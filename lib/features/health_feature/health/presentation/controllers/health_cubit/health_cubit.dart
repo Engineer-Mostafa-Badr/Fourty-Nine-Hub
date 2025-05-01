@@ -26,7 +26,9 @@ import '../../../../create_doctor/domain/entities/governorate_entity.dart';
 import '../../../../create_doctor/domain/usecases/get_governorates.dart';
 import '../../../domain/entities/appointment_booking_entity.dart';
 import '../../../domain/entities/booking_entity.dart';
+import '../../../domain/entities/most_booking_entity.dart';
 import '../../../domain/usecases/get_booking_use_case.dart';
+import '../../../domain/usecases/get_most_booking_use_case.dart';
 
 part 'health_state.dart';
 
@@ -44,6 +46,7 @@ class HealthCubit extends Cubit<HealthState> {
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetBookingUseCase _getBookingUseCase;
+  final GetMostBookingUseCase _getMostBookingUseCase;
 
   HealthCubit(
       this._getUserUpcomingAppointmentsUseCase,
@@ -57,7 +60,7 @@ class HealthCubit extends Cubit<HealthState> {
       this._isDoctorApprovalUsecase,
       this._toggleFavoriteCategoryUseCase,
       this._deleteFavoriteCategoryUseCase,
-      this._cancelAppointmentUseCase, this._getBookingUseCase)
+      this._cancelAppointmentUseCase, this._getBookingUseCase, this._getMostBookingUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -360,51 +363,99 @@ class HealthCubit extends Cubit<HealthState> {
     if (currentType == type) return;
     loadInitialBooking(type);
   }
-  // bool hasMoreBooking = true;
-  // int currentBookingPage = 1;
-  // bool isLoadingMoreBooking = false;
-  // List<BookingEntity> reqBooking = [];
-  //
-  // void loadInitialBooking() async {
-  //   emit(state.copyWith(status: HealthStates.loading));
-  //   reqBooking.clear();
-  //   currentBookingPage = 1;
-  //   hasMoreBooking = true;
-  //   await getCurrentBooking();
-  //   emit(state.copyWith(status: HealthStates.success));
-  // }
-  //
-  // Future<void> getCurrentBooking(String type) async {
-  //   if (!hasMoreBooking || isLoadingMoreBooking) return;
-  //
-  //   isLoadingMoreBooking = true;
+
+  List<MostBookingEntity> mostBooking = [];
+
+  int mostBookingPage = 1;
+  bool hasMoreMost = true;
+ bool isLoadingMoreMost = true;
+
+
+  void loadInitialMostBooking() async {
+    emit(state.copyWith(status: HealthStates.loading));
+    currentBookings.clear();
+    mostBookingPage = 1;
+    hasMoreMost = true;
+    await getMostBookings();
+    emit(state.copyWith(status: HealthStates.success));
+  }
+
+  Future<void> getMostBookings() async {
+    if (isLoading) return;  // Prevent concurrent requests if needed
+
+    isLoading = true;
+    emit(state.copyWith(isLoadingMoreMostBooking: true));
+
+    final response = await _getMostBookingUseCase(
+      GetMostBookingParams(page: mostBookingPage, limit: 5),
+    );
+
+    response.fold(
+          (failure) {
+        isLoading = false;
+        emit(state.copyWith(
+          failure: failure,
+          isLoadingMoreMostBooking: false,
+          status: HealthStates.error,
+        ));
+      },
+          (data) {
+            mostBooking.addAll(data);
+
+        if ((data.length ?? 0) < 5) {
+          hasMoreMost = false;
+          emit(state.copyWith(isLoadingMoreMostBooking: false));
+        } else {
+          mostBookingPage++;
+        }
+
+            isLoadingMoreMost = false;
+        emit(state.copyWith(
+            mostBooking: data, isLoadingMoreMostBooking: false));
+      },
+      //     (data) {
+      //   mostBooking.addAll(data);  // Add new data to the list
+      //   mostBookingPage++;
+      //   hasMoreMost = data.length >= 5;  // Assuming the API sends 5 items per page or more
+      //
+      //   isLoading = false;
+      //   emit(state.copyWith(
+      //     mostBooking: mostBooking,
+      //     isLoadingMoreMostBooking: false,
+      //     status: HealthStates.success, // Add the success status
+      //   ));
+      // },
+    );
+  }
+
+
+  // Future<void> getMostBookings() async {
+  //   isLoading = true;
   //   emit(state.copyWith(isLoadingMoreBooking: true));
   //
-  //   final response = await _getBookingUseCase(
-  //        GetBookingParams(page: currentBookingPage, limit: 5, type: type));
+  //   final response = await _getMostBookingUseCase(
+  //     GetMostBookingParams(page: mostBookingPage, limit: 5, ),
+  //   );
+  //
   //   response.fold(
   //         (failure) {
-  //       isLoadingMoreBooking = false;
+  //       isLoading = false;
   //       emit(state.copyWith(
-  //           failure: failure,
-  //           isLoadingMoreBooking: false,
-  //           status: HealthStates.error));
+  //         failure: failure,
+  //         isLoadingMoreBooking: false,
+  //         status: HealthStates.error,
+  //       ));
   //     },
   //         (data) {
-  //       reqBooking.addAll(data);
-  //
-  //       if ((data.length ?? 0) < 5) {
-  //         hasMoreBooking = false;
-  //         emit(state.copyWith(isLoadingMoreBooking: false));
-  //       } else {
-  //         currentBookingPage++;
-  //       }
-  //
-  //       isLoadingMoreBooking = false;
+  //         mostBooking.addAll(data);
+  //         mostBookingPage++;
+  //         hasMoreCurrent = data.length >= 5;
+  //       isLoading = false;
   //       emit(state.copyWith(
-  //           bookingEntity: data, isLoadingMoreBooking: false));
+  //         mostBooking: mostBooking,
+  //         isLoadingMoreBooking: false,
+  //       ));
   //     },
   //   );
   // }
-
 }

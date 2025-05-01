@@ -24,7 +24,7 @@ extension EditFoodStateX on EditFoodState {
 class EditFoodState {
   final EditFoodStates status;
   final Failure? failure;
-  final Restaurant? restaurant;
+  final GetAllRestaurantEntity? restaurant;
   final String? successMessage;
   final String? imagePath;
   final bool connected;
@@ -45,7 +45,7 @@ class EditFoodState {
   EditFoodState copyWith({
     EditFoodStates? status,
     Failure? failure,
-    Restaurant? restaurant,
+    GetAllRestaurantEntity? restaurant,
     List<RestaurantMenu>? meals,
     bool? connected,
     String? imagePath,

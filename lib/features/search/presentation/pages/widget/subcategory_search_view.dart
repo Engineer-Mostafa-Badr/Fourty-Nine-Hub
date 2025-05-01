@@ -14,8 +14,8 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
@@ -23,6 +23,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../domain/use_case/fetch_search_use_case.dart';
 
 class SubCategorySearchView extends StatefulWidget {
   const SubCategorySearchView({super.key});
@@ -32,157 +33,105 @@ class SubCategorySearchView extends StatefulWidget {
 }
 
 class _SubCategorySearchViewState extends State<SubCategorySearchView> {
+  late final ScrollController _scrollController;
+  late final SearchCubit _cubit;
+  static const _scrollThreshold = 200.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<SearchCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+  void _onScroll() async {
+    final max = _scrollController.position.maxScrollExtent;
+    final current = _scrollController.position.pixels;
+
+    final searchText = _cubit.searchController.text.trim();
+    if (searchText.isEmpty) return; // 🚫 Don't call API with empty search
+
+    if (current >= max - _scrollThreshold &&
+        !_cubit.isLoadingSubCategoriesSearchMore &&
+        _cubit.hasMoreSubCategoriesSearchData) {
+      final prefs = await SharedPreferences.getInstance();
+      final filter = prefs.getString('filter') ?? '';
+      final params = SearchParams(
+        search: searchText,
+        filter: filter,
+        params: PaginationParams(page: _cubit.subCategoriesSearchPage),
+      );
+      _cubit.getPaginatedSubCategorySearch(params: params);
+    }
+  }
+
+  void _onScroll1() async {
+    final max = _scrollController.position.maxScrollExtent;
+    final current = _scrollController.position.pixels;
+    if (current >= max - _scrollThreshold &&
+        !_cubit.isLoadingSubCategoriesSearchMore &&
+        _cubit.hasMoreSubCategoriesSearchData) {
+      final prefs = await SharedPreferences.getInstance();
+      final filter = prefs.getString('filter') ?? '';
+      final params = SearchParams(
+        search: _cubit.searchController.text.trim(),
+        filter: filter,
+        params: PaginationParams(page: _cubit.subCategoriesSearchPage),
+      );
+      _cubit.getPaginatedSubCategorySearch(params: params);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.h),
-      child: BlocBuilder<SearchCubit, SearchState>(
-        builder: (BuildContext context, state) {
-          // if(state.status ==SearchStates.loading){
-          //   return const Center(child: CircularProgressIndicator());
-          // }
-          final controller = context.read<SearchCubit>();
-          if (controller.searchController.text.isNotEmpty) {
-            return PagedGridView<int, SubCategoryEntity>(
-              pagingController: controller.searchPagingSubCategoryController,
-              builderDelegate: PagedChildBuilderDelegate<SubCategoryEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  return Center(
-                    child: Text(
-                      LocaleKeys.noData.localize,
-                      style: Styles.mediumText(),
-                    ),
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return SubCategoryCard(
-                    mainCategory: (state.mainCategory != null &&
-                            index < state.mainCategory!.length)
-                        ? state.mainCategory![index]
-                        : MainCategoryEntity(
-                            id: '',
-                            nameEn: '',
-                            image: '',
-                            banner: '',
-                            cover: '',
-                            total: 0,
-                          ),
-                    item: item,
-                    onFav: () async {
-                      var result = await controller
-                          .toggleSubCategoryToFavorites(item.id);
-                      return result;
-                    },
-                  );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, childAspectRatio: 1),
+    return BlocBuilder<SearchCubit, SearchState>(
+      buildWhen: (prev, curr) =>
+      prev.searchSubCategory != curr.searchSubCategory || prev.status != curr.status,
+      builder: (context, state) {
+        final subCategories = _cubit.subCategoriesSearch;
+
+        // Loading first page
+        if (state.status == SearchStates.loading && subCategories.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        // No results
+        if (subCategories.isEmpty) {
+          return const Center(child: Text('No subcategories found.'));
+        }
+
+        // List view with loader at bottom
+        return ListView.builder(
+          controller: _scrollController,
+          physics: _cubit.searchController.text.trim().isEmpty
+              ? const NeverScrollableScrollPhysics()
+              : const AlwaysScrollableScrollPhysics(),
+
+          itemCount: _cubit.subCategoriesSearch.length +
+              (_cubit.isLoadingSubCategoriesSearchMore ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index >= _cubit.subCategoriesSearch.length) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            final subCategory = _cubit.subCategoriesSearch[index];
+            return ListTile(
+              title: Text(subCategory.nameEn),
             );
-          }
-          return Center(
-            child: Text(LocaleKeys.noResultsFound.localize),
-          );
-        },
-      ),
+          },
+        );
+
+      },
     );
   }
 
-  Widget buildItem(SubCategoryEntity model, Function() fav, IconData icon,
-          MainCategoryEntity item) =>
-      InkWell(
-        onTap: () => context.push(Routes.ADS,
-            extra: AdsViewParams(mainCategory: item, subCategory: model)),
-        child: Container(
-          margin: EdgeInsets.all(10.w),
-          decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(5.r),
-              boxShadow: const [
-                BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 1,
-                    offset: Offset(-1, 1),
-                    blurRadius: 5)
-              ]),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: SquareImage(
-                        fit: BoxFit.cover,
-                        radius: 5,
-                        url: model.image,
-                      ),
-                    ),
-                    Positioned(
-                        top: 10.h,
-                        right: 10.w,
-                        child: IconAppButton(
-                          icon: icon,
-                          onPressed: () async {
-                            final result = await fav();
-                            print("resutlt=$result");
-                            if (result == true) {
-                              model.isFavorite = !model.isFavorite!;
-                              setState(() {});
-                            }
-                            // var result = await widget.onFav();
-                            // if (result == true) {
-                            //   widget.item.isFavorite = !widget.item.isFavorite!;
-                            //   setState(() {});
-                            // }
-                          },
-                          color: AppColors.SECONDARY_COLOR,
-                        ))
-                  ],
-                ),
-              ),
-              const Sizer(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Label(
-                            text: context.locale == Locales.english
-                                ? model.nameEn
-                                : model.nameAr,
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconAppButton(
-                        icon: Icons.add_box_rounded,
-                        size: 40.h,
-                        onPressed: () {
-                          if (AuthHelper().isLoggedIn()) {
-                            context.push(Routes.CREATEAD,
-                                extra: CategorizationEntity(
-                                    mainCategory: item, subCategory: model));
-                            print('item.id: ${item.id}');
-                          } else {
-                            context.push(Routes.LOGIN);
-                          }
-                        })
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
 }

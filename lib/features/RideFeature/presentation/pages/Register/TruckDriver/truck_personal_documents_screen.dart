@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
@@ -69,14 +70,14 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
                     const Sizer(),
                     DefaultTextFormField(
                       currentController: idNumberController,
-                      fillColor: AppColors.GREYBG,
+                      fillColor: context.isDarkMode?Colors.grey.shade600 : AppColors.GREYBG,
                       borderColor: Colors.transparent,
                       hint: LocaleKeys.licenseNumber.localize,
                     ),
                     const Sizer(),
                     DefaultTextFormField(
                       currentController: expirationDateController,
-                      fillColor: AppColors.GREYBG,
+                      fillColor: context.isDarkMode?Colors.grey.shade600 : AppColors.GREYBG,
                       borderColor: Colors.transparent,
                       hint: LocaleKeys.expireDate.localize,
                     ),

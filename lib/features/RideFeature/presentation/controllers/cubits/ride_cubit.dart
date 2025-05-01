@@ -76,6 +76,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
@@ -93,6 +94,9 @@ class RideCubit extends Cubit<RideState> {
   bool isRecord = false;
   bool showWaypointOne = false;
   bool showWaypointTwo = false;
+
+  String? selectedCategoryType = "ride";
+  int? selectedCategoryIndex = 0;
 
   bool hasPendingShownBottomSheet = false;
   bool hasAcceptedShownBottomSheet = false;
@@ -210,6 +214,10 @@ class RideCubit extends Cubit<RideState> {
       // trip started socket event
       SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
         CliLogger.info("RIDE:DRIVER_STARTED_TRIP:  $data");
+      });
+      // trip ended socket event
+      SharedWebSocket.socket!.on("RIDE:DRIVER_COMPLETED_TRIP", (data) {
+        CliLogger.info("RIDE:DRIVER_COMPLETED_TRIP:  $data");
       });
     }
   }
@@ -397,23 +405,16 @@ class RideCubit extends Cubit<RideState> {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (rideCategory) async {
-        // RegisterRideSpecialEntity? rideSocketCachedData = await Storage().getDriverEntity();
-        // RegisterRideNotSpecialEntity? rideNonSocketCachedData = await Storage().getDriverNoSocketEntity();
-        // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
-        // print("data?.isShipping111${rideSocketCachedData?.isShipping}");
-        //   print("rideSocketCachedData?.isShipping${rideSocketCachedData?.isShipping}");
-        //   for (var item in rideSubCategories) {
-        //     List<String> subcategoryIds = [];
-        //     subcategoryIds.addAll(rideSocketCachedData?.subcategoryIds??[]);
-        //     subcategoryIds.add(rideNonSocketCachedData?.subcategoryId??'');
-        //     if (subcategoryIds.contains(item.subCategoryId)) {
-        //       item.isSelected = true;
-        //       item.isEnabled = true;
-        //     }else{
-        //       item.isSelected = false;
-        //       item.isEnabled = false;
-        //     }
-        //   }
+        if (selectedCategoryType == 'ride' && subCategoryId.isNotEmpty) {
+          final index = rideCategory.subCategories.indexWhere(
+                (sub) => sub.subCategoryId == subCategoryId,
+          );
+
+          if (index != -1) {
+            final matchedSubCategory = rideCategory.subCategories.removeAt(index);
+            rideCategory.subCategories.insert(0, matchedSubCategory);
+          }
+        }
         emit(state.copyWith(
             status: RideStates.success,
             rideCategory: rideCategory,
@@ -433,19 +434,16 @@ class RideCubit extends Cubit<RideState> {
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
       (rideCategory) async {
-        // LoadingRegisterEntity? loadingCachedData = await Storage().getLoaderEntity();
-        // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
-        // for (var item in rideSubCategories) {
-        //   List<String> subcategoryIds = [];
-        //   subcategoryIds.add(loadingCachedData?.categoryId??'');
-        //   if (subcategoryIds.contains(item.subCategoryId)) {
-        //     item.isSelected = true;
-        //     item.isEnabled = true;
-        //   }else{
-        //     item.isSelected = false;
-        //     item.isEnabled = false;
-        //   }
-        // }
+        if (selectedCategoryType != 'ride' && subCategoryId.isNotEmpty) {
+          final index = rideCategory.subCategories.indexWhere(
+                (sub) => sub.subCategoryId == subCategoryId,
+          );
+
+          if (index != -1) {
+            final matchedSubCategory = rideCategory.subCategories.removeAt(index);
+            rideCategory.subCategories.insert(0, matchedSubCategory);
+          }
+        }
         emit(state.copyWith(
             status: RideStates.success,
             shippingCategory: rideCategory,
@@ -636,17 +634,17 @@ class RideCubit extends Cubit<RideState> {
 
   double getTotalPrice(double price, {bool isScooter = false}) {
     double totalPrice = price;
-    if (!isScooter) {
-      if (isComfort) {
+    // if (!isScooter) {
+      if (serviceLocator<RideCubit>().isComfort) {
         totalPrice += state.rideExpectedPrice?.comfort ?? 0;
       }
-      if (isNonSmoker) {
+      if (serviceLocator<RideCubit>().isNonSmoker) {
         totalPrice += state.rideExpectedPrice?.nonSmoking ?? 0;
       }
-      if (isAutoAccept) {
+      if (serviceLocator<RideCubit>().isAutoAccept) {
         totalPrice += state.rideExpectedPrice?.autoAccept ?? 0;
       }
-    }
+    // }
     return totalPrice;
   }
 
@@ -756,10 +754,10 @@ class RideCubit extends Cubit<RideState> {
             else{
               updateToLocation(lat: rideRequestTrip.targetCoordinates!.first, lng: rideRequestTrip.targetCoordinates!.last, address: rideRequestTrip.to!);
               updateCurrentLocation(lat: rideRequestTrip.startCoordinates!.first, lng: rideRequestTrip.startCoordinates!.last, address: rideRequestTrip.from!);
-              if(rideRequestTrip.wayPointOne != null){
+              if(rideRequestTrip.wayPointOne != null && rideRequestTrip.wayPointOne!.isNotEmpty){
                 updateWayPointOne(lat: rideRequestTrip.wayPointOne!.first, lng: rideRequestTrip.wayPointOne!.last, address: rideRequestTrip.wayPointOneTitle!);
               }
-              if(rideRequestTrip.wayPointTwo != null){
+              if(rideRequestTrip.wayPointTwo != null && rideRequestTrip.wayPointTwo!.isNotEmpty){
                 updateWayPointTwo(lat: rideRequestTrip.wayPointTwo!.first, lng: rideRequestTrip.wayPointTwo!.last, address: rideRequestTrip.wayPointTwoTitle!);
               }
             }
@@ -825,10 +823,10 @@ class RideCubit extends Cubit<RideState> {
             else{
               updateToLocation(lat: rideRequestTrip.targetCoordinates!.first, lng: rideRequestTrip.targetCoordinates!.last, address: rideRequestTrip.to!);
               updateCurrentLocation(lat: rideRequestTrip.startCoordinates!.first, lng: rideRequestTrip.startCoordinates!.last, address: rideRequestTrip.from!);
-              if(rideRequestTrip.wayPointOne != null){
+              if(rideRequestTrip.wayPointOne != null && rideRequestTrip.wayPointOne!.isNotEmpty){
                 updateWayPointOne(lat: rideRequestTrip.wayPointOne!.first, lng: rideRequestTrip.wayPointOne!.last, address: rideRequestTrip.wayPointOneTitle!);
               }
-              if(rideRequestTrip.wayPointTwo != null){
+              if(rideRequestTrip.wayPointTwo != null && rideRequestTrip.wayPointTwo!.isNotEmpty){
                 updateWayPointTwo(lat: rideRequestTrip.wayPointTwo!.first, lng: rideRequestTrip.wayPointTwo!.last, address: rideRequestTrip.wayPointTwoTitle!);
               }
             }
@@ -850,10 +848,10 @@ class RideCubit extends Cubit<RideState> {
             else{
               updateToLocation(lat: rideRequestTrip.targetCoordinates!.first, lng: rideRequestTrip.targetCoordinates!.last, address: rideRequestTrip.to!);
               updateCurrentLocation(lat: rideRequestTrip.startCoordinates!.first, lng: rideRequestTrip.startCoordinates!.last, address: rideRequestTrip.from!);
-              if(rideRequestTrip.wayPointOne != null){
+              if(rideRequestTrip.wayPointOne != null && rideRequestTrip.wayPointOne!.isNotEmpty){
                 updateWayPointOne(lat: rideRequestTrip.wayPointOne!.first, lng: rideRequestTrip.wayPointOne!.last, address: rideRequestTrip.wayPointOneTitle!);
               }
-              if(rideRequestTrip.wayPointTwo != null){
+              if(rideRequestTrip.wayPointTwo != null && rideRequestTrip.wayPointTwo!.isNotEmpty){
                 updateWayPointTwo(lat: rideRequestTrip.wayPointTwo!.first, lng: rideRequestTrip.wayPointTwo!.last, address: rideRequestTrip.wayPointTwoTitle!);
               }
             }

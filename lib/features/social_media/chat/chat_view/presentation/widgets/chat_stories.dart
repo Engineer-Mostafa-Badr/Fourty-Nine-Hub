@@ -468,10 +468,8 @@
 
 import 'dart:math';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -824,6 +822,12 @@ class ProfileWithStoriesBorder extends StatelessWidget {
             child: Image.network(
               profilePictureUrl,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.network(
+                  UIConst.profilePlaceHolder,
+                  fit: BoxFit.cover,
+                );
+              },
             ),
           ),
         ),
@@ -883,7 +887,7 @@ class StoriesBorderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (storiesCount <= 0) return;
 
-    final double strokeWidth = 4.0;
+    final double strokeWidth = 3.0;
     final double radius = (size.width / 2) + 4;
     final Offset center = Offset(size.width / 2, size.height / 2);
     final Rect rect = Rect.fromCircle(center: center, radius: radius);

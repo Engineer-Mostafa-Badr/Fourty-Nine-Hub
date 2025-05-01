@@ -511,7 +511,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         Row(
           children: details.take(3).map((e) {
             return Padding(
-              padding: const EdgeInsetsDirectional.only(end: 24),
+              padding: const EdgeInsetsDirectional.only(end: 16),
               child: LableAndTextMarriageDetails(
                 lable: context.isArabic ? e.nameAr : e.nameEn,
                 text: context.isArabic ? e.valueAr : e.valueEn,

@@ -32,7 +32,6 @@ class FormTextField extends StatelessWidget {
   final Color? fillColor;
   final bool noBorder;
   final bool? readOnly;
-  final TextStyle? hintStyle;
   final BorderRadius? borderRadius;
   final BoxConstraints? constraints;
   final TextStyle? textStyle;
@@ -77,6 +76,40 @@ class FormTextField extends StatelessWidget {
     this.borderSide,
     this.focusNode,
   });
+  FormTextField(
+      {super.key,
+      this.initialValue,
+      this.action,
+      this.maxLength,
+      this.obsecure,
+      this.borderRadius,
+      this.prefix,
+      this.noBorder = false,
+      this.readOnly = false,
+      this.constraints,
+      this.fillColor,
+      this.hint,
+      this.label,
+      this.info,
+      this.autofill,
+      this.suffix,
+      this.type,
+      this.isEmail,
+      this.enabled,
+      this.onConfirm,
+      this.textAlignVertical,
+      this.extraValidationMessage,
+      this.extraValidation,
+      this.onTap,
+      this.height,
+      this.maxLines,
+      this.style,
+      this.validator,
+      this.required,
+      this.controller,
+      this.textStyle,
+      this.borderColor,
+      this.borderSide});
 
   bool validate = false;
 

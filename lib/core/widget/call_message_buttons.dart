@@ -38,6 +38,7 @@ class CallMessageButtons extends StatefulWidget {
       required this.phone, this.senderName, this.senderImage,
       required this.id,
       this.hasReport = false,
+      this.flex,
       this.clientId});
   final String otherUserId;
   final String? clientId;
@@ -47,6 +48,7 @@ class CallMessageButtons extends StatefulWidget {
   final String? senderName;
   final String? senderImage;
   final bool? hasReport;
+  final int? flex;
 
   @override
   State<CallMessageButtons> createState() => _CallMessageButtonsState();
@@ -66,7 +68,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                flex: 3,
+                flex: widget.flex??3,
                 child: IconButton(
                   color: (snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)
@@ -74,6 +76,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                       : AppColors.DARK_GRAY_COLOR,
                   icon: SvgPicture.asset(
                     Assets.phoneIcon
+                      ,color: context.isDarkMode?Colors.white:null
                   ),
                   // icon: const Icon(Icons.call),
                   onPressed: !context.read<UserCubit>().isLoggedIn
@@ -190,7 +193,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
-                  icon: SvgPicture.asset(Assets.mailIcon),
+                  icon: SvgPicture.asset(Assets.mailIcon,color: context.isDarkMode?Colors.white:null),
                   // icon: const Icon(Icons.email),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () => context.push(Routes.LOGIN)

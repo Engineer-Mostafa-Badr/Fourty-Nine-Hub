@@ -12,7 +12,7 @@ class InstagramPostEntity {
   final bool verifiedBadge;
   final List<String> medias;
   final List<CommentInstagramModel> comments;
-  final List<UserTagEntity> userTags;
+  final List<InstagramPostUserTagEntity> userTags;
   final List<String> hashtags;
   final int favoritesCounter;
   final int commentsCounter;
@@ -44,19 +44,33 @@ class InstagramPostEntity {
   });
 }
 
-class UserTagEntity {
+class InstagramPostUserTagEntity {
   final String username;
   final String firstName;
   final String lastName;
   final String profilePictureUrl;
 
-  UserTagEntity({
+  InstagramPostUserTagEntity({
     required this.username,
     required this.firstName,
     required this.lastName,
     required this.profilePictureUrl,
   });
 }
+
+// class UserTagEntity {
+//   final String username;
+//   final String firstName;
+//   final String lastName;
+//   final String profilePictureUrl;
+//
+//   UserTagEntity({
+//     required this.username,
+//     required this.firstName,
+//     required this.lastName,
+//     required this.profilePictureUrl,
+//   });
+// }
 
 // class CommentsEntity {
 //   final String id;

@@ -98,27 +98,27 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
       final controller = context.read<SearchCubit>();
       if (widget.from == 'posts') {
         if (controller
-                .searchPagingPostsController.itemList?[widget.index].type ==
+                .postsSearch[widget.index].type ==
             'advertisement') {
           return FacebookAdvertisementCard(
             post:
-                controller.searchPagingPostsController.itemList![widget.index],
+                controller.postsSearch[widget.index],
           );
         } else if (controller
-                .searchPagingPostsController.itemList![widget.index].type ==
+                .postsSearch[widget.index].type ==
             'twitter_post') {
           return FacebookTweetCard(
             post:
-                controller.searchPagingPostsController.itemList![widget.index],
+                controller.postsSearch[widget.index],
           );
         } else {
           var myPost = widget.from == 'details'
               ? widget.post
-              : controller.searchPagingPostsController.itemList![widget.index];
+              : controller.postsSearch[widget.index];
           return InkWell(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
                 ? () => widget.showPostDetails(controller
-                    .searchPagingPostsController.itemList![widget.index])
+                    .postsSearch[widget.index])
                 : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,25 +185,25 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     children: [
                       if (myPost.likesCount != 0)
                         _buildCounterWidget(
-                            value: myPost.likesCount, image: Assets.like),
+                            value: myPost.likesCount!, image: Assets.like),
                       if (myPost.hahaCount != 0)
                         _buildCounterWidget(
-                            value: myPost.hahaCount, image: Assets.haha),
+                            value: myPost.hahaCount!, image: Assets.haha),
                       if (myPost.loveCount != 0)
                         _buildCounterWidget(
-                            value: myPost.loveCount, image: Assets.heart),
+                            value: myPost.loveCount!, image: Assets.heart),
                       if (myPost.wowCount != 0)
                         _buildCounterWidget(
-                            value: myPost.wowCount, image: Assets.wow),
+                            value: myPost.wowCount!, image: Assets.wow),
                       if (myPost.sadCount != 0)
                         _buildCounterWidget(
-                            value: myPost.sadCount, image: Assets.sad),
+                            value: myPost.sadCount!, image: Assets.sad),
                       if (myPost.angryCount != 0)
                         _buildCounterWidget(
-                            value: myPost.angryCount, image: Assets.angry),
+                            value: myPost.angryCount!, image: Assets.angry),
                       const Spacer(),
                       InkWell(
-                        onTap: () => widget.showPostComments(myPost.id),
+                        onTap: () => widget.showPostComments(myPost.id!),
                         child: Row(
                           children: [
                             Label(
@@ -241,7 +241,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                               icon: FontAwesomeIcons.comment,
                               label: LocaleKeys.comment.localize,
                               // image: Assets.comment,
-                              onTap: () => widget.showPostComments(myPost.id)),
+                              onTap: () => widget.showPostComments(myPost.id!)),
                         ),
                       Expanded(
                         child: _buildReactionPlaceHolder(
@@ -321,24 +321,23 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                                                           .shareFormKey
                                                           .currentState!
                                                           .validate()) {
-                                                        var result = await controller
-                                                            .onShare(
-                                                                postId: myPost
-                                                                            .isShared ==
-                                                                        true
-                                                                    ? myPost
-                                                                        .mainPost!
-                                                                        .id
-                                                                    : myPost
-                                                                        .id);
-                                                        if (result == true) {
-                                                          showSuccessMessage(
-                                                              context,
-                                                              LocaleKeys
-                                                                  .postSharedSuccessfully
-                                                                  .localize);
-                                                          context.pop();
-                                                        }
+                                                        // var result = await controller
+                                                        //     .onShare(
+                                                        //         postId: myPost!.isShared? ==
+                                                        //                 true
+                                                        //             ? myPost
+                                                        //                 .mainPost!
+                                                        //                 .id
+                                                        //             : myPost
+                                                        //                 .id);
+                                                        // if (result == true) {
+                                                        //   showSuccessMessage(
+                                                        //       context,
+                                                        //       LocaleKeys
+                                                        //           .postSharedSuccessfully
+                                                        //           .localize);
+                                                        //   context.pop();
+                                                        // }
                                                       }
                                                     },
                                                     child: Container(
@@ -402,11 +401,11 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
       } else {
         var myPost = widget.from == 'details'
             ? widget.post
-            : controller.searchPagingPostsController.itemList![widget.index];
+            : controller.postsSearch[widget.index];
         return InkWell(
           onTap: (widget.from == 'posts' && widget.post.isShared == true)
               ? () => widget.showPostDetails(controller
-                  .searchPagingPostsController.itemList![widget.index])
+                  .postsSearch[widget.index])
               : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,25 +422,25 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount, image: Assets.like),
+                          value: myPost.likesCount!, image: Assets.like),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount, image: Assets.haha),
+                          value: myPost.hahaCount!, image: Assets.haha),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount, image: Assets.heart),
+                          value: myPost.loveCount!, image: Assets.heart),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount, image: Assets.wow),
+                          value: myPost.wowCount!, image: Assets.wow),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount, image: Assets.sad),
+                          value: myPost.sadCount!, image: Assets.sad),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount, image: Assets.angry),
+                          value: myPost.angryCount!, image: Assets.angry),
                     const Spacer(),
                     InkWell(
-                      onTap: () => widget.showPostComments(myPost.id),
+                      onTap: () => widget.showPostComments(myPost.id!),
                       child: Row(
                         children: [
                           Label(
@@ -479,7 +478,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                             icon: FontAwesomeIcons.message,
                             image: Assets.comment,
                             label: LocaleKeys.comments.localize,
-                            onTap: () => widget.showPostComments(myPost.id)),
+                            onTap: () => widget.showPostComments(myPost.id!)),
                       ),
                     Expanded(
                       child: _buildReactionPlaceHolder(
@@ -488,14 +487,14 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                           isImage: true,
                           image: Assets.facebookShare,
                           onTap: () async {
-                            var result = await controller.onShare(
-                                postId: myPost.isShared == true
-                                    ? myPost.mainPost!.id
-                                    : myPost.id);
-                            if (result == true) {
-                              showSuccessMessage(
-                                  context, "Post shared successfully");
-                            }
+                            // var result = await controller.onShare(
+                            //     postId: myPost.isShared == true
+                            //         ? myPost.mainPost!.id
+                            //         : myPost.id);
+                            // if (result == true) {
+                            //   showSuccessMessage(
+                            //       context, "Post shared successfully");
+                            // }
                           }),
                     ),
                   ],
@@ -543,7 +542,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     bottomSheet(
                         context: context,
                         widget: ReportView(
-                          id: widget.post.id,
+                          id: widget.post.id!,
                           categoryId: '66a3583454e6e337915514db',
                         ));
                   });
@@ -555,7 +554,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                 title: LocaleKeys.deletePost.localize,
                 subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
-                  widget.deletePost(post.id);
+                  widget.deletePost(post.id!);
                   if (fromDetails == true) {
                     context.pop();
                   }
@@ -566,7 +565,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
-                widget.hidePost(post.id);
+                widget.hidePost(post.id!);
                 if (fromDetails == true) {
                   context.pop();
                 }
@@ -614,7 +613,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               InkWell(
                 onTap: () {
                   if (widget.fromProfile == false) {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user!.id);
                   }
                 },
                 child: ImageFromInternet(
@@ -633,7 +632,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                       onTap: () {
                         if (widget.fromProfile == false) {
                           context.push(Routes.OTHERSACCOUNT,
-                              extra: post.user.id);
+                              extra: post.user!.id);
                         }
                       },
                       child: Column(
@@ -646,14 +645,14 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                               onPressed: () {
                                 if (widget.fromProfile == false) {
                                   context.push(Routes.OTHERSACCOUNT,
-                                      extra: post.user.id);
+                                      extra: post.user!.id);
                                 }
                               }),
                           RichText(
                               text: TextSpan(children: [
-                            TextSpan(
-                                text: post.sinceTime,
-                                style: Styles.mediumText(color: Colors.grey)),
+                            // TextSpan(
+                            //     text: post.sinceTime,
+                            //     style: Styles.mediumText(color: Colors.grey)),
                             const WidgetSpan(
                                 child: Icon(
                               Icons.group,

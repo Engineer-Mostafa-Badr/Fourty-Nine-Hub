@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 
+import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../domain/entity/complete_order_entity.dart';
 import '../../domain/entity/order_food_entity.dart';
 import '../../domain/usecases/complete_order_restaurant_usecase.dart';
@@ -23,7 +24,7 @@ abstract class RestaurantDashboardRemoteDataSource {
   Future<Either<Failure, bool>> changeActiveStatus();
   Future<Either<Failure, bool>> deleteRestaurant(DeleteResturantParams params);
   Future<Either<Failure, bool>> updateRestaurant(UpdateRestaurantParams params);
-  Future<Either<Failure, Restaurant2Model>> getRestaurantInfo();
+  Future<Either<Failure, GetAllRestaurantEntity>> getRestaurantInfo();
   Future<Either<Failure, RestaurantStatistics>> getRestaurantStatistics();
   Future<Either<Failure, bool>> cancelOrder({required int id});
   Future<Either<Failure, bool>> approveOrder({required int id});
@@ -80,13 +81,13 @@ class RestaurantDashboardRemoteDataSourceImpl
   // }
 
   @override
-  Future<Either<Failure, Restaurant2Model>> getRestaurantInfo() async {
+  Future<Either<Failure, GetAllRestaurantEntity>> getRestaurantInfo() async {
     final response = await _apiServices.get(EndPoints.getRestaurantInfo);
 
     return response.fold((l) {
       return Left(l);
     }, (data) {
-      return Right(Restaurant2Model.fromJson(data['data']));
+      return Right(GetAllRestaurantModel.fromJson(data['data']));
     });
   }
 

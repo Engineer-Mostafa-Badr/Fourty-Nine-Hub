@@ -30,6 +30,7 @@ class LogDetailsScreen extends StatefulWidget {
 
 class _LogDetailsScreenState extends State<LogDetailsScreen> {
   late LogsRequestLogsEntity _currentLogsEntity;
+
   @override
   void initState() {
     super.initState();
@@ -40,16 +41,15 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
     setState(() {
       // Create a new UserRateRestaurantEntity with the updated rating
       final updatedRate = _currentLogsEntity.userRateRestaurant?.copyWith(
-        rate: newRating.toInt(),  // Update only the rate
+        rate: newRating.toInt(), // Update only the rate
       );
 
       // Update the _currentLogsEntity with the new UserRateRestaurantEntity
       _currentLogsEntity = _currentLogsEntity.copyWith(
-        userRateRestaurant: updatedRate,  // Replace the old one
+        userRateRestaurant: updatedRate, // Replace the old one
       );
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,23 +61,24 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Order Details"),
+          title: Text(LocaleKeys.orderDetails.localize, style: Styles.headerText(
+            fontWeight: FontWeight.w700
+          )),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
               Container(
-                // elevation: context.isDarkMode ? 0 : 2,
                 decoration: BoxDecoration(
-                    // color: cardDarkColor(context),
                     border: Border.all(
-                      color: AppColors.black,
+                      color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
                     ),
                     borderRadius: BorderRadius.circular(15)),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
+                    spacing: 8,
                     children: [
                       _buildHeader(context),
                       _buildFooter(context),
@@ -85,68 +86,110 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 8,),
               widget.logsEntity.userRateRestaurant == null ||
                       widget.logsEntity.userRateRestaurant == 0
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Label(
-                          text: LocaleKeys.noRating.localize,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: AppColors.black),
+                        Expanded(
+                          child: Label(
+                            text: LocaleKeys.noRating.localize,
+                            style: Styles.mediumText(
+                                fontWeight: FontWeight.w700,
+                                // fontSize: 16,
+                                color:context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+                            ),
+                          ),
                         ),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.cF3F3F3),
-                            onPressed: () {},
-                            child: Label(
-                              text: LocaleKeys.rate.localize,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                  color: AppColors.black),
-                            )),
+                        InkWell(
+                            onTap: () {
+                              final cubit =
+                              context.read<RestaurantsCubit>();
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return BlocProvider(
+                                    create: (context) =>
+                                        serviceLocator<RestaurantsCubit>(),
+                                    child: RatingBottomSheet(
+                                      restaurantId: widget
+                                          .logsEntity.restaurantId!.id!,
+                                      cubit: cubit,
+                                      onRatingUpdated: _updateRating,
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: AppColors.cF3F3F3,
+                                  borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: Label(
+                                text: LocaleKeys.rate.localize,
+                                style: Styles.mediumText(
+                                    fontWeight: FontWeight.w700,
+                                    // fontSize: 14,
+                                    color:context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+                                ),
+                              ),
+                            )
+
+                        ),
                       ],
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Label(
-                          text: LocaleKeys.yourRate.localize,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: AppColors.black),
+                        Expanded(
+                          child: Label(
+                            text: LocaleKeys.yourRate.localize,
+                            style: Styles.mediumText(
+                                fontWeight: FontWeight.w700,
+                                // fontSize: 16,
+                              color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+                            ),
+                          ),
                         ),
                         Row(
                           children: [
-                            const Label(
-                              text: "Good",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            Label(
+                              text: context.isArabic
+                                  ? widget.logsEntity.userRateRestaurantName
+                                  ?.ar ??
+                                  ""
+                                  : widget.logsEntity.userRateRestaurantName
+                                  ?.en ??
+                                  "",
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+                              ),
                             ),
                             RatingBar(
-                              initialRating: _currentLogsEntity.userRateRestaurant?.rate?.toDouble() ?? 0,
-                              // initialRating:
-                              //     widget.logsEntity.userRateRestaurant?.toDouble() ?? 0,
+                              initialRating: _currentLogsEntity
+                                      .userRateRestaurant?.rate
+                                      ?.toDouble() ??
+                                  0,
                               ignoreGestures: true,
                               itemPadding:
                                   const EdgeInsets.symmetric(horizontal: 3),
                               ratingWidget: RatingWidget(
                                 full: SvgPicture.asset(Assets.star1),
-                                half: SvgPicture.asset(Assets.star1),
-                                empty: SvgPicture.asset(Assets.starEmpty),
+                                half: SvgPicture.asset(Assets.halfStar),
+                                empty: SvgPicture.asset(Assets.starEmpty,color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,),
                               ),
                               itemSize: 13,
                               onRatingUpdate: (double value) {},
                             ),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.cF3F3F3),
-                                onPressed: () {
-                                  final cubit = context.read<RestaurantsCubit>();
+                            InkWell(
+                                onTap: () {
+                                  final cubit =
+                                      context.read<RestaurantsCubit>();
                                   showModalBottomSheet(
                                     context: context,
                                     isScrollControlled: true,
@@ -155,8 +198,8 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                         create: (context) =>
                                             serviceLocator<RestaurantsCubit>(),
                                         child: RatingBottomSheet(
-                                          restaurantId:
-                                              widget.logsEntity.restaurantId!.id!,
+                                          restaurantId: widget
+                                              .logsEntity.restaurantId!.id!,
                                           cubit: cubit,
                                           onRatingUpdated: _updateRating,
                                         ),
@@ -164,13 +207,21 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                     },
                                   );
                                 },
-                                child: Label(
-                                  text: LocaleKeys.modify.localize,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14,
-                                      color: AppColors.black),
-                                )),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.cF3F3F3,
+                                    borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child: Label(
+                                    text: LocaleKeys.modify.localize,
+                                    style: Styles.mediumText(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.black
+                                    ),
+                                  ),
+                                )
+                            ),
                           ],
                         ),
                       ],
@@ -178,37 +229,62 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Label(
-                    text: LocaleKeys.restaurantRateYou.localize,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: AppColors.black),
-                  ),
-                  Row(
-                    children: [
-                      const Label(
-                        text: "Good",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                  Expanded(
+                    child: Label(
+                      text: LocaleKeys.restaurantRateYou.localize,
+                      style: Styles.mediumText(
+                          fontWeight: FontWeight.w700,
+                        color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
                       ),
-                      RatingBar(
-                        initialRating: _currentLogsEntity.restaurantRateUser?.toDouble() ?? 0,
-                        // initialRating:
-                        //     widget.logsEntity.userRateRestaurant?.toDouble() ?? 0,
-                        ignoreGestures: true,
-                        itemPadding:
-                        const EdgeInsets.symmetric(horizontal: 3),
-                        ratingWidget: RatingWidget(
-                          full: SvgPicture.asset(Assets.star1),
-                          half: SvgPicture.asset(Assets.star1),
-                          empty: SvgPicture.asset(Assets.starEmpty),
+                    ),
+                  ),
+                  widget.logsEntity.restaurantRateUser == null
+                      ? Row(
+                          children: [
+                            Label(
+                              text: context.isArabic
+                                  ? widget.logsEntity.restaurantRateUserName
+                                          ?.ar ??
+                                      ""
+                                  : widget.logsEntity.restaurantRateUserName
+                                          ?.en ??
+                                      "",
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+                              ),
+                            ),
+                            RatingBar(
+                              initialRating: _currentLogsEntity
+                                      .restaurantRateUser
+                                      ?.toDouble() ??
+                                  0,
+                              // initialRating:
+                              //     widget.logsEntity.userRateRestaurant?.toDouble() ?? 0,
+                              ignoreGestures: true,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 3),
+                              ratingWidget: RatingWidget(
+                                full: SvgPicture.asset(Assets.star1,),
+                                half: SvgPicture.asset(Assets.halfStar),
+                                empty: SvgPicture.asset(Assets.starEmpty,color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,),
+                              ),
+                              itemSize: 13,
+                              onRatingUpdate: (double value) {},
+                            ),
+                          ],
+                        )
+                      : Label(
+                          text: context.isArabic
+                              ? widget.logsEntity.restaurantRateUserName?.ar ??
+                                  ""
+                              : widget.logsEntity.restaurantRateUserName?.en ??
+                                  "",
+                          style: Styles.mediumText(fontWeight: FontWeight.w600,
+
+                            color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+                          ),
                         ),
-                        itemSize: 13,
-                        onRatingUpdate: (double value) {},
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ],
@@ -230,11 +306,13 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
               radius: 30,
               backgroundColor: Colors.grey[600],
               backgroundImage:
-                  widget.logsEntity.userId?.userProfile?.profilePictureKey != null
-                      ? NetworkImage(
-                          widget.logsEntity.userId!.userProfile!.profilePictureKey!.mediaKey!)
+                  widget.logsEntity.userId?.userProfile?.profilePictureKey !=
+                          null
+                      ? NetworkImage(widget.logsEntity.userId!.userProfile!
+                          .profilePictureKey!.mediaKey!)
                       : null,
-              child: widget.logsEntity.userId?.userProfile?.profilePictureKey == null
+              child: widget.logsEntity.userId?.userProfile?.profilePictureKey ==
+                      null
                   ? const Icon(
                       Icons.person,
                       size: 40,
@@ -250,17 +328,17 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                 borderRadius: BorderRadius.circular(10),
                 // shape: BoxShape.circle,
               ),
-              child: const Row(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.star,
-                    size: 6.6,
+                    size: 10,
                     color: AppColors.ACCENT_COLOR,
                   ),
                   Text(
-                    '4.5',
-                    style: TextStyle(
-                      fontSize: 10,
+                    "${widget.logsEntity.userId?.restaurantRate ?? 0}",
+                    style: Styles.smallText(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -272,7 +350,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         ),
         const SizedBox(width: 16),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.center,
@@ -281,9 +359,9 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
             ],
           ),
         ),
-        const SizedBox(width: 8),
+        // const SizedBox(width: 8),
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Center(child: _buildRestaurantDetails(context)),
         ),
       ],
@@ -294,9 +372,9 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
     return Label(
       text: capitalizeAndSplit2Only(
           widget.logsEntity.userId?.firstName ?? LocaleKeys.noName.tr()),
-      style: const TextStyle(
-        fontSize: 16,
+      style: Styles.mediumText(
         fontWeight: FontWeight.w600,
+        color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
       ),
     );
   }
@@ -310,20 +388,22 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
               LocaleKeys.unknownRestaurant.tr()),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 16,
+          style: Styles.mediumText(
             fontWeight: FontWeight.w700,
+            color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
           ),
         ),
         if (widget.logsEntity.restaurantId?.subcategoryId != null)
           Text(
             context.isArabic
-                ? widget.logsEntity.restaurantId!.subcategoryId!.nameAr.toString()
+                ? widget.logsEntity.restaurantId!.subcategoryId!.nameAr
+                    .toString()
                 : capitalizeAndSplit2Only(
-                    widget.logsEntity.restaurantId!.subcategoryId!.nameEn ?? ''),
-            style: const TextStyle(
-              fontSize: 16,
+                    widget.logsEntity.restaurantId!.subcategoryId!.nameEn ??
+                        ''),
+            style: Styles.mediumText(
               fontWeight: FontWeight.w700,
+              color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
             ),
           ),
         _buildFoodDetails(),
@@ -348,9 +428,9 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
       foodList.length > 1 ? "${foodList[0]}, ${foodList[1]}" : foodList[0],
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: const TextStyle(
-        fontSize: 16,
+      style: Styles.mediumText(
         fontWeight: FontWeight.w700,
+        color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
       ),
     );
   }
@@ -358,26 +438,16 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
   Widget _buildTotalAndCurrency() {
     return Row(
       children: [
-        Text(
-          "${LocaleKeys.total.tr()}: ",
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        // const Spacer(),
-        Text(
-          widget.logsEntity.total?.toString() ?? '0',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        Text(
-          " ${widget.logsEntity.currencyEn ?? ''}",
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+        Expanded(
+          child: Text(
+            "${LocaleKeys.total.tr()}"
+                ":${widget.logsEntity.total?.toString() ?? '0'}",
+            style: Styles.mediumText(
+              fontWeight: FontWeight.w700,
+              color: context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
@@ -393,19 +463,23 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
               ? DateFormat('MMM d, yyyy h:mm a')
                   .format(DateTime.parse(widget.logsEntity.createdAt!))
               : LocaleKeys.noDate.tr(),
-          style: const TextStyle(
-            fontSize: 12,
+          style: Styles.smallText(
+            // fontSize: 12,
             fontWeight: FontWeight.w600,
+            color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
           ),
         ),
         const Spacer(),
         Flexible(
           flex: 5,
           child: Text(
-            widget.logsEntity.subscriptionType?.toString() ??
-                LocaleKeys.noSubscription.tr(),
-            style: const TextStyle(
-              fontSize: 12,
+            context.isArabic
+                ? widget.logsEntity.subscriptionType?.ar ??
+                    LocaleKeys.noSubscription.tr()
+                : widget.logsEntity.subscriptionType?.en ??
+                    LocaleKeys.noSubscription.tr(),
+            style: Styles.smallText(
+              // fontSize: 12,
               color: AppColors.SECONDARY_COLOR_DARK,
               fontWeight: FontWeight.w600,
             ),
@@ -415,6 +489,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
     );
   }
 }
+
 class RatingBottomSheet extends StatefulWidget {
   final String restaurantId;
   final RestaurantsCubit cubit;
@@ -445,7 +520,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       try {
         // Show loading
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Submitting rating...')),
+           SnackBar(content: Text(LocaleKeys.submittingRating.localize)),
         );
 
         // Submit rating
@@ -455,14 +530,14 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
         widget.onRatingUpdated?.call(_rating);
 
         // Refresh data
-         widget.cubit.loadInitialReqLogs();
+        widget.cubit.loadInitialReqLogs();
 
         // Close bottom sheet
         Navigator.pop(context);
 
         // Show success
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Rating submitted successfully')),
+           SnackBar(content: Text(LocaleKeys.ratingSubmittedSuccessfully.localize)),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -471,7 +546,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please provide a rating')),
+         SnackBar(content: Text(LocaleKeys.pleaseProvideRate.localize)),
       );
     }
   }
@@ -496,8 +571,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration:  BoxDecoration(
+        color: context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor,
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
       child: Column(
@@ -505,12 +580,18 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
         children: [
           Label(
             text: LocaleKeys.rateTheRestaurant.localize,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+            style:  Styles.headerText(
+              fontWeight: FontWeight.w700,
+              color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+            ),
           ),
           const SizedBox(height: 8),
           Label(
-            text:getRatingText(),
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 30),
+            text: getRatingText(),
+            style:  Styles.mediumText(
+                fontWeight: FontWeight.w500, fontSize: 30,
+              color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+            ),
           ),
 
           const SizedBox(height: 8),
@@ -524,7 +605,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               full: SvgPicture.asset(Assets.star1),
               half: SvgPicture.asset(Assets.star1),
               // You can adjust the half icon if needed
-              empty: SvgPicture.asset(Assets.starEmpty),
+              empty: SvgPicture.asset(Assets.starEmpty,color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,),
             ),
             itemSize: 40,
             // Adjust the size of the star
@@ -536,16 +617,12 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
           ),
           const SizedBox(height: 24),
           AppButton(
-              backColor: AppColors.PRIMARY_COLOR,
-              color: AppColors.whiteColor,
-              // style: ElevatedButton.styleFrom(
-              //   backgroundColor: AppColors.PRIMARY_COLOR,
-              //   padding: const EdgeInsets.symmetric(vertical: 12),
-              //   shape: RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              // ),
-
+              backColor: context.isDarkMode ? AppColors.whiteColor :AppColors.PRIMARY_COLOR,
+              color: context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor,
+              style: Styles.mediumText(
+                fontSize: 50,
+                color: context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor,
+              ),
               onPressed: () => _sendRating(context),
               label: LocaleKeys.send.localize),
         ],
@@ -553,137 +630,3 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
     );
   }
 }
-
-// class RatingBottomSheet extends StatefulWidget {
-//   final String restaurantId;
-//   final RestaurantsCubit cubit;
-//
-//   const RatingBottomSheet({
-//     super.key,
-//     required this.restaurantId,
-//     required this.cubit,
-//   });
-//
-//   @override
-//   _RatingBottomSheetState createState() => _RatingBottomSheetState();
-// }
-//
-// class _RatingBottomSheetState extends State<RatingBottomSheet> {
-//   double _rating = 0;
-//   TextEditingController _commentController = TextEditingController();
-//
-//   @override
-//   void dispose() {
-//     _commentController.dispose();
-//     super.dispose();
-//   }
-//
-//   void _sendRating(BuildContext context) {
-//     if (_rating > 0) {
-//       final params = AddRateRestaurantParams(
-//         restaurantId: widget.restaurantId,
-//         rate: _rating,
-//         comment: "Elmon",
-//       );
-//
-//       // Call the Cubit to rate the restaurant
-//       widget.cubit.rateRestaurant(params: params);
-//
-//       // Wait for the response and then refresh the list
-//       widget.cubit.rateRestaurant(params: params).then((_) {
-//         // Refresh the data after rating is submitted
-//         widget.cubit.loadInitialReqLogs();
-//       });
-//       Navigator.pop(context); // Close the bottom sheet after sending the rating
-//       Navigator.pop(context); // Close the bottom sheet after sending the rating
-//       Navigator.pop(context); // Close the bottom sheet after sending the rating
-//     } else {
-//       // Show an error if no rating or comment is provided
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Please provide a rating ')),
-//       );
-//     }
-//   }
-//
-//   // Method to return the text based on the rating
-//   String getRatingText() {
-//     if (_rating == 1) {
-//       return LocaleKeys.bad.localize;
-//     } else if (_rating == 2) {
-//       return LocaleKeys.poor2.localize;
-//     } else if (_rating == 3) {
-//       return LocaleKeys.good.localize;
-//     } else if (_rating == 4) {
-//       return LocaleKeys.veryGood.localize;
-//     } else if (_rating == 5) {
-//       return LocaleKeys.excellent.localize;
-//     }
-//     return '';
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: double.infinity,
-//       padding: const EdgeInsets.all(16),
-//       decoration: const BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-//       ),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Label(
-//             text: LocaleKeys.rateTheRestaurant.localize,
-//             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-//           ),
-//           const SizedBox(height: 8),
-//           // Rating Bar
-//           RatingBar(
-//             initialRating: _rating,
-//             ignoreGestures: false,
-//             // Allow interaction
-//             itemPadding: const EdgeInsets.symmetric(horizontal: 3),
-//             ratingWidget: RatingWidget(
-//               full: SvgPicture.asset(Assets.star1),
-//               half: SvgPicture.asset(Assets.star1),
-//               // You can adjust the half icon if needed
-//               empty: SvgPicture.asset(Assets.starEmpty),
-//             ),
-//             itemSize: 40,
-//             // Adjust the size of the star
-//             onRatingUpdate: (rating) {
-//               setState(() {
-//                 _rating = rating;
-//               });
-//             },
-//           ),
-//           const SizedBox(height: 16),
-//           // Displaying the rating text based on the selected rating
-//           Text(
-//             getRatingText(),
-//             style: const TextStyle(
-//               fontSize: 16,
-//               fontWeight: FontWeight.w600,
-//               color: Colors.black,
-//             ),
-//           ),
-//           const SizedBox(height: 24),
-//           AppButton(
-//               backColor: AppColors.PRIMARY_COLOR,
-//               color: AppColors.whiteColor,
-//               // style: ElevatedButton.styleFrom(
-//               //   backgroundColor: AppColors.PRIMARY_COLOR,
-//               //   padding: const EdgeInsets.symmetric(vertical: 12),
-//               //   shape: RoundedRectangleBorder(
-//               //     borderRadius: BorderRadius.circular(8),
-//               //   ),
-//               // ),
-//
-//               onPressed: () => _sendRating(context),
-//               label: LocaleKeys.send.localize),
-//         ],
-//       ),
-//     );
-//   }
-// }

@@ -30,7 +30,7 @@ import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class SubCategoriesRestaurantCard extends StatelessWidget {
-  final Restaurant? item;
+  final GetAllRestaurantEntity? item;
   final bool isVertical;
   final String mealId;
   final Function(String id) favouriteRestaurant;
@@ -49,31 +49,187 @@ class SubCategoriesRestaurantCard extends StatelessWidget {
       onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
       child: isVertical
           ? VerticalRestaurantCard(
-        item: item,
-        mealId: mealId,
-        favouriteRestaurant: (String id) => favouriteRestaurant(id),
-      )
+              item: item,
+              mealId: mealId,
+              favouriteRestaurant: (String id) => favouriteRestaurant(id),
+            )
           : HorizontalRestaurantCard(item: item),
     );
   }
 }
+class PropertyCard extends StatelessWidget {
+  final GetAllRestaurantEntity item;
+  final String mealId;
+  final bool myRestaurant;
+  final Function(String id) favouriteRestaurant;
 
-class VerticalRestaurantCard extends StatelessWidget {
-  final Restaurant? item;
+  const PropertyCard(
+      {super.key,
+        required this.item,
+        required this.mealId,
+        required this.favouriteRestaurant,
+        required this.myRestaurant});
+
+  String formatViews(int views) {
+    if (views >= 1000000) {
+      return "${(views / 1000000).toStringAsFixed(1)}M";
+    } else if (views >= 1000) {
+      return "${(views / 1000).toStringAsFixed(1)}K";
+    } else {
+      return views.toString();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hasSubscription = item.isPremium;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(width: 1,
+          color: context.isDarkMode ?  AppColors.whiteColor.withOpacity(0.7) : AppColors.black.withOpacity(0.7),
+        ),
+      ),
+      child: Column(
+        // spacing: 10,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+                vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  spacing: 4,
+
+                  children: [
+                    SvgPicture.asset(
+                      Assets.eyeIcon,
+                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                    ),
+                    Label(
+                      text: formatViews(item.totalViews!.toInt()),
+                      style:  Styles.mediumText(
+                        // fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        // color: AppColors.c6C6C6C,
+                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                    Label(
+                      text: LocaleKeys.views.localize,
+                      style:  Styles.mediumText(
+                        // fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                  ],
+                ),
+                Label(
+                  text: (context.isArabic ? item.subscriptionType?.ar : item.subscriptionType?.en) ?? "N/A",
+                  textAlign: TextAlign.right,
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w700,
+                    color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR_DARK,
+                    // fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // if (hasSubscription == true)
+          //   EliteBanner(subscriptionType: (context.isArabic ? item.subscriptionType?.ar : item.subscriptionType?.en) ?? ''),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: ImagesProfileForRestaurant(
+                  heightCarousel: 150,
+                  autoPlay: true,
+                  restaurantMedia: item.restaurantMedia,
+                ),
+              ),
+              if (!myRestaurant && context.read<UserCubit>().isLoggedIn)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: FavoriteButton(
+                    item: item,
+                    mealId: mealId,
+                    favouriteRestaurant: (String id) =>
+                        favouriteRestaurant(id),
+                  ),
+                ),
+            ],
+          ),
+          DetailsSection(
+            item: item,
+            myRestaurant: myRestaurant,
+          ),
+          // if (!myRestaurant) const SizedBox(height: 4),
+          if (!myRestaurant)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: PremiumAndRequestButtons(item: item),
+                ),
+                Flexible(
+                  child: CallMessageReportButtons(item: item),
+                ),
+              ],
+            )
+
+        ],
+      ),
+    );
+  }
+}
+class FavoriteButton extends StatelessWidget {
+  final GetAllRestaurantEntity item;
   final String mealId;
   final Function(String id) favouriteRestaurant;
 
-  const VerticalRestaurantCard(
+  const FavoriteButton(
       {super.key,
-        this.item,
+        required this.item,
         required this.mealId,
         required this.favouriteRestaurant});
 
   @override
   Widget build(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      icon: Icon(
+        (item.isFavorite ?? false) ? Icons.favorite : Icons.favorite_border,
+        color: AppColors.SECONDARY_COLOR,
+      ),
+      onPressed: () async {
+        await favouriteRestaurant(item.id!);
+      },
+    );
+  }
+}
+
+class VerticalRestaurantCard extends StatelessWidget {
+  final GetAllRestaurantEntity? item;
+  final String mealId;
+  final Function(String id) favouriteRestaurant;
+
+  const VerticalRestaurantCard(
+      {super.key,
+      this.item,
+      required this.mealId,
+      required this.favouriteRestaurant});
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.92,
-      height: MediaQuery.of(context).size.width *1,
+      // height: MediaQuery.of(context).size.height * 0.50,
       child: PropertyCard(
         item: item!,
         mealId: mealId,
@@ -85,7 +241,7 @@ class VerticalRestaurantCard extends StatelessWidget {
 }
 
 class HorizontalRestaurantCard extends StatelessWidget {
-  final Restaurant? item;
+  final GetAllRestaurantEntity? item;
 
   const HorizontalRestaurantCard({super.key, this.item});
 
@@ -110,10 +266,6 @@ class HorizontalRestaurantCard extends StatelessWidget {
               Label(
                 text: item?.name ?? "",
                 style: Styles.mediumText(fontWeight: FontWeight.w400),
-              ),
-              Label(
-                text: item?.description ?? "",
-                style: Styles.mediumText(color: Colors.grey),
               ),
               Row(
                 children: [
@@ -140,128 +292,7 @@ class HorizontalRestaurantCard extends StatelessWidget {
   }
 }
 
-class PropertyCard extends StatelessWidget {
-  final Restaurant item;
-  final String mealId;
-  final bool myRestaurant;
-  final Function(String id) favouriteRestaurant;
 
-  const PropertyCard(
-      {super.key,
-        required this.item,
-        required this.mealId,
-        required this.favouriteRestaurant,
-        required this.myRestaurant});
-
-  String formatViews(int views) {
-    if (views >= 1000000) {
-      return "${(views / 1000000).toStringAsFixed(1)}M";
-    } else if (views >= 1000) {
-      return "${(views / 1000).toStringAsFixed(1)}K";
-    } else {
-      return views.toString();
-    }
-  }
-  @override
-  Widget build(BuildContext context) {
-    final hasSubscription =
-        item.subscriptionType?.split(' ').first.toLowerCase() != 'no';
-    return LayoutBuilder(
-      builder: (context, constraints) {
-
-
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(width: 1, color: AppColors.PRIMARY_COLOR),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding:const EdgeInsetsDirectional.symmetric(vertical: 8,horizontal: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      spacing: 2,
-                      children: [
-                        SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
-                        Label(text: formatViews(item.totalViews!.toInt()),
-                          style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.c6C6C6C
-                          ),
-                        ),
-                        Label(text: LocaleKeys.views.localize,
-                          style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.c6C6C6C
-                          ),
-                        ),
-                      ],
-                    ),
-                    Label(
-                      text: item.subscriptionType ?? "N/A" ,
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (hasSubscription)
-                EliteBanner(subscriptionType: item.subscriptionType ?? ''),
-              Flexible(
-                flex: 4,
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: ImagesProfileForRestaurant(
-                        autoPlay: true,
-                        restaurantMedia: item.restaurantMedia,
-                      ),
-                    ),
-                    if (!myRestaurant && context.read<UserCubit>().isLoggedIn)
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        child: FavoriteButton(
-                            item: item,
-                            mealId: mealId,
-                            favouriteRestaurant: (String id) =>
-                                favouriteRestaurant(id)),
-                      ),
-                  ],
-                ),
-              ),
-              Flexible(
-                  flex: 2,
-                  child:
-                  DetailsSection(item: item, myRestaurant: myRestaurant)),
-              if (!myRestaurant) const SizedBox(height: 4),
-              if (!myRestaurant)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                        width: 180,
-                        child: PremiumAndRequestButtons(item: item)),
-                    CallMessageReportButtons(item: item),
-                  ],
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
 
 class PropertyCardShimmer extends StatelessWidget {
   const PropertyCardShimmer({super.key});
@@ -311,16 +342,16 @@ class EliteBanner extends StatelessWidget {
             color: subscriptionType == 'Premium subscription'
                 ? AppColors.SECONDARY_COLOR
                 : subscriptionType == 'Regular subscription'
-                ? AppColors.PRIMARY_COLOR
-                : null,
+                    ? AppColors.PRIMARY_COLOR
+                    : null,
           ),
           const Sizer(),
           Text(
             subscriptionType == 'Premium subscription'
                 ? LocaleKeys.premium.localize
                 : subscriptionType == 'Regular subscription'
-                ? LocaleKeys.regular.localize
-                : LocaleKeys.notSubscribed.localize,
+                    ? LocaleKeys.regular.localize
+                    : LocaleKeys.notSubscribed.localize,
             textAlign: TextAlign.start,
             style: const TextStyle(
               fontSize: 18,
@@ -334,41 +365,9 @@ class EliteBanner extends StatelessWidget {
   }
 }
 
-class FavoriteButton extends StatelessWidget {
-  final Restaurant item;
-  final String mealId;
-  final Function(String id) favouriteRestaurant;
-
-  const FavoriteButton(
-      {super.key,
-        required this.item,
-        required this.mealId,
-        required this.favouriteRestaurant});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      padding: EdgeInsets.zero,
-      icon: Icon(
-        (item.isFavorite ?? false) ? Icons.favorite : Icons.favorite_border,
-        color: AppColors.SECONDARY_COLOR,
-      ),
-      onPressed: () async {
-        await favouriteRestaurant(item.id!);
-
-        // if (mealId.isNotEmpty) {
-        //   await BlocProvider.of<RestaurantsCubit>(context)
-        //       .getSubCategoryRestaurants(id: mealId);
-        // } else {
-        //   // await BlocProvider.of<RestaurantsCubit>(context).getAllRestaurant();
-        // }
-      },
-    );
-  }
-}
 
 class DetailsSection extends StatelessWidget {
-  final Restaurant item;
+  final GetAllRestaurantEntity item;
 
   final bool myRestaurant;
 
@@ -379,7 +378,7 @@ class DetailsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: double.infinity,
+      // height: MediaQuery.sizeOf(context).height * 0.2,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -395,13 +394,12 @@ class DetailsSection extends StatelessWidget {
               Text(
                 item.name ?? '',
                 style:
-                const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               ),
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                  "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
-                      "${item.description != null ? "," : ""} ${item.description ?? ''}",
+                  "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}",
                   style: const TextStyle(
                       fontWeight: FontWeight.w600, fontSize: 12),
                   overflow: TextOverflow.ellipsis,
@@ -415,60 +413,31 @@ class DetailsSection extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Label(text: item.rateName ?? "N/A"),
-                    // const Icon(
-                    //   Icons.star_rounded,
-                    //   color: AppColors.ACCENT_COLOR,
-                    // ),
-                    // const Sizer(),
+                    Label(text: (context.isArabic ? item.rateName?.ar :item.rateName?.en) ?? "N/A",
+                    style: Styles.smallText(
+                      fontWeight: FontWeight.w600,
+                      // fontSize: 16
+                    ),
+                    ),
                     RatingBar(
-                      initialRating: item.totalRating ?? 0,
+                      initialRating: item.totalRating?.toDouble() ?? 0,
                       ignoreGestures: true,
+                      allowHalfRating: true,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 3),
                       ratingWidget: RatingWidget(
                         full: SvgPicture.asset(Assets.star1),
-                        half: SvgPicture.asset(Assets.star1),
-                        empty: SvgPicture.asset(Assets.starEmpty),
+                        half: SvgPicture.asset(Assets.halfStar),
+                        empty: SvgPicture.asset(Assets.starEmpty,
+                        color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                        ),
                       ),
                       itemSize: 13,
                       onRatingUpdate: (double value) {},
                     ),
-                    // Label(
-                    //   text: '${item.totalRating}',
-                    //   style: Styles.mediumText(fontWeight: FontWeight.w500),
-                    // ),
-                    // Label(
-                    //   text: '(${item.numberOfReviews}+)',
-                    //   style: Styles.mediumText(),
-                    // ),
                   ],
                 ),
               ],
             ),
-          // Expanded(
-          //     child: Row(
-          //   children: [
-          //     Text(item.name ?? '', style: TextStyle(
-          //         fontWeight: FontWeight.w600, fontSize: 16)),
-          //     Text(
-          //         "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
-          //             "${item.description != null ? "," : ""} ${item.description ?? ''}",
-          //         style: TextStyle(
-          //             fontWeight: FontWeight.w600, fontSize: 12)),
-          //     if (myRestaurant)
-          //       ClickableWidget(
-          //           onTap: () {
-          //             context.push(Routes.RESTAURANTORDERS);
-          //           },
-          //           child: Text(LocaleKeys.showAllOrders.localize,
-          //               style: Styles.mediumText(
-          //                   color: AppColors.SECONDARY_COLOR,
-          //                   decoration: TextDecoration.underline,
-          //                   decorationThickness: 2.w))),
-          //
-          //   ],
-          // )
-          // ),
           if (myRestaurant)
             Row(
               // mainAxisAlignment: MainAxisAlignment.end,
@@ -500,28 +469,38 @@ class DetailsSection extends StatelessWidget {
               children: [
                 if (!myRestaurant)
                   Text(
-                      (item.isActive ?? false)
-                          ? LocaleKeys.available.localize
-                          : LocaleKeys.notAvailable.localize,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                          color: AppColors.SECONDARY_COLOR)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Icon(Icons.location_on_rounded),
-                    Text(
-                      // textAlign: TextAlign.end,
-                        '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr : item.city?.cityNameEn ?? ''}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                        )),
-                  ],
+                    (item.isActive ?? false)
+                        ? LocaleKeys.available.localize
+                        : LocaleKeys.notAvailable.localize,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                      color: AppColors.SECONDARY_COLOR,
+                    ),
+                  ),
+                Expanded( // <<< حل المشكلة هنا
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Icon(Icons.location_on_rounded),
+                      SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr ?? '' : item.city?.cityNameEn ?? ''}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
-            ),
+            )
+
         ],
       ),
     );
@@ -529,7 +508,7 @@ class DetailsSection extends StatelessWidget {
 }
 
 class PremiumAndRequestButtons extends StatelessWidget {
-  final Restaurant item;
+  final GetAllRestaurantEntity item;
 
   const PremiumAndRequestButtons({super.key, required this.item});
 
@@ -537,32 +516,12 @@ class PremiumAndRequestButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
-      child: Row(
-        children: [
-          // _buildButton(
-          //   label: LocaleKeys.premiumRequest.localize,
-          //   color: AppColors.PRIMARY_COLOR_DARK,
-          //   onPressed: () async {
-          //     serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-          //       showRegular: false,
-          //       title:
-          //           "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn} Subscription",
-          //       onSubscribed: () {
-          //         context.push(Routes.RESTAURANTDETAILS, extra: item);
-          //       },
-          //       subCategoryId: item.subcategoryId!.id,
-          //     );
-          //   },
-          // ),
-          // const SizedBox(width: 4),
-          _buildButton(
-            label: LocaleKeys.request.localize,
-            color: AppColors.PRIMARY_COLOR_DARK,
-            onPressed: () {
-              context.push(Routes.RESTAURANTDETAILS, extra: item);
-            },
-          ),
-        ],
+      child: _buildButton(
+        label: LocaleKeys.request.localize,
+        color: AppColors.PRIMARY_COLOR_DARK,
+        onPressed: () {
+          context.push(Routes.RESTAURANTDETAILS, extra: item);
+        },
       ),
     );
   }
@@ -572,94 +531,38 @@ class PremiumAndRequestButtons extends StatelessWidget {
     required Color color,
     required VoidCallback onPressed,
   }) {
-    return Flexible(
-      child: AppButton(
-        radius: 15,
-        height: 60.h,
-        padding: 0,
-        margin: 0,
-        label: label,
-        backColor: color,
-        style: Styles.mediumText(color: Colors.white),
-        onPressed: onPressed,
-      ),
+    return AppButton(  // Removed the Flexible wrapper
+      radius: 15,
+      height: 60.h,
+      padding: 0,
+      margin: 0,
+      label: label,
+      backColor: color,
+      style: Styles.mediumText(color: Colors.white),
+      onPressed: onPressed,
     );
   }
 }
 
 class CallMessageReportButtons extends StatelessWidget {
-  final Restaurant item;
+  final GetAllRestaurantEntity item;
 
   const CallMessageReportButtons({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     final isChatEnabled = item.enableOrDisableChat?.toLowerCase() == 'enable';
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
-      child: Row(
-        children: [
-          // IconButton(
-          //   icon:  SvgPicture.asset(Assets.phoneIconRed,
-          //   width: 18,
-          //     height: 18,
-          //   ),
-          //   color: isChatEnabled
-          //       ? AppColors.PRIMARY_COLOR
-          //       : AppColors.GREY_DARK_COLOR,
-          //   onPressed: isChatEnabled
-          //       ? () {
-          //     showModalBottomSheet(
-          //       context: context,
-          //       backgroundColor: cardDarkColor(context),
-          //       shape: const RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-          //       ),
-          //       builder: (_) {
-          //         return Padding(
-          //           padding: const EdgeInsets.all(16.0),
-          //           child: Column(
-          //             mainAxisSize: MainAxisSize.min,
-          //             children: [
-          //               ElevatedButton(
-          //                 onPressed: () {
-          //                   Navigator.pop(context); // close current sheet
-          //                   _showFreeCallBottomSheet(context, item);
-          //                 },
-          //                 child: const Text("Free Call"),
-          //               ),
-          //               ElevatedButton(
-          //                 onPressed: () {
-          //                   launchUrlString("tel://${item.number}");
-          //                 },
-          //                 child: const Text("Regular Call"),
-          //               ),
-          //             ],
-          //           ),
-          //         );
-          //       },
-          //     );
-          //   }
-          //       : () {
-          //     SubscriptionMethod().subscribe(
-          //       subscribeId: item.subcategoryId?.id ?? '',
-          //       title: item.name ?? '',
-          //     );
-          //   },
-          //   // onPressed: isChatEnabled
-          //   //     ? () => launchUrlString("tel://${item.number}")
-          //   //     : () {
-          //   //         SubscriptionMethod().subscribe(
-          //   //             subscribeId: item.subcategoryId?.id ?? '',
-          //   //             title: item.name ?? '');
-          //   //       },
-          // ),
-          IconButton(
+    return Row(
+      // spacing: 15,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: IconButton(
             icon: SvgPicture.asset(
               Assets.phoneIconRed,
-              width: 18,
-              height: 18,
-              color:  isChatEnabled
+              width: 22,
+              height: 22,
+              color: isChatEnabled
                   ? AppColors.PRIMARY_COLOR_DARK
                   : AppColors.GREY_DARK_COLOR,
             ),
@@ -668,56 +571,60 @@ class CallMessageReportButtons extends StatelessWidget {
                 : AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled
                 ? () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: cardDarkColor(context),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                ),
-                builder: (_) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      spacing: 16,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AppButton(
-                          backColor: AppColors.PRIMARY_COLOR,
-                          color: AppColors.whiteColor,
-                          onPressed: () {
-                            Navigator.pop(context); // Close first sheet
-                            // _showFreeCallBottomSheet(context, item);
-                          },
-                          label:  "Free Call",
-                        ),
-                        AppButton(
-                          backColor: AppColors.cD9D9D9,
-                          color: AppColors.black,
-                          onPressed: () {
-                            Navigator.pop(context); // Close first sheet
-                            _showRegularCallBottomSheet(context, item); // Open second
-                          },
-                          label:  "Regular Call",
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: cardDarkColor(context),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(16)),
+                      ),
+                      builder: (_) {
+                        return Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            spacing: 16,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AppButton(
+                                backColor: AppColors.PRIMARY_COLOR,
+                                color: AppColors.whiteColor,
+                                onPressed: () {
+                                  Navigator.pop(context); // Close first sheet
+                                  // _showFreeCallBottomSheet(context, item);
+                                },
+                                label: LocaleKeys.freeCall.localize,
+                              ),
+                              AppButton(
+                                backColor: AppColors.cD9D9D9,
+                                color: AppColors.black,
+                                onPressed: () {
+                                  Navigator.pop(context); // Close first sheet
+                                  _showRegularCallBottomSheet(
+                                      context, item); // Open second
+                                },
+                                label: LocaleKeys.regularCall.localize,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
                 : () {
-              SubscriptionMethod().subscribe(
-                subscribeId: item.subcategoryId?.id ?? '',
-                title: item.name ?? '',
-              );
-            },
+                    SubscriptionMethod().subscribe(
+                      subscribeId: item.subcategoryId?.id ?? '',
+                      title: item.name ?? '',
+                    );
+                  },
           ),
-
-
-          // const SizedBox(width: 4),
-          IconButton(
-            icon: SvgPicture.asset(Assets.mailIconRed,
-              color:  isChatEnabled
+        ),
+        Expanded(
+          child: IconButton(
+            icon: SvgPicture.asset(
+              Assets.mailIconRed,
+              width: 18,
+              height: 18,
+              color: isChatEnabled
                   ? AppColors.PRIMARY_COLOR_DARK
                   : AppColors.GREY_DARK_COLOR,
             ),
@@ -736,9 +643,18 @@ class CallMessageReportButtons extends StatelessWidget {
                   title: item.name ?? '');
             },
           ),
-          // const SizedBox(width: 4),
-          IconButton(
-            icon: const Icon(Icons.report),
+        ),
+        Expanded(
+          child: IconButton(
+            icon: SvgPicture.asset(
+              Assets.reportRed,
+              width: 18,
+              height: 18,
+              color: isChatEnabled
+                  ? AppColors.PRIMARY_COLOR_DARK
+                  : AppColors.GREY_DARK_COLOR,
+            ),
+          
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
               await showModalBottomSheet(
@@ -750,144 +666,25 @@ class CallMessageReportButtons extends StatelessWidget {
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
                     child: ReportView(
                       id: item.id!,
-                      categoryId: item.subcategoryId!.id,
+                      categoryId: item.subcategoryId!.id!,
                     ),
                   );
                 },
               );
-
+          
               // Implement report functionality here
             },
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
-  // void _showRegularCallBottomSheet(BuildContext context, Restaurant item) {
-  //   bool isBookingForAnotherClient = false;
-  //   final TextEditingController phoneController = TextEditingController(text: item.number ?? '');
-  //   showModalBottomSheet(
-  //     context: context,
-  //     isScrollControlled: true,
-  //     backgroundColor: cardDarkColor(context),
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-  //     ),
-  //     builder: (context) {
-  //       return StatefulBuilder(
-  //         builder: (context, setState) {
-  //           return Padding(
-  //             padding: EdgeInsets.only(
-  //               left: 16,
-  //               right: 16,
-  //               bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-  //               top: 16,
-  //             ),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 CheckboxListTile(
-  //                   activeColor: AppColors.PRIMARY_COLOR,
-  //                   contentPadding: EdgeInsets.zero,
-  //                   value: isBookingForAnotherClient,
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       isBookingForAnotherClient = value!;
-  //                       if (isBookingForAnotherClient) {
-  //                         phoneController.clear();
-  //                       } else {
-  //                         phoneController.text = item.number ?? '';
-  //                       }
-  //                     });
-  //                   },
-  //
-  //                   // onChanged: (value) {
-  //                   //   setState(() {
-  //                   //     isBookingForAnotherClient = value!;
-  //                   //   });
-  //                   // },
-  //                   title: Text(
-  //                     LocaleKeys.imBookingOfAnotherClient.localize,
-  //                     style: const TextStyle(
-  //                       fontWeight: FontWeight.w600,
-  //                       fontSize: 16,
-  //                       color: AppColors.c717171,
-  //                     ),
-  //                     maxLines: 2,
-  //                     overflow: TextOverflow.ellipsis,
-  //                   ),
-  //                   controlAffinity: ListTileControlAffinity.leading,
-  //                   dense: true, // reduces vertical padding
-  //                   visualDensity:  VisualDensity(horizontal: -4, vertical: -4),
-  //                 ),
-  //                 const SizedBox(height: 10),
-  //                 TextField(
-  //                   enabled: isBookingForAnotherClient,
-  //                   controller: phoneController,
-  //                   keyboardType: TextInputType.phone,
-  //                   style: TextStyle(
-  //                     color: Colors.black.withOpacity(0.8)
-  //                   ),
-  //                   decoration: InputDecoration(
-  //                     prefixIcon: Padding(
-  //                       padding: const EdgeInsets.all(12.0), // Adjust padding as needed
-  //                       child: SvgPicture.asset(
-  //                         color: AppColors.PRIMARY_COLOR,
-  //                         Assets.phoneIconRed,
-  //                         width: 18,
-  //                         height: 18,
-  //                         fit: BoxFit.contain,
-  //                       ),
-  //                     ),
-  //                     hintText: LocaleKeys.phone.localize,
-  //                     filled: true,
-  //                     fillColor: Colors.grey.shade200,
-  //                     border: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.circular(12),
-  //                       borderSide: BorderSide.none,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 const SizedBox(height: 20),
-  //                 SizedBox(
-  //                   width: double.infinity,
-  //                   child: AppButton(
-  //                     backColor: AppColors.PRIMARY_COLOR,
-  //                     color: AppColors.whiteColor,
-  //                     label: LocaleKeys.submit.localize,
-  //                     onPressed: () {
-  //                       final enteredNumber = phoneController.text.trim();
-  //                       if (isBookingForAnotherClient) {
-  //                         if (enteredNumber.isEmpty) {
-  //                           // Show error
-  //                           ScaffoldMessenger.of(context).showSnackBar(
-  //                             const SnackBar(
-  //                               content: Text("Please enter a phone number"),
-  //                             ),
-  //                           );
-  //                           return;
-  //                         }
-  //                         launchUrlString("tel://$enteredNumber");
-  //                       } else {
-  //                         launchUrlString("tel://${item.number}");
-  //                       }
-  //
-  //                       Navigator.pop(context);
-  //                     },
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-  void _showRegularCallBottomSheet(BuildContext context, Restaurant item) {
+
+  void _showRegularCallBottomSheet(BuildContext context, GetAllRestaurantEntity item) {
     bool isBookingForAnotherClient = false;
     bool hasPhoneError = false;
-    final TextEditingController phoneController = TextEditingController(text: item.number ?? '');
+    final TextEditingController phoneController =
+        TextEditingController(text: item.phone ?? '');
 
     showModalBottomSheet(
       context: context,
@@ -928,7 +725,7 @@ class CallMessageReportButtons extends StatelessWidget {
                         if (isBookingForAnotherClient) {
                           phoneController.clear();
                         } else {
-                          phoneController.text = item.number ?? '';
+                          phoneController.text = item.phone ?? '';
                         }
                       });
                     },
@@ -966,7 +763,9 @@ class CallMessageReportButtons extends StatelessWidget {
                         ),
                       ),
                       hintText: LocaleKeys.phone.localize,
-                      errorText: hasPhoneError ? LocaleKeys.enterPhoneNumber.localize : null,
+                      errorText: hasPhoneError
+                          ? LocaleKeys.enterPhoneNumber.localize
+                          : null,
                       filled: true,
                       fillColor: Colors.grey.shade200,
                       border: OutlineInputBorder(
@@ -993,7 +792,7 @@ class CallMessageReportButtons extends StatelessWidget {
                           }
                           launchUrlString("tel://$enteredNumber");
                         } else {
-                          launchUrlString("tel://${item.number}");
+                          launchUrlString("tel://${item.phone}");
                         }
 
                         Navigator.pop(context);
@@ -1009,24 +808,6 @@ class CallMessageReportButtons extends StatelessWidget {
     );
   }
 
-  Widget _buildButtonWithIcon({
-    required String label,
-    required IconData icon,
-    required Color color,
-    required Function onPressed,
-  }) {
-    return Expanded(
-      child: AppButton(
-        padding: 0,
-        margin: 0,
-        height: 60.h,
-        label: label,
-        icon: icon,
-        iconSize: 70.h,
-        backColor: color,
-        style: Styles.mediumText(color: Colors.white),
-        onPressed: onPressed,
-      ),
-    );
-  }
+
+
 }

@@ -30,7 +30,7 @@ class FilterButtonItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          color: AppColors.c0B1035,
+          color: AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -52,20 +52,6 @@ class FilterButtonItem extends StatelessWidget {
           ],
         ),
       ),
-    );
-    return BadgedLabel(
-      label: title,
-      style: Styles.mediumText(
-        color: Colors.white,
-        fontSize: 32,
-      ),
-      height: 42,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      // width: 170.h,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      // icon: Icons.filter_alt_rounded,
-      iconLeading: Icons.keyboard_arrow_down_rounded,
-      onTap: onTap,
     );
   }
 }

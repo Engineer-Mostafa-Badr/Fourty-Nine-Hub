@@ -46,6 +46,7 @@ import '../features/food_feature/restaurants_list/data/datasources/restaurants_r
 import '../features/food_feature/restaurants_list/data/repositories/restaurant_list_repo_impl.dart';
 import '../features/food_feature/restaurants_list/domain/repositories/resturant_list_repo.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/add_rate_restaurant_use_case.dart';
+import '../features/food_feature/restaurants_list/domain/usecases/get_food_ads_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_req_logs_count_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_req_logs_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_user_order_use_case.dart';
@@ -149,6 +150,8 @@ class FoodServiceLocator {
         () => RestaurantMenuCubit(serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantSharedData>(
         () => RestaurantSharedData());
+    serviceLocator.registerLazySingleton<GetFoodAdsUseCase>(
+        () => GetFoodAdsUseCase(     serviceLocator(),));
 
 
     serviceLocator.registerFactory<CreateRestaurantCubit>(
@@ -163,6 +166,7 @@ class FoodServiceLocator {
       ),
     );
     serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

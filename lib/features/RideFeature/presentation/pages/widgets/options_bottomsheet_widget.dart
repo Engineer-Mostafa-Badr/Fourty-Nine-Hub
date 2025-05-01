@@ -32,7 +32,7 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
           return Builder(
             builder: (context) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                     children: [
                       switchWidget(
@@ -204,14 +204,17 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
       Function(bool)? onChanged}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
       children: [
         Text(text ?? '',
             style:
                 const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
         Transform.scale(
           scale: 0.75,
+
           child: Switch(
             value: valuee ?? false,
+            padding: const EdgeInsets.all(0),
             activeColor: AppColors.PRIMARY_COLOR,
             inactiveThumbColor: AppColors.PRIMARY_COLOR,
             trackOutlineColor: WidgetStateProperty.all<Color>(

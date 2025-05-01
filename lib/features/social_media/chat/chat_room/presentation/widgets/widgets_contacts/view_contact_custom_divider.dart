@@ -11,7 +11,7 @@ class ViewContactCustomDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Divider(
       color: context.isDarkMode
-          ? AppColors.QUANTITY_COLOR
+          ? AppColors.GRAY_LIGHT_COLOR3
           : AppColors.GRAY_LIGHT_COLOR3,
       height: 30,
       thickness: 8,

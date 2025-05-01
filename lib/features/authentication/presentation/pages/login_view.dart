@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 import 'dart:io';
 
@@ -19,13 +17,10 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/widgets/birth_date_field.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -56,11 +51,11 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
-  final formKey = GlobalKey<FormState>();
+  final formKeyLogin = GlobalKey<FormState>();
+  final formKeyRegister = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     scrollController.dispose();
     log(widget.authType.toString(),
@@ -235,9 +230,6 @@ class _LoginViewState extends State<LoginView> {
               ..setLogin(true)
               ..attachToken()
               ..getUser().then((value) async {
-                serviceLocator<GetWalletCubit>().getWallet();
-                serviceLocator<WalletCubit>().getWallet();
-                serviceLocator<MainCategoriesCubit>().getWallet();
                 String? accessToken = await CacheManager.getAccessToken();
                 String? refreshToken = await CacheManager.getRefreshToken();
                 debugPrint(
@@ -262,17 +254,14 @@ class _LoginViewState extends State<LoginView> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: BackAppBar(),
-          ),
+          appBar: const BackAppBar(),
           body: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,
             child: Padding(
               padding: EdgeInsets.all(16.0.w),
               child: Form(
-                  key: formKey,
+                  key: formKeyLogin,
                   // autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
@@ -332,7 +321,9 @@ class _LoginViewState extends State<LoginView> {
                           ? LoginWidget(
                               loginCubit: loginCubit,
                             )
-                          : const RegisterWidget(),
+                          : RegisterWidget(
+                              formKeyRegister: formKeyRegister,
+                            ),
                       // SizedBox(
                       //   height: widget.authType == AuthType.LOGIN
                       //       ? MediaQuery.of(context).viewInsets.bottom != 0.0
@@ -352,7 +343,10 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
-                                  registerCubit.register();
+                                  if (formKeyRegister.currentState!
+                                      .validate()) {
+                                    registerCubit.register();
+                                  }
                                 } else {
                                   showErrorMessage(
                                       context,
@@ -372,7 +366,7 @@ class _LoginViewState extends State<LoginView> {
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: () {
                                 log("message");
-                                loginCubit.login(formKey, context);
+                                loginCubit.login(formKeyLogin);
                               },
                             ),
                     ],
@@ -422,7 +416,7 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
-  bool obsecure = false;
+  bool obsecure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -432,6 +426,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       children: [
         DefaultTextFormField(
           currentController: loginCubit.emailTextController,
+          // keyboardType: TextInputType.emailAddress,
           borderColor: Colors.black,
           // fillColor: const Color(0xFFEEEEEE),
           hint:
@@ -441,6 +436,12 @@ class _LoginWidgetState extends State<LoginWidget> {
             color: AppColors.GREY_DARK_COLOR,
             size: 40.w,
           ),
+          validator: (v) {
+            if (v!.isEmpty) {
+              return LocaleKeys.emailRequired.localize;
+            }
+            return null;
+          },
           // action: (v) {},
         ),
         const Sizer(),
@@ -464,6 +465,12 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
           ),
           // action: (v) {},
+          validator: (v) {
+            if (v!.isEmpty) {
+              return LocaleKeys.passwordRequired.localize;
+            }
+            return null;
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -558,7 +565,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 // }
 
 class RegisterWidget extends StatefulWidget {
-  const RegisterWidget({super.key});
+  const RegisterWidget({super.key, required this.formKeyRegister});
+
+  final GlobalKey<FormState> formKeyRegister;
 
   @override
   State<RegisterWidget> createState() => _RegisterWidgetState();
@@ -566,7 +575,6 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -576,7 +584,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       child: Padding(
         padding: EdgeInsets.all(8.0.w),
         child: Form(
-          key: formKey,
+          key: widget.formKeyRegister,
           // autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
@@ -591,6 +599,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.userNameRequired.localize;
+                    }
+                    return null;
+                  },
                   // action: (v) {},
                 ),
 
@@ -608,6 +622,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     size: 40.w,
                   ),
                   // action: (v) {},
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.firstNameRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
 
                 Sizer(
@@ -625,6 +645,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.lastNameRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,
@@ -648,6 +674,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     size: 40.w,
                   ),
                   keyboardType: TextInputType.emailAddress,
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.emailRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,
@@ -731,6 +763,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       size: 40.w,
                     ),
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.passwordRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,
@@ -755,6 +793,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       size: 40.w,
                     ),
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.passwordRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,
@@ -790,7 +834,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   children: [
                     Text(
                       '${LocaleKeys.iAcceptAll.localize} ',
-                      style: Styles.mediumText(fontWeight: FontWeight.w600),
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w600,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                     ClickableWidget(
                       onTap: () {

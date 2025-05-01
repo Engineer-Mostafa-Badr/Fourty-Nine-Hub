@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/header_text_widget.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../driver/widget/available_ride_mode_widget.dart';
 import '../../presentation/view/widget/taps/tab_bar_row_widget.dart';
 import 'one_way_widget.dart';
 
 class TabBarContentWidget extends StatefulWidget {
-  final TabController tabController;
-
-  const TabBarContentWidget({super.key, required this.tabController});
+  const TabBarContentWidget({super.key, required TabController tabController})
+      : _tabController = tabController;
+  final TabController _tabController;
 
   @override
   _TabBarContentWidgetState createState() => _TabBarContentWidgetState();
@@ -41,16 +43,20 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
+        const SizedBox(height: 8),
+        const Center(child: HeaderTextWidget()),
+        const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.0.h),
           child: TabBarRowWidget(
             onTap: () {
               setState(() {
                 _hasTappedTab = !_hasTappedTab; // ✅ يقلب الحالة
               });
             },
-            tabController: widget.tabController,
+            tabController: widget._tabController,
           ),
         ),
         SizedBox(height: 10.h),
@@ -64,9 +70,9 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: AnimatedBuilder(
-                animation: widget.tabController,
+                animation: widget._tabController,
                 builder: (context, child) {
-                  int index = widget.tabController.index;
+                  int index = widget._tabController.index;
                   return Text(
                     context.isArabic ? hintsArabic[index] : hints[index],
                     style: TextStyle(
@@ -79,121 +85,121 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
               ),
             ),
           ),
-        Expanded(
-          child: TabBarView(
-            controller: widget.tabController,
-            children: [
-              AvailableTripsWidget(content: tabContents[0]),
-              BookingsWidget(content: tabContents[1]),
-              RunningTripsWidget(content: tabContents[2]),
-              ExpiredTripsWidget(content: tabContents[3]),
-            ],
-          ),
-        ),
+        _buildCategory(controller: widget._tabController),
       ],
     );
+  }
+
+  _buildCategory({
+     required TabController controller,
+  }) {
+    switch (controller.index) {
+      case 0:
+        return AvailableTripsWidget(content: tabContents[0]);
+      case 1:
+        return BookingsWidget(content: tabContents[1]);
+      case 2:
+        return RunningTripsWidget(content: tabContents[2]);
+      case 3:
+        return ExpiredTripsWidget(content: tabContents[3]);
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }
 
 // 🔹 ويدجيت لكل تاب
 class AvailableTripsWidget extends StatelessWidget {
   final List<String> content;
+
   const AvailableTripsWidget({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                ...List.generate(
-                  5,
-                  (index) => OneWayWidget(
-                    requestType: LocaleKeys.regular.localize,
-                    statusDriver: LocaleKeys.expired.localize,
-                  ),
+        : ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) => OneWayWidget(
+                  requestType: LocaleKeys.regular.localize,
+                  statusDriver: LocaleKeys.expired.localize,
                 ),
-                SizedBox(height: 100.h),
-              ],
-            ),
-          );
+            separatorBuilder: (context, index) => const Sizer(),
+            itemCount: 5);
   }
 }
 
 class BookingsWidget extends StatelessWidget {
   final List<String> content;
+
   const BookingsWidget({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                OneWayWidget(
-                  cancelButton: true,
-                  statusDriver: LocaleKeys.expired.localize,
-                  requestType: LocaleKeys.regular.localize,
-                ),
-                OneWayWidget(
-                  statusDriver: LocaleKeys.expired.localize,
-                  requestType: LocaleKeys.regular.localize,
-                ),
-                SizedBox(height: 100.h),
-              ],
-            ),
+        : Column(
+            children: [
+              OneWayWidget(
+                cancelButton: true,
+                statusDriver: LocaleKeys.expired.localize,
+                requestType: LocaleKeys.regular.localize,
+              ),
+              OneWayWidget(
+                statusDriver: LocaleKeys.expired.localize,
+                requestType: LocaleKeys.regular.localize,
+              ),
+              SizedBox(height: 100.h),
+            ],
           );
   }
 }
 
 class RunningTripsWidget extends StatelessWidget {
   final List<String> content;
+
   const RunningTripsWidget({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                AvailableRideModeWidget(
-                  requestType: LocaleKeys.regular.localize,
-                  cancelButton: false,
-                  statusDriver: LocaleKeys.running.localize,
-                ),
-                AvailableRideModeWidget(
-                  requestType: LocaleKeys.regular.localize,
-                  cancelButton: false,
-                  statusDriver: LocaleKeys.running.localize,
-                ),
-                SizedBox(height: 100.h),
-              ],
-            ),
+        : Column(
+            children: [
+              AvailableRideModeWidget(
+                requestType: LocaleKeys.regular.localize,
+                cancelButton: false,
+                statusDriver: LocaleKeys.running.localize,
+              ),
+              AvailableRideModeWidget(
+                requestType: LocaleKeys.regular.localize,
+                cancelButton: false,
+                statusDriver: LocaleKeys.running.localize,
+              ),
+              SizedBox(height: 100.h),
+            ],
           );
   }
 }
 
 class ExpiredTripsWidget extends StatelessWidget {
   final List<String> content;
+
   const ExpiredTripsWidget({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                AvailableRideModeWidget(
-                  requestType: LocaleKeys.regular.localize,
-                  cancelButton: false,
-                  statusDriver: LocaleKeys.expired.localize,
-                ),
-              ],
-            ),
+        : Column(
+            children: [
+              AvailableRideModeWidget(
+                requestType: LocaleKeys.regular.localize,
+                cancelButton: false,
+                statusDriver: LocaleKeys.expired.localize,
+              ),
+            ],
           );
   }
 }

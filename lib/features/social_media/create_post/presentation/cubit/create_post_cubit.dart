@@ -18,7 +18,6 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
@@ -659,25 +658,25 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     // print(state.fileEntity?.mediaId);
   }
 
-  loadUsers(String search) async {
-    await getFriendsFollowers(1, search);
-    usersPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getFriendsFollowers(pageKey, search);
-    });
-  }
-
-  loadPlaces(String search) async {
-    await getPlaces(1, search);
-    usersPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getPlaces(pageKey, search);
-    });
-  }
+  // loadUsers(String search) async {
+  //   await getFriendsFollowers(1, search);
+  //   usersPagingController.addPageRequestListener((pageKey) {
+  //     print("initStatePageKey : $pageKey");
+  //     getFriendsFollowers(pageKey, search);
+  //   });
+  // }
+  //
+  // loadPlaces(String search) async {
+  //   await getPlaces(1, search);
+  //   usersPagingController.addPageRequestListener((pageKey) {
+  //     print("initStatePageKey : $pageKey");
+  //     getPlaces(pageKey, search);
+  //   });
+  // }
 
   // int pageSize = 4;
-  final PagingController<int, PostUserEntity> usersPagingController =
-      PagingController(firstPageKey: 1);
+  // final PagingController<int, PostUserEntity> usersPagingController =
+  //     PagingController(firstPageKey: 1);
 
   PaginationParams paginationParams = PaginationParams.basic();
   List<PostUserEntity> usersList = [];
@@ -706,73 +705,73 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   // }
 
   int pageSize = 100;
-  getFriendsFollowers(int page, String search) async {
-    print("paaaaaaaaaaaaaage$page");
-    if (page == 1) {
-      usersPagingController.itemList = [];
-    }
-    final response = await _friendsFollowersUseCase(
-        FriendsFollowersParams(search: search, limit: pageSize, page: page));
-    response.fold(
-      (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
-      (data) {
-        final isLastPage = data.length < pageSize;
-        List<PostUserEntity> fetchUsers = [];
-        if (state.selectedUsers != null && state.selectedUsers!.isNotEmpty) {
-          fetchUsers.clear();
-          print("ssssssssssssssssssssssssssssssssssssssssssss");
-          fetchUsers = data.map((item) {
-            var isSelected =
-                state.selectedUsers!.any((selected) => item.id == selected.id);
+  // getFriendsFollowers(int page, String search) async {
+  //   print("paaaaaaaaaaaaaage$page");
+  //   if (page == 1) {
+  //     usersPagingController.itemList = [];
+  //   }
+  //   final response = await _friendsFollowersUseCase(
+  //       FriendsFollowersParams(search: search, limit: pageSize, page: page));
+  //   response.fold(
+  //     (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+  //     (data) {
+  //       final isLastPage = data.length < pageSize;
+  //       List<PostUserEntity> fetchUsers = [];
+  //       if (state.selectedUsers != null && state.selectedUsers!.isNotEmpty) {
+  //         fetchUsers.clear();
+  //         print("ssssssssssssssssssssssssssssssssssssssssssss");
+  //         fetchUsers = data.map((item) {
+  //           var isSelected =
+  //               state.selectedUsers!.any((selected) => item.id == selected.id);
+  //
+  //           if (isSelected) {
+  //             item.isSelected = true;
+  //           }
+  //
+  //           return item;
+  //         }).toList();
+  //       } else {
+  //         fetchUsers.clear();
+  //         fetchUsers = data;
+  //       }
+  //       if (isLastPage) {
+  //         usersPagingController.appendLastPage(fetchUsers);
+  //       } else {
+  //         final nextPageKey = page + 1;
+  //         usersPagingController.appendPage(fetchUsers, nextPageKey);
+  //       }
+  //       emit(state.copyWith(status: CreatePostStates.success));
+  //     },
+  //   );
+  // }
 
-            if (isSelected) {
-              item.isSelected = true;
-            }
-
-            return item;
-          }).toList();
-        } else {
-          fetchUsers.clear();
-          fetchUsers = data;
-        }
-        if (isLastPage) {
-          usersPagingController.appendLastPage(fetchUsers);
-        } else {
-          final nextPageKey = page + 1;
-          usersPagingController.appendPage(fetchUsers, nextPageKey);
-        }
-        emit(state.copyWith(status: CreatePostStates.success));
-      },
-    );
-  }
-
-  final PagingController<int, PlaceEntity> placesPagingController =
-      PagingController(firstPageKey: 1);
-  Future<void> getPlaces(int page, String search) async {
-    // emit(state.copyWith(status: St))
-    // final user = context.read<UserCubit>().state.data;
-    final response = await _getPlacesUseCase(
-        FriendsFollowersParams(search: search, limit: pageSize, page: page));
-    response.fold(
-        (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
-        (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        placesPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        // List<PlaceEntity> fetchUsers=[];
-        placesPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        placesPagingController.appendPage(data, nextPageKey);
-      }
-      emit(state.copyWith(status: CreatePostStates.success));
-    });
-  }
+  // final PagingController<int, PlaceEntity> placesPagingController =
+  //     PagingController(firstPageKey: 1);
+  // Future<void> getPlaces(int page, String search) async {
+  //   // emit(state.copyWith(status: St))
+  //   // final user = context.read<UserCubit>().state.data;
+  //   final response = await _getPlacesUseCase(
+  //       FriendsFollowersParams(search: search, limit: pageSize, page: page));
+  //   response.fold(
+  //       (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+  //       (data) {
+  //     final isLastPage = data.length < pageSize;
+  //     if (page == 1) {
+  //       print("page == 1 $page");
+  //       placesPagingController.itemList = [];
+  //     }
+  //     if (isLastPage) {
+  //       print("isLastPage = $isLastPage");
+  //       // List<PlaceEntity> fetchUsers=[];
+  //       placesPagingController.appendLastPage(data);
+  //     } else {
+  //       print("isNotLastPage = $isLastPage");
+  //       final nextPageKey = page + 1;
+  //       placesPagingController.appendPage(data, nextPageKey);
+  //     }
+  //     emit(state.copyWith(status: CreatePostStates.success));
+  //   });
+  // }
 
   onSelectPlace(PlaceEntity place) {
     emit(state.copyWith(place: place, status: CreatePostStates.success));

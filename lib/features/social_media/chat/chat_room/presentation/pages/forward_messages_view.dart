@@ -30,6 +30,7 @@ class ForwardMessagesViewParams {
 
 class ForwardMessagesView extends StatefulWidget {
   final ForwardMessagesViewParams forwardMessagesViewParams;
+
   const ForwardMessagesView(
       {super.key, required this.forwardMessagesViewParams});
 
@@ -135,7 +136,8 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                                                   .read<ChatRoomCubit>()
                                                   .selectedMessages[0]
                                                   .media[0]
-                                                  .url, // Replace with actual image URL
+                                                  .url,
+                                              // Replace with actual image URL
                                               width: 60,
                                               height: 60,
                                               fit: BoxFit.cover,
@@ -226,21 +228,20 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                                     text: _messageController.text,
                                     media: [],
                                     sender: MessageSenderEntity(
-                                        id: '',
-                                        name: '',
-                                        avatar:
-                                            ''), // Provide actual sender details
-                                    reply: null, // No reply message initially
+                                        id: '', name: '', avatar: ''),
+                                    // Provide actual sender details
+                                    reply: null,
+                                    // No reply message initially
                                     createdAt: DateTime.now(),
                                     updateAt: DateTime.now(),
-                                    byMe:
-                                        true, // Assuming the user is the sender
+                                    byMe: true,
+                                    // Assuming the user is the sender
                                     isUpdated: false,
                                     seen: false,
                                     delivered: false,
                                     hasReply: false,
-                                    time: DateTime.now()
-                                        .toIso8601String(), // Convert to string format
+                                    time: DateTime.now().toIso8601String(),
+                                    // Convert to string format
                                     isDeleted: false,
                                     sharedContacts: [],
                                     isOneTimeViewMessage: false,
@@ -291,9 +292,14 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
               : state.chats!.isEmpty
                   ? Center(
                       child: Label(
-                          text: LocaleKeys.noChatsUntilNow.tr(),
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold, fontSize: 26)),
+                        text: LocaleKeys.noChatsUntilNow.tr(),
+                        style: Styles.mediumText(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26,
+                        ),
+                      ),
                     )
                   : Scrollbar(
                       // isAlwaysShown: true,  // Ensures the scrollbar is always visible

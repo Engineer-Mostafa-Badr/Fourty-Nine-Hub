@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -15,9 +15,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
@@ -31,6 +31,7 @@ import '../../../features/competition/presentation/cubit/competition_cubit/compe
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
 import '../../../features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import '../../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import '../../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -61,266 +62,275 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetWalletCubit(serviceLocator()),
-      child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-        builder: (context, state) {
-          context.read<GetWalletCubit>();
-          return Drawer(
-            width: 600.w,
-            child: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // context
-                    //     .read<UserCubit>()
-                    //     .isLoggedIn
-                    //     ? _buildAccountHeader(
-                    //   context: context,
-                    //   user: state.data,
-                    // )
-                    //     : _buildLoginWidget(context: context),
-                    context.read<UserCubit>().isLoggedIn
-                        ? accountWidget(context: context, user: state.data)
-                        : _buildLoginWidget(context: context),
-                    const Divider(
-                      color: Colors.grey,
-                    ),
-                    IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                competitionSubscription(context: context),
-                                drawerListTile(
-                                    image: Assets.customPage,
-                                    label: LocaleKeys.customPage.localize,
-                                    onTap: () {
+    return BlocBuilder<UserCubit, BasicState<UserEntity>>(
+      builder: (context, state) {
+        // context.read<GetWalletCubit>();
+        return Drawer(
+          width: 600.w,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // context
+                  //     .read<UserCubit>()
+                  //     .isLoggedIn
+                  //     ? _buildAccountHeader(
+                  //   context: context,
+                  //   user: state.data,
+                  // )
+                  //     : _buildLoginWidget(context: context),
+                  context.read<UserCubit>().isLoggedIn
+                      ? accountWidget(context: context, user: state.data)
+                      : _buildLoginWidget(context: context),
+                  const Divider(
+                    color: Colors.grey,
+                  ),
+                  IntrinsicHeight(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              competitionSubscription(context: context),
+                              drawerListTile(
+                                  image: Assets.customPage,
+                                  label: LocaleKeys.customPage.localize,
+                                  onTap: () {
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    }
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const EditPage(),
+                                      ),
+                                    );
+                                  }),
+                              // drawerListTile(
+                              //   image: Assets.microphone,
+                              //   label:
+                              //       LocaleKeys.advertiseYourCompany.localize,
+                              //   onTap: () {
+                              //     AdInterstitialTop.loadIntersitialAd();
+                              //     AdInterstitialTop.showInterstitialAd();
+                              //     Navigator.pop(context);
+                              //     return context.push(Routes.CREATECOMPANYAD);
+                              //   },
+                              // ),
+                              drawerListTile(
+                                  image: Assets.quran,
+                                  label: LocaleKeys.quraan.localize,
+                                  onTap: () {
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    context.pop();
+                                    return context.push(Routes.QURAAN);
+                                  }),
+                              drawerListTile(
+                                  image: Assets.azkar,
+                                  label: LocaleKeys.azkar.localize,
+                                  onTap: () {
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    context.pop();
+
+                                    return context.push(Routes.AZKAAR);
+                                  }),
+                              drawerListTile(
+                                  // icon: Icons.settings,
+                                  image: Assets.settings_icon,
+                                  label: LocaleKeys.settings.localize,
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.SETTINGS);
+                                  }),
+                              drawerListTile(
+                                  // icon: Icons.privacy_tip,
+                                  image: Assets.privacy_icon,
+                                  label: LocaleKeys.privacy.localize,
+                                  onTap: () {
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    } else {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const EditPage(),
+
+                                      context.pop();
+                                      context.push(Routes.PRIVACY);
+                                    }
+                                  }),
+                              drawerListTile(
+                                  image: Assets.policy,
+                                  label: LocaleKeys.policies.localize,
+                                  onTap: () {
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    context.pop();
+                                    return context.push(Routes.POLICY,
+                                        extra: false);
+                                  }),
+                              drawerListTile(
+                                  // icon: Icons.share,
+                                  image: Assets.share_app_icon,
+                                  label: LocaleKeys.shareApp.localize,
+                                  onTap: () {
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    }
+                                    context.pop();
+                                    context.push(Routes.SHAREAPP);
+                                  }),
+                              drawerListTile(
+                                  // icon: Icons.message,
+                                  image: Assets.contact_us_icon,
+                                  label: LocaleKeys.contactUs.localize,
+                                  onTap: () {
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    }
+                                    context.pop();
+                                    context.push(Routes.CONTACTUS);
+                                  }),
+                              drawerListTile(
+                                  // icon: Icons.logout,
+                                  image: Assets.sign_out_icon,
+                                  requireLogin: true,
+                                  label: LocaleKeys.logout.localize,
+                                  onTap: () {
+                                    showAnimatedDialog(
+                                      context,
+                                      AlertDialog(
+                                        // backgroundColor: context.isDarkMode?AppColors.:Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
-                                      );
-                                    }),
-                                // drawerListTile(
-                                //   image: Assets.microphone,
-                                //   label:
-                                //       LocaleKeys.advertiseYourCompany.localize,
-                                //   onTap: () {
-                                //     AdInterstitialTop.loadIntersitialAd();
-                                //     AdInterstitialTop.showInterstitialAd();
-                                //     Navigator.pop(context);
-                                //     return context.push(Routes.CREATECOMPANYAD);
-                                //   },
-                                // ),
-                                drawerListTile(
-                                    image: Assets.quran,
-                                    label: LocaleKeys.quraan.localize,
-                                    onTap: () {
-                                      AdInterstitialTop.loadIntersitialAd();
-                                      AdInterstitialTop.showInterstitialAd();
-                                      context.pop();
-                                      return context.push(Routes.QURAAN);
-                                    }),
-                                drawerListTile(
-                                    image: Assets.azkar,
-                                    label: LocaleKeys.azkar.localize,
-                                    onTap: () {
-                                      AdInterstitialTop.loadIntersitialAd();
-                                      AdInterstitialTop.showInterstitialAd();
-                                      context.pop();
-
-                                      return context.push(Routes.AZKAAR);
-                                    }),
-                                drawerListTile(
-                                    // icon: Icons.settings,
-                                    image: Assets.settings_icon,
-                                    label: LocaleKeys.settings.localize,
-                                    onTap: () {
-                                      context.pop();
-                                      context.push(Routes.SETTINGS);
-                                    }),
-                                drawerListTile(
-                                    // icon: Icons.privacy_tip,
-                                    image: Assets.privacy_icon,
-                                    label: LocaleKeys.privacy.localize,
-                                    onTap: () {
-                                      AdInterstitialTop.loadIntersitialAd();
-                                      AdInterstitialTop.showInterstitialAd();
-
-                                      context.pop();
-                                      return context.push(Routes.PRIVACY);
-                                    }),
-                                drawerListTile(
-                                    image: Assets.policy,
-                                    label: LocaleKeys.policies.localize,
-                                    onTap: () {
-                                      AdInterstitialTop.loadIntersitialAd();
-                                      AdInterstitialTop.showInterstitialAd();
-                                      context.pop();
-                                      return context.push(Routes.POLICY,
-                                          extra: false);
-                                    }),
-                                drawerListTile(
-                                    // icon: Icons.share,
-                                    image: Assets.share_app_icon,
-                                    label: LocaleKeys.shareApp.localize,
-                                    onTap: () {
-                                      context.pop();
-                                      context.push(Routes.SHAREAPP);
-                                    }),
-                                drawerListTile(
-                                    // icon: Icons.message,
-                                    image: Assets.contact_us_icon,
-                                    label: LocaleKeys.contactUs.localize,
-                                    onTap: () {
-                                      context.pop();
-                                      context.push(Routes.CONTACTUS);
-                                    }),
-                                drawerListTile(
-                                    // icon: Icons.logout,
-                                    image: Assets.sign_out_icon,
-                                    requireLogin: true,
-                                    label: LocaleKeys.logout.localize,
-                                    onTap: () {
-                                      showAnimatedDialog(
-                                        context,
-                                        AlertDialog(
-                                          backgroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          content: const LogoutWidget(),
-                                        ),
-                                      );
-                                    }),
-                              ],
-                            ),
+                                        content: const LogoutWidget(),
+                                      ),
+                                    );
+                                  }),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.only(end: 12),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                drawerRollWidget(
-                                    label: LocaleKeys.ride.localize,
-                                    image: Assets.rideIcon,
-                                    onTap: () {
-                                      context.pop();
-                                      context.push(Routes.RIDE_HOME);
-                                    }),
-                                drawerRollWidget(
-                                  label: LocaleKeys.loading.localize,
-                                  image: Assets.loading,
-                                  // onTap: () {},
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(end: 12),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              drawerRollWidget(
+                                  label: LocaleKeys.ride.localize,
+                                  image: Assets.rideIcon,
                                   onTap: () {
                                     context.pop();
-                                    context
-                                        .push(Routes.createLoadingTripScreen);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.health.localize,
-                                  image: Assets.healthIcon,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.VISITA);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.meal.localize,
-                                  image: Assets.meal,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.FOOD);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.marriage.localize,
-                                  image: Assets.married,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.MARRIAGESUBCATEGORIES);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.find.localize,
-                                  image: Assets.find,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.Tinder);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.reel.localize,
-                                  image: Assets.reel,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.REELS);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.spotlight.localize,
-                                  image: Assets.spotlight,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.SPOTLIGHT);
-                                  },
-                                ),
-                                // drawerRollWidget(
-                                //   label: LocaleKeys.meet.localize,
-                                //   image: Assets.meet,
-                                //   onTap: () {
-                                //     context.pop();
-                                //     context.push(Routes.MEETINGROOM);
-                                //   },
-                                // ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.live.localize,
-                                  image: Assets.liveIcon,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.LIVE);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.snap.localize,
-                                  image: Assets.snap,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.SNAP);
-                                  },
-                                ),
+                                    context.push(Routes.RIDE_HOME);
+                                  }),
+                              // drawerRollWidget(
+                              //   label: LocaleKeys.loading.localize,
+                              //   image: Assets.loading,
+                              //   // onTap: () {},
+                              //   onTap: () {
+                              //     context.pop();
+                              //     context
+                              //         .push(Routes.createLoadingTripScreen);
+                              //   },
+                              // ),
+                              drawerRollWidget(
+                                label: LocaleKeys.health.localize,
+                                image: Assets.healthIcon,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.VISITA);
+                                },
+                              ),
+                              drawerRollWidget(
+                                label: LocaleKeys.meal.localize,
+                                image: Assets.meal,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.FOOD);
+                                },
+                              ),
+                              drawerRollWidget(
+                                label: LocaleKeys.marriage.localize,
+                                image: Assets.married,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.MARRIAGESUBCATEGORIES);
+                                },
+                              ),
+                              drawerRollWidget(
+                                label: LocaleKeys.find.localize,
+                                image: Assets.find,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.Tinder);
+                                },
+                              ),
+                              drawerRollWidget(
+                                label: LocaleKeys.reel.localize,
+                                image: Assets.reel,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.REELS);
+                                },
+                              ),
+                              drawerRollWidget(
+                                label: LocaleKeys.spotlight.localize,
+                                image: Assets.spotlight,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.SPOTLIGHT);
+                                },
+                              ),
+                              // drawerRollWidget(
+                              //   label: LocaleKeys.meet.localize,
+                              //   image: Assets.meet,
+                              //   onTap: () {
+                              //     context.pop();
+                              //     context.push(Routes.MEETINGROOM);
+                              //   },
+                              // ),
+                              drawerRollWidget(
+                                label: LocaleKeys.live.localize,
+                                image: Assets.liveIcon,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.LIVE);
+                                },
+                              ),
+                              drawerRollWidget(
+                                label: LocaleKeys.snap.localize,
+                                image: Assets.snap,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.SNAP);
+                                },
+                              ),
 
-                                drawerRollWidget(
-                                  label: LocaleKeys.chat.localize,
-                                  image: Assets.whatsApp,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.CHAT,
-                                        extra: ChatsViewParams());
-                                  },
-                                ),
-                              ],
-                            ),
+                              drawerRollWidget(
+                                label: LocaleKeys.chat.localize,
+                                image: Assets.whatsApp,
+                                onTap: () {
+                                  context.pop();
+                                  context.push(Routes.CHAT,
+                                      extra: ChatsViewParams());
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -341,7 +351,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   isCircle: true,
                   backColor: Colors.red.withValues(alpha: 0.1),
                   icon: Icons.person,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
                   onPressed: () {
                     context.pop();
                     context.push(Routes.LOGIN);
@@ -365,7 +377,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     isCircle: true,
                     icon: Icons.person_add,
                     backColor: Colors.red.withValues(alpha: 0.1),
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       context.pop();
                       context.push(Routes.REGISTER);
@@ -527,39 +541,81 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     }
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
-      child: ListTile(
+      child: InkWell(
         onTap: () => onTap(),
-        leading: image != null && icon == null
-            ? Image.asset(
-                image,
-                width: image == Assets.contact_us_icon ? 35.h : 40.h,
-                height: image == Assets.contact_us_icon ? 35.h : 40.h,
-                fit: BoxFit.cover,
-              )
-            : Icon(
-                icon,
-                size: 45.w,
-                color: AppColors.PRIMARY_COLOR,
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(
+              top: 12.0, bottom: 12.0, start: 16),
+          child: Row(
+            children: [
+              image != null && icon == null
+                  ? Image.asset(
+                      image,
+                      width: image == Assets.contact_us_icon ? 35.h : 40.h,
+                      height: image == Assets.contact_us_icon ? 35.h : 40.h,
+                      fit: BoxFit.cover,
+                    )
+                  : Icon(
+                      icon,
+                      size: 45.w,
+                      color: AppColors.PRIMARY_COLOR,
+                    ),
+              const Sizer(),
+              Label(
+                  text: label,
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w500,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  )),
+              if (description != null)
+                Label(
+                    text: description,
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w300,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    )),
+              const Spacer(),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 28.w,
               ),
-        title: Label(
-            text: label,
-            style: Styles.mediumText(
-              fontWeight: FontWeight.w500,
-              color: context.isDarkMode ? Colors.white : Colors.black,
-            )),
-        subtitle: (description != null)
-            ? Label(
-                text: description,
-                style: Styles.mediumText(
-                  fontWeight: FontWeight.w300,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                ))
-            : null,
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 28.w,
+            ],
+          ),
         ),
       ),
+      // ListTile(
+      //   onTap: () => onTap(),
+      //   leading: image != null && icon == null
+      //       ? Image.asset(
+      //           image,
+      //           width: image == Assets.contact_us_icon ? 35.h : 40.h,
+      //           height: image == Assets.contact_us_icon ? 35.h : 40.h,
+      //           fit: BoxFit.cover,
+      //         )
+      //       : Icon(
+      //           icon,
+      //           size: 45.w,
+      //           color: AppColors.PRIMARY_COLOR,
+      //         ),
+      //   title: Label(
+      //       text: label,
+      //       style: Styles.mediumText(
+      //         fontWeight: FontWeight.w500,
+      //         color: context.isDarkMode ? Colors.white : Colors.black,
+      //       )),
+      //   subtitle: (description != null)
+      //       ? Label(
+      //           text: description,
+      //           style: Styles.mediumText(
+      //             fontWeight: FontWeight.w300,
+      //             color: context.isDarkMode ? Colors.white : Colors.black,
+      //           ))
+      //       : null,
+      //   trailing: Icon(
+      //     Icons.arrow_forward_ios,
+      //     size: 28.w,
+      //   ),
+      // ),
     );
   }
 
@@ -598,34 +654,36 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Navigator.pop(context);
           context.go(Routes.LUCKYWHEEL);
         } else {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return Dialog(
-                insetPadding: const EdgeInsets.all(20),
-                child: Container(
-                  width: 350,
-                  height: 400,
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      const CustomNotLogged(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      AppButton(
-                          color: AppColors.LIGHT_COLOR,
-                          backColor: AppColors.PRIMARY_COLOR_DARK,
-                          label: "Cancel",
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+          return pleaseLoginDialog(context);
+
+          // showDialog(
+          //   context: context,
+          //   builder: (BuildContext context) {
+          //     return Dialog(
+          //       insetPadding: const EdgeInsets.all(20),
+          //       child: Container(
+          //         width: 350,
+          //         height: 400,
+          //         padding: const EdgeInsets.all(16),
+          //         child: Column(
+          //           children: [
+          //             const CustomNotLogged(),
+          //             const SizedBox(
+          //               height: 10,
+          //             ),
+          //             AppButton(
+          //                 color: AppColors.LIGHT_COLOR,
+          //                 backColor: AppColors.PRIMARY_COLOR_DARK,
+          //                 label: "Cancel",
+          //                 onPressed: () {
+          //                   Navigator.pop(context);
+          //                 }),
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
         }
       },
       child: Container(
@@ -721,7 +779,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     required BuildContext context,
     required UserEntity? user,
   }) {
-    context.read<GetWalletCubit>();
+    // context.read<GetWalletCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -769,6 +827,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        if (!context.read<UserCubit>().isLoggedIn) {
+                          return pleaseLoginDialog(context);
+                        }
                         bottomSheet(
                           context: context,
                           asAlertDialog: true,
@@ -776,7 +837,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           widget: Wrap(
                             spacing: 20,
                             runSpacing: 20,
-                            children: <Widget>[
+                            children: [
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
@@ -786,8 +847,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 ),
                                 child: ListTile(
                                   leading: const Icon(Icons.photo_library),
-                                  title: const Label(
-                                    text: 'Gallery',
+                                  title: Label(
+                                    text: LocaleKeys.gallery.localize,
                                   ),
                                   onTap: () async {
                                     // Navigator.pop(context);
@@ -806,7 +867,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 ),
                                 child: ListTile(
                                   leading: const Icon(Icons.camera_alt),
-                                  title: const Label(text: 'Camera'),
+                                  title:
+                                      Label(text: LocaleKeys.camera.localize),
                                   onTap: () async {
                                     // Navigator.pop(context);
                                     await context.read<UserCubit>().uploadPhoto(
@@ -876,65 +938,68 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               const Sizer(),
               Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Label(
-                        text: _getFirstTwoWords(user?.fullName ?? ''),
-                        style: Styles.mediumText(
-                          fontWeight: FontWeight.bold,
-                          color:
-                              context.isDarkMode ? Colors.white : Colors.black,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      if (user?.isDocument ?? false)
-                        Icon(
-                          Icons.verified,
-                          color: AppColors.PRIMARY_COLOR,
-                          size: 40.w,
-                        ),
-                    ],
-                  ),
-                  // Label(
-                  //   text: getUserType(user),
-                  //   style: Styles.mediumText(),
-                  // ),
-                  Sizer(
-                    height: 10.h,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // context.push(
-                      //   Routes.WALLET,
-                      // );
-                    },
-                    child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Icon(
-                          Icons.wallet,
-                          size: 35.w,
-                        ),
-                        Sizer(
-                          width: 8.h,
-                          height: 8.h,
-                        ),
-                        Expanded(
-                          child: Label(
-                            text: '${user?.wallet ?? 0}',
-                            style: Styles.mediumText(
-                                decoration: TextDecoration.underline),
+                        Label(
+                          text: _getFirstTwoWords(user?.fullName ?? ''),
+                          style: Styles.mediumText(
+                            fontWeight: FontWeight.bold,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
                           ),
-                        )
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        if (user?.isDocument ?? false)
+                          Icon(
+                            Icons.verified,
+                            color: AppColors.PRIMARY_COLOR,
+                            size: 40.w,
+                          ),
                       ],
                     ),
-                  )
-                ],
-              )),
+                    // Label(
+                    //   text: getUserType(user),
+                    //   style: Styles.mediumText(),
+                    // ),
+                    Sizer(
+                      height: 10.h,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // context.push(
+                        //   Routes.WALLET,
+                        // );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.wallet,
+                            size: 35.w,
+                          ),
+                          const Sizer(),
+                          Expanded(
+                            child: Label(
+                              text: '${user?.wallet ?? 0}',
+                              style: Styles.mediumText(
+                                decoration: TextDecoration.underline,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           Row(
@@ -947,13 +1012,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   showAnimatedDialog(
                     context,
                     AlertDialog(
-                      content:Column(
+                      content: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Label(
-                              text: 'Restart to Apply',
-                              style: Styles.headerText(fontWeight: FontWeight.w400)),
+                              text: LocaleKeys.restartToApply.localize,
+                              style: Styles.headerText(
+                                  fontWeight: FontWeight.w400)),
                           const Sizer(),
                           Row(
                             children: [
@@ -965,15 +1031,19 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   label: LocaleKeys.cancel.localize,
                                 ),
                               ),
-                              const Sizer(width: 16,),
+                              const Sizer(
+                                width: 16,
+                              ),
                               Expanded(
                                 child: AppButton(
                                   backColor: AppColors.PRIMARY_COLOR,
                                   onPressed: () {
-                                    context.read<CustomPageCubit>().updateActivate(value);
+                                    context
+                                        .read<CustomPageCubit>()
+                                        .updateActivate(value);
                                     Restart.restartApp();
                                   },
-                                  label: 'Restart',
+                                  label: LocaleKeys.restart.localize,
                                 ),
                               ),
                             ],
@@ -1012,6 +1082,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Label(text: LocaleKeys.floatingNavigator.localize),
             ],
           ),
+          Row(
+            children: [
+              BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
+                builder: (context, state) {
+                  var choiceRulerCubit = ChoiceRulerCubit.get(context);
+                  return CustomSwitchButton(
+                    value: choiceRulerCubit.choiceRulerEnabled,
+                    onChanged: (value) async {
+                      Navigator.pop(context);
+                      choiceRulerCubit.changeChoiceRulerEnabled();
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                width: 4.w,
+              ),
+              Label(
+                text: LocaleKeys.choiceRuler.localize,
+              ),
+            ],
+          )
         ],
       ),
     );

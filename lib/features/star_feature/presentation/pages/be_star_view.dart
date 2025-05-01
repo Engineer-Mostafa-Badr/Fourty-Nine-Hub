@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
@@ -42,6 +43,7 @@ class _BeStarViewState extends State<BeStarView> {
   late List<bool> _isVideoEnded = [];
   late ScrollController _scrollController;
   late StarCubit _cubit;
+  bool isFloatingButtonVisible = true;
   bool showMore = false;
   final AdsManager _adsManager = AdsManager();
 
@@ -50,12 +52,21 @@ class _BeStarViewState extends State<BeStarView> {
     super.initState();
     _cubit = context.read<StarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialData();
+    _cubit.loadAllTalentsData();
     _adsManager.preloadAds();
-    _cubit.fetchBanner();
   }
 
+  void _onScroll2(){
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      isFloatingButtonVisible = false;
+    } else {
+      isFloatingButtonVisible = true;
+    }
+    setState(() {});
+  }
   void _onScroll() {
+    _onScroll2();
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       _cubit.getAllTalent();
@@ -117,7 +128,7 @@ class _BeStarViewState extends State<BeStarView> {
       // ),
       // floatingActionButton: const FloatingActionButtonStar(),
       floatingActionButton: context.read<UserCubit>().isLoggedIn
-          ? const FloatingActionButtonStar()
+          ? isFloatingButtonVisible?const FloatingActionButtonStar():null
           : null,
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
@@ -171,7 +182,7 @@ class _BeStarViewState extends State<BeStarView> {
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(
                       fontSize: 60.sp,
-                      color: AppColors.SECONDARY_COLOR,
+                      color: context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR,
                     ),
                   ),
                   const Sizer(),
@@ -182,7 +193,7 @@ class _BeStarViewState extends State<BeStarView> {
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(
                       fontSize: 60.sp,
-                      color: AppColors.SECONDARY_COLOR,
+                      color:context.isDarkMode?Colors.white: AppColors.SECONDARY_COLOR,
                     ),
                   ),
                   const Sizer(),
@@ -618,7 +629,7 @@ class _BeStarViewState extends State<BeStarView> {
           Text(
             LocaleKeys.tube.localize,
             style: TextStyle(
-              color: Colors.black,
+              color: context.isDarkMode?Colors.white:Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 32.sp,
             ),
@@ -673,7 +684,7 @@ class _BeStarViewState extends State<BeStarView> {
                 Text(
                   LocaleKeys.winners.localize,
                   style: TextStyle(
-                    color: Colors.black,
+                    color:context.isDarkMode?Colors.white: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 32.sp,
                   ),

@@ -28,13 +28,13 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
                 return DropdownButtonFormField<FoodCategoryEntity>(
-                  icon: const Icon(
+                  icon:  Icon(
                     Icons.keyboard_arrow_down_outlined,
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                   ),
-                  dropdownColor: AppColors.BG_GRAY_COLOR,
+                  dropdownColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
                   decoration: InputDecoration(
-                    fillColor: AppColors.BG_GRAY_COLOR,
+                    fillColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
                     isDense: true,
                     constraints: BoxConstraints.loose(
                       Size.fromHeight(90.h),
@@ -82,10 +82,12 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                           child: Text(
                             (context.isArabic ? e.nameAr : e.nameEn) ?? "",
                             style: Styles.mediumText(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.color), // Add your desired text style here
+                              color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK :  AppColors.PRIMARY_COLOR,
+                                // color: Theme.of(context)
+                                //     .textTheme
+                                //     .bodyMedium
+                                //     ?.color
+                            ), // Add your desired text style here
                           )))
                       .toList(),
                   onChanged: (value) {

@@ -6,12 +6,12 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
+import '../../../features/payment/presentation/cache_out_cubit/payment_cubit.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../stateless/labels/label.dart';
@@ -42,24 +42,27 @@ class _WalletWidgetState extends State<WalletWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MainCategoriesCubit>(
-      create: (BuildContext context) => serviceLocator()..getWallet(),
-      child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+    return BlocProvider(
+      create: (BuildContext context) =>
+          serviceLocator<PaymentCacheOutCubit>()..getWallet(),
+      child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
         builder: (BuildContext context, state) {
           return Container(
-            // height: (isOpen?200:100).h,
             margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: const [
-                  BoxShadow(
-                    color: AppColors.GRAY_LIGHT_COLOR3,
-                    blurRadius: 5,
-                    spreadRadius: 5,
-                  )
-                ]),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: context.isDarkMode
+                      ? Colors.grey.shade600
+                      : AppColors.GRAY_LIGHT_COLOR3,
+                  blurRadius: 5,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
             child: Column(
               children: [
                 ClickableWidget(
@@ -91,7 +94,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         context.push(Routes.CASHBACK);
                       },
                           LocaleKeys.balance.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0)} ',
+                          '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0, useArabicNumerals: context.isArabic)} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -112,7 +115,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         context.push(Routes.GIFT);
                       },
                           LocaleKeys.gift.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0)} ',
+                          '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0, useArabicNumerals: context.isArabic)} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -134,7 +137,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         //showing
                       },
                           LocaleKeys.wallet.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0)} ',
+                          '${FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0, useArabicNumerals: context.isArabic)} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -462,38 +465,45 @@ class _WalletWidgetState extends State<WalletWidget> {
 
   Widget buildItem(Function function, String title, String amount, currency) =>
       Expanded(
-          child: InkWell(
-        onTap: () {
-          function();
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Label(
+        child: InkWell(
+          onTap: () {
+            function();
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
                 text: title,
                 style: Styles.mediumText(
                   fontWeight: FontWeight.bold,
-                )),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Label(
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Label(
                       text: amount.toString(),
                       style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
-                      )),
-                ),
-                Expanded(
-                  child: Label(
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Label(
                       text: currency,
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.SECONDARY_COLOR)),
-                ),
-              ],
-            ),
-          ],
+                        fontWeight: FontWeight.bold,
+                        color:context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ));
+      );
 }

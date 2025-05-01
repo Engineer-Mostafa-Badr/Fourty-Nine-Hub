@@ -66,6 +66,12 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
             appBar: AppBar(
               titleSpacing: 0,
               centerTitle: false,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               title: Transform(
                 transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
                 child: Text(
@@ -79,8 +85,11 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
                 if (state.status == RideStates.loading && page == 1) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state.status == RideStates.error) {
-                  return Center(child: Text(state.failure.toString()));
+                  return const SizedBox();
                 } else if (state.status == RideStates.success) {
+                  if(state.completedTrips?.isEmpty??true) {
+                    return Center(child: Text(context.isArabic ? "لا يوجد رحلات مكتملة" : "No completed trips"));
+                  }
                   return ListView.builder(
                     controller: _scrollController,
                     itemCount: (state.completedTrips?.length ?? 0) + (isFetching ? 1 : 0),

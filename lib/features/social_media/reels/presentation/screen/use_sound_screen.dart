@@ -36,7 +36,7 @@ class UseSoundScreen extends StatelessWidget {
           hint: "اغنية عمرو دياب ",
           borderColor: context.isDarkMode ? Colors.white : Colors.black,
           noBorder: false,
-          hintStyle: TextStyle(
+          style: TextStyle(
             color: context.isDarkMode ? Colors.white : Colors.grey.shade600,
           ),
           //   fillColor: Colors.white,

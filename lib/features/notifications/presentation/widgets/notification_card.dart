@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -22,6 +23,7 @@ class NotificationCard extends StatefulWidget {
   final Function() notificationSeenCallback;
   final Function() notificationDeleteCallback;
   final String? type;
+
   const NotificationCard(
       {super.key,
       required this.notificationEntity,
@@ -91,22 +93,23 @@ class _NotificationCardState extends State<NotificationCard> {
                     Builder(builder: (context) {
                       if (widget.type == 'services') {
                         return Container(
-                            decoration:
-                                const BoxDecoration(shape: BoxShape.circle),
-                            clipBehavior: Clip.hardEdge,
-                            margin: EdgeInsetsDirectional.only(end: 15.w),
-                            height: kToolbarHeight,
-                            width: kToolbarHeight,
-                            child: Image.asset(
-                              widget.notificationEntity.receiverId ==
-                                      UserCubit.to.state.data?.id
-                                  ? UserCubit.to.state.data?.profilePicture ??
-                                      Assets.maleImagePlaceholder
-                                  : widget.notificationEntity.gender == 'male' 
-                                      ? Assets.maleImagePlaceholder
-                                      : Assets.femaleImagePlacehlder,
-                              fit: BoxFit.fill,
-                            ));
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          clipBehavior: Clip.hardEdge,
+                          margin: EdgeInsetsDirectional.only(end: 15.w),
+                          height: kToolbarHeight,
+                          width: kToolbarHeight,
+                          child: Image.network(
+                            widget.notificationEntity.receiverId ==
+                                    UserCubit.to.state.data?.id
+                                ? UserCubit.to.state.data?.profilePicture ??
+                                    Assets.maleImagePlaceholder
+                                : widget.notificationEntity.gender == 'male'
+                                    ? Assets.maleImagePlaceholder
+                                    : Assets.femaleImagePlacehlder,
+                            fit: BoxFit.fill,
+                          ),
+                        );
                       }
                       return Container(
                         height: kToolbarHeight,
@@ -127,20 +130,34 @@ class _NotificationCardState extends State<NotificationCard> {
                           if (widget.notificationEntity.title?.isNotEmpty ??
                               false) ...[
                             Text(
-                              _capitalizeTitle(
-                                  widget.notificationEntity.title ?? ''),
-                              style: Styles.headerText(),
+                              context.isArabic
+                                  ? widget.notificationEntity.title ?? ''
+                                  : _capitalizeTitle(
+                                      widget.notificationEntity.title ?? ''),
+                              style: Styles.headerText(
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
                             ),
                             Sizer(height: 5.h),
                           ],
                           Text(
                             widget.notificationEntity.body ?? '',
-                            style: Styles.mediumText(),
+                            style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                           Sizer(height: 5.h),
                           Label(
                             text: _formatDate(),
-                            style: Styles.mediumText(color: Colors.grey),
+                            style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -200,8 +217,10 @@ class _NotificationCardState extends State<NotificationCard> {
 class NotificationCustomContainer extends StatelessWidget {
   const NotificationCustomContainer(
       {super.key, required this.color, required this.child});
+
   final Color color;
   final Widget child;
+
   @override
   Widget build(BuildContext context) {
     return Container(

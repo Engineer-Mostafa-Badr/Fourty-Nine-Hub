@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,7 @@ import '../../domain/entities/installment_entity.dart';
 class InstallmentAdCard extends StatelessWidget {
   final InstallmentEntity item;
   final bool isVertical;
+
   const InstallmentAdCard(
       {super.key, required this.item, this.isVertical = true});
 
@@ -71,7 +73,10 @@ class InstallmentAdCard extends StatelessWidget {
                 ],
               ),
               Label(
-                text: item.ad?.address?.address ?? '',
+                text: (context.isArabic
+                        ? item.ad?.address?.addressAr
+                        : item.ad?.address?.addressEn) ??
+                    '',
                 style: Styles.mediumText(),
                 maxLines: 1,
               ),

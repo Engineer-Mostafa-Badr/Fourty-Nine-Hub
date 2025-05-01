@@ -9,9 +9,11 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/states/basic_state.dart';
+import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
+import '../../../../notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 
 class ChangePasswordSecondViewBody extends StatefulWidget {
   const ChangePasswordSecondViewBody({super.key});
@@ -52,7 +54,36 @@ class _ChangePasswordSecondViewBodyState
         serviceLocator(),
         serviceLocator(),
       ),
-      child: BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+      child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
+        listener: (context, state) {
+          if (state is ChangePasswordSuccess) {
+            context.pop();
+            print('emit(ChangePasswordSuccess());');
+            serviceLocator<UserCubit>()
+              ..setLogin(true)
+              ..attachToken()
+              ..getUser().then((value) async {
+                String? accessToken = await CacheManager.getAccessToken();
+                String? refreshToken = await CacheManager.getRefreshToken();
+                debugPrint(
+                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint('Refresh Token: $refreshToken');
+                debugPrint('Access Token: $accessToken');
+                debugPrint(
+                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint(serviceLocator<UserCubit>().state.data.toString());
+                // Navigator.pop(context);
+                // Navigator.pop(context);
+                context.pushReplacement(Routes.HOME);
+              });
+            context
+                .read<NotificationSocketIoCubit>()
+                .notificationListener(languageCode: 'en');
+            context
+                .read<NotificationSocketIoCubit>()
+                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+          }
+        },
         builder: (context, state) {
           var forgotPasswordCubit = context.read<ForgotPasswordCubit>();
           return Form(
@@ -62,9 +93,9 @@ class _ChangePasswordSecondViewBodyState
               child: Column(
                 children: [
                   LabelAndTextFormField(
-                    label: 'Old Password',
+                    label: LocaleKeys.oldPassword.localize,
                     controller: forgotPasswordCubit.odlPasswordController,
-                    hint: 'Old Password',
+                    hint: LocaleKeys.oldPassword.localize,
                   ),
                   const SizedBox(
                     height: 8,

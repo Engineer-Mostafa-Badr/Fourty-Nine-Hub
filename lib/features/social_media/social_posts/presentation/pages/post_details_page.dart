@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -101,7 +100,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                 children: [
                   Expanded(
                     child: RefreshIndicator(
-                      onRefresh: () async => controller.onRefreshPostDetails(),
+                      onRefresh: () async {
+
+                      },
                       child: CustomScrollView(
                         slivers: [
                           SliverToBoxAdapter(
@@ -127,72 +128,72 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               ],
                             ),
                           ),
-                          PagedSliverList<int, CommentEntity>(
-                            pagingController:
-                                controller.commentsPagingController,
-                            builderDelegate:
-                                PagedChildBuilderDelegate<CommentEntity>(
-                              noItemsFoundIndicatorBuilder: (context) {
-                                return Center(
-                                  child: Text(
-                                    LocaleKeys.noComments.localize,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                );
-                              },
-                              itemBuilder: (context, item, index) {
-                                return _buildCommentCard(
-                                    comment: controller.commentsPagingController
-                                        .itemList![index],
-                                    onCommentReply:
-                                        (ReplyOnCommentParams params) async {
-                                      var result =
-                                          await widget.onCommentReply(params);
-
-                                      state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount +
-                                              1);
-                                      setState(() {});
-                                      return result;
-                                    },
-                                    onDeleteComment: (String id) async {
-                                      var result =
-                                          await widget.onDeleteComment(id);
-                                      state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount -
-                                              1);
-                                      controller
-                                          .commentsPagingController.itemList
-                                          ?.removeWhere(
-                                              (element) => element.id == id);
-
-                                      setState(() {});
-                                      return result;
-                                    },
-                                    onDeleteReply: (String id) async {
-                                      var result =
-                                          await widget.onDeleteReply(id);
-                                      state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount -
-                                              1);
-                                      controller
-                                          .repliesPagingController.itemList
-                                          ?.removeWhere(
-                                              (element) => element.id == id);
-                                      setState(() {});
-                                      return result;
-                                    });
-                              },
-                              noMoreItemsIndicatorBuilder: (context) =>
-                                  Container(),
-                              firstPageProgressIndicatorBuilder: (context) =>
-                                  const CupertinoActivityIndicator(),
-                              newPageProgressIndicatorBuilder: (context) =>
-                                  const CupertinoActivityIndicator(),
-                            ),
-                          ),
+                          // PagedSliverList<int, CommentEntity>(
+                          //   pagingController:
+                          //       controller.commentsPagingController,
+                          //   builderDelegate:
+                          //       PagedChildBuilderDelegate<CommentEntity>(
+                          //     noItemsFoundIndicatorBuilder: (context) {
+                          //       return Center(
+                          //         child: Text(
+                          //           LocaleKeys.noComments.localize,
+                          //           style: const TextStyle(
+                          //             fontSize: 18,
+                          //           ),
+                          //         ),
+                          //       );
+                          //     },
+                          //     itemBuilder: (context, item, index) {
+                          //       return _buildCommentCard(
+                          //           comment: controller.commentsPagingController
+                          //               .itemList![index],
+                          //           onCommentReply:
+                          //               (ReplyOnCommentParams params) async {
+                          //             var result =
+                          //                 await widget.onCommentReply(params);
+                          //
+                          //             state.postDetails?.commentsCount =
+                          //                 (state.postDetails!.commentsCount +
+                          //                     1);
+                          //             setState(() {});
+                          //             return result;
+                          //           },
+                          //           onDeleteComment: (String id) async {
+                          //             var result =
+                          //                 await widget.onDeleteComment(id);
+                          //             state.postDetails?.commentsCount =
+                          //                 (state.postDetails!.commentsCount -
+                          //                     1);
+                          //             controller
+                          //                 .commentsPagingController.itemList
+                          //                 ?.removeWhere(
+                          //                     (element) => element.id == id);
+                          //
+                          //             setState(() {});
+                          //             return result;
+                          //           },
+                          //           onDeleteReply: (String id) async {
+                          //             var result =
+                          //                 await widget.onDeleteReply(id);
+                          //             state.postDetails?.commentsCount =
+                          //                 (state.postDetails!.commentsCount -
+                          //                     1);
+                          //             controller
+                          //                 .repliesPagingController.itemList
+                          //                 ?.removeWhere(
+                          //                     (element) => element.id == id);
+                          //             setState(() {});
+                          //             return result;
+                          //           });
+                          //     },
+                          //     noMoreItemsIndicatorBuilder: (context) =>
+                          //         Container(),
+                          //     firstPageProgressIndicatorBuilder: (context) =>
+                          //         const CupertinoActivityIndicator(),
+                          //     newPageProgressIndicatorBuilder: (context) =>
+                          //         const CupertinoActivityIndicator(),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -236,8 +237,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   content: commentTextController.text),
                             );
                             final user = context.read<UserCubit>().state.data;
-                            controller.commentsPagingController.itemList
-                                ?.insert(
+                            controller.postComments.insert(
                               0,
                               CommentModel(
                                 id: data.id,
@@ -267,8 +267,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               ),
                             );
                             // widget.post.commentsCount=(widget.post.commentsCount!+1);
-                            state.postDetails?.commentsCount =
-                                (state.postDetails!.commentsCount + 1);
+                            // state.postDetails?.commentsCount =
+                            //     (state.postDetails!.commentsCount + 1);
                             commentTextController.clear();
                             FocusScope.of(context).unfocus();
                             setState(() {});

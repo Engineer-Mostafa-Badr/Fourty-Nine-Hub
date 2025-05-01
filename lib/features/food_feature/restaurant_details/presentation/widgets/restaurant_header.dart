@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 class RestaurantHeader extends StatefulWidget {
-  final Restaurant restaurant;
+  final GetAllRestaurantEntity restaurant;
 
   const RestaurantHeader({Key? key, required this.restaurant}) : super(key: key);
 
@@ -46,7 +49,6 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                 heightCarousel: imageHeight,
                 widthForImages: MediaQuery.of(context).size.width,
               ),
-
               // Overlay gradient
               Container(
                 decoration: BoxDecoration(
@@ -106,14 +108,37 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                     color: AppColors.whiteColor,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
+                                  // child: Row(
+                                  //   children: [
+                                  //     const Icon(
+                                  //       Icons.star_rounded,
+                                  //       color: AppColors.ACCENT_COLOR,
+                                  //       size: 20,
+                                  //     ),
+                                  //     const SizedBox(width: 4),
+                                  //     Text(
+                                  //       '${widget.restaurant.totalRating ?? '0.0'} ',
+                                  //       style: Styles.mediumText(
+                                  //         fontWeight: FontWeight.w500,
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   child: Row(
                                     children: [
-                                      const Icon(
-                                        Icons.star_rounded,
-                                        color: AppColors.ACCENT_COLOR,
-                                        size: 20,
+                                      RatingBar(
+                                        initialRating: widget.restaurant.totalRating?.toDouble() ?? 0,
+                                        ignoreGestures: true,
+                                        allowHalfRating: true,
+                                        itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+                                        ratingWidget: RatingWidget(
+                                          full: SvgPicture.asset(Assets.star1),
+                                          half: SvgPicture.asset(Assets.halfStar),  // <-- same as full!
+                                          empty: SvgPicture.asset(Assets.starEmpty),
+                                        ),
+                                        itemSize: 13,
+                                        onRatingUpdate: (double value) {},
                                       ),
-                                      const SizedBox(width: 4),
                                       Text(
                                         '${widget.restaurant.totalRating ?? '0.0'} ',
                                         style: Styles.mediumText(
@@ -125,7 +150,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.reviews.localize})',
+                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})',
                                   style: Styles.mediumText(
                                     color: Colors.white70,
                                   ),

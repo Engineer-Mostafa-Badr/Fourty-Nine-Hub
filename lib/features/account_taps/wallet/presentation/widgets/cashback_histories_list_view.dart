@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
@@ -67,9 +68,7 @@ class _CashbackHistoriesListViewState extends State<CashbackHistoriesListView> {
               date: history.createdAt,
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const CustomLoading();
           }
         },
       );

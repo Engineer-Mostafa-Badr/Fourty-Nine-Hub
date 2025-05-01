@@ -36,10 +36,10 @@ class NormalPostScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
-            child: BuildFacebookHeader(user:postEntity.user, sinceTime: postEntity.sinceTime,activity: postEntity.activity,feeling: postEntity.feeling,users: postEntity.users,location: postEntity.location,),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
+          //   child: BuildFacebookHeader(user:postEntity.user, sinceTime: postEntity.sinceTime,activity: postEntity.activity,feeling: postEntity.feeling,users: postEntity.users,location: postEntity.location,),
+          // ),
           // const SizedBox(height: 16.0),
 
           // if (postEntity.images?.isNotEmpty??false)
@@ -56,7 +56,7 @@ class NormalPostScreen extends StatelessWidget {
                         color: AppColors.black),
                   ),
                 ),
-                if(postEntity.type=="live_event_post")FacebookLifeEventWidget(postEntity: postEntity,),
+                // if(postEntity.type=="live_event_post")FacebookLifeEventWidget(postEntity: postEntity,),
                 if(postEntity.type=="gif_post"&&postEntity.gifUrl!=null&&postEntity.gifUrl!.isNotEmpty)
                   ImageFromInternet(image: postEntity.gifUrl??'',width: double.infinity,height: 256,fit: BoxFit.cover,),
                 if(postEntity.images!=null&&postEntity.images!.isNotEmpty&&postEntity.type=="normal_post")SizedBox(
@@ -125,9 +125,12 @@ class NormalPostScreen extends StatelessWidget {
                 //     ), // Like Text
                 //   ],
                 // ),
-                BuildReactionsButtons(
-                  post: postEntity,
-                  from: "posts",
+                SizedBox(
+                  height: 250,
+                  child: BuildReactionsButtons(
+                    post: postEntity,
+                    from: "posts",
+                  ),
                 ),
                 const SizedBox(width: 16), // Space between buttons
 
@@ -140,7 +143,7 @@ class NormalPostScreen extends StatelessWidget {
                           widget: BlocProvider.value(
                             value:
                             serviceLocator<SocialPostsCubit>()
-                              ..loadComments(context, postEntity.id),
+                              ..loadPostCommentsData(context:context, postId:postEntity.id),
                             child: FacebookPostComments(
                               postId: postEntity.id,
                               onAddComment:

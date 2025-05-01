@@ -31,6 +31,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/constants/registration_status.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'favorite_ads.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -74,6 +75,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   bool _showSearch = false;
   bool _showExpire = false;
+  bool _showFavAds = false;
   bool _showLog = false;
 
   @override
@@ -105,12 +107,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       shrinkWrap: true,
       children: [
         const MealBanner(),
-        // if (!(state.isResturant?.isRestaurant ?? false))
         _buildRegisterRestaurantPrompt(state),
         const Sizer(),
-        // if ((state.isResturant?.isRestaurant ?? false) &&
-        //     (state.isResturant?.approved ?? false))
-        //   const ResturantDashboardButton(),
         _buildSearchAndExpiredRequests(),
         if (_showSearch)
           BlocProvider(
@@ -135,16 +133,29 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               onClose: () => setState(() => _showExpire = false),
             ),
           ),
-
         if (_showLog)
           BlocProvider(
+            key: ValueKey("log-${DateTime.now().millisecondsSinceEpoch}"),
             create: (context) =>
-                serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
+            serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
             child: RestaurantRequestLogsScreen(
+              key: ValueKey("log-screen-${DateTime.now().millisecondsSinceEpoch}"),
               onClose: () => setState(() => _showLog = false),
             ),
           ),
-        if (!_showSearch && !_showExpire && !_showLog)
+
+        if (_showFavAds)
+          BlocProvider(
+            create: (context) =>
+            serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
+            child: RestaurantFavAdsScreen(
+              onClose: () => setState(() {
+                context.read<RestaurantsCubit>().loadInitialData();
+                _showFavAds = false;
+              }),
+            ),
+          ),
+        if (!_showSearch && !_showExpire && !_showLog && !_showFavAds)
           Padding(
             padding: EdgeInsets.all(10.w),
             child: Column(
@@ -206,14 +217,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                           .read<RestaurantsCubit>()
                                           .toggleFavoriteRestaurant(id);
                                       if (result == true) {
-                                        context
-                                                .read<RestaurantsCubit>()
-                                                .restaurants[i]
-                                                .isFavorite =
-                                            !context
-                                                .read<RestaurantsCubit>()
-                                                .restaurants[i]
-                                                .isFavorite!;
+                                        context.read<RestaurantsCubit>().restaurants[i].isFavorite
+                                        = !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+
                                       }
                                     },
                                   ),
@@ -240,33 +246,13 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   }
 
   Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
-    // return CustomApproveMealButton(text:  LocaleKeys.serveClientsByClickRegister.tr() ,onPressed: (){},);
-    //        if (!(state.isResturant?.isRestaurant ?? false))
     return Padding(
       padding: EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (context.read<UserCubit>().isLoggedIn)
           GestureDetector(
-            // onTap: () {
-            //   if (context.read<UserCubit>().isLoggedIn) {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => BlocProvider<CreateRestaurantCubit>(
-            //           create: (context) =>
-            //           serviceLocator<CreateRestaurantCubit>()..loadData(),
-            //           child: CreateRestaurantForm(
-            //             from: 'create',
-            //             restaurantId: state.isResturant?.restaurantId ?? '',
-            //           ),
-            //         ),
-            //       ),
-            //     );
-            //   } else {
-            //     context.push(Routes.REGISTER);
-            //   }
-            // },
             child: Stack(
               children: [
                 Container(
@@ -406,7 +392,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           ),
           if (state.isResturant?.approved != null)
             state.isResturant?.approved == true
-                ? const SizedBox() // show SizedBox if approved is true
+                ? const SizedBox()
                 : Label(
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
@@ -416,95 +402,20 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     textAlign: TextAlign.end,
                     text: LocaleKeys.waitingApproval.localize,
                   ),
-
-          // if(state.isResturant?.approved != null)
-          //   Label(
-          //     style: TextStyle(
-          //       fontWeight: FontWeight.w600,
-          //       fontSize: 14,
-          //       color: AppColors.PRIMARY_COLOR_DARK
-          //     ),
-          //     textAlign: TextAlign.end,
-          //       text: state.isResturant?.approved == false ? LocaleKeys.waitingApproval.localize :null),
         ],
       ),
     );
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h),
-      child: GestureDetector(
-        onTap: () {
-          if (context.read<UserCubit>().isLoggedIn) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider<CreateRestaurantCubit>(
-                  create: (context) =>
-                      serviceLocator<CreateRestaurantCubit>()..loadData(),
-                  child: CreateRestaurantForm(
-                    from: 'create',
-                    restaurantId: state.isResturant?.restaurantId ?? '',
-                  ),
-                ),
-              ),
-            );
-          } else {
-            context.push(Routes.REGISTER);
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: Text(
-            LocaleKeys.serveClientsByClickRegister.tr(),
-            style: Styles.mediumText(color: Colors.red),
-          ),
-        ),
-      ),
-    );
   }
-
-  // Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
-  //   // return CustomApproveMealButton(text:  LocaleKeys.serveClientsByClickRegister.tr() ,onPressed: (){},);
-  //   return Padding(
-  //     padding: EdgeInsets.only(top: 10.h),
-  //     child: GestureDetector(
-  //       onTap: () {
-  //         if (context.read<UserCubit>().isLoggedIn) {
-  //           Navigator.push(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (context) => BlocProvider<CreateRestaurantCubit>(
-  //                 create: (context) =>
-  //                     serviceLocator<CreateRestaurantCubit>()..loadData(),
-  //                 child: CreateRestaurantForm(
-  //                   from: 'create',
-  //                   restaurantId: state.isResturant?.restaurantId ?? '',
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         } else {
-  //           context.push(Routes.REGISTER);
-  //         }
-  //       },
-  //       child: Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 5.0),
-  //         child: Text(
-  //           LocaleKeys.serveClientsByClickRegister.tr(),
-  //           style: Styles.mediumText(color: Colors.red),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildSearchAndExpiredRequests() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
+        spacing: 5,
         children: [
           Row(
             children: [
-              InkWell(
+              GestureDetector(
                 onTap: () {
                   if (context.read<UserCubit>().isLoggedIn) {
                     setState(() {
@@ -512,32 +423,73 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       if (_showSearch) {
                         _showExpire = false;
                         _showLog = false;
+                        _showFavAds = false;
                       }
                     });
                   } else {
                     context.push(Routes.LOGIN);
                   }
                 },
-                child: Icon(
+                child:Icon(
                   _showSearch ? Icons.search_off_rounded : Icons.search,
                   color: _showSearch
-                      ? AppColors.PRIMARY_COLOR_DARK
-                      : AppColors.PRIMARY_COLOR,
-                ),
+                      ? (context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR_DARK)
+                      : (context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR),
+                )
               ),
               const Sizer(),
-              InkWell(
+              GestureDetector(
                   onTap: () {
                     context.push(Routes.FOODCART);
                   },
                   child: Icon(
                     Icons.shopping_cart,
-                    color: Colors.black,
+                    color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR ,
                   )),
             ],
           ),
-          SizedBox(
-            width: 5,
+
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                if (context.read<UserCubit>().isLoggedIn) {
+                  setState(() {
+                    _showFavAds = !_showFavAds;
+                    if (_showFavAds) {
+                      _showSearch = false;
+                      _showLog = false;
+                      _showExpire = false;
+                     }else if(!_showFavAds){
+                      context.read<RestaurantsCubit>().loadInitialRestaurantsData('');
+                    }
+                  });
+                } else {
+                  context.push(Routes.LOGIN);
+                }
+              },
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: _showFavAds
+                            ? AppColors.PRIMARY_COLOR_DARK
+                            : AppColors.PRIMARY_COLOR),
+                    borderRadius: BorderRadius.circular(15),
+                    color: _showFavAds
+                        ? AppColors.PRIMARY_COLOR
+                        : AppColors.cD9D9D9),
+                child: Label(
+                  text: LocaleKeys.favouriteAds.localize,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color:
+                      _showFavAds ? AppColors.whiteColor : AppColors.black),
+                ),
+              ),
+            ),
           ),
           BlocBuilder<RestaurantsCubit, RestaurantsListState>(
             builder: (context, state) {
@@ -545,7 +497,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         if (context.read<UserCubit>().isLoggedIn) {
                           setState(() {
@@ -553,6 +505,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             if (_showLog) {
                               _showSearch = false;
                               _showExpire = false;
+                              _showFavAds = false;
                             }
                           });
                         } else {
@@ -617,11 +570,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               );
             },
           ),
-          SizedBox(
-            width: 5,
-          ),
           Expanded(
-            child: InkWell(
+            child: GestureDetector(
               onTap: () {
                 if (context.read<UserCubit>().isLoggedIn) {
                   setState(() {
@@ -629,6 +579,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     if (_showExpire) {
                       _showSearch = false;
                       _showLog = false;
+                      _showFavAds = false;
                     }
                   });
                 } else {

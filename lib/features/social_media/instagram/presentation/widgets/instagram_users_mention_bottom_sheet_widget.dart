@@ -13,7 +13,7 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
     required this.userTags,
   });
 
-  final List<UserTagEntity> userTags;
+  final List<InstagramPostUserTagEntity> userTags;
 
   @override
   Widget build(BuildContext context) {

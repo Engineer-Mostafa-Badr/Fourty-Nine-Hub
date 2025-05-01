@@ -12,7 +12,7 @@ extension CusineRestaurantsStateX on CusineRestaurantsState {
 class CusineRestaurantsState {
   final CusineRestaurantsStates? status;
   final Failure? failure;
-  final List<RestaurantModel>? cusineRestaurants;
+  final List<GetAllRestaurantEntity>? cusineRestaurants;
 
   const CusineRestaurantsState({
     this.status,
@@ -22,7 +22,7 @@ class CusineRestaurantsState {
   CusineRestaurantsState copyWith({
     CusineRestaurantsStates? status,
     Failure? failure,
-    List<RestaurantModel>? cusineRestaurants,
+    List<GetAllRestaurantEntity>? cusineRestaurants,
   }) {
     return CusineRestaurantsState(
       status: status ?? this.status,

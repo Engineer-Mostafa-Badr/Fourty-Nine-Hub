@@ -15,11 +15,13 @@ import '../../../../../../core/widget/custom_scaffold.dart';
 class ImagesPageViewParams {
   final MessageEntity messageEntity;
   final int index;
+
   ImagesPageViewParams({required this.messageEntity, required this.index});
 }
 
 class ImagesPageView extends StatefulWidget {
   const ImagesPageView({super.key, required this.params});
+
   final ImagesPageViewParams params;
 
   @override
@@ -29,6 +31,7 @@ class ImagesPageView extends StatefulWidget {
 class _ImagesPageViewState extends State<ImagesPageView> {
   int _selectedIndex = 0;
   late PageController _pageController;
+
   @override
   void initState() {
     _selectedIndex = widget.params.index;
@@ -103,6 +106,7 @@ class CustomVideoPlayerCard extends StatefulWidget {
     super.key,
     required this.videoUrl,
   });
+
   final String videoUrl;
 
   @override

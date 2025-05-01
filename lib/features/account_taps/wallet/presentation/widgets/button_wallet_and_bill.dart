@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class ButtonWalletAndBill extends StatelessWidget {
@@ -22,7 +23,9 @@ class ButtonWalletAndBill extends StatelessWidget {
         height: 44,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: ShapeDecoration(
-          color: const Color(0xFF0B1035),
+          color: context.isDarkMode
+              ? const Color(0xFFCACEF4)
+              : const Color(0xFF0B1035),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -37,7 +40,12 @@ class ButtonWalletAndBill extends StatelessWidget {
               ),
               Label(
                 text: label,
-                style: Styles.headerText(fontSize: 34, color: Colors.white),
+                style: Styles.headerText(
+                  fontSize: 34,
+                  color: context.isDarkMode
+                      ? const Color(0xFF0D0D0D)
+                      : Colors.white,
+                ),
               ),
             ],
           ),

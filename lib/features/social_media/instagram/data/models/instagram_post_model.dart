@@ -1,6 +1,11 @@
 import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 
+import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/user_tag_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
+
 class InstagramPostModel extends InstagramPostEntity {
   InstagramPostModel({
     required super.id,
@@ -26,41 +31,56 @@ class InstagramPostModel extends InstagramPostEntity {
 
   factory InstagramPostModel.fromJson(Map<String, dynamic> json) {
     return InstagramPostModel(
-      id: json['postId'] ?? '',
-      content: json['content'] ?? '',
-      userId: json['owner']?['userId'] ?? '',
-      firstName: json['owner']?['firstName'] ?? '',
-      lastName: json['owner']?['lastName'] ?? '',
-      username: json['owner']?['username'] ?? '',
-      locationName: json['location']?['name'] ?? '',
-      profilePictureUrl: json['owner']?['profilePictureUrl'] ?? '',
-      verifiedBadge: json['owner']?['verifiedBadge'] ?? false,
+      id: json['postId']?.toString() ?? '', // Default to empty string if null
+      content: json['content']?.toString() ?? '',
+      userId: json['owner']?['userId']?.toString() ?? '', // Ensure userId is not null
+      firstName: json['owner']?['firstName']?.toString() ?? '',
+      lastName: json['owner']?['lastName']?.toString() ?? '',
+      username: json['owner']?['username']?.toString() ?? '',
+      locationName: json['location']?['name']?.toString() ?? '', // Handle null location
+      profilePictureUrl: json['owner']?['profilePictureUrl']?.toString() ?? '', // Handle null
+      verifiedBadge: json['owner']?['verifiedBadge'] ?? false, // Default to false if null
       medias: json['mediaUrls'] != null
-          ? List<String>.from(
-              json['mediaUrls'].map((x) => x).toList(),
-            )
+          ? List<String>.from(json['mediaUrls'].map((x) => x ?? '').toList()) // Handle null in mediaUrls
           : [],
       comments: json['comments'] != null
           ? List<CommentInstagramModel>.from(
-              json['comments']
-                  .map((x) => CommentInstagramModel.fromJson(x))
-                  .toList(),
-            )
+        json['comments'].map((x) => CommentInstagramModel.fromJson(x)).toList(),
+      )
           : [],
       userTags: json['userTags'] != null
-          ? List<UserTagEntity>.from(
-              json['userTags'].map((x) => UserTagsModel.fromJson(x)).toList(),
-            )
+          ? List<InstagramPostUserTagEntity>.from(
+        json['userTags']
+            .map((x) => InstagramPostUserTagModel.fromJson(x))
+            .toList(),
+      )
           : [],
       hashtags: json['hashtags'] != null
-          ? List<String>.from(json['hashtags'].map((x) => x).toList())
+          ? List<String>.from(json['hashtags'].map((x) => x ?? '').toList()) // Handle null hashtags
           : [],
-      favoritesCounter: json['favoritesCounter'] ?? 0,
-      commentsCounter: json['commentsCounter'] ?? 0,
-      likesCounter: json['likesCounter'] ?? 0,
-      createdAt: json['createdAt'] ?? '',
-      countOfStory: json['owner']?['countOfStory'] ?? 0,
-      isFriend: json['owner']?['isFriend'] ?? false,
+      favoritesCounter: json['favoritesCounter'] ?? 0, // Default to 0 if null
+      commentsCounter: json['commentsCounter'] ?? 0, // Default to 0 if null
+      likesCounter: json['likesCounter'] ?? 0, // Default to 0 if null
+      createdAt: json['createdAt']?.toString() ?? '', // Default to empty string if null
+      countOfStory: json['owner']?['countOfStory'] ?? 0, // Default to 0 if null
+      isFriend: json['owner']?['isFriend'] ?? false, // Default to false if null
+    );
+  }
+}
+
+class InstagramPostUserTagModel extends InstagramPostUserTagEntity {
+  InstagramPostUserTagModel(
+      {required super.username,
+      required super.firstName,
+      required super.lastName,
+      required super.profilePictureUrl});
+
+  factory InstagramPostUserTagModel.fromJson(Map<String, dynamic> json) {
+    return InstagramPostUserTagModel(
+      username: json['username'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      profilePictureUrl: json['profilePictureUrl'] ?? '',
     );
   }
 }
@@ -75,19 +95,19 @@ class InstagramPostModel extends InstagramPostEntity {
 //   }
 // }
 
-class UserTagsModel extends UserTagEntity {
-  UserTagsModel(
-      {required super.username,
-      required super.firstName,
-      required super.lastName,
-      required super.profilePictureUrl});
-
-  factory UserTagsModel.fromJson(Map<String, dynamic> json) {
-    return UserTagsModel(
-      username: json['username'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      profilePictureUrl: json['profilePictureUrl'],
-    );
-  }
-}
+// class UserTagsModel extends UserTagEntity {
+//   UserTagsModel(
+//       {required super.username,
+//       required super.firstName,
+//       required super.lastName,
+//       required super.profilePictureUrl});
+//
+//   factory UserTagsModel.fromJson(Map<String, dynamic> json) {
+//     return UserTagsModel(
+//       username: json['username'],
+//       firstName: json['firstName'],
+//       lastName: json['lastName'],
+//       profilePictureUrl: json['profilePictureUrl'],
+//     );
+//   }
+// }

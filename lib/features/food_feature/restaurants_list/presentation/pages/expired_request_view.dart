@@ -155,7 +155,7 @@ class TripRequestCard extends StatelessWidget {
            decoration: BoxDecoration(
              // color: cardDarkColor(context),
              border: Border.all(
-               color: AppColors.black,
+               color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
              ),
              borderRadius: BorderRadius.circular(15)
            ),
@@ -193,13 +193,13 @@ class TripRequestCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 // shape: BoxShape.circle,
               ),
-              child: const Row(
+              child:  Row(
                 children: [
                   Icon(Icons.star,size: 6.6,color: AppColors.ACCENT_COLOR,),
                   Text(
                     '4.5',
-                    style: TextStyle(
-                      fontSize: 10,
+                    style: Styles.smallText(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -216,26 +216,28 @@ class TripRequestCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildUserName(),
+              _buildUserName(context),
             ],
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Center(child: _buildRestaurantDetails(context)),
         ),
       ],
     );
   }
 
-  Widget _buildUserName() {
+  Widget _buildUserName(BuildContext context) {
     return Label(
      text:  capitalizeAndSplit2Only(
           orderData.user?.firstName ?? LocaleKeys.noName.tr()),
-      style: const TextStyle(
-        fontSize: 16,
+      style: Styles.mediumText(
         fontWeight: FontWeight.w600,
+        color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+
+
       ),
     );
   }
@@ -249,9 +251,10 @@ class TripRequestCard extends StatelessWidget {
                 LocaleKeys.unknownRestaurant.tr()),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 16,
+          style: Styles.mediumText(
             fontWeight: FontWeight.w700,
+            color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+
           ),),
         if (orderData.restaurant?.subcategory != null)
           Text(
@@ -259,18 +262,19 @@ class TripRequestCard extends StatelessWidget {
                   ? orderData.restaurant!.subcategory!.nameAr.toString()
                   : capitalizeAndSplit2Only(
                       orderData.restaurant!.subcategory!.nameEn ?? ''),
-            style: const TextStyle(
-              fontSize: 16,
+            style: Styles.mediumText(
               fontWeight: FontWeight.w700,
+              color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+
             ),
           ),
-        _buildFoodDetails(),
-        _buildTotalAndCurrency(),
+        _buildFoodDetails(context),
+        _buildTotalAndCurrency(context),
       ],
     );
   }
 
-  Widget _buildFoodDetails() {
+  Widget _buildFoodDetails(BuildContext context) {
     if (orderData.orders == null || orderData.orders!.isEmpty) {
       return Text(
         LocaleKeys.noOrders.tr(),
@@ -286,40 +290,33 @@ class TripRequestCard extends StatelessWidget {
       foodList.length > 1 ? "${foodList[0]}, ${foodList[1]}" : foodList[0],
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: const TextStyle(
-        fontSize: 16,
+      style: Styles.mediumText(
         fontWeight: FontWeight.w700,
+        color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
       ),
     );
   }
 
-  Widget _buildTotalAndCurrency() {
+  Widget _buildTotalAndCurrency(BuildContext context) {
     return Row(
       children: [
-        Text(
-          "${LocaleKeys.total.tr()}: ",
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        // const Spacer(),
-        Text(
-          orderData.total?.toString() ?? '0',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        Text(
-          " ${orderData.currency ?? ''}",
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+        Expanded(
+          child: Text(
+            "${LocaleKeys.total.tr()}:"
+                "${orderData.total?.toString() ?? '0'}"
+                "${context.isArabic ? orderData.currencyAr
+                : orderData.currencyEn ?? ''}",
+            style: Styles.mediumText(
+              fontWeight: FontWeight.w700,
+              color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
     );
+
   }
 
   Widget _buildFooter(BuildContext context) {
@@ -330,23 +327,24 @@ class TripRequestCard extends StatelessWidget {
           orderData.createdAt != null
               ? DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!)
               : LocaleKeys.noDate.tr(),
-          style: const TextStyle(
-            fontSize: 12,
+          style: Styles.smallText(
             fontWeight: FontWeight.w600,
+            color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+
           ),
         ),
         const Spacer(),
         Flexible(
           flex: 5,
           child: Text(
-            orderData.subscriptionType?.toString() ??
-                LocaleKeys.noSubscription.tr(),
-            style: const TextStyle(
-              fontSize: 12,
+            (context.isArabic ? orderData.subscriptionType?.ar : orderData.subscriptionType?.en)
+                ?? LocaleKeys.noSubscription.tr(),
+            style: Styles.smallText(
               color: AppColors.SECONDARY_COLOR_DARK,
               fontWeight: FontWeight.w600,
             ),
           ),
+
         ),
       ],
     );

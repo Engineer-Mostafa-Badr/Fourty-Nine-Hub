@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,7 +17,7 @@ class TripJoinInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
           context.push(Routes.AVAILABLE_TRIPS);
@@ -40,18 +41,7 @@ class TripJoinInfoScreen extends StatelessWidget {
           ),
         ),
       ),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {},
-          ),
-        ),
-      ),
-      body: const TripJoinInfoInfoBody(),
+      body: const TripJoinInfoInfoBody(), mainCategoryId: 1,
     );
   }
 }

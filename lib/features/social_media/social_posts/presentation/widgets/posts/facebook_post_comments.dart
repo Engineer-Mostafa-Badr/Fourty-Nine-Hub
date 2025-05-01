@@ -63,7 +63,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
               text:
-                  '${controller.commentsPagingController.itemList?.length ?? 0} ${LocaleKeys.comments.localize}',
+                  '${controller.postComments.length} ${LocaleKeys.comments.localize}',
               style: Styles.mediumText()),
           leading: IconButton(
               onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
@@ -71,51 +71,51 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
         ),
         body: Column(
           children: [
-            Expanded(
-              child: PagedListView<int, CommentEntity>(
-                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
-                pagingController: controller.commentsPagingController,
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
-                    noItemsFoundIndicatorBuilder: (context) {
-                      print(
-                          controller.commentsPagingController.itemList?.length);
-                      return Padding(
-                          padding: const EdgeInsets.only(top: 200),
-                          child: Center(
-                            child: Text(
-                              LocaleKeys.noComments.localize,
-                              style: const TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                          ));
-                    },
-                    itemBuilder: (context, item, index) {
-                      return _buildCommentCard(
-                        comment: controller
-                            .commentsPagingController.itemList![index],
-                        onDeleteComment: (String id) async {
-                          var result = await widget.onDeleteComment(id);
-                          if (result == true) {
-                            controller.commentsPagingController.itemList
-                                ?.removeWhere((e) => e.id == id);
-                            setState(() {});
-                          }
-                        },
-                        onDeleteReply: (String id) => widget.onDeleteReply(id),
-                      );
-                    },
-                    noMoreItemsIndicatorBuilder: (context) => Container(),
-                    firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: const EdgeInsets.only(top: 150),
-                        child: const CupertinoActivityIndicator()),
-                    newPageProgressIndicatorBuilder: (context) =>
-                        const CupertinoActivityIndicator()),
-              ),
-            ),
+            // Expanded(
+            //   child: PagedListView<int, CommentEntity>(
+            //     padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
+            //     pagingController: controller.commentsPagingController,
+            //     shrinkWrap: true,
+            //     physics: const BouncingScrollPhysics(
+            //         parent: AlwaysScrollableScrollPhysics()),
+            //     builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
+            //         noItemsFoundIndicatorBuilder: (context) {
+            //           print(
+            //               controller.commentsPagingController.itemList?.length);
+            //           return Padding(
+            //               padding: const EdgeInsets.only(top: 200),
+            //               child: Center(
+            //                 child: Text(
+            //                   LocaleKeys.noComments.localize,
+            //                   style: const TextStyle(
+            //                     fontSize: 18,
+            //                   ),
+            //                 ),
+            //               ));
+            //         },
+            //         itemBuilder: (context, item, index) {
+            //           return _buildCommentCard(
+            //             comment: controller
+            //                 .commentsPagingController.itemList![index],
+            //             onDeleteComment: (String id) async {
+            //               var result = await widget.onDeleteComment(id);
+            //               if (result == true) {
+            //                 controller.commentsPagingController.itemList
+            //                     ?.removeWhere((e) => e.id == id);
+            //                 setState(() {});
+            //               }
+            //             },
+            //             onDeleteReply: (String id) => widget.onDeleteReply(id),
+            //           );
+            //         },
+            //         noMoreItemsIndicatorBuilder: (context) => Container(),
+            //         firstPageProgressIndicatorBuilder: (context) => Container(
+            //             margin: const EdgeInsets.only(top: 150),
+            //             child: const CupertinoActivityIndicator()),
+            //         newPageProgressIndicatorBuilder: (context) =>
+            //             const CupertinoActivityIndicator()),
+            //   ),
+            // ),
             Container(
                 height: kToolbarHeight,
                 decoration: const BoxDecoration(),
@@ -156,8 +156,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                                 PostCommentParams(
                                     postId: widget.postId,
                                     content: commentTextController.text));
-                            controller.commentsPagingController.itemList
-                                ?.insert(
+                            controller.postComments.insert(
                               0,
                               CommentModel(
                                 id: data.id,

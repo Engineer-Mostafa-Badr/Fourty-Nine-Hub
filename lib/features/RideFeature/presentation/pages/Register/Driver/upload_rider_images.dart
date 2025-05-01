@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
@@ -45,46 +46,49 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (c,v)=>context.push(Routes.RIDE_HOME),
-      child: Scaffold(
-        body: BlocBuilder<RideRegisterCubit,RideRegisterState>(
-          builder: (context,state) {
-            var cubit = context.read<RideRegisterCubit>();
-            return state.isLoading?const Center(child: CircularProgressIndicator()):ListView(
-              padding: const EdgeInsets.only(top: 82, left: 16, right: 16),
-              children: [
-                Label(
-                  text: LocaleKeys.completeRegistration.localize,
-                  style: Styles.headerText(
-                    fontWeight: FontWeight.w500,
+      child: RefreshIndicator(
+        onRefresh: ()=>context.read<RideRegisterCubit>().fetchRideUploadedImagesData(context,widget.params),
+        child: Scaffold(
+          body: BlocBuilder<RideRegisterCubit,RideRegisterState>(
+            builder: (context,state) {
+              var cubit = context.read<RideRegisterCubit>();
+              return state.isLoading?const Center(child: CircularProgressIndicator()):ListView(
+                padding: const EdgeInsets.only(top: 82, left: 16, right: 16),
+                children: [
+                  Label(
+                    text: LocaleKeys.completeRegistration.localize,
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                state.isShipping==true?loadingUploadImages(cubit,state,widget.params!):rideUploadImages(state,widget.params!),
-                // UploadImageRow(title: "ID",onTap: ()=>context.push(Routes.personalDocumentsScreen),disableUpload: state.isUploadDriverId!=null&&(state.isUploadDriverId==true),),
-                // const SizedBox(
-                //   height: 40,
-                // ),
-                // UploadImageRow(title: "Driver License",onTap: ()=>context.push(Routes.driversLicenseScreen),disableUpload: state.isUploadDriverLicense!=null&&(state.isUploadDriverLicense==true),),
-                // const SizedBox(
-                //   height: 40,
-                // ),
-                // UploadImageRow(title: "Car Image/License",onTap: ()=>context.push(Routes.vehicleInformationScreen),disableUpload: state.isUploadCarLicense!=null&&(state.isUploadCarLicense==true),),
-                // const SizedBox(
-                //   height: 40,
-                // ),
-                // if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
-                // const SizedBox(
-                //   height: 40,
-                // )],
-                // if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
-                //   height: 40,
-                // )],
-                // if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')UploadImageRow(title: "Terminal Examination",onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
-              ],
-            );
-          }
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  state.isShipping==true?loadingUploadImages(cubit,state,widget.params!):rideUploadImages(state,widget.params!),
+                  // UploadImageRow(title: "ID",onTap: ()=>context.push(Routes.personalDocumentsScreen),disableUpload: state.isUploadDriverId!=null&&(state.isUploadDriverId==true),),
+                  // const SizedBox(
+                  //   height: 40,
+                  // ),
+                  // UploadImageRow(title: "Driver License",onTap: ()=>context.push(Routes.driversLicenseScreen),disableUpload: state.isUploadDriverLicense!=null&&(state.isUploadDriverLicense==true),),
+                  // const SizedBox(
+                  //   height: 40,
+                  // ),
+                  // UploadImageRow(title: "Car Image/License",onTap: ()=>context.push(Routes.vehicleInformationScreen),disableUpload: state.isUploadCarLicense!=null&&(state.isUploadCarLicense==true),),
+                  // const SizedBox(
+                  //   height: 40,
+                  // ),
+                  // if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
+                  // const SizedBox(
+                  //   height: 40,
+                  // )],
+                  // if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
+                  //   height: 40,
+                  // )],
+                  // if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')UploadImageRow(title: "Terminal Examination",onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
+                ],
+              );
+            }
+          ),
         ),
       ),
     );
@@ -94,7 +98,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
-        UploadImageRow(title: "ID",onTap: () async {
+        UploadImageRow(title: LocaleKeys.personalDocuments.localize,onTap: () async {
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: PersonalDocumentsScreen(params: params,))));
@@ -104,7 +108,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
         const SizedBox(
           height: 40,
         ),
-        UploadImageRow(title: "Driver License",onTap: () async {
+        UploadImageRow(title: LocaleKeys.driversLicense.localize,onTap: () async {
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: DriversLicenseScreen(params: params,))));
@@ -114,7 +118,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
         const SizedBox(
           height: 40,
         ),
-        UploadImageRow(title: "Car Image/License",onTap: () async {
+        UploadImageRow(title: LocaleKeys.vehicleInformation.localize,onTap: () async {
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: VehicleInformationScreen(params: params,))));
@@ -124,7 +128,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
         const SizedBox(
           height: 40,
         ),
-        if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: () async {
+        if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: LocaleKeys.criminalRecord.localize,onTap: () async {
           // context.push(Routes.criminalRecordScreen);
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
@@ -133,7 +137,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
         },disableUpload: (state.isUploadCriminalRecord==true),),const SizedBox(
           height: 40,
         )],
-        if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: () async {
+        if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: LocaleKeys.dragAnalysis.localize,onTap: () async {
           // context.push(Routes.drugAnalysisScreen);
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
@@ -146,11 +150,13 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
                 TextSpan(
                     text: "${LocaleKeys.phone.localize} : ",
                     style:
-                    Styles.mediumText(
+                    Styles.headerText(
                         color: AppColors.SECONDARY_COLOR)),
                 TextSpan(
                     text: state.pictureOptional?.drugAnalysisPhone??'',
-                    style: Styles.mediumText())
+                    style: Styles.mediumText(
+                      color: context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR
+                    ))
               ]),
             ),
             ],
@@ -160,11 +166,13 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
                 TextSpan(
                     text: "${LocaleKeys.address.localize} : ",
                     style:
-                    Styles.mediumText(
+                    Styles.headerText(
                         color: AppColors.SECONDARY_COLOR)),
                 TextSpan(
                     text: state.pictureOptional?.drugAnalysisAddress??'',
-                    style: Styles.mediumText())
+                    style: Styles.mediumText(
+                        color: context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR
+                    ))
               ]),
             ),
           ],
@@ -185,11 +193,13 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
                 TextSpan(
                     text: "${LocaleKeys.phone.localize} : ",
                     style:
-                    Styles.mediumText(
+                    Styles.headerText(
                         color: AppColors.SECONDARY_COLOR)),
                 TextSpan(
                     text: state.pictureOptional?.technicalExaminationPhone??'',
-                    style: Styles.mediumText())
+                    style: Styles.mediumText(
+                        color: context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR
+                    ))
               ]),
             ),
           ],
@@ -199,11 +209,14 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
                 TextSpan(
                     text: "${LocaleKeys.address.localize} : ",
                     style:
-                    Styles.mediumText(
+                    Styles.headerText(
                         color: AppColors.SECONDARY_COLOR)),
                 TextSpan(
                     text: state.pictureOptional?.technicalExaminationAddress??'',
-                    style: Styles.mediumText())
+                    style: Styles.mediumText(
+                        color: context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR
+
+                    ))
               ]),
             ),
             ],
@@ -215,7 +228,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
   Widget loadingUploadImages(RideRegisterCubit cubit,RideRegisterState state,UploadRiderImagesParams params){
     return Column(
       children:[
-        UploadImageRow(title: "ID",onTap: () async {
+        UploadImageRow(title: LocaleKeys.personalDocuments.localize,onTap: () async {
          await  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: PersonalDocumentsScreen(params: params,))));
@@ -225,7 +238,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
         const SizedBox(
           height: 40,
         ),
-        UploadImageRow(title: "Driver License",onTap: () async {
+        UploadImageRow(title: LocaleKeys.driversLicense.localize,onTap: () async {
         await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: DriversLicenseScreen(params: params,))));
@@ -235,7 +248,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
         const SizedBox(
           height: 40,
         ),
-        UploadImageRow(title: "Car Image/License",onTap: () async {
+        UploadImageRow(title: LocaleKeys.vehicleInformation.localize,onTap: () async {
           // context.push(Routes.vehicleInformationScreen);
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),

@@ -19,7 +19,7 @@ class FareBottomSheetWidget extends StatelessWidget {
     required this.selectedCategoryName,
   }) : _controller = TextEditingController(
           text:
-              selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
+              selectedCategoryPrice > 0 ? selectedCategoryPrice.toInt().toString() : '',
         );
 
   final RideCubit rideCubit;
@@ -36,17 +36,18 @@ class FareBottomSheetWidget extends StatelessWidget {
         builder: (context, state) {
           return Form(
             // Wrap in a Form widget
+
             key: _formKey,
             child: Column(
               children: [
                 TextFormField(
                   controller: _controller,
                   autofocus: true,
-                  cursorColor: AppColors.PRIMARY_COLOR,
+                  cursorColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                   cursorHeight: 50,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                    color: AppColors.PRIMARY_COLOR,
+                  style:  TextStyle(
+                    color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w500,
                     fontSize: 40,
                   ),
@@ -54,12 +55,12 @@ class FareBottomSheetWidget extends StatelessWidget {
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     hintText: context.isArabic ? 'ج.م' : 'EGP',
-                    hintStyle: const TextStyle(
-                      color: Color(0xff96979B),
+                    hintStyle:  const TextStyle(
+                      color:  Color(0xff96979B),
                       fontWeight: FontWeight.w500,
                       fontSize: 40,
                     ),
-                    fillColor: Colors.white,
+                    fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                     filled: true,
                     border: const UnderlineInputBorder(),
                     focusedBorder: const UnderlineInputBorder(),
@@ -85,8 +86,8 @@ class FareBottomSheetWidget extends StatelessWidget {
                         amount < minFare ||
                         amount > maxFare) {
                       return context.isArabic
-                          ? 'يجب أن يكون المبلغ بين $minFare و $maxFare'
-                          : 'Amount must be between $minFare and $maxFare';
+                          ? 'يجب أن يكون المبلغ بين ${minFare.toInt()} و ${maxFare.toInt()}'
+                          : 'Amount must be between ${minFare.toInt()} and ${maxFare.toInt()}';
                     }
 
                     return null;

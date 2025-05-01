@@ -464,7 +464,8 @@ class FourtyNineServiceLocator {
     //     () => ThumbnailsCubit(serviceLocator())..loadData());
     serviceLocator.registerFactory<MainCategoriesTapsCubit>(() =>
         MainCategoriesTapsCubit(serviceLocator(), serviceLocator())
-          ..loadData());
+          ..loadData()
+    );
     serviceLocator.registerFactory<MyAddsCubit>(() => MyAddsCubit(
           serviceLocator(),
           serviceLocator(),

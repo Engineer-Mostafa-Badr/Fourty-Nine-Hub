@@ -1,293 +1,18 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_slidable/flutter_slidable.dart';
-// import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
-// import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-// import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-// import 'package:fourtyninehub/core/states/basic_state.dart';
-// import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-// import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
-// import 'package:fourtyninehub/res/style/app_colors.dart';
-// import 'package:fourtyninehub/res/style/styles.dart';
-// import 'package:fourtyninehub/routes/routes.dart';
-// import 'package:fourtyninehub/service_locator/service_locator.dart';
-// import 'package:go_router/go_router.dart';
-// import '../widgets/calling_card.dart';
-// import '../widgets/chat_card.dart';
-//
-// class ChatView extends StatefulWidget {
-//   const ChatView({super.key});
-//
-//   @override
-//   State<ChatView> createState() => _ChatViewState();
-// }
-//
-// class _ChatViewState extends State<ChatView> {
-//   late ChatsCubit chatCubit;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     initSocketConnection();
-//   }
-//
-//   initSocketConnection() {
-//     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-//     chatCubit.getChats(index: 0);
-//   }
-//
-//   final List<String> groups = [
-//     'Social',
-//     'Services',
-//     'Call & Video(Social)',
-//     'Call & Video(Services)',
-//     'Greet',
-//     'Groups',
-//     'Anonymous',
-//     'Archive',
-//     'Lock Chat',
-//     'Unread',
-//   ];
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultTabController(
-//       length: groups.length,
-//       initialIndex: 0,
-//       child: SharedScaffold(
-//         mainCategoryId: 2,
-//         body: NestedAppbar(
-//           appBars: [
-//             const SliverAppBar(
-//               expandedHeight: kToolbarHeight * 1.5,
-//               automaticallyImplyLeading: false,
-//               floating: true,
-//               flexibleSpace: ChatStories(),
-//             ),
-//             SliverAppBar(
-//               automaticallyImplyLeading: false,
-//               floating: true,
-//               pinned: true,
-//               titleSpacing: 0,
-//               title: _buildCategoriesLabels(),
-//             )
-//           ],
-// body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-//   builder: (context, state) {
-//     return context.read<UserCubit>().isLoggedIn
-//         ? _buildCategoriesViews()
-//         : Center(
-//             child: Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               GestureDetector(
-//                   onTap: () => context.push(Routes.LOGIN),
-//                   child: Label(
-//                       text: 'Login',
-//                       style: Styles.headerText(color: Colors.blue))),
-//               Label(
-//                   text: ', To continue in using chat services',
-//                   style: Styles.headerText()),
-//             ],
-//           ));
-//   },
-// ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildCategoriesLabels() {
-//     return TabBar(
-//         onTap: (index) {
-//           context.read<ChatsCubit>().getChats(index: index);
-//
-//           // if this locked chat we request password
-//           if (index == 8) {
-//             showDialogToConfirmChatLockPassword(context);
-//           }
-//         },
-//         tabAlignment: TabAlignment.start,
-//         isScrollable: true,
-//         tabs: groups.map((e) {
-//           return Tab(
-//             text: e,
-//           );
-//         }).toList());
-//   }
-//
-//   Widget _buildCategoriesViews() {
-//     return TabBarView(children: [
-//       _buildCategoryChats(),
-//       _buildCategoryChats(),
-//       _buildCallingHistory(isVideo: false),
-//       _buildCallingHistory(isVideo: true),
-//       _buildCallingHistory(isVideo: false),
-//       _buildCallingHistory(isVideo: true),
-//       _buildCategoryChats(isSecret: true),
-//       _buildCategoryChats(),
-//       _buildCategoryChats(),
-//       _buildCategoryChats(),
-//       // _buildCategoryChats(),
-//       // _buildCategoryChats(),
-//     ]);
-//   }
-//
-//   Widget _buildCategoryChats({bool isSecret = false}) {
-//     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
-//       return state.chats == null || state.isLoading
-//           ? LoadingCustom.customThreeBounce(context)
-//           : state.chats?.length == 0
-//               ? Center(
-//                   child: Label(
-//                       text: 'No Chats until now',
-//                       style: Styles.mediumText(
-//                           color: const Color.fromARGB(255, 87, 87, 87),
-//                           fontWeight: FontWeight.bold,
-//                           fontSize: 18)),
-//                 )
-//               : ListView.separated(
-//                   shrinkWrap: true,
-//                   physics: const NeverScrollableScrollPhysics(),
-//                   itemBuilder: (context, index) => Slidable(
-//                     key: ValueKey(index),
-//                     // All actions are defined in the children parameter.
-//
-//                     closeOnScroll: false,
-//                     endActionPane: ActionPane(
-//                       motion: const ScrollMotion(),
-//                       dismissible: DismissiblePane(onDismissed: () {}),
-//                       children: [
-//                         SlidableAction(
-//                           onPressed: (value) {
-//                             bottomSheet(
-//                                 context: context,
-//                                 isScrollControlled: true,
-//                                 widget: MoreIconBottomSheet(
-//                                   ChatCategoryEntity: state.chats![index],
-//                                   chatsCubit: chatCubit,
-//                                 ));
-//                           },
-//                           backgroundColor:
-//                               const Color.fromARGB(255, 191, 191, 191),
-//                           foregroundColor: Colors.white,
-//                           icon: Icons.more_horiz,
-//                           label: 'More',
-//                           padding: EdgeInsets.zero,
-//                         ),
-//                         SlidableAction(
-//                           onPressed: (value) async {
-//                             chatCubit.changeChatToArchiveOrNormalUseCase(
-//                                 state.chats![index].sId!);
-//                           },
-//                           backgroundColor: AppColors.PRIMARY_COLOR,
-//                           foregroundColor: Colors.white,
-//                           icon: Icons.delete_outlined,
-//                           label: state.chats![index].archived!
-//                               ? 'Unarchive'
-//                               : 'Archive',
-//                           padding: EdgeInsets.zero,
-//                         ),
-//                       ],
-//                     ),
-//
-//                     // onDismissed: ,
-//                     child: ChatCard(
-//                       isSecret: isSecret,
-//                       ChatCategoryEntity: state.chats?[index],
-//                       chatsCubit: chatCubit,
-//                     ),
-//                   ),
-//                   separatorBuilder: (context, index) => const SizedBox(),
-//                   itemCount: state.chats?.length ?? 0,
-//                 );
-//     });
-//   }
-//
-//   Widget _buildCallingHistory({required bool isVideo}) {
-//     return ListView.separated(
-//         shrinkWrap: true,
-//         physics: const NeverScrollableScrollPhysics(),
-//         itemBuilder: (context, index) => CallingCard(
-//               isVideo: isVideo,
-//             ),
-//         separatorBuilder: (context, index) => const SizedBox(),
-//         itemCount: 8);
-//   }
-//
-//   Future<bool?> showDialogToConfirmChatLockPassword(
-//       BuildContext context) async {
-//     TextEditingController passwordController = TextEditingController(text: '');
-//     return await showDialog(
-//       context: context,
-//       builder: ((context) => AlertDialog(
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(5.0),
-//             ),
-//             title: Label(
-//                 text: 'Lock chats password please',
-//                 style: Styles.headerText(
-//                     fontWeight: FontWeight.bold, color: Colors.black)),
-//             content: Material(
-//               child: ConstrainedBox(
-//                 constraints: const BoxConstraints(maxHeight: 100.0),
-//                 child: Column(
-//                   mainAxisSize: MainAxisSize.min,
-//                   children: [
-//                     FormTextField(
-//                         controller: passwordController,
-//                         hint: 'password',
-//                         type: TextInputType.number,
-//                         // initialValue: '',
-//                         style: const TextStyle(
-//                             fontSize: 20,
-//                             color: Colors.grey,
-//                             fontWeight: FontWeight.bold),
-//                         action: (v) => () {}),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             actions: [
-//               TextButton(
-//                   onPressed: () async {
-//                     chatCubit.getChats(
-//                         index: 8, password: passwordController.text.trim());
-//                     Navigator.of(context).pop(false);
-//                   },
-//                   child: const Text('Confirm password')),
-//             ],
-//           )),
-//     );
-//   }
-// }
-//after add index to navigate
-
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
@@ -298,30 +23,32 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 
+import '../../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
 import '../widgets/calling_card.dart';
-import '../widgets/chat_card.dart';
+import '../widgets/end_to_end_Encrypted_widget.dart';
+import '../widgets/new_chat_card.dart';
 
 class ChatsViewParams {
   final int initialTabIndex;
   bool isFromStartChat = false;
   ChatEntity? selectedChat;
+
   ChatsViewParams(
       {this.initialTabIndex = 0,
       this.isFromStartChat = false,
       this.selectedChat});
 }
 
-// ignore: must_be_immutable
 class ChatView extends StatefulWidget {
   final ChatsViewParams chatsViewParams;
+
   const ChatView({super.key, required this.chatsViewParams});
 
   @override
@@ -340,7 +67,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
     if (widget.chatsViewParams.isFromStartChat) {
       chatsCubit = context.read<ChatsCubit>()..init();
       chatsCubit.selectChat = widget.chatsViewParams.selectedChat!;
-
+      // print(
+      //     'widget.chatsViewParams.selectedChat! ${widget.chatsViewParams.selectedChat!}');
       Future.microtask(() async {
         await context
             .read<ChatsCubit>()
@@ -391,510 +119,104 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: DefaultTabController(
-          length: ChatCategories.values.length,
-          initialIndex: widget.chatsViewParams.initialTabIndex,
-          child: BlocBuilder<ChatsCubit, ChatsState>(
-            builder: (context, state) {
-              return SharedScaffold(
-                mainCategoryId: 2,
-                body: NestedAppbar(
-                  scrollController:
-                      scrollController, // Attach the ScrollController here
-                  appBars: [
-                    SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      floating: true,
-                      flexibleSpace: BlocProvider.value(
-                        value: serviceLocator<StoryCubit>()..fetchStories(),
-                        child: BlocBuilder<ChatsCubit, ChatsState>(
-                          // buildWhen: (previous, current) {
-                          //   return previous.status != ChatsStates.typing ||
-                          //       previous.status != ChatsStates.recording;
-                          // },
-                          builder: (context, state) {
-                            return context.read<UserCubit>().isLoggedIn
-                                ? SizedBox(
-                                    // height: 20,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-
-                                        context
-                                            .read<ChatsCubit>()
-                                            .selectedChats
-                                            .isNotEmpty? IconButton(
-                                            onPressed: (){
-                                              context
-                                                  .read<ChatsCubit>()
-                                              .clearSelectedChats();
-                                            },
-                                            icon: const Icon(Icons.arrow_back)):const SizedBox(),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 16.w),
-                                          child: Text(
-                                            context
-                                                    .read<ChatsCubit>()
-                                                    .selectedChats
-                                                    .isNotEmpty
-                                                ? "${context.read<ChatsCubit>().selectedChats.length}"
-                                                : "49 Hub",
-                                            style: context
-                                                    .read<ChatsCubit>()
-                                                    .selectedChats
-                                                    .isNotEmpty
-                                                ? Styles.mediumText(
-                                                    color: context.isDarkMode
-                                                        ? Colors.white
-                                                        : AppColors.PRIMARY_COLOR)
-                                                : Styles.headerText(
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 48,
-                                                    color: context.isDarkMode
-                                                        ? Colors.white
-                                                        : AppColors
-                                                            .PRIMARY_COLOR),
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        context
-                                                .read<ChatsCubit>()
-                                                .selectedChats
-                                                .isEmpty
-                                            ? const SizedBox.shrink()
-                                            : Row(
-                                                children: [
-                                                  IconButton(
-                                                    onPressed: () async {
-                                                      await context
-                                                          .read<ChatsCubit>()
-                                                          .pinAndUnpinChat();
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.push_pin_outlined),
-                                                    color: context.isDarkMode
-                                                        ? Colors.white
-                                                        : AppColors.PRIMARY_COLOR,
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () async {
-                                                      await context
-                                                          .read<ChatsCubit>()
-                                                          .deleteChat();
-                                                    },
-                                                    icon: Icon(
-                                                      Icons
-                                                          .delete_forever_outlined,
-                                                      color: context.isDarkMode
-                                                          ? Colors.white
-                                                          : AppColors
-                                                              .PRIMARY_COLOR,
-                                                    ),
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () async {
-                                                      await context
-                                                          .read<ChatsCubit>()
-                                                          .changeMuteChat();
-                                                    },
-                                                    icon: Icon(
-                                                      Icons
-                                                          .notifications_off_outlined,
-                                                      color: context.isDarkMode
-                                                          ? Colors.white
-                                                          : AppColors
-                                                              .PRIMARY_COLOR,
-                                                    ),
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () async {
-                                                      await context
-                                                          .read<ChatsCubit>()
-                                                          .changeArchiveChat(
-                                                              isArchivedTab:
-                                                                  false);
-                                                      final archivedChatsCount =
-                                                          chatsCubit.selectedChats
-                                                              .length;
-
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        SnackBar(
-                                                          backgroundColor: const Color(0xff1A1A1A), // Set background color to blue
-                                                          content:
-                                                              BlocProvider.value(
-                                                            value: context.read<
-                                                                ChatsCubit>(),
-                                                            child: Builder(
-                                                              builder: (context) {
-                                                                return Text.rich(
-                                                                  TextSpan(
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: context
-                                                                                .isArabic
-                                                                            ? "تم أرشفة "
-                                                                            : "Archived ",
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontSize:
-                                                                              16,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                      TextSpan(
-                                                                        text:
-                                                                            "$archivedChatsCount ", // العدد
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontSize:
-                                                                              16,
-                                                                        ),
-                                                                      ),
-                                                                      TextSpan(
-                                                                        text: context
-                                                                                .isArabic
-                                                                            ? "محادثة"
-                                                                            : "chats",
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontSize:
-                                                                              16,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                );
-                                                              },
-                                                            ),
-                                                          ),
-                                                          action: SnackBarAction(
-                                                            label:
-                                                                context.isArabic
-                                                                    ? "تراجع"
-                                                                    : "UNDO",
-                                                              textColor: AppColors.PRIMARY_COLOR_DARK, // Set "Undo" text color to gray
-                                                            onPressed: () async {
-                                                              await context
-                                                                  .read<
-                                                                      ChatsCubit>()
-                                                                  .changeArchiveChat(
-                                                                      isArchivedTab:
-                                                                          false);
-                                                            },
-                                                          ),
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 3),
-                                                        ),
-                                                      );
-
-                                                      Future.delayed(
-                                                          const Duration(
-                                                              seconds: 3), () {
-                                                        context
-                                                            .read<ChatsCubit>()
-                                                            .clearSelectedChats();
-                                                      });
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.archive_outlined,
-                                                      color: context.isDarkMode
-                                                          ? Colors.white
-                                                          : AppColors
-                                                              .PRIMARY_COLOR,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                        context
-                                                .read<ChatsCubit>()
-                                                .selectedChats
-                                                .isEmpty
-                                            ? Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.photo_camera_outlined,
-                                                  ),
-                                                  PopupMenuButton(
-                                                    icon: Icon(
-                                                      Icons.more_vert,
-                                                      color: context.isDarkMode
-                                                          ? Colors.white
-                                                          : AppColors
-                                                              .PRIMARY_COLOR,
-                                                    ),
-                                                    color: context.isDarkMode
-                                                        ? AppColors.PRIMARY_COLOR
-                                                        : AppColors
-                                                            .BACKGROUND_COLOR,
-                                                    shape:
-                                                        const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  16.0)),
-                                                    ),
-                                                    offset: const Offset(0, 50),
-                                                    onSelected:
-                                                        (int value) async {
-                                                      if (value == 1) {
-                                                        context.push(Routes
-                                                            .CHATPROFILEVIEW);
-                                                      }
-                                                      if (value == 0) {
-                                                        await context
-                                                            .read<ChatsCubit>()
-                                                            .recoverDeletedChats();
-                                                      }
-                                                    },
-                                                    itemBuilder: (context) {
-                                                      return _mainMenuBuilder();
-                                                    },
-                                                  ),
-                                                ],
-                                              )
-                                            : PopupMenuButton(
-                                                icon: Icon(
-                                                  Icons.more_vert,
-                                                  color: context.isDarkMode
-                                                      ? Colors.white
-                                                      : AppColors.PRIMARY_COLOR,
-                                                ),
-                                                color: context.isDarkMode
-                                                    ? AppColors.PRIMARY_COLOR
-                                                    : AppColors.BACKGROUND_COLOR,
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(16.0)),
-                                                ),
-                                                offset: const Offset(0, 50),
-                                                onSelected: (int value) async {
-                                                  if (value == 3) {
-                                                    // await context
-                                                    //     .read<ChatsCubit>()
-                                                    //     .lockChats(
-                                                    //         isLockedTap: false);
-                                                    await context
-                                                        .read<ChatsCubit>()
-                                                        .lockChats(
-                                                            isLockedTap: false);
-                                                    final unlockedChatsCount =
-                                                        chatsCubit
-                                                            .selectedChats.length;
-
-                                                    ScaffoldMessenger.of(context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        backgroundColor: const Color(0xff1A1A1A), // Set background color
-                                                        content:
-                                                            BlocProvider.value(
-                                                          value: context
-                                                              .read<ChatsCubit>(),
-                                                          child: Builder(
-                                                            builder: (context) {
-                                                              return Text.rich(
-                                                                TextSpan(
-                                                                  children: [
-                                                                    TextSpan(
-                                                                      text: context
-                                                                              .isArabic
-                                                                          ? "تم قفل "
-                                                                          : "Locked ",
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text:
-                                                                          "$unlockedChatsCount ", // Count
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            16,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text: context
-                                                                              .isArabic
-                                                                          ? "محادثة"
-                                                                          : "chats",
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ),
-                                                        action: SnackBarAction(
-                                                          label: context.isArabic
-                                                              ? "تراجع"
-                                                              : "UNDO",
-                                                          textColor: AppColors.PRIMARY_COLOR_DARK, // Set "Undo" text color to gray
-                                                          onPressed: () async {
-                                                            await context
-                                                                .read<
-                                                                    ChatsCubit>()
-                                                                .lockChats(
-                                                                    isLockedTap:
-                                                                        false);
-                                                          },
-                                                        ),
-                                                        duration: const Duration(
-                                                            seconds: 3),
-                                                      ),
-                                                    );
-
-                                                    Future.delayed(
-                                                        const Duration(
-                                                            seconds: 3), () {
-                                                      context
-                                                          .read<ChatsCubit>()
-                                                          .clearSelectedChats();
-                                                    });
-                                                  }
-                                                },
-                                                itemBuilder: (context) {
-                                                  return [
-                                                    // PopupMenuItem<int>(
-                                                    //   value: 0,
-                                                    //   child: Text(
-                                                    //     LocaleKeys.addShortcut
-                                                    //         .tr(),
-                                                    //     style: Styles.mediumText(
-                                                    //         color: context
-                                                    //                 .isDarkMode
-                                                    //             ? Colors.white
-                                                    //             : AppColors
-                                                    //                 .PRIMARY_COLOR),
-                                                    //   ),
-                                                    // ),
-                                                    // PopupMenuItem<int>(
-                                                    //   value: 1,
-                                                    //   child: Text(
-                                                    //     LocaleKeys.markAsUnread
-                                                    //         .tr(),
-                                                    //     style: Styles.mediumText(
-                                                    //         color: context
-                                                    //                 .isDarkMode
-                                                    //             ? Colors.white
-                                                    //             : AppColors
-                                                    //                 .PRIMARY_COLOR),
-                                                    //   ),
-                                                    // ),
-                                                    // PopupMenuItem<int>(
-                                                    //   value: 2,
-                                                    //   child: Text(
-                                                    //     LocaleKeys.selectAll.tr(),
-                                                    //     style: Styles.mediumText(
-                                                    //         color: context
-                                                    //                 .isDarkMode
-                                                    //             ? Colors.white
-                                                    //             : AppColors
-                                                    //                 .PRIMARY_COLOR),
-                                                    //   ),
-                                                    // ),
-                                                    PopupMenuItem<int>(
-                                                      value: 3,
-                                                      child: Text(
-                                                        context.isArabic?"الدردشات المغلقه":"Locked chats",
-                                                        style: Styles.mediumText(
-                                                            color: context
-                                                                    .isDarkMode
-                                                                ? Colors.white
-                                                                : AppColors
-                                                                    .PRIMARY_COLOR),
-                                                      ),
-                                                    ),
-                                                  ];
-                                                },
-                                              ),
-                                      ],
-                                    ),
-                                  )
-                                : const SizedBox.shrink();
-                          },
-                        ),
+    return BlocBuilder<ChatsCubit, ChatsState>(
+      builder: (context, state) {
+        // final chatsCubit = context.read<ChatsCubit>();
+        return CustomScaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(
+                context.read<ChatsCubit>().selectedChats.isEmpty ? 40 : 0),
+            child: Builder(
+              builder: (context) {
+                if (context.read<ChatsCubit>().selectedChats.isEmpty) {
+                  return HomeAppbar(
+                    isHaveLeading: false,
+                    isWithBackArrow: true,
+                    inChat: PopupMenuButton(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      color: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : AppColors.BACKGROUND_COLOR,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      offset: const Offset(0, 50),
+                      onSelected: (int value) async {
+                        if (value == 2) {
+                          context.push(Routes.CHATPROFILEVIEW);
+                        }
+                        if (value == 1) {
+                          await context
+                              .read<ChatsCubit>()
+                              .recoverDeletedChats();
+                        }
+                      },
+                      itemBuilder: (context) {
+                        return _mainMenuBuilder();
+                      },
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ),
+          body: SafeArea(
+            child: DefaultTabController(
+              length: ChatCategories.values.length,
+              initialIndex: widget.chatsViewParams.initialTabIndex,
+              child: NestedAppbar(
+                scrollController:
+                    scrollController, // Attach the ScrollController here
+                appBars: [
+                  if (context.read<ChatsCubit>().selectedChats.isNotEmpty)
+                    _selectedChatAppBar(chatsCubit),
+                  SliverAppBar(
+                    expandedHeight: MediaQuery.of(context).size.height *
+                        0.1, // Responsive height
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    flexibleSpace: BlocProvider(
+                      create: (context) => serviceLocator<StoryCubit>()
+                        ..fetchStories()
+                        ..getMutedStories(),
+                      child: const Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: ChatStories(),
                       ),
                     ),
-                    // if (context.read<UserCubit>().isLoggedIn)
-                    SliverAppBar(
-                      expandedHeight: MediaQuery.of(context).size.height *
-                          0.1, // Responsive height
-                      automaticallyImplyLeading: false,
-                      floating: true,
-                      flexibleSpace: BlocProvider(
-                        create: (context) => serviceLocator<StoryCubit>()
-                          ..fetchStories()
-                          ..getMutedStories(),
-                        child: const ChatStories(),
-                      ),
-                    ),
-                    SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      floating: true,
-                      pinned: true,
-                      titleSpacing: 0,
-                      title: _buildCategoriesLabels(),
-                    )
-                  ],
-                  // body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                  //   builder: (context, state) {
-                  //     return _buildCategoriesViews();
-                  //   },
-                  // ),
-                  body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                    builder: (context, state) {
-                      return context.read<UserCubit>().isLoggedIn
-                          ? _buildCategoriesViews()
-                          : Center(
-                              child: Row(
+                  ),
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    pinned: true,
+                    titleSpacing: 0,
+                    title: _buildCategoriesLabels(),
+                  )
+                ],
+                // body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                //   builder: (context, state) {
+                //     return _buildCategoriesViews();
+                //   },
+                // ),
+                body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                  builder: (context, state) {
+                    return context.read<UserCubit>().isLoggedIn
+                        ? _buildCategoriesViews()
+                        : Center(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 GestureDetector(
                                     onTap: () => context.push(Routes.LOGIN),
                                     child: Label(
-                                      text: LocaleKeys.login.tr(),
+                                      text: LocaleKeys.login.localize,
                                       style: const TextStyle(
                                         color: AppColors.PRIMARY_COLOR_DARK,
                                         fontWeight: FontWeight.bold,
@@ -905,22 +227,26 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                       ),
                                     )),
                                 Label(
-                                  text: LocaleKeys.continueUsingChatServices.tr(),
-                                  style: const TextStyle(
+                                  text: LocaleKeys
+                                      .continueUsingChatServices.localize,
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
                               ],
-                            ));
-                    },
-                  ),
+                            ),
+                          );
+                  },
                 ),
-              );
-            },
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -929,7 +255,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       // PopupMenuItem<int>(
       //   value: 0,
       //   child: Text(
-      //     LocaleKeys.newGroup.tr(),
+      //     LocaleKeys.newGroup.localize,
       //     style: Styles.mediumText(
       //         color:
       //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
@@ -938,37 +264,40 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       // PopupMenuItem<int>(
       //   value: 1,
       //   child: Text(
-      //     LocaleKeys.newBroadcast.tr(),
+      //     LocaleKeys.newBroadcast.localize,
       //     style: Styles.mediumText(
       //         color:
       //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
       //   ),
       // ),
       PopupMenuItem<int>(
-        value: 2,
-        child: Text(
-          context.isArabic? "الرسائل المميزة":"Starred Messages",
-          style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
-        ),
-      ),
-      PopupMenuItem<int>(
         value: 0,
-        child: Text(
-          LocaleKeys.recoverDeletedChats.tr(),
+        child: Label(
+          text: context.isArabic ? "الرسائل المميزة" : "Starred Messages",
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            fontSize: 32,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
         value: 1,
-        child: Text(
-          LocaleKeys.profile.tr(),
+        child: Label(
+          text: LocaleKeys.recoverDeletedChats.localize,
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            fontSize: 32,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 2,
+        child: Label(
+          text: LocaleKeys.profile.localize,
+          style: Styles.mediumText(
+            fontSize: 32,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
     ];
@@ -983,7 +312,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   //       tabAlignment: TabAlignment.start,
   //       isScrollable: true,
   //       tabs: ChatCategories.values.map((e) {
-  //         return Tab(text: e.name.tr());
+  //         return Tab(text: e.name.localize);
   //       }).toList());
   // }
 
@@ -996,7 +325,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         dividerColor: Colors.transparent,
         // unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
         indicator: BoxDecoration(
-          color: Colors.red.withOpacity(0.1), // Light red background
+          color: Colors.red.withValues(alpha: 0.1), // Light red background
           borderRadius: BorderRadius.circular(8), // Rounded corners
         ),
         tabAlignment: TabAlignment.start,
@@ -1006,7 +335,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Text(
-                e.name.tr(),
+                e.name.localize,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: e == ChatCategories.values[tabController.index]
@@ -1046,14 +375,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   expandedOptions
                       ? FontAwesomeIcons.anglesUp
                       : FontAwesomeIcons.anglesDown,
-                  color: Colors.black.withOpacity(0.3),
+                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
                   size: 18,
                 ),
               ),
             ),
             ChatOptions(
               icon: Icons.archive_outlined,
-              text: context.isArabic?"المؤرشفة":"Archived",
+              text: context.isArabic ? "المؤرشفة" : "Archived",
               onTap: () async {
                 final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
@@ -1084,7 +413,9 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   ? ChatOptions(
                       key: const ValueKey(1),
                       icon: Icons.mail_lock_outlined,
-                      text: context.isArabic?"الدردشات المغلقة":"Locked chats",
+                      text: context.isArabic
+                          ? "الدردشات المغلقة"
+                          : "Locked chats",
                       // onTap: () async {
                       //   final result = await context.push(Routes.ARCHIVEDCHATS,
                       //       extra: OptionsChatsViewParams(
@@ -1119,7 +450,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   ? ChatOptions(
                       key: const ValueKey(2),
                       icon: Icons.person_off_outlined,
-                      text: LocaleKeys.anonymous.tr(),
+                      text: LocaleKeys.anonymous.localize,
                       onTap: () async {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
@@ -1151,7 +482,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   ? ChatOptions(
                       key: const ValueKey(3),
                       icon: Icons.emoji_people,
-                      text: LocaleKeys.greet.tr(),
+                      text: LocaleKeys.greet.localize,
                       onTap: () async {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
@@ -1173,6 +504,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
             // const Divider(),
             _buildCategoryChats(),
+
             const MessagesAreEndToEndEncrypted(),
           ],
         );
@@ -1191,14 +523,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   expandedOptions
                       ? FontAwesomeIcons.anglesUp
                       : FontAwesomeIcons.anglesDown,
-                  color: Colors.black.withOpacity(0.3),
+                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
                   size: 18,
                 ),
               ),
             ),
             ChatOptions(
               icon: Icons.archive_outlined,
-              text: context.isArabic?"المؤرشفة":"Archived",
+              text: context.isArabic ? "المؤرشفة" : "Archived",
               onTap: () async {
                 final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
@@ -1228,7 +560,9 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   ? ChatOptions(
                       key: const ValueKey(4),
                       icon: Icons.mail_lock_outlined,
-                      text: context.isArabic?"الدردشات المغلقة":"Locked chats",
+                      text: context.isArabic
+                          ? "الدردشات المغلقة"
+                          : "Locked chats",
                       // onTap: () async {
                       //   final result = await context.push(Routes.ARCHIVEDCHATS,
                       //       extra: OptionsChatsViewParams(
@@ -1339,16 +673,17 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           : state.chats!.isEmpty
               ? Center(
                   child: Label(
-                      text: LocaleKeys.noChatsUntilNow.tr(),
+                      text: LocaleKeys.noChatsUntilNow.localize,
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, fontSize: 26)),
+                          fontWeight: FontWeight.bold, fontSize: 26,
+                      color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR
+                      ),),
                 )
               : Scrollbar(
                   // isAlwaysShown: true,  // Ensures the scrollbar is always visible
                   interactive: true,
                   thumbVisibility: true,
                   thickness: 3,
-
                   child: ListView.separated(
                     shrinkWrap: true,
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -1375,7 +710,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                       ? AppColors.DARK_BLUE_COLOR
                                       : Colors.white,
                                   icon: Icons.more_horiz,
-                                  label: LocaleKeys.more.tr(),
+                                  label: LocaleKeys.more.localize,
                                   padding: EdgeInsets.zero,
                                 ),
                                 SlidableAction(
@@ -1390,151 +725,39 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                       : Colors.white,
                                   icon: Icons.delete_outlined,
                                   label: state.chats![index].archived
-                                      ? LocaleKeys.unarchive.tr()
-                                      : LocaleKeys.archive.tr(),
+                                      ? LocaleKeys.unarchive.localize
+                                      : LocaleKeys.archive.localize,
                                   padding: EdgeInsets.zero,
                                 ),
                               ],
                             ),
-                            child: ChatCard(
+                            child: NewChatCard(
                               isSecret: isSecret,
                               chat: state.chats?[index],
                               chatsCubit: chatsCubit,
                             ),
                           ),
-                    separatorBuilder: (context, index) => const SizedBox(),
+                    separatorBuilder: (context, index) => Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+                      child: Divider(
+                        thickness: 1,
+                        color:context.isDarkMode ? Colors.white12 : Colors.black12,
+                        height: 5,
+                      ),
+                    ),
                     itemCount: state.chats?.length ?? 0,
                   ),
                 );
     });
   }
 
-  // Widget _buildCallingHistory({required bool isVideo}) {
-  //   return DefaultTabController(
-  //     length: 2, // Two tabs: Social and Services
-
-  //     child: Column(
-  //       children: [
-  //         // Tab Bar for Social and Services
-  //         TabBar(
-  //           labelColor:
-  //               context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-  //           unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
-  //           indicator: const BoxDecoration(
-  //               // color: AppColors.PRIMARY_COLOR_DARK,
-  //               border: Border(
-  //             bottom: BorderSide(
-  //               color: AppColors.PRIMARY_COLOR_DARK,
-  //               width: 3.0,
-  //             ),
-  //           )),
-  //           tabs: [
-  //             Tab(text: LocaleKeys.social.tr()),
-  //             Tab(text: LocaleKeys.services.tr()),
-  //           ],
-  //           indicatorColor: Colors.blue,
-  //         ),
-  //         Expanded(
-  //           // TabBarView to display content for each tab
-  //           child: TabBarView(
-  //             children: [
-  //               // Social tab: Show video calls
-  //               ListView.separated(
-  //                 shrinkWrap: true,
-  //                 physics: const NeverScrollableScrollPhysics(),
-  //                 itemBuilder: (context, index) =>
-  //                     const CallingCard(isVideo: true),
-  //                 separatorBuilder: (context, index) => const SizedBox(),
-  //                 itemCount: 8,
-  //               ),
-  //               // Services tab: Show voice calls
-  //               ListView.separated(
-  //                 shrinkWrap: true,
-  //                 physics: const NeverScrollableScrollPhysics(),
-  //                 itemBuilder: (context, index) =>
-  //                     const CallingCard(isVideo: false),
-  //                 separatorBuilder: (context, index) => const SizedBox(),
-  //                 itemCount: 8,
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-  // Widget _buildCallingHistory({required bool isVideo}) {
-  //   return DefaultTabController(
-  //     length: 2, // Two tabs: Social and Services
-  //     child: Column(
-  //       children: [
-  //         // Tab Bar for Social and Services
-  //         SizedBox(
-  //           height: 40,
-  //           child: TabBar(
-  //             dividerColor: Colors.transparent,
-  //
-  //             labelPadding: const EdgeInsets.symmetric(horizontal: 32),
-  //             indicator: BoxDecoration(
-  //               color: Colors.red
-  //                   .withOpacity(0.1), // Light red background for selected tab
-  //               borderRadius: BorderRadius.circular(12), // Rounded corners
-  //             ),
-  //             labelColor: Colors.red, // Selected tab text color
-  //             unselectedLabelColor:
-  //                 AppColors.LIGHT_GRAY_COLOR2, // Unselected tab text color
-  //             isScrollable: true, // Ensures proper alignment
-  //             tabs: [
-  //               Padding(
-  //                 padding: const EdgeInsets.symmetric(
-  //                   horizontal: 8,
-  //                 ),
-  //                 child: Tab(text: LocaleKeys.social.tr()),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.symmetric(
-  //                   horizontal: 8,
-  //                 ),
-  //                 child: Tab(text: LocaleKeys.services.tr()),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         Expanded(
-  //           // TabBarView to display content for each tab
-  //           child: TabBarView(
-  //             children: [
-  //               // Social tab: Show video calls
-  //               ListView.separated(
-  //                 shrinkWrap: true,
-  //                 physics: const NeverScrollableScrollPhysics(),
-  //                 itemBuilder: (context, index) =>
-  //                     const CallingCard(isVideo: true),
-  //                 separatorBuilder: (context, index) => const SizedBox(),
-  //                 itemCount: 8,
-  //               ),
-  //               // Services tab: Show voice calls
-  //               ListView.separated(
-  //                 shrinkWrap: true,
-  //                 physics: const NeverScrollableScrollPhysics(),
-  //                 itemBuilder: (context, index) =>
-  //                     const CallingCard(isVideo: false),
-  //                 separatorBuilder: (context, index) => const SizedBox(),
-  //                 itemCount: 8,
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget _buildCallingHistory({required bool isVideo}) {
     return DefaultTabController(
       length: 2, // Two tabs: Social and Services
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Keeps the height minimal for alignment
+        mainAxisSize: MainAxisSize.min,
+        // Keeps the height minimal for alignment
         children: [
           // Centered Tab Bar for Social and Services
           SizedBox(
@@ -1542,30 +765,32 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             child: Align(
               alignment: Alignment.center,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16), // Adjust padding as needed
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                // Adjust padding as needed
                 // constraints: const BoxConstraints(maxWidth: 300), // Controls width for centering
                 child: TabBar(
                   dividerColor: Colors.transparent,
                   labelPadding: const EdgeInsets.symmetric(horizontal: 32),
                   indicator: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1), // Light red background for selected tab
+                    color: Colors.red.withValues(alpha: 0.1),
+                    // Light red background for selected tab
                     borderRadius: BorderRadius.circular(12), // Rounded corners
                   ),
-                  labelColor: Colors.red, // Selected tab text color
-                  unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2, // Unselected tab text color
-                  isScrollable: false, // Ensures proper alignment
+                  labelColor: Colors.red,
+                  unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
+                  isScrollable: false,
                   tabs: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                       ),
-                      child: Tab(text: LocaleKeys.social.tr()),
+                      child: Tab(text: LocaleKeys.social.localize),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                       ),
-                      child: Tab(text: LocaleKeys.services.tr()),
+                      child: Tab(text: LocaleKeys.services.localize),
                     ),
                   ],
                 ),
@@ -1581,7 +806,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) =>
-                  const CallingCard(isVideo: true),
+                      CallingCard(isVideo: index.isEven),
                   separatorBuilder: (context, index) => const SizedBox(),
                   itemCount: 8,
                 ),
@@ -1590,7 +815,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) =>
-                  const CallingCard(isVideo: false),
+                      CallingCard(isVideo: index.isEven),
                   separatorBuilder: (context, index) => const SizedBox(),
                   itemCount: 8,
                 ),
@@ -1601,7 +826,6 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       ),
     );
   }
-
 
   Widget buildBroadcast() {
     return SingleChildScrollView(
@@ -1614,7 +838,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  LocaleKeys.broadcasts.tr(),
+                  LocaleKeys.broadcasts.localize,
                   style: Styles.mediumText(fontWeight: FontWeight.w600),
                 ),
               ),
@@ -1624,7 +848,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   context.push(Routes.SEEALLBROADCASTS);
                 },
                 child: Text(
-                  LocaleKeys.seeAll.tr(),
+                  LocaleKeys.seeAll.localize,
                   style: Styles.smallText(
                     color: AppColors.PRIMARY_COLOR_DARK,
                     fontSize: 24,
@@ -1672,7 +896,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           Padding(
             padding: const EdgeInsets.only(left: 16, top: 24, right: 16),
             child: Text(
-              LocaleKeys.myBroadcasts.tr(),
+              LocaleKeys.myBroadcasts.localize,
               style: Styles.mediumText(fontWeight: FontWeight.w600),
             ),
           ),
@@ -1695,47 +919,304 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   }
 }
 
-class MessagesAreEndToEndEncrypted extends StatelessWidget {
-  const MessagesAreEndToEndEncrypted({
-    super.key,
-  });
+_selectedChatAppBar(ChatsCubit chatsCubit) {
+  return SliverAppBar(
+    automaticallyImplyLeading: false,
+    floating: true,
+    flexibleSpace: BlocBuilder<ChatsCubit, ChatsState>(
+      builder: (context, state) {
+        return context.read<UserCubit>().isLoggedIn
+            ? SizedBox(
+                // height: 20,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    context.read<ChatsCubit>().selectedChats.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              context.read<ChatsCubit>().clearSelectedChats();
+                            },
+                            icon: const Icon(Icons.arrow_back))
+                        : const SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Text(
+                        "${context.read<ChatsCubit>().selectedChats.length}",
+                        style: Styles.mediumText(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR),
+                      ),
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            await context.read<ChatsCubit>().pinAndUnpinChat();
+                          },
+                          icon: const Icon(Icons.push_pin_outlined),
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await context.read<ChatsCubit>().deleteChat();
+                          },
+                          icon: Icon(
+                            Icons.delete_forever_outlined,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await context.read<ChatsCubit>().changeMuteChat();
+                          },
+                          icon: Icon(
+                            Icons.notifications_off_outlined,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await context
+                                .read<ChatsCubit>()
+                                .changeArchiveChat(isArchivedTab: false);
+                            final archivedChatsCount =
+                                chatsCubit.selectedChats.length;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: const Color(0xff1A1A1A),
+                                // Set background color to blue
+                                content: BlocProvider.value(
+                                  value: context.read<ChatsCubit>(),
+                                  child: Builder(
+                                    builder: (context) {
+                                      return Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: context.isArabic
+                                                  ? "تم أرشفة "
+                                                  : "Archived ",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: "$archivedChatsCount ",
+                                              // العدد
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: context.isArabic
+                                                  ? "محادثة"
+                                                  : "chats",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                action: SnackBarAction(
+                                  label: context.isArabic ? "تراجع" : "UNDO",
+                                  textColor: AppColors.PRIMARY_COLOR_DARK,
+                                  // Set "Undo" text color to gray
+                                  onPressed: () async {
+                                    await context
+                                        .read<ChatsCubit>()
+                                        .changeArchiveChat(
+                                            isArchivedTab: false);
+                                  },
+                                ),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.lock_outline,
-            size: 24,
-          ),
-          Column(
-            children: [
-              Label(
-                  text: "${LocaleKeys.yourPersonalMessages.localize} ",
-                  style: Styles.mediumText(
-                      fontWeight: FontWeight.bold, fontSize: 28)),
-              Label(
-                text: "${LocaleKeys.endToEndEncryption.localize}",
-                style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                    color: AppColors.PRIMARY_COLOR_DARK),
-              ),
-            ],
-          ),
-          const Icon(
-            Icons.lock_outline,
-            size: 24,
-            color: Colors.transparent,
-          ),
-        ],
-      ),
-    );
-  }
+                            Future.delayed(const Duration(seconds: 3), () {
+                              context.read<ChatsCubit>().clearSelectedChats();
+                            });
+                          },
+                          icon: Icon(
+                            Icons.archive_outlined,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                          ),
+                        ),
+                      ],
+                    ),
+                    PopupMenuButton(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      color: context.isDarkMode
+                          ? AppColors.PRIMARY_COLOR
+                          : AppColors.BACKGROUND_COLOR,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      offset: const Offset(0, 50),
+                      onSelected: (int value) async {
+                        if (value == 3) {
+                          // await context
+                          //     .read<ChatsCubit>()
+                          //     .lockChats(
+                          //         isLockedTap: false);
+                          await context
+                              .read<ChatsCubit>()
+                              .lockChats(isLockedTap: false);
+                          final unlockedChatsCount =
+                              chatsCubit.selectedChats.length;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: const Color(0xff1A1A1A),
+                              // Set background color
+                              content: BlocProvider.value(
+                                value: context.read<ChatsCubit>(),
+                                child: Builder(
+                                  builder: (context) {
+                                    return Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: context.isArabic
+                                                ? "تم قفل "
+                                                : "Locked ",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: "$unlockedChatsCount ",
+                                            // Count
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: context.isArabic
+                                                ? "محادثة"
+                                                : "chats",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              action: SnackBarAction(
+                                label: context.isArabic ? "تراجع" : "UNDO",
+                                textColor: AppColors.PRIMARY_COLOR_DARK,
+                                // Set "Undo" text color to gray
+                                onPressed: () async {
+                                  await context
+                                      .read<ChatsCubit>()
+                                      .lockChats(isLockedTap: false);
+                                },
+                              ),
+                              duration: const Duration(seconds: 3),
+                            ),
+                          );
+
+                          Future.delayed(const Duration(seconds: 3), () {
+                            context.read<ChatsCubit>().clearSelectedChats();
+                          });
+                        }
+                      },
+                      itemBuilder: (context) {
+                        return [
+                          // PopupMenuItem<int>(
+                          //   value: 0,
+                          //   child: Text(
+                          //     LocaleKeys.addShortcut
+                          //         .localize,
+                          //     style: Styles.mediumText(
+                          //         color: context
+                          //                 .isDarkMode
+                          //             ? Colors.white
+                          //             : AppColors
+                          //                 .PRIMARY_COLOR),
+                          //   ),
+                          // ),
+                          // PopupMenuItem<int>(
+                          //   value: 1,
+                          //   child: Text(
+                          //     LocaleKeys.markAsUnread
+                          //         .localize,
+                          //     style: Styles.mediumText(
+                          //         color: context
+                          //                 .isDarkMode
+                          //             ? Colors.white
+                          //             : AppColors
+                          //                 .PRIMARY_COLOR),
+                          //   ),
+                          // ),
+                          // PopupMenuItem<int>(
+                          //   value: 2,
+                          //   child: Text(
+                          //     LocaleKeys.selectAll.localize,
+                          //     style: Styles.mediumText(
+                          //         color: context
+                          //                 .isDarkMode
+                          //             ? Colors.white
+                          //             : AppColors
+                          //                 .PRIMARY_COLOR),
+                          //   ),
+                          // ),
+                          PopupMenuItem<int>(
+                            value: 3,
+                            child: Text(
+                              context.isArabic
+                                  ? "الدردشات المغلقه"
+                                  : "Locked chats",
+                              style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.PRIMARY_COLOR),
+                            ),
+                          ),
+                        ];
+                      },
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox.shrink();
+      },
+    ),
+  );
 }
 
 class ChatOptions extends StatelessWidget {
@@ -1769,6 +1250,8 @@ class ChatOptions extends StatelessWidget {
               style: Styles.mediumText(
                 fontWeight: FontWeight.w400,
                 fontSize: 32,
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               ),
             ),
           ],
@@ -1778,131 +1261,132 @@ class ChatOptions extends StatelessWidget {
   }
 }
 
-class FriendRequest {
-  final String name;
-  final int mutualFriends;
-  final String profileImageUrl;
-
-  FriendRequest({
-    required this.name,
-    required this.mutualFriends,
-    required this.profileImageUrl,
-  });
-}
-
-class FriendRequestItem extends StatefulWidget {
-  final FriendRequest request;
-
-  const FriendRequestItem({super.key, required this.request});
-
-  @override
-  _FriendRequestItemState createState() => _FriendRequestItemState();
-}
-
-class _FriendRequestItemState extends State<FriendRequestItem> {
-  String buttonText = 'Add Friend';
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Row(
-        children: [
-          // Profile Image
-          CircleAvatar(
-            radius: 30,
-            backgroundImage: NetworkImage(
-              serviceLocator<UserCubit>().state.data != null
-                  ? serviceLocator<UserCubit>().state.data!.profilePicture!
-                  : UIConst.profilePlaceHolder,
-            ),
-          ),
-          const SizedBox(width: 8),
-
-          // Name and Mutual Friends
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.request.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  '${widget.request.mutualFriends} mutual friends',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Confirm Button (Add Friend/Follow/Greet)
-          ElevatedButton(
-            onPressed:
-                isLoading ? null : handleButtonPress, // Disable if loading
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.PRIMARY_COLOR,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            child: isLoading
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
-                : Text(
-                    buttonText,
-                    style: const TextStyle(color: Colors.white, fontSize: 11),
-                  ),
-          ),
-          const SizedBox(width: 8),
-
-          // Delete Button
-          ElevatedButton(
-            onPressed: () {
-              // Add delete logic here
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: Colors.white, fontSize: 11),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void handleButtonPress() async {
-    // Start showing loading indicator
-    setState(() {
-      isLoading = true;
-    });
-
-    // Simulate 1 second delay (replace with your logic)
-    await Future.delayed(const Duration(seconds: 1));
-
-    // Update the button text based on the current state
-    setState(() {
-      if (buttonText == 'Add Friend') {
-        buttonText = 'Follow';
-      } else if (buttonText == 'Follow') {
-        buttonText = 'Greet';
-      }
-      isLoading = false;
-    });
-  }
-}
+//
+// class FriendRequest {
+//   final String name;
+//   final int mutualFriends;
+//   final String profileImageUrl;
+//
+//   FriendRequest({
+//     required this.name,
+//     required this.mutualFriends,
+//     required this.profileImageUrl,
+//   });
+// }
+//
+// class FriendRequestItem extends StatefulWidget {
+//   final FriendRequest request;
+//
+//   const FriendRequestItem({super.key, required this.request});
+//
+//   @override
+//   _FriendRequestItemState createState() => _FriendRequestItemState();
+// }
+//
+// class _FriendRequestItemState extends State<FriendRequestItem> {
+//   String buttonText = 'Add Friend';
+//   bool isLoading = false;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+//       child: Row(
+//         children: [
+//           // Profile Image
+//           CircleAvatar(
+//             radius: 30,
+//             backgroundImage: NetworkImage(
+//               serviceLocator<UserCubit>().state.data != null
+//                   ? serviceLocator<UserCubit>().state.data!.profilePicture!
+//                   : UIConst.profilePlaceHolder,
+//             ),
+//           ),
+//           const SizedBox(width: 8),
+//
+//           // Name and Mutual Friends
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   widget.request.name,
+//                   style: const TextStyle(
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 16,
+//                   ),
+//                 ),
+//                 Text(
+//                   '${widget.request.mutualFriends} mutual friends',
+//                   style: const TextStyle(
+//                     color: Colors.grey,
+//                     fontSize: 14,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//
+//           // Confirm Button (Add Friend/Follow/Greet)
+//           ElevatedButton(
+//             onPressed:
+//                 isLoading ? null : handleButtonPress, // Disable if loading
+//             style: ElevatedButton.styleFrom(
+//               backgroundColor: AppColors.PRIMARY_COLOR,
+//               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//             ),
+//             child: isLoading
+//                 ? const SizedBox(
+//                     width: 16,
+//                     height: 16,
+//                     child: CircularProgressIndicator(
+//                       color: Colors.white,
+//                       strokeWidth: 2,
+//                     ),
+//                   )
+//                 : Text(
+//                     buttonText,
+//                     style: const TextStyle(color: Colors.white, fontSize: 11),
+//                   ),
+//           ),
+//           const SizedBox(width: 8),
+//
+//           // Delete Button
+//           ElevatedButton(
+//             onPressed: () {
+//               // Add delete logic here
+//             },
+//             style: ElevatedButton.styleFrom(
+//               backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+//               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//             ),
+//             child: const Text(
+//               'Delete',
+//               style: TextStyle(color: Colors.white, fontSize: 11),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   void handleButtonPress() async {
+//     // Start showing loading indicator
+//     setState(() {
+//       isLoading = true;
+//     });
+//
+//     // Simulate 1 second delay (replace with your logic)
+//     await Future.delayed(const Duration(seconds: 1));
+//
+//     // Update the button text based on the current state
+//     setState(() {
+//       if (buttonText == 'Add Friend') {
+//         buttonText = 'Follow';
+//       } else if (buttonText == 'Follow') {
+//         buttonText = 'Greet';
+//       }
+//       isLoading = false;
+//     });
+//   }
+// }

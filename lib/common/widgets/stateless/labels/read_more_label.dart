@@ -220,26 +220,29 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
       child: secondHalf!.isEmpty
           ? _buildRichText(firstHalf!, isRTL)
           : Column(
-        children: <Widget>[
-          _buildRichText(flag ? ("${firstHalf!}...") : (firstHalf! + secondHalf!), isRTL),
-          InkWell(
-            child: Row(
-              mainAxisAlignment: isRTL ? MainAxisAlignment.start : MainAxisAlignment.end,
               children: <Widget>[
-                Text(
-                  flag ? "show more" : "show less",
-                  style: const TextStyle(color: Colors.blue),
+                _buildRichText(
+                    flag ? ("${firstHalf!}...") : (firstHalf! + secondHalf!),
+                    isRTL),
+                InkWell(
+                  child: Row(
+                    mainAxisAlignment:
+                        isRTL ? MainAxisAlignment.start : MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        flag ? "show more" : "show less",
+                        style: const TextStyle(color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    setState(() {
+                      flag = !flag;
+                    });
+                  },
                 ),
               ],
             ),
-            onTap: () {
-              setState(() {
-                flag = !flag;
-              });
-            },
-          ),
-        ],
-      ),
     );
   }
 
@@ -250,9 +253,11 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
       widget.style ?? Styles.headerText(fontSize: 60.sp),
     );
     return Align(
-      alignment: isRTL ? Alignment.centerRight : Alignment.centerLeft, // Adjust alignment based on language
+      alignment: isRTL ? Alignment.centerRight : Alignment.centerLeft,
+      // Adjust alignment based on language
       child: RichText(
-        textAlign: isRTL ? TextAlign.right : TextAlign.left, // Adjust text alignment based on language
+        textAlign: isRTL ? TextAlign.right : TextAlign.left,
+        // Adjust text alignment based on language
         text: TextSpan(children: spans),
       ),
     );
@@ -285,7 +290,7 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
               ? Colors.blue.shade900
               : Colors.blue, // Darken color on press
           decoration:
-          isLinkPressed ? TextDecoration.underline : TextDecoration.none,
+              isLinkPressed ? TextDecoration.underline : TextDecoration.none,
         ), // Link style
         recognizer: TapGestureRecognizer()
           ..onTapDown = (_) {

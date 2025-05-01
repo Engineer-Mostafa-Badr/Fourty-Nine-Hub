@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -145,7 +146,7 @@ class _FoodCartViewState extends State<FoodCartView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      backgroundColor: scaffoldDarkColor(context),
+      // backgroundColor: scaffoldDarkColor(context),
       appBar: _buildAppBar(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
@@ -183,7 +184,7 @@ class _FoodCartViewState extends State<FoodCartView> {
       children: [
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding:  EdgeInsets.symmetric(horizontal: 16.0.w),
             itemCount: cart.allItems.length,
             itemBuilder: (context, index) {
               final cartItem = cart.allItems[index];
@@ -303,161 +304,12 @@ class _FoodCartViewState extends State<FoodCartView> {
     );
   }
 
-  Widget _buildFoodImage(String imageUrl) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: imageUrl.isNotEmpty
-          ? Image.network(
-              imageUrl,
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return _placeholderImage();
-              },
-            )
-          : _placeholderImage(),
-    );
-  }
 
-  Widget _placeholderImage() {
-    return Container(
-      width: 80,
-      height: 80,
-      color: Colors.grey[200],
-      child: const Icon(
-        Icons.broken_image,
-        size: 40,
-        color: Colors.grey,
-      ),
-    );
-  }
 
-  Widget _buildItemDetails(
-    CartItem cartItem,
-    String foodId,
-    String foodName,
-    int quantity,
-    double totalPrice,
-    String currency,
-  ) {
-    int localQuantity = quantity;
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  foodName,
-                  style: Styles.headerText(),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    _buildQuantityButton(
-                      icon: quantity > 1 ? Icons.remove : Icons.delete,
-                      color: quantity > 1 ? null : AppColors.SECONDARY_COLOR,
-                      onTap: () {
-                        setState(() {
-                          //   quantity>1?_decrement(
-                          //     restaurantId: cartItem.restaurant?.id ?? '',
-                          //     mealId: foodId,
-                          //     qtyChange: 1,
-                          //     currentQty: quantity,
-                          //   ):_deleteFromCart(
-                          //     mealId: foodId,
-                          //     restaurantId: cartItem.restaurant?.id ?? '',
-                          //   );
-                          if (localQuantity > 0) {
-                            localQuantity--;
-                          }
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      '$localQuantity',
-                      style: Styles.headerText(),
-                    ),
-                    const SizedBox(width: 12),
-                    _buildQuantityButton(
-                      icon: Icons.add,
-                      onTap: () {
-                        print("object");
-                        localQuantity += 1;
 
-                        setState(() {
-                          // _updateQuantity(
-                          //   restaurantId: cartItem.restaurant?.id ?? '',
-                          //   mealId: foodId,
-                          //   qtyChange: 1,
-                          //   currentQty: quantity,
-                          // );
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          _buildItemPrice(totalPrice, currency, localQuantity != quantity),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildQuantityButton(
-      {required IconData icon, required VoidCallback onTap, Color? color}) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey),
-        ),
-        child: Icon(
-          icon,
-          size: 16,
-          color: color,
-        ),
-      ),
-    );
-  }
 
-  Widget _buildItemPrice(double totalPrice, String currency, bool showConfirm) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          children: [
-            Text(
-              totalPrice.toStringAsFixed(2),
-              style: Styles.headerText(),
-            ),
-            Text(
-              ' $currency',
-              style: Styles.mediumText(
-                  color: AppColors.SECONDARY_COLOR,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        const SizedBox(height: 40),
-        if (showConfirm)
-          ClickableWidget(
-            onTap: () {},
-            child: const Label(text: "text"),
-          )
-      ],
-    );
-  }
+
 
   Widget _buildCartSummary(Cart cart, String currency) {
     return Padding(

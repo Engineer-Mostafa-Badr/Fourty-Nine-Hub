@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
@@ -102,6 +103,7 @@ class AreYouSure extends StatelessWidget {
                       label: LocaleKeys.close.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
                       ),
                       onPressed: () => context.pop()),
                 ),

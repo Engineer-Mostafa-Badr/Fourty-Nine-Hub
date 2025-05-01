@@ -32,6 +32,7 @@ import '../../../../health_feature/create_doctor/domain/usecases/get_governorate
 import '../../../../health_feature/health/domain/usecases/get_health_subcategories.dart';
 import '../../../../health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../../restaurants_list/domain/usecases/create_restaurant.dart';
 import '../../data/models/restaurant_orders_model.dart';
 import '../../domain/entity/complete_order_entity.dart';
@@ -240,14 +241,17 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   //   );
   // }
 
-  void loadData() async {
+  Future<void> loadData() async {
+    print("Current ${orders}");
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
     orders.clear();
     currentPage = 1;
     hasMoreData = true;
     await getOrders(false);
   }
-  void loadDataPast() async {
+  Future<void> loadDataPast() async {
+    print("past ${orders}");
+
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
     ordersPast.clear();
     currentPagePast = 1;
@@ -289,7 +293,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
 
         isLoadingMorePast = false;
         emit(state.copyWith(
-            status: RestaurantDashboardStates.success, orders: data));
+            status: RestaurantDashboardStates.success, ordersPast: data));
       },
     );
   }
@@ -331,17 +335,19 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     response.fold(
           (failure) async {
         emit(state.copyWith(failure: failure, status: RestaurantDashboardStates.error));
-        await getOrders(true);
+        // await loadData();
+        // await loadDataPast();
       },
           (blockHealthEntity) async {
-        // Successful deletion
         emit(state.copyWith(
           completeOrderEntity: blockHealthEntity,
           status: RestaurantDashboardStates.success,
         ));
-        await getOrders(true);
+        await loadData();      // refresh current orders
+        await loadDataPast();  // refresh past orders
       },
     );
+
   }
 
   Future<void> getRestaurantInfo() async {
@@ -440,17 +446,6 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     // getRestaurantOrders();
   }
 
-  // Future<void> changeConnectivityStatus(isActive) async {
-  //   const url = 'https://49backend.com/api/v1/restaurants/modify-active';
-  //
-  //   final res =await apiConsumer.patch(url, data: {
-  //     'isActive': isActive,
-  //   });
-  //
-  //   emit(state.copyWith(
-  //     connected: !state.connected,
-  //   ));
-  // }
 
   Future<void> cancelBooking({required int id}) async {
     emit(state.copyWith(

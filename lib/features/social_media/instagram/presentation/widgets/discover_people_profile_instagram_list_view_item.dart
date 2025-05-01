@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
-  const DiscoverPeopleProfileInstagramListViewItem({super.key});
+  const DiscoverPeopleProfileInstagramListViewItem(
+      {super.key, required this.suggest});
+
+  final SuggestionEntity suggest;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +37,7 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
                 height: 4,
               ),
               Label(
-                text: 'ahmed mohamed',
+                text: '${suggest.firstName} ${suggest.lastName}',
                 style: Styles.mediumText(
                   fontWeight: FontWeight.w500,
                 ),
@@ -38,7 +46,7 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
                 height: 4,
               ),
               Label(
-                text: 'followed by',
+                text: LocaleKeys.followedBy.localize,
                 style: Styles.mediumText(
                   fontSize: 22,
                   color: Colors.black.withValues(alpha: 153),
@@ -47,7 +55,8 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Label(
-                  text: 'mohamed ahmed + 4',
+                  text:
+                      '${suggest.followers.first.firstName} ${suggest.followers.first.lastName} + ${suggest.followers.length - 1}',
                   style: Styles.mediumText(
                     fontSize: 22,
                     color: Colors.black.withValues(alpha: 153),
@@ -60,14 +69,18 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
               AppButton(
                 height: 24,
                 width: 121,
-                label: 'follow',
+                label: LocaleKeys.follow.localize,
                 style: Styles.headerText(
                   fontSize: 24,
                   color: Colors.white,
                   height: 1.50,
                 ),
                 backColor: const Color(0xFF0B1035),
-                onPressed: () {},
+                onPressed: () {
+                  context
+                      .read<ProfileInstagramCubit>()
+                      .followUser(suggest.userId);
+                },
               ),
             ],
           ),
@@ -75,7 +88,11 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
             top: 0,
             end: 0,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                context
+                    .read<ProfileInstagramCubit>()
+                    .removeFollowUser(suggest.userId);
+              },
               child: const Icon(
                 Icons.close,
               ),

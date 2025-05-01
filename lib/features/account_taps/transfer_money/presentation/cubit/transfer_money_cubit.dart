@@ -4,7 +4,6 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
-
 import '../../../wallet/domain/entities/wallet/wallet_entity.dart';
 import '../../../wallet/domain/usecases/get_wallet_usecase.dart';
 import '../../domain/use_case/fetch_user_use_case.dart';
@@ -20,24 +19,41 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
     this._getWalletUseCase,
   ) : super(const TransferMoneyState());
 
-  WalletEntity? da;
-  Future<void> loadData() async {
-    // await fetchUsers();
-    // await getWallet();
-    emit(state.copyWith(status: TransferMoneyStates.loading));
-    var response = await _fetchUserUseCase(const NoParams());
+  // WalletEntity? da;
+  // Future<void> loadData() async {
+  //   // await fetchUsers();
+  //   // await getWallet();
+  //   emit(state.copyWith(status: TransferMoneyStates.loading));
+  //   var response = await _fetchUserUseCase(const NoParams());
+  //   return response.fold(
+  //     (l) =>
+  //         emit(state.copyWith(failure: l, status: TransferMoneyStates.error)),
+  //     (user) async {
+  //       emit(state.copyWith(users: user));
+  //       final response = await _getWalletUseCase.call(const NoParams());
+  //       response.fold((l) {
+  //         emit(state.copyWith(failure: l, status: TransferMoneyStates.error));
+  //       }, (data) {
+  //         da = data;
+  //         emit(state.copyWith(status: TransferMoneyStates.success, wallet: data));
+  //       });
+  //     },
+  //   );
+  // }
+
+  Future<void> searchUser({required String query}) async {
+    emit(state.copyWith(searchUserLoading: true));
+    var response = await _fetchUserUseCase(FetchUserParams(query: query));
     return response.fold(
-      (l) =>
-          emit(state.copyWith(failure: l, status: TransferMoneyStates.error)),
-      (user) async {
-        emit(state.copyWith(users: user));
-        final response = await _getWalletUseCase.call(const NoParams());
-        response.fold((l) {
-          emit(state.copyWith(failure: l, status: TransferMoneyStates.error));
-        }, (data) {
-          da = data;
-          emit(state.copyWith(status: TransferMoneyStates.success, wallet: data));
-        });
+      (l) => emit(state.copyWith(
+          failure: l,
+          status: TransferMoneyStates.error,
+          searchUserLoading: false)),
+      (data) {
+        emit(state.copyWith(
+          users: data,
+          searchUserLoading: false,
+        ));
       },
     );
   }

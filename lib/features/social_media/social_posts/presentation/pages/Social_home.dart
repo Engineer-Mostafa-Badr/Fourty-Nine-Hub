@@ -100,36 +100,35 @@ class _SocialHomeViewState extends State<SocialHomeView>
           : null,
       body: Column(
         children: [
-          isShowExplain
-              ? Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        context.push(Routes.GIFT);
-                      },
-                      child: Label(
-                        text:LocaleKeys.socialExplain.localize,
-                        style: Styles.headerText(
-                          color: AppColors.SECONDARY_COLOR,
-                          shadows: const [
-                            Shadow(
-                              color: Colors.black12,
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                            ),
-                            Shadow(
-                              color: Colors.black12,
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
+          if (isShowExplain)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: InkWell(
+                onTap: () {
+                  context.push(Routes.GIFT);
+                },
+                child: Label(
+                  text: LocaleKeys.socialExplain.localize,
+                  style: Styles.headerText(
+                    color: AppColors.SECONDARY_COLOR,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 4),
+                        blurRadius: 4,
                       ),
-                    ),
-                    const Sizer(),
-                  ],
-                )
-              : Container(),
+                      Shadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 4),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                ),
+              ),
+            ),
           Expanded(
             child: DefaultTabController(
               length: 3,
@@ -151,100 +150,223 @@ class _SocialHomeViewState extends State<SocialHomeView>
                               : AppColors.PRIMARY_COLOR,
                           tabs: [
                             Tab(
-                              icon: Stack(
+                              height: 78,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SvgPicture.asset(
-                                      Assets.facebookAppBarIcon,
-                                      height: 35,
-                                      width: 35,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isShowExplain = !isShowExplain;
-                                        });
-                                      },
-                                      child: SvgPicture.asset(
-                                        Assets.idea,
-                                        height: 20,
-                                        width: 20,
+                                  Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          Assets.facebookAppBarIcon,
+                                          height: 35,
+                                          width: 35,
+                                        ),
                                       ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              isShowExplain = !isShowExplain;
+                                            });
+                                          },
+                                          child: SvgPicture.asset(
+                                            Assets.idea,
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Label(
+                                    text: LocaleKeys.Face.localize,
+                                    style: Styles.headerText(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                      height: 1.83,
                                     ),
                                   ),
                                 ],
                               ),
-                              height: 78,
-                              text: LocaleKeys.Face.localize,
+                              // icon: Stack(
+                              //   children: [
+                              //     Padding(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       child: SvgPicture.asset(
+                              //         Assets.facebookAppBarIcon,
+                              //         height: 35,
+                              //         width: 35,
+                              //       ),
+                              //     ),
+                              //     Positioned(
+                              //       top: 0,
+                              //       right: 0,
+                              //       child: InkWell(
+                              //         onTap: () {
+                              //           setState(() {
+                              //             isShowExplain = !isShowExplain;
+                              //           });
+                              //         },
+                              //         child: SvgPicture.asset(
+                              //           Assets.idea,
+                              //           height: 20,
+                              //           width: 20,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // height: 78,
+                              // text: LocaleKeys.Face.localize,
                             ),
                             Tab(
-                              icon: Stack(
+                              // icon: Stack(
+                              //   children: [
+                              //     Padding(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       child: SvgPicture.asset(
+                              //         Assets.instagramAppBarIcon,
+                              //         height: 35,
+                              //         width: 35,
+                              //       ),
+                              //     ),
+                              //     Positioned(
+                              //       top: 0,
+                              //       right: 0,
+                              //       child: InkWell(
+                              //         onTap: () {
+                              //           setState(() {
+                              //             isShowExplain = !isShowExplain;
+                              //           });
+                              //         },
+                              //         child: SvgPicture.asset(
+                              //           Assets.idea,
+                              //           height: 20,
+                              //           width: 20,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+
+                              height: 78,
+                              child: Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SvgPicture.asset(
-                                      Assets.instagramAppBarIcon,
-                                      height: 35,
-                                      width: 35,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isShowExplain = !isShowExplain;
-                                        });
-                                      },
-                                      child: SvgPicture.asset(
-                                        Assets.idea,
-                                        height: 20,
-                                        width: 20,
+                                  Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          Assets.instagramAppBarIcon,
+                                          height: 35,
+                                          width: 35,
+                                        ),
                                       ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              isShowExplain = !isShowExplain;
+                                            });
+                                          },
+                                          child: SvgPicture.asset(
+                                            Assets.idea,
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Label(
+                                    text: LocaleKeys.Insta.localize,
+                                    style: Styles.headerText(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                      height: 1.83,
                                     ),
                                   ),
                                 ],
                               ),
-                              height: 78,
-                              text: LocaleKeys.Insta.localize,
+                              // text: LocaleKeys.Insta.localize,
                             ),
                             Tab(
-                              icon: Stack(
+                              height: 78,
+                              child: Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SvgPicture.asset(
-                                      Assets.twitterAppBarIcon,
-                                      height: 35,
-                                      width: 35,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isShowExplain = !isShowExplain;
-                                        });
-                                      },
-                                      child: SvgPicture.asset(
-                                        Assets.idea,
-                                        height: 20,
-                                        width: 20,
+                                  Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          Assets.twitterAppBarIcon,
+                                          height: 35,
+                                          width: 35,
+                                        ),
                                       ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              isShowExplain = !isShowExplain;
+                                            });
+                                          },
+                                          child: SvgPicture.asset(
+                                            Assets.idea,
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Label(
+                                    text: LocaleKeys.tweet.localize,
+                                    style: Styles.headerText(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                      height: 1.83,
                                     ),
                                   ),
                                 ],
                               ),
-                              height: 78,
-                              text: LocaleKeys.tweet.localize,
+                              // icon: Stack(
+                              //   children: [
+                              //     Padding(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       child: SvgPicture.asset(
+                              //         Assets.twitterAppBarIcon,
+                              //         height: 35,
+                              //         width: 35,
+                              //       ),
+                              //     ),
+                              //     Positioned(
+                              //       top: 0,
+                              //       right: 0,
+                              //       child: InkWell(
+                              //         onTap: () {
+                              //           setState(() {
+                              //             isShowExplain = !isShowExplain;
+                              //           });
+                              //         },
+                              //         child: SvgPicture.asset(
+                              //           Assets.idea,
+                              //           height: 20,
+                              //           width: 20,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // text: LocaleKeys.tweet.localize,
                             ),
                           ],
                         ),

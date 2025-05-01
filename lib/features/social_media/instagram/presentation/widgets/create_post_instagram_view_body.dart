@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -9,8 +12,12 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/app_bar_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/floating_action_button_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class CreatePostInstagramViewBody extends StatelessWidget {
   const CreatePostInstagramViewBody({super.key});
@@ -88,7 +95,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
         if (state.status.isError) {
           return CustomError(
             errMessage:
-                state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
+                getFailureMessage(state.failure ?? UnknownFailure(''), context),
           );
         }
         return Stack(
@@ -101,17 +108,18 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                 return Column(
                   children: [
                     AppBarCreatePostInstagram(
-                      postType: context
+                      postIndex: context
                           .read<CreatePostInstagramCubit>()
-                          .postTypes[state.postTypeSelectedIndex],
+                          .postTypes[state.postTypeSelectedIndex]
+                          .index,
                       onPressed: () {
                         if (state.postTypeSelectedIndex == 0) {
-                          bool isEmpty = context
+                          bool isGalleryPostEmpty = context
                               .read<CreatePostInstagramCubit>()
                               .state
-                              .selectedImages
+                              .selectedGalleryPost
                               .isEmpty;
-                          if (isEmpty) {
+                          if (isGalleryPostEmpty) {
                             showErrorMessage(
                               context,
                               LocaleKeys.youMustSelectAtLeastOneImage.localize,
@@ -119,17 +127,27 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           } else {
                             context.pushNamed(
                               Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                              // extra: state.selectedImages,
+                              extra: context.read<CreatePostInstagramCubit>(),
                             );
                             // context
                             //     .read<CreatePostInstagramCubit>()
                             //     .nextPage(context);
                           }
                         } else if (state.postTypeSelectedIndex == 2) {
-                          if (true) {
+                          bool isGalleryReelEmpty = context
+                              .read<CreatePostInstagramCubit>()
+                              .state
+                              .selectedGalleryPost
+                              .isEmpty;
+                          if (isGalleryReelEmpty) {
                             showErrorMessage(
                               context,
                               LocaleKeys.youMustSelectAtLeastOneVideo.localize,
+                            );
+                          } else {
+                            context.pushNamed(
+                              Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                              extra: context.read<CreatePostInstagramCubit>(),
                             );
                           }
                         }
@@ -142,10 +160,10 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                             // selectedImage: selectedImage,
                             ),
                       ),
-                    if (state.postTypeSelectedIndex == 1)
-                      const Expanded(child: Placeholder()),
+                    // if (state.postTypeSelectedIndex == 1)
+                    //   const Expanded(child: Placeholder()),
                     if (state.postTypeSelectedIndex == 2)
-                      const Expanded(child: Placeholder()),
+                      const Expanded(child: ReelBodyCreatePostInstagram()),
                   ],
                 );
               },
@@ -205,6 +223,299 @@ class CreatePostInstagramViewBody extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class ReelBodyCreatePostInstagram extends StatefulWidget {
+  const ReelBodyCreatePostInstagram({super.key});
+
+  @override
+  State<ReelBodyCreatePostInstagram> createState() =>
+      _ReelBodyCreatePostInstagramState();
+}
+
+class _ReelBodyCreatePostInstagramState
+    extends State<ReelBodyCreatePostInstagram> {
+  // VideoPlayerController? _controller;
+
+  @override
+  void initState() {
+    context.read<CreatePostInstagramCubit>().fetchVideos(context);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<CreatePostInstagramCubit, CreatePostInstagramState>(
+      listener: (context, state) {
+        if (state.isPermissionGranted == false) {
+          showErrorMessage(context, LocaleKeys.permissionDenied.localize);
+        }
+      },
+      builder: (context, state) {
+        if (state.loadingReelsScreen) {
+          return const CustomLoading();
+        }
+        if (state.galleryReels.isEmpty) {
+          return Center(
+            child: Label(
+              text: LocaleKeys.youHaveNoVideosToDisplay.localize,
+              style: Styles.mediumText(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          );
+        }
+        return Column(
+          children: [
+            // if (state.selectedGalleryReels.isNotEmpty)
+            //   Container(
+            //     height: 240,
+            //     width: double.infinity,
+            //     color: Colors.black,
+            //     child: state.isVideoInitialized && _controller != null
+            //         ? Stack(
+            //             alignment: Alignment.center,
+            //             children: [
+            //               AspectRatio(
+            //                 aspectRatio: _controller!.value.aspectRatio,
+            //                 child: VideoPlayer(_controller!),
+            //               ),
+            //               _buildVideoControls(),
+            //             ],
+            //           )
+            //         : const Center(child: CircularProgressIndicator()),
+            //   ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  Label(
+                    text: LocaleKeys.recents.localize,
+                    style: Styles.mediumText(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  const Icon(
+                    Icons.keyboard_arrow_down,
+                    size: 16,
+                  ),
+                  const Spacer(),
+                  BlocBuilder<CreatePostInstagramCubit,
+                      CreatePostInstagramState>(
+                    buildWhen: (previous, current) =>
+                        previous.multiSelectGalleryReel !=
+                        current.multiSelectGalleryReel,
+                    builder: (context, state) {
+                      return InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          context
+                              .read<CreatePostInstagramCubit>()
+                              .changeMultiSelectGalleryReel();
+                        },
+                        child: Material(
+                          color: Colors.transparent,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: state.multiSelectGalleryReel
+                                  ? AppColors.c6E6E70
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: SvgPicture.asset(
+                              Assets.createPostInstagramMultiImageIcon,
+                              height: 20,
+                              width: 20,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 3,
+                  mainAxisSpacing: 3,
+                  childAspectRatio: 123 / 221,
+                ),
+                itemCount: state.galleryReels
+                    .length, // images.length + (state.hasMoreImages ? 1 : 0),
+                itemBuilder: (context, index) {
+                  return _buildVideoThumbnail(
+                    state.galleryReels[index],
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildVideoThumbnail(AssetEntity assets) {
+    return GestureDetector(
+      onTap: () => context.read<CreatePostInstagramCubit>().onTapGalleryReel(
+            itemOfGallery: assets,
+          ),
+      onLongPress: () {
+        context.read<CreatePostInstagramCubit>().onTapGalleryReel(
+              itemOfGallery: assets,
+            );
+        context.read<CreatePostInstagramCubit>().changeMultiSelectGalleryReel();
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AssetEntityImage(
+            assets,
+            width: double.infinity,
+            height: double.infinity,
+            isOriginal: false,
+            // thumbnailSize: const ThumbnailSize(200, 200),
+            thumbnailFormat: ThumbnailFormat.jpeg,
+            fit: BoxFit.cover,
+          ),
+          PositionedDirectional(
+            bottom: 6,
+            end: 5,
+            child: Label(
+              text: _formatDuration(assets.duration),
+              style: Styles.smallText(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          // // أيقونة التشغيل
+          // Icon(
+          //   Icons.play_circle_outline,
+          //   color: Colors.white.withOpacity(0.8),
+          //   size: 30,
+          // ),
+
+          // مؤشر إذا كان هذا الفيديو هو المحدد حاليًا
+          if (context
+              .read<CreatePostInstagramCubit>()
+              .state
+              .selectedGalleryReels
+              .contains(assets))
+            Positioned.fill(
+              child: Container(
+                // width: double.infinity,
+                // height: double.infinity,
+                decoration: const BoxDecoration(
+                  // border: Border.all(color: AppColors.c161F68, width: 2),
+                  // borderRadius: BorderRadius.circular(8),
+                  color: Colors.white38,
+                ),
+              ),
+            ),
+          if (context
+              .read<CreatePostInstagramCubit>()
+              .state
+              .multiSelectGalleryReel)
+            PositionedDirectional(
+              top: 6,
+              start: 5,
+              child: Container(
+                width: 30,
+                height: 30,
+                decoration: const BoxDecoration(
+                    color: Colors.white12,
+                    shape: BoxShape.circle,
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    )),
+                child: context
+                        .read<CreatePostInstagramCubit>()
+                        .state
+                        .selectedGalleryReels
+                        .contains(assets)
+                    ? Container(
+                        width: 29,
+                        height: 29,
+                        decoration: const BoxDecoration(
+                          color: AppColors.c161F68,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: Label(
+                          text:
+                              '${context.read<CreatePostInstagramCubit>().state.selectedGalleryReels.indexOf(assets) + 1}',
+                          style: Styles.smallText(
+                            fontSize: 32,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                    : null,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Widget _buildVideoControls() {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       if (_controller == null) return;
+  //       setState(() {
+  //         if (_controller!.value.isPlaying) {
+  //           _controller!.pause();
+  //         } else {
+  //           _controller!.play();
+  //         }
+  //       });
+  //     },
+  //     child: Container(
+  //       color: Colors.transparent,
+  //       child: Center(
+  //         child: _controller != null && !_controller!.value.isPlaying
+  //             ? const Icon(
+  //                 Icons.play_arrow,
+  //                 size: 50,
+  //                 color: Colors.white70,
+  //               )
+  //             : Container(),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  String _formatDuration(int seconds) {
+    final Duration duration = Duration(seconds: seconds);
+    final int minutes = duration.inMinutes;
+    final int remainingSeconds = duration.inSeconds - minutes * 60;
+    return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 }
 

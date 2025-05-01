@@ -10,7 +10,7 @@ class ChoiceRulerCubit extends Cubit<ChoiceRulerState> {
 
   static ChoiceRulerCubit get(context) => BlocProvider.of(context);
 
-  bool choiceRulerStatus = true;
+  bool choiceRulerStatus = false;
   bool choiceRulerEnabled = true;
 
   Future<void> getChoiceRulerEnabledStatus() async {

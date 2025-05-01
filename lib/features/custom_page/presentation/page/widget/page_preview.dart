@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -13,7 +12,7 @@ import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/service_page_preview%20copy.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/service_page_preview_copy.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
@@ -48,7 +47,6 @@ class _PagePreviewState extends State<PagePreview>
   @override
   initState() {
     serviceLocator<MainCategoriesCubit>().loadData();
-
     super.initState();
   }
 
@@ -82,7 +80,8 @@ class _PagePreviewState extends State<PagePreview>
               bottom: TabBar(
                 dividerColor: Colors.transparent,
                 indicator: BoxDecoration(
-                  color: Colors.red.withValues(alpha: 0.1), // Light red background
+                  color: Colors.red.withValues(alpha: 0.1),
+                  // Light red background
                   borderRadius: BorderRadius.circular(8), // Rounded corners
                 ),
                 labelStyle: const TextStyle(
@@ -118,6 +117,7 @@ class _PagePreviewState extends State<PagePreview>
           body: Stack(
             children: [
               TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   MultiBlocProvider(
                     providers: [
@@ -190,13 +190,14 @@ class _PagePreviewState extends State<PagePreview>
                             showAnimatedDialog(
                               context,
                               AlertDialog(
-                                content:Column(
+                                content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Label(
-                                        text: 'Restart to Apply',
-                                        style: Styles.headerText(fontWeight: FontWeight.w400)),
+                                        text: LocaleKeys.restartToApply.localize,
+                                        style: Styles.headerText(
+                                            fontWeight: FontWeight.w400)),
                                     const Sizer(),
                                     Row(
                                       children: [
@@ -208,7 +209,9 @@ class _PagePreviewState extends State<PagePreview>
                                             label: LocaleKeys.cancel.localize,
                                           ),
                                         ),
-                                        const Sizer(width: 16,),
+                                        const Sizer(
+                                          width: 16,
+                                        ),
                                         Expanded(
                                           child: AppButton(
                                             backColor: AppColors.PRIMARY_COLOR,
@@ -218,7 +221,7 @@ class _PagePreviewState extends State<PagePreview>
                                                   .updateActivate(true);
                                               Restart.restartApp();
                                             },
-                                            label: 'Restart',
+                                            label: LocaleKeys.restart.localize,
                                           ),
                                         ),
                                       ],
@@ -234,13 +237,14 @@ class _PagePreviewState extends State<PagePreview>
                             showAnimatedDialog(
                               context,
                               AlertDialog(
-                                content:Column(
+                                content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Label(
-                                        text: 'Restart to Apply',
-                                        style: Styles.headerText(fontWeight: FontWeight.w400)),
+                                        text: LocaleKeys.restartToApply.localize,
+                                        style: Styles.headerText(
+                                            fontWeight: FontWeight.w400)),
                                     const Sizer(),
                                     Row(
                                       children: [
@@ -252,7 +256,9 @@ class _PagePreviewState extends State<PagePreview>
                                             label: LocaleKeys.cancel.localize,
                                           ),
                                         ),
-                                        const Sizer(width: 16,),
+                                        const Sizer(
+                                          width: 16,
+                                        ),
                                         Expanded(
                                           child: AppButton(
                                             backColor: AppColors.PRIMARY_COLOR,
@@ -262,7 +268,7 @@ class _PagePreviewState extends State<PagePreview>
                                                   .updateActivate(true);
                                               Restart.restartApp();
                                             },
-                                            label: 'Restart',
+                                            label: LocaleKeys.restart.localize,
                                           ),
                                         ),
                                       ],

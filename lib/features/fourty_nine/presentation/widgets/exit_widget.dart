@@ -1,13 +1,15 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/custom_show_dialog.dart';
-import '../../../../res/style/styles.dart';
 import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 
 class ExitWidget extends StatelessWidget {
   final Widget child;
@@ -65,40 +67,65 @@ class ExitWidget extends StatelessWidget {
   //       false; // Return false if the dialog is dismissed
   // }
   Future<bool> _showExitConfirmationDialog(BuildContext context) async {
-    return await showAnimatedDialog(context,AlertDialog(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      titlePadding: const EdgeInsets.only(top: 16),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      title: Text(
-        LocaleKeys.warning.localize,
-        style: Styles.headerText(color: Colors.red, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.ellipsis,
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 8),
-          Center(
-            child: Label(
-              text: LocaleKeys.ExitApp.localize,
-              style: Styles.headerText(),
-            ),
-          ),
-          const SizedBox(height: 5),
-          Label(
-            text: LocaleKeys.sureLogoutApp.localize,
-            style: Styles.mediumText(),
-          ),
-        ],
-      ),
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      actions: [
-        buildButton(LocaleKeys.sure.localize, AppColors.PRIMARY_COLOR,Colors.white,(){SystemNavigator.pop();}),
-        buildButton(LocaleKeys.no.localize, Colors.white,AppColors.PRIMARY_COLOR,(){Navigator.of(context).pop(false);}),
-
-      ],
-    ))??false;
+    return await showAnimatedDialog(
+            context,
+            AlertDialog(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              titlePadding: const EdgeInsets.only(top: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              title: Text(
+                LocaleKeys.warning.localize,
+                style: Styles.headerText(
+                    color: Colors.red, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 8),
+                  Center(
+                    child: Label(
+                      text: LocaleKeys.ExitApp.localize,
+                      style: Styles.headerText(
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Label(
+                    text: LocaleKeys.sureLogoutApp.localize,
+                    style: Styles.mediumText(
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              actionsPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              actions: [
+                buildButton(
+                  context,
+                  label: LocaleKeys.yes.localize,
+                  color: AppColors.SECONDARY_COLOR,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    SystemNavigator.pop();
+                  },
+                ),
+                buildButton(
+                  context,
+                  label: LocaleKeys.no.localize,
+                  onTap: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                // buildButton(LocaleKeys.sure.localize, AppColors.PRIMARY_COLOR,Colors.white,(){SystemNavigator.pop();}),
+                // buildButton(LocaleKeys.no.localize, Colors.white,AppColors.PRIMARY_COLOR,(){Navigator.of(context).pop(false);}),
+              ],
+            )) ??
+        false;
     // return await showDialog<bool>(
     //   context: context,
     //   builder: (context) => AlertDialog(
@@ -136,7 +163,6 @@ class ExitWidget extends StatelessWidget {
     //     ],
     //   ),
     // ) ?? false;
-
   }
 
   @override
@@ -156,11 +182,15 @@ class ExitWidget extends StatelessWidget {
     );
   }
 
-  Widget buildButton(String label,Color background,Color foreGround,Function()onTap){
-    return    TextButton(
+  Widget buildButton(BuildContext context,
+      {required String label, required Function() onTap, Color? color}) {
+    return TextButton(
       style: TextButton.styleFrom(
-        backgroundColor: background,
-        foregroundColor: foreGround,
+        backgroundColor: color ??
+            (context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+        // foregroundColor: color == AppColors.SECONDARY_COLOR
+        //     ? Colors.white
+        //     : (context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white),
         padding: const EdgeInsets.all(0),
         minimumSize: const Size(70, 30),
         maximumSize: const Size(70, 30),
@@ -171,7 +201,11 @@ class ExitWidget extends StatelessWidget {
       onPressed: () => onTap(),
       child: Label(
         text: label,
-        style: Styles.mediumText(),
+        style: Styles.mediumText(
+          color: color != null
+              ? Colors.white
+              : (context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white),
+        ),
       ),
     );
   }

@@ -26,9 +26,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../common/widgets/dynamic/custom_bottom_navigator.dart';
-import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
@@ -85,7 +84,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     appOpenAdManager.loadAd();
     WidgetsBinding.instance.addObserver(this);
 
-    await checkLogin();
+    // await checkLogin();
     super.didChangeDependencies();
     _setupScrollController();
 
@@ -126,7 +125,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
-
+    _setupScrollController();
     super.initState();
   }
 
@@ -161,13 +160,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
       child: ExitWidget(
         child: CustomScaffold(
           key: _scaffoldKey,
-          appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: HomeAppbar(
-              isWithBackArrow: false,
-              language: true,
-              // isHaveLeading: true,
-            ),
+          appBar: const HomeAppbar(
+            isWithBackArrow: false,
+            language: true,
+            // isHaveLeading: true,
           ),
           bottomNavigationBar: BottomNavigator(
             scrollController: scrollController,
@@ -190,8 +186,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             children: [
               const AddBanner(),
-              //carousel slider
-              // const Sizer(),
               const AnnounceWidget(),
               const Sizer(),
               !context.read<UserCubit>().isLoggedIn
@@ -209,6 +203,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   : const SizedBox.shrink(),
               ClickableWidget(
                 onTap: () {
+                  if (!context.read<UserCubit>().isLoggedIn) {
+                    return pleaseLoginDialog(context);
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -223,7 +220,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
                     "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                     style: Styles.headerText(
-                        fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                        fontSize: 30,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
                         ? TextDirection.rtl
                         : TextDirection.ltr,
@@ -266,7 +266,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const Sizer(),
               Row(children: [
                 const Sizer(width: 8),
-
                 Expanded(
                   child: _buildStarWidget(
                     onTap: () {
@@ -274,7 +273,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       AdInterstitialTop.showInterstitialAd();
                       context.push(Routes.RIDE_HOME);
                     },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    shadowColor: Color(0xff8000FF),
                     image: Assets.car2Image,
                     title: LocaleKeys.ride.localize,
                   ),
@@ -287,7 +286,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       AdInterstitialTop.showInterstitialAd();
                       context.push(Routes.VISITA);
                     },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    shadowColor: Color(0xff4997D0),
                     image: Assets.doctorImage,
                     title: LocaleKeys.health.localize,
                   ),
@@ -301,50 +300,50 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       HandleCashback.setCount('beAStarCount', context);
                       context.push(Routes.FOOD);
                     },
-                    shadowColor: Colors.deepOrange.withValues(alpha: .7),
+                    shadowColor: Color(0xffFF7F00),
                     image: Assets.mealImage,
                     title: LocaleKeys.meal.localize,
                   ),
                 ),
                 const Sizer(width: 8),
-
               ]),
               const Sizer(),
               const Sizer(),
-              Row(children: [
-                const Sizer(width: 8),
-
+              Row(
+                children: [
+                  const Sizer(width: 8),
                   Expanded(child: _pickMeAndComeWithUWidget()),
-                const Sizer(width: 32),
-                Expanded(
-                  child: _buildStarWidget(
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      HandleCashback.setCount('beAStarCount', context);
-                      context.push(Routes.BE_STAR);
-                    },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                    image: Assets.tube1,
-                    title: LocaleKeys.tube.localize,
+                  const Sizer(width: 32),
+                  Expanded(
+                    child: _buildStarWidget(
+                      onTap: () {
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        HandleCashback.setCount('beAStarCount', context);
+                        context.push(Routes.BE_STAR);
+                      },
+                      shadowColor:
+                          AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                      image: Assets.tube1,
+                      title: LocaleKeys.tube.localize,
+                    ),
                   ),
-                ),
-                const Sizer(width: 32),
-                Expanded(
-                  child: _buildStarWidget(
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.MARRIAGESUBCATEGORIES);
-                    },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                    image: Assets.marriage,
-                    title: LocaleKeys.marriage.localize,
+                  const Sizer(width: 32),
+                  Expanded(
+                    child: _buildStarWidget(
+                      onTap: () {
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        context.push(Routes.MARRIAGESUBCATEGORIES);
+                      },
+                      shadowColor: Color(0xffFFC0CB),
+                      image: Assets.marriage,
+                      title: LocaleKeys.marriage.localize,
+                    ),
                   ),
-                ),
-                const Sizer(width: 8),
-
-              ],),
+                  const Sizer(width: 8),
+                ],
+              ),
               const Sizer(),
               // _buildTenPercentWidget(),
               // const Sizer(),
@@ -458,10 +457,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
       children: [
         Expanded(
           child: _buildItemTabBar(
-            const Icon(
-              Icons.grid_view,
-              color: AppColors.PRIMARY_COLOR,
-              size: 25,
+            Image.asset(
+              Assets.gridIcon,
+              width: 24,
+              height: 24,
             ),
             Routes.MAINCATEGORIESTREE,
             () => HandleCashback.setCount('threeDotsCount', context),
@@ -470,11 +469,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
         GestureDetector(
           onTap: () {
             if (context.read<UserCubit>().isLoggedIn) {
-            } else {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const FavouriteScreensView()));
+            } else {
+              return pleaseLoginDialog(context);
             }
           },
           child: Container(
@@ -489,10 +489,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ),
         Expanded(
           child: _buildItemTabBar(
-            const Icon(
-              Icons.view_carousel,
-              color: AppColors.PRIMARY_COLOR,
-              size: 30,
+            Image.asset(
+              Assets.sliderIcon,
+              width: 24,
+              height: 24,
             ),
             Routes.MAINCATEGORIESCARDS,
             () {
@@ -558,6 +558,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(image),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: shadowColor,
@@ -571,11 +575,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              image,
-              fit: BoxFit.fill,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   image,
+            //   fit: BoxFit.fill,
+            //   // width: double.infinity,
+            //   // height: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),
@@ -645,11 +650,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
         route != null ? context.push(route) : null;
       },
       child: Container(
-        // height: kToolbarHeight * 2.h,
         height: 64,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(Assets.joinTrip),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
@@ -665,11 +673,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              Assets.joinTrip,
-              fit: BoxFit.fill,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   Assets.joinTrip,
+            //   fit: BoxFit.fill,
+            //   width: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),

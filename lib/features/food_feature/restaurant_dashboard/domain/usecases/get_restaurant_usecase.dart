@@ -3,15 +3,16 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 
+import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../repositories/restaurant_dashboard_repo.dart';
 
-class GetRestaurantInfoUseCase extends UseCase<Restaurant2Model, NoParams> {
+class GetRestaurantInfoUseCase extends UseCase<GetAllRestaurantEntity, NoParams> {
   final RestaurantDashboardRepo _repository;
 
   const GetRestaurantInfoUseCase(this._repository);
 
   @override
-  Future<Either<Failure, Restaurant2Model>> call(NoParams params) {
+  Future<Either<Failure, GetAllRestaurantEntity>> call(NoParams params) {
     return _repository.getRestaurantInfo();
   }
 }

@@ -70,9 +70,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory() async {
+    print("loadDataCategory");
     await loadData();
     await getMainCategoryDetails();
-    await getQuestion();
+    // await getQuestion();
     await getMainCategoryCustomPage();
   }
 
@@ -90,9 +91,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> loadData() async {
+    print("loadData");
+
     emit(state.copyWith(status: StateStatus.loading));
-    await UserCubit.to.getUser();
-    getWallet();
+    // await UserCubit.to.getUser();
+    // getWallet();
     getCurrency();
     getSettings();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
@@ -141,8 +144,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> getMainCategoryCustomPage() async {
     emit(state.copyWith(status: StateStatus.loading));
-    await UserCubit.to.getUser();
-    getWallet();
+    // await UserCubit.to.getUser();
+    // getWallet();
     getCurrency();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
@@ -257,6 +260,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getWallet() async {
+    if (state.wallet != null) return;
+    print('getWallet getWallet');
     final response = await _getWalletHomeUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));

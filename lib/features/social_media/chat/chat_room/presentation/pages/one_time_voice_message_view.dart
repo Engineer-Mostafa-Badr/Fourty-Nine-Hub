@@ -11,6 +11,7 @@ import '../../../../../../core/widget/custom_scaffold.dart';
 
 class OneTimeVoiceMessageView extends StatefulWidget {
   const OneTimeVoiceMessageView({super.key, required this.messageEntity});
+
   final MessageEntity messageEntity;
 
   @override

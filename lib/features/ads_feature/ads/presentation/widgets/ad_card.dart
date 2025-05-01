@@ -241,7 +241,7 @@ class _AdCardState extends State<AdCard> {
                                   text:
                                       "${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn}    ",
                                   style: Styles.mediumText(
-                                      color: AppColors.GREY_DARK_COLOR),
+                                      color: context.isDarkMode? AppColors.LIGHT_COLOR : AppColors.GREY_DARK_COLOR),
                                 ),
                               ],
                             );

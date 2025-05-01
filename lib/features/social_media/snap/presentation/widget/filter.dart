@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +32,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // late DeepArController deepArController;
+  late DeepArController deepArController;
   final GlobalKey _key = GlobalKey();
   File? _selectedImage;
 
@@ -41,8 +42,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    //deepArController = DeepArController();
-    //  _initializeDeepArController();
+    deepArController = DeepArController();
+    _initializeDeepArController();
   }
 
   @override
@@ -51,26 +52,26 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  // Future<void> _initializeDeepArController() async {
-  //   if (!deepArController.isInitialized) {
-  //     await deepArController.initialize(
-  //       androidLicenseKey:
-  //           '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
-  //       iosLicenseKey:
-  //           '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
-  //     );
-  //   }
-  // }
+  Future<void> _initializeDeepArController() async {
+    if (!deepArController.isInitialized) {
+      await deepArController.initialize(
+        androidLicenseKey:
+        '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
+        iosLicenseKey:
+        '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
+      );
+    }
+  }
 
   Future<void> _captureAndSaveImage() async {
     try {
       RenderRepaintBoundary? boundary =
-          _key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
+      _key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
 
       if (boundary != null) {
         ui.Image image = await boundary.toImage(pixelRatio: 3.0);
         ByteData? byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
+        await image.toByteData(format: ui.ImageByteFormat.png);
 
         if (byteData != null) {
           Uint8List pngBytes = byteData.buffer.asUint8List();
@@ -118,121 +119,129 @@ class _HomePageState extends State<HomePage> {
       }
 
       // Apply the downloaded filter to DeepAR
-      //   deepArController.switchEffect(filePath);
+      deepArController.switchEffect(filePath);
     } catch (e) {
       print("Error downloading or switching effect: $e");
     }
   }
 
-  // Widget buildCameraPreview() => RepaintBoundary(
-  //       key: _key,
-  //       child: SizedBox(
-  //         height: MediaQuery.of(context).size.height * 0.78,
-  //         child: Transform.scale(
-  //           scale: 1.6,
-  //           child: DeepArPreview(deepArController),
-  //         ),
-  //       ),
-  //     );
+  Widget buildCameraPreview() => RepaintBoundary(
+    key: _key,
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.78,
+      child: Transform.scale(
+        scale: 1.6,
+        child: DeepArPreview(deepArController),
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      body: BlocProvider<SnapCubit>(
-        create: (BuildContext context) => serviceLocator()..fetchFilter(),
-        child: BlocBuilder<SnapCubit, SnapState>(
-          builder: (BuildContext context, state) {
-            if (state.status == SnapStates.success) {
-              return Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+      body: FutureBuilder(
+        future: _initializeDeepArController(),
+        builder: (context, snapshot) {
+          return BlocProvider<SnapCubit>(
+            create: (BuildContext context) => serviceLocator()..fetchFilter(),
+            child: BlocBuilder<SnapCubit, SnapState>(
+              builder: (BuildContext context, state) {
+                if (state.status == SnapStates.success) {
+                  return Stack(
                     children: [
-                      //   buildCameraPreview(),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () async {
-                            await _captureAndSaveImage().then((value) {
-                              setState(() {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MediaPreview(
-                                      mediaPath: _selectedImage!.path,
-                                      mediaType: MediaType.image,
-                                    ),
-                                  ),
-                                );
-                              });
-                            });
-                          },
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Center(
-                                child: Container(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 5.w),
-                                  height: MediaQuery.of(context).size.height *
-                                      0.13, // Responsive circle height
-                                  width: MediaQuery.of(context).size.height *
-                                      0.13, // Responsive circle width
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Colors.white, width: 8.w),
-                                  ),
-                                ),
-                              ),
-                              PageView.builder(
-                                controller: _pageController,
-                                itemCount: state.snap?.length,
-                                onPageChanged: (index) async {
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          buildCameraPreview(),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () async {
+                                await _captureAndSaveImage().then((value) {
                                   setState(() {
-                                    selectedFilterIndex = index;
-                                  });
-
-                                  // Automatically apply the filter when scrolled
-                                  final filterUrl = state.snap![index].deepar;
-                                  await applyDynamicFilter(filterUrl);
-                                },
-                                itemBuilder: (context, index) {
-                                  final filter = state.snap![index];
-                                  return Padding(
-                                    padding: EdgeInsets.all(40.w),
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      width: selectedFilterIndex == index
-                                          ? 90.w
-                                          : 70.w,
-                                      height: selectedFilterIndex == index
-                                          ? 90.h
-                                          : 70.h,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          image: NetworkImage(filter.image),
-                                          fit: BoxFit.contain,
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MediaPreview(
+                                          mediaPath: _selectedImage!.path,
+                                          mediaType: MediaType.image,
                                         ),
                                       ),
+                                    );
+                                  });
+                                });
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Center(
+                                    child: Container(
+                                      padding:
+                                      EdgeInsets.symmetric(horizontal: 5.w),
+                                      height:
+                                      MediaQuery.of(context).size.height *
+                                          0.13, // Responsive circle height
+                                      width:
+                                      MediaQuery.of(context).size.height *
+                                          0.13, // Responsive circle width
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: Colors.white, width: 8.w),
+                                      ),
                                     ),
-                                  );
-                                },
+                                  ),
+                                  PageView.builder(
+                                    controller: _pageController,
+                                    itemCount: state.snap?.length,
+                                    onPageChanged: (index) async {
+                                      setState(() {
+                                        selectedFilterIndex = index;
+                                      });
+
+                                      // Automatically apply the filter when scrolled
+                                      final filterUrl =
+                                          state.snap![index].deepar;
+                                      await applyDynamicFilter(filterUrl);
+                                    },
+                                    itemBuilder: (context, index) {
+                                      final filter = state.snap![index];
+                                      return Padding(
+                                        padding: EdgeInsets.all(40.w),
+                                        child: AnimatedContainer(
+                                          duration:
+                                          const Duration(milliseconds: 300),
+                                          width: selectedFilterIndex == index
+                                              ? 90.w
+                                              : 70.w,
+                                          height: selectedFilterIndex == index
+                                              ? 90.h
+                                              : 70.h,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              image: NetworkImage(filter.image),
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
+                      _buildTopIcons(),
                     ],
-                  ),
-                  _buildTopIcons(),
-                ],
-              );
-            }
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
+                  );
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -261,9 +270,9 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
                   child: ImageFromInternet(
                     image: serviceLocator<UserCubit>()
-                            .state
-                            .data!
-                            .profilePicture ??
+                        .state
+                        .data!
+                        .profilePicture ??
                         UIConst.profilePlaceHolder,
                     height: 90.h,
                     width: 90.w,
@@ -291,20 +300,20 @@ class _HomePageState extends State<HomePage> {
             children: [
               IconButton(
                 icon: const Icon(Icons.loop, color: Colors.white, size: 30),
-                onPressed: () {},
+                onPressed: deepArController.flipCamera,
               ),
-              // IconButton(
-              //   icon: Icon(
-              //     size: 50.sp,
-              //     deepArController.toggleFlash() == false
-              //         ? FontAwesomeIcons.bolt
-              //         : FontAwesomeIcons.bolt,
-              //     color: deepArController.toggleFlash() == false
-              //         ? Colors.grey
-              //         : Colors.yellow,
-              //   ),
-              //   onPressed: deepArController.toggleFlash,
-              // ),
+              IconButton(
+                icon: Icon(
+                  size: 50.sp,
+                  deepArController.toggleFlash() == false
+                      ? FontAwesomeIcons.bolt
+                      : FontAwesomeIcons.bolt,
+                  color: deepArController.toggleFlash() == false
+                      ? Colors.grey
+                      : Colors.yellow,
+                ),
+                onPressed: deepArController.toggleFlash,
+              ),
             ],
           ),
         ],
