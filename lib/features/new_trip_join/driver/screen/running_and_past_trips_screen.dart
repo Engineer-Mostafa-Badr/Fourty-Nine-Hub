@@ -40,18 +40,19 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
       key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-    child: HomeAppbar(
-        isWithBackArrow: false,
-        language: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
+        child: HomeAppbar(
+          isWithBackArrow: false,
+          language: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+            ),
           ),
         ),
-      ),),
+      ),
       body: RunningAndPastTripsBody(
         tabController: _tabController,
       ),
@@ -72,13 +73,7 @@ class RunningAndPastTripsBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 15),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: TabBarRowRideModeWidget(
-            tabController: _tabController,
-          ),
-        ),
+        const SizedBox(height: 25),
         const SizedBox(height: 5),
         Expanded(
           child: TabBarContentRideModeWidget(tabController: _tabController),
@@ -89,6 +84,8 @@ class RunningAndPastTripsBody extends StatelessWidget {
 }
 
 class ItemTabRideModeWidget extends StatelessWidget {
+  final void Function()? onTap;
+
   final String text;
   final String icon;
   final int index;
@@ -98,7 +95,8 @@ class ItemTabRideModeWidget extends StatelessWidget {
       required this.text,
       required this.icon,
       required this.index,
-      required this.tabController});
+      required this.tabController,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +127,16 @@ class ItemTabRideModeWidget extends StatelessWidget {
                   color: isSelected ? Colors.black : Colors.grey),
             ),
           ),
-          Positioned(top: -14, right: -6, child: SvgPicture.asset(icon)),
+          Positioned(
+            top: -14,
+            right: -6,
+            child: GestureDetector(
+              onTap: onTap,
+              child: SvgPicture.asset(
+                icon,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -137,9 +144,12 @@ class ItemTabRideModeWidget extends StatelessWidget {
 }
 
 class TabBarRowRideModeWidget extends StatelessWidget {
+  final void Function()? onTap;
+
   final TabController tabController;
 
-  const TabBarRowRideModeWidget({super.key, required this.tabController});
+  const TabBarRowRideModeWidget(
+      {super.key, required this.tabController, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +158,7 @@ class TabBarRowRideModeWidget extends StatelessWidget {
       children: [
         Expanded(
           child: ItemTabRideModeWidget(
+            onTap: onTap,
             text: context.isArabic ? "رحلاتي الحاليه" : "My Running",
             icon: Assets.ideaIcon,
             index: 0,
@@ -157,6 +168,7 @@ class TabBarRowRideModeWidget extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: ItemTabRideModeWidget(
+            onTap: onTap,
             text: context.isArabic ? "الرحلات السابقة" : "Past Trips",
             icon: Assets.ideaIcon,
             index: 1,
@@ -191,35 +203,48 @@ class _TabBarContentRideModeWidgetState
     [""],
     [""],
   ];
-
+  bool showHint = false;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: AnimatedBuilder(
-              animation: widget.tabController,
-              builder: (context, child) {
-                int index = widget.tabController.index;
-                return Text(
-                  context.isArabic ? arabicHints[index] : hints[index],
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TabBarRowRideModeWidget(
+            onTap: () {
+              setState(() {
+                showHint = !showHint;
+              });
+            },
+            tabController: widget.tabController,
           ),
         ),
+        SizedBox(height: 10),
+        if (showHint)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: AnimatedBuilder(
+                animation: widget.tabController,
+                builder: (context, child) {
+                  int index = widget.tabController.index;
+                  return Text(
+                    context.isArabic ? arabicHints[index] : hints[index],
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         Expanded(
           child: TabBarView(
             controller: widget.tabController,
