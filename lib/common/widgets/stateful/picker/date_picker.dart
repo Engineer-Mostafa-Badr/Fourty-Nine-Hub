@@ -62,8 +62,6 @@ class _DatePickerFieldState extends State<DatePickerField> {
 
               widget.onDateSelected(_selectedDate);
             }
-          } else {
-            context.push(Routes.LOGIN);
           }
         } else {
           final DateTime? picked = await showDatePicker(

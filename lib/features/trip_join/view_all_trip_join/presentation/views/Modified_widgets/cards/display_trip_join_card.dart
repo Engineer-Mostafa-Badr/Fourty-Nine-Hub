@@ -186,7 +186,7 @@ class _TripJoinCardState extends State<TripJoinCard> {
                 TextSpan(
                     text: '${20} ',
                     style: Styles.headerText(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.bold)),
                 TextSpan(
                   text: context.isArabic ? 'جنيه' : 'EGP',
                   style: Styles.mediumText(

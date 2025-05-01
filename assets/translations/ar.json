@@ -1562,5 +1562,10 @@
   "modifyLocation": "تعديل العنوان",
   "availableRequest": "الطلبات المتاحة",
   "pastRequests": "الطلبات السابقة",
-  "create": "نشر"
+  "create": "نشر",
+  "cartUpdated": "تم تحديث عربة التسوق بنجاح",
+  "failedDeleteItem": "فشل في حذف العنصر",
+  "favoritesUpdated": "تم تحديث المفضلة بنجاح",
+  "failedUpdateFavorites": "فشل تحديث المفضلة"
+
 }

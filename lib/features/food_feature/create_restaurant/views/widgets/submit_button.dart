@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
@@ -14,7 +15,7 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: ElevatedAppButton(
+          child: AppButton(
             onPressed: () async {
               var res =
                   await context.read<CreateRestaurantCubit>().submit(context);
@@ -26,7 +27,7 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
               }
             },
             label: context.isArabic ? 'ارسال' : 'Submit',
-            textStyle: Styles.headerText(color: Colors.white),
+            // textStyle: Styles.headerText(color: Colors.white),
           ),
         ),
       ],

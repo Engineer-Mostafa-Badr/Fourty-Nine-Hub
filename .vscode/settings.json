@@ -3,5 +3,9 @@
   "dart.flutterSdkPath": ".fvm/versions/3.27.3",
   "cSpell.words": [
     "انتظر"
-  ]
+  ],
+  "flutterTools.displayGetxContextMenu": false,
+  "flutterTools.displayMobxContextMenu": false,
+  "flutterTools.displayRiverpodContextMenu": false,
+  "flutterTools.displayModularContextMenu": false
 }

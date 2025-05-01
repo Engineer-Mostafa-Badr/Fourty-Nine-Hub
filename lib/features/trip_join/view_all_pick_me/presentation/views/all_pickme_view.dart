@@ -186,7 +186,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
                 color: selected ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
                 border: Border.all(
                     color: selected
-                        ? AppColors.SECONDARY_COLOR
+                        ? context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR
                         : AppColors.c0B1035,
                     width: 2)),
             child: Center(

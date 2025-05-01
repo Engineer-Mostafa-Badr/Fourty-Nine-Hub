@@ -241,65 +241,30 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   image: CachedNetworkImageProvider(
                     widget.category.banner,
                   ),
-                  // colorFilter: ColorFilter.mode(
-                  //   Colors.black.withOpacity(0.3),
-                  //   BlendMode.darken,
-                  // ),
                 ),
-                // image: DecorationImage(
-                //   fit: BoxFit.cover,
-                //   image:AssetImage(Assets.healthBanner1),
-                //   // CachedNetworkImageProvider(
-                //   //   widget.category.banner,
-                //   // ),
-                //   colorFilter: ColorFilter.mode(
-                //     Colors.black.withOpacity(0.3),
-                //     BlendMode.darken,
-                //   ),
-                // ),
               ),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   PositionedDirectional(end: 0, child: _buildRegisterButton()),
-                  Label(
-                    text: widget.category.name ?? "",
-                    style: Styles.headerText(
-                      fontSize: 48,
-                      color: Colors.white,
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.6),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Label(
+                      text: widget.category.name ?? "",
+                      style: Styles.headerText(
+                        fontSize: 48,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  // PositionedDirectional(
-                  //   start: 0,
-                  //   child: Column(
-                  //     children: [
-                  //       context.read<UserCubit>().isLoggedIn
-                  //           ? InkWell(
-                  //               onTap: () async => await widget.onFavorite(),
-                  //               child: Icon(
-                  //                 widget.category.isFavorite == true
-                  //                     ? Icons.favorite
-                  //                     : Icons.favorite,
-                  //                 color: widget.category.isFavorite == true
-                  //                     ? AppColors.SECONDARY_COLOR
-                  //                     : AppColors.LIGHT_GRAY_COLOR2,
-                  //               ),
-                  //             )
-                  //           : const SizedBox.shrink(),
-                  //     ],
-                  //   ),
-                  // ),
-                  // PositionedDirectional(
-                  //   start: 20,
-                  //   child: InkWell(
-                  //     onTap: () async => await widget.onFavorite(),
-                  //     child: Icon(
-                  //       size: 64.h,
-                  //       Icons.favorite,
-                  //       color: AppColors.SECONDARY_COLOR,
-                  //     ),
-                  //   ),
-                  // )
                 ],
               ),
             ),

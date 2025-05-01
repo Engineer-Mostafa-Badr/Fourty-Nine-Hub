@@ -64,12 +64,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                         context.read<UserCubit>().isLoggedIn)
                     ? AppColors.PRIMARY_COLOR
                     : AppColors.DARK_GRAY_COLOR,
-                icon: SvgPicture.asset(
-                  Assets.phoneIcon,
-                  width: 36.h,
-                  height: 36.h,
-                  fit: BoxFit.cover,
-                ),
+                icon:const Icon(Icons.call,color: Colors.black,),
                 onPressed:()=>JoinTripBottomSheet(context,
                     topButtonColor: AppColors.PRIMARY_COLOR,
                     topButtonTitle:LocaleKeys.freeCall.localize ,

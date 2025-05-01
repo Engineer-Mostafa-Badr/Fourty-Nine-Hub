@@ -1579,5 +1579,9 @@
   "modifyLocation": "Modify Location",
   "availableRequest": "Available Requests",
   "pastRequests": "Past Requests",
-  "create": "Create"
+  "create": "Create",
+  "cartUpdated": "Cart Update Successfully",
+  "failedDeleteItem": "Failed to delete item",
+  "favoritesUpdated": "Favorites Update Successfully",
+  "failedUpdateFavorites": "Failed Update Favorites"
 }

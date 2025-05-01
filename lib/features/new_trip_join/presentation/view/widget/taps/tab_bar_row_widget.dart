@@ -14,33 +14,41 @@ class TabBarRowWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TabItemWidget(
-            onTap: onTap,
-            text: context.isArabic ? "رحلات \n متاحه" : "Available\nTrips",
-            icon: Assets.ideaIcon,
-            index: 0,
-            tabController: tabController),
+        Expanded(
+          child: TabItemWidget(
+              onTap: onTap,
+              text: context.isArabic ? "رحلات \n متاحه" : "Available\nTrips",
+              icon: Assets.ideaIcon,
+              index: 0,
+              tabController: tabController),
+        ),
         SizedBox(width: 28.w),
-        TabItemWidget(
-            onTap: onTap,
-            text: context.isArabic ? "حجوزاتي" : "My\nBookings",
-            icon: Assets.ideaIcon,
-            index: 1,
-            tabController: tabController),
+        Expanded(
+          child: TabItemWidget(
+              onTap: onTap,
+              text: context.isArabic ? "حجوزاتي" : "My\nBookings",
+              icon: Assets.ideaIcon,
+              index: 1,
+              tabController: tabController),
+        ),
         SizedBox(width: 28.w),
-        TabItemWidget(
-            onTap: onTap,
-            text: context.isArabic ? "رحلات \nجارية " : "Running\nTrips",
-            icon: Assets.ideaIcon,
-            index: 2,
-            tabController: tabController),
+        Expanded(
+          child: TabItemWidget(
+              onTap: onTap,
+              text: context.isArabic ? "رحلات \nجارية " : "Running\nTrips",
+              icon: Assets.ideaIcon,
+              index: 2,
+              tabController: tabController),
+        ),
         SizedBox(width: 28.w),
-        TabItemWidget(
-          onTap: onTap,
-          text: context.isArabic ? "رحلات \n منتهية " : "Expired\nTrips",
-          icon: Assets.ideaIcon,
-          index: 3,
-          tabController: tabController,
+        Expanded(
+          child: TabItemWidget(
+            onTap: onTap,
+            text: context.isArabic ? "رحلات \n منتهية " : "Expired\nTrips",
+            icon: Assets.ideaIcon,
+            index: 3,
+            tabController: tabController,
+          ),
         ),
       ],
     );

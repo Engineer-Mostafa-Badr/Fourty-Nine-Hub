@@ -40,38 +40,38 @@ class FormTextField extends StatelessWidget {
 
   FormTextField(
       {super.key,
-      this.initialValue,
-      this.action,
-      this.maxLength,
-      this.obsecure,
-      this.borderRadius,
-      this.prefix,
-      this.noBorder = false,
-      this.readOnly = false,
-      this.constraints,
-      this.fillColor,
-      this.hint,
-      this.label,
-      this.info,
-      this.autofill,
-      this.suffix,
-      this.type,
-      this.isEmail,
-      this.enabled,
-      this.onConfirm,
-      this.textAlignVertical,
-      this.extraValidationMessage,
-      this.extraValidation,
-      this.onTap,
-      this.height,
-      this.maxLines,
-      this.style,
-      this.validator,
-      this.required,
-      this.controller,
-      this.textStyle,
-      this.borderColor,
-      this.borderSide});
+        this.initialValue,
+        this.action,
+        this.maxLength,
+        this.obsecure,
+        this.borderRadius,
+        this.prefix,
+        this.noBorder = false,
+        this.readOnly = false,
+        this.constraints,
+        this.fillColor,
+        this.hint,
+        this.label,
+        this.info,
+        this.autofill,
+        this.suffix,
+        this.type,
+        this.isEmail,
+        this.enabled,
+        this.onConfirm,
+        this.textAlignVertical,
+        this.extraValidationMessage,
+        this.extraValidation,
+        this.onTap,
+        this.height,
+        this.maxLines,
+        this.style,
+        this.validator,
+        this.required,
+        this.controller,
+        this.textStyle,
+        this.borderColor,
+        this.borderSide});
 
   bool validate = false;
 
@@ -82,8 +82,8 @@ class FormTextField extends StatelessWidget {
         height: height ?? 40,
         child: TextFormField(
           readOnly: readOnly ?? false,
-          // style:
-          //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+          style:
+              textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
           textAlignVertical: textAlignVertical,
           maxLines: maxLines ?? 1,
           maxLength: maxLength,
@@ -93,7 +93,7 @@ class FormTextField extends StatelessWidget {
             }
           },
           validator: validator ??
-              (value) {
+                  (value) {
                 validate = true;
                 final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
@@ -140,19 +140,19 @@ class FormTextField extends StatelessWidget {
             enabledBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: borderSide ?? AppColors.GREYFIELD,
-                    ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(5),
-                  ),
+              borderSide: BorderSide(
+                color: borderSide ?? AppColors.GREYFIELD,
+              ),
+              borderRadius: borderRadius ?? BorderRadius.circular(5),
+            ),
             focusedBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: borderColor ?? AppColors.GREYFIELD,
-                    ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(5),
-                  ),
+              borderSide: BorderSide(
+                color: borderColor ?? AppColors.GREYFIELD,
+              ),
+              borderRadius: borderRadius ?? BorderRadius.circular(5),
+            ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.red,
@@ -162,12 +162,13 @@ class FormTextField extends StatelessWidget {
             focusedErrorBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.red,
-                    ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(5),
-                  ),
+              borderSide: const BorderSide(
+                color: Colors.red,
+              ),
+              borderRadius: borderRadius ?? BorderRadius.circular(5),
+            ),
           ),
+          cursorColor: Colors.grey,
         ),
       ),
       if (info != null)
