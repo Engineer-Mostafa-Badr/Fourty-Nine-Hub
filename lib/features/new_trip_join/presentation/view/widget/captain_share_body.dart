@@ -78,7 +78,8 @@ class _CaptainShareBodyState extends State<CaptainShareBody>
                 borderColor: Colors.red,
                 containerColor: Colors.white,
                 iconColor: const Color(0xffF33D49),
-                textColor: const Color(0xffF33D49),
+                textColor:
+                    context.isDarkMode ? Colors.white : const Color(0xffF33D49),
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
                 onTap: () {},

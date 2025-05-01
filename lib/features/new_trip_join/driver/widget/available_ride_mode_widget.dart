@@ -95,7 +95,7 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           ),
                           children: [
                             TextSpan(
-                              text: context.isArabic ? "جنيهًا مصريًا" : "EGP",
+                              text: context.isArabic ? "  ج.م" : "EGP",
                               style: const TextStyle(
                                   color: Colors.red, fontSize: 12),
                             ),

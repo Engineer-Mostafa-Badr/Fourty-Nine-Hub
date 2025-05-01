@@ -60,9 +60,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   children: [
                     Text(
                       LocaleKeys.normal.localize,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                        color: context.isDarkMode ? Colors.white : Colors.red,
                       ),
                     ),
                     RichText(
@@ -74,7 +74,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         ),
                         children: [
                           TextSpan(
-                            text: context.isArabic ? "جنيه مصري" : "EGP",
+                            text: context.isArabic ? "  ج.م" : "EGP",
                             style: const TextStyle(
                               color: Colors.red,
                               fontSize: 12,
