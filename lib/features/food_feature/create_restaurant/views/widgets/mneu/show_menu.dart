@@ -101,8 +101,7 @@ class ShowMneu extends StatelessWidget {
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Container(
                                         padding: EdgeInsets.symmetric(
@@ -110,12 +109,13 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: AppColors.BG_GRAY_COLOR),
+                                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR),
                                         child: Row(
                                           children: [
                                             Text(
                                               e.foodName ?? "",
-                                              style: Styles.mediumText(),
+                                              style: Styles.mediumText(
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -127,7 +127,8 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: AppColors.BG_GRAY_COLOR),
+                                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
+                                      ),
                                         child: Row(
                                           children: [
                                             Text(
@@ -152,9 +153,11 @@ class ShowMneu extends StatelessWidget {
                                         onPressed: () {
                                           menuCubit.removeMenuItem(context, e);
                                         },
-                                        child: const Text(
-                                          "Remove",
-                                          style: TextStyle(color: Colors.black),
+                                        child:  Text(
+                                          LocaleKeys.remove.localize,
+                                          style: Styles.mediumText(
+                                            color: AppColors.PRIMARY_COLOR
+                                          ),
                                         ),
                                       )
                                     ],
@@ -229,7 +232,7 @@ class ShowMneu extends StatelessWidget {
                                           // نفس onTap أعلاه
                                           await menuCubit.uploadMealImage(
                                               context,
-                                              subcategoryId: subcategoryId);
+                                              subcategoryId: subcategoryId ??  "62c8babb8e28a58a3edf581d");
                                         },
                                         onDelete:
                                             null, // لا يوجد حذف للصورة قبل إضافة العنصر

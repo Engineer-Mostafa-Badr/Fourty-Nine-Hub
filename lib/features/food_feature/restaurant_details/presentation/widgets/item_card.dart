@@ -9,9 +9,11 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
 
 class ItemCard extends StatefulWidget {
@@ -76,7 +78,13 @@ class _ItemCardState extends State<ItemCard> {
       qty = 0;
     });
   }
-
+  String _formatPrice(double price) {
+    if (price % 1 == 0) {
+      return price.toStringAsFixed(0); // No decimal part
+    } else {
+      return price.toStringAsFixed(2); // Show up to 2 decimals
+    }
+  }
   @override
   Widget build(BuildContext context) {
     context.read<RestaurantDetailsCubit>();
@@ -124,7 +132,6 @@ class _ItemCardState extends State<ItemCard> {
               ),
             ),
             const SizedBox(width: 12),
-
             // MAIN CONTENT
             Expanded(
               child: Padding(
@@ -134,8 +141,7 @@ class _ItemCardState extends State<ItemCard> {
                   children: [
                     Text(
                       widget.meal.foodName ?? 'Unknown',
-                      style: const TextStyle(
-                          fontSize: 16,
+                      style: Styles.mediumText(
                           fontWeight: FontWeight.w600
                       ),
                       maxLines: 1,
@@ -143,20 +149,19 @@ class _ItemCardState extends State<ItemCard> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      (widget.meal.price ?? 0.0).toStringAsFixed(2),
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600
+                      _formatPrice(widget.meal.price ?? 0.0),
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
+
                   ],
                 ),
               ),
             ),
 
-            // QUANTITY AND ADD TO CART - STATIC POSITION
             Container(
-              padding:  EdgeInsetsDirectional.only(top: 8, end: 8), // Match main content alignment
+              padding:  EdgeInsetsDirectional.only(top: 8, end: 8),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -188,15 +193,38 @@ class _ItemCardState extends State<ItemCard> {
                     ),
                   ),
                   SizedBox(height: 6,),
-                  // Space reserved for Add to Cart button (even when hidden)
                   SizedBox(
-                    // height: qty > 0 ? 36 : 0, // Reserve space when button is hidden
                     child: Visibility(
                       visible: qty > 0,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 0),
                         child: GestureDetector(
-                          onTap: _addToCart,
+                          onTap: (){
+                            if(context.isUserLoggedIn ){
+                              _addToCart() ;
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                                    style: Styles.smallText(
+                                      color: AppColors.whiteColor
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 4),
+                                  action: SnackBarAction(
+                                    label: LocaleKeys.login.localize,
+                                    textColor: Colors.white,
+                                    onPressed: () {
+                                      context.push(Routes.LOGIN);
+                                    },
+                                  ),
+                                ),
+                              );
+                              // context.push(Routes.LOGIN);
+                            }
+                          },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
@@ -206,8 +234,9 @@ class _ItemCardState extends State<ItemCard> {
                             ),
                             child:  Text(
                               LocaleKeys.addToCart.localize,
-                              style: TextStyle(color: Colors.black, fontSize: 10,
-                              fontWeight: FontWeight.w600
+                              style: Styles.smallText(
+                                fontWeight: FontWeight.w500
+
                               ),
                             ),
                           ),

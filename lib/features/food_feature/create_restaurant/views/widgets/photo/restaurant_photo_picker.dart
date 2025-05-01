@@ -71,7 +71,7 @@ class _CreateRestaurantProfilePhotoPickerState
 
                         await createRestaurantCubit.uploadProfileImage(
                           context: context,
-                          subcategoryId: widget.subcategoryId,
+                          subcategoryId: widget.subcategoryId ?? "62c8babb8e28a58a3edf581d",
                           index: isAddBox ? null : index,
                         );
                         setState(() {});
@@ -155,13 +155,21 @@ Widget buildPhotoBox({
         if (!isAddBox && image != null)
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.file(
+            child: File(image.path).existsSync()
+                ? Image.file(
               File(image.path),
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.fill,
+            )
+                : Image.asset(
+              Assets.icon, // replace with your fallback asset
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.fill,
             ),
           ),
+
 
         // 2) InkWell الكبير ليجعل الصندوق بأكمله قابلاً للنقر (إضافة / استبدال صورة)
         Material(

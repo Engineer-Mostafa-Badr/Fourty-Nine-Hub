@@ -476,6 +476,9 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                 TextFormField(
                   controller: _phoneController,
                   decoration: InputDecoration(
+                    hintStyle: Styles.mediumText(
+                      fontWeight: FontWeight.w600
+                    ),
                     labelText: LocaleKeys.your_phone_number.tr(),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -487,15 +490,39 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.red, // border color on error
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.redAccent, // border color when focused and invalid
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    errorStyle: const TextStyle(
+                      color: Colors.red, // error text color
+                      fontSize: 14,
+                    ),
                   ),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return LocaleKeys.please_enter_phone_number.tr();
                     }
+                    final regex = RegExp(r'^(010|011|012|015)\d{8}$');
+                    if (!regex.hasMatch(value)) {
+                      return LocaleKeys.invalidPhoneNumber.tr();
+                    }
+
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,

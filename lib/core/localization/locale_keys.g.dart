@@ -1555,5 +1555,9 @@ abstract class  LocaleKeys {
   static const availableRequest = 'availableRequest';
   static const pastRequests = 'pastRequests';
   static const create = 'create';
+  static const cartUpdated = 'cartUpdated';
+  static const failedDeleteItem = 'failedDeleteItem';
+  static const favoritesUpdated = 'favoritesUpdated';
+  static const failedUpdateFavorites = 'failedUpdateFavorites';
 
 }

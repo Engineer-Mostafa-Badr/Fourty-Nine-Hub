@@ -134,7 +134,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.w700,
                                     // fontSize: 14,
-                                    color:context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+                                    color: AppColors.black ,
                                 ),
                               ),
                             )

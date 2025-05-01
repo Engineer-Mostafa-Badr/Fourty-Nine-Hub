@@ -1578,7 +1578,11 @@ class CodegenLoader extends AssetLoader{
   "modifyLocation": "تعديل العنوان",
   "availableRequest": "الطلبات المتاحة",
   "pastRequests": "الطلبات السابقة",
-  "create": "نشر"
+  "create": "نشر",
+  "cartUpdated": "تم تحديث عربة التسوق بنجاح",
+  "failedDeleteItem": "فشل في حذف العنصر",
+  "favoritesUpdated": "تم تحديث المفضلة بنجاح",
+  "failedUpdateFavorites": "فشل تحديث المفضلة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3160,7 +3164,11 @@ static const Map<String,dynamic> _en = {
   "modifyLocation": "Modify Location",
   "availableRequest": "Available Requests",
   "pastRequests": "Past Requests",
-  "create": "Create"
+  "create": "Create",
+  "cartUpdated": "Cart Update Successfully",
+  "failedDeleteItem": "Failed to delete item",
+  "favoritesUpdated": "Favorites Update Successfully",
+  "failedUpdateFavorites": "Failed Update Favorites"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
