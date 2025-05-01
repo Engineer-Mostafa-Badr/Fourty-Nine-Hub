@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_my_favourite_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -29,6 +31,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final FilterAdUseCase _filterAdUseCase;
   final GetMyAdByIdUseCase _getMyAdByIdUseCase;
+  final GetMyFavouriteAdsUsecase _getMyFavouriteAdsUsecase;
   final GetAdRequestsUseCase _getAdRequestsUseCase;
 
   SubcategoriesCubit(
@@ -39,6 +42,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     this._filterAdUseCase,
     this._getCustomPageSubCategoriesUseCase,
     this._getMyAdByIdUseCase,
+    this._getMyFavouriteAdsUsecase,
     this._getAdRequestsUseCase,
   ) : super(SubcategoriesState());
 
@@ -256,14 +260,14 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     await getMarriageAds(
       subCategoryId: subCategoryId,
     );
-    await getMarriageMyAds();
+    await getMarriageMyAds('62c8b5b09332225799fe335e');
     await getRequestsLog(subCategoryId);
     adsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getMarriageAds(
         subCategoryId: subCategoryId,
       );
-      getMarriageMyAds();
+      getMarriageMyAds('62c8b5b09332225799fe335e');
       getRequestsLog(subCategoryId);
     });
     emit(state.copyWith(status: SubcategoriesStates.initState));
@@ -292,7 +296,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     hasMoreData = true;
     await getMarriageAds(
         subCategoryId: state.selectedSubCatId ?? '62c8be728e28a58a3edf5f55');
-    await getMarriageMyAds();
+    await getMarriageMyAds('62c8b5b09332225799fe335e');
     await getRequestsLog('62c8b5b09332225799fe335e');
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
   }
@@ -346,8 +350,108 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     );
   }
 
-  Future getMarriageMyAds() async {
-    final response = await _getMyAdByIdUseCase('62c8b5b09332225799fe335e');
+  bool isLoadingMyFavouriteAdsMore = false;
+  bool isLoadingMyFavouriteAds = false;
+  bool hasMoreMyFavouriteAds = true;
+  int currentMyFavouriteAdsPage = 1;
+  List<AdEntity> myFavouriteAds = [];
+  loadMyFavouriteAds({
+    required String id,
+  }) async {
+    print("Gettinghiii");
+    myFavouriteAds.clear();
+    isLoadingMyFavouriteAds=true;
+    currentMyFavouriteAdsPage = 1;
+    hasMoreMyFavouriteAds = true;
+    isLoadingMyFavouriteAdsMore = false;
+    emit(state.copyWith(status: SubcategoriesStates.loadingAds));
+    await getMyFavouriteAds(id);
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+    isLoadingMyFavouriteAds=false;
+  }
+
+  bool isLoadingMyAdsMore = false;
+  bool isLoadingMyAds = false;
+  bool hasMoreMyAds = true;
+  int currentMyAdsPage = 1;
+  List<AdEntity> myAds = [];
+  loadMyAds({
+    required String id,
+  }) async {
+    print("Gettinghiii");
+    myAds.clear();
+    isLoadingMyAds=true;
+    currentMyAdsPage = 1;
+    hasMoreMyAds = true;
+    isLoadingMyAdsMore = false;
+    emit(state.copyWith(status: SubcategoriesStates.loadingAds));
+    await getMyAds(id);
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+    isLoadingMyAds=false;
+  }
+
+  Future getMyAds(String mainCategoryId) async {
+    // final response = await _getMyAdByIdUseCase('62c8b5b09332225799fe335e');
+    if (!hasMoreMyAds || isLoadingMyAdsMore) return;
+
+    isLoadingMyAdsMore = true;
+
+
+    final response = await _getMyAdByIdUseCase(GetMyAdByIdParams(mainCategoryId: mainCategoryId,page: currentMyAdsPage));
+    response.fold(
+          (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+          (data) {
+            myAds.addAll(data);
+        if (data.length < pageSize) {
+          hasMoreMyAds = false;
+        } else {
+          currentMyAdsPage++;
+        }
+
+        isLoadingMyAdsMore = false;
+        print("objectmarriageAds${data.length}");
+        emit(state.copyWith(myAds: data));
+      },
+    );
+    response.fold(
+      (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+      (data) async {
+        emit(state.copyWith(
+            myAds: data, status: SubcategoriesStates.adsSuccess));
+      },
+    );
+  }
+
+  Future getMyFavouriteAds(String mainCategoryId) async {
+    // final response = await _getMyAdByIdUseCase('62c8b5b09332225799fe335e');
+    if (!hasMoreMyFavouriteAds || isLoadingMyFavouriteAdsMore) return;
+
+    isLoadingMyFavouriteAdsMore = true;
+
+
+    final response = await _getMyFavouriteAdsUsecase(GetMyAdByIdParams(mainCategoryId: mainCategoryId,page: currentMyFavouriteAdsPage));
+    response.fold(
+          (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+          (data) {
+            myFavouriteAds.addAll(data);
+        if (data.length < pageSize) {
+          hasMoreMyFavouriteAds = false;
+        } else {
+          currentMyFavouriteAdsPage++;
+        }
+        isLoadingMyFavouriteAdsMore = false;
+        emit(state.copyWith(myAds: data));
+      },
+    );
+  }
+
+
+  Future getMarriageMyAds(String mainCategoryId) async {
+    // final response = await _getMyAdByIdUseCase('62c8b5b09332225799fe335e');
+    final response = await _getMyAdByIdUseCase(GetMyAdByIdParams(mainCategoryId: mainCategoryId,page: 1));
     response.fold(
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
@@ -471,23 +575,51 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     // );
   }
 
+
+  bool isLoadingRequestsLogMore = false;
+  bool isLoadingRequestsLog = false;
+  bool hasMoreRequestsLog = true;
+  int currentRequestsLogPage = 1;
+  List<AdRequestEntity> requestsLog = [];
+  loadRequestsLog({
+    required String id,
+  }) async {
+    print("Gettinghiii");
+    isLoadingRequestsLog=true;
+    currentRequestsLogPage = 1;
+    hasMoreRequestsLog = true;
+    isLoadingRequestsLogMore = false;
+    emit(state.copyWith(status: SubcategoriesStates.loadingAds));
+    await getRequestsLog(id);
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+    isLoadingRequestsLog=false;
+  }
   getRequestsLog(String id) async {
-    if (!hasMoreData || isLoadingMore) return;
+    if (!hasMoreRequestsLog || isLoadingRequestsLogMore) return;
 
     emit(state.copyWith(status: SubcategoriesStates.loading));
-    isLoadingMore = true;
+    isLoadingRequestsLogMore = true;
 
     final response = await _getAdRequestsUseCase(
       GetAdRequestsParams(
-          id: id, page: currentPage, limit: pageSize, username: ''),
+          id: id, page: currentRequestsLogPage, limit: pageSize, username: ''),
     );
-    // final response = await _filterAdUseCase(filterModel);
     response.fold(
-      (failure) => emit(
-          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
-      (data) {
+          (failure) => emit(
+              state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+          (data) {
+            requestsLog.addAll(data);
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentRequestsLogPage++;
+        }
+
+        isLoadingMore = false;
+        print("objectmarriageAds${data.length}");
         emit(state.copyWith(adsRequestsLog: data));
       },
     );
+
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateAdDropdownMenu<T> extends StatelessWidget {
@@ -24,27 +26,27 @@ class CreateAdDropdownMenu<T> extends StatelessWidget {
         height: 42,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: const Color(0xffF5F5F5),
+          color: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
         ),
         child: Theme(
           data: Theme.of(context).copyWith(
-            canvasColor: const Color(0xFFE0E0E0),
+            canvasColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xFFE0E0E0),
           ),
           child: ButtonTheme(
             alignedDropdown: true,
             child: DropdownButton<T>(
               value: value,
               isExpanded: true,
-              icon: const Padding(
-                padding: EdgeInsetsDirectional.only(end: 16),
+              icon: Padding(
+                padding: const EdgeInsetsDirectional.only(end: 16),
                 child: Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: Colors.black,
+                  color: context.isDarkMode?AppColors.whiteColor:Colors.black,
                 ),
               ),
               menuMaxHeight: 300,
               elevation: 2,
-              dropdownColor: const Color(0xFFE0E0E0),
+              dropdownColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xFFE0E0E0),
               borderRadius: BorderRadius.circular(15),
               itemHeight: 50,
               underline: Container(),
@@ -52,7 +54,7 @@ class CreateAdDropdownMenu<T> extends StatelessWidget {
               items: items,
               hint: Label(
                 text: hint,
-                style: Styles.mediumText(fontSize: 32),
+                style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:null),
               ),
             ),
           ),

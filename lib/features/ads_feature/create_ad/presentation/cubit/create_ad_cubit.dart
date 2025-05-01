@@ -340,7 +340,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   }
 
   final user = UserCubit.to.state.data?.id;
-
+  bool isLoadingCreateAd = false;
   void createAd(
       {required CategorizationEntity categorize,
       required BuildContext context}) async {
@@ -387,6 +387,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       }
       List<CreateAdEntity> selectedDetails =
           details.where((element) => element.value.nameAr.isNotEmpty).toList();
+      bool isLoadingCreateAd = false;
+      emit(state.copyWith(status: CreateAdStates.loadingCreateAd));
       final response = await _createAdUseCase(AdModel(
         id: 'id',
         title: title ?? '',

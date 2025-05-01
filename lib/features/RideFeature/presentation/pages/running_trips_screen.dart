@@ -97,7 +97,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 } else if (state.status == RideStates.success) {
-                  if(state.runningTrips!.isEmpty) {
+                  if(state.runningTrips?.isEmpty??true) {
                     return Center(child: Text(context.isArabic ? "لا يوجد رحلات حالية" : "No running trips"));
                   }
                   return ListView.builder(

@@ -22,7 +22,7 @@ class CustomHeaderForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(LocaleKeys.createAd,style: Styles.headerText(),),
+        Text(LocaleKeys.createAd.localize,style: Styles.headerText(),),
         Sizer(),
         Row(
           children: [
@@ -55,7 +55,7 @@ class CustomHeaderForm extends StatelessWidget {
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w500,
                     fontSize: 32,
-                    color: context.isDarkMode?Colors.white:Colors.black,
+                    color: context.isDarkMode?Colors.white:Colors.black.withValues(alpha: 153),
                   ),
                 ),
               ],

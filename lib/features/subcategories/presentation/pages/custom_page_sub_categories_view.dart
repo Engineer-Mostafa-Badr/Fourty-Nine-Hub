@@ -507,7 +507,7 @@ class _CustomPageSubCategoriesViewState
                       isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                       onPressed: () {
                         // TODO: EDIT THIS
-                        context.read<SubcategoriesCubit>().getMarriageMyAds();
+                        context.read<SubcategoriesCubit>().getMarriageMyAds(widget.mainCategory.id);
                         context
                             .read<SubcategoriesCubit>()
                             .toggleMyAds('isMyAdsOpen');
