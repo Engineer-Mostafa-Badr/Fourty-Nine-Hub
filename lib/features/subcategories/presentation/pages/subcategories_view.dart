@@ -93,7 +93,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
     );
 
     final String? selected = await showMenu<String>(
-        color: Colors.white,
+        color:context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
         menuPadding: EdgeInsets.zero,
         shadowColor: Colors.grey.shade300,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
