@@ -79,9 +79,12 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
+import '../../domain/entities/create_no_track_trip_entity.dart';
 import '../../domain/entities/get_offers_entity.dart';
+import '../../domain/usecases/create_non_track_trip_use_case.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../models/create_no_track_trip_model.dart';
 import '../models/dashboards/get_offers_response_model.dart';
 import '../../../../shared_web_socket.dart';
 import '../../../account_taps/my_adds/data/model/click_model.dart';
@@ -193,6 +196,9 @@ abstract class RideRemoteDataSource {
 
   Future<Either<Failure, bool>> makeLoadingRequestTrip(
       MakeLoadingRequestTripUsecaseParam params);
+
+  Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params);
+
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -1056,6 +1062,22 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     await _apiConsumer.post(EndPoints.clickGlobal, data: params.toJson());
     return response.fold(
             (failure) => Left(failure), (data) => Right(ClickModel.fromJson(data)));
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params) async{
+    final url = "${EndPoints.createNonTrackTrip}";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+            final createNonTrackTrip = CreateNonTrackTripModel.fromJson(data);
+
+            return Right(createNonTrackTrip);
+      },
+    );
   }
 
 }

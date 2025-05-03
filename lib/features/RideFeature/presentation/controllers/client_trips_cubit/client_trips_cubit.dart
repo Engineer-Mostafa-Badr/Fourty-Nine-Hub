@@ -12,8 +12,10 @@ import '../../../../health_feature/create_doctor/domain/entities/city.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_cities.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import '../../../domain/entities/create_no_track_trip_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/get_offers_entity.dart';
+import '../../../domain/usecases/create_non_track_trip_use_case.dart';
 import '../../../domain/usecases/get_client_offers_usecase.dart';
 import '../../../domain/usecases/get_loading_offers_usecase.dart';
 import '../../../domain/usecases/make_loading_request_trip_usecase.dart';
@@ -28,6 +30,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
   final GetLoadingOffersUsecase getLoadingOffersUsecase;
   final GetCitiesUseCase _getCitiesUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
+  final CreateNonTrackTripUseCase createNonTrackTripUseCase;
   ClientTripsCubit(
     this.makeNonTrackingRequestTripUsecase,
     this.getClientOffersUseCase,
@@ -35,7 +38,29 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     this._getCitiesUseCase,
     this._getGovernoratesUseCase,
     this.makeLoadingRequestTripUsecase,
+    this.createNonTrackTripUseCase,
   ) : super(const ClientTripsState());
+
+
+
+  Future<void> createNonTrackTrip({required CreateNonTrackTripParams params}) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+
+    final response = await createNonTrackTripUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (createNonTrackTripEntity) {
+        emit(state.copyWith(
+            createNonTrackTripEntity: createNonTrackTripEntity,
+            status: ClientTripsStates.success,
+        ));
+      },
+    );
+  }
+
 
   Future<void> getCities(String governorateId) async {
     emit(state.copyWith(status: ClientTripsStates.loadingCities));

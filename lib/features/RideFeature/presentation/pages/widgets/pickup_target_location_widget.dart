@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/functions/helper/lang_helper.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../health_feature/create_doctor/domain/entities/city.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -80,7 +82,9 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                                               ? city?.nameAr
                                               : city?.nameEn) ??
                                           '',
-                                      style: Styles.headerText(),
+                                      style: Styles.headerText(
+                                        color:  AppColors.PRIMARY_COLOR
+                                      ),
                                     ),
                                   ),
                                 );
@@ -110,7 +114,9 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                                               ? governorate?.nameAr
                                               : governorate?.nameEn) ??
                                           '',
-                                      style: Styles.headerText(),
+                                      style: Styles.headerText(
+                                        color:  AppColors.PRIMARY_COLOR
+                                      ),
                                     ),
                                   ),
                                 );
@@ -161,6 +167,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
+                      color:  AppColors.PRIMARY_COLOR
                     ),
                   ),
                 ],

@@ -1582,7 +1582,12 @@ class CodegenLoader extends AssetLoader{
   "cartUpdated": "تم تحديث عربة التسوق بنجاح",
   "failedDeleteItem": "فشل في حذف العنصر",
   "favoritesUpdated": "تم تحديث المفضلة بنجاح",
-  "failedUpdateFavorites": "فشل تحديث المفضلة"
+  "failedUpdateFavorites": "فشل تحديث المفضلة",
+  "pleaseFillAllRequiredFields": "يرجى ملء جميع الحقول المطلوبة",
+  "youCantChoosePastTime": "لا يمكنك اختيار وقت في الماضي!",
+  "chooseTheTime": "اختر الوقت",
+  "chooseTheDate": "اختر التاريخ",
+  "pleaseSelectDateFirst": "يرجى تحديد التاريخ أولاً"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3168,7 +3173,12 @@ static const Map<String,dynamic> _en = {
   "cartUpdated": "Cart Update Successfully",
   "failedDeleteItem": "Failed to delete item",
   "favoritesUpdated": "Favorites Update Successfully",
-  "failedUpdateFavorites": "Failed Update Favorites"
+  "failedUpdateFavorites": "Failed Update Favorites",
+  "pleaseFillAllRequiredFields": "Please fill all required fields",
+  "youCantChoosePastTime": "You can't choose a time in the past!",
+  "chooseTheTime": "Choose The Time",
+  "chooseTheDate": "Choose The Date",
+  "pleaseSelectDateFirst": "Please select a date first."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

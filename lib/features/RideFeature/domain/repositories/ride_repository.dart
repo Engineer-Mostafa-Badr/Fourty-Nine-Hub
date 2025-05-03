@@ -51,7 +51,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
+import '../entities/create_no_track_trip_entity.dart';
 import '../entities/get_offers_entity.dart';
+import '../usecases/create_non_track_trip_use_case.dart';
 import '../usecases/make_loading_request_trip_usecase.dart';
 import '../usecases/make_non_tracking_request_trip_usecase.dart';
 
@@ -112,4 +114,6 @@ abstract class RideRepository {
   void listenToRideOffers(Function(RideOfferEntity offer) params);
   Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params);
   Future<Either<Failure, ClickEntity>> click(ClickParams params);
+  Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params);
+
 }

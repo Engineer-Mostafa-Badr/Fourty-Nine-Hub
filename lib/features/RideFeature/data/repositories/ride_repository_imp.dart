@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
@@ -28,6 +29,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
@@ -355,5 +357,10 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, ClickEntity>> click(ClickParams params) {
     return rideRemoteDataSource.click(params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params) async{
+    return rideRemoteDataSource.createNonTrackTrip(params);
   }
 }

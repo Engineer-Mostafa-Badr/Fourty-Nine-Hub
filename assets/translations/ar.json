@@ -1566,6 +1566,11 @@
   "cartUpdated": "تم تحديث عربة التسوق بنجاح",
   "failedDeleteItem": "فشل في حذف العنصر",
   "favoritesUpdated": "تم تحديث المفضلة بنجاح",
-  "failedUpdateFavorites": "فشل تحديث المفضلة"
+  "failedUpdateFavorites": "فشل تحديث المفضلة",
+  "pleaseFillAllRequiredFields": "يرجى ملء جميع الحقول المطلوبة",
+  "youCantChoosePastTime": "لا يمكنك اختيار وقت في الماضي!",
+  "chooseTheTime": "اختر الوقت",
+  "chooseTheDate": "اختر التاريخ",
+  "pleaseSelectDateFirst": "يرجى تحديد التاريخ أولاً"
 
 }

@@ -1583,5 +1583,12 @@
   "cartUpdated": "Cart Update Successfully",
   "failedDeleteItem": "Failed to delete item",
   "favoritesUpdated": "Favorites Update Successfully",
-  "failedUpdateFavorites": "Failed Update Favorites"
+  "failedUpdateFavorites": "Failed Update Favorites",
+  "pleaseFillAllRequiredFields": "Please fill all required fields",
+  "youCantChoosePastTime": "You can't choose a time in the past!",
+  "chooseTheTime": "Choose The Time",
+  "chooseTheDate": "Choose The Date",
+  "pleaseSelectDateFirst": "Please select a date first.",
+
+
 }

@@ -47,12 +47,14 @@ class ClientTripsState {
   final List<TripEntity>? offers;
   final List<CityEntity>? cities;
   final List<GovernorateEntity>? governorates;
+  final CreateNonTrackTripEntity? createNonTrackTripEntity;
   const ClientTripsState({
     this.status = ClientTripsStates.initState,
     this.failure,
     this.offers,
     this.cities,
     this.governorates,
+    this.createNonTrackTripEntity,
   });
   ClientTripsState copyWith({
     ClientTripsStates? status,
@@ -60,6 +62,7 @@ class ClientTripsState {
     List<TripEntity>? offers,
     List<CityEntity>? cities,
     List<GovernorateEntity>? governorates,
+    CreateNonTrackTripEntity? createNonTrackTripEntity,
   }) {
     return ClientTripsState(
       status: status ?? this.status,
@@ -67,6 +70,7 @@ class ClientTripsState {
       offers: offers ?? this.offers,
       cities: cities ?? this.cities,
       governorates: governorates ?? this.governorates,
+      createNonTrackTripEntity: createNonTrackTripEntity ?? this.createNonTrackTripEntity,
     );
   }
 }

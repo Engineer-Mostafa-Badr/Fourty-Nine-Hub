@@ -1481,4 +1481,5 @@ class EndPoints {
   static const getMostBooking = '/health/doctors';
 
   static const getDoctorList = '/health/doctors';
+  static const createNonTrackTrip = '/ride/non-tracking/trips/client';
 }

@@ -308,7 +308,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RideCubit, RideState>(listener: (context, state) {
+    return BlocConsumer<RideCubit, RideState>(
+        listener: (context, state) {
       log("new state listener");
       var cubit = serviceLocator<RideCubit>();
       if (state.requestedTrip != null) {
@@ -739,7 +740,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildBottomSheet() {
     return Positioned(
-      bottom: 0,
+      // bottom: 0,
       left: 0,
       right: 0,
       child: Column(

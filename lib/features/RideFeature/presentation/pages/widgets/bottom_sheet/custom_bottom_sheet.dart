@@ -87,7 +87,7 @@ Future<dynamic> customBottomSheet2(context,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
-                  Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                  Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600,   color:  AppColors.PRIMARY_COLOR)),
                   IconButton(
                     icon: SvgPicture.asset('assets/icons/close.svg'),
                     onPressed: () {
