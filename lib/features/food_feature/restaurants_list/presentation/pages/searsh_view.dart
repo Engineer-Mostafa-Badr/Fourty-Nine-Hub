@@ -227,31 +227,28 @@ class SearchRestaurantView extends StatelessWidget {
                   /// ------- search governorates
                   else if (state.status ==
                       SearchRestaurantStates.loadingGovernorates) {
-                    return RefreshIndicator(
-                      onRefresh: () async => searchCubit.refreshState(),
-                      child: ListView.builder(
-                        shrinkWrap: true,
+                    return ListView.builder(
+                      shrinkWrap: true,
 
-                        itemCount: state.governorates?.length,
-                        itemBuilder: (context, index) {
-                          GovernorateEntity? governorate =
-                          state.governorates?[index];
-                          return GestureDetector(
-                            onTap: () =>
-                                searchCubit.selectGovernorate(governorate),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                (getLang() == "ar"
-                                    ? governorate?.nameAr
-                                    : governorate?.nameEn) ??
-                                    '',
-                                style: Styles.headerText(),
-                              ),
+                      itemCount: state.governorates?.length,
+                      itemBuilder: (context, index) {
+                        GovernorateEntity? governorate =
+                        state.governorates?[index];
+                        return GestureDetector(
+                          onTap: () =>
+                              searchCubit.selectGovernorate(governorate),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              (getLang() == "ar"
+                                  ? governorate?.nameAr
+                                  : governorate?.nameEn) ??
+                                  '',
+                              style: Styles.headerText(),
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
                     );
                   } else if (state.status ==
                       SearchRestaurantStates.loadingSearchGevnorates) {
@@ -259,7 +256,6 @@ class SearchRestaurantView extends StatelessWidget {
                       onRefresh: () async => searchCubit.refreshState(),
                       child: ListView.builder(
                         shrinkWrap: true,
-
                         itemCount: state.searchGovernorates?.length,
                         itemBuilder: (context, index) {
                           GovernorateEntity? governorate =

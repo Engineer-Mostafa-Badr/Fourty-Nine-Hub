@@ -101,8 +101,7 @@ class ShowMneu extends StatelessWidget {
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Container(
                                         padding: EdgeInsets.symmetric(
@@ -110,12 +109,13 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: AppColors.BG_GRAY_COLOR),
+                                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR),
                                         child: Row(
                                           children: [
                                             Text(
                                               e.foodName ?? "",
-                                              style: Styles.mediumText(),
+                                              style: Styles.mediumText(
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -127,7 +127,8 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: AppColors.BG_GRAY_COLOR),
+                                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
+                                      ),
                                         child: Row(
                                           children: [
                                             Text(
@@ -152,9 +153,11 @@ class ShowMneu extends StatelessWidget {
                                         onPressed: () {
                                           menuCubit.removeMenuItem(context, e);
                                         },
-                                        child: const Text(
-                                          "Remove",
-                                          style: TextStyle(color: Colors.black),
+                                        child:  Text(
+                                          LocaleKeys.remove.localize,
+                                          style: Styles.mediumText(
+                                            color: AppColors.PRIMARY_COLOR
+                                          ),
                                         ),
                                       )
                                     ],
@@ -229,7 +232,7 @@ class ShowMneu extends StatelessWidget {
                                           // نفس onTap أعلاه
                                           await menuCubit.uploadMealImage(
                                               context,
-                                              subcategoryId: subcategoryId);
+                                              subcategoryId: subcategoryId ??  "62c8babb8e28a58a3edf581d");
                                         },
                                         onDelete:
                                             null, // لا يوجد حذف للصورة قبل إضافة العنصر
@@ -257,7 +260,9 @@ class ShowMneu extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 TextFormField(
-                                  style: Styles.mediumText(),
+                                  style: Styles.mediumText(
+                                    color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                                  ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -272,7 +277,7 @@ class ShowMneu extends StatelessWidget {
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.itemName.tr(),
                                     hintStyle: Styles.mediumText(),
-                                    fillColor: AppColors.BG_GRAY_COLOR,
+                                    fillColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
@@ -314,7 +319,10 @@ class ShowMneu extends StatelessWidget {
                                 ),
                                 const Sizer(),
                                 TextFormField(
-                                  style: Styles.mediumText(),
+                                  style: Styles.mediumText(
+                                      color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+
+                                  ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -333,7 +341,7 @@ class ShowMneu extends StatelessWidget {
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.price.tr(),
                                     hintStyle: Styles.mediumText(),
-                                    fillColor: AppColors.BG_GRAY_COLOR,
+                                    fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),

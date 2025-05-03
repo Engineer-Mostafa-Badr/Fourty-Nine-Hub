@@ -112,7 +112,6 @@ class _TripJoinViewState extends State<TripJoinView>
                         onPressed: () => Navigator.of(context).pop(),
                         icon: const Icon(
                           Icons.arrow_back,
-                          color: AppColors.PRIMARY_COLOR,
                         )),
                   ),
                   const Sizer(),
@@ -121,7 +120,6 @@ class _TripJoinViewState extends State<TripJoinView>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: List.generate(3, (index) {
                       bool isSelected = selectedIndex == index;
-
                       Widget child = TripOptionWidget(
                         imagePath: Assets.locationTripIcon,
                         title: getTitleForIndex(index),

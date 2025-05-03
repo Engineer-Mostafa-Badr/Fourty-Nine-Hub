@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad_dropdown_menu.dart';
@@ -60,7 +64,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32),
+            style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
           ),
         ),
         const SizedBox(
@@ -117,7 +121,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32),
+            style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
           ),
         ),
         const SizedBox(
@@ -135,8 +139,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           //             }).toList(),
           items: widget.property.values
               .map<DropdownMenuItem<SelectionEntity>>((e) => DropdownMenuItem(
-                    child: Text(e.nameEn),
                     value: e,
+                    child: Text(context.isArabic?e.nameAr:e.nameEn),
                   ))
               .toList(),
           onChange: (SelectionEntity? newValue) {
@@ -219,7 +223,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32),
+            style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
           ),
         ),
         const SizedBox(
@@ -231,6 +235,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               ? widget.property.nameAr
               : widget.property.nameEn,
           keyboardType: TextInputType.number,
+          inputFormatters:[FilteringTextInputFormatter.digitsOnly],
           validator: (value) {
             if ((value == null || value.isEmpty)) {
               return LocaleKeys.required.localize;
@@ -262,45 +267,85 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32),
+            style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
           ),
         ),
         const SizedBox(
           height: 4,
         ),
-        Row(
-          spacing: 8,
-          children: widget.property.values.map((e) {
-            return Expanded(
-              child: InkWell(
-                onTap: () {
-                  widget.onChanged(e);
-                  value = e;
-                  setState(() {});
-                },
-                child: Container(
-                  height: 42,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(5),
-                  // margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffF5F5F5),
-                    border: value == e
-                        ? Border.all(
-                            color: AppColors.SECONDARY_COLOR_DARK2,
-                          )
-                        : null,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Label(
-                    text: getLang() == 'ar' ? e.nameAr : e.nameEn,
-                    style: Styles.mediumText(fontSize: 32),
-                  ),
-                ),
+        GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+              childAspectRatio: 3.4
+
+          ),
+          itemCount: widget.property.values.length,
+          itemBuilder: (context,index)=>ClickableWidget(
+            onTap: () {
+              widget.onChanged(widget.property.values[index]);
+              value = widget.property.values[index];
+              setState(() {});
+            },
+            child: Container(
+              height: 42,
+              width: MediaQuery.of(context).size.width * 0.52,
+              margin: EdgeInsets.symmetric(vertical: 5.h),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(5),
+              // margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
+                border: value == widget.property.values[index]
+                    ? Border.all(
+                  color: AppColors.SECONDARY_COLOR_DARK2,
+                )
+                    : null,
+                borderRadius: BorderRadius.circular(15),
               ),
-            );
-          }).toList(),
+              child: Label(
+                text: getLang() == 'ar' ? widget.property.values[index].nameAr : widget.property.values[index].nameEn,
+                style: Styles.mediumText(fontSize: 28,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
+              ),
+            ),
+          )
         ),
+        // Row(
+        //   spacing: 8,
+        //   children: widget.property.values.map((e) {
+        //     return Expanded(
+        //       child: InkWell(
+        //         onTap: () {
+        //           widget.onChanged(e);
+        //           value = e;
+        //           setState(() {});
+        //         },
+        //         child: Container(
+        //           height: 42,
+        //           alignment: Alignment.center,
+        //           padding: const EdgeInsets.all(5),
+        //           // margin: const EdgeInsets.all(5),
+        //           decoration: BoxDecoration(
+        //             color: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
+        //             border: value == e
+        //                 ? Border.all(
+        //                     color: AppColors.SECONDARY_COLOR_DARK2,
+        //                   )
+        //                 : null,
+        //             borderRadius: BorderRadius.circular(15),
+        //           ),
+        //           child: Label(
+        //             text: getLang() == 'ar' ? e.nameAr : e.nameEn,
+        //             style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
+        //           ),
+        //         ),
+        //       ),
+        //     );
+        //   }).toList(),
+        // ),
         // RichText(
         //     text: TextSpan(
         //         children: widget.property.values.map((e) {

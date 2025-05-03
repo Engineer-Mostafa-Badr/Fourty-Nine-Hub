@@ -153,6 +153,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   bool isScrollingDown;
 
   double bottomNavBarHeight = 75; // Initial height of the bottom bar
+  bool _isDisposed = false;
 
   _CustomBottomNavigationBarState({
     required this.scrollController,
@@ -162,26 +163,38 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   @override
   void initState() {
     super.initState();
+    isScrollingDown = widget.isScrollingDown;
 
-    scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (!isScrollingDown) {
-          setState(() {
-            isScrollingDown = true;
-            bottomNavBarHeight = 0.0; // Hide the bottom bar
-          });
-        }
-      } else if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (isScrollingDown) {
-          setState(() {
-            isScrollingDown = false;
-            bottomNavBarHeight = 75; // Show the bottom bar
-          });
-        }
+    scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+
+  void _scrollListener() {
+    // Check if the widget is disposed or not mounted before calling setState
+    if (_isDisposed || !mounted) return;
+
+    if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (!isScrollingDown && scrollController.offset > 20) {
+        setState(() {
+          isScrollingDown = true;
+          bottomNavBarHeight = 0.0; // Hide the bottom bar
+        });
       }
-    });
+    } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (isScrollingDown) {
+        setState(() {
+          isScrollingDown = false;
+          bottomNavBarHeight = 75; // Show the bottom bar
+        });
+      }
+    }
   }
 
   @override
@@ -207,7 +220,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     color: Colors.black12, blurRadius: 5, spreadRadius: 2),
               ],
             ),
-            child: Row(
+            child:bottomNavBarHeight==75?Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: List.generate(widget.items.length, (index) {
@@ -248,9 +261,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                                     ?.total ??
                                                 0,
                                       ),
-                                      Label(
-                                        text: widget.items[index].label,
-                                        style: Styles.smallText(),
+                                      Expanded(
+                                        child: Label(
+                                          text: widget.items[index].label,
+                                          style: Styles.smallText(),
+                                        ),
                                       ),
                                     ],
                                   );
@@ -283,7 +298,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                   ),
                 );
               }),
-            ),
+            ):Container(),
           ),
         ),
       ),

@@ -3,14 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 class RestaurantHeader extends StatefulWidget {
   final GetAllRestaurantEntity restaurant;
 
@@ -80,13 +83,36 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                             color: Colors.redAccent,
                           ),
                           onPressed: () async {
-                            final success = await context
-                                .read<RestaurantDetailsCubit>()
-                                .toggleFavoriteRestaurant(widget.restaurant.id ?? "", context);
-                            if (success) {
-                              setState(() {
-                                isFavorite = !isFavorite;
-                              });
+                            if (context.isUserLoggedIn) {
+                              final success = await context
+                                  .read<RestaurantDetailsCubit>()
+                                  .toggleFavoriteRestaurant(
+                                  widget.restaurant.id ?? "", context);
+                              if (success) {
+                                setState(() {
+                                  isFavorite = !isFavorite;
+                                });
+                              }
+                            }else{
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                                    style: Styles.smallText(
+                                        color: AppColors.whiteColor
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 4),
+                                  action: SnackBarAction(
+                                    label: LocaleKeys.login.localize,
+                                    textColor: Colors.white,
+                                    onPressed: () {
+                                      context.push(Routes.LOGIN);
+                                    },
+                                  ),
+                                ),
+                              );
                             }
                           },
                         ),
@@ -108,22 +134,6 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                     color: AppColors.whiteColor,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  // child: Row(
-                                  //   children: [
-                                  //     const Icon(
-                                  //       Icons.star_rounded,
-                                  //       color: AppColors.ACCENT_COLOR,
-                                  //       size: 20,
-                                  //     ),
-                                  //     const SizedBox(width: 4),
-                                  //     Text(
-                                  //       '${widget.restaurant.totalRating ?? '0.0'} ',
-                                  //       style: Styles.mediumText(
-                                  //         fontWeight: FontWeight.w500,
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
                                   child: Row(
                                     children: [
                                       RatingBar(
@@ -143,6 +153,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                         '${widget.restaurant.totalRating ?? '0.0'} ',
                                         style: Styles.mediumText(
                                           fontWeight: FontWeight.w500,
+                                          color: AppColors.PRIMARY_COLOR
                                         ),
                                       ),
                                     ],
@@ -172,124 +183,5 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
         ),
       ),
     );
-
-    // return Padding(
-    //   padding: EdgeInsets.symmetric(horizontal: 30.w),
-    //   child: ClipRRect(
-    //     borderRadius: BorderRadius.circular(20),
-    //     child: SizedBox(
-    //       width: double.infinity,
-    //       height: imageHeight,
-    //       child: Stack(
-    //         fit: StackFit.expand,
-    //         children: [
-    //           ImagesProfileForRestaurant(
-    //             autoPlay: true,
-    //             restaurantMedia: widget.restaurant.restaurantMedia,
-    //             heightCarousel: imageHeight,
-    //             widthForImages: MediaQuery.of(context).size.width,
-    //           ),
-    //
-    //           Container(
-    //             decoration: BoxDecoration(
-    //               gradient: LinearGradient(
-    //                 colors: [
-    //                   Colors.black.withOpacity(0.6),
-    //                   Colors.transparent,
-    //                 ],
-    //                 begin: Alignment.bottomCenter,
-    //                 end: Alignment.topCenter,
-    //               ),
-    //             ),
-    //           ),
-    //
-    //           // (3) البيانات النصية (الاسم والتقييم)
-    //           Align(
-    //             alignment: AlignmentDirectional.topEnd,
-    //             child: Padding(
-    //               padding: EdgeInsets.all(30.w),
-    //               child: Column(
-    //                 crossAxisAlignment: CrossAxisAlignment.center,
-    //                 children: [
-    //                   Text(
-    //                     widget.restaurant.name ?? '',
-    //                     style: Styles.headerText(
-    //                       fontSize: 40,
-    //                       fontWeight: FontWeight.bold,
-    //                       color: Colors.white,
-    //                     ),
-    //                   ),
-    //                   Row(
-    //                     mainAxisAlignment: MainAxisAlignment.end,
-    //                     children: [
-    //                       Container(
-    //                         decoration: BoxDecoration(
-    //                           color: AppColors.whiteColor,
-    //                           borderRadius: BorderRadius.circular(10),
-    //                         ),
-    //                         child: Row(
-    //                           children: [
-    //                             const Icon(
-    //                               Icons.star_rounded,
-    //                               color: AppColors.ACCENT_COLOR,
-    //                               size: 20,
-    //                             ),
-    //                             const SizedBox(width: 4),
-    //                             Text(
-    //                               '${widget.restaurant.totalRating ?? '0.0'} ',
-    //                               style: Styles.mediumText(
-    //                                 fontWeight: FontWeight.w500,
-    //                               ),
-    //                             ),
-    //                           ],
-    //                         ),
-    //                       ),
-    //                       10.horizontalSpace,
-    //                       Text(
-    //                         '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.reviews.localize})',
-    //                         style: Styles.mediumText(
-    //                           color: Colors.white70,
-    //                         ),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //           ),
-    //
-    //           // (4) زر المفضّلة في أعلى اليمين
-    //          Padding(
-    //            padding:  EdgeInsetsDirectional.only(top: 20,start: 8),
-    //            child: Align(
-    //             alignment: AlignmentDirectional.topStart,
-    //               child: IconButton(
-    //                 iconSize: 32,
-    //                 icon: Icon(
-    //                   isFavorite ? Icons.favorite : Icons.favorite_border,
-    //                   color: Colors.redAccent,
-    //                 ),
-    //                 onPressed: () async {
-    //                   /// استدعاء Cubit لعمل Toggle
-    //                   final success = await context
-    //                       .read<RestaurantDetailsCubit>()
-    //                       .toggleFavoriteRestaurant(widget.restaurant.id ?? "",context);
-    //
-    //                   if (success) {
-    //                     /// إذا نجح الطلب، اقلب الحالة المحلية وأظهر Snackbar
-    //                     setState(() {
-    //                       isFavorite = !isFavorite;
-    //                     });
-    //
-    //                   }
-    //                 },
-    //               ),
-    //             ),
-    //          ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

@@ -67,7 +67,7 @@ class _PercentageCompetitionWidgetState
               child: Center(
                 child: Label(
                   text:
-                      '${FormatNumbers().formatNumber(widget.currentPoints)} / ${FormatNumbers().formatNumber(widget.totalPoints)}',
+                      '${FormatNumbers().formatNumber(widget.currentPoints, useArabicNumerals: true)} / ${FormatNumbers().formatNumber(widget.totalPoints, useArabicNumerals: true)}',
                   style: Styles.headerText(
                     color: Colors.white,
                     fontSize: 32,
@@ -104,7 +104,7 @@ class _PercentageCompetitionWidgetState
                 child: Center(
                   child: Label(
                     text:
-                        '${FormatNumbers().formatNumber(widget.price)} ${widget.currency}',
+                        '${FormatNumbers().formatNumber(widget.price, useArabicNumerals: true)} ${widget.currency}',
                     style: Styles.headerText(
                       color: Colors.white,
                       fontSize: 32,

@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
 class AdsAddressEntity extends Equatable {
-  final String governmentAr;
-  final String governmentEn;
-  final String cityAr;
-  final String cityEn;
-  final String addressAr;
-  final String addressEn;
+  final String? governmentAr;
+  final String? governmentEn;
+  final String? cityAr;
+  final String? cityEn;
+  final String? addressAr;
+  final String? addressEn;
   final List<double> coordinates;
 
   const AdsAddressEntity({

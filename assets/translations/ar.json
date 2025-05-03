@@ -1563,5 +1563,9 @@
   "availableRequest": "الطلبات المتاحة",
   "pastRequests": "الطلبات السابقة",
   "create": "نشر",
+  "cartUpdated": "تم تحديث عربة التسوق بنجاح",
+  "failedDeleteItem": "فشل في حذف العنصر",
+  "favoritesUpdated": "تم تحديث المفضلة بنجاح",
+  "failedUpdateFavorites": "فشل تحديث المفضلة",
   "pleaseSelectAUser": "الرجاء اختيار المستخدم"
 }

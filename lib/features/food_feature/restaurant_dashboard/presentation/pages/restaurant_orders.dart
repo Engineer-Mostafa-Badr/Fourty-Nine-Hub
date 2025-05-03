@@ -424,7 +424,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: cardDarkColor(context),
+      // backgroundColor: cardDarkColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -438,7 +438,6 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
                 });
               }
             });
-
             return Padding(
               padding: EdgeInsets.only(
                 left: 16,
