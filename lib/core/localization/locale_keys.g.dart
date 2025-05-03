@@ -1555,5 +1555,6 @@ abstract class  LocaleKeys {
   static const availableRequest = 'availableRequest';
   static const pastRequests = 'pastRequests';
   static const create = 'create';
+  static const pleaseSelectAUser = 'pleaseSelectAUser';
 
 }

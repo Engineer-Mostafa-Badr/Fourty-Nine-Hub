@@ -9,7 +9,8 @@ class TransferMoneyModel extends TransferMoneyEntity {
     required super.amount,
     required super.currencyEn,
     required super.currencyAr,
-    required super.date,
+    required super.dateEn,
+    required super.dateAr,
     required super.fromEmail,
     required super.toEmail,
   });
@@ -25,7 +26,8 @@ class TransferMoneyModel extends TransferMoneyEntity {
       amount: json['amount'] ?? 0,
       currencyEn: json['currencyEn'] ?? '',
       currencyAr: json['currencyAr'] ?? '',
-      date: json['date'] ?? '',
+      dateEn: json['date']['en'] ?? '',
+      dateAr: json['date']['ar'] ?? '',
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
@@ -20,11 +19,32 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
   ) : super(const TransferMoneyState());
 
   // WalletEntity? da;
+
+  Future<void> loadData() async {
+    emit(state.copyWith(status: TransferMoneyStates.loading));
+    var response = await _getWalletUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: TransferMoneyStates.failure));
+    }, (data) {
+      // da = data;
+      emit(state.copyWith(
+        status: TransferMoneyStates.success,
+        wallet: data,
+      ));
+    });
+  }
+
+  void selectUser(String userEmail) {
+    emit(state.copyWith(
+      userSelectedEmail: userEmail,
+      searchUserStatus: TransferMoneyStates.initial,
+    ));
+  }
   // Future<void> loadData() async {
   //   // await fetchUsers();
-  //   // await getWallet();
+  //   await getWallet();
   //   emit(state.copyWith(status: TransferMoneyStates.loading));
-  //   var response = await _fetchUserUseCase(const NoParams());
+  //   // var response = await _fetchUserUseCase(const NoParams());
   //   return response.fold(
   //     (l) =>
   //         emit(state.copyWith(failure: l, status: TransferMoneyStates.error)),
@@ -42,17 +62,17 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
   // }
 
   Future<void> searchUser({required String query}) async {
-    emit(state.copyWith(searchUserLoading: true));
+    emit(state.copyWith(searchUserStatus: TransferMoneyStates.loading));
     var response = await _fetchUserUseCase(FetchUserParams(query: query));
     return response.fold(
       (l) => emit(state.copyWith(
-          failure: l,
-          status: TransferMoneyStates.error,
-          searchUserLoading: false)),
+        failure: l,
+        searchUserStatus: TransferMoneyStates.failure,
+      )),
       (data) {
         emit(state.copyWith(
           users: data,
-          searchUserLoading: false,
+          searchUserStatus: TransferMoneyStates.success,
         ));
       },
     );
@@ -62,16 +82,16 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
   Future<TransferMoneyEntity> transferMoney({
     required TransferMoneyParams params,
   }) async {
-    emit(state.copyWith(status: TransferMoneyStates.transferLoading));
-    var response = await _transferMoneyUseCase(params);
+    emit(state.copyWith(transferStatus: TransferMoneyStates.loading));
+    var response = await _transferMoneyUseCase.call(params);
     response.fold(
       (l) => emit(state.copyWith(
-          failure: l, status: TransferMoneyStates.transferError)),
+          failure: l, transferStatus: TransferMoneyStates.failure)),
       (data) {
         // getWallet();
         dataTransfer = data;
         emit(state.copyWith(
-            dataTransfer: data, status: TransferMoneyStates.transferSuccess));
+            dataTransfer: data, transferStatus: TransferMoneyStates.success));
       },
     );
     return dataTransfer!;
@@ -91,11 +111,11 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
   // Future<WalletEntity> getWallet() async {
   //   final response = await _getWalletUseCase.call(const NoParams());
   //   response.fold((l) {
-  //     emit(state.copyWith(failure: l, status: TransferMoneyStates.error));
+  //     emit(state.copyWith(failure: l, status: TransferMoneyStates.failure));
   //   }, (data) {
-  //     da = data;
-  //     emit(state.copyWith(wallet: data));
+  //     // da = data;
+  //     emit(state.copyWith(wallet: data, status: TransferMoneyStates.success));
   //   });
-  //   return da!;
+
   // }
 }

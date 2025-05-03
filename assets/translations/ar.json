@@ -1562,5 +1562,6 @@
   "modifyLocation": "تعديل العنوان",
   "availableRequest": "الطلبات المتاحة",
   "pastRequests": "الطلبات السابقة",
-  "create": "نشر"
+  "create": "نشر",
+  "pleaseSelectAUser": "الرجاء اختيار المستخدم"
 }

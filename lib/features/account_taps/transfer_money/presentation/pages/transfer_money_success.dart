@@ -21,9 +21,9 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class TransactionSuccessScreen extends StatefulWidget {
-  const TransactionSuccessScreen({super.key, required this.model});
+  const TransactionSuccessScreen({super.key, required this.dataEntity});
 
-  final TransferMoneyEntity model;
+  final TransferMoneyEntity dataEntity;
 
   @override
   _TransactionSuccessScreenState createState() =>
@@ -99,7 +99,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                       Text.rich(
                         TextSpan(children: [
                           TextSpan(
-                            text: '${widget.model.amount} ',
+                            text: '${widget.dataEntity.amount} ',
                             style: Styles.headerText(
                               color: Colors.black,
                               fontSize: 48 + 48,
@@ -109,8 +109,8 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                           ),
                           TextSpan(
                             text: context.isArabic
-                                ? widget.model.currencyAr
-                                : widget.model.currencyEn,
+                                ? widget.dataEntity.currencyAr
+                                : widget.dataEntity.currencyEn,
                             style: Styles.headerText(
                               color: AppColors.SECONDARY_COLOR_DARK2,
                               fontSize: 36 + 36,
@@ -136,8 +136,8 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                       ),
                       TransferListTileWidget(
                         title: LocaleKeys.from.localize,
-                        mail: '@${widget.model.fromEmail.split('@')[0]}',
-                        name: widget.model.from,
+                        mail: '@${widget.dataEntity.fromEmail.split('@')[0]}',
+                        name: widget.dataEntity.from,
                         image: Image.asset(Assets.logo),
                       ),
                       const SizedBox(
@@ -150,8 +150,8 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                       // To Section
                       TransferListTileWidget(
                         title: LocaleKeys.to.localize,
-                        mail: '@${widget.model.toEmail.split('@')[0]}',
-                        name: widget.model.to,
+                        mail: '@${widget.dataEntity.toEmail.split('@')[0]}',
+                        name: widget.dataEntity.to,
                         image: SvgPicture.asset(Assets.walletImage),
                       ),
                       const SizedBox(
@@ -169,7 +169,9 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                               ),
                             ),
                             Label(
-                              text: widget.model.date,
+                              text: context.isArabic
+                                  ? widget.dataEntity.dateAr
+                                  : widget.dataEntity.dateEn,
                               style: Styles.headerText(
                                 fontSize: 40,
                               ),

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class Debouncer {
   Debouncer({
-    required this.duration,
-});
-  final Duration duration;
+    this.duration,
+  });
+  final Duration? duration;
 
   VoidCallback? action;
   Timer? _timer;
@@ -15,6 +15,6 @@ class Debouncer {
     if (_timer != null) {
       _timer?.cancel();
     }
-    _timer = Timer(duration, action);
+    _timer = Timer(duration ?? const Duration(milliseconds: 1000), action);
   }
 }

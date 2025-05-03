@@ -1579,5 +1579,6 @@
   "modifyLocation": "Modify Location",
   "availableRequest": "Available Requests",
   "pastRequests": "Past Requests",
-  "create": "Create"
+  "create": "Create",
+  "pleaseSelectAUser": "Please select a user"
 }
