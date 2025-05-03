@@ -1566,6 +1566,6 @@
   "cartUpdated": "تم تحديث عربة التسوق بنجاح",
   "failedDeleteItem": "فشل في حذف العنصر",
   "favoritesUpdated": "تم تحديث المفضلة بنجاح",
-  "failedUpdateFavorites": "فشل تحديث المفضلة"
-
+  "failedUpdateFavorites": "فشل تحديث المفضلة",
+  "pleaseSelectAUser": "الرجاء اختيار المستخدم"
 }

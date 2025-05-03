@@ -27,8 +27,7 @@ class _TagUserViewState extends State<TagUserView> {
   late ScrollController _scrollController;
   late final TextEditingController searchController;
   late final FocusNode _focusNode;
-  final Debouncer _debouncer =
-      Debouncer(duration: const Duration(milliseconds: 650));
+  final Debouncer _debouncer = Debouncer();
 
   @override
   void initState() {
@@ -209,12 +208,13 @@ class _TagUserViewState extends State<TagUserView> {
                 ),
                 searchController.text.isNotEmpty
                     ? Expanded(
-                      child: Builder(
+                        child: Builder(
                           builder: (context) {
                             // if (state.status.isInitial) {
                             //   return Container();
                             // }
-                            if (state.status.isLoading || state.status.isInitial) {
+                            if (state.status.isLoading ||
+                                state.status.isInitial) {
                               return const CustomLoading();
                             }
                             if (state.status.isError) {
@@ -226,14 +226,19 @@ class _TagUserViewState extends State<TagUserView> {
                             return ListView.builder(
                               controller: _scrollController,
                               physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount:
-                                  context.read<TagUsersCubit>().users.length +
-                                      (context.read<TagUsersCubit>().isLoadingMore
-                                          ? 1
-                                          : 0),
+                              itemCount: context
+                                      .read<TagUsersCubit>()
+                                      .users
+                                      .length +
+                                  (context.read<TagUsersCubit>().isLoadingMore
+                                      ? 1
+                                      : 0),
                               itemBuilder: (context, index) {
                                 if (index ==
-                                    context.read<TagUsersCubit>().users.length) {
+                                    context
+                                        .read<TagUsersCubit>()
+                                        .users
+                                        .length) {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 }
@@ -265,7 +270,8 @@ class _TagUserViewState extends State<TagUserView> {
                                               .usersTag
                                               .any((u) => u.id == user.id)
                                           ? const Icon(
-                                              Icons.check_circle_outline_rounded,
+                                              Icons
+                                                  .check_circle_outline_rounded,
                                               color: Colors.green,
                                             )
                                           : null,
@@ -281,16 +287,16 @@ class _TagUserViewState extends State<TagUserView> {
                             );
                           },
                         ),
-                    )
+                      )
                     : Expanded(
-                      child: TagUserViewBody(
+                        child: TagUserViewBody(
                           onTap: () {
                             _focusNode.requestFocus();
                             isSearchClicked = true;
                             setState(() {});
                           },
                         ),
-                    ),
+                      ),
               ],
             ),
           ),

@@ -1559,5 +1559,6 @@ abstract class  LocaleKeys {
   static const failedDeleteItem = 'failedDeleteItem';
   static const favoritesUpdated = 'favoritesUpdated';
   static const failedUpdateFavorites = 'failedUpdateFavorites';
+  static const pleaseSelectAUser = 'pleaseSelectAUser';
 
 }
