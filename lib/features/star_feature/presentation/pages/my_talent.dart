@@ -7,8 +7,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/get_my_talents.dart';
 
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../service_locator/service_locator.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controller/cubit/star_cubit.dart';
 import 'get_all_talents.dart';
 
@@ -20,7 +22,6 @@ class MyTalentView extends StatefulWidget {
 }
 
 class _MyTalentViewState extends State<MyTalentView> {
-
   late StarCubit _cubit;
   late ScrollController _scrollController;
 
@@ -48,14 +49,18 @@ class _MyTalentViewState extends State<MyTalentView> {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) => serviceLocator<StarCubit>(),
-                    child: const AllWinnerView(),
+              if (!context.read<UserCubit>().isLoggedIn) {
+                pleaseLoginDialog(context);
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => serviceLocator<StarCubit>(),
+                      child: const AllWinnerView(),
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             },
             child: Padding(
               padding: EdgeInsets.only(
@@ -66,7 +71,7 @@ class _MyTalentViewState extends State<MyTalentView> {
                   Text(
                     LocaleKeys.winners.localize,
                     style: TextStyle(
-                      color: context.isDarkMode?Colors.white:Colors.black,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 32.sp,
                     ),
@@ -85,7 +90,7 @@ class _MyTalentViewState extends State<MyTalentView> {
           LocaleKeys.myTalent.localize,
           // 'My Talent',
           style: TextStyle(
-            color: context.isDarkMode?Colors.white:Colors.black,
+            color: context.isDarkMode ? Colors.white : Colors.black,
             fontWeight: FontWeight.bold,
             fontSize: 36.sp,
           ),
