@@ -1567,5 +1567,7 @@
   "failedDeleteItem": "فشل في حذف العنصر",
   "favoritesUpdated": "تم تحديث المفضلة بنجاح",
   "failedUpdateFavorites": "فشل تحديث المفضلة",
-  "pleaseSelectAUser": "الرجاء اختيار المستخدم"
+  "pleaseSelectAUser": "الرجاء اختيار المستخدم",
+  "invalidEmailAddress": "البريد الالكتروني غير صحيح",
+  "phoneNumbersNotAllowed": "غير مسموح برقم الهاتف. برجاء حذف رقم الهاتف الموجود"
 }

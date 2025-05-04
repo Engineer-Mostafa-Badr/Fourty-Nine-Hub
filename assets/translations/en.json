@@ -1584,5 +1584,7 @@
   "failedDeleteItem": "Failed to delete item",
   "favoritesUpdated": "Favorites Update Successfully",
   "failedUpdateFavorites": "Failed Update Favorites",
-  "pleaseSelectAUser": "Please select a user"
+  "pleaseSelectAUser": "Please select a user",
+  "invalidEmailAddress": "Invalid Email Address",
+  "phoneNumbersNotAllowed": "Phone numbers are not allowed. Please remove any phone number pattern."
 }

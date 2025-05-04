@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import '../../../../core/utils/validator.dart';
 import 'abstract/main_text_form_field.dart';
 
-class DefaultTextFormField extends MainTextFormField {
-  DefaultTextFormField({
+class EmailTextFormField extends MainTextFormField {
+  EmailTextFormField({
     super.key,
     super.currentFocusNode,
     super.nextFocusNode,
@@ -40,8 +40,7 @@ class DefaultTextFormField extends MainTextFormField {
     super.hintColor,
     super.hintStyle,
   }) : super(
-          validator:
-              validator ?? (isRequired ? Validator().validateEmptyField : null),
+          validator: validator ?? (isRequired ? validatorNotHavePhone : null),
           hintText: hint + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
           inputFormatters: inputFormatter,
