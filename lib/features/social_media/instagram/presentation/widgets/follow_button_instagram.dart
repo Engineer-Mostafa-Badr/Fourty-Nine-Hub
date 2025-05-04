@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -26,9 +27,13 @@ class FollowButtonInstagram extends StatelessWidget {
       ),
       width: 84,
       height: 29,
-      backColor: Colors.transparent,
+      backColor:
+          context.isDarkMode ? const Color(0xff868686) : Colors.transparent,
       radius: 4,
-      border: Border.all(color: isReel ? Colors.white : Colors.black),
+      border: Border.all(
+          color: isReel
+              ? (context.isDarkMode ? Colors.transparent : Colors.white)
+              : Colors.black),
       onPressed: onPressed,
     );
   }

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/comment_instagram_cubit/comments_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/comment_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/icon_and_value_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 
 class IconsActionPostInsta extends StatelessWidget {
   const IconsActionPostInsta({
@@ -36,7 +34,8 @@ class IconsActionPostInsta extends StatelessWidget {
               Icons.favorite,
               color: Color(0xffFE0135),
             ),
-            value: FormatNumbers().formatNumber(likes),
+            value: FormatNumbers()
+                .formatNumber(likes, useArabicNumerals: context.isArabic),
             onPressed: () {},
           ),
           const SizedBox(
@@ -44,10 +43,13 @@ class IconsActionPostInsta extends StatelessWidget {
           ),
           IconAndValueWidget(
             icon: Image.asset(
-              Assets.instagramCommentIcon,
+              context.isDarkMode
+                  ? Assets.instagramCommentIconDark
+                  : Assets.instagramCommentIcon,
               width: 30,
             ),
-            value: FormatNumbers().formatNumber(comments),
+            value: FormatNumbers()
+                .formatNumber(comments, useArabicNumerals: context.isArabic),
             onPressed: () {
               // context.pushNamed(
               //   Routes.INSTAGRAMCOMMENT,
@@ -102,10 +104,13 @@ class IconsActionPostInsta extends StatelessWidget {
           ),
           IconAndValueWidget(
             icon: Image.asset(
-              Assets.instagramSharePostIcon,
+              context.isDarkMode
+                  ? Assets.instagramSharePostIconDark
+                  : Assets.instagramSharePostIcon,
               width: 30,
             ),
-            value: FormatNumbers().formatNumber(shares),
+            value: FormatNumbers()
+                .formatNumber(shares, useArabicNumerals: context.isArabic),
             onPressed: () {},
           ),
           // Image.asset(

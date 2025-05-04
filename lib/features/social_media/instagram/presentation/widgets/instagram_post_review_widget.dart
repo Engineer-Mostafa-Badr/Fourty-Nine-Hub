@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/description_post.dart';
@@ -49,7 +50,9 @@ class InstagramPostReviewWidget extends StatelessWidget {
             text: FormatDate().fromatDateLikeMonthDay(
                 context, instagramPostEntity.createdAt!),
             style: Styles.mediumText(
-              color: const Color(0x66000000),
+              color: context.isDarkMode
+                  ? const Color(0x66FFFFFF)
+                  : const Color(0x66000000),
             ),
           ),
         ),

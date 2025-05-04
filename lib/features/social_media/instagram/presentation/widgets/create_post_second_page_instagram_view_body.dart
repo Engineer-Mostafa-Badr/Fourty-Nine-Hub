@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -60,7 +61,7 @@ class _CreatePostSecondPageInstagramViewBodyState
               return Column(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: EdgeInsets.only(right: 8.0, left: 8.0, top: 24.0),
                     child: ShowImagesCreatePostSecond(
                         // selectedImages: selectedImages,
                         ),
@@ -77,12 +78,18 @@ class _CreatePostSecondPageInstagramViewBodyState
                   ),
                   ButtonLabelCreatePostInstagram(
                     svgIcon: state.usersTag.isNotEmpty
-                        ? Assets.instagramTagPeopleRedIcon
-                        : Assets.instagramTagPeopleIcon,
+                        ? (context.isDarkMode
+                            ? Assets.instagramTagPeopleRedIconDark
+                            : Assets.instagramTagPeopleRedIcon)
+                        : (context.isDarkMode
+                            ? Assets.instagramTagPeopleIconDark
+                            : Assets.instagramTagPeopleIcon),
                     title: LocaleKeys.tagPeople.localize,
                     labelColor: state.usersTag.isNotEmpty
-                        ? const Color(0xffFF3308)
-                        : AppColors.black,
+                        ? (context.isDarkMode
+                            ? const Color(0xffFF4622)
+                            : const Color(0xffFF3308))
+                        : (context.isDarkMode ? Colors.white : AppColors.black),
                     iconAction: state.usersTag.isNotEmpty
                         ? Icons.close_rounded
                         : Icons.arrow_forward_ios_rounded,
@@ -112,18 +119,24 @@ class _CreatePostSecondPageInstagramViewBodyState
                     height: 8,
                   ),
                   ButtonLabelCreatePostInstagram(
-                    svgIcon: state.location == null?
-                        Assets.instagramLocationIcon :
-                    Assets.instagramLocationRedIcon,
-                    title: state.location == null?
-                    LocaleKeys.addLocation.localize
-                    : state.location!.name,
-                    labelColor: state.location == null?
-                    Colors.black
-                    : const Color(0xffFF3308),
-                    iconAction: state.location == null?
-                    Icons.arrow_forward_ios_rounded
-                    : Icons.close_rounded,
+                    svgIcon: state.location == null
+                        ? (context.isDarkMode
+                            ? Assets.instagramLocationIconDark
+                            : Assets.instagramLocationIcon)
+                        : (context.isDarkMode
+                            ? Assets.instagramLocationRedIconDark
+                            : Assets.instagramLocationRedIcon),
+                    title: state.location == null
+                        ? LocaleKeys.addLocation.localize
+                        : state.location!.name,
+                    labelColor: state.location == null
+                        ? (context.isDarkMode ? Colors.white : AppColors.black)
+                        : (context.isDarkMode
+                            ? const Color(0xffFF4622)
+                            : const Color(0xffFF3308)),
+                    iconAction: state.location == null
+                        ? Icons.arrow_forward_ios_rounded
+                        : Icons.close_rounded,
                     onPressed: () {
                       context.pushNamed(
                         Routes.INSTAGRAMADDLOCATION,
@@ -135,9 +148,12 @@ class _CreatePostSecondPageInstagramViewBodyState
                     height: 8,
                   ),
                   ButtonLabelCreatePostInstagram(
-                    svgIcon: Assets.instagramMusicIcon,
+                    svgIcon: context.isDarkMode
+                        ? Assets.instagramMusicIconDark
+                        : Assets.instagramMusicIcon,
                     title: LocaleKeys.addMusic.localize,
-                    labelColor: Colors.black,
+                    labelColor:
+                        context.isDarkMode ? Colors.white : Colors.black,
                     iconAction: Icons.arrow_forward_ios_rounded,
                     onPressed: () {
                       context.pushNamed(
@@ -158,16 +174,21 @@ class _CreatePostSecondPageInstagramViewBodyState
             height: 51,
             radius: 8,
             style: Styles.headerText(
-                fontSize: 32, fontWeight: FontWeight.w400, color: Colors.white),
-            backColor: AppColors.c0B1035,
+                fontSize: 32,
+                fontWeight: FontWeight.w400,
+                color: context.isDarkMode
+                    ? const Color(0xff0D0D0D)
+                    : Colors.white),
+            backColor: context.isDarkMode ? Colors.white : AppColors.c0B1035,
             onPressed: () {
-              if(captionController.text.isEmpty){
-                showErrorMessage(context, LocaleKeys.captionMustBeAdded.localize);
+              if (captionController.text.isEmpty) {
+                showErrorMessage(
+                    context, LocaleKeys.captionMustBeAdded.localize);
                 return;
               } else {
                 context.read<CreatePostInstagramCubit>().createPost(
-                  caption: captionController.text,
-                );
+                      caption: captionController.text,
+                    );
               }
             },
           ),

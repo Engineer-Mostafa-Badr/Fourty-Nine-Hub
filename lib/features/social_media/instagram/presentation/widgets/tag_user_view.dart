@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -137,7 +138,9 @@ class _TagUserViewState extends State<TagUserView> {
                         height: 40,
                         margin: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                          color: const Color(0xffF0F0F0),
+                          color: context.isDarkMode
+                              ? Colors.grey[700]
+                              : const Color(0xffF0F0F0),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: TextField(
