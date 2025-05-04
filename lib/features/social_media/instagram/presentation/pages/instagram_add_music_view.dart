@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
@@ -29,7 +30,7 @@ class InstagramAddMusicView extends StatelessWidget {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.close_rounded),
-          color: const Color(0xB3000000),
+          color: context.isDarkMode ? Colors.white : const Color(0xB3000000),
         ),
       ),
       body: const InstagramAddMusicViewBody(),
@@ -45,7 +46,8 @@ class InstagramAddMusicViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<InstagramAddMusicCubit, InstagramAddMusicState>(
-      buildWhen: (previous, current) => previous.isSelectedMusic != current.isSelectedMusic,
+      buildWhen: (previous, current) =>
+          previous.isSelectedMusic != current.isSelectedMusic,
       builder: (context, state) {
         if (state.isSelectedMusic) {
           return const Column(
@@ -276,7 +278,9 @@ class InstagramAddMusicViewAppBar extends StatelessWidget {
       child: TextField(
         decoration: InputDecoration(
           filled: true,
-          fillColor: const Color(0xffF0F0F0),
+          fillColor: context.isDarkMode
+              ? const Color(0xFF1B1B1B)
+              : const Color(0xffF0F0F0),
           contentPadding: const EdgeInsets.symmetric(vertical: 11),
           border: InputBorder.none,
           focusedBorder: InputBorder.none,
