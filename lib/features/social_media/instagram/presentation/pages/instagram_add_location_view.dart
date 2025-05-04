@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -56,14 +57,17 @@ class InstagramAddLocationView extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.close_rounded),
-                color: Colors.black.withValues(alpha: 0.7),
+                color: context.isDarkMode
+                    ? Colors.white
+                    : Colors.black.withValues(alpha: 0.7),
               ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: InkWell(
                     onTap: () {
-                      context.read<InstagramAddLocationCubit>()
+                      context
+                          .read<InstagramAddLocationCubit>()
                           .fetchLocationAndAddress();
                     },
                     child: Padding(
@@ -108,7 +112,7 @@ class InstagramAddLocationView extends StatelessWidget {
                 const SizedBox(
                   height: 72,
                 ),
-                if(state.location != null)
+                if (state.location != null)
                   Column(
                     children: [
                       Label(
@@ -124,24 +128,33 @@ class InstagramAddLocationView extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          context.read<InstagramAddLocationCubit>()
+                          context
+                              .read<InstagramAddLocationCubit>()
                               .removeLocation();
-                          context.read<CreatePostInstagramCubit>()
+                          context
+                              .read<CreatePostInstagramCubit>()
                               .removeLocation();
                         },
                         child: Material(
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 23, vertical: 12,),
+                              horizontal: 23,
+                              vertical: 12,
+                            ),
                             decoration: ShapeDecoration(
-                              color: AppColors.c0B1035,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.c0B1035,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             child: Label(
                               text: LocaleKeys.close.localize,
-                              style: Styles.mediumText(color: Colors.white),
+                              style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? const Color(0xFF0D0D0D)
+                                      : Colors.white),
                             ),
                           ),
                         ),
@@ -188,14 +201,18 @@ class InstagramAddLocationView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 23, vertical: 12),
                           decoration: ShapeDecoration(
-                            color: AppColors.c0B1035,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.c0B1035,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                           ),
                           child: Label(
-                            text: LocaleKeys.turnOnLocationServices
-                                .localize,
-                            style: Styles.mediumText(color: Colors.white),
+                            text: LocaleKeys.turnOnLocationServices.localize,
+                            style: Styles.mediumText(
+                                color: context.isDarkMode
+                                    ? const Color(0xFF0D0D0D)
+                                    : Colors.white),
                           ),
                         ),
                       ),

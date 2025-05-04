@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
@@ -78,31 +79,33 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
         BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
           builder: (context, state) {
             return SliverToBoxAdapter(
-              child: false
-                  //  state.suggestFollowsData!.suggestions.isEmpty
-                  ? const SizedBox()
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Label(
-                            text: LocaleKeys.discoverPeople.localize,
-                            style: Styles.mediumText(),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: Label(
-                              text: LocaleKeys.seeAll.localize,
-                              style: Styles.mediumText(
-                                color: const Color(0xFFFF3308),
+              child: //false
+                  state.suggestFollowsData!.suggestions.isEmpty
+                      ? const SizedBox()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 24),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text: LocaleKeys.discoverPeople.localize,
+                                style: Styles.mediumText(),
                               ),
-                            ),
+                              InkWell(
+                                onTap: () {},
+                                child: Label(
+                                  text: LocaleKeys.seeAll.localize,
+                                  style: Styles.mediumText(
+                                    color: context.isDarkMode
+                                        ? const Color(0xffFF4622)
+                                        : const Color(0xFFFF3308),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
             );
           },
         ),

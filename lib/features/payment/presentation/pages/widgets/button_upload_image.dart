@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class ButtonUploadImage extends StatelessWidget {
@@ -25,7 +26,9 @@ class ButtonUploadImage extends StatelessWidget {
         height: height,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: ShapeDecoration(
-          color: const Color(0xFF0B1035),
+          color: context.isDarkMode
+              ? const Color(0xFFCAD0F4)
+              : const Color(0xFF0B1035),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -42,7 +45,9 @@ class ButtonUploadImage extends StatelessWidget {
                 text: label,
                 style: Styles.headerText(
                   fontSize: 32,
-                  color: Colors.white,
+                  color: context.isDarkMode
+                      ? const Color(0xFF0D0D0D)
+                      : Colors.white,
                   fontWeight: FontWeight.w500,
                   height: 1.6,
                 ),

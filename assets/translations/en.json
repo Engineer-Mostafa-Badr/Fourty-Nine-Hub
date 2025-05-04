@@ -1584,5 +1584,16 @@
   "failedDeleteItem": "Failed to delete item",
   "favoritesUpdated": "Favorites Update Successfully",
   "failedUpdateFavorites": "Failed Update Favorites",
-  "pleaseSelectAUser": "Please select a user"
+  "pleaseSelectAUser": "Please select a user",
+  "paymob": "Paymob",
+  "fawry": "Fawry",
+  "instaPay": "InstaPay",
+  "card": "Card",
+  "link": "Link",
+  "payAtFawry": "Pay at Fawry",
+  "cardName": "Card Name",
+  "expiryYear": "Expiry Year",
+  "expiryMonth": "Expiry Month",
+  "ccv": "CCV",
+  "errorDecodingQrCode": "Error decoding QR code"
 }

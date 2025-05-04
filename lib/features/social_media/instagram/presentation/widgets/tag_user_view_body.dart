@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
@@ -27,9 +28,7 @@ class TagUserViewBody extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: MediaQuery
-                        .sizeOf(context)
-                        .height * 0.4,
+                    height: MediaQuery.sizeOf(context).height * 0.4,
                     width: double.infinity,
                     child: ShowImageTagPeopleWidget(onTap: onTap),
                   ),
@@ -45,7 +44,11 @@ class TagUserViewBody extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
-                          side: const BorderSide(width: 1),
+                          side: BorderSide(
+                              width: 1,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black),
                           borderRadius: BorderRadius.circular(6),
                         ),
                       ),
@@ -110,61 +113,64 @@ class TagUserViewBody extends StatelessWidget {
                 ],
               ),
             ),
-            context
-                .read<CreatePostInstagramCubit>()
-                .state
-                .usersTag
-                .isEmpty ?
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 80),
-                child: Center(
-                  child: Label(
-                    text: LocaleKeys.tapPhotoToTagPeople.localize,
-                    style: Styles.mediumText(
-                      color: Colors.black.withValues(alpha: 128),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ) :
-            BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
-              buildWhen: (previous, current) => previous.usersTag != current.usersTag,
-              builder: (context, state) {
-                return SliverList.builder(
-                    itemCount: context
-                        .read<CreatePostInstagramCubit>()
-                        .state
-                        .usersTag
-                        .length,
-                    itemBuilder: (context, index) {
-                      final user = context
-                          .read<CreatePostInstagramCubit>()
-                          .state
-                          .usersTag[index];
-                      return ListTile(
-                        leading: ImageFromInternet(
-                          image: user.imageUrl,
-                          isCircle: true,
-                          height: 40,
-                          width: 40,
-                        ),
-                        title: Label(
-                          text: user.username,
+            context.read<CreatePostInstagramCubit>().state.usersTag.isEmpty
+                ? SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 80),
+                      child: Center(
+                        child: Label(
+                          text: LocaleKeys.tapPhotoToTagPeople.localize,
                           style: Styles.mediumText(
-                            fontWeight: FontWeight.w500,
-                            height: 1.29,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black.withValues(alpha: 128),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        trailing: IconButton(onPressed: () {
-                          context.read<CreatePostInstagramCubit>()
-                              .removeUserTag(user);
-                        }, icon: const Icon(Icons.close_rounded)),
-                      );
-                    });
-              },
-            ),
+                      ),
+                    ),
+                  )
+                : BlocBuilder<CreatePostInstagramCubit,
+                    CreatePostInstagramState>(
+                    buildWhen: (previous, current) =>
+                        previous.usersTag != current.usersTag,
+                    builder: (context, state) {
+                      return SliverList.builder(
+                          itemCount: context
+                              .read<CreatePostInstagramCubit>()
+                              .state
+                              .usersTag
+                              .length,
+                          itemBuilder: (context, index) {
+                            final user = context
+                                .read<CreatePostInstagramCubit>()
+                                .state
+                                .usersTag[index];
+                            return ListTile(
+                              leading: ImageFromInternet(
+                                image: user.imageUrl,
+                                isCircle: true,
+                                height: 40,
+                                width: 40,
+                              ),
+                              title: Label(
+                                text: user.username,
+                                style: Styles.mediumText(
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.29,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    context
+                                        .read<CreatePostInstagramCubit>()
+                                        .removeUserTag(user);
+                                  },
+                                  icon: const Icon(Icons.close_rounded)),
+                            );
+                          });
+                    },
+                  ),
           ],
         );
       },
