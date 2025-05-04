@@ -62,7 +62,9 @@ class AreYouSure extends StatelessWidget {
               text: title,
               style: Styles.headerText(
                 fontWeight: FontWeight.w700,
-                color: AppColors.SECONDARY_COLOR_DARK2,
+                color: context.isDarkMode
+                    ? const Color(0xffF45560)
+                    : AppColors.SECONDARY_COLOR_DARK2,
               ),
             ),
             const SizedBox(
@@ -83,11 +85,15 @@ class AreYouSure extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppButton(
-                      backColor: AppColors.SECONDARY_COLOR_DARK2,
+                      backColor: context.isDarkMode
+                          ? const Color(0xffF45560)
+                          : AppColors.SECONDARY_COLOR_DARK2,
                       label: LocaleKeys.ok.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color: context.isDarkMode
+                            ? const Color(0xff0D0D0D)
+                            : Colors.white,
                       ),
                       onPressed: () {
                         action();
@@ -99,7 +105,9 @@ class AreYouSure extends StatelessWidget {
                 ),
                 Expanded(
                   child: AppButton(
-                      backColor: const Color(0xFFD9D9D9),
+                      backColor: context.isDarkMode
+                          ? const Color(0xff333333)
+                          : const Color(0xFFD9D9D9),
                       label: LocaleKeys.close.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,

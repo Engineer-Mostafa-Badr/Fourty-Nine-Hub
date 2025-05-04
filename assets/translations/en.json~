@@ -1579,21 +1579,5 @@
   "modifyLocation": "Modify Location",
   "availableRequest": "Available Requests",
   "pastRequests": "Past Requests",
-  "create": "Create",
-  "cartUpdated": "Cart Update Successfully",
-  "failedDeleteItem": "Failed to delete item",
-  "favoritesUpdated": "Favorites Update Successfully",
-  "failedUpdateFavorites": "Failed Update Favorites",
-  "pleaseSelectAUser": "Please select a user",
-  "paymob": "Paymob",
-  "fawry": "Fawry",
-  "instaPay": "InstaPay",
-  "card": "Card",
-  "link": "Link",
-  "payAtFawry": "Pay at Fawry",
-  "cardName": "Card Name",
-  "expiryYear": "Expiry Year",
-  "expiryMonth": "Expiry Month",
-  "ccv": "CCV",
-  "errorDecodingQrCode": "Error decoding QR code"
+  "create": "Create"
 }

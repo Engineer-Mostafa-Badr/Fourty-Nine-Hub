@@ -236,6 +236,10 @@ abstract class Assets {
   static String instagramSharePostIcon =
       'assets/icons/instagram_share_post_icon.png';
   static String instagramHideIcon = 'assets/icons/instagram_hide_icon.svg';
+  static String transferMoneyBackgroundCard =
+      'assets/icons/transfer_money_background_card.png';
+  static String transferMoneyBackgroundCardDark =
+      'assets/icons/transfer_money_background_card_dark.png';
 
   // reactions
   static String like = 'assets/images/reactions/like.png';
