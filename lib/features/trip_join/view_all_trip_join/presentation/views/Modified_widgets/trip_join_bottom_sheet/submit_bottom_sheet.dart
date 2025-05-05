@@ -15,7 +15,7 @@ Future<dynamic> SubmitBottomSheet(context,
     required String buttonTitle,}) {
   bool isChecked=false;
   return showModalBottomSheet(
-    backgroundColor: AppColors.whiteColor,
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     context: context,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
@@ -24,12 +24,12 @@ Future<dynamic> SubmitBottomSheet(context,
       builder: (BuildContext context, StateSetter setModalState) {
         return Container(
           width: double.infinity,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            borderRadius:const BorderRadius.only(
               topLeft: Radius.circular(25),
               topRight: Radius.circular(25),
             ),
-            color: AppColors.whiteColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 25,
@@ -47,8 +47,8 @@ Future<dynamic> SubmitBottomSheet(context,
                         onTap: () => Navigator.of(context).pop(),
                         child: CircleAvatar(
                           radius: 24.h,
-                          backgroundColor: AppColors.BG_GRAY_COLOR,
-                          child:const Icon(Icons.close),
+                          backgroundColor: AppColors.getFillColor(context),
+                          child:Icon(Icons.close,color: AppColors.getTextColor(context),),
                         ),
                       )),
                   Padding(
@@ -69,8 +69,8 @@ Future<dynamic> SubmitBottomSheet(context,
                                 });
 
                               } ,
-                              checkColor: Colors.white,
-                              activeColor: AppColors.PRIMARY_COLOR,
+                              checkColor:context.isDarkMode?AppColors.black: Colors.white,
+                              activeColor: AppColors.getButtonPrimaryColor(context),
                             ),
                             const Sizer(),
                             Label(text: context.isArabic?'انا احجز بالنيابة عن شخص اخر':'I am booking on behalf of another Client',
@@ -78,13 +78,17 @@ Future<dynamic> SubmitBottomSheet(context,
                             ),
                           ],
                         ),
-                        const Sizer(),
+                        const Sizer(height: 20,),
                         FormTextField(
-                          prefix:const Icon(Icons.call,color: AppColors.PRIMARY_COLOR,),
-                          fillColor:AppColors.BG_GRAY_COLOR ,
+                          prefix: Icon(Icons.call,color: AppColors.getButtonPrimaryColor(context),),
+                          fillColor:AppColors.getFillColor(context) ,
                           hint: LocaleKeys.phoneNumber.localize,
                           borderRadius: BorderRadius.circular(10),
                           type: TextInputType.phone,
+                          borderColor: AppColors.getFillColor(context),
+                          borderSide: AppColors.getFillColor(context),
+                          textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                          style: Styles.mediumText(color: AppColors.getTextColor(context)),
                         ),
                         const Sizer(),
                         ElevatedButton(
@@ -108,10 +112,7 @@ Future<dynamic> SubmitBottomSheet(context,
                               child: Text(
                                 buttonTitle,
                                 style: Styles.headerText(
-                                    color:
-                                        buttonColor == AppColors.BG_GRAY_COLOR
-                                            ? Colors.black
-                                            : Colors.white),
+                                    color:context.isDarkMode?AppColors.black:Colors.white),
                               ),
                             ),
                           ),

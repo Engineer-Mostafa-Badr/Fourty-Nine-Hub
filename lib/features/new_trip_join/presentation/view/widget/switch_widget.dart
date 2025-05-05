@@ -41,10 +41,10 @@ class SwitchWidget extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            thumbColor: const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+            thumbColor: WidgetStatePropertyAll(AppColors.getButtonPrimaryColor(context)),
             trackOutlineColor: value
                 ? const WidgetStatePropertyAll(Colors.transparent)
-                : const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+                : WidgetStatePropertyAll(AppColors.getButtonPrimaryColor(context)),
             inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
             activeTrackColor: HexColor('4CDA64'),
           )

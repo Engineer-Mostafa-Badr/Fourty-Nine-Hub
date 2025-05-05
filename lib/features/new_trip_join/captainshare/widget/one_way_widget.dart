@@ -13,6 +13,7 @@ class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
   final String? requestType;
+
   const OneWayWidget({
     super.key,
     this.statusDriver,
@@ -52,23 +53,24 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   children: [
                     Text(
                       LocaleKeys.normal.localize,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                        color: AppColors.getRedColor(context),
                       ),
                     ),
                     RichText(
                       text: TextSpan(
                         text: "50 ",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                          color: AppColors.getTextColor(context),
                         ),
                         children: [
                           TextSpan(
-                            text: context.isArabic ? "جنيه مصري" : "EGP",
-                            style: const TextStyle(
-                              color: Colors.red,
+                            text: context.isArabic ? "ج.م" : "EGP",
+                            style: TextStyle(
+                              color: AppColors.getRedColor(context),
                               fontSize: 12,
                             ),
                           ),
@@ -108,9 +110,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           SizedBox(height: 8.h),
                           SvgPicture.asset(
                             Assets.freeIcon,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            color: AppColors.getTextColor(context),
                           ),
                         ],
                       ),
@@ -126,9 +126,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           SizedBox(height: 8.h),
                           SvgPicture.asset(
                             Assets.freeIcon,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            color: AppColors.getTextColor(context),
                           ),
                         ],
                       ),
@@ -167,7 +165,8 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     children: [
-                      const Icon(Icons.circle, color: Colors.red, size: 12),
+                      Icon(Icons.circle,
+                          color: AppColors.getRedColor(context), size: 12),
                       Expanded(
                         child: Divider(
                           color: context.isDarkMode
@@ -202,7 +201,17 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    SvgPicture.asset(Assets.circleGreen),
+                    CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Colors.transparent,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.green,
+                        radius: 10,
+                        child: CircleAvatar(
+                            backgroundColor: AppColors.getFillColor(context),
+                            radius: 5),
+                      ),
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
@@ -219,7 +228,17 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 SizedBox(height: 10.h),
                 Row(
                   children: [
-                    SvgPicture.asset(Assets.circleBlue),
+                    CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Colors.transparent,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.blue,
+                        radius: 10,
+                        child: CircleAvatar(
+                            backgroundColor: AppColors.getFillColor(context),
+                            radius: 5),
+                      ),
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
@@ -306,7 +325,8 @@ class _OneWayWidgetState extends State<OneWayWidget> {
         if (_showContainer)
           const Positioned(
             top: 0,
-            bottom: 80, // تحديد المكان اللي هيظهر فيه الـ Container
+            bottom: 80,
+            // تحديد المكان اللي هيظهر فيه الـ Container
             left: 0,
             right: 0,
             child: AddressWidget(),
@@ -325,7 +345,9 @@ class AddressWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xffE8E8E8),
+        color: context.isDarkMode
+            ? const Color(0xFF333333)
+            : AppColors.BG_GRAY_COLOR,
         borderRadius: BorderRadius.circular(20),
       ),
       margin: const EdgeInsets.all(10),
@@ -339,24 +361,36 @@ class AddressWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAddressWidget(
-                    icon: Assets.circleGreen,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                  Flexible(
+                    child: TextAddressWidget(
+                      color: Colors.green,
+                      address:
+                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    ),
                   ),
                   SizedBox(height: 12.h),
-                  TextAddressWidget(
-                    icon: Assets.circleBlack,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                  Flexible(
+                    child: TextAddressWidget(
+                      color: Colors.black,
+                      address:
+                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    ),
                   ),
                   SizedBox(height: 12.h),
-                  TextAddressWidget(
-                    icon: Assets.circleBlack,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                  Flexible(
+                    child: TextAddressWidget(
+                      color: Colors.black,
+                      address:
+                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    ),
                   ),
                   SizedBox(height: 12.h),
-                  TextAddressWidget(
-                    icon: Assets.circleBlue,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                  Flexible(
+                    child: TextAddressWidget(
+                      color: Colors.blue,
+                      address:
+                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    ),
                   ),
                 ],
               ),
@@ -378,24 +412,37 @@ class AddressWidget extends StatelessWidget {
 
 class TextAddressWidget extends StatelessWidget {
   final String? address;
-  final String? icon;
+  final Color? color;
+
   const TextAddressWidget({
     super.key,
     this.address,
-    this.icon,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SvgPicture.asset(icon ?? ""),
+        CircleAvatar(
+          radius: 10,
+          backgroundColor: Colors.transparent,
+          child: CircleAvatar(
+            backgroundColor: color,
+            radius: 7,
+            child: CircleAvatar(
+                backgroundColor: context.isDarkMode
+                    ? const Color(0xFF333333)
+                    : AppColors.BG_GRAY_COLOR,
+                radius: 3),
+          ),
+        ),
         SizedBox(width: 9.w),
         Text(
           context.isArabic ? address ?? "" : address ?? "",
           style: TextStyle(
-            fontSize: 22.sp,
-            color: AppColors.black,
+            fontSize: 28.sp,
+            color: AppColors.getTextColor(context),
             fontWeight: FontWeight.bold,
           ),
         )

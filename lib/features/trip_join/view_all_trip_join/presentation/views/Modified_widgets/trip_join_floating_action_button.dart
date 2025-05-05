@@ -26,7 +26,7 @@ class TripJoinFloatingActionButton extends StatelessWidget {
         children: [
           RawMaterialButton(
             onPressed:onTap,
-            fillColor: AppColors.PRIMARY_COLOR,
+            fillColor:context.isDarkMode?AppColors.Floating_Button_COLOR_DARK: AppColors.PRIMARY_COLOR,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -38,11 +38,11 @@ class TripJoinFloatingActionButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.add, color: Colors.white, size: 20),
+                  Icon(Icons.add, color:context.isDarkMode?AppColors.black: Colors.white, size: 20),
                   const SizedBox(),
                   Text(title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: context.isDarkMode?AppColors.black:Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),

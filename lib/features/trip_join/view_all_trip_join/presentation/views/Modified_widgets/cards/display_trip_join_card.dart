@@ -171,6 +171,7 @@ class _TripJoinCardState extends State<TripJoinCard> {
             icon,
             width: 48.h,
             fit: BoxFit.cover,
+            color: context.isDarkMode&&icon==Assets.tripJoinCarIcon?Colors.white:null,
           ),
           const Sizer(),
           Text(
@@ -192,14 +193,14 @@ class _TripJoinCardState extends State<TripJoinCard> {
                   style: Styles.mediumText(
                       fontSize: context.locale.languageCode == "ar" ? 35 : 28,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.SECONDARY_COLOR),
+                      color: AppColors.getRedColor(context)),
                 )
               ])),
               Label(
                 text: LocaleKeys.seat.localize,
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
-                    color: context.isDarkMode ? Colors.white : Colors.black),
+                    color: AppColors.getTextColor(context)),
               )
             ],
           )
@@ -222,7 +223,7 @@ class _TripJoinCardState extends State<TripJoinCard> {
         child: Text(
           LocaleKeys.subscribeToContactClient.localize,
           style: Styles.headerText(
-            color: AppColors.getSecondryColor(context),
+            color: AppColors.getRedColor(context),
             fontSize: 30,
           ),
           textAlign: TextAlign.start,

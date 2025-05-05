@@ -33,7 +33,7 @@ class TripJoinButtonsSection extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               title: buttonTitle??'',
-              color: AppColors.SECONDARY_COLOR,
+              color: AppColors.getRedColor(context),
               onTap: onTap,
               radius: 15,
             ),

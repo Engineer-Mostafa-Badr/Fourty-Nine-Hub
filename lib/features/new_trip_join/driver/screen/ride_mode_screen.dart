@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../routes/routes.dart';
@@ -81,6 +82,7 @@ class NewRideModeBody extends StatelessWidget {
                 onTap: () {
                   context.push(Routes.captainShareScreen);
                 },
+                iconColor: AppColors.getButtonPrimaryColor(context),
               ),
               TripOptionWidget(
                 icon: Assets.car,
@@ -89,12 +91,14 @@ class NewRideModeBody extends StatelessWidget {
                 onTap: () {
                   context.push(Routes.AVAILABLE_TRIPS);
                 },
+                iconColor: AppColors.getButtonPrimaryColor(context),
               ),
               TripOptionWidget(
                 icon: Assets.pickMeIcon,
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "وصلني معاك" : "Pick me",
                 onTap: () {context.push(Routes.All_PickMe_View);},
+                iconColor: AppColors.getButtonPrimaryColor(context),
               ),
             ],
           ),

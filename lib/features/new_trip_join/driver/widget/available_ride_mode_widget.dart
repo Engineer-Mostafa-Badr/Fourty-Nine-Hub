@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -56,15 +58,15 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: context.isArabic ? "سيدة/" : "Lady/ ",
+                          text: context.isArabic ? "سيدة/ " : "Lady/ ",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24.sp,
-                            color: Colors.red,
+                            color: AppColors.getRedColor(context),
                           ),
                           children: [
                             TextSpan(
-                              text: context.isArabic ? "ليدي درايف" : "سائقة ",
+                              text: context.isArabic ? "ليدي درايف" : "Lady Driver",
                               style: TextStyle(
                                 color: context.isDarkMode
                                     ? Colors.white
@@ -87,9 +89,9 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           ),
                           children: [
                             TextSpan(
-                              text: context.isArabic ? "جنيهًا مصريًا" : "EGP",
-                              style: const TextStyle(
-                                  color: Colors.red, fontSize: 12),
+                              text: context.isArabic ? "ج.م" : "EGP",
+                              style: TextStyle(
+                                  color: AppColors.getRedColor(context), fontSize: 14),
                             ),
                           ],
                         ),
@@ -207,7 +209,16 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      SvgPicture.asset(Assets.circleGreen),
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.transparent,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.green,
+                          radius: 10,
+                          child: CircleAvatar(
+                              backgroundColor: AppColors.getFillColor(context), radius: 5),
+                        ),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
@@ -221,7 +232,16 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      SvgPicture.asset(Assets.circleBlue),
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.transparent,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          radius: 10,
+                          child: CircleAvatar(
+                              backgroundColor: AppColors.getFillColor(context), radius: 5),
+                        ),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
@@ -232,7 +252,7 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                       ),
                     ],
                   ),
-                  //      const SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Text(
@@ -246,8 +266,8 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                         ),
                       ),
                       const Spacer(),
-                      TextButton(
-                        onPressed: () {},
+                      ClickableWidget(
+                        onTap: () {},
                         child: Text(
                           widget.requestType ?? "",
                           style: TextStyle(
@@ -259,7 +279,7 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 5),
+                      widget.cancelButton == true? const SizedBox(width: 5):const SizedBox(),
                       widget.cancelButton == true
                           ? ElevatedButton(
                               style: ButtonStyle(
@@ -279,6 +299,7 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           : const SizedBox(),
                     ],
                   ),
+                  const Sizer(),
                 ],
               ),
             ),

@@ -34,6 +34,7 @@ class _TripJoinContentState extends State<TripJoinContent>
       setState(() {});
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -43,7 +44,6 @@ class _TripJoinContentState extends State<TripJoinContent>
           Sizer(
             height: 10.h,
           ),
-
           ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -52,32 +52,33 @@ class _TripJoinContentState extends State<TripJoinContent>
                 switch (_displayedCategory) {
                   case LocaleKeys.availableTrips:
                     return AvailableTripsCard(
-                      subscribtionPlan: context.isArabic?'العروض المميزة':LocaleKeys.premium.localize,
-                      title: context.isArabic
-                          ? 'كيا، سيراتو'
-                          : 'Kia, Cerato',
+                      subscribtionPlan: context.isArabic
+                          ? 'العروض المميزة'
+                          : LocaleKeys.premium.localize,
+                      title: context.isArabic ? 'كيا، سيراتو' : 'Kia, Cerato',
                       buttonTitle: LocaleKeys.request.localize,
                       isMale: true,
-                      time:
-                      context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
                       seats: 2,
                       status: context.isArabic ? 'مكرر' : 'Repeat',
                       isRequestButton: true,
                       isContactInfo: true,
                       iconCar: true,
                       onTab: () => JoinTripBottomSheet(context,
-                          topButtonColor: AppColors.SECONDARY_COLOR,
-                          topButtonTitle:
-                          LocaleKeys.premium_request.localize,
-                          bottomButtonColor: AppColors.PRIMARY_COLOR,
-                          bottomButtonTitle:
-                          LocaleKeys.request.localize,
+                          topButtonColor: AppColors.getRedColor(context),
+                          topButtonTitle: LocaleKeys.premium_request.localize,
+                          bottomButtonColor:
+                              AppColors.getButtonPrimaryColor(context),
+                          bottomButtonTitle: LocaleKeys.request.localize,
                           onTap: () => SubmitBottomSheet(
-                            context,
-                            buttonColor: AppColors.PRIMARY_COLOR,
-                            buttonTitle:
-                            LocaleKeys.submit.localize,
-                          )),
+                                context,
+                                buttonColor: AppColors.getButtonPrimaryColor(context),
+                                buttonTitle: LocaleKeys.submit.localize,
+                              ),
+                          topTextColor:
+                              context.isDarkMode ? Colors.black : Colors.white,
+                          bottomTextColor:
+                              context.isDarkMode ? Colors.black : Colors.white),
                     );
 
                   case LocaleKeys.requestLog:
@@ -86,8 +87,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                       title: context.isArabic ? 'محمد' : 'Mohamed',
                       isMale: true,
                       buttonTitle: LocaleKeys.request.localize,
-                      time:
-                      context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
                       seats: 2,
                       status: context.isArabic ? 'انتهت' : 'Expired',
                       isRequestButton: false,
@@ -98,28 +98,21 @@ class _TripJoinContentState extends State<TripJoinContent>
                   case LocaleKeys.myAds:
                     return TripJoinCard(
                       subscribtionPlan: LocaleKeys.premium.localize,
-                      title: context.isArabic
-                          ? 'كيا، سيراتو'
-                          : 'Kia, Cerato',
+                      title: context.isArabic ? 'كيا، سيراتو' : 'Kia, Cerato',
                       isMale: true,
                       buttonTitle: LocaleKeys.deleteAd.localize,
-                      time:
-                      context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
                       seats: 2,
-                      status:
-                      context.isArabic ? 'مرة واحدة' : 'One Time',
+                      status: context.isArabic ? 'مرة واحدة' : 'One Time',
                       isRequestButton: true,
                       isContactInfo: false,
                       iconCar: true,
                       onTab: () => showDialogTripJoin(
                           context,
                           DialogContent(
-                            subTitle:
-                            LocaleKeys.areDeleteThisAd.localize,
-                            leftButtonTitle:
-                            LocaleKeys.deleteAd.localize,
-                            rightButtonTitle:
-                            LocaleKeys.close.localize,
+                            subTitle: LocaleKeys.areDeleteThisAd.localize,
+                            leftButtonTitle: LocaleKeys.deleteAd.localize,
+                            rightButtonTitle: LocaleKeys.close.localize,
                           )),
                     );
                 }
@@ -183,18 +176,24 @@ class _TripJoinContentState extends State<TripJoinContent>
             ),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40.h),
-                color: selected ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
+                color: selected
+                    ? AppColors.getButtonPrimaryColor(context)
+                    : AppColors.getFillColor(context),
                 border: Border.all(
                     color: selected
-                        ? context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR
-                        : AppColors.c0B1035,
+                        ? AppColors.getRedColor(context)
+                        : AppColors.getButtonPrimaryColor(context),
                     width: 2)),
             child: Center(
               child: Text(
                 title.localize,
                 style: Styles.headerText(
                     fontSize: 24,
-                    color: selected ? Colors.white : AppColors.black),
+                    color: selected
+                        ? context.isDarkMode
+                            ? Colors.black
+                            : Colors.white
+                        : AppColors.getTextColor(context)),
               ),
             ),
           ),
@@ -205,13 +204,17 @@ class _TripJoinContentState extends State<TripJoinContent>
               right: 4.h,
               child: Container(
                 padding: const EdgeInsets.all(2),
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: AppColors.SECONDARY_COLOR),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.getRedColor(context)),
                 child: Center(
                   child: Text(
                     '1k',
                     style: Styles.smallText(
-                        color: AppColors.whiteColor, fontSize: 20),
+                        color: context.isDarkMode
+                            ? Colors.black
+                            : AppColors.whiteColor,
+                        fontSize: 20),
                   ),
                 ),
               ),

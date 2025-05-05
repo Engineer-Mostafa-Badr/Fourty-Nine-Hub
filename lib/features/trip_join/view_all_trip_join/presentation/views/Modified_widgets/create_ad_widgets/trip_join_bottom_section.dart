@@ -30,7 +30,7 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
     return Container(
       padding: EdgeInsets.all(32.h),
       decoration: BoxDecoration(
-          color: AppColors.colorGreyLight,
+          color: AppColors.getFillColor(context),
           borderRadius: BorderRadius.circular(30.h)),
       child: Row(
         children: [
@@ -40,18 +40,19 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
               children: [
                 CustomRow(
                   children: [
-                    const Center(
+                    Center(
                         child: Icon(
                       Icons.directions_car,
                       size: 30,
-                      color: Colors.black,
+                      color: AppColors.getTextColor(context),
                     )),
                     Text('0.0 ${LocaleKeys.KM.localize}',
-                        style: Styles.headerText(color: Colors.black)),
+                        style: Styles.headerText(
+                            color: AppColors.getTextColor(context))),
                     Center(
                       child: Text('${20} ',
                           style: Styles.headerText(
-                              color: Colors.black,
+                              color: AppColors.getTextColor(context),
                               fontWeight: FontWeight.bold)),
                     ),
                     Text(
@@ -60,7 +61,7 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                           fontSize:
                               context.locale.languageCode == "ar" ? 35 : 28,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.SECONDARY_COLOR),
+                          color: AppColors.getRedColor(context)),
                     )
                   ],
                 ),
@@ -78,12 +79,13 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                           );
                           setState(() {});
                         },
-                        icon: const Icon(Icons.access_time,
-                            size: 30, color: Colors.black),
+                        icon: Icon(Icons.access_time,
+                            size: 30, color: AppColors.getTextColor(context)),
                       ),
                     ),
                     Text(_getTime(),
-                        style: Styles.headerText(color: Colors.black)),
+                        style: Styles.headerText(
+                            color: AppColors.getTextColor(context))),
                     Checkbox(
                       visualDensity:
                           const VisualDensity(horizontal: -4, vertical: -4),
@@ -93,22 +95,21 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                         isChecked = value ?? false;
                         setState(() {});
                       },
-                      checkColor: Colors.white,
-                      activeColor: AppColors.PRIMARY_COLOR,
-                      side:const BorderSide(
-                        color: Colors.black,
-                        width: 2
-                      ),
+                      checkColor:context.isDarkMode?Colors.black: Colors.white,
+                      activeColor: AppColors.getTextColor(context),
+                      side: BorderSide(
+                          color: AppColors.getTextColor(context), width: 2),
                     ),
                     Text(LocaleKeys.repeat.localize,
-                        style: Styles.headerText(color: Colors.black)),
+                        style: Styles.headerText(
+                            color: AppColors.getTextColor(context))),
                   ],
                 ),
                 const Sizer(),
                 CustomRow(
                   children: [
                     DropdownButton(
-                      dropdownColor: const Color.fromRGBO(225, 225, 225, 1),
+                      dropdownColor: AppColors.getFillColor(context),
                       borderRadius: BorderRadius.circular(15),
                       menuWidth: 100.w,
                       enableFeedback: false,
@@ -121,8 +122,8 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                               value: e,
                               child: Text(
                                 e.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
+                                style: TextStyle(
+                                  color: AppColors.getTextColor(context),
                                 ),
                               )))
                           .toList(),
@@ -130,21 +131,32 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                         selectedSeatNum = value ?? 1;
                         setState(() {});
                       },
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 30,
-                          color: Colors.black
-                      ),
+                      icon: selectedSeatNum != null
+                          ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.h),
+                            child: Text(
+                                '$selectedSeatNum',
+                                style: Styles.headerText(
+                                    color: AppColors.getTextColor(context)),
+                              ),
+                          )
+                          : Icon(Icons.keyboard_arrow_down,
+                              size: 30, color: AppColors.getTextColor(context)),
                       isDense: true,
                     ),
-                    Text(LocaleKeys.seat.localize, style: Styles.headerText(color: Colors.black)),
+                    Text(LocaleKeys.seat.localize,
+                        style: Styles.headerText(
+                            color: AppColors.getTextColor(context))),
                     Image.asset(
                       Assets.tripJoinBabySeatIcon,
                       height: 40.h,
+                      color: AppColors.getTextColor(context),
                     ),
                     Text(
                       LocaleKeys.seat.localize,
-                      style: Styles.headerText(fontWeight: FontWeight.bold,color: Colors.black),
+                      style: Styles.headerText(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getTextColor(context)),
                     ),
                   ],
                 ),
@@ -163,37 +175,5 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
       return result;
     }
     return time!.format(context);
-  }
-
-  void _showDropdownMenu(
-      {required BuildContext context,
-      required Offset position,
-      required List items,
-      required var selectedItem}) async {
-    final RenderBox overlay =
-        Overlay.of(context).context.findRenderObject() as RenderBox;
-
-    final selected = await showMenu<String>(
-      color: AppColors.colorGreyLight,
-      context: context,
-      position: RelativeRect.fromLTRB(
-        position.dx,
-        position.dy - 50,
-        overlay.size.width - position.dx,
-        overlay.size.height - position.dy,
-      ),
-      items: items
-          .map((brand) => PopupMenuItem<String>(
-                value: brand,
-                child: Text(brand),
-              ))
-          .toList(),
-    );
-
-    if (selected != null) {
-      setState(() {
-        selectedItem = selected;
-      });
-    }
   }
 }

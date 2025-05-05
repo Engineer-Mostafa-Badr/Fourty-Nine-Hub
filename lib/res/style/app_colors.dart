@@ -37,6 +37,10 @@ abstract class AppColors {
   static const SECONDARY_COLOR = Color(0xFFED1C24);
   static const SECONDARY_COLOR_DARK = Color(0xFFec5749);
   static const SECONDARY_COLOR_DARK2 = Color(0xFFF33D49);
+  static const Floating_Button_COLOR_DARK = Color(0xFFCACFF4);
+  static const Scaffold_Color_DARK = Color(0xFF0D0D0D);
+  static const fill_Color_DARK = Color(0xFF171717);
+  static const red_Color_DARK = Color(0xFFF45560);
   static const c0B1035 = Color(0xFF0B1035);
   static const c46484B = Color(0xFF46484B);
   static const cF5F5F5 = Color(0xFFF5F5F5);
@@ -142,6 +146,26 @@ abstract class AppColors {
     return context.isDarkMode
         ? AppColors.SECONDARY_COLOR_DARK
         : AppColors.SECONDARY_COLOR;
+  }
+  static Color getTextColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.whiteColor
+        : AppColors.black;
+  }
+  static Color getRedColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.red_Color_DARK
+        : AppColors.SECONDARY_COLOR;
+  }
+  static Color getButtonPrimaryColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.Floating_Button_COLOR_DARK
+        : AppColors.PRIMARY_COLOR;
+  }
+  static Color getFillColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.fill_Color_DARK
+        : AppColors.colorGreyLight;
   }
   
 }

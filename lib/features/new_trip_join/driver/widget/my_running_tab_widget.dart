@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -30,16 +33,16 @@ class MyRunningTabWidget extends StatefulWidget {
 class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
   final TextEditingController otpController = TextEditingController();
 
-  @override
-  void dispose() {
-    otpController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   otpController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return widget.content.isEmpty
-        ? _emptyMessage()
+        ? _emptyMessage(context)
         : SingleChildScrollView(
             child: Column(
               children: [
@@ -54,14 +57,14 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildTripInfo(context),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 10),
                       _buildActionButtons(context),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 15),
                             GestureDetector(
                               onTap: () => _showOtpBottomSheet(context),
                               child: Text(
@@ -77,7 +80,7 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 10),
                             PinCodeTextField(
                               onTap: () => _showOtpBottomSheet(context),
                               readOnly: true,
@@ -124,10 +127,19 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             children: [
-              SvgPicture.asset(Assets.circleGreen),
+              CircleAvatar(
+                radius: 12,
+                backgroundColor: Colors.transparent,
+                child: CircleAvatar(
+                  backgroundColor: Colors.green,
+                  radius: 10,
+                  child: CircleAvatar(
+                      backgroundColor: AppColors.getFillColor(context), radius: 5),
+                ),
+              ),
               const SizedBox(width: 5),
               Text(
-                "Giza, Egypt",
+                context.isArabic?'الجيزة ،مصر':"Giza, Egypt",
                 style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
               ),
             ],
@@ -136,7 +148,7 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Text(
-            context.isArabic ? "العميل الثاني 3 دقيقة" : "1st Client  3 mins",
+            context.isArabic ? "العميل الأول 3 د" : "1st Client  3 mins",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
@@ -154,7 +166,7 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: _customButton(
+          child: _customButton(context,
             context.isArabic
                 ? widget.clientNumberAr ?? ""
                 : widget.clientNumberEn ?? "",
@@ -162,7 +174,7 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: _customButton(
+          child: _customButton(context,
             context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
           ),
         ),
@@ -170,20 +182,20 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
     );
   }
 
-  Widget _customButton(String text) {
+  Widget _customButton(BuildContext context,String text) {
     return Container(
       height: 65.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: AppColors.PRIMARY_COLOR,
+        color: AppColors.getButtonPrimaryColor(context),
       ),
       child: Center(
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 12,
-            color: Colors.white,
+            color: context.isDarkMode?Colors.black: Colors.white,
           ),
         ),
       ),
@@ -196,6 +208,7 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
       child: OutlinedButton(
         onPressed: () {},
         style: OutlinedButton.styleFrom(
+          backgroundColor: AppColors.getFillColor(context),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -241,7 +254,7 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
           builder: (context, setModalState) {
             return Container(
               decoration: BoxDecoration(
-                color: isDarkMode ? Colors.grey[900] : Colors.white,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(20)),
                 boxShadow: [
@@ -314,19 +327,18 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
             ),
           ),
         ),
-        SizedBox(
-          height: 40,
-          width: 40,
-          child: Align(
-            alignment: Alignment.centerRight,
+        Align(
+          alignment: Alignment.centerRight,
+          child: ClickableWidget(
+            onTap: ()=>Navigator.of(context).pop(),
             child: CircleAvatar(
-              backgroundColor: const Color(0xffD9D9D9),
-              child: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(
+              radius: 30.h,
+              backgroundColor: AppColors.getFillColor(context),
+              child:Center(
+                child: Icon(
                   Icons.close,
-                  color: AppColors.PRIMARY_COLOR,
-                ),
+                  color: AppColors.getTextColor(context),
+                  ),
               ),
             ),
           ),
@@ -342,21 +354,21 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
         height: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: AppColors.PRIMARY_COLOR,
+          color: AppColors.getButtonPrimaryColor(context),
         ),
         child: Center(
-          child: Text("تم",
-              style: TextStyle(fontSize: 36.sp, color: Colors.white)),
+          child: Text(context.isArabic?"تم":'Done',
+              style: TextStyle(fontSize: 36.sp, color:context.isDarkMode?Colors.black: Colors.white)),
         ),
       ),
     );
   }
 }
 
-Widget _emptyMessage() {
-  return const Center(
+Widget _emptyMessage(BuildContext context) {
+  return  Center(
     child: Text(
-      'Your running trip right now.',
+      LocaleKeys.thereIsNoTripsInThisList.localize,
       style: const TextStyle(fontSize: 16, color: Colors.grey),
     ),
   );
