@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +28,7 @@ class OneWayWidget extends StatefulWidget {
 
 class _OneWayWidgetState extends State<OneWayWidget> {
   bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+  ExpandableController _expandableController=ExpandableController();
 
   @override
   Widget build(BuildContext context) {
