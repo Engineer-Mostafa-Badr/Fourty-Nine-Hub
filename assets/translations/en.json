@@ -1588,5 +1588,16 @@
   "invalidEmailAddress": "Invalid Email Address",
   "phoneNumbersNotAllowed": "Phone numbers are not allowed. Please remove any phone number pattern.",
   "enterPositiveNumber": "Enter a positive number",
-  "yellowCardMember": "Yellow Card Member"
+  "yellowCardMember": "Yellow Card Member",
+  "paymob": "Paymob",
+  "fawry": "Fawry",
+  "instaPay": "InstaPay",
+  "card": "Card",
+  "link": "Link",
+  "payAtFawry": "Pay at Fawry",
+  "cardName": "Card Name",
+  "expiryYear": "Expiry Year",
+  "expiryMonth": "Expiry Month",
+  "ccv": "CCV",
+  "errorDecodingQrCode": "Error decoding QR code"
 }

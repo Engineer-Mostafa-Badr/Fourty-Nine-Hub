@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -14,9 +15,14 @@ import 'package:go_router/go_router.dart';
 class SubscriptoinAmountsWidget extends StatefulWidget {
   final WalletTypes walletType;
   final List<SubscriptionAmountEntity> amounts;
+  final bool hideRedTitle;
 
-  const SubscriptoinAmountsWidget(
-      {super.key, required this.amounts, required this.walletType});
+  const SubscriptoinAmountsWidget({
+    super.key,
+    required this.amounts,
+    required this.walletType,
+    this.hideRedTitle = false,
+  });
 
   @override
   State<SubscriptoinAmountsWidget> createState() =>
@@ -41,14 +47,15 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Label(
-            text: LocaleKeys.insufficientAmount.localize,
-            style: Styles.headerText(
-              color: const Color(0xffF45560),
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
+          if (!widget.hideRedTitle)
+            Label(
+              text: LocaleKeys.insufficientAmount.localize,
+              style: Styles.headerText(
+                color: const Color(0xffF45560),
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
           const SizedBox(
             height: 8,
           ),
@@ -76,6 +83,9 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                   Radio(
                     value: widget.amounts[index].amount,
                     groupValue: groupValue,
+                    activeColor: context.isDarkMode
+                        ? const Color(0xffD6DADE)
+                        : const Color(0xff212529),
                     onChanged: (value) {
                       setState(() {
                         groupValue = value!;
@@ -100,7 +110,10 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                       ),
                       child: Center(
                         child: Label(
-                          text: widget.amounts[index].amount.toString(),
+                          text: FormatNumbers().formatNumberByComma(
+                            widget.amounts[index].amount.toString(),
+                            isArabic: context.isArabic,
+                          ),
                           style: Styles.mediumText(
                             color: context.isDarkMode
                                 ? const Color(0xff0D0D0D)

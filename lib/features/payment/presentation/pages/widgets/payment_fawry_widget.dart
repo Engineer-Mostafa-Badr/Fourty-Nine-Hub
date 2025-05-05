@@ -9,12 +9,14 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_save_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_saved_cards_entity.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -100,7 +102,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   });
                 },
                 icon: Icons.credit_card,
-                text: "Card",
+                text: LocaleKeys.card.localize,
                 isSelected: _isCardSelected,
               ),
             ),
@@ -125,7 +127,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   });
                 },
                 icon: Icons.qr_code_scanner,
-                text: "QR Code",
+                text: LocaleKeys.qrCode.localize,
                 isSelected: _showQrCode,
               ),
             ),
@@ -155,7 +157,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   });
                 },
                 icon: Icons.link,
-                text: "Link",
+                text: LocaleKeys.link.localize,
                 isSelected: _showLink,
               ),
             ),
@@ -180,7 +182,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   });
                 },
                 icon: Icons.payment,
-                text: "Pay at Fawry",
+                text: LocaleKeys.payAtFawry.localize,
                 isSelected: _showNumber,
               ),
             ),
@@ -353,16 +355,20 @@ class _FawryPaymentState extends State<FawryPayment> {
         const Sizer(),
         AppButton(
           height: 44,
-          color: AppColors.LIGHT_COLOR,
+          // color: AppColors.LIGHT_COLOR,
           label: _isAddingNewCard
               ? LocaleKeys.hideCardForm.localize
               : LocaleKeys.addNewCard.localize,
           style: Styles.headerText(
             fontWeight: FontWeight.w500,
             fontSize: 32,
-            color: AppColors.LIGHT_COLOR,
+            color: context.isDarkMode
+                ? const Color(0xFF0D0D0D)
+                : AppColors.LIGHT_COLOR,
           ),
-          backColor: AppColors.SECONDARY_COLOR_DARK2,
+          backColor: context.isDarkMode
+              ? const Color(0xFFF4555F)
+              : const Color(0xFFF33D49),
           onPressed: () {
             setState(() {
               _isAddingNewCard = !_isAddingNewCard;
@@ -375,8 +381,14 @@ class _FawryPaymentState extends State<FawryPayment> {
             padding: 0,
             cardBgColor: Colors.black,
             cardNumber: _cardNumberController.text,
-            //  textStyle: Styles.mediumText(fontSize: 30.sp,color: Theme.of(context).scaffoldBackgroundColor),
-            chipColor: Theme.of(context).scaffoldBackgroundColor,
+            textStyle: Styles.mediumText(
+              fontSize: 30,
+              color: context.isDarkMode ? Colors.black : Colors.white,
+            ),
+            // chipColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundImage: context.isDarkMode
+                ? Assets.transferMoneyBackgroundCardDark
+                : Assets.transferMoneyBackgroundCard,
             expiryDate:
                 '${_expiryMonthController.text}/${_expiryYearController.text}',
             cardHolderName: _cardAlias.text,
@@ -392,23 +404,35 @@ class _FawryPaymentState extends State<FawryPayment> {
           TextFormField(
             controller: _cardNumberController,
             cursorColor: AppColors.PRIMARY_COLOR,
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.headerText(
+              fontSize: 32,
+              fontWeight: FontWeight.w500,
+              height: 1.60,
+            ),
             decoration: InputDecoration(
-              labelText: 'Credit Card Number',
-              labelStyle: const TextStyle(color: Colors.black),
+              labelText: LocaleKeys.cardNumber.localize,
+              labelStyle: Styles.headerText(
+                fontSize: 32,
+                fontWeight: FontWeight.w500,
+                height: 1.60,
+              ),
               filled: true,
-              fillColor: Colors.white,
+              fillColor:
+                  context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
             ),
             maxLength: 16,
@@ -421,24 +445,36 @@ class _FawryPaymentState extends State<FawryPayment> {
           const SizedBox(height: 8),
           TextFormField(
             cursorColor: AppColors.PRIMARY_COLOR,
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.headerText(
+              fontSize: 32,
+              fontWeight: FontWeight.w500,
+              height: 1.60,
+            ),
             controller: _cardAlias,
             decoration: InputDecoration(
-              labelText: 'Credit Card Name',
-              labelStyle: const TextStyle(color: Colors.black),
+              labelText: LocaleKeys.cardName.localize,
+              labelStyle: Styles.headerText(
+                fontSize: 32,
+                fontWeight: FontWeight.w500,
+                height: 1.60,
+              ),
               filled: true,
-              fillColor: Colors.white,
+              fillColor:
+                  context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
             ),
             maxLength: 16,
@@ -450,24 +486,40 @@ class _FawryPaymentState extends State<FawryPayment> {
               Expanded(
                 child: TextFormField(
                   cursorColor: AppColors.PRIMARY_COLOR,
-                  style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                  style: Styles.headerText(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w500,
+                    height: 1.60,
+                  ),
                   controller: _expiryMonthController,
                   decoration: InputDecoration(
-                    labelText: 'Expiry Month',
-                    labelStyle: const TextStyle(color: Colors.black),
+                    labelText: LocaleKeys.expiryMonth.localize,
+                    labelStyle: Styles.headerText(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                      height: 1.60,
+                    ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: context.isDarkMode
+                        ? const Color(0xFF0D0D0D)
+                        : Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderSide: BorderSide(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderSide: BorderSide(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderSide: BorderSide(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black),
                     ),
                   ),
                   maxLength: 2,
@@ -483,23 +535,39 @@ class _FawryPaymentState extends State<FawryPayment> {
                 child: TextFormField(
                   controller: _expiryYearController,
                   cursorColor: AppColors.PRIMARY_COLOR,
-                  style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                  style: Styles.headerText(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w500,
+                    height: 1.60,
+                  ),
                   decoration: InputDecoration(
-                    labelText: 'Expiry Year',
-                    labelStyle: const TextStyle(color: Colors.black),
+                    labelText: LocaleKeys.cardNumber.localize,
+                    labelStyle: Styles.headerText(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                      height: 1.60,
+                    ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: context.isDarkMode
+                        ? const Color(0xFF0D0D0D)
+                        : Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderSide: BorderSide(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderSide: BorderSide(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderSide: BorderSide(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black),
                     ),
                   ),
                   maxLength: 2,
@@ -516,23 +584,35 @@ class _FawryPaymentState extends State<FawryPayment> {
           TextFormField(
             controller: _cvvController,
             cursorColor: AppColors.PRIMARY_COLOR,
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.headerText(
+              fontSize: 32,
+              fontWeight: FontWeight.w500,
+              height: 1.60,
+            ),
             decoration: InputDecoration(
-              labelText: 'CVV',
-              labelStyle: const TextStyle(color: Colors.black),
+              labelText: LocaleKeys.ccv.localize,
+              labelStyle: Styles.headerText(
+                fontSize: 32,
+                fontWeight: FontWeight.w500,
+                height: 1.60,
+              ),
               filled: true,
-              fillColor: Colors.white,
+              fillColor:
+                  context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide: BorderSide(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
               ),
             ),
             maxLength: 4,
@@ -552,10 +632,14 @@ class _FawryPaymentState extends State<FawryPayment> {
                     label: LocaleKeys.payWithCard.localize,
                     style: Styles.headerText(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.LIGHT_COLOR,
+                      color: context.isDarkMode
+                          ? const Color(0xFF0D0D0D)
+                          : Colors.white,
                       fontSize: 24,
                     ),
-                    backColor: AppColors.c0B1035,
+                    backColor: context.isDarkMode
+                        ? const Color(0xFFCACFF4)
+                        : AppColors.c0B1035,
                     onPressed: () {
                       print("Ok");
                       _handlePayWithCard();
@@ -570,10 +654,14 @@ class _FawryPaymentState extends State<FawryPayment> {
                   label: LocaleKeys.saveCard.localize,
                   style: Styles.headerText(
                     fontWeight: FontWeight.w700,
-                    color: AppColors.LIGHT_COLOR,
+                    color: context.isDarkMode
+                        ? const Color(0xFF0D0D0D)
+                        : Colors.white,
                     fontSize: 24,
                   ),
-                  backColor: AppColors.c0B1035,
+                  backColor: context.isDarkMode
+                      ? const Color(0xFFCACFF4)
+                      : AppColors.c0B1035,
                   onPressed: () async {
                     print("Yes");
 
@@ -690,10 +778,14 @@ class _FawryPaymentState extends State<FawryPayment> {
                   label: LocaleKeys.cancel.localize,
                   style: Styles.headerText(
                     fontWeight: FontWeight.w700,
-                    color: AppColors.LIGHT_COLOR,
+                    color: context.isDarkMode
+                        ? const Color(0xFF0D0D0D)
+                        : Colors.white,
                     fontSize: 24,
                   ),
-                  backColor: AppColors.SECONDARY_COLOR_DARK2,
+                  backColor: context.isDarkMode
+                      ? const Color(0xffF45560)
+                      : AppColors.SECONDARY_COLOR_DARK2,
                   onPressed: () {
                     setState(() {
                       _isAddingNewCard = false;
@@ -822,17 +914,27 @@ class _FawryPaymentState extends State<FawryPayment> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40.r),
           color: isSelected
-              ? Theme.of(context).primaryColor
-              : AppColors.LIGHT_GRAY_COLOR,
+              ? (context.isDarkMode
+                  ? const Color(0xffCACFF4)
+                  : const Color(0xff0B1035))
+              : (context.isDarkMode
+                  ? const Color(0xff2C2C2C)
+                  : const Color(0xffE0E0E0)),
         ),
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon,
-                  color: isSelected
-                      ? Theme.of(context).scaffoldBackgroundColor
-                      : AppColors.GREY_NORMAL_COLOR),
+              Icon(
+                icon,
+                color: isSelected
+                    ? (context.isDarkMode
+                        ? const Color(0xff0D0D0D)
+                        : Colors.white)
+                    : (context.isDarkMode
+                        ? const Color(0xffB7B7B7)
+                        : const Color(0xffB7B7B7)),
+              ),
               const SizedBox(
                 width: 10,
               ),
@@ -843,8 +945,10 @@ class _FawryPaymentState extends State<FawryPayment> {
                     fontWeight: FontWeight.w600,
                     fontSize: 32,
                     color: isSelected
-                        ? Theme.of(context).scaffoldBackgroundColor
-                        : Colors.black87,
+                        ? (context.isDarkMode
+                            ? const Color(0xff0D0D0D)
+                            : Colors.white)
+                        : (context.isDarkMode ? Colors.white : Colors.black),
                   ),
                   textAlign: TextAlign.center, // Center text horizontally
                   maxLines: 1,
@@ -996,9 +1100,23 @@ class _FawryPaymentState extends State<FawryPayment> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text("QR Code:"),
+            Label(
+              text: '${LocaleKeys.qrCode.localize}:',
+              style: Styles.headerText(
+                fontWeight: FontWeight.w700,
+                fontSize: 32,
+                height: 1.6,
+              ),
+            ),
             SizedBox(height: 10.h),
-            const Text('Error decoding QR code'),
+            Label(
+              text: '${LocaleKeys.errorDecodingQrCode.localize}:',
+              style: Styles.headerText(
+                fontWeight: FontWeight.w700,
+                fontSize: 32,
+                height: 1.6,
+              ),
+            ),
           ],
         ),
       );
@@ -1008,7 +1126,14 @@ class _FawryPaymentState extends State<FawryPayment> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const Text("QR Code:"),
+          Label(
+            text: '${LocaleKeys.qrCode.localize}:',
+            style: Styles.headerText(
+              fontWeight: FontWeight.w700,
+              fontSize: 32,
+              height: 1.6,
+            ),
+          ),
           SizedBox(height: 10.h),
           Center(
             child: Image.memory(

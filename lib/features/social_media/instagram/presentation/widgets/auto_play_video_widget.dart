@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_view_body.dart';
@@ -122,7 +123,7 @@ class _AutoplayVideoWidgetState extends State<AutoplayVideoWidget> {
             Container(
               height: 438,
               width: double.infinity,
-              color: Colors.grey,
+              color: context.isDarkMode ? Colors.white12 : Colors.grey,
               child: _isInitialized
                   ? AspectRatio(
                       aspectRatio: _controller.value.aspectRatio,
@@ -153,7 +154,8 @@ class _AutoplayVideoWidgetState extends State<AutoplayVideoWidget> {
                               ? Icons.pause_circle_filled_rounded
                               : Icons.play_circle_filled_rounded,
                           size: 50,
-                          color: Colors.white,
+                          color:
+                              context.isDarkMode ? Colors.black : Colors.white,
                         ),
                         onPressed: _isInitialized ? _togglePlay : null,
                       ),

@@ -3,15 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/follower_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/followers_state.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/suggest_followers_section.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/suggest_reels_instagram_section.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -148,17 +153,48 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
             SliverToBoxAdapter(
               child: _buildTabBar(context),
             ),
-            // const SliverToBoxAdapter(
-            //   child: SizedBox(
-            //     height: 82,
-            //     child: ChatStories(),
-            //   ),
-            // ),
-            // const SliverToBoxAdapter(
-            //   child: SizedBox(
-            //     height: 16,
-            //   ),
-            // ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 82,
+                child: ChatStories(),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 16,
+              ),
+            ),
+            SliverList.separated(
+              itemCount: state.posts.length + (state.hasMorePosts ? 1 : 0),
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                // 1. عنصر التحميل الإضافي (عند نهاية القائمة)
+                if (index == state.posts.length) {
+                  return _isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CustomLoading(),
+                        )
+                      : const SizedBox();
+                }
+
+                // 2. عرض "مقاطع مقترحة" كل 4 منشورات (حتى 5 مرات)
+                if ((index + 1) % 4 == 0 && index ~/ 4 < 5) {
+                  return _buildSuggestedReels(context);
+                }
+
+                // 3. عرض "متابعات مقترحة" كل 6 منشورات (حتى 3 مرات)
+                if ((index + 1) % 6 == 0 && index ~/ 6 < 3) {
+                  return _buildSuggestedFollowers(context);
+                }
+
+                // 4. المنشور العادي
+                return PostInstagramWidget(
+                  key: ValueKey('post_${state.posts[index].id}'),
+                  instagramPostEntity: state.posts[index],
+                );
+              },
+            ),
             // SliverList.separated(
             //   itemCount: state.posts.length + (state.hasMorePosts ? 1 : 0),
             //   separatorBuilder: (context, index) => const SizedBox(
@@ -169,7 +205,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
             //       return _isLoading
             //           ? const Padding(
             //               padding: EdgeInsets.all(8.0),
-            //               child: Center(child: CircularProgressIndicator()),
+            //               child: CustomLoading(),
             //             )
             //           : const SizedBox();
             //     }
@@ -207,7 +243,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
             //     } else {
             //       // Show regular product
             //       // return ProductItem(item: mainProductList[index]);
-            //
+
             //       return PostInstagramWidget(
             //         key: ValueKey('post_${state.posts[index].id}'),
             //         instagramPostEntity: state.posts[index],
@@ -219,6 +255,61 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
           ],
         );
       },
+    );
+  }
+
+  // دالة مساعدة لبناء قسم المقاطع المقترحة
+  Widget _buildSuggestedReels(BuildContext context) {
+    return BlocBuilder<ReelInstagramCubit, ReelInstagramState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return _buildShimmerLoader();
+        } else if (state.status.isSuccess) {
+          return SuggestReelsInstagramSection(reels: state.reels!);
+        }
+        return _buildErrorWidget();
+      },
+    );
+  }
+
+// دالة مساعدة لبناء قسم المتابعات المقترحة
+  Widget _buildSuggestedFollowers(BuildContext context) {
+    return BlocBuilder<SuggestFollowCubit, SuggestFollowState>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return _buildShimmerLoader();
+        } else if (state.isSuccess) {
+          if (state.suggestFollowsData!.suggestions.isEmpty) {
+            return Container();
+          }
+          return SuggestFollowersSection(
+              suggestions: state.suggestFollowsData!.suggestions);
+        }
+        return _buildErrorWidget();
+      },
+    );
+  }
+
+// دالة لتحميل Shimmer (تأثير التحميل)
+  Widget _buildShimmerLoader() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 200,
+        width: double.infinity,
+        color: Colors.grey,
+      ),
+    );
+  }
+
+// دالة لعرض خطأ (لتسهيل التصحيح)
+  Widget _buildErrorWidget() {
+    return Container(
+      height: 100,
+      color: Colors.red,
+      alignment: Alignment.center,
+      child: const Text('حدث خطأ', style: TextStyle(color: Colors.white)),
     );
   }
 
@@ -279,8 +370,12 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                               icons[index].values.first.toString(),
                               colorFilter: ColorFilter.mode(
                                   selectedIndex == index
-                                      ? const Color(0xFF0B1035)
-                                      : const Color(0xffD9D9D9),
+                                      ? (context.isDarkMode
+                                          ? Colors.white
+                                          : const Color(0xFF0B1035))
+                                      : (context.isDarkMode
+                                          ? const Color(0xff333333)
+                                          : const Color(0xffD9D9D9)),
                                   BlendMode.srcIn),
                             ),
                             const SizedBox(
@@ -293,8 +388,12 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 32,
                                   color: selectedIndex == index
-                                      ? const Color(0xFF0B1035)
-                                      : const Color(0xffD9D9D9),
+                                      ? (context.isDarkMode
+                                          ? Colors.white
+                                          : const Color(0xFF0B1035))
+                                      : (context.isDarkMode
+                                          ? const Color(0xff333333)
+                                          : const Color(0xffD9D9D9)),
                                 ),
                               ),
                             )
@@ -307,7 +406,9 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                           Container(
                             width: double.infinity,
                             height: 2,
-                            color: const Color(0xff0B1035),
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : const Color(0xFF0B1035),
                           )
                       ],
                     ),

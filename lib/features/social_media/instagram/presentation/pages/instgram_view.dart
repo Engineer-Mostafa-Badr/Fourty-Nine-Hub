@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
@@ -73,6 +74,10 @@ class InstagramView extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 serviceLocator<ReelInstagramCubit>()..getReels(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                serviceLocator<SuggestFollowCubit>()..fetchSuggestFollow(),
           ),
         ],
         child: const InstagramViewBody(),

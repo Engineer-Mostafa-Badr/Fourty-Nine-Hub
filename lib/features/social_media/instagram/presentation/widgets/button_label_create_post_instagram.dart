@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class ButtonLabelCreatePostInstagram extends StatelessWidget {
@@ -47,6 +48,9 @@ class ButtonLabelCreatePostInstagram extends StatelessWidget {
               Icon(
                 iconAction,
                 size: 12,
+                color: context.isDarkMode
+                    ? const Color(0xff808080)
+                    : const Color(0x80000000),
               ),
               // IconButton(
               //   icon: Icon(
