@@ -236,21 +236,32 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   @override
   Future<Either<Failure, List<UserTagEntity>>> getUserTag(
       GetUserTagParams params) async {
-    final response = await _apiConsumer.get(
-      EndPoints.getUserTag(page: params.page, limit: params.limit),
-      data: {
-        "username": params.username,
-      },
-    );
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getUserTag(
+          username: params.username,
+          page: params.page,
+          limit: params.limit,
+        ),
+        // data: {
+        //   "username": params.username,
+        // },
+      );
 
-    return response.fold((l) {
-      return Left(l);
-    }, (data) {
-      final list = (data['data']['tags'] as List)
-          .map((e) => UserTagModel.fromJson(e))
-          .toList();
-      return Right(list);
-    });
+      return response.fold((l) {
+        return Left(l);
+      }, (data) {
+        final list = (data['data']['tags'] as List)
+            .map((e) => UserTagModel.fromJson(e))
+            .toList();
+        return Right(list);
+      });
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
   }
 
   @override

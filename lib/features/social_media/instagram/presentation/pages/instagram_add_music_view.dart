@@ -101,19 +101,23 @@ class InstagramAddMusicViewBody extends StatelessWidget {
                           Label(
                             text: 'Amr Diab Music',
                             style: Styles.mediumText(
-                              color: Colors.white,
+                              color: context.isDarkMode
+                                  ? const Color(0xff0D0D0D)
+                                  : Colors.white,
                               fontWeight: FontWeight.w500,
                               height: 1.29,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 4,
                           ),
                           Label(
                             text: 'Amr Diab',
                             style: Styles.smallText(
                               fontSize: 24,
-                              color: Colors.white,
+                              color: context.isDarkMode
+                                  ? const Color(0xff0D0D0D)
+                                  : Colors.white,
                               fontWeight: FontWeight.w500,
                               height: 0.83,
                             ),
@@ -123,11 +127,13 @@ class InstagramAddMusicViewBody extends StatelessWidget {
                       const Spacer(),
                       InkWell(
                         onTap: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.all(6),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
                           child: Icon(
                             Icons.pause,
-                            color: Colors.white,
+                            color: context.isDarkMode
+                                ? const Color(0xff0D0D0D)
+                                : Colors.white,
                             size: 28,
                           ),
                         ),
@@ -137,9 +143,11 @@ class InstagramAddMusicViewBody extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {},
-                        child: const Icon(
+                        child: Icon(
                           Icons.arrow_circle_right,
-                          color: Colors.white,
+                          color: context.isDarkMode
+                              ? const Color(0xff0D0D0D)
+                              : Colors.white,
                           size: 28,
                         ),
                       ),
@@ -185,7 +193,9 @@ class InstagramAddMusicListView extends StatelessWidget {
                 text: 'Amr Diab',
                 style: Styles.smallText(
                   fontSize: 24,
-                  color: const Color(0x66000000),
+                  color: context.isDarkMode
+                      ? const Color(0x66FFFFFF)
+                      : const Color(0x66000000),
                   fontWeight: FontWeight.w500,
                   height: 0.83,
                 ),
@@ -236,7 +246,9 @@ class MusicSectionsWidget extends StatelessWidget {
                           decoration: ShapeDecoration(
                             color: state.activeMusicSectionIndex ==
                                     sections.indexOf(section)
-                                ? const Color(0xFFFFEEEA)
+                                ? (context.isDarkMode
+                                    ? const Color(0xff171717)
+                                    : const Color(0xFFFFEEEA))
                                 : Colors.transparent,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -247,8 +259,12 @@ class MusicSectionsWidget extends StatelessWidget {
                             style: Styles.headerText(
                               color: state.activeMusicSectionIndex ==
                                       sections.indexOf(section)
-                                  ? const Color(0xFFFF3308)
-                                  : const Color(0x4D000000),
+                                  ? (context.isDarkMode
+                                      ? const Color(0xffFF4622)
+                                      : const Color(0xFFFF3308))
+                                  : (context.isDarkMode
+                                      ? const Color(0x4DFFFFFF)
+                                      : const Color(0x4D000000)),
                               fontSize: 28,
                             ),
                           ),
@@ -289,11 +305,15 @@ class InstagramAddMusicViewAppBar extends StatelessWidget {
             width: 16,
             height: 16,
             child: Center(
-              child: SvgPicture.asset(Assets.instagramSearchIcon),
+              child: SvgPicture.asset(context.isDarkMode
+                  ? Assets.instagramSearchIconDark
+                  : Assets.instagramSearchIcon),
             ),
           ),
           hintStyle: Styles.mediumText(
-            color: const Color(0x80000000),
+            color: context.isDarkMode
+                ? const Color(0x80FFFFFF)
+                : const Color(0x80000000),
           ),
           hintText: LocaleKeys.searchForALocation.localize,
         ),
