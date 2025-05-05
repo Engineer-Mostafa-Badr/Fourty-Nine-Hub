@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../ads/interstitial_ad_model.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/handle_cashback.dart';
@@ -61,6 +64,9 @@ class GridBlocksWidget extends StatelessWidget {
         ),
         _buildStarWidget(context,
           onTap: () {
+            if(!context.read<UserCubit>().isLoggedIn){
+              return pleaseLoginDialog(context);
+            }
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('tripJoinCount', context);
@@ -73,6 +79,9 @@ class GridBlocksWidget extends StatelessWidget {
         ),
         _buildStarWidget(context,
           onTap: () {
+          if(!context.read<UserCubit>().isLoggedIn){
+            return pleaseLoginDialog(context);
+          }
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('beAStarCount', context);
