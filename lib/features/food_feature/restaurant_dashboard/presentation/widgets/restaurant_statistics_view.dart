@@ -8,10 +8,9 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
-import '../../../../../core/messages/messages.dart';
+import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../create_restaurant/cubit/create_resturant_cubit.dart';
@@ -183,20 +182,10 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
                   ),
                   const SizedBox(height: 24),
 
-                  TextFormField(
-                    controller: numberController,
+                  NewPhoneNumberTextFormField(
+                    currentController: numberController,
                     keyboardType: TextInputType.phone,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: InputDecoration(
-                      hintText: "Enter new number",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
-                      ),
-                    ),
+                    isRequired: true,
                   ),
 
                   const SizedBox(height: 32),

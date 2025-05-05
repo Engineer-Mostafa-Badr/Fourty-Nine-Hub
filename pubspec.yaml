@@ -32,7 +32,7 @@ dependencies:
   elegant_notification: ^2.3.0
   emoji_picker_flutter: any
   equatable: ^2.0.5
-  ffmpeg_kit_flutter: ^6.0.3
+#  ffmpeg_kit_flutter: 6.0.1
   file_picker: ^8.0.6
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0

@@ -41,6 +41,10 @@ class _NotificationCardState extends State<NotificationCard> {
   Widget build(BuildContext context) {
     return BlocBuilder<AllNotficationsSeenCubit, AllNotficationsSeenState>(
       builder: (context, state) {
+        if (widget.notificationEntity.body == null ||
+            widget.notificationEntity.title == null) {
+          return Container();
+        }
         return InkWell(
           onTap: () {
             widget.notificationSeenCallback();
@@ -87,7 +91,7 @@ class _NotificationCardState extends State<NotificationCard> {
               child: NotificationCustomContainer(
                 color: widget.notificationEntity.read!
                     ? Colors.transparent
-                    : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                    : AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
                 child: Row(
                   children: [
                     Builder(builder: (context) {
