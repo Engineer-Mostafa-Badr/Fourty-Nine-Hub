@@ -3,28 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../settings/presentation/pages/widgets/custombutton.dart';
-import '../../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
-import '../../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/find_location_button.dart';
 import '../widget/alert_text_widget.dart';
 import '../widget/premium_and_request_widget.dart';
 import '../widget/price_and_seat_widget.dart';
@@ -39,7 +31,6 @@ class NewRouteScreen extends StatefulWidget {
 }
 
 class _NewRouteScreenState extends State<NewRouteScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -391,10 +382,10 @@ class _NewRouteBodyState extends State<NewRouteBody> {
       ),
     );
   }
-
-  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => LatLng(point[1], point[0])).toList();
-  }
+  //
+  // List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+  //   return polyline.map((point) => LatLng(point[1], point[0])).toList();
+  // }
 
   Widget _buildTopImage() {
     return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
