@@ -83,14 +83,20 @@ class PickMeInfoInfoBody extends StatelessWidget {
                 )
               : SvgPicture.asset(Assets.pickMeInfoIcon),
           SizedBox(height: 30.h),
-          RowTextWidget(
-            text: context.isArabic ? "لا تملك سيارة؟!" : "Don't have a car?!",
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
+              text: context.isArabic ? "لا تملك سيارة؟!" : "Don't have a car?!",
+            ),
           ),
           SizedBox(height: 15.h),
-          RowTextWidget(
-            text: context.isArabic
-                ? " تعبت من السعر الباهظ."
-                : 'Tired from the expensive price.',
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
+              text: context.isArabic
+                  ? " تعبت من السعر الباهظ."
+                  : 'Tired from the expensive price.',
+            ),
           ),
           SizedBox(height: 15.h),
           RowTextWidget(
@@ -105,10 +111,13 @@ class PickMeInfoInfoBody extends StatelessWidget {
                 : 'Wait for car owners to contact you.',
           ),
           SizedBox(height: 15.h),
-          RowTextWidget(
-              text: context.isArabic
-                  ? "شارك رحلتك ووفر المال."
-                  : 'Share your trip & save money.'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
+                text: context.isArabic
+                    ? "شارك رحلتك ووفر المال."
+                    : 'Share your trip & save money.'),
+          ),
         ],
       ),
     );

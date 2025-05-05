@@ -1555,5 +1555,23 @@ abstract class  LocaleKeys {
   static const availableRequest = 'availableRequest';
   static const pastRequests = 'pastRequests';
   static const create = 'create';
-
+  static const cartUpdated = 'cartUpdated';
+  static const failedDeleteItem = 'failedDeleteItem';
+  static const favoritesUpdated = 'favoritesUpdated';
+  static const failedUpdateFavorites = 'failedUpdateFavorites';
+  static const pleaseSelectAUser = 'pleaseSelectAUser';
+  static const paymob = 'paymob';
+  static const fawry = 'fawry';
+  static const instaPay = 'instaPay';
+  static const card = 'card';
+  static const link = 'link';
+  static const payAtFawry = 'payAtFawry';
+  static const cardName = 'cardName';
+  static const expiryYear = 'expiryYear';
+  static const expiryMonth = 'expiryMonth';
+  static const ccv = 'ccv';
+  static const errorDecodingQrCode = 'errorDecodingQrCode';
+  static const phoneNumbersNotAllowed = 'phoneNumbersNotAllowed';
+  static const invalidEmailAddress = 'invalidEmailAddress';
+  static const yellowCardMember = 'yellowCardMember';
 }

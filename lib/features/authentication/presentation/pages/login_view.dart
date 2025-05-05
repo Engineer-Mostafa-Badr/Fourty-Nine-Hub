@@ -28,6 +28,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/form/text_fields/email_text_form_field.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
@@ -424,11 +425,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     return Column(
       children: [
-        DefaultTextFormField(
+        EmailTextFormField(
           currentController: loginCubit.emailTextController,
-          // keyboardType: TextInputType.emailAddress,
           borderColor: Colors.black,
-          // fillColor: const Color(0xFFEEEEEE),
           hint:
               '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
           prefixIcon: Icon(
@@ -436,13 +435,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             color: AppColors.GREY_DARK_COLOR,
             size: 40.w,
           ),
-          validator: (v) {
-            if (v!.isEmpty) {
-              return LocaleKeys.emailRequired.localize;
-            }
-            return null;
-          },
-          // action: (v) {},
+          isRequired: true,
         ),
         const Sizer(),
         DefaultTextFormField(
@@ -464,7 +457,6 @@ class _LoginWidgetState extends State<LoginWidget> {
               size: 40.w,
             ),
           ),
-          // action: (v) {},
           validator: (v) {
             if (v!.isEmpty) {
               return LocaleKeys.passwordRequired.localize;
@@ -662,9 +654,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
-                DefaultTextFormField(
+                EmailTextFormField(
                   borderColor: Colors.black,
-                  // fillColor: const Color(0xFFEEEEEE),
                   currentController: registerCubit.emailTextController,
                   hint:
                       '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
@@ -673,13 +664,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return LocaleKeys.emailRequired.localize;
-                    }
-                    return null;
-                  },
+                  isRequired: true,
                 ),
                 Sizer(
                   height: 30.h,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/add_food_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/change_quantity_usecase.dart';
@@ -16,6 +17,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../data/models/cart_model.dart';
@@ -115,7 +117,8 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       result = true;
       showCustomSnackBar(
         context,
-        "Cart Update Successfully",
+        // "Cart Update Successfully",
+        LocaleKeys.cartUpdated.localize,
         Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
       );
       emit(state.copyWith(status: RestaurantDetailsStates.success));
@@ -156,7 +159,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     res.fold(
       (failure) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to delete item')),
+           SnackBar(content: Text(LocaleKeys.failedDeleteItem.localize)),
         );
       },
       (r) async {
@@ -424,13 +427,13 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     response.fold((failure) {
       showCustomSnackBar(
         context,
-        "Faild Update Favorites",
+        LocaleKeys.failedUpdateFavorites.localize,
         Icon(Icons.warning_amber_rounded, color: AppColors.PRIMARY_COLOR_DARK),
       );
     }, (data) {
       showCustomSnackBar(
         context,
-        "Favorites Update Successfully",
+        LocaleKeys.favoritesUpdated.localize,
         Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
       );
       result = data;
@@ -449,6 +452,7 @@ showCustomSnackBar(BuildContext context, String message, Icon icon) {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       backgroundColor: Colors.white,
       content: Row(
+        spacing: 10,
         children: [
           icon,
           16.verticalSpace,

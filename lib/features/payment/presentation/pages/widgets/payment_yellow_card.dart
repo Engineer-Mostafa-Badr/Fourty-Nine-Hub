@@ -52,10 +52,10 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:widget.fromSlider == false ? null : const PreferredSize(
+      appBar:widget.fromSlider == false ? null : PreferredSize(
           preferredSize: Size.fromHeight(30),
           child: BackAppBar(
-            label: 'Yellow Card Member',
+            label: LocaleKeys.yellowCardMember.localize,
           )),
       body: BlocProvider(
         create: (BuildContext context) =>
@@ -81,6 +81,9 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
             }
           },
           builder: (BuildContext context, state) {
+            if(state.status == StateStatus.loading){
+              return const Center(child: CircularProgressIndicator());
+            }
             final controller = context.read<PaymentCacheOutCubit>();
             return Padding(
               padding: const EdgeInsets.all(16.0),

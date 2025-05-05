@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +32,13 @@ class AvailableRideModeWidget extends StatefulWidget {
 
 class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
   bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+  late ExpandableController _expandableController;
+
+  @override
+  void initState() {
+    super.initState();
+    _expandableController = ExpandableController(initialExpanded: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +260,31 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _expandableController.toggle();
+                        });
+                      },
+                      child: SvgPicture.asset(
+                        Assets.redFrame,
+                        width: 50,
+                      ),
+                    ),
+                  ),
+                  ExpandablePanel(
+                    controller: _expandableController,
+                    theme: const ExpandableThemeData(
+                      hasIcon: false,
+                      tapBodyToCollapse: false,
+                      tapHeaderToExpand: false,
+                    ),
+                    header: const SizedBox(),
+                    collapsed: const SizedBox(),
+                    expanded: const AddressWidget(),
+                  ),
+                  //      const SizedBox(height: 8),
                   Row(
                     children: [
                       Text(

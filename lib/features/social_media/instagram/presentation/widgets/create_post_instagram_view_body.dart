@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -337,7 +338,9 @@ class _ReelBodyCreatePostInstagramState
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: SvgPicture.asset(
-                              Assets.createPostInstagramMultiImageIcon,
+                              context.isDarkMode
+                                  ? Assets.createPostInstagramMultiImageIconDark
+                                  : Assets.createPostInstagramMultiImageIcon,
                               height: 20,
                               width: 20,
                             ),
@@ -405,7 +408,8 @@ class _ReelBodyCreatePostInstagramState
               text: _formatDuration(assets.duration),
               style: Styles.smallText(
                 fontSize: 24,
-                color: Colors.white,
+                color:
+                    context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.white,
                 fontWeight: FontWeight.w600,
               ),
             ),

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
+
+import '../../../../../common/widgets/form/text_fields/email_text_form_field.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
 
@@ -48,10 +47,11 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
             child: Column(
               children: [
-                DefaultTextFormField(
+                EmailTextFormField(
                   currentController: forgotPasswordCubit.emailController,
                   hint:
                       '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
+                    isRequired:true,
                 ),
                 const SizedBox(
                   height: 16,

@@ -25,6 +25,7 @@ class ChargeWalletButtonBloc extends StatelessWidget {
             widget: SubscriptoinAmountsWidget(
               amounts: state.amounts,
               walletType: WalletTypes.mainWallet,
+              hideRedTitle: true,
             ),
           );
         }

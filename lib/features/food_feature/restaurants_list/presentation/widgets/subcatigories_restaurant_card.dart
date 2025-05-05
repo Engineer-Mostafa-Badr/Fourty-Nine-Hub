@@ -118,7 +118,7 @@ class PropertyCard extends StatelessWidget {
                       ),
                     ),
                     Label(
-                      text: LocaleKeys.views.localize,
+                      text: LocaleKeys.view.localize,
                       style:  Styles.mediumText(
                         // fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -547,8 +547,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
 class CallMessageReportButtons extends StatelessWidget {
   final GetAllRestaurantEntity item;
 
-  const CallMessageReportButtons({super.key, required this.item});
-
+   CallMessageReportButtons({super.key, required this.item});
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final isChatEnabled = item.enableOrDisableChat?.toLowerCase() == 'enable';
@@ -569,53 +569,124 @@ class CallMessageReportButtons extends StatelessWidget {
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
-            onPressed: isChatEnabled
+            onPressed: context.read<UserCubit>().isLoggedIn
+                ? (isChatEnabled
                 ? () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: cardDarkColor(context),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(16)),
-                      ),
-                      builder: (_) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            spacing: 16,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AppButton(
-                                backColor: AppColors.PRIMARY_COLOR,
-                                color: AppColors.whiteColor,
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  // _showFreeCallBottomSheet(context, item);
-                                },
-                                label: LocaleKeys.freeCall.localize,
-                              ),
-                              AppButton(
-                                backColor: AppColors.cD9D9D9,
-                                color: AppColors.black,
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  _showRegularCallBottomSheet(
-                                      context, item); // Open second
-                                },
-                                label: LocaleKeys.regularCall.localize,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
+              showModalBottomSheet(
+                context: context,
+                // backgroundColor: cardDarkColor(context),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0) ,
+                    child: Column(
+                      spacing: 10,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppButton(
+                          backColor: AppColors.PRIMARY_COLOR,
+                          color: AppColors.whiteColor,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            // _showFreeCallBottomSheet(context, item);
+                          },
+                          label: LocaleKeys.freeCall.localize,
+                        ),
+                        AppButton(
+                          backColor: AppColors.cD9D9D9,
+                          color: AppColors.black,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _showRegularCallBottomSheet(context, item);
+                          },
+                          label: LocaleKeys.regularCall.localize,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }
                 : () {
-                    SubscriptionMethod().subscribe(
-                      subscribeId: item.subcategoryId?.id ?? '',
-                      title: item.name ?? '',
-                    );
-                  },
+              SubscriptionMethod().subscribe(
+                subscribeId: item.subcategoryId?.id ?? '',
+                title: item.name ?? '',
+              );
+            })
+                : () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                    style: Styles
+                        .mediumText()
+                        .copyWith(decoration: TextDecoration.none,
+                    color: AppColors.whiteColor
+                    ), // ✅ Safe
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: LocaleKeys.login.localize,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      context.push(Routes.LOGIN);
+                    },
+                  ),
+                ),
+              );
+            },
+
+
+            // onPressed: isChatEnabled
+            //     ? () {
+            //         showModalBottomSheet(
+            //           context: context,
+            //           backgroundColor: cardDarkColor(context),
+            //           shape: const RoundedRectangleBorder(
+            //             borderRadius:
+            //                 BorderRadius.vertical(top: Radius.circular(16)),
+            //           ),
+            //           builder: (_) {
+            //             return Padding(
+            //               padding: const EdgeInsets.all(16.0),
+            //               child: Column(
+            //                 spacing: 16,
+            //                 mainAxisSize: MainAxisSize.min,
+            //                 children: [
+            //                   AppButton(
+            //                     backColor: AppColors.PRIMARY_COLOR,
+            //                     color: AppColors.whiteColor,
+            //                     onPressed: () {
+            //                       Navigator.pop(context); // Close first sheet
+            //                       // _showFreeCallBottomSheet(context, item);
+            //                     },
+            //                     label: LocaleKeys.freeCall.localize,
+            //                   ),
+            //                   AppButton(
+            //                     backColor: AppColors.cD9D9D9,
+            //                     color: AppColors.black,
+            //                     onPressed: () {
+            //                       Navigator.pop(context); // Close first sheet
+            //                       _showRegularCallBottomSheet(
+            //                           context, item); // Open second
+            //                     },
+            //                     label: LocaleKeys.regularCall.localize,
+            //                   ),
+            //                 ],
+            //               ),
+            //             );
+            //           },
+            //         );
+            //       }
+            //     : () {
+            //         SubscriptionMethod().subscribe(
+            //           subscribeId: item.subcategoryId?.id ?? '',
+            //           title: item.name ?? '',
+            //         );
+            //       },
           ),
         ),
         Expanded(
@@ -631,17 +702,43 @@ class CallMessageReportButtons extends StatelessWidget {
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
-            onPressed: isChatEnabled
+            onPressed: context.read<UserCubit>().isLoggedIn
+                ? (isChatEnabled
                 ? () {
-              BlocProvider.of<RestaurantsCubit>(context)
-                  .getExpiredOrders();
+              BlocProvider.of<RestaurantsCubit>(context).getExpiredOrders();
               // Implement message functionality here
             }
                 : () {
               SubscriptionMethod().subscribe(
-                  subscribeId: item.subcategoryId?.id ?? '',
-                  title: item.name ?? '');
+                subscribeId: item.subcategoryId?.id ?? '',
+                title: item.name ?? '',
+              );
+            })
+                : () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                    style: Styles
+                        .mediumText()
+                        .copyWith(decoration: TextDecoration.none,
+                        color: AppColors.whiteColor
+                    ), // ✅ Safe
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: LocaleKeys.login.localize,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      context.push(Routes.LOGIN);
+                    },
+                  ),
+                ),
+              );
             },
+
+
           ),
         ),
         Expanded(
@@ -689,7 +786,7 @@ class CallMessageReportButtons extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: cardDarkColor(context),
+      // backgroundColor: cardDarkColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -711,95 +808,106 @@ class CallMessageReportButtons extends StatelessWidget {
                 bottom: MediaQuery.of(context).viewInsets.bottom + 16,
                 top: 16,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CheckboxListTile(
-                    activeColor: AppColors.PRIMARY_COLOR,
-                    contentPadding: EdgeInsets.zero,
-                    value: isBookingForAnotherClient,
-                    onChanged: (value) {
-                      setState(() {
-                        isBookingForAnotherClient = value!;
-                        hasPhoneError = false;
-                        if (isBookingForAnotherClient) {
-                          phoneController.clear();
-                        } else {
-                          phoneController.text = item.phone ?? '';
-                        }
-                      });
-                    },
-                    title: Text(
-                      LocaleKeys.imBookingOfAnotherClient.localize,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: AppColors.c717171,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CheckboxListTile(
+                      activeColor: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                      contentPadding: EdgeInsets.zero,
+                      value: isBookingForAnotherClient,
+                      onChanged: (value) {
+                        setState(() {
+                          isBookingForAnotherClient = value!;
+                          hasPhoneError = false;
+                          if (isBookingForAnotherClient) {
+                            phoneController.clear();
+                          } else {
+                            phoneController.text = item.phone ?? '';
+                          }
+                        });
+                      },
+                      title: Text(
+                        LocaleKeys.imBookingOfAnotherClient.localize,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: AppColors.c717171,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      dense: true,
+                      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                     ),
-                    controlAffinity: ListTileControlAffinity.leading,
-                    dense: true,
-                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    enabled: isBookingForAnotherClient,
-                    controller: phoneController,
-                    keyboardType: TextInputType.phone,
-                    style: TextStyle(
-                      color: Colors.black.withOpacity(0.8),
-                    ),
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SvgPicture.asset(
-                          color: AppColors.PRIMARY_COLOR,
-                          Assets.phoneIconRed,
-                          width: 18,
-                          height: 18,
-                          fit: BoxFit.contain,
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      enabled: isBookingForAnotherClient,
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocaleKeys.please_enter_phone_number.localize;
+                        }
+                        final regex = RegExp(r'^(010|011|012|015)\d{8}$');
+                        if (!regex.hasMatch(value)) {
+                          return LocaleKeys.invalidPhoneNumber.localize;
+                        }
+                        return null;
+                      },
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.8),
+                      ),
+                      decoration: InputDecoration(
+                        hintStyle: Styles.mediumText(
+                          color: AppColors.PRIMARY_COLOR_DARK
+                        ),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SvgPicture.asset(
+                            color: AppColors.PRIMARY_COLOR,
+                            Assets.phoneIconRed,
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        hintText: LocaleKeys.phone.localize,
+                        errorText: hasPhoneError
+                            ? LocaleKeys.enterPhoneNumber.localize
+                            : null,
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
                         ),
                       ),
-                      hintText: LocaleKeys.phone.localize,
-                      errorText: hasPhoneError
-                          ? LocaleKeys.enterPhoneNumber.localize
-                          : null,
-                      filled: true,
-                      fillColor: Colors.grey.shade200,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: AppButton(
+                        backColor: AppColors.PRIMARY_COLOR,
+                        color: AppColors.whiteColor,
+                        label: LocaleKeys.submit.localize,
+                        onPressed: () {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            final enteredNumber = phoneController.text.trim();
+                            final phoneToDial = isBookingForAnotherClient
+                                ? enteredNumber
+                                : item.phone;
+
+                            launchUrlString("tel://$phoneToDial");
+                            Navigator.pop(context);
+                          }
+                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: AppButton(
-                      backColor: AppColors.PRIMARY_COLOR,
-                      color: AppColors.whiteColor,
-                      label: LocaleKeys.submit.localize,
-                      onPressed: () {
-                        final enteredNumber = phoneController.text.trim();
-                        if (isBookingForAnotherClient) {
-                          if (enteredNumber.isEmpty) {
-                            setState(() {
-                              hasPhoneError = true;
-                            });
-                            return;
-                          }
-                          launchUrlString("tel://$enteredNumber");
-                        } else {
-                          launchUrlString("tel://${item.phone}");
-                        }
-
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

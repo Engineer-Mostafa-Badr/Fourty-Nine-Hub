@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_post_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -90,8 +91,12 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: currentIndex == index
-                          ? AppColors.PRIMARY_COLOR
-                          : Colors.grey,
+                          ? (context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR)
+                          : (context.isDarkMode
+                              ? const Color(0x26FFFFFF)
+                              : Colors.grey),
                     ),
                   );
                 },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
@@ -59,19 +60,26 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
       mainAxisSize: MainAxisSize.min,
       children: [
         SvgPicture.asset(
-          Assets.instagramTriangleBlackIcon,
+          context.isDarkMode
+              ? Assets.instagramTriangleBlackIconDark
+              : Assets.instagramTriangleBlackIcon,
         ),
         Container(
           padding: const EdgeInsets.all(10),
           decoration: ShapeDecoration(
-            color: const Color(0xFF1A1A1A),
+            color: context.isDarkMode
+                ? const Color(0xFFE5E5E5)
+                : const Color(0xFF1A1A1A),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
           ),
           child: Label(
             text: LocaleKeys.whoIsThis.localize,
-            style: Styles.mediumText(color: Colors.white),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? const Color(0xFF0D0D0D)
+                    : Colors.white),
           ),
         )
       ],

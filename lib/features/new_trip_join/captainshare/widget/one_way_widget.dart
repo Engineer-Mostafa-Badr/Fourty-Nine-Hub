@@ -116,11 +116,14 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       ),
                       Column(
                         children: [
-                          Text(
-                            LocaleKeys.free.localize,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 13),
+                            child: Text(
+                              LocaleKeys.free.localize,
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           SizedBox(height: 8.h),
@@ -142,7 +145,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                                   : AppColors.PRIMARY_COLOR,
                             ),
                           ),
-                          // const SizedBox(height: 4),
                           Padding(
                             padding: EdgeInsets.only(top: 15.h, left: 8.h),
                             child: Text(
@@ -197,7 +199,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -251,6 +252,30 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       ),
                     ),
                   ],
+                ),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _expandableController.toggle();
+                      });
+                    },
+                    child: SvgPicture.asset(
+                      Assets.redFrame,
+                      width: 50,
+                    ),
+                  ),
+                ),
+                ExpandablePanel(
+                  controller: _expandableController,
+                  theme: const ExpandableThemeData(
+                    hasIcon: false,
+                    tapBodyToCollapse: false,
+                    tapHeaderToExpand: false,
+                  ),
+                  header: const SizedBox(),
+                  collapsed: const SizedBox(),
+                  expanded: const AddressWidget(),
                 ),
                 Row(
                   children: [

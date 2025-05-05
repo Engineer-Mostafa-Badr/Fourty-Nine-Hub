@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/build_food_list.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
@@ -135,7 +136,29 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ElevatedButton(
               onPressed: () {
-                context.push(Routes.FOODCART);
+                if (context.isUserLoggedIn) {
+                  context.push(Routes.FOODCART);
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                        style: Styles.smallText(
+                            color: AppColors.whiteColor
+                        ),
+                      ),
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 4),
+                      action: SnackBarAction(
+                        label: LocaleKeys.login.localize,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          context.push(Routes.LOGIN);
+                        },
+                      ),
+                    ),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),

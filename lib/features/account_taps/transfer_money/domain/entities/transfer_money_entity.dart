@@ -8,7 +8,8 @@ class TransferMoneyEntity {
   final num amount;
   final String currencyEn;
   final String currencyAr;
-  final String date;
+  final String dateEn;
+  final String dateAr;
 
   TransferMoneyEntity({
     required this.from,
@@ -18,7 +19,8 @@ class TransferMoneyEntity {
     required this.amount,
     required this.currencyEn,
     required this.currencyAr,
-    required this.date,
+    required this.dateEn,
+    required this.dateAr,
     required this.fromEmail,
     required this.toEmail,
   });

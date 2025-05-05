@@ -358,7 +358,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       await UploadFile().uploadImage(
         useWeChatPicker: true,
         subCategoryId:
-            createRestaurantParams.subcategoryId ?? subcategoryId ?? '',
+            createRestaurantParams.subcategoryId ?? subcategoryId ?? "62c8babb8e28a58a3edf581d",
         onUploaded: (value) {
           onUploaded(value);
         },

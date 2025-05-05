@@ -57,48 +57,7 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
       margin: widget.margin,
       child: Row(
         children: [
-          // Country Code Dropdown
-          // Expanded(
-          //   flex: 2,
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //       color: widget.fillColor ?? Colors.white,
-          //       borderRadius: BorderRadius.circular(10.0),
-          //       border: Border.all(color: widget.codeColor ?? Colors.grey),
-          //     ),
-          //     child: DropdownButton<String>(
-          //       value: _selectedCountryCode,
-          //       icon: const Icon(
-          //         Icons.arrow_drop_down,
-          //         color: AppColors.QUANTITY_COLOR,
-          //       ),
-          //       isExpanded: true,
-          //       dropdownColor: Colors.blue.withOpacity(0.5),
-          //       onChanged: (String? newValue) {
-          //         setState(() {
-          //           _selectedCountryCode = newValue!;
-          //         });
-          //       },
-          //       style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-          //       items: <String>[
-          //         '+1',
-          //         '+44',
-          //         '+91'
-          //       ] // Add more country codes as needed
-          //           .map<DropdownMenuItem<String>>((String value) {
-          //         return DropdownMenuItem<String>(
-          //           value: value,
-          //           child: Text(value),
-          //         );
-          //       }).toList(),
-          //     ),
-          //   ),
-          // ),
-          //
-          // const SizedBox(width: 8.0),
-          // Phone Number Text Field
           Expanded(
-            // flex: 8,
             child: TextFormField(
               focusNode: widget.currentFocusNode,
               controller: widget.currentController,
@@ -137,7 +96,6 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
                 ),
               ),
               maxLength: 15,
-              // Adjust as needed
               onChanged: (value) {
                 widget.onInputChanged('$_selectedCountryCode$value');
               },

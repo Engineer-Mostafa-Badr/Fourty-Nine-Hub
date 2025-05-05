@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
@@ -119,8 +120,10 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
                           horizontal: 12, vertical: 7),
                       decoration: ShapeDecoration(
                         color: state.multiSelectGalleryPost
-                            ? AppColors.c0B1035
-                            : const Color(0xFFD9D9D9),
+                            ? (AppColors.c0B1035)
+                            : (context.isDarkMode
+                                ? const Color(0xFF333333)
+                                : const Color(0xFFD9D9D9)),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -138,7 +141,9 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
                             size: 11,
                             color: state.multiSelectGalleryPost
                                 ? Colors.white
-                                : Colors.black,
+                                : (context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black),
                           ),
                           const SizedBox(
                             width: 4,
@@ -150,7 +155,9 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: state.multiSelectGalleryPost
                                   ? Colors.white
-                                  : Colors.black,
+                                  : (context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black),
                             ),
                           ),
                         ],
@@ -169,9 +176,11 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
                 child: Container(
                   width: 30,
                   height: 30,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFFD9D9D9),
-                    shape: OvalBorder(),
+                  decoration: ShapeDecoration(
+                    color: context.isDarkMode
+                        ? const Color(0xFF333333)
+                        : const Color(0xFFD9D9D9),
+                    shape: const OvalBorder(),
                   ),
                   child: const Center(
                     child: Icon(

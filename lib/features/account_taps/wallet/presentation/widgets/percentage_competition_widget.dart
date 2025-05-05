@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
@@ -67,7 +68,7 @@ class _PercentageCompetitionWidgetState
               child: Center(
                 child: Label(
                   text:
-                      '${FormatNumbers().formatNumber(widget.currentPoints, useArabicNumerals: true)} / ${FormatNumbers().formatNumber(widget.totalPoints, useArabicNumerals: true)}',
+                      '${FormatNumbers().formatNumber(widget.currentPoints, useArabicNumerals: context.isArabic)} / ${FormatNumbers().formatNumber(widget.totalPoints, useArabicNumerals: context.isArabic)}',
                   style: Styles.headerText(
                     color: Colors.white,
                     fontSize: 32,
@@ -104,7 +105,7 @@ class _PercentageCompetitionWidgetState
                 child: Center(
                   child: Label(
                     text:
-                        '${FormatNumbers().formatNumber(widget.price, useArabicNumerals: true)} ${widget.currency}',
+                        '${FormatNumbers().formatNumber(widget.price, useArabicNumerals: context.isArabic)} ${widget.currency}',
                     style: Styles.headerText(
                       color: Colors.white,
                       fontSize: 32,
@@ -143,7 +144,8 @@ class _PercentageCompetitionWidgetState
                 ),
                 child: Center(
                   child: Label(
-                    text: '${widget.percentage.toStringAsFixed(2)}%',
+                    text:
+                        '${FormatNumbers().convertNumberToLocalizedString(widget.percentage.toStringAsFixed(1), isArabic: context.isArabic)}%',
                     style: Styles.headerText(
                       color: Colors.white,
                       fontSize: 32,

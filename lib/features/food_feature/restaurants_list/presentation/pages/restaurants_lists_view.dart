@@ -256,6 +256,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             child: Stack(
               children: [
                 Container(
+                  height: 40,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: state.isResturant?.isRestaurant == false
@@ -316,31 +317,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                   context.push(Routes.REGISTER);
                                 }
                               },
-                    // onPressed: state.isResturant?.approved == false  ? ()async{
-                    //   var result = await context.push(Routes.RestaurantDashboard,
-                    //       extra: state.isResturant!.restaurantId!);
-                    //   if (result == true) {
-                    //     context.read<RestaurantsCubit>().loadData();
-                    //   }
-                    // } : () {
-                    //   if (context.read<UserCubit>().isLoggedIn) {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) => BlocProvider<CreateRestaurantCubit>(
-                    //           create: (context) =>
-                    //           serviceLocator<CreateRestaurantCubit>()..loadData(),
-                    //           child: CreateRestaurantForm(
-                    //             from: 'create',
-                    //             restaurantId: state.isResturant?.restaurantId ?? '',
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     );
-                    //   } else {
-                    //     context.push(Routes.REGISTER);
-                    //   }
-                    // },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
@@ -355,8 +331,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       ),
                       child: Container(
                         alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0),
+                        // padding: const EdgeInsets.symmetric(
+                        //     horizontal: 16.0, vertical: 12.0),
                         child: Text(
                           state.isResturant?.isRestaurant == false
                               ? LocaleKeys.serveClientsByClickRegister.tr()
@@ -393,7 +369,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           if (state.isResturant?.approved != null)
             state.isResturant?.approved == true
                 ? const SizedBox()
-                : Label(
+                : context.read<UserCubit>().isLoggedIn ? Label(
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
@@ -401,7 +377,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     ),
                     textAlign: TextAlign.end,
                     text: LocaleKeys.waitingApproval.localize,
-                  ),
+                  ) : SizedBox.shrink(),
         ],
       ),
     );
@@ -539,9 +515,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         ),
                       ),
                     ),
-                    Positioned(
+                    PositionedDirectional(
                       top: -10,
-                      right: -6,
+                      start: -6,
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: const BoxDecoration(
