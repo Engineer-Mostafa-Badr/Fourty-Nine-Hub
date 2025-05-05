@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TripJoinCardButton extends StatelessWidget {
@@ -42,7 +43,7 @@ class TripJoinCardButton extends StatelessWidget {
             const Sizer(width: 5),
             Text(
               title,
-              style: Styles.headerText(color: Colors.white, fontSize: 30),
+              style: Styles.headerText(color: context.isDarkMode?Colors.black:Colors.white, fontSize: 30),
               textAlign: TextAlign.center,
             ),
           ],

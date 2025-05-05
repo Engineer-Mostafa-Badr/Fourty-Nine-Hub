@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/submit_bottom_sheet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,required Color bottomButtonColor,required String topButtonTitle,required String bottomButtonTitle,required void Function() onTap}) {
+Future<dynamic> JoinTripBottomSheet(context,
+    {required Color topButtonColor,
+    required Color bottomButtonColor,
+    required Color topTextColor,
+    required Color bottomTextColor,
+    required String topButtonTitle,
+    required String bottomButtonTitle,
+    required void Function() onTap}) {
   return showModalBottomSheet(
     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     context: context,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
     isScrollControlled: true,
-    builder: (context)=>Container(
+    builder: (context) => Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),
         ),
@@ -33,16 +41,19 @@ Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,requi
           Stack(
             children: [
               Positioned(
-                top: 10,
-                right:12,
-                child: GestureDetector(
-                  onTap:()=> Navigator.of(context).pop(),
-                  child: CircleAvatar(
-                    radius: 24.h,
-                    backgroundColor: AppColors.BG_GRAY_COLOR,
-                    child:Icon(Icons.close) ,
-                  ),
-                )),
+                  top: 10,
+                  right: 12,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: CircleAvatar(
+                      radius: 24.h,
+                      backgroundColor: AppColors.getFillColor(context),
+                      child: Icon(
+                        Icons.close,
+                        color: AppColors.getTextColor(context),
+                      ),
+                    ),
+                  )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 45, 12, 0),
                 child: Column(
@@ -66,7 +77,7 @@ Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,requi
                         child: Center(
                           child: Text(
                             topButtonTitle,
-                            style: Styles.headerText(),
+                            style: Styles.headerText(color: topTextColor),
                           ),
                         ),
                       ),
@@ -75,7 +86,7 @@ Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,requi
                     ElevatedButton(
                       onPressed: onTap,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:bottomButtonColor,
+                        backgroundColor: bottomButtonColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -90,12 +101,11 @@ Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,requi
                         child: Center(
                           child: Text(
                             bottomButtonTitle,
-                            style: Styles.headerText( color: bottomButtonColor==AppColors.BG_GRAY_COLOR?Colors.black:Colors.white),
+                            style: Styles.headerText(color: bottomTextColor),
                           ),
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),

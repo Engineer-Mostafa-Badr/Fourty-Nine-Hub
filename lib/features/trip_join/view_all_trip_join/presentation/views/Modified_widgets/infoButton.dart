@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class WelcomeTextWidget extends StatefulWidget {
@@ -45,7 +46,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.isDarkMode?AppColors.fill_Color_DARK:Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -57,7 +58,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
                 child:  Text(
                   widget.infoMessage ,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.black),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: context.isDarkMode?Colors.white:Colors.black),
                 ),
               ),
             ),
@@ -80,10 +81,10 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
       children: [
         Text(
           widget.title,
-          style:const TextStyle(
+          style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w700,
-            color: AppColors.SECONDARY_COLOR,
+            color:AppColors.getRedColor(context),
           ),
         ),
         const Spacer(),
@@ -96,13 +97,13 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
             width: 30,
             height: 30,
             decoration:  BoxDecoration(
-              color: AppColors.PRIMARY_COLOR,
+              color: AppColors.getButtonPrimaryColor(context),
               borderRadius: BorderRadius.circular(20.h)
             ),
-            child: const Icon(
+            child: Icon(
               size: 18,
               Icons.question_mark,
-              color: Colors.white,
+              color:context.isDarkMode?Colors.black: Colors.white,
             ),
           ),
         ),

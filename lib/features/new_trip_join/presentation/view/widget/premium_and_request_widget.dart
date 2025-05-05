@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
@@ -19,7 +20,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.SECONDARY_COLOR_DARK,
+                backgroundColor: AppColors.getRedColor(context),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -29,7 +30,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
                 LocaleKeys.premiumRequest.localize,
                 style: TextStyle(
                   fontSize: 25.sp,
-                  color: Colors.white,
+                  color: context.isDarkMode?Colors.black:Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -39,7 +40,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.PRIMARY_COLOR,
+                backgroundColor: AppColors.getButtonPrimaryColor(context),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -49,7 +50,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
                 LocaleKeys.request.localize,
                 style: TextStyle(
                   fontSize: 25.sp,
-                  color: Colors.white,
+                  color: context.isDarkMode?Colors.black:Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),

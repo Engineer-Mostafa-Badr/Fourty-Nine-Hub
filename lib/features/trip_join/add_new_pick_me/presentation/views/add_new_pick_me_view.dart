@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/infoButton.dart';
@@ -18,7 +19,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../RideFeature/presentation/pages/osm_search_and_pick.dart';
 
@@ -35,22 +36,6 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
   int? selectedSeatNum;
   bool isChecked = false;
   TimeOfDay? time;
-  List<String> carBrands = [
-    'Alfa Romeo',
-    'Aston Martin',
-    'Audi',
-    'BMW',
-    'Baic',
-    'Bestune',
-    'Brilliance',
-    'Buick',
-  ];
-
-  List<String> carModels = [
-    'A1',
-    'MZ 40',
-    'X3',
-  ];
   int seatNum = 1;
   var phoneController = TextEditingController();
   String? selectedCountry;
@@ -128,14 +113,25 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
               const Sizer(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: NewPhoneNumberTextFormField(
-                    style: Styles.mediumText(),
+                child: FormTextField(
+                    type: TextInputType.phone,
+                    textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                    height: 76.h,
+                    style: Styles.mediumText(color: AppColors.getTextColor(context)),
                     constraints:
                     const BoxConstraints(maxHeight: 52, minHeight: 52),
-                    fillColor: AppColors.colorGreyLight,
-                    currentController: phoneController,
-                    isRequired: true,
-                ),
+                    fillColor: AppColors.getFillColor(context),
+                    borderRadius: BorderRadius.circular(30.h),
+                    borderColor: AppColors.getFillColor(context),borderSide: AppColors.getFillColor(context),
+                    controller: phoneController,
+                    hint: LocaleKeys.phoneNumber.localize,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return LocaleKeys
+                            .please_enter_phone_number.localize;
+                      }
+                      return null;
+                    }),
               ),
               const Sizer(),
               const Padding(
@@ -172,7 +168,7 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color(0xFFEEEEEE),
+          color: AppColors.getFillColor(context),
         ),
         child: Row(
           children: [
@@ -198,7 +194,7 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                     : text,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Styles.mediumText(color: Colors.black),
+                style: Styles.mediumText(color: AppColors.getTextColor(context)),
               ),
             ),
           ],

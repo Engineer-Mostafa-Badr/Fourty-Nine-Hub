@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class AlertTextWidget extends StatelessWidget {
   final String text;
@@ -20,7 +21,7 @@ class AlertTextWidget extends StatelessWidget {
           padding: EdgeInsets.only(top: fontSize * 0.15),
           child: Icon(
             Icons.circle,
-            color: Colors.black,
+            color: AppColors.getTextColor(context),
             size: fontSize * 0.4,
           ),
         ),
@@ -31,7 +32,7 @@ class AlertTextWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize.sp,
               fontWeight: FontWeight.w700,
-              color: Colors.black,
+              color:AppColors.getTextColor(context),
             ),
             softWrap: true,
           ),

@@ -13,11 +13,11 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class TinderSubCategoryAdsView extends StatefulWidget {
-  final TinderSubAdsViewParams params;
+  // final TinderSubAdsViewParams params;
 
   const TinderSubCategoryAdsView({
     super.key,
-    required this.params,
+    // required this.params,
   });
 
   @override
@@ -35,10 +35,10 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   void initState() {
     super.initState();
 
-    context.read<TinderViewCubit>().fetchMainCategoryById(
-          context,
-          '6718f27eacb309f8b1f94d0c',
-        );
+    // context.read<TinderViewCubit>().fetchMainCategoryById(
+    //       context,
+    //       '6718f27eacb309f8b1f94d0c',
+    //     );
 
     _tabController = TabController(length: 2, vsync: this);
   }
@@ -51,7 +51,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
 
   @override
   Widget build(BuildContext context) {
-    final tinderCubit = context.watch<TinderViewCubit>();
+    // final tinderCubit = context.watch<TinderViewCubit>();
 
     return CustomScaffold(
       appBar: const PreferredSize(
@@ -65,8 +65,10 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
           final textSize = isSmallScreen ? 14.0 : 18.0;
           final iconSize = isSmallScreen ? 24.0 : 30.0;
 
-          return tinderCubit.state.mainCategoryResponse != null
-              ? Column(
+          return
+            // tinderCubit.state.mainCategoryResponse != null
+            //   ?
+            Column(
                   children: [
                     const Sizer(),
                     Container(
@@ -77,9 +79,9 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         color: Colors.yellow,
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(
-                            tinderCubit.state.mainCategoryResponse?.banner ??
-                                '',
+                          image: NetworkImage('https://i.pinimg.com/736x/c8/59/72/c8597269752fd834d4f71ceaac6642fb.jpg'
+                            // tinderCubit.state.mainCategoryResponse?.banner ??
+                            //     '',
                           ),
                         ),
                       ),
@@ -94,15 +96,16 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                     Icons.favorite,
                                     size: iconSize,
                                     color:
-                                        widget.params.subCategory.isFavorite ==
-                                                true
-                                            ? AppColors.SECONDARY_COLOR
-                                            : AppColors.GREY_DARK_COLOR,
+                                        // widget.params.subCategory.isFavorite ==
+                                        //         true
+                                        //     ? AppColors.SECONDARY_COLOR
+                                        //     :
+                                        AppColors.GREY_DARK_COLOR,
                                   ),
                                 ),
                                 const Sizer(),
-                                Text(
-                                  '${tinderCubit.state.mainCategoryResponse!.numberOfAdsCount} ${Labels.ads}',
+                                Text('kldsfuslfkds',
+                                  //'${tinderCubit.state.mainCategoryResponse!.numberOfAdsCount} ${Labels.ads}',
                                   textScaler: TextScaler.noScaling,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 30.sp),
@@ -114,8 +117,9 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                           Expanded(
                             child: FittedBox(
                               child: Text(
-                                tinderCubit.state.mainCategoryResponse!.name ??
-                                    "",
+                                // tinderCubit.state.mainCategoryResponse!.name ??
+                                //     "",
+                                'sdklfdsfds',
                                 textScaler: TextScaler.noScaling,
                                 style: TextStyle(
                                     // color: AppColors.PRIMARY_COLOR,
@@ -132,8 +136,10 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     const Sizer(),
                     Text(
                       context.isArabic
-                          ? widget.params.subCategory.nameAr
-                          : widget.params.subCategory.nameEn,
+                          ? 'jdjfsjj'
+                          //widget.params.subCategory.nameAr
+                          : 'fjfjfj',
+                      //widget.params.subCategory.nameEn,
                       textScaler: TextScaler.noScaling,
                       style: TextStyle(
                           fontSize: 40.sp,
@@ -143,11 +149,17 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     const Sizer(),
                     Builder(builder: (context) {
                       String provider = getServiceName(context.isArabic
-                          ? widget.params.subCategory.nameAr
-                          : widget.params.subCategory.nameEn);
+                              ? 'fjfjjf'
+                              //widget.params.subCategory.nameAr
+                              : 'fkfjfj'
+                          //widget.params.subCategory.nameEn
+                          );
                       String user = getUserName(context.isArabic
-                          ? widget.params.subCategory.nameAr
-                          : widget.params.subCategory.nameEn);
+                              ? 'dkkfjfj'
+                              // widget.params.subCategory.nameAr
+                              : 'fkfjfjf'
+                          // widget.params.subCategory.nameEn
+                          );
                       return TabBar(
                         controller: _tabController,
                         labelColor: AppColors.SECONDARY_COLOR,
@@ -168,20 +180,29 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         children: [
                           Center(
                               child: Text(
-                            'Provider: ${getServiceName(context.isArabic ? widget.params.subCategory.nameAr : widget.params.subCategory.nameEn)}',
+                            'Provider: ${getServiceName(
+                                context.isArabic ?'okjoij'
+                                //widget.params.subCategory.nameAr
+                                    :'knknnk'
+                                //widget.params.subCategory.nameEn
+                            )}',
                             textScaler: TextScaler.noScaling,
                           )),
                           Center(
                               child: Text(
-                            'User: ${getUserName(context.isArabic ? widget.params.subCategory.nameAr : widget.params.subCategory.nameEn)}',
+                            'User: ${getUserName(context.isArabic ?'dsjns'
+                            //widget.params.subCategory.nameAr
+                                : 'kmslkakjd'
+                            //widget.params.subCategory.nameEn
+                            )}',
                             textScaler: TextScaler.noScaling,
                           )),
                         ],
                       ),
                     ),
                   ],
-                )
-              : const Center(child: CircularProgressIndicator());
+                );
+              //: const Center(child: CircularProgressIndicator());
         },
       ),
     );
