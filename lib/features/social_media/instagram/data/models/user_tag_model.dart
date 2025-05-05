@@ -10,9 +10,9 @@ class UserTagModel extends UserTagEntity {
   });
 
   factory UserTagModel.fromJson(Map<String, dynamic> json) => UserTagModel(
-        id: json['_id'] ?? '',
+        id: json['id'] ?? '',
         username: json['username'] ?? '',
-        imageUrl: json['USER_PROFILE']['profilePictureKey'] ?? '',
+        imageUrl: json['profilePictureKey'] ?? '',
         firstName: json['firstName'] ?? '',
         lastName: json['lastName'] ?? '',
       );

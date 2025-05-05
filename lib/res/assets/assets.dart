@@ -134,6 +134,8 @@ abstract class Assets {
   static String instagramRefreshRedIcon =
       'assets/icons/instagram_refresh_red_icon.svg';
   static String instagramSearchIcon = 'assets/icons/instagram_search_icon.svg';
+  static String instagramSearchIconDark =
+      'assets/icons/instagram_search_icon_dark.svg';
 
   static String createPostInstagramMultiImageIcon =
       'assets/icons/create_post_instagram_multi_image_icon.svg';
