@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/carousel_slider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -60,6 +61,10 @@ class AnnounceWidget extends StatelessWidget {
           onTap: () {
             print(item.id);
             print(item.titleEn);
+            if (UserCubit.to.isLoggedIn == false) {
+              context.push(Routes.LOGIN);
+              return;
+            }
             if (item.id == '67700fc734004152c40f8b71') {
               context.push(Routes.GIFT);
             } else if (item.id == '6770102e34004152c40f8b9a') {
