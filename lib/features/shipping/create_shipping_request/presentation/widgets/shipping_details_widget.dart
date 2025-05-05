@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -65,10 +66,10 @@ class ShippingDetailsWidget extends StatelessWidget {
             ],
           ),
           const Sizer(),
-          FormTextField(
-            hint: LocaleKeys.phoneNumber.tr(),
+          NewPhoneNumberTextFormField(
             prefix: const Icon(Icons.phone),
-            controller: controller.toPhoneTextController,
+            currentController: controller.toPhoneTextController,
+            isRequired: true,
           ),
         ],
       );
@@ -166,10 +167,10 @@ class ShippingDetailsWidget extends StatelessWidget {
             ],
           ),
           const Sizer(),
-          FormTextField(
-            hint: LocaleKeys.phoneNumber.tr(),
+          NewPhoneNumberTextFormField(
             prefix: const Icon(Icons.phone),
-            controller: controller.fromPhoneTextController,
+            currentController: controller.fromPhoneTextController,
+            isRequired: true,
           ),
         ],
       );

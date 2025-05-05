@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
+
+import '../../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 
 class DriverPhoneNumberV2 extends StatefulWidget {
   const DriverPhoneNumberV2({
@@ -35,52 +35,13 @@ class _DriverPhoneNumberV2State extends State<DriverPhoneNumberV2> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 80.h,
-      child: TextFormField(
-        // currentController: TextEditingController(),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(15)),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(15)),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(15)),
-          disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(15)),
-          errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(15)),
-          fillColor: Color.fromRGBO(245, 245, 245, 1),
-          isDense: true, // Added this
-          contentPadding: const EdgeInsets.all(14),
-          labelStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 25.sp,
-              fontWeight: FontWeight.w400),
-          label: Text(LocaleKeys.phoneNumber.localize),
-        ),
-        keyboardType: TextInputType.phone,
+      child: NewPhoneNumberTextFormField(
+        currentController: TextEditingController(),
         onChanged: (value) {
           tripJoinViewCubit.phoneNumber = value;
         },
-        validator: (value) {
-          return _validateMobile(value);
-        },
+        isRequired: true,
       ),
     );
-  }
-
-  String? _validateMobile(String? value) {
-    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = RegExp(pattern);
-    if (value == null || value.isEmpty) {
-      return LocaleKeys.youCantLeaveFieldEmpty.localize;
-    } else if (!regExp.hasMatch(value)) {
-      return LocaleKeys.enterValidPhoneNumber.localize;
-    }
-    return null;
   }
 }

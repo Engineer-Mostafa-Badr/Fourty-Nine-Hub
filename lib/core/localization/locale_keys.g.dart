@@ -1571,5 +1571,7 @@ abstract class  LocaleKeys {
   static const expiryMonth = 'expiryMonth';
   static const ccv = 'ccv';
   static const errorDecodingQrCode = 'errorDecodingQrCode';
-
+  static const phoneNumbersNotAllowed = 'phoneNumbersNotAllowed';
+  static const invalidEmailAddress = 'invalidEmailAddress';
+  static const yellowCardMember = 'yellowCardMember';
 }
