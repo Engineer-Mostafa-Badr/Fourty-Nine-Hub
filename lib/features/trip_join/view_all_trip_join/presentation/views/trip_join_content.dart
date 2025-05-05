@@ -53,7 +53,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                   case LocaleKeys.availableTrips:
                     return AvailableTripsCard(
                       subscribtionPlan: context.isArabic
-                          ? 'العروض المميزة'
+                          ? 'مميز'
                           : LocaleKeys.premium.localize,
                       title: context.isArabic ? 'كيا، سيراتو' : 'Kia, Cerato',
                       buttonTitle: LocaleKeys.request.localize,
@@ -87,7 +87,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                       title: context.isArabic ? 'محمد' : 'Mohamed',
                       isMale: true,
                       buttonTitle: LocaleKeys.request.localize,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      time: context.isArabic ? '8:00 م' : '8:00 Pm',
                       seats: 2,
                       status: context.isArabic ? 'انتهت' : 'Expired',
                       isRequestButton: false,
@@ -101,7 +101,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                       title: context.isArabic ? 'كيا، سيراتو' : 'Kia, Cerato',
                       isMale: true,
                       buttonTitle: LocaleKeys.deleteAd.localize,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      time: context.isArabic ? '8:00 م' : '8:00 Pm',
                       seats: 2,
                       status: context.isArabic ? 'مرة واحدة' : 'One Time',
                       isRequestButton: true,

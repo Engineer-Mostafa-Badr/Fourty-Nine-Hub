@@ -224,7 +224,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                     style: Styles.headerText(
                         color:AppColors.getTextColor(context), fontWeight: FontWeight.bold)),
                 TextSpan(
-                  text: context.isArabic ? 'جنيه' : 'EGP',
+                  text: context.isArabic ? 'ج.م' : 'EGP',
                   style: Styles.mediumText(
                       fontSize: context.locale.languageCode == "ar" ? 35 : 28,
                       fontWeight: FontWeight.w500,

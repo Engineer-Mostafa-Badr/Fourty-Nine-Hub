@@ -256,7 +256,7 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                   Row(
                     children: [
                       Text(
-                        context.isArabic ? 'منذ ساعة واحدة' : '1 hour ago',
+                        context.isArabic ? 'منذ ساعة ' : '1 hour ago',
                         style: TextStyle(
                           fontSize: 28.sp,
                           color: context.isDarkMode

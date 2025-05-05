@@ -255,7 +255,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 Row(
                   children: [
                     Text(
-                      context.isArabic ? "منذ 10 دقائق" : '10 mins ago',
+                      context.isArabic ? "منذ 10 د" : '10 mins ago',
                       style: TextStyle(
                         fontSize: 14,
                         color: context.isDarkMode
