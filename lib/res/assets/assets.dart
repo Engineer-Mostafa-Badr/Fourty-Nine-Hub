@@ -35,6 +35,7 @@ abstract class Assets {
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
   static String share2Icon = 'assets/icons/share_2_icon.svg';
+  static String share2IconDark = 'assets/icons/share_2_icon_dark.svg';
   static String publication = 'assets/icons/publication.svg';
   static String zoomVideo = 'assets/icons/zoomVideo.svg';
   static String adIcon = 'assets/icons/ad_icon.svg';
@@ -49,6 +50,7 @@ abstract class Assets {
   static String mailIcon = 'assets/icons/mail_icon.svg';
   static String mailIconRed = 'assets/icons/mail_icon_red.svg';
   static String refreshIcon = 'assets/icons/refresh_icon.svg';
+  static String refreshIconDark = 'assets/icons/refresh_icon_dark.svg';
   static String searchIcon = 'assets/icons/search_icon.svg';
   static String captainTripsIcon = 'assets/icons/captain_trips_icon.svg';
   static String captainTripsIconDark =
@@ -314,8 +316,11 @@ abstract class Assets {
   static String carImage = "assets/images/car_image.jpg";
   static String personalImage = "assets/images/personal_image.png";
   static String checkSuccessImage = 'assets/images/check_success_image.png';
+  static String checkSuccessImageDark =
+      'assets/images/check_success_image_dark.png';
   static String checkCircle = 'assets/icons/check-circle.png';
   static String walletImage = 'assets/images/wallet_image.svg';
+  static String walletImageDark = 'assets/images/wallet_image_dark.svg';
 
 // .png
   //drawer
