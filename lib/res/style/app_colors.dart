@@ -41,6 +41,7 @@ abstract class AppColors {
   static const Scaffold_Color_DARK = Color(0xFF0D0D0D);
   static const fill_Color_DARK = Color(0xFF171717);
   static const red_Color_DARK = Color(0xFFF45560);
+  static const Find_fill_DARK = Color(0xFF262626);
   static const c0B1035 = Color(0xFF0B1035);
   static const c46484B = Color(0xFF46484B);
   static const cF5F5F5 = Color(0xFFF5F5F5);
@@ -166,6 +167,11 @@ abstract class AppColors {
     return context.isDarkMode
         ? AppColors.fill_Color_DARK
         : AppColors.colorGreyLight;
+  }
+  static Color getFindFillColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.Find_fill_DARK
+        : AppColors.LIGHT_GRAY_COLOR;
   }
   
 }

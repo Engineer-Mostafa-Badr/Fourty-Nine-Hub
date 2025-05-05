@@ -187,6 +187,7 @@ flutter:
     # - assets/images/butterfly.png
     # - assets/images/salary.png
     - assets/icons/
+    - assets/icons/tinder/
     - assets/lottie/
     - assets/filters/
     - assets/audio/
