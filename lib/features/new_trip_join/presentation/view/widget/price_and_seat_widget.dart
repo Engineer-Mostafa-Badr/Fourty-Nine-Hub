@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
@@ -42,8 +43,8 @@ class _PriceAndSeatWidgetState extends State<PriceAndSeatWidget> {
             children: [
               TextSpan(
                 text: context.isArabic ? "جنيه مصري" : "EGP",
-                style: const TextStyle(
-                  color: Colors.red,
+                style: TextStyle(
+                  color:AppColors.getRedColor(context),
                 ),
               ),
             ],

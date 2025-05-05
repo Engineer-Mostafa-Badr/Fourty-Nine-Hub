@@ -6,33 +6,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_text_no_login.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/show_user_in_map.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../chat/chat_view/domain/entities/chat_entity.dart';
 import '../../../chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import '../../../chat/chat_view/presentation/pages/chats_view.dart';
-import '../../data/shared/shared.dart';
 
 class TinderCardStack extends StatefulWidget {
   const TinderCardStack({super.key});
@@ -46,78 +36,74 @@ class _TinderCardStackState extends State<TinderCardStack> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 0.88.sh,
-      child: BlocBuilder<TinderViewCubit, TinderViewState>(
-        builder: (context, state) {
-          // if (state.userData!.isEmpty) {
-          //   return const Center(
-          //     child: CupertinoActivityIndicator(radius: 25),
-          //   );
-          // }
-          return _buildCardSwiper(context, state);
-        },
+      child: Stack(
+        children: [
+          _buildCardSwiper(
+            context,
+          ),
+          _buildActions(
+            context,
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildCardSwiper(BuildContext context, TinderViewState state) {
+  Widget _buildCardSwiper(
+    BuildContext context,
+  ) {
     return CardSwiper(
-      cardsCount: state.userData0!.length,
-      numberOfCardsDisplayed:
-          state.userData0!.length < 3 ? state.userData0!.length : 2,
-      scale: 0.9,
+      backCardOffset: const Offset(0, 0),
+      cardsCount: 5,
+      numberOfCardsDisplayed: 3,
       isLoop: true,
-      padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 24),
+      padding: const EdgeInsets.only(bottom: 24),
+      maxAngle: 50,
       onSwipe: (previousIndex, currentIndex, direction) {
-        // Disable swapping if there's only one card
-        if (state.userData0!.length == 1) {
-          return false; // Prevent swipe
-        }
         setState(() {
           // Update the UI based on new card index
-          _buildCardWidget(context, state.userData0![currentIndex!]);
+          _buildCardWidget(
+            context,
+            isSwapping: true
+          );
         });
-        if (currentIndex != null) {
-          _fetchUserDataOnSwipe(context, state.userData0![currentIndex].id);
-
-          // if (currentIndex >= state.userData0!.length - 3) {
-          //   context.read<TinderViewCubit>().fetchUserData(state.gender!);
-          // }
-        }
         return true;
       },
       cardBuilder: (context, index, horizontalOffsetPercentage,
           verticalOffsetPercentage) {
-        // if (index >= state.userData0!.length) {
-        //   setState(() {});
-        // }
-        return _buildCardWidget(context, state.userData0![index]);
+        return _buildCardWidget(
+          context,
+        );
       },
       duration: const Duration(milliseconds: 100),
     );
   }
 
-  void _fetchUserDataOnSwipe(BuildContext context, String? userId) {
-    if (userId != null && userId.isNotEmpty) {
-      context.read<TinderViewCubit>().fetchLastSeen(userId: userId);
-      // ..checkUserNearby(cardUserId: userId);
-    }
-  }
-
-  Widget _buildCardWidget(BuildContext context, UserDataTinderEntity cardUser) {
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: SizedBox(
-        child: Card(
-          clipBehavior: Clip.hardEdge,
-          elevation: 2,
+  Widget _buildCardWidget(
+    BuildContext context,
+  {bool? isSwapping}
+  ) {
+    return SizedBox(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 16.0.h),
+        child:  Card(
+          clipBehavior: Clip.antiAlias,
+          shape:const  RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+          elevation: 0,
+          margin: EdgeInsets.zero,
           child: Stack(
             children: [
-              SwipeCardDemo2(cardUser: cardUser),
-              // _buildGenderSwitch(context, cardUser),
-              // _buildMapSwitch(context, cardUser),
-              //_buildStoryBar(context, cardUser),
-              _buildPersonInfo(context, cardUser),
-              _buildActions(context, cardUser),
+              const SwipeCardDemo2(),
+              if(isSwapping!=null)
+                Positioned(
+                  left: 20,
+                  top: 20,
+                  child: Container(
+                  child: Text('noooooooooooo'),
+                                ),
+                )
             ],
           ),
         ),
@@ -125,183 +111,78 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Widget _buildGenderSwitch(BuildContext context, UserDataTinderEntity user) {
-    return Positioned(
-      right: 8,
-      top: 25,
-      child: Container(
-        width: 80.w,
-        height: 80.h,
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.5),
-          shape: BoxShape.circle,
-        ),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: IconButton(
-            onPressed: () => _switchDisplayGender(context, user),
-            icon: Icon(
-                context.read<TinderViewCubit>().state.userData0?[0].gender ==
-                        'female'
-                    ? Icons.female
-                    : Icons.male,
-                size: 35,
-                color: Colors.black),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMapSwitch(BuildContext context, UserDataTinderEntity user) {
-    return Positioned(
-      left: 8,
-      top: 25,
-      child: Container(
-        width: 40,
-        height: 40.h,
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.5),
-          shape: BoxShape.circle,
-        ),
-        child: IconButton(
-          onPressed: () {
-            // Define the location you want to pass
-            // LatLng location = LatLng(37.7749, -122.4194); // Example coordinates (San Francisco)
-
-            LatLng location = LatLng(
-                user.location!.coordinates[0],
-                user.location!
-                    .coordinates[1]); // Example coordinates (San Francisco)
-            log("${user.location!.coordinates[0]} ${user.location!.coordinates[1]} /////////////////////////////////////////////////////////");
-            // Navigate to the MapScreen and pass the location
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MapScreen(location: location),
-              ),
-            );
-          },
-          icon: const Icon(FontAwesomeIcons.locationDot, color: Colors.black),
-        ),
-      ),
-    );
-  }
-
-  Future<void> _switchDisplayGender(
-      BuildContext context, UserDataTinderEntity user) async {
-    final currentGender = context.read<TinderViewCubit>().state.gender;
-    final newGender = currentGender == 'female' ? 'male' : 'female';
-    // await context.read<TinderViewCubit>().fetchUserData(gender: ! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "");
-    setState(() {
-      print('sssssssssssssssssssssssssssss');
-    });
-  }
-
-  // Widget _buildStoryBar(BuildContext context, UserDataTinderEntity user) {
+  // Widget _buildGenderSwitch(BuildContext context, UserDataTinderEntity user) {
   //   return Positioned(
-  //     top: 10,
-  //     left: 10,
-  //     right: 10,
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: List.generate(
-  //         user.pictures.length,
-  //         (dotIndex) => Expanded(
-  //           child: Container(
-  //             margin: const EdgeInsets.symmetric(horizontal: 2.0),
-  //             height: 4,
-  //             decoration: BoxDecoration(
-  //               color: dotIndex ==
-  //                       context.read<TinderViewCubit>().state.currentStoryIndex
-  //                   ? Colors.red
-  //                   : Colors.grey.withOpacity(0.5),
-  //               borderRadius: BorderRadius.circular(2),
-  //             ),
-  //           ),
+  //     right: 8,
+  //     top: 25,
+  //     child: Container(
+  //       width: 80.w,
+  //       height: 80.h,
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey.withOpacity(0.5),
+  //         shape: BoxShape.circle,
+  //       ),
+  //       child: FittedBox(
+  //         fit: BoxFit.scaleDown,
+  //         child: IconButton(
+  //           onPressed: () => _switchDisplayGender(context, user),
+  //           icon: Icon(
+  //               context.read<TinderViewCubit>().state.userData0?[0].gender ==
+  //                       'female'
+  //                   ? Icons.female
+  //                   : Icons.male,
+  //               size: 35,
+  //               color: Colors.black),
   //         ),
   //       ),
   //     ),
   //   );
   // }
+  //
+  // Widget _buildMapSwitch(BuildContext context, UserDataTinderEntity user) {
+  //   return Positioned(
+  //     left: 8,
+  //     top: 25,
+  //     child: Container(
+  //       width: 40,
+  //       height: 40.h,
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey.withOpacity(0.5),
+  //         shape: BoxShape.circle,
+  //       ),
+  //       child: IconButton(
+  //         onPressed: () {
+  //           // Define the location you want to pass
+  //           // LatLng location = LatLng(37.7749, -122.4194); // Example coordinates (San Francisco)
+  //
+  //           LatLng location = LatLng(
+  //               user.location!.coordinates[0],
+  //               user.location!
+  //                   .coordinates[1]); // Example coordinates (San Francisco)
+  //           log("${user.location!.coordinates[0]} ${user.location!.coordinates[1]} /////////////////////////////////////////////////////////");
+  //           // Navigate to the MapScreen and pass the location
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (context) => MapScreen(location: location),
+  //             ),
+  //           );
+  //         },
+  //         icon: const Icon(FontAwesomeIcons.locationDot, color: Colors.black),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildPersonInfo(BuildContext context, UserDataTinderEntity cardUser) {
-    return Positioned(
-      bottom: kToolbarHeight,
-      right: 8,
-      left: 8,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildPersonStatus(context),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Row(
-                children: [
-                  InkWell(
-                    onTap: cardUser.hasStory? (){
-                      // navigate to stories
-                    }: null,
-                    child: Container(
-                      height: kToolbarHeight * .7,
-                      width: kToolbarHeight * .7,
-                      decoration: cardUser.hasStory? BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(
-                          color: AppColors.PRIMARY_COLOR_DARK,
-                          width: 3,
-                        )
-                      ): null,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: CircleAvatar(
-                          child: Image.network(
-                            cardUser.profilePicture??UIConst.profilePlaceHolder,
-                            fit: BoxFit.cover,
-                            errorBuilder:
-                                (context, error, stackTrace) {
-                              return Image.network(
-                                UIConst.profilePlaceHolder,
-                                fit: BoxFit.cover,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8,),
-                  Text(
-                    "${capitalizeAndSplit(cardUser.firstName ?? '')} ${capitalizeAndSplit(cardUser.lastName ?? '')}",
-                    textAlign: TextAlign.start,
-                    maxLines: 1,
-                    softWrap: true,
-                    overflow: TextOverflow.fade,
-                    textScaler: TextScaler.noScaling,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 60.sp,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(1.0, 1.0),
-                          blurRadius: 4.0,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              subtitle: _buildLastSeen(context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Future<void> _switchDisplayGender(
+  //     BuildContext context, UserDataTinderEntity user) async {
+  //   final currentGender = context.read<TinderViewCubit>().state.gender;
+  //   final newGender = currentGender == 'female' ? 'male' : 'female';
+  //   // await context.read<TinderViewCubit>().fetchUserData(gender: ! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "");
+  //   setState(() {
+  //     print('sssssssssssssssssssssssssssss');
+  //   });
+  // }
 
   getStatus(BuildContext context) {
     final lastSeenModel = context.read<TinderViewCubit>().state.lastSeenModel;
@@ -321,15 +202,6 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   getNearByStatus(BuildContext context) {
     final nearByModel = context.read<TinderViewCubit>().state.isUserNearby;
-    // context
-    //     .read<TinderViewCubit>()
-    //     .state
-    //     .isUserNearby
-    //     ?.data
-    //     ?.isNearBy ==
-    //     true
-    //     ? 'Nearby'
-    //     : 'Not Nearby',
     if (nearByModel != null && nearByModel.data != null) {
       if (nearByModel.data!.isNearBy!) {
         return context.isArabic ? 'قريبٌ منك' : 'Nearby';
@@ -340,138 +212,64 @@ class _TinderCardStackState extends State<TinderCardStack> {
     return '';
   }
 
-  Widget _buildPersonStatus(BuildContext context) {
-    return BlocBuilder<TinderViewCubit, TinderViewState>(
-      builder: (context, state) {
-        if (state.lastSeenModelState == TinderStates.failure ||
-            state.lastSeenModelState == TinderStates.initial) {
-          return const Sizer();
-        }
-        return Row(
-          children: [
-            getStatus(context).toString().isNotEmpty
-                ? Container(
-                    padding: const EdgeInsets.all(4),
-                    //padding: EdgeInsetsDirectional.only(end: 8,top: 5),
-                    decoration: BoxDecoration(
-                        color: AppColors.WHATS_APP_COLOR,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Text(
-                      getStatus(context),
-                      textScaler: TextScaler.noScaling,
-                      style: TextStyle(fontSize: 40.sp, color: Colors.white),
-                    ))
-                : const SizedBox.shrink(),
-            const SizedBox(width: 10),
-            getNearByStatus(context).toString().isNotEmpty
-                ? Container(
-                    padding: const EdgeInsets.all(4),
-                    //padding: EdgeInsetsDirectional.only(end: 8,top: 5),
-                    decoration: BoxDecoration(
-                        color: AppColors.SECONDARY_COLOR,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Text(
-                      getNearByStatus(context),
-                      textScaler: TextScaler.noScaling,
-                      style: TextStyle(fontSize: 40.sp, color: Colors.white),
-                    ))
-                : const SizedBox.shrink(),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildLastSeen(BuildContext context) {
-    // final lastSeen =
-    //     context.read<TinderViewCubit>().state.lastSeenModel?.data?.lastSeen;
-    return BlocBuilder<TinderViewCubit, TinderViewState>(
-      builder: (context, state) {
-        if (state.lastSeenModelState == TinderStates.failure ||
-            state.lastSeenModelState == TinderStates.initial) {
-          return const Text('');
-        } else {
-          if (state.lastSeenModel?.lastSeen != null) {
-            return Text(
-              "${context.isArabic ? " آخر ظهور منذ" : 'Last seen'} ${getTimeAgo(context, state.lastSeenModel?.lastSeen ?? '')}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textScaler: TextScaler.noScaling,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 35.sp,
-                shadows: const [
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 4.0,
-                    color: Colors.black87,
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }
-      },
-    );
-  }
-
-  Widget _buildActions(BuildContext context, UserDataTinderEntity cardUser) {
+  Widget _buildActions(
+    BuildContext context,
+  ) {
     return Positioned(
-      bottom: 8,
+      bottom: 2,
       right: 8,
       left: 8,
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: EdgeInsets.symmetric(horizontal: 32.0.h, vertical: 8.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildActionButton(
               context,
-              Icons.person,
-              !context.read<UserCubit>().isLoggedIn
-                  ? () => context.push(Routes.LOGIN)
-                  : () => context.push(Routes.OTHERSACCOUNT, extra: cardUser.id),
-              color: AppColors.PRIMARY_COLOR,
+              Image.asset(Assets.unavailable), (){},
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     : () => context.push(Routes.OTHERSACCOUNT, extra: cardUser.id),
+              color: AppColors.PRIMARY_COLOR, isMini: true,
             ),
-            _buildActionButton(context, Icons.chat,
-                !context.read<UserCubit>().isLoggedIn
-                    ? () => context.push(Routes.LOGIN)
-                    :  () => showChatBottomSheet(context, cardUser),
-                color: Colors.white, iconColor: AppColors.PRIMARY_COLOR),
             _buildActionButton(
-              context,
-              Icons.add_photo_alternate_outlined,
-              !context.read<UserCubit>().isLoggedIn
-                  ? () => context.push(Routes.LOGIN)
-                  :  () => _navigateToUserProfile(context, cardUser),
-              color: Colors.red,
+              context, Image.asset(Assets.tinder_gift), () {},
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     :  () => showChatBottomSheet(context, cardUser),
+              color: Colors.white,
             ),
             _buildActionButton(
               context,
-              Icons.card_giftcard,
-              !context.read<UserCubit>().isLoggedIn
-                  ? () => context.push(Routes.LOGIN)
-                  :  () => showGiftBottomSheet(context, receiverId: cardUser.id),
+              Image.asset(Assets.green_heart), () {},
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     :  () => _navigateToUserProfile(context, cardUser),
+              color: Colors.red, isMini: true,
+            ),
+            _buildActionButton(
+              context,
+              Image.asset(Assets.tinder_comments), () {},
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     :  () => showGiftBottomSheet(context, receiverId: cardUser.id),
               color: AppColors.ACCENT_COLOR,
             ),
             _buildActionButton(
-              context,
-              Icons.report,
-              !context.read<UserCubit>().isLoggedIn
-                  ? () => context.push(Routes.LOGIN)
-                  : () {
-                      bottomSheet(
-                          context: context,
-                          widget: ReportView(
-                            id: cardUser.id!,
-                            categoryId: '66af974f8bf69f9469944746',
-                          ));
-                    },
-              // () => _showReportBottomSheet(context, cardUser),
-              color: Colors.red,
-            ),
+                context, Image.asset(Assets.tinder_account),()=> context.push(Routes.UserProfilePage),
+                // !context.read<UserCubit>().isLoggedIn
+                //     ? () => context.push(Routes.LOGIN)
+                //     : () {
+                //         bottomSheet(
+                //             context: context,
+                //             widget: ReportView(
+                //               id: cardUser.id!,
+                //               categoryId: '66af974f8bf69f9469944746',
+                //             ));
+                //       },
+                // () => _showReportBottomSheet(context, cardUser),
+                color: Colors.red,
+                isMini: true),
           ],
         ),
       ),
@@ -479,43 +277,43 @@ class _TinderCardStackState extends State<TinderCardStack> {
   }
 
   Widget _buildActionButton(
-    BuildContext context,
-    IconData icon,
-    VoidCallback onPressed, {
-    Color? color,
-    Color? iconColor,
-  }) {
-    return FloatingActionButton.small(
+      BuildContext context, Widget child, VoidCallback onPressed,
+      {Color? color, bool? isMini}) {
+    return FloatingActionButton(
       heroTag: UniqueKey(),
       onPressed: onPressed,
-      backgroundColor: color,
+      mini: isMini ?? false,
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-      child: Icon(icon, color: iconColor ?? Colors.white),
+      child: Padding(
+        padding: EdgeInsets.all(isMini == null ? 16.0.h : 8.h),
+        child: child,
+      ),
     );
   }
 
-  _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
-    if (!context.read<UserCubit>().isLoggedIn) {
-      return const CustomNotLogged();
-    }
-    if (serviceLocator<UserCubit>().state.data != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: serviceLocator<TinderViewCubit>()
-                  ..fetchUserProfile(
-                      userId: serviceLocator<UserCubit>().state.data!.id),
-              ),
-            ],
-            child: const UserProfilePage(),
-          ),
-        ),
-      );
-    }
-  }
+// _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
+//   if (!context.read<UserCubit>().isLoggedIn) {
+//     return const CustomNotLogged();
+//   }
+//   if (serviceLocator<UserCubit>().state.data != null) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => MultiBlocProvider(
+//           providers: [
+//             BlocProvider.value(
+//               value: serviceLocator<TinderViewCubit>()
+//                 ..fetchUserProfile(
+//                     userId: serviceLocator<UserCubit>().state.data!.id),
+//             ),
+//           ],
+//           child: const UserProfilePage(),
+//         ),
+//       ),
+//     );
+//   }
+// }
 }
 
 // class ChatAlertDialogue extends StatelessWidget {
@@ -895,21 +693,21 @@ class ChatBottomSheet extends StatelessWidget {
     }
   }
 
-  void _navigateToChatRoom(BuildContext context, String chatId,
-      ChatRoomCubit chatRoomCubit, ChatsCubit chatsCubit) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: chatRoomCubit),
-            BlocProvider.value(value: chatsCubit),
-          ],
-          child: ChatRoomView(chatsCubit: chatsCubit),
-        ),
-      ),
-    );
-  }
+// void _navigateToChatRoom(BuildContext context, String chatId,
+//     ChatRoomCubit chatRoomCubit, ChatsCubit chatsCubit) {
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//       builder: (_) => MultiBlocProvider(
+//         providers: [
+//           BlocProvider.value(value: chatRoomCubit),
+//           BlocProvider.value(value: chatsCubit),
+//         ],
+//         child: ChatRoomView(chatsCubit: chatsCubit),
+//       ),
+//     ),
+//   );
+// }
 }
 
 Widget _buildChatOptionCard(
@@ -1080,99 +878,13 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
           ));
 }
 
-Widget swipeCardDemo2(BuildContext context, UserDataTinderEntity cardUser) {
-  int currentStoryIndex = 0;
-
-  void nextStory() {
-    final pictures = cardUser.pictures;
-    currentStoryIndex = (currentStoryIndex < pictures.length - 1)
-        ? currentStoryIndex + 1
-        : pictures.length - 1;
-  }
-
-  void previousStory() {
-    currentStoryIndex = (currentStoryIndex > 0) ? currentStoryIndex - 1 : 0;
-  }
-
-  void handleTap(Offset localPosition) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
-
-    if (tappedLeftSide) {
-      context.isArabic ? nextStory() : previousStory();
-    } else {
-      context.isArabic ? previousStory() : nextStory();
-    }
-  }
-
-  Widget buildCard(BuildContext context) {
-    final pictures = cardUser.pictures;
-    final profilePicture = cardUser.profilePicture;
-
-    String? imageUrl;
-    if (pictures.isNotEmpty) {
-      imageUrl = pictures.reversed.toList()[currentStoryIndex].mediaKey;
-    }
-
-    return Stack(
-      children: [
-        Hero(
-          tag: UniqueKey(),
-          child: Image.network(
-            imageUrl ?? profilePicture ?? UIConst.profilePlaceHolder,
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.fitHeight,
-            errorBuilder: (_, __, ___) => Image.network(
-              UIConst.profilePlaceHolder,
-              fit: BoxFit.fitHeight,
-              height: double.infinity,
-            ),
-          ),
-        ),
-        Positioned(
-          top: 10,
-          left: 10,
-          right: 10,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              pictures.length,
-              (dotIndex) => Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: (dotIndex == currentStoryIndex)
-                        ? Colors.red
-                        : Colors.white54,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  return StatefulBuilder(
-    builder: (context, setState) {
-      return GestureDetector(
-        onTapUp: (details) => handleTap(details.localPosition),
-        child: buildCard(context),
-      );
-    },
-  );
-}
-
-//last ya ali
-
 class SwipeCardDemo2 extends StatefulWidget {
-  final UserDataTinderEntity cardUser;
+  //final UserDataTinderEntity cardUser;
 
-  const SwipeCardDemo2({super.key, required this.cardUser});
+  const SwipeCardDemo2({
+    super.key,
+    // required this.cardUser
+  });
 
   @override
   SwipeCardDemo2State createState() => SwipeCardDemo2State();
@@ -1187,26 +899,26 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
     super.initState();
   }
 
-  // void _nextStory() {
-  //   setState(() {
-  //     if (_currentStoryIndex == widget.cardUser.pictures.length - 1) {
-  //       _currentStoryIndex = 0;
-  //     }
-  //     _currentStoryIndex =
-  //         (_currentStoryIndex < widget.cardUser.pictures.length)
-  //             ? _currentStoryIndex + 1
-  //             : widget.cardUser.pictures.length - 1;
-  //   });
-  // }
-
   void _nextStory() {
     setState(() {
-      if (_currentStoryIndex < widget.cardUser.pictures.length - 1) {
+      final pictures = [
+        Assets.spotlight_profile,
+        Assets.personalImage,
+        Assets.spotlight_profile,
+        Assets.personalImage,
+      ];
+      if (_currentStoryIndex < pictures.length - 1) {
         _currentStoryIndex = _currentStoryIndex + 1;
       } else {
-        _currentStoryIndex = widget.cardUser.pictures.length -
-            1; // Reset to the first story after the last
+        _currentStoryIndex =
+            pictures.length - 1; // Reset to the first story after the last
       }
+      // if (_currentStoryIndex < widget.cardUser.pictures.length - 1) {
+      //   _currentStoryIndex = _currentStoryIndex + 1;
+      // } else {
+      //   _currentStoryIndex = widget.cardUser.pictures.length -
+      //       1; // Reset to the first story after the last
+      // }
     });
   }
 
@@ -1220,27 +932,16 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
     });
   }
 
-  // void _previousStory() {
-  //   setState(() {
-  //     if (_currentStoryIndex == 0) {
-  //       _currentStoryIndex = widget.cardUser.pictures.length;
-  //     }
-  //     _currentStoryIndex =
-  //         (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapUp: (details) => _handleTap(details.localPosition),
-      child: _buildCard(context),
+      child: _buildCard(context, _currentStoryIndex),
     );
   }
 
   void _handleTap(Offset localPosition) {
     print('Current Story Index: $_currentStoryIndex');
-
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
     print('Current Story Index: $_currentStoryIndex');
@@ -1254,21 +955,160 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
     });
   }
 
-  Widget _buildCard(BuildContext context) {
-    final pictures = widget.cardUser.pictures;
-    final profilePicture = widget.cardUser.profilePicture;
+  Widget _buildPersonInfo(BuildContext context, int index) {
+    return Positioned(
+      bottom: kToolbarHeight - 20,
+      right: 8,
+      left: 8,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                'Mohamed Magdy',
+                //"${capitalizeAndSplit(cardUser.firstName ?? '')} ${capitalizeAndSplit(cardUser.lastName ?? '')}",
+                textAlign: TextAlign.start,
+                maxLines: 1,
+                softWrap: true,
+                overflow: TextOverflow.fade,
+                textScaler: TextScaler.noScaling,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 60.sp,
+                  shadows: const [
+                    Shadow(
+                      offset: Offset(1.0, 1.0),
+                      blurRadius: 4.0,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [personInfoSubtitle(index)],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget personInfoSubtitle(int index) {
+    switch (index) {
+      case 1:
+        return _customListTile(
+            Assets.location,
+          context.isArabic ? 'يبعُد 10 ميل ' : '10 Miles Away',
+        );
+      case 2:
+        return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _customListTile(
+                Assets.tinder_home,
+                context.isArabic ? 'حلوان' : 'Helwan',
+              ),
+              _customListTile(
+                Assets.location,
+                context.isArabic
+                    ? 'يبعُد 10 ميل'
+                    : '10 Miles Away',
+              ),
+            ]);
+      case 3:
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _customListTile(
+                Assets.interest,
+                context.isArabic ? 'اهتمامات' : 'Interests'),
+            Wrap(
+              children: [
+                _buildInterestsBobble(
+                    title: context.isArabic ? 'الكتابة' : 'Writing'),
+                const Sizer(),
+                _buildInterestsBobble(
+                    title: context.isArabic ? 'كرة القدم' : 'Football'),
+                const Sizer(),
+                _buildInterestsBobble(title: context.isArabic ? 'جيم' : 'GYM'),
+              ],
+            )
+          ],
+        );
+      default:
+        return Label(
+          text: context.isArabic ? 'أنت تعرفني 😎' : 'You Know Me 😎',
+          style: Styles.headerText(color: Colors.white),
+        );
+    }
+  }
+
+  Widget _buildInterestsBobble({
+    required String title,
+  }) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: const Color(0xFF404040),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Label(
+        text: title,
+        style: Styles.headerText(color: Colors.white, fontSize: 32),
+      ),
+    );
+  }
+
+  Widget _customListTile(String icon, String title) {
+    return ListTile(
+      dense: true,
+      contentPadding: EdgeInsets.zero,
+      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+      leading: Image.asset(
+        icon,
+        height: 35.h,
+        color: Colors.white,
+      ),
+      title: Label(
+        text: title,
+        style: Styles.headerText(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildCard(BuildContext context, int index) {
+    // final pictures = widget.cardUser.pictures;
+    // final profilePicture = widget.cardUser.profilePicture;
+
+    final pictures = [
+      Assets.spotlight_profile,
+      Assets.personalImage,
+      Assets.spotlight_profile,
+      Assets.personalImage,
+    ];
+    const profilePicture =
+        'https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D';
 
     String? imageUrl;
-    if (pictures.isNotEmpty) {
-      imageUrl = pictures.reversed.toList()[_currentStoryIndex].mediaKey;
-    }
+    // if (pictures.isNotEmpty) {
+    //   imageUrl = pictures.reversed.toList()[_currentStoryIndex].mediaKey;
+    // }
 
     return Stack(
       children: [
         Hero(
           tag: UniqueKey(),
           child: Image.network(
-            imageUrl ?? profilePicture ?? UIConst.profilePlaceHolder,
+            imageUrl ?? profilePicture
+            //?? UIConst.profilePlaceHolder,
+            ,
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.fitHeight,
@@ -1287,7 +1127,6 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.transparent, // Gradual fade to transparent
                   Colors.transparent, // Gradual fade to transparent
                   Colors.black.withOpacity(0.7), // Shadow effect at the top
                 ],
@@ -1308,14 +1147,18 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 2.0),
                   height: 4,
-                  color: (dotIndex != _currentStoryIndex)
-                      ? Colors.white54
-                      : Colors.red,
+                  decoration: BoxDecoration(
+                      color: (dotIndex != _currentStoryIndex)
+                          ? const Color(0xFF808080)
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(30)),
                 ),
               ),
             ),
           ),
         ),
+
+        _buildPersonInfo(context, index),
       ],
     );
   }

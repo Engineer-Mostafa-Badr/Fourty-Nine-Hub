@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../routes/routes.dart';
@@ -20,13 +23,13 @@ class PastTripsWidget extends StatelessWidget {
                     context.push(Routes.captainRideDetails);
                   },
                   cancelButton: false,
-                  statusDriver: "Expired",
-                  requestType: 'Regular',
+                  statusDriver: context.isArabic?'منتهي':"Expired",
+                  requestType: context.isArabic?'عادي':'Regular',
                 ),
                 AvailableRideModeWidget(
                   onTap: () {},
-                  statusDriver: "Expired",
-                  requestType: 'Regular',
+                  statusDriver: context.isArabic?'منتهي':"Expired",
+                  requestType: context.isArabic?'عادي':'Regular',
                 ),
               ],
             ),
@@ -35,10 +38,10 @@ class PastTripsWidget extends StatelessWidget {
 }
 
 Widget _emptyMessage() {
-  return const Center(
+  return Center(
     child: Text(
-      'Your running trip right now.',
-      style: TextStyle(fontSize: 16, color: Colors.grey),
+      LocaleKeys.thereIsNoTripsInThisList.localize,
+      style: const TextStyle(fontSize: 16, color: Colors.grey),
     ),
   );
 }

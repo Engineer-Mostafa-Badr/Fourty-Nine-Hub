@@ -252,6 +252,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
@@ -1572,6 +1573,10 @@ class AppPages {
                         path: Paths.TINDER,
                         name: Routes.Tinder,
                         builder: (context, state) => const TinderView()),
+                    GoRoute(
+                        path: Paths.UserProfilePage,
+                        name: Routes.UserProfilePage,
+                        builder: (context, state) => const UserProfilePage()),
                     GoRoute(
                         path: Paths.LIVE,
                         name: Routes.LIVE,

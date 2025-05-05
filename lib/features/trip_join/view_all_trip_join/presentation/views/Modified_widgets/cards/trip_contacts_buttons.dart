@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -58,18 +58,26 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                visualDensity:const  VisualDensity(
-                    horizontal: -4, vertical: -4),
-                color: (snap.data == true &&
-                        context.read<UserCubit>().isLoggedIn)
-                    ? AppColors.PRIMARY_COLOR
-                    : AppColors.DARK_GRAY_COLOR,
-                icon:const Icon(Icons.call,color: Colors.black,),
-                onPressed:()=>JoinTripBottomSheet(context,
-                    topButtonColor: AppColors.PRIMARY_COLOR,
-                    topButtonTitle:LocaleKeys.freeCall.localize ,
-                    bottomButtonColor: AppColors.BG_GRAY_COLOR,
-                    bottomButtonTitle: LocaleKeys.regularCall.localize,onTap:()=> Navigator.of(context).pop()),
+                visualDensity:
+                    const VisualDensity(horizontal: -4, vertical: -4),
+                color:
+                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                        ? AppColors.PRIMARY_COLOR
+                        : AppColors.DARK_GRAY_COLOR,
+                icon: Icon(
+                  Icons.call,
+                  color: context.isDarkMode ? AppColors.grey : Colors.black,
+                ),
+                onPressed: () => JoinTripBottomSheet(context,
+                    topButtonColor: AppColors.getButtonPrimaryColor(context),
+                    topButtonTitle: LocaleKeys.freeCall.localize,
+                    bottomButtonColor:context.isDarkMode?AppColors.fill_Color_DARK:Color(0xFFD9D9D9),
+                    bottomButtonTitle: LocaleKeys.regularCall.localize,
+                    onTap: () => Navigator.of(context).pop(),
+                    topTextColor:
+                        context.isDarkMode ? Colors.black : Colors.white,
+                    bottomTextColor:
+                    AppColors.getTextColor(context)),
                 // !context.read<UserCubit>().isLoggedIn
                 //     ? () => context.push(Routes.LOGIN)
                 //     :
@@ -216,14 +224,15 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 //           },
               ),
               IconButton(
-                visualDensity:const  VisualDensity(
-                    horizontal: -4, vertical: -4),
-                color: (snap.data == true &&
-                        context.read<UserCubit>().isLoggedIn)
-                    ? AppColors.PRIMARY_COLOR
-                    : AppColors.DARK_GRAY_COLOR,
+                visualDensity:
+                    const VisualDensity(horizontal: -4, vertical: -4),
+                color:
+                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                        ? AppColors.PRIMARY_COLOR
+                        : AppColors.DARK_GRAY_COLOR,
                 icon: SvgPicture.asset(
                   Assets.mailIcon,
+                  color: context.isDarkMode ? AppColors.grey : Colors.black,
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
                     ? () => context.push(Routes.LOGIN)
@@ -251,11 +260,13 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                           },
               ),
               IconButton(
-                visualDensity:const  VisualDensity(
-                    horizontal: -4, vertical: -4),
+                visualDensity:
+                    const VisualDensity(horizontal: -4, vertical: -4),
                 padding: EdgeInsets.zero,
-                color: AppColors.SECONDARY_COLOR,
-                icon: const Icon(Icons.report,),
+                color: AppColors.getRedColor(context),
+                icon: const Icon(
+                  Icons.report,
+                ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
                     ? () => context.push(Routes.LOGIN)
                     : () {

@@ -73,15 +73,20 @@ class _AllPickMeViewState extends State<AllPickMeView>
                       isContactInfo: true,
                       iconCar: false,
                       onTab: () => JoinTripBottomSheet(context,
-                          topButtonColor: AppColors.SECONDARY_COLOR,
+                          topButtonColor: AppColors.getRedColor(context),
                           topButtonTitle: LocaleKeys.premium_request.localize,
-                          bottomButtonColor: AppColors.PRIMARY_COLOR,
+                          bottomButtonColor:
+                              AppColors.getButtonPrimaryColor(context),
                           bottomButtonTitle: LocaleKeys.request.localize,
                           onTap: () => SubmitBottomSheet(
                                 context,
                                 buttonColor: AppColors.PRIMARY_COLOR,
                                 buttonTitle: LocaleKeys.submit.localize,
-                              )),
+                              ),
+                          topTextColor:
+                              context.isDarkMode ? Colors.black : Colors.white,
+                          bottomTextColor:
+                              context.isDarkMode ? Colors.black : Colors.white),
                     );
                   case LocaleKeys.requestLog:
                     return TripJoinCard(
@@ -155,7 +160,8 @@ class _AllPickMeViewState extends State<AllPickMeView>
         Expanded(
           child: _buildCategory(
             title: LocaleKeys.myAds,
-            index: 2,),
+            index: 2,
+          ),
         ),
       ],
     );
@@ -183,18 +189,24 @@ class _AllPickMeViewState extends State<AllPickMeView>
             ),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40.h),
-                color: selected ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
+                color: selected
+                    ? AppColors.getButtonPrimaryColor(context)
+                    : AppColors.getFillColor(context),
                 border: Border.all(
                     color: selected
-                        ? context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR
-                        : AppColors.c0B1035,
+                        ? AppColors.getRedColor(context)
+                        : AppColors.getButtonPrimaryColor(context),
                     width: 2)),
             child: Center(
               child: Text(
                 title.localize,
                 style: Styles.headerText(
                     fontSize: 24,
-                    color: selected ? Colors.white : AppColors.black),
+                    color: selected
+                        ? context.isDarkMode
+                            ? Colors.black
+                            : Colors.white
+                        : AppColors.getTextColor(context)),
               ),
             ),
           ),
@@ -205,13 +217,17 @@ class _AllPickMeViewState extends State<AllPickMeView>
               right: 4.h,
               child: Container(
                 padding: const EdgeInsets.all(2),
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: AppColors.SECONDARY_COLOR),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.getRedColor(context)),
                 child: Center(
                   child: Text(
                     '1k',
                     style: Styles.smallText(
-                        color: AppColors.whiteColor, fontSize: 20),
+                        color: context.isDarkMode
+                            ? Colors.black
+                            : AppColors.whiteColor,
+                        fontSize: 20),
                   ),
                 ),
               ),
