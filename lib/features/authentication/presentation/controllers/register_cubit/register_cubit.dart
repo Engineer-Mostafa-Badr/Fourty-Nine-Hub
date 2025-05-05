@@ -59,69 +59,71 @@ class RegisterCubit extends Cubit<RegisterState> {
     String? token = await FirebaseMessaging.instance.getToken();
     log("message");
     if (state is RegisterLoading) return;
-    //   if (formKey.currentState!.validate()) {
     emit(RegisterLoading());
-
-    if (_isPhoneNumber(emailTextController.text.trim())) {
-      final result = await _registerByPhoneUseCase(
-        RegisterByPhoneParams(
-          userName: userNameController.text.trim(),
-          firstName: firstNameController.text.trim(),
-          lastName: lastNameController.text.trim(),
-          birthday: birthDateTextController.text.trim(),
-          phoneNumber: emailTextController.text.trim(),
-          password: passwordTextController.text.trim(),
-          confirmPassword: confirmPasswordTextController.text.trim(),
-          isMale: isMale,
-          referralId: referralId.text.trim(),
-          token: token ?? "",
-        ),
-      );
-      emit(
-        result.fold(
-          (failure) => RegisterError(failure),
-          (data) {
-            print("data.isPhoneVerified ${data.isPhoneVerified}");
-            print("data.tokensEntity.accessToken ${data.tokensEntity.accessToken}");
-            if (data.isPhoneVerified) {
-              _attachToken(data.tokensEntity); // attach to dio
-              _saveTokens(data.tokensEntity);
-              return RegisterByPhone(
-                userTokensEntity: data.tokensEntity,
-                isPhoneVerified: data.isPhoneVerified,
-                giftMessageEntity: data.giftMessageEntity,
-              );
-            }
-            else{
-              return OTPPhoneSent();
-            }
-          },
-        ),
-      );
-    } else if (_isEmail(emailTextController.text.trim())) {
-      final result = await _registerUseCase(
-        RegisterParams(
-          userName: userNameController.text.trim(),
-          firstName: firstNameController.text.trim(),
-          lastName: lastNameController.text.trim(),
-          birthday: birthDateTextController.text.trim(),
-          email: emailTextController.text.trim(),
-          password: passwordTextController.text.trim(),
-          confirmPassword: confirmPasswordTextController.text.trim(),
-          isMale: isMale,
-          referralId: referralId.text.trim(),
-          token: token ?? "",
-        ),
-      );
-      emit(
-        result.fold(
-          (failure) => RegisterError(failure),
-          (_) => OTPSent(),
-        ),
-      );
+    if (passwordTextController.text != confirmPasswordTextController.text) {
+      emit(RegisterConfirmPassword());
+    }else{
+      if (_isPhoneNumber(emailTextController.text.trim())) {
+        final result = await _registerByPhoneUseCase(
+          RegisterByPhoneParams(
+            userName: userNameController.text.trim(),
+            firstName: firstNameController.text.trim(),
+            lastName: lastNameController.text.trim(),
+            birthday: birthDateTextController.text.trim(),
+            phoneNumber: emailTextController.text.trim(),
+            password: passwordTextController.text.trim(),
+            confirmPassword: confirmPasswordTextController.text.trim(),
+            isMale: isMale,
+            referralId: referralId.text.trim(),
+            token: token ?? "",
+          ),
+        );
+        emit(
+          result.fold(
+                (failure) => RegisterError(failure),
+                (data) {
+              print("data.isPhoneVerified ${data.isPhoneVerified}");
+              print(
+                  "data.tokensEntity.accessToken ${data.tokensEntity.accessToken}");
+              if (data.isPhoneVerified) {
+                _attachToken(data.tokensEntity); // attach to dio
+                _saveTokens(data.tokensEntity);
+                return RegisterByPhone(
+                  userTokensEntity: data.tokensEntity,
+                  isPhoneVerified: data.isPhoneVerified,
+                  giftMessageEntity: data.giftMessageEntity,
+                );
+              } else {
+                return OTPPhoneSent();
+              }
+            },
+          ),
+        );
+      }
+      else if (_isEmail(emailTextController.text.trim())) {
+        final result = await _registerUseCase(
+          RegisterParams(
+            userName: userNameController.text.trim(),
+            firstName: firstNameController.text.trim(),
+            lastName: lastNameController.text.trim(),
+            birthday: birthDateTextController.text.trim(),
+            email: emailTextController.text.trim(),
+            password: passwordTextController.text.trim(),
+            confirmPassword: confirmPasswordTextController.text.trim(),
+            isMale: isMale,
+            referralId: referralId.text.trim(),
+            token: token ?? "",
+          ),
+        );
+        emit(
+          result.fold(
+                (failure) => RegisterError(failure),
+                (_) => OTPSent(),
+          ),
+        );
+      }
     }
 
-    // }
   }
 
   Future<void> signInWithGoogle() async {

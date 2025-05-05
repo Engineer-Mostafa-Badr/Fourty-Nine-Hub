@@ -41,6 +41,7 @@ import '../../../authentication/presentation/controllers/user_cubit/user_cubit.d
 import '../widgets/announce_widget.dart';
 import '../widgets/exit_widget.dart';
 import '../widgets/favourite_screens_view.dart';
+import '../widgets/grid_blocks_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -174,11 +175,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
           floatingActionButton: _isScrollingDown
               ? null
               : const FloatingButton(
-                  changeView: 1,
-                  icon: Icons.person,
-                ),
+            changeView: 1,
+            icon: Icons.person,
+          ),
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          FloatingActionButtonLocation.centerDocked,
           // drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
@@ -188,22 +189,28 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const AddBanner(),
               const AnnounceWidget(),
               const Sizer(),
-              !context.read<UserCubit>().isLoggedIn
+              !context
+                  .read<UserCubit>()
+                  .isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
               ScrollableTextWithAnimation(
                 textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                context.isArabic ? TextDirection.rtl : TextDirection.ltr,
               ),
 
               //wallet
 
-              context.read<UserCubit>().isLoggedIn
+              context
+                  .read<UserCubit>()
+                  .isLoggedIn
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
                 onTap: () {
-                  if (!context.read<UserCubit>().isLoggedIn) {
+                  if (!context
+                      .read<UserCubit>()
+                      .isLoggedIn) {
                     return pleaseLoginDialog(context);
                   }
                   Navigator.push(
@@ -218,7 +225,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   alignment: Alignment.center,
                   child: AutoScrollText(
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
+                    "${LocaleKeys.choosePreferredAppStyle
+                        .localize}..  ${LocaleKeys.clickHere
+                        .localize}!!                                         ",
                     style: Styles.headerText(
                         fontSize: 30,
                         color: context.isDarkMode
@@ -232,124 +241,89 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   ),
                 ),
               ),
-              // ScrollableTextWithAnimation(text: 'Colored text.kasmdlkasdmklasmdkladmslkamdklasmdkndasjkdnasjkdnsjka',),
-              //    Sizer(),
-              //admob
-              //   const GoogleAddsBanner(),
-              // Row(
-              //   children: [
-              //     // Expanded(
-              //     //   child: _walletsWidget(),
-              //     // ),
-              //     // const Sizer(),
-              //     Expanded(child: _buildStarWidget()),
-              //   ],
-              // ),
-              // const Sizer(),
+              const Sizer(),
+              GridBlocksWidget(),
               // Row(children: [
+              //   const Sizer(width: 8),
               //   Expanded(
               //     child: _buildStarWidget(
               //       onTap: () {
               //         AdInterstitialTop.loadIntersitialAd();
               //         AdInterstitialTop.showInterstitialAd();
-              //         context.push(Routes.BE_STAR);
+              //         context.push(Routes.RIDE_HOME);
               //       },
-              //       shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+              //       shadowColor: Color(0xff8000FF),
               //       image: Assets.car2Image,
               //       title: LocaleKeys.ride.localize,
               //     ),
               //   ),
               //   const Sizer(width: 32),
-              //   Expanded(child: _pickMeAndComeWithUWidget()),
+              //   Expanded(
+              //     child: _buildStarWidget(
+              //       onTap: () {
+              //         AdInterstitialTop.loadIntersitialAd();
+              //         AdInterstitialTop.showInterstitialAd();
+              //         context.push(Routes.VISITA);
+              //       },
+              //       shadowColor: Color(0xff4997D0),
+              //       image: Assets.doctorImage,
+              //       title: LocaleKeys.health.localize,
+              //     ),
+              //   ),
+              //   const Sizer(width: 32),
+              //   Expanded(
+              //     child: _buildStarWidget(
+              //       onTap: () {
+              //         AdInterstitialTop.loadIntersitialAd();
+              //         AdInterstitialTop.showInterstitialAd();
+              //         HandleCashback.setCount('beAStarCount', context);
+              //         context.push(Routes.FOOD);
+              //       },
+              //       shadowColor: Color(0xffFF7F00),
+              //       image: Assets.mealImage,
+              //       title: LocaleKeys.meal.localize,
+              //     ),
+              //   ),
+              //   const Sizer(width: 8),
               // ]),
               // const Sizer(),
-              const Sizer(),
-              Row(children: [
-                const Sizer(width: 8),
-                Expanded(
-                  child: _buildStarWidget(
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.RIDE_HOME);
-                    },
-                    shadowColor: Color(0xff8000FF),
-                    image: Assets.car2Image,
-                    title: LocaleKeys.ride.localize,
-                  ),
-                ),
-                const Sizer(width: 32),
-                Expanded(
-                  child: _buildStarWidget(
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.VISITA);
-                    },
-                    shadowColor: Color(0xff4997D0),
-                    image: Assets.doctorImage,
-                    title: LocaleKeys.health.localize,
-                  ),
-                ),
-                const Sizer(width: 32),
-                Expanded(
-                  child: _buildStarWidget(
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      HandleCashback.setCount('beAStarCount', context);
-                      context.push(Routes.FOOD);
-                    },
-                    shadowColor: Color(0xffFF7F00),
-                    image: Assets.mealImage,
-                    title: LocaleKeys.meal.localize,
-                  ),
-                ),
-                const Sizer(width: 8),
-              ]),
-              const Sizer(),
-              const Sizer(),
-              Row(
-                children: [
-                  const Sizer(width: 8),
-                  Expanded(child: _pickMeAndComeWithUWidget()),
-                  const Sizer(width: 32),
-                  Expanded(
-                    child: _buildStarWidget(
-                      onTap: () {
-                        AdInterstitialTop.loadIntersitialAd();
-                        AdInterstitialTop.showInterstitialAd();
-                        HandleCashback.setCount('beAStarCount', context);
-                        context.push(Routes.BE_STAR);
-                      },
-                      shadowColor:
-                          AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                      image: Assets.tube1,
-                      title: LocaleKeys.tube.localize,
-                    ),
-                  ),
-                  const Sizer(width: 32),
-                  Expanded(
-                    child: _buildStarWidget(
-                      onTap: () {
-                        AdInterstitialTop.loadIntersitialAd();
-                        AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.MARRIAGESUBCATEGORIES);
-                      },
-                      shadowColor: Color(0xffFFC0CB),
-                      image: Assets.marriage,
-                      title: LocaleKeys.marriage.localize,
-                    ),
-                  ),
-                  const Sizer(width: 8),
-                ],
-              ),
-              const Sizer(),
-              // _buildTenPercentWidget(),
               // const Sizer(),
-              // _auctionAndInstallmentWidget(),
-              // const Sizer(),
-              // _buildBookingWidget(),
+              // Row(
+              //   children: [
+              //     const Sizer(width: 8),
+              //     Expanded(child: _pickMeAndComeWithUWidget()),
+              //     const Sizer(width: 32),
+              //     Expanded(
+              //       child: _buildStarWidget(
+              //         onTap: () {
+              //           AdInterstitialTop.loadIntersitialAd();
+              //           AdInterstitialTop.showInterstitialAd();
+              //           HandleCashback.setCount('beAStarCount', context);
+              //           context.push(Routes.BE_STAR);
+              //         },
+              //         shadowColor:
+              //             AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+              //         image: Assets.tube1,
+              //         title: LocaleKeys.tube.localize,
+              //       ),
+              //     ),
+              //     const Sizer(width: 32),
+              //     Expanded(
+              //       child: _buildStarWidget(
+              //         onTap: () {
+              //           AdInterstitialTop.loadIntersitialAd();
+              //           AdInterstitialTop.showInterstitialAd();
+              //           context.push(Routes.MARRIAGESUBCATEGORIES);
+              //         },
+              //         shadowColor: Color(0xffFFC0CB),
+              //         image: Assets.marriage,
+              //         title: LocaleKeys.marriage.localize,
+              //       ),
+              //     ),
+              //     const Sizer(width: 8),
+              //   ],
+              // ),
+              const Sizer(),
               const Sizer(),
               //cats layout
               BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
@@ -369,10 +343,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       highlightColor: Colors.white24,
                       child: GridView.builder(
                         gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisSpacing: 10,
-                                crossAxisCount: 2,
-                                childAspectRatio: 2 / 3),
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisSpacing: 10,
+                            crossAxisCount: 2,
+                            childAspectRatio: 2 / 3),
                         itemCount: 6,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -381,7 +355,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                             padding: const EdgeInsets.only(bottom: 10),
                             child: Container(
                               height:
-                                  MediaQuery.of(context).size.height * .15.h,
+                              MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * .15.h,
                               width: double.infinity,
                               margin: EdgeInsets.symmetric(horizontal: 10.w),
                               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -399,10 +376,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   if (state.data != null) {
                     return GridView.builder(
                       gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisSpacing: 10,
-                              crossAxisCount: 2,
-                              childAspectRatio: .9),
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 10,
+                          crossAxisCount: 2,
+                          childAspectRatio: .9),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -429,7 +406,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               onFavorite: () async {
                                 var result = await controller
                                     .toggleFavoriteMedicalService(
-                                        state.data![index].id);
+                                    state.data![index].id);
                                 print("result$result");
                                 return result;
                               },
@@ -463,12 +440,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
               height: 24,
             ),
             Routes.MAINCATEGORIESTREE,
-            () => HandleCashback.setCount('threeDotsCount', context),
+                () => HandleCashback.setCount('threeDotsCount', context),
           ),
         ),
         GestureDetector(
           onTap: () {
-            if (context.read<UserCubit>().isLoggedIn) {
+            if (context
+                .read<UserCubit>()
+                .isLoggedIn) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -477,7 +456,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               return pleaseLoginDialog(context);
             }
           },
-          child: Container(
+              child: Container(
             height: 40,
             width: 40,
             decoration: const BoxDecoration(
@@ -495,7 +474,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               height: 24,
             ),
             Routes.MAINCATEGORIESCARDS,
-            () {
+                () {
               log('extra is $extra');
               AdInterstitialTop.loadIntersitialAd();
               AdInterstitialTop.showInterstitialAd();
@@ -526,9 +505,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
       ),
     );
   }
-
+}
   // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  _pickMeAndComeWithUWidget() {
+/*  _pickMeAndComeWithUWidget() {
     return _buildRideSubCategoryItem(
       title: context.isArabic ? 'جاي معاك' : 'Trip Join',
       // image: '',
@@ -694,7 +673,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       ),
     );
   }
-}
+}*/
 
 /*  Row _auctionAndInstallmentWidget() {
     return Row(

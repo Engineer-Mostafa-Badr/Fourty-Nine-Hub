@@ -41,6 +41,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../fourty_nine/presentation/widgets/grid_blocks_widget.dart';
 import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class ServicePagePreview extends StatefulWidget {
@@ -242,96 +243,97 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                   ),
                 ),
                 const SliverToBoxAdapter(child: Sizer()),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(children: [
-                      const Sizer(width: 8),
-                      Expanded(
-                        child: _buildStarWidget(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            context.push(Routes.RIDE_HOME);
-                          },
-                          shadowColor: Color(0xff8000FF),
-                          image: Assets.car2Image,
-                          title: LocaleKeys.ride.localize,
-                        ),
-                      ),
-                      const Sizer(width: 32),
-                      Expanded(
-                        child: _buildStarWidget(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            context.push(Routes.VISITA);
-                          },
-                          shadowColor: Color(0xff4997D0),
-                          image: Assets.doctorImage,
-                          title: LocaleKeys.health.localize,
-                        ),
-                      ),
-                      const Sizer(width: 32),
-                      Expanded(
-                        child: _buildStarWidget(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            HandleCashback.setCount('beAStarCount', context);
-                            context.push(Routes.FOOD);
-                          },
-                          shadowColor: Color(0xffFF7F00),
-                          image: Assets.mealImage,
-                          title: LocaleKeys.meal.localize,
-                        ),
-                      ),
-                      const Sizer(width: 8),
-                    ]),
-                  ),
-                ),
-                const SliverToBoxAdapter(child: Sizer()),
-                const SliverToBoxAdapter(child: Sizer()),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      children: [
-                        const Sizer(width: 8),
-                        Expanded(child: _pickMeAndComeWithUWidget()),
-                        const Sizer(width: 32),
-                        Expanded(
-                          child: _buildStarWidget(
-                            onTap: () {
-                              AdInterstitialTop.loadIntersitialAd();
-                              AdInterstitialTop.showInterstitialAd();
-                              HandleCashback.setCount('beAStarCount', context);
-                              context.push(Routes.BE_STAR);
-                            },
-                            shadowColor:
-                                AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                            image: Assets.tube1,
-                            title: LocaleKeys.tube.localize,
-                          ),
-                        ),
-                        const Sizer(width: 32),
-                        Expanded(
-                          child: _buildStarWidget(
-                            onTap: () {
-                              AdInterstitialTop.loadIntersitialAd();
-                              AdInterstitialTop.showInterstitialAd();
-                              context.push(Routes.MARRIAGESUBCATEGORIES);
-                            },
-                            shadowColor: const Color(0xffFFC0CB),
-                            image: Assets.marriage,
-                            title: LocaleKeys.marriage.localize,
-                          ),
-                        ),
-                        const Sizer(width: 8),
-                      ],
-                    ),
-                  ),
-                ),
+                // SliverToBoxAdapter(
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 10),
+                //     child: Row(children: [
+                //       const Sizer(width: 8),
+                //       Expanded(
+                //         child: _buildStarWidget(
+                //           onTap: () {
+                //             AdInterstitialTop.loadIntersitialAd();
+                //             AdInterstitialTop.showInterstitialAd();
+                //             context.push(Routes.RIDE_HOME);
+                //           },
+                //           shadowColor: Color(0xff8000FF),
+                //           image: Assets.car2Image,
+                //           title: LocaleKeys.ride.localize,
+                //         ),
+                //       ),
+                //       const Sizer(width: 32),
+                //       Expanded(
+                //         child: _buildStarWidget(
+                //           onTap: () {
+                //             AdInterstitialTop.loadIntersitialAd();
+                //             AdInterstitialTop.showInterstitialAd();
+                //             context.push(Routes.VISITA);
+                //           },
+                //           shadowColor: Color(0xff4997D0),
+                //           image: Assets.doctorImage,
+                //           title: LocaleKeys.health.localize,
+                //         ),
+                //       ),
+                //       const Sizer(width: 32),
+                //       Expanded(
+                //         child: _buildStarWidget(
+                //           onTap: () {
+                //             AdInterstitialTop.loadIntersitialAd();
+                //             AdInterstitialTop.showInterstitialAd();
+                //             HandleCashback.setCount('beAStarCount', context);
+                //             context.push(Routes.FOOD);
+                //           },
+                //           shadowColor: Color(0xffFF7F00),
+                //           image: Assets.mealImage,
+                //           title: LocaleKeys.meal.localize,
+                //         ),
+                //       ),
+                //       const Sizer(width: 8),
+                //     ]),
+                //   ),
+                // ),
+                // const SliverToBoxAdapter(child: Sizer()),
+                // const SliverToBoxAdapter(child: Sizer()),
+                // SliverToBoxAdapter(
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 10),
+                //     child: Row(
+                //       children: [
+                //         const Sizer(width: 8),
+                //         Expanded(child: _pickMeAndComeWithUWidget()),
+                //         const Sizer(width: 32),
+                //         Expanded(
+                //           child: _buildStarWidget(
+                //             onTap: () {
+                //               AdInterstitialTop.loadIntersitialAd();
+                //               AdInterstitialTop.showInterstitialAd();
+                //               HandleCashback.setCount('beAStarCount', context);
+                //               context.push(Routes.BE_STAR);
+                //             },
+                //             shadowColor:
+                //                 AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                //             image: Assets.tube1,
+                //             title: LocaleKeys.tube.localize,
+                //           ),
+                //         ),
+                //         const Sizer(width: 32),
+                //         Expanded(
+                //           child: _buildStarWidget(
+                //             onTap: () {
+                //               AdInterstitialTop.loadIntersitialAd();
+                //               AdInterstitialTop.showInterstitialAd();
+                //               context.push(Routes.MARRIAGESUBCATEGORIES);
+                //             },
+                //             shadowColor: const Color(0xffFFC0CB),
+                //             image: Assets.marriage,
+                //             title: LocaleKeys.marriage.localize,
+                //           ),
+                //         ),
+                //         const Sizer(width: 8),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                SliverToBoxAdapter(child: GridBlocksWidget()),
                 const SliverToBoxAdapter(child: Sizer()),
                 SliverToBoxAdapter(
                   child: CustomAnimatedText(
@@ -433,7 +435,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                       if (state.customPage != null) {
                         return getMainCategoryWidgets(controller, state)[
                             CacheManager.getInt(
-                                CacheManager.selectedCategoryView)!];
+                                CacheManager.selectedCategoryView)??0];
                       } else {
                         return const SliverToBoxAdapter(
                             child: SizedBox.shrink());

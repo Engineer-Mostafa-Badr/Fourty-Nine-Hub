@@ -12,8 +12,10 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/states/basic_state.dart';
 import '../../../../routes/routes.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../payment/presentation/pages/widgets/payment_yellow_card.dart';
 
 class AnnounceWidget extends StatelessWidget {
@@ -59,6 +61,9 @@ class AnnounceWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         child: InkWell(
           onTap: () {
+            if (!context.read<UserCubit>().isLoggedIn) {
+              return pleaseLoginDialog(context);
+            }
             print(item.id);
             print(item.titleEn);
             if (UserCubit.to.isLoggedIn == false) {
@@ -71,11 +76,13 @@ class AnnounceWidget extends StatelessWidget {
               context.push(Routes.CASHBACK);
             } else if (item.id == '67700f4934004152c40f8b48') {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const PaymentYellowCard(
-                            fromSlider: true,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PaymentYellowCard(
+                    fromSlider: true,
+                  ),
+                ),
+              );
               //    Navigator.push(
               // context,
               // MaterialPageRoute(
