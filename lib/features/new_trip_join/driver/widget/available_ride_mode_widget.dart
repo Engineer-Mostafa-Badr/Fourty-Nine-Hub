@@ -337,30 +337,30 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 9,
-          left: 170,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _showContainer = !_showContainer; // تغيير حالة الـ Container
-              });
-            },
-            child: SvgPicture.asset(
-              Assets.frameIcon,
-              width: 50,
-            ),
-          ),
-        ),
-        // الـ Container اللي هيظهر أو يختفي حسب الضغط
-        if (_showContainer)
-          const Positioned(
-            top: 0,
-            bottom: 75, // تحديد المكان اللي هيظهر فيه الـ Container
-            left: 0,
-            right: 0,
-            child: AddressWidget(),
-          ),
+        // Positioned(
+        //   bottom: 9,
+        //   left: 170,
+        //   child: GestureDetector(
+        //     onTap: () {
+        //       setState(() {
+        //         _showContainer = !_showContainer; // تغيير حالة الـ Container
+        //       });
+        //     },
+        //     child: SvgPicture.asset(
+        //       Assets.frameIcon,
+        //       width: 50,
+        //     ),
+        //   ),
+        // ),
+        // // الـ Container اللي هيظهر أو يختفي حسب الضغط
+        // if (_showContainer)
+        //   const Positioned(
+        //     top: 0,
+        //     bottom: 75, // تحديد المكان اللي هيظهر فيه الـ Container
+        //     left: 0,
+        //     right: 0,
+        //     child: AddressWidget(),
+        //   ),
       ],
     );
   }

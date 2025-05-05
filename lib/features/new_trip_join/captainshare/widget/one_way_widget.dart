@@ -31,6 +31,11 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   ExpandableController _expandableController=ExpandableController();
 
   @override
+  void initState() {
+    super.initState();
+    _expandableController = ExpandableController(initialExpanded: false);
+  }
+  @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
@@ -334,30 +339,30 @@ class _OneWayWidgetState extends State<OneWayWidget> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 9,
-          left: 270.h,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _showContainer = !_showContainer; // تغيير حالة الـ Container
-              });
-            },
-            child: SvgPicture.asset(
-              Assets.frameIcon,
-              width: 50,
-            ),
-          ),
-        ),
-        if (_showContainer)
-          const Positioned(
-            top: 0,
-            bottom: 80,
-            // تحديد المكان اللي هيظهر فيه الـ Container
-            left: 0,
-            right: 0,
-            child: AddressWidget(),
-          ),
+        // Positioned(
+        //   bottom: 9,
+        //   left: 270.h,
+        //   child: GestureDetector(
+        //     onTap: () {
+        //       setState(() {
+        //         _showContainer = !_showContainer; // تغيير حالة الـ Container
+        //       });
+        //     },
+        //     child: SvgPicture.asset(
+        //       Assets.frameIcon,
+        //       width: 50,
+        //     ),
+        //   ),
+        // ),
+        // if (_showContainer)
+        //   const Positioned(
+        //     top: 0,
+        //     bottom: 80,
+        //     // تحديد المكان اللي هيظهر فيه الـ Container
+        //     left: 0,
+        //     right: 0,
+        //     child: AddressWidget(),
+        //   ),
       ],
     );
   }
@@ -377,9 +382,8 @@ class AddressWidget extends StatelessWidget {
             : AppColors.BG_GRAY_COLOR,
         borderRadius: BorderRadius.circular(20),
       ),
-      margin: const EdgeInsets.all(10),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 17),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -388,48 +392,40 @@ class AddressWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    child: TextAddressWidget(
-                      color: Colors.green,
-                      address:
-                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                    ),
+                  TextAddressWidget(
+                    color: Colors.green,
+                    address:
+                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
-                  Flexible(
-                    child: TextAddressWidget(
-                      color: Colors.black,
-                      address:
-                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                    ),
+                  TextAddressWidget(
+                    color: Colors.black,
+                    address:
+                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
-                  Flexible(
-                    child: TextAddressWidget(
-                      color: Colors.black,
-                      address:
-                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                    ),
+                  TextAddressWidget(
+                    color: Colors.black,
+                    address:
+                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
-                  Flexible(
-                    child: TextAddressWidget(
-                      color: Colors.blue,
-                      address:
-                          context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                    ),
+                  TextAddressWidget(
+                    color: Colors.blue,
+                    address:
+                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                 ],
               ),
             ),
-            Positioned(
-              bottom: -1,
-              right: 5,
-              left: 2,
-              child: SvgPicture.asset(
-                Assets.redFrame,
-              ),
-            ),
+            // Positioned(
+            //   bottom: -1,
+            //   right: 5,
+            //   left: 2,
+            //   child: SvgPicture.asset(
+            //     Assets.redFrame,
+            //   ),
+            // ),
           ],
         ),
       ),
