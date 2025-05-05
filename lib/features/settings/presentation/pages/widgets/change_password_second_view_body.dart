@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
@@ -8,6 +9,8 @@ import 'package:fourtyninehub/features/settings/presentation/pages/widgets/label
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/messages/messages.dart';
 import '../../../../../core/states/basic_state.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -82,6 +85,14 @@ class _ChangePasswordSecondViewBodyState
             context
                 .read<NotificationSocketIoCubit>()
                 .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+          }
+          if (state is ConfirmPasswordNotMache) {
+            showErrorMessage(
+              context,
+              context.isArabic
+                  ? 'كلمة المرور غير متطابقة'
+                  : 'Password does not match',
+            );
           }
         },
         builder: (context, state) {

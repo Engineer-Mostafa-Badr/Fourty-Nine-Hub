@@ -83,6 +83,12 @@ class _LoginViewState extends State<LoginView> {
           // print("Print here ${isVeryfied}");
 
           showErrorMessage(context, getFailureMessage(state.failure, context));
+        } else if (state is RegisterConfirmPassword) {
+          showErrorMessage(
+              context,
+              context.isArabic
+                  ? 'كلمة المرور غير متطابقة'
+                  : 'Password does not match');
         } else if (state is OTPSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(

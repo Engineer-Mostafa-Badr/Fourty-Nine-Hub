@@ -6,6 +6,7 @@ sealed class RegisterState {}
 final class RegisterInitial extends RegisterState {}
 
 final class RegisterLoading extends RegisterState {}
+final class RegisterConfirmPassword extends RegisterState {}
 
 final class OTPSent extends RegisterState {}
 final class OTPPhoneSent extends RegisterState {}
