@@ -18,6 +18,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../widgets/close_widget.dart';
 import '../widgets/upload_file_widget.dart';
 
@@ -173,19 +174,12 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   text: LocaleKeys.phoneNumber.localize,
                                   style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
-                                DefaultTextFormField(
+                                NewPhoneNumberTextFormField(
                                   currentController: cubit.ridePhoneNumberController,
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  hint: LocaleKeys.phoneNumber.localize,
                                   label: LocaleKeys.phoneNumber.localize,
-                                  keyboardType: TextInputType.number,
-                                  validator: (v) {
-                                    if (v == null || v.isEmpty) {
-                                      return LocaleKeys.required.localize;
-                                    }
-                                    return null;
-                                  },
+                                  isRequired: true,
                                 ),
                                 const Sizer(),
                                 Label(

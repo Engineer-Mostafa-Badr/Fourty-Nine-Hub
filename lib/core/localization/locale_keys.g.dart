@@ -1562,5 +1562,5 @@ abstract class  LocaleKeys {
   static const pleaseSelectAUser = 'pleaseSelectAUser';
   static const phoneNumbersNotAllowed = 'phoneNumbersNotAllowed';
   static const invalidEmailAddress = 'invalidEmailAddress';
-
+  static const yellowCardMember = 'yellowCardMember';
 }

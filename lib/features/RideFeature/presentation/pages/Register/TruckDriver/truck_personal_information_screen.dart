@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../widgets/close_widget.dart';
 import '../widgets/register_floating_action_button.dart';
 
@@ -81,11 +82,11 @@ class TruckPersonalInformationScreen extends StatelessWidget {
                       hint: LocaleKeys.user_info_date_of_birth.localize,
                     ),
                     const Sizer(),
-                    DefaultTextFormField(
+                    NewPhoneNumberTextFormField(
                       currentController: phoneNumberController,
                       fillColor: AppColors.GREYBG,
                       borderColor: Colors.transparent,
-                      hint: LocaleKeys.phoneNumber.localize,
+                      isRequired: true,
                     ),
                   ],
                 ),

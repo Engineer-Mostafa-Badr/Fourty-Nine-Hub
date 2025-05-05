@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import '../../../../core/utils/validator.dart';
 import 'abstract/main_text_form_field.dart';
 
-class EmailTextFormField extends MainTextFormField {
-  EmailTextFormField({
+class TextWithoutPhoneTextFormField extends MainTextFormField {
+  const TextWithoutPhoneTextFormField({
     super.key,
     super.currentFocusNode,
     super.nextFocusNode,

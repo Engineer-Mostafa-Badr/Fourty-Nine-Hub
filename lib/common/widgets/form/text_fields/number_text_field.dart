@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import '../../../../core/localization/locale_keys.g.dart';
+
 import '../../../../core/utils/validator.dart';
 import 'abstract/main_text_form_field.dart';
 
-class NewPhoneNumberTextFormField extends MainTextFormField {
-  NewPhoneNumberTextFormField({
+class NumberTextFormField extends MainTextFormField {
+  const NumberTextFormField({
     super.key,
     super.currentFocusNode,
     super.nextFocusNode,
     required super.currentController,
-    super.keyboardType = TextInputType.phone,
+    required final String hint,
+    super.keyboardType,
     super.contentPadding,
     super.style,
     super.onTap,
@@ -25,7 +25,7 @@ class NewPhoneNumberTextFormField extends MainTextFormField {
     super.noBoarder,
     final bool isRequired = false,
     super.expanded,
-    super.borderColor = Colors.black,
+    Color super.borderColor = Colors.black,
     final List<TextInputFormatter>? inputFormatter,
     super.maxLines,
     super.minLines,
@@ -39,12 +39,10 @@ class NewPhoneNumberTextFormField extends MainTextFormField {
     super.constraints,
     super.hintColor,
     super.hintStyle,
-    FocusNode? focusNode,
   }) : super(
-          validator: (v) =>
-              validator?.call(v) ?? (isRequired ? validatorPhone(v) : null),
-          hintText: LocaleKeys.phoneNumber.localize + (isRequired ? '*' : ''),
+          validator: validator ?? (isRequired ? validatorNumber : null),
+          hintText: hint + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          inputFormatters: inputFormatter,
         );
 }

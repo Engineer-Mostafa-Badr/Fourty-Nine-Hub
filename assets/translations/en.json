@@ -1586,5 +1586,7 @@
   "failedUpdateFavorites": "Failed Update Favorites",
   "pleaseSelectAUser": "Please select a user",
   "invalidEmailAddress": "Invalid Email Address",
-  "phoneNumbersNotAllowed": "Phone numbers are not allowed. Please remove any phone number pattern."
+  "phoneNumbersNotAllowed": "Phone numbers are not allowed. Please remove any phone number pattern.",
+  "enterPositiveNumber": "Enter a positive number",
+  "yellowCardMember": "Yellow Card Member"
 }

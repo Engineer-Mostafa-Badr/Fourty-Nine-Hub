@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../routes/routes.dart';
 
 class RequestButton extends StatelessWidget {
@@ -40,7 +41,7 @@ class RequestButton extends StatelessWidget {
                     context.pop();
                     showModalBottomSheet(
                       backgroundColor: context.isDarkMode
-                          ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                          ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
                           : AppColors.LIGHT_COLOR,
                       context: context,
                       shape: const RoundedRectangleBorder(
@@ -74,30 +75,17 @@ class RequestButton extends StatelessWidget {
                                   constraints: BoxConstraints(maxHeight: 180.h),
                                   child: Form(
                                     key: controller.formKey,
-                                    child: TextFormField(
+                                    child: NewPhoneNumberTextFormField(
                                       style: const TextStyle(
                                         color: AppColors.DARK_BLUE_COLOR,
                                       ),
-                                      validator: (value) {
-                                        if ((value == null || value.isEmpty)) {
-                                          return LocaleKeys.required.localize;
-                                        } else {
-                                          return null;
-                                        }
-                                      },
-                                      // focusNode: focusNode,
+                                      currentController: TextEditingController(),
+                                      isRequired: true,
                                       maxLines: null,
                                       maxLength: 150,
                                       onChanged: (c) =>
                                           controller.changePhone(v: c),
                                       // controller: controller,
-                                      decoration: InputDecoration(
-                                          hintText:
-                                              LocaleKeys.phoneNumber.localize,
-                                          fillColor: Colors.white,
-                                          hintStyle: Styles.mediumText(
-                                              color:
-                                                  AppColors.DARK_GRAY_COLOR)),
                                     ),
                                   ),
                                 ),

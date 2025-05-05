@@ -136,3 +136,14 @@ String? validatorNotHavePhone(String? email) {
   }
   return null;
 }
+
+String? validatorNumber(String? value) {
+  if (value == null || value.isEmpty) {
+    return LocaleKeys.required.localize;
+  }
+  final number = int.tryParse(value);
+  if (number == null || number <= 0) {
+    return 'Enter a positive number';
+  }
+  return null;
+}

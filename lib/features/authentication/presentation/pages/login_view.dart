@@ -457,7 +457,6 @@ class _LoginWidgetState extends State<LoginWidget> {
               size: 40.w,
             ),
           ),
-          // action: (v) {},
           validator: (v) {
             if (v!.isEmpty) {
               return LocaleKeys.passwordRequired.localize;
@@ -655,9 +654,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
-                DefaultTextFormField(
+                EmailTextFormField(
                   borderColor: Colors.black,
-                  // fillColor: const Color(0xFFEEEEEE),
                   currentController: registerCubit.emailTextController,
                   hint:
                       '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
@@ -666,13 +664,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return LocaleKeys.emailRequired.localize;
-                    }
-                    return null;
-                  },
+                  isRequired: true,
                 ),
                 Sizer(
                   height: 30.h,
