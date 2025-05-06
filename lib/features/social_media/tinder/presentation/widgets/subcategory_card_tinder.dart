@@ -17,6 +17,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class SubcategoryCardTinder extends StatefulWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
@@ -107,7 +109,8 @@ class _SubCategoryCardState extends State<SubcategoryCardTinder> {
                                   mainCategory: widget.mainCategory,
                                   subCategory: widget.item));
                         } else {
-                          context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
                         }
                       })
                 ],

@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class HealthMedicalServiceCard extends StatefulWidget {
   final HealthSubcategoryEntity subCategory;
@@ -132,8 +133,9 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                                   .mainCategory!,
                               subCategory: widget.subCategory),
                         );
-                      } else {
-                        context.push(Routes.LOGIN);
+                      } else {                                  return pleaseLoginDialog(context);
+
+                      // context.push(Routes.LOGIN);
                       }
                     },
                   )

@@ -23,6 +23,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class AllPickMeBuilder extends StatefulWidget {
   const AllPickMeBuilder({super.key});
@@ -115,7 +116,9 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   if (context.read<UserCubit>().isLoggedIn) {
                     _reportOnTap(context, pickMeCardEntity);
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 premuimRequestOnTap: () async {
@@ -146,7 +149,9 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                       );
                     }
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 requestOnTap: () async {
@@ -169,7 +174,9 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                       },
                     );
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 callOnTap: () async {
@@ -184,7 +191,9 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                       launchUrlString("tel://${pickMeCardEntity.phone}");
                     }
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 messageOnTap: () async {
@@ -194,8 +203,9 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                       UIConst.chatNormalId,
                       LocaleKeys.chatSubscription.localize,
                     )) {}
-                  } else {
-                    context.push(Routes.LOGIN);
+                  } else {                                  return pleaseLoginDialog(context);
+
+                  // context.push(Routes.LOGIN);
                   }
                 },
                 subscribeMessageOnTap: () async {
@@ -205,8 +215,9 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                       pickMeCardEntity.categoryId ?? '',
                       LocaleKeys.tripjoinPremuimSubscription.localize,
                     )) {}
-                  } else {
-                    context.push(Routes.LOGIN);
+                  } else {                                  return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
               );

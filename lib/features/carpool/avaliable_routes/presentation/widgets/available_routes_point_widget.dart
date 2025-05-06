@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -156,8 +157,10 @@ class AvailableRoutesPointInfo extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (status.toLowerCase() == 'free') {
-          context.read<UserCubit>().isLoggedIn
-              ? tripStatus != "expired" && tripStatus != "Completed"
+          if(!context.read<UserCubit>().isLoggedIn){
+            return pleaseLoginDialog(context);
+          }
+               tripStatus != "expired" && tripStatus != "Completed"
                   ? context.read<UserCubit>().isLoggedIn &&
                           entity.locations[0].bookedUser?.id != userId &&
                           entity.locations[1].bookedUser?.id != userId &&
@@ -169,8 +172,7 @@ class AvailableRoutesPointInfo extends StatelessWidget {
                           isComfort: isComfort,
                           price: price)
                       : const SizedBox()
-                  : const SizedBox()
-              : context.push(Routes.LOGIN);
+                  : const SizedBox();
         }
       },
       child: Container(

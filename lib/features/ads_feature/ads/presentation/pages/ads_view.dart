@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -240,7 +241,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                     mainCategory: widget.params.mainCategory,
                     subCategory: widget.params.subCategory));
           } else {
-            context.push(Routes.LOGIN);
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
           }
         },
         iconSize: 18,
@@ -259,7 +261,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                   mainCategory: widget.params.mainCategory,
                   subCategory: widget.params.subCategory));
         } else {
-          context.push(Routes.LOGIN);
+          return pleaseLoginDialog(context);
+
+          // context.push(Routes.LOGIN);
         }
       },
       backgroundColor: AppColors.PRIMARY_COLOR,

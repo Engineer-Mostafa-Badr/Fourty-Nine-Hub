@@ -67,8 +67,9 @@ class AnnounceWidget extends StatelessWidget {
             print(item.id);
             print(item.titleEn);
             if (UserCubit.to.isLoggedIn == false) {
-              context.push(Routes.LOGIN);
-              return;
+              return pleaseLoginDialog(context);
+              // context.push(Routes.LOGIN);
+              // return;
             }
             if (item.id == '67700fc734004152c40f8b71') {
               context.push(Routes.GIFT);
