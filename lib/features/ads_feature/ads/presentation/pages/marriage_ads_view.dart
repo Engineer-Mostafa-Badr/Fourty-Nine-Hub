@@ -26,6 +26,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -133,7 +134,8 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                 ),
               );
             } else {
-              context.push(Routes.LOGIN);
+              return pleaseLoginDialog(context);
+              // context.push(Routes.LOGIN);
             }
           },
         ),

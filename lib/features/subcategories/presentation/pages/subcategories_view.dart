@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_v
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -126,7 +127,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                                       mainCategory: widget.mainCategory,
                                       subCategory: item));
                             } else {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

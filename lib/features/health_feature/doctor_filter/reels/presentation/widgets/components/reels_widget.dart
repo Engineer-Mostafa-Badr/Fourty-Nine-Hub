@@ -14,6 +14,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../../../../social_media/reels/presentation/pages/reel_actions.dart';
@@ -200,8 +201,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       ),
                       GestureDetector(
                           onTap: () {
-                            if (!serviceLocator<UserCubit>().isLoggedIn) {
-                              context.push(Routes.LOGIN);
+                            if (!serviceLocator<UserCubit>().isLoggedIn) { return pleaseLoginDialog(context);
+                              // context.push(Routes.LOGIN);
                             } else {
                               _showGiftBottomSheet(context);
                             }

@@ -250,6 +250,7 @@ import '../../../../res/style/styles.dart';
 import '../../../ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import '../cubit/subcategories_cubit.dart';
 import '../widgets/floating_add_button.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class CustomPageSubCategoriesView extends StatefulWidget {
   final MainCategoryEntity mainCategory;
@@ -354,7 +355,9 @@ class _CustomPageSubCategoriesViewState
                                       mainCategory: widget.mainCategory,
                                       subCategory: item));
                             } else {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

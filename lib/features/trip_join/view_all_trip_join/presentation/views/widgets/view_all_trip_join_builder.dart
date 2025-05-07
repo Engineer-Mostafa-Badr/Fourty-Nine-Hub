@@ -19,6 +19,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class ViewAllTripJoinCardBuilder extends StatefulWidget {
   const ViewAllTripJoinCardBuilder({
@@ -72,9 +73,13 @@ class _ViewAllTripJoinCardBuilderState
               return AvailableTripCard(
                 tripJoinCardEntity: tripJoinCardEntity,
                 reportOnTap: () {
-                  context.read<UserCubit>().isLoggedIn
-                      ? _reportOnTap(context, index)
-                      : context.push(Routes.LOGIN);
+                  if(context.read<UserCubit>().isLoggedIn)
+                       {_reportOnTap(context, index);}
+                      else {
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
+                  }
                 },
                 premuimRequestOnTap: () async {
                   if (context.read<UserCubit>().isLoggedIn) {
@@ -100,7 +105,9 @@ class _ViewAllTripJoinCardBuilderState
                       );
                     }
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 requestOnTap: () async {
@@ -121,7 +128,9 @@ class _ViewAllTripJoinCardBuilderState
                       },
                     );
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 callOnTap: () async {
@@ -134,7 +143,9 @@ class _ViewAllTripJoinCardBuilderState
                       launchUrlString("tel://${tripJoinCardEntity.phone}");
                     }
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                   // launchUrlString("tel://${tripJoinCardEntity.phone}");
                   // return;
@@ -147,7 +158,9 @@ class _ViewAllTripJoinCardBuilderState
                       LocaleKeys.chatSubscription.localize,
                     )) {}
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 subscribeMessageOnTap: () async {
@@ -160,8 +173,9 @@ class _ViewAllTripJoinCardBuilderState
                     )) {}
                   } else {
                     print("not LOOGEDIN \n");
+                    return pleaseLoginDialog(context);
 
-                    context.push(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
               );

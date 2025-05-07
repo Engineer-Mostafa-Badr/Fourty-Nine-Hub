@@ -16,6 +16,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../restaurant_details/presentation/widgets/restaurant_header.dart';
 import '../cubit/restaurant_details_cubit.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
   final GetAllRestaurantEntity restaurant;
@@ -139,25 +140,27 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                 if (context.isUserLoggedIn) {
                   context.push(Routes.FOODCART);
                 }else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                        style: Styles.smallText(
-                            color: AppColors.whiteColor
-                        ),
-                      ),
-                      backgroundColor: Colors.red,
-                      duration: Duration(seconds: 4),
-                      action: SnackBarAction(
-                        label: LocaleKeys.login.localize,
-                        textColor: Colors.white,
-                        onPressed: () {
-                          context.push(Routes.LOGIN);
-                        },
-                      ),
-                    ),
-                  );
+                  return pleaseLoginDialog(context);
+
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                  //       style: Styles.smallText(
+                  //           color: AppColors.whiteColor
+                  //       ),
+                  //     ),
+                  //     backgroundColor: Colors.red,
+                  //     duration: Duration(seconds: 4),
+                  //     action: SnackBarAction(
+                  //       label: LocaleKeys.login.localize,
+                  //       textColor: Colors.white,
+                  //       onPressed: () {
+                  //        // context.push(Routes.LOGIN);
+                  //       },
+                  //     ),
+                  //   ),
+                  // );
                 }
               },
               style: ElevatedButton.styleFrom(

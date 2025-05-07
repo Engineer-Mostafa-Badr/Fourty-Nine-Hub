@@ -26,6 +26,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
@@ -155,7 +156,8 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   time = pickedTime;
                                 }
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+                                // context.push(Routes.LOGIN);
                               }
 
                               setState(() {});
@@ -189,7 +191,9 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                 );
                                 date = pickedDate;
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+
+                                // context.push(Routes.LOGIN);
                               }
 
                               setState(() {});
@@ -402,7 +406,9 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   );
                                 }
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+
+                                // context.push(Routes.LOGIN);
                               }
                             },
                           ),
@@ -435,7 +441,9 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   );
                                 }
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+
+                                // context.push(Routes.LOGIN);
                               }
                             },
                           ),

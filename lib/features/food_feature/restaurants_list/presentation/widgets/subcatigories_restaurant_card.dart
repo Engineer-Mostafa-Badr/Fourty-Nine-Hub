@@ -28,6 +28,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class SubCategoriesRestaurantCard extends StatelessWidget {
   final GetAllRestaurantEntity? item;
@@ -616,27 +617,27 @@ class CallMessageReportButtons extends StatelessWidget {
               );
             })
                 : () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                    style: Styles
-                        .mediumText()
-                        .copyWith(decoration: TextDecoration.none,
-                    color: AppColors.whiteColor
-                    ), // ✅ Safe
-                  ),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  action: SnackBarAction(
-                    label: LocaleKeys.login.localize,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      context.push(Routes.LOGIN);
-                    },
-                  ),
-                ),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+              //       style: Styles
+              //           .mediumText()
+              //           .copyWith(decoration: TextDecoration.none,
+              //       color: AppColors.whiteColor
+              //       ), // ✅ Safe
+              //     ),
+              //     backgroundColor: Colors.red,
+              //     duration: Duration(seconds: 3),
+              //     action: SnackBarAction(
+              //       label: LocaleKeys.login.localize,
+              //       textColor: Colors.white,
+              //       onPressed: () {
+              //         // context.push(Routes.LOGIN);
+              //       },
+              //     ),
+              //   ),
+              // );
             },
 
 
@@ -715,27 +716,29 @@ class CallMessageReportButtons extends StatelessWidget {
               );
             })
                 : () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                    style: Styles
-                        .mediumText()
-                        .copyWith(decoration: TextDecoration.none,
-                        color: AppColors.whiteColor
-                    ), // ✅ Safe
-                  ),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  action: SnackBarAction(
-                    label: LocaleKeys.login.localize,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      context.push(Routes.LOGIN);
-                    },
-                  ),
-                ),
-              );
+              return pleaseLoginDialog(context);
+
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+              //       style: Styles
+              //           .mediumText()
+              //           .copyWith(decoration: TextDecoration.none,
+              //           color: AppColors.whiteColor
+              //       ), // ✅ Safe
+              //     ),
+              //     backgroundColor: Colors.red,
+              //     duration: Duration(seconds: 3),
+              //     action: SnackBarAction(
+              //       label: LocaleKeys.login.localize,
+              //       textColor: Colors.white,
+              //       onPressed: () {
+              //         // context.push(Routes.LOGIN);
+              //       },
+              //     ),
+              //   ),
+              // );
             },
 
 

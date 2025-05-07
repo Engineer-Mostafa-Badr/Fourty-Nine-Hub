@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../routes/routes.dart';
@@ -33,7 +34,9 @@ class RequestButton extends StatelessWidget {
         onTap: !context.read<UserCubit>().isLoggedIn
             ? () {
                 context.pop();
-                context.push(Routes.LOGIN);
+                return pleaseLoginDialog(context);
+
+          // context.push(Routes.LOGIN);
               }
             : subscriptionStatus == 'premium'
                 ? null
@@ -122,7 +125,8 @@ class RequestButton extends StatelessWidget {
                                                 }
                                               });
                                             } else {
-                                              context.go(Routes.LOGIN);
+                                              return pleaseLoginDialog(context);
+                                              // context.go(Routes.LOGIN);
                                             }
                                           },
                                           child: Container(

@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../chat/chat_view/domain/entities/chat_entity.dart';
 import '../../../chat/chat_view/domain/usecases/get_chats_usecase.dart';
@@ -535,7 +536,9 @@ class ChatBottomSheet extends StatelessWidget {
                             ),
                           );
                         } else {
-                          context.push(Routes.LOGIN);
+                          return pleaseLoginDialog(context);
+
+                          // context.push(Routes.LOGIN);
                         }
                       },
                       child: _buildChatOptionCard(
@@ -586,7 +589,9 @@ class ChatBottomSheet extends StatelessWidget {
                             );
                           }
                         } else {
-                          context.push(Routes.LOGIN);
+                          return pleaseLoginDialog(context);
+
+                          // context.push(Routes.LOGIN);
                         }
                       },
                       child: _buildChatOptionCard(
@@ -817,7 +822,9 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                 ),
                               );
                             } else {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),
@@ -864,7 +871,9 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                 );
                               }
                             } else {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

@@ -40,6 +40,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class InstagramProfile extends StatefulWidget {
   const InstagramProfile({super.key, required this.userId});
@@ -739,7 +740,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                   );
                                 }
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+
+                                // context.push(Routes.LOGIN);
                               }
                             },
                             anonymousPress: () async {
@@ -759,7 +762,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                   ),
                                 );
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+
+                                // context.push(Routes.LOGIN);
                               }
                             },
                           ),

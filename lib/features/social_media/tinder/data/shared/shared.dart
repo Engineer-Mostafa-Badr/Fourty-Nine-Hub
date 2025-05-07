@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
@@ -607,7 +608,10 @@ pleaseLoginWidget(context) {
       padding: const EdgeInsets.all(8.0),
       child: Center(
         child: OutlinedButton(
-          onPressed: () => context.push(Routes.LOGIN),
+          onPressed: () {
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          },
           style: ButtonStyle(
               foregroundColor: WidgetStatePropertyAll(
                   context.isDarkMode ? Colors.white70 : Colors.black87)),

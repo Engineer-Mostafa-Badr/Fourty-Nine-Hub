@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -203,25 +204,27 @@ class _ItemCardState extends State<ItemCard> {
                             if(context.isUserLoggedIn ){
                               _addToCart() ;
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                                    style: Styles.smallText(
-                                      color: AppColors.whiteColor
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.red,
-                                  duration: Duration(seconds: 4),
-                                  action: SnackBarAction(
-                                    label: LocaleKeys.login.localize,
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      context.push(Routes.LOGIN);
-                                    },
-                                  ),
-                                ),
-                              );
+                              return pleaseLoginDialog(context);
+
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text(
+                              //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                              //       style: Styles.smallText(
+                              //         color: AppColors.whiteColor
+                              //       ),
+                              //     ),
+                              //     backgroundColor: Colors.red,
+                              //     duration: Duration(seconds: 4),
+                              //     action: SnackBarAction(
+                              //       label: LocaleKeys.login.localize,
+                              //       textColor: Colors.white,
+                              //       onPressed: () {
+                              //        // context.push(Routes.LOGIN);
+                              //       },
+                              //     ),
+                              //   ),
+                              // );
                               // context.push(Routes.LOGIN);
                             }
                           },

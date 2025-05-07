@@ -30,6 +30,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class TwitterView extends StatefulWidget {
   const TwitterView({super.key});
@@ -66,7 +67,9 @@ class _TwitterViewState extends State<TwitterView> {
               if (context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.CREATEPOST, extra: 'twitter');
               } else {
-                context.push(Routes.LOGIN);
+                return pleaseLoginDialog(context);
+
+                // context.push(Routes.LOGIN);
               }
             },
             child: Text(

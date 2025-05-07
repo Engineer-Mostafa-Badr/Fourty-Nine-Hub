@@ -14,6 +14,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../routes/routes.dart';
@@ -167,7 +168,9 @@ class PremiumRequestButton extends StatelessWidget {
               );
             }
           } else {
-            context.push(Routes.LOGIN);
+            return pleaseLoginDialog(context);
+
+            // context.push(Routes.LOGIN);
           }
         },
       );

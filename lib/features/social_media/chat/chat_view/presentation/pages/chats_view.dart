@@ -27,6 +27,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../../service_locator/service_locator.dart';
@@ -214,7 +215,10 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 GestureDetector(
-                                    onTap: () => context.push(Routes.LOGIN),
+                                    onTap: () {
+                                      return pleaseLoginDialog(context);
+                                      // context.push(Routes.LOGIN);
+                                    },
                                     child: Label(
                                       text: LocaleKeys.login.localize,
                                       style: const TextStyle(
