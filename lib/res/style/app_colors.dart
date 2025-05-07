@@ -153,6 +153,11 @@ abstract class AppColors {
         ? AppColors.whiteColor
         : AppColors.black;
   }
+  static Color getReversedTextColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.black
+        : AppColors.whiteColor;
+  }
   static Color getRedColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.red_Color_DARK

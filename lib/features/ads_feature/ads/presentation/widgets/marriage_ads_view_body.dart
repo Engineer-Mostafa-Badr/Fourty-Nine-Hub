@@ -122,7 +122,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                 child: CustomNotificationBadge(
                   count: 0,
                   child: HeaderButtonWidget(
-                    title: LocaleKeys.favouriteAds.localize,
+                    title: context.isArabic?'مفضلة':'Favourites',
                     isOpened:
                         context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
                     onPressed: () {
@@ -213,7 +213,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
-                    color: AppColors.PRIMARY_COLOR,
+                    color: AppColors.getButtonPrimaryColor(context),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -225,13 +225,13 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                         Assets.filter,
                         width: 16,
                         height: 16,
-                        color: Colors.white,
+                        color: AppColors.getReversedTextColor(context),
                       ),
                       const Sizer(),
                       Label(
                         text: LocaleKeys.filter.localize,
                         style: Styles.mediumText(
-                          color: Colors.white,
+                          color:AppColors.getReversedTextColor(context),
                         ),
                       ),
                     ],
@@ -267,7 +267,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
-                    color: AppColors.PRIMARY_COLOR,
+                    color: AppColors.getButtonPrimaryColor(context),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -279,13 +279,13 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                         Assets.hotelFilter,
                         width: 16,
                         height: 16,
-                        color: Colors.white,
+                        color: AppColors.getReversedTextColor(context),
                       ),
                       const Sizer(),
                       Label(
                         text: LocaleKeys.city.localize,
                         style: Styles.mediumText(
-                          color: Colors.white,
+                          color:AppColors.getReversedTextColor(context),
                         ),
                       ),
                     ],
@@ -440,12 +440,13 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
       if (widget.state.myAds == null) {
-        return SizedBox(
-          child: Label(
-            text: 'My Ads is Null',
-            style: Styles.headerText(),
-          ),
-        );
+        return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
+        //   SizedBox(
+        //   child: Label(
+        //     text: LocaleKeys.noAds.localize,
+        //     style: Styles.headerText(),
+        //   ),
+        // );
       }
 
       if (widget.state.myAds!.isEmpty) {
@@ -463,12 +464,13 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     if (context.read<SubcategoriesCubit>().isRequestLogOpen) {
       print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
       if (widget.state.adsRequestsLog == null) {
-        return SizedBox(
-          child: Label(
-            text: 'My Ads is Null',
-            style: Styles.headerText(),
-          ),
-        );
+        return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
+        //   SizedBox(
+        //   child: Label(
+        //     text: LocaleKeys.noAds.localize,
+        //     style: Styles.headerText(),
+        //   ),
+        // );
       }
 
       if (widget.state.adsRequestsLog!.isEmpty) {
@@ -486,12 +488,13 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
       print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
       if (widget.state.adsRequestsLog == null) {
-        return SizedBox(
-          child: Label(
-            text: 'My Ads is Null',
-            style: Styles.headerText(),
-          ),
-        );
+        return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
+        //   SizedBox(
+        //   child: Label(
+        //     text: LocaleKeys.noAds.localize,
+        //     style: Styles.headerText(),
+        //   ),
+        // );
       }
 
       if (widget.state.adsRequestsLog!.isEmpty) {
@@ -507,7 +510,8 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     // Ads
     print('state.adds ${widget.state.ads}');
     if (widget.state.ads == null) {
-      return const SizedBox();
+      return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
+        // const SizedBox();
     }
     if (widget.state.ads!.isEmpty) {
       return CustomEmptyWidget(

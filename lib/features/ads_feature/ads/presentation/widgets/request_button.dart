@@ -76,13 +76,14 @@ class RequestButton extends StatelessWidget {
                                   child: Form(
                                     key: controller.formKey,
                                     child: NewPhoneNumberTextFormField(
-                                      style: const TextStyle(
-                                        color: AppColors.DARK_BLUE_COLOR,
+                                      style: TextStyle(
+                                        color: AppColors.getTextColor(context),
                                       ),
                                       currentController: TextEditingController(),
                                       isRequired: true,
                                       maxLines: null,
                                       maxLength: 150,
+                                      hintColor:AppColors.getTextColor(context) ,
                                       onChanged: (c) =>
                                           controller.changePhone(v: c),
                                       // controller: controller,
@@ -129,14 +130,14 @@ class RequestButton extends StatelessWidget {
                                             height: 80.h,
                                             padding: const EdgeInsets.all(5),
                                             decoration: BoxDecoration(
-                                                color: AppColors.PRIMARY_COLOR,
+                                                color: AppColors.getButtonPrimaryColor(context),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             alignment: Alignment.center,
                                             child: Label(
                                               text: LocaleKeys.send.localize,
                                               style: Styles.headerText(
-                                                  color: Colors.white),
+                                                  color: AppColors.getReversedTextColor(context)),
                                             ),
                                           ),
                                         ),

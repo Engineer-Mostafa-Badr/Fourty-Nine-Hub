@@ -115,9 +115,9 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             label: context.isArabic ? 'زواج' : 'Marriage',
           ),
         ),
-        floatingActionButton: CustomFloatingButtonAds(
+        floatingActionButton:state.isLoading?null: CustomFloatingButtonAds(
           title:
-              "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
+              "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr??''}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn??''}"}",
           onPressed: () {
             if (AuthHelper().isLoggedIn()) {
               context.push(
@@ -137,7 +137,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             }
           },
         ),
-        body: MarriageAdsViewBody(
+        body: state.isLoading?CustomLoading():MarriageAdsViewBody(
           controller: controller,
           state: state,
           scrollController: _scrollController,
