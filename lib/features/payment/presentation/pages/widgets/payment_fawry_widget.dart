@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -18,6 +19,8 @@ import 'package:fourtyninehub/features/payment/domain/entities/fawry_saved_cards
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
@@ -541,7 +544,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                     height: 1.60,
                   ),
                   decoration: InputDecoration(
-                    labelText: LocaleKeys.cardNumber.localize,
+                    labelText: LocaleKeys.expiryYear.localize,
                     labelStyle: Styles.headerText(
                       fontSize: 32,
                       fontWeight: FontWeight.w500,
@@ -833,7 +836,8 @@ class _FawryPaymentState extends State<FawryPayment> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pushAndRemoveUntil(Routes.HOME, (route) => false);
+                // Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),

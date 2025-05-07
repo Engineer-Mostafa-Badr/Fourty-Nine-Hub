@@ -8,6 +8,8 @@ class WinnersGiftEntity {
   final String competitionNameAr;
   final num profitAmount;
   final String winAt;
+  final String currencyEn;
+  final String currencyAr;
 
   WinnersGiftEntity({
     required this.userId,
@@ -19,5 +21,7 @@ class WinnersGiftEntity {
     required this.competitionNameAr,
     required this.profitAmount,
     required this.winAt,
+    required this.currencyEn,
+    required this.currencyAr,
   });
 }

@@ -11,6 +11,8 @@ class WinnersGiftModel extends WinnersGiftEntity {
     required super.competitionNameAr,
     required super.profitAmount,
     required super.winAt,
+    required super.currencyAr,
+    required super.currencyEn,
   });
 
   factory WinnersGiftModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,8 @@ class WinnersGiftModel extends WinnersGiftEntity {
       competitionNameAr: json['competitionDetails']['nameAr'],
       profitAmount: json['profitAmount'],
       winAt: json['winAt'],
+      currencyAr: json['currencyAr'],
+      currencyEn: json['currencyEn'],
     );
   }
 }

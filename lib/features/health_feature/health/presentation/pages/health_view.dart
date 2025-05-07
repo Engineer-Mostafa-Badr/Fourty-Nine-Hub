@@ -23,10 +23,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../../service_locator/service_locator.dart';
 
-
-
 class HealthView extends StatefulWidget {
-  HealthView({super.key});
+  const HealthView({super.key});
 
   @override
   State<HealthView> createState() => _HealthViewState();
@@ -81,8 +79,8 @@ class _HealthViewState extends State<HealthView> {
               state.isDoctor == false
                   ? const RegistrationBanner()
                   : DoctorModeBanner(
-                isWaitingApproval: isWaitingApproval,
-              ),
+                      isWaitingApproval: isWaitingApproval,
+                    ),
               if (isWaitingApproval) WaitingAprovalText(),
               const Sizer(),
               Padding(
@@ -110,13 +108,14 @@ class _HealthViewState extends State<HealthView> {
                     Expanded(
                       child: CurrentHistoryBooking(
                         title: context.isArabic
-                            ? 'تاريخ الحجوزات'
+                            ? 'سجل الحجوزات'
                             : 'Booking History',
                         isSelected: _showHistory,
                         onTap: () => _toggleView('history'),
                       ),
                     ),
                     const Sizer(),
+
                     /// Current Booking
                     Expanded(
                       child: CurrentHistoryBooking(
@@ -151,8 +150,9 @@ class _HealthViewState extends State<HealthView> {
               if (_showCurrent)
                 BlocProvider(
                   create: (context) => serviceLocator<HealthCubit>(
-                    // Pass your dependencies here
-                  )..loadInitialBooking('current'),
+                      // Pass your dependencies here
+                      )
+                    ..loadInitialBooking('current'),
                   child: CurrentBookingsScreen(
                     onClose: () => setState(() => _showCurrent = false),
                   ),
@@ -161,23 +161,23 @@ class _HealthViewState extends State<HealthView> {
               // History view
               if (_showHistory)
                 BlocProvider(
-                  create: (context) => serviceLocator<HealthCubit>()..loadInitialBooking('history'),
+                  create: (context) => serviceLocator<HealthCubit>()
+                    ..loadInitialBooking('history'),
                   child: BookingHistoryScreen(
                     onClose: () => setState(() => _showHistory = false),
                   ),
                 ),
 
-
               // Favourite Ads view
               if (_showMost)
                 BlocProvider(
                   key: ValueKey('MostBookingScreen'),
-                  create: (context) => serviceLocator<HealthCubit>()..loadInitialMostBooking(),
+                  create: (context) =>
+                      serviceLocator<HealthCubit>()..loadInitialMostBooking(),
                   child: MostBookingScreen(
                     onClose: () => setState(() => _showMost = false),
                   ),
                 ),
-
             ],
           );
         },
