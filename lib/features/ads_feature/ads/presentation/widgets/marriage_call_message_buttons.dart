@@ -28,6 +28,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class MarriageCallMessageButtons extends StatefulWidget {
   const MarriageCallMessageButtons({
@@ -79,7 +80,10 @@ class _MarriageCallMessageButtonsState
                       EdgeInsetsDirectional.only(start: widget.startPadding),
                   child: InkWell(
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+                      return pleaseLoginDialog(context);
+              // context.push(Routes.LOGIN);
+          }
                         : snap.data == true
                             ? () {
                                 showModalBottomSheet(
@@ -242,7 +246,10 @@ class _MarriageCallMessageButtonsState
                   //         ? AppColors.PRIMARY_COLOR
                   //         : AppColors.DARK_GRAY_COLOR,
                   onTap: !context.read<UserCubit>().isLoggedIn
-                      ? () => context.push(Routes.LOGIN)
+                      ? () {
+          return pleaseLoginDialog(context);
+          // context.push(Routes.LOGIN);
+          }
                       : snap.data == true
                           ? () async {
                               ChatEntity? chat = await context
@@ -282,7 +289,10 @@ class _MarriageCallMessageButtonsState
                   InkWell(
                     // color: AppColors.SECONDARY_COLOR,
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+          return pleaseLoginDialog(context);
+          // context.push(Routes.LOGIN);
+          }
                         : () {
                             bottomSheet(
                                 context: context,

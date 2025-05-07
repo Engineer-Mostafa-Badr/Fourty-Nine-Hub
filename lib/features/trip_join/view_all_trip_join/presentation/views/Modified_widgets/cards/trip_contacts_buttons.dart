@@ -18,6 +18,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class ContactsTripButtons extends StatefulWidget {
   const ContactsTripButtons(
@@ -235,7 +236,10 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                   color: context.isDarkMode ? AppColors.grey : Colors.black,
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () => context.push(Routes.LOGIN)
+                    ? () {
+                  return pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
                     : snap.data == true
                         ? () async {
                             ChatEntity? chat = await context
@@ -268,7 +272,10 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                   Icons.report,
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () => context.push(Routes.LOGIN)
+                    ? () {
+                  return pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
                     : () {
                         bottomSheet(
                             context: context,

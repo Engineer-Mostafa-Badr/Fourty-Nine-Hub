@@ -464,6 +464,8 @@ extension CategoriesExtension on Categories {
         return Categories.farming;
       case "62c8b5b29332225799fe3362":
         return Categories.governmentCharity;
+      case "62c8b57c9332225799fe3306":
+        return Categories.health;
       default:
         throw ArgumentError("Invalid category id: $id");
     }

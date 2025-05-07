@@ -35,6 +35,8 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print('subCategory: ${widget.subCategory.id}');
+        print('mainCategory: ${context.read<HealthCubit>().state.mainCategory!.id}');
         if (context.read<HealthCubit>().state.mainCategory != null) {
           context.push(
             Routes.ADS,

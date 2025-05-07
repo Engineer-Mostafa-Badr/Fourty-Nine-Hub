@@ -774,7 +774,8 @@ class ChatStories extends StatelessWidget {
                     ),
                   ),
                 )
-              : context.push(Routes.LOGIN);
+              : pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()

@@ -124,7 +124,8 @@ class RequestButton extends StatelessWidget {
                                                 }
                                               });
                                             } else {
-                                              context.go(Routes.LOGIN);
+                                              return pleaseLoginDialog(context);
+                                              // context.go(Routes.LOGIN);
                                             }
                                           },
                                           child: Container(
