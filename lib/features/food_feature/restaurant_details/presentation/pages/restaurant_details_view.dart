@@ -168,7 +168,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                backgroundColor: AppColors.SECONDARY_COLOR,
+                backgroundColor: AppColors.getRedColor(context),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -178,13 +178,13 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                     LocaleKeys.view_cart.tr(),
                     style: Styles.headerText(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColors.getReversedTextColor(context),
                     ),
                   ),
                   const Sizer(),
-                  const Icon(
+                   Icon(
                     Icons.shopping_cart_rounded,
-                    color: Colors.white,
+                    color: AppColors.getReversedTextColor(context),
                   ),
                 ],
               ),

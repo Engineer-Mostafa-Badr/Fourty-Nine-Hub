@@ -88,7 +88,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cD9D9D9,
+                  color:AppColors.getFillColor(context),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -222,8 +222,8 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                             currentQty: localQuantity ?? 0,
                                           );
                                         });
-                                      },
-                                      color: AppColors.SECONDARY_COLOR,
+                                      },textColor: AppColors.getReversedTextColor(context),
+                                      color: AppColors.getRedColor(context),
                                       label: LocaleKeys.confirm.localize,
                                     ),
                                     const SizedBox(width: 8),
@@ -251,7 +251,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                 const SizedBox(height: 8),
                 Text(
                   '${LocaleKeys.confirmQuantity.localize} (${widget.quantity}).',
-                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                  style: Styles.mediumText(color: AppColors.getRedColor(context)),
                 ),
               ],
             ],

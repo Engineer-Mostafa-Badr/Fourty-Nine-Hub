@@ -19,7 +19,6 @@ class BuildFoodList extends StatelessWidget {
         if (meals == null || meals.isEmpty) {
           return const SizedBox(); // Return an empty widget if meals are null or empty
         }
-
         return Padding(
           padding: const EdgeInsets.all(10.0),
           child: ListView.builder(

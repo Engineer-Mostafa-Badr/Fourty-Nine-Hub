@@ -93,7 +93,7 @@ class _ItemCardState extends State<ItemCard> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cD9D9D9,
+          color:AppColors.getFillColor(context),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -231,15 +231,15 @@ class _ItemCardState extends State<ItemCard> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: AppColors.SECONDARY_COLOR_DARK,
+                              color: AppColors.getRedColor(context),
                               borderRadius: BorderRadius.circular(15),
                               // border: Border.all(color: AppColors.LIGHT_COLOR),
                             ),
                             child:  Text(
                               LocaleKeys.addToCart.localize,
                               style: Styles.smallText(
-                                fontWeight: FontWeight.w500
-
+                                fontWeight: FontWeight.w500,
+                                color:AppColors.getReversedTextColor(context)
                               ),
                             ),
                           ),
