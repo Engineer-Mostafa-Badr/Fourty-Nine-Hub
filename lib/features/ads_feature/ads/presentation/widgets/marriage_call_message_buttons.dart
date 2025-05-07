@@ -231,7 +231,7 @@ class _MarriageCallMessageButtonsState
                           : Assets.phoneIcon,
                       color:!(snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)?
-                      context.isDarkMode ? Colors.white : null: null,
+                      context.isDarkMode ? Colors.white : null: null,height: 37.h,
                       // color: (snap.data == true &&
                       //         context.read<UserCubit>().isLoggedIn)
                       //     ? AppColors.PRIMARY_COLOR
@@ -282,7 +282,7 @@ class _MarriageCallMessageButtonsState
                         : Assets.mailIcon,
                     color:!(snap.data == true &&
                         context.read<UserCubit>().isLoggedIn)?
-                    context.isDarkMode ? Colors.white : null: null,
+                    context.isDarkMode ? Colors.white : null: null,height: 30.h,
                   ),
                 ),
                 if (widget.hasReport == true) ...[
@@ -302,9 +302,10 @@ class _MarriageCallMessageButtonsState
                                 ));
                           },
                     // color: AppColors.SECONDARY_COLOR,
-                    child: const Icon(
+                    child: Icon(
                       Icons.report,
                       color: AppColors.SECONDARY_COLOR_DARK2,
+                      size:50.h,
                     ),
                   ),
                 ]

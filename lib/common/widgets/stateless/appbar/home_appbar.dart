@@ -139,7 +139,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: TextAppButton(
                   label: LocaleKeys.lang.localize,
-                  style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                  style: Styles.headerText(color: AppColors.getRedColor(context)),
                   onPressed: () {
                     HandleCashback.setCount('langCount', context);
                     // if (context.locale == Locales.arabic) {

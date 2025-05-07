@@ -65,7 +65,6 @@ class _TinderCardStackState extends State<TinderCardStack> {
           // Update the UI based on new card index
           _buildCardWidget(
             context,
-            isSwapping: true
           );
         });
         return true;
@@ -999,7 +998,8 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [personInfoSubtitle(index)],
+                children: [
+                  const Sizer(height: 10,),personInfoSubtitle(index)],
               ),
             ),
           ],
@@ -1024,6 +1024,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
                 Assets.tinder_home,
                 context.isArabic ? 'حلوان' : 'Helwan',
               ),
+              const Sizer(height: 10,),
               _customListTile(
                 Assets.location,
                 context.isArabic
@@ -1038,6 +1039,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
             _customListTile(
                 Assets.interest,
                 context.isArabic ? 'اهتمامات' : 'Interests'),
+            const Sizer(height: 8,),
             Wrap(
               children: [
                 _buildInterestsBobble(
@@ -1076,19 +1078,19 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
   }
 
   Widget _customListTile(String icon, String title) {
-    return ListTile(
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      leading: Image.asset(
-        icon,
-        height: 35.h,
-        color: Colors.white,
-      ),
-      title: Label(
-        text: title,
-        style: Styles.headerText(color: Colors.white),
-      ),
+    return Row(
+      children: [
+        Image.asset(
+          icon,
+          height: 35.h,
+          color: Colors.white,
+        ),
+        const Sizer(),
+        Label(
+          text: title,
+          style: Styles.headerText(color: Colors.white),
+        ),
+      ]
     );
   }
 

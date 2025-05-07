@@ -79,6 +79,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
           label: LocaleKeys.adRequests.localize,
+          backColor: AppColors.getTextColor(context),
         ),
       ),
       body: Column(

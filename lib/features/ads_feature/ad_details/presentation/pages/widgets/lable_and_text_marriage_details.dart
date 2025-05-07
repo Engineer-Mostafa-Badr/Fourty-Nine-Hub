@@ -21,7 +21,7 @@ class LableAndTextMarriageDetails extends StatelessWidget {
             style: Styles.headerText(
               fontWeight: FontWeight.w500,
               fontSize: 32,
-              color: AppColors.SECONDARY_COLOR_DARK2,
+              color: AppColors.getRedColor(context),
               height: 1.60,
             ),
           ),

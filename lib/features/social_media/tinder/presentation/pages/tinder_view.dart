@@ -6,23 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -117,6 +110,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
               ],
             ),
             title: ClickableWidget(
+              onTap: ()=>context.push(Routes.FindMyProfileScreen),
                 child: Image.asset(
               Assets.male_profile,
               width: 70.w,
