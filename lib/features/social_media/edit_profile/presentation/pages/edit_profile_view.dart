@@ -110,11 +110,9 @@ class _EditProfileViewState extends State<EditProfileView> {
             textColor: context.isDarkMode ? Colors.black : Colors.white,
             iconColor: context.isDarkMode ? Colors.black : Colors.white,
             // enableCustomAppBar: true,
-            backColor: const Color(0xffCACFF4),
             automaticallyImplyLeading: false,
           ),
           enableCustomAppBar: true,
-          scaffoldBackgroundWithAppBarColor: const Color(0xffCACFF4),
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
