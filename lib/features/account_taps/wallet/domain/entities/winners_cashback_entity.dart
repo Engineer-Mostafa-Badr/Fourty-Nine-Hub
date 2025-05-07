@@ -9,9 +9,9 @@ class WinnersCashbackEntity {
   WinnersCashbackEntity({
     required this.userId,
     required this.firstName,
-  required this.lastName,
-  required this.profilePictureKey,
-  required this.profitAmount,
-  required this.winAt,
-});
+    required this.lastName,
+    required this.profilePictureKey,
+    required this.profitAmount,
+    required this.winAt,
+  });
 }

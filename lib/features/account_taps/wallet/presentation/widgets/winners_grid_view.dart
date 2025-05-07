@@ -71,7 +71,7 @@ class _WinnersGridViewState extends State<WinnersGridView> {
               mainAxisSpacing: 8,
               childAspectRatio: 110 / 173,
               crossAxisCount: 3,
-              mainAxisExtent: 180,
+              // mainAxisExtent: 180,
             ),
             itemBuilder: (context, index) {
               if (index < widget.winners.length) {
@@ -119,7 +119,7 @@ class WinnersGridViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 173,
+      height: 180,
       // width: 110,
       // padding: EdgeInsets.symmetric(horizontal: 7),
       decoration: BoxDecoration(

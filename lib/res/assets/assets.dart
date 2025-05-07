@@ -1,5 +1,12 @@
 abstract class Assets {
   static String spinWheel = 'assets/images/spin.png';
+  static String spinWheelDark = 'assets/images/spin_dark.png';
+  static String drawerGalleryIcon = 'assets/icons/drawer_gallery_icon.svg';
+  static String drawerGalleryIconDark =
+      'assets/icons/drawer_gallery_icon_dark.svg';
+  static String drawerCameraIcon = 'assets/icons/drawer_camera_icon.svg';
+  static String drawerCameraIconDark =
+      'assets/icons/drawer_camera_icon_dark.svg';
   static String cameraAddTalent = 'assets/49-New-icons/camera.png';
   static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
   static String starIcon = 'assets/images/star.svg';

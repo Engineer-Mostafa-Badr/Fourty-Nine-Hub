@@ -26,7 +26,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
 
 class HealthView extends StatefulWidget {
-  HealthView({super.key});
+  const HealthView({super.key});
 
   @override
   State<HealthView> createState() => _HealthViewState();
@@ -110,7 +110,7 @@ class _HealthViewState extends State<HealthView> {
                     Expanded(
                       child: CurrentHistoryBooking(
                         title: context.isArabic
-                            ? 'تاريخ الحجوزات'
+                            ? 'سجل الحجوزات'
                             : 'Booking History',
                         isSelected: _showHistory,
                         onTap: () {

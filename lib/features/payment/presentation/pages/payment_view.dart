@@ -515,7 +515,8 @@ class _PaymentViewState extends State<PaymentView> {
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
                       print(" the provider $_selectedProviderId");
-                      if (phoneNumbers.isEmpty) {
+                      // if (phoneNumbers.isEmpty) {
+                      if (bankNameController.text.isEmpty) {
                         showErrorMessage(context,
                             LocaleKeys.pleaseEnterPhoneNumber.localize);
                         return;
