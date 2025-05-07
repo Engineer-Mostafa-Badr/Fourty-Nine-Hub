@@ -105,38 +105,42 @@ class AnnounceWidget extends StatelessWidget {
                 fit: BoxFit.cover,
               )),
               Positioned.fill(
-                  child: Container(
-                decoration: BoxDecoration(
+                child: Container(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                      Colors.black.withOpacity(.4),
-                      Colors.black.withOpacity(.6),
-                      Colors.black.withOpacity(.8),
-                    ])),
-              )),
-              Positioned.fill(
-                  child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Label(
-                        style: Styles.headerText(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                        textAlign: TextAlign.center,
-                        text: context.isArabic ? item.titleAr : item.titleEn),
-                    const Sizer(),
-                    Label(
-                        style: Styles.smallText(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                        textAlign: TextAlign.center,
-                        text: context.isArabic
-                            ? item.subTitleAr
-                            : item.subTitleEn),
-                  ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: .4),
+                        Colors.black.withValues(alpha: .6),
+                        Colors.black.withValues(alpha: .8),
+                      ],
+                    ),
+                  ),
                 ),
-              )),
+              ),
+              Positioned.fill(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Label(
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                          textAlign: TextAlign.center,
+                          text: context.isArabic ? item.titleAr : item.titleEn),
+                      const Sizer(),
+                      Label(
+                          style: Styles.smallText(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                          textAlign: TextAlign.center,
+                          text: context.isArabic
+                              ? item.subTitleAr
+                              : item.subTitleEn),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
