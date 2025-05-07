@@ -35,6 +35,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../res/assets/assets.dart';
@@ -486,6 +487,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         height: 48,
         child: GestureDetector(
           onTap: () {
+            if(!context.read<UserCubit>().isLoggedIn){
+              return pleaseLoginDialog(context);
+            }
             customBottomSheet(context, serviceLocator<RideCubit>(),
                 isDarkMode: context.isDarkMode,
                 child: Padding(
@@ -766,7 +770,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 if (context.isUserLoggedIn) {
                                   context.push(Routes.rideLoadingRequestScreen,extra: false);
                                 } else {
-                                  context.push(Routes.LOGIN);
+                                  // context.push(Routes.LOGIN);
+                                    return pleaseLoginDialog(context);
                                 }
                               },
                               child: _tripsWidget(
@@ -788,7 +793,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 if (context.isUserLoggedIn) {
                                   context.push(Routes.rideLoadingRequestScreen,extra: true);
                                 } else {
-                                  context.push(Routes.LOGIN);
+                                  return pleaseLoginDialog(context);
+                                  // context.push(Routes.LOGIN);
                                 }
                               },
                               child: _tripsWidget(
@@ -816,7 +822,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               if (context.isUserLoggedIn) {
                                 context.push(Routes.RIDEACTIVITY);
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+
+                                // context.push(Routes.LOGIN);
                               }
                             },
                             child: _tripsWidget(LocaleKeys.activity.tr(),
@@ -992,7 +1000,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           );
                                         }
                                       } else {
-                                        context.push(Routes.LOGIN);
+                                        return pleaseLoginDialog(context);
+                                        // context.push(Routes.LOGIN);
                                       }
                                     },
                                     backColor: AppColors.SECONDARY_COLOR_DARK2,
@@ -1052,7 +1061,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               );
                                             }
                                           } else {
-                                            context.push(Routes.LOGIN);
+                                            return pleaseLoginDialog(context);
+                                            // context.push(Routes.LOGIN);
                                           }
                                         },
                                         backColor: AppColors.PRIMARY_COLOR,

@@ -36,6 +36,7 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class UserPostCard extends StatefulWidget {
   final PostEntity post;
@@ -246,8 +247,9 @@ class _UserPostCardState extends State<UserPostCard> {
                   onTap: () {
                     if (context.read<UserCubit>().isLoggedIn) {
                       widget.showPostComments(myPost.id);
-                    } else {
-                      context.push(Routes.LOGIN);
+                    } else {                                  return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                     }
                   },
                   child: Row(
@@ -298,7 +300,9 @@ class _UserPostCardState extends State<UserPostCard> {
                             if (context.read<UserCubit>().isLoggedIn) {
                               return widget.showPostComments(myPost.id);
                             } else {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           }),
                 ),
@@ -310,8 +314,9 @@ class _UserPostCardState extends State<UserPostCard> {
                         onTap: () {
                           if (context.read<UserCubit>().isLoggedIn) {
                             return widget.showPostComments(myPost.id);
-                          } else {
-                            context.push(Routes.LOGIN);
+                          } else {                                  return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           }
                         }),
                   ),
@@ -329,8 +334,9 @@ class _UserPostCardState extends State<UserPostCard> {
                             showSuccessMessage(context,
                                 LocaleKeys.postSharedSuccessfully.localize);
                           }
-                        } else {
-                          context.push(Routes.LOGIN);
+                        } else {                                  return pleaseLoginDialog(context);
+
+                          // context.push(Routes.LOGIN);
                         }
                       }),
                 ),

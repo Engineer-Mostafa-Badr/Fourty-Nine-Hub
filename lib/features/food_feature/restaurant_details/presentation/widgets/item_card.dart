@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -92,7 +93,7 @@ class _ItemCardState extends State<ItemCard> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cD9D9D9,
+          color:AppColors.getFillColor(context),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -203,40 +204,42 @@ class _ItemCardState extends State<ItemCard> {
                             if(context.isUserLoggedIn ){
                               _addToCart() ;
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                                    style: Styles.smallText(
-                                      color: AppColors.whiteColor
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.red,
-                                  duration: Duration(seconds: 4),
-                                  action: SnackBarAction(
-                                    label: LocaleKeys.login.localize,
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      context.push(Routes.LOGIN);
-                                    },
-                                  ),
-                                ),
-                              );
+                              return pleaseLoginDialog(context);
+
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text(
+                              //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                              //       style: Styles.smallText(
+                              //         color: AppColors.whiteColor
+                              //       ),
+                              //     ),
+                              //     backgroundColor: Colors.red,
+                              //     duration: Duration(seconds: 4),
+                              //     action: SnackBarAction(
+                              //       label: LocaleKeys.login.localize,
+                              //       textColor: Colors.white,
+                              //       onPressed: () {
+                              //        // context.push(Routes.LOGIN);
+                              //       },
+                              //     ),
+                              //   ),
+                              // );
                               // context.push(Routes.LOGIN);
                             }
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: AppColors.SECONDARY_COLOR_DARK,
+                              color: AppColors.getRedColor(context),
                               borderRadius: BorderRadius.circular(15),
                               // border: Border.all(color: AppColors.LIGHT_COLOR),
                             ),
                             child:  Text(
                               LocaleKeys.addToCart.localize,
                               style: Styles.smallText(
-                                fontWeight: FontWeight.w500
-
+                                fontWeight: FontWeight.w500,
+                                color:AppColors.getReversedTextColor(context)
                               ),
                             ),
                           ),

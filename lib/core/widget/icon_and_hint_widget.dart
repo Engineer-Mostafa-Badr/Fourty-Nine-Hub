@@ -26,6 +26,7 @@ class IconAndHintWidget extends StatelessWidget {
         Expanded(
           child: Label(
             text: text,
+            maxLines: 2,
             style: textStyle ??
                 Styles.mediumText(
                   fontSize: 20,

@@ -9,8 +9,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
+import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import '../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
@@ -293,6 +295,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               onTap: () {
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
+                                if(!context.read<UserCubit>().isLoggedIn){
+                                  return pleaseLoginDialog(context);
+                                }
                                 context.push(Routes.SPOTLIGHT);
                               },
                             ),
@@ -300,8 +305,12 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.live.localize,
                               image: Assets.liveIcon,
                               onTap: () {
+
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
+                                if(!context.read<UserCubit>().isLoggedIn){
+                                  return pleaseLoginDialog(context);
+                                }
                                 context.push(Routes.LIVE);
                               },
                             ),
@@ -321,6 +330,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               onTap: () {
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
+                                if(!context.read<UserCubit>().isLoggedIn){
+                                  return pleaseLoginDialog(context);
+                                }
                                 context.push(Routes.CHAT,
                                     extra: ChatsViewParams());
                               },

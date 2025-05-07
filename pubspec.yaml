@@ -149,6 +149,7 @@ dependencies:
   animated_notch_bottom_bar: ^1.0.3
   expandable: ^5.0.1
   deepar_flutter: ^0.0.5
+  percent_indicator: ^4.2.2
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   http: ^0.13.3
@@ -188,6 +189,7 @@ flutter:
     # - assets/images/butterfly.png
     # - assets/images/salary.png
     - assets/icons/
+    - assets/icons/tinder/
     - assets/lottie/
     - assets/filters/
     - assets/audio/

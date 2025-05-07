@@ -80,7 +80,7 @@ class _CreateAdViewState extends State<CreateAdView> {
       return CustomScaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(30),
-          child:HomeAppbar(),
+          child:HomeAppbar(isWithBackArrow: true,),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           // buildWhen: (previous, current) => previous.status == current.status,
@@ -337,9 +337,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //     style: Styles.mediumText(fontSize: 32),
                       //   ),
                       // ),
-
                       CreateAdDropdownMenu<GovernorateEntity>(
-                        value: state.governorate!.isEmpty
+                        value:state.governorate!.isEmpty
                             ? null
                             : state.governorates!
                                 .where((gov) => gov.id == state.governorate)
@@ -605,9 +604,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                       state.isLoadingCreateAd? const Center(child: CircularProgressIndicator()):AppButton(
                         label: LocaleKeys.publish.localize,
-                        backColor: AppColors.c0B1035,
+                        backColor: AppColors.getButtonPrimaryColor(context),
                         style: Styles.headerText(
-                          color: Colors.white,
+                          color: AppColors.getReversedTextColor(context),
                           fontSize: 28,
                         ),
                         height: 44,
@@ -658,7 +657,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                 padding: const EdgeInsets.all(16),
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xFFD9D9D9),
+                  color:AppColors.getFillColor(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -704,7 +703,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ],
                     ),
                     const Sizer(
-                      height: 4,
+                      height: 8,
                     ),
                     // BadgedLabel(
                     //   label: LocaleKeys.addImages.localize,

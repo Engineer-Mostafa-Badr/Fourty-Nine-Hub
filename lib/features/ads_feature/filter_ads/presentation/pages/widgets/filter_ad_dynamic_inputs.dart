@@ -68,9 +68,9 @@ class _FilterAdDynamicInputWidgetState
               maxLines: null,
               onChanged: (v) =>
                   widget.onTextChanged(v, true, widget.property.type),
-              style: Styles.mediumText(fontSize: 32),
+              style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
               decoration: InputDecoration(
-                fillColor: const Color(0xffF5F5F5),
+                fillColor: AppColors.getFillColor(context),
                 filled: true,
                 contentPadding: const EdgeInsetsDirectional.only(start: 16),
                 border: OutlineInputBorder(
@@ -93,7 +93,7 @@ class _FilterAdDynamicInputWidgetState
                   borderRadius: BorderRadius.circular(15.0),
                   borderSide: BorderSide.none,
                 ),
-                hintStyle: Styles.mediumText(fontSize: 32),
+                hintStyle: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
                 hintText: getLang() == 'ar'
                     ? widget.property.nameAr
                     : widget.property.nameEn,
@@ -137,11 +137,11 @@ class _FilterAdDynamicInputWidgetState
               height: 42,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: const Color(0xffF5F5F5),
+                color: AppColors.getFillColor(context),
               ),
               child: Theme(
                 data: Theme.of(context).copyWith(
-                  canvasColor: const Color(0xFFE0E0E0),
+                  canvasColor: AppColors.getFillColor(context),
                 ),
                 child: ButtonTheme(
                   alignedDropdown: true,
@@ -151,7 +151,7 @@ class _FilterAdDynamicInputWidgetState
                     icon: const Icon(Icons.keyboard_arrow_down_rounded),
                     menuMaxHeight: 300,
                     elevation: 2,
-                    dropdownColor: const Color(0xFFE0E0E0),
+                    dropdownColor: AppColors.getFillColor(context),
                     borderRadius: BorderRadius.circular(15),
                     itemHeight: 50,
                     underline: Container(),
@@ -181,7 +181,7 @@ class _FilterAdDynamicInputWidgetState
                         text: getLang() == 'ar'
                             ? value?.nameAr ?? ''
                             : value?.nameEn ?? '',
-                        style: Styles.mediumText(fontSize: 32),
+                        style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
                       ),
                     ),
                   ),
@@ -294,9 +294,9 @@ class _FilterAdDynamicInputWidgetState
                     onChanged: (v) =>
                         widget.onTextChanged(v, true, widget.property.type),
                     keyboardType: TextInputType.number,
-                    style: Styles.mediumText(fontSize: 32),
+                    style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
                     decoration: InputDecoration(
-                      fillColor: const Color(0xffF5F5F5),
+                      fillColor: AppColors.getFillColor(context),
                       filled: true,
                       contentPadding:
                           const EdgeInsetsDirectional.only(start: 16),
@@ -320,7 +320,7 @@ class _FilterAdDynamicInputWidgetState
                         borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
-                      hintStyle: Styles.mediumText(fontSize: 32),
+                      hintStyle: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
                       hintText: LocaleKeys.from.localize,
                       // prefix: Sizer(
                       //   width: 20.w,
@@ -347,9 +347,9 @@ class _FilterAdDynamicInputWidgetState
                     onChanged: (v) =>
                         widget.onTextChanged(v, false, widget.property.type),
                     keyboardType: TextInputType.number,
-                    style: Styles.mediumText(fontSize: 32),
+                    style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
                     decoration: InputDecoration(
-                      fillColor: const Color(0xffF5F5F5),
+                      fillColor: AppColors.getFillColor(context),
                       filled: true,
                       contentPadding:
                           const EdgeInsetsDirectional.only(start: 16),
@@ -375,7 +375,7 @@ class _FilterAdDynamicInputWidgetState
                       ),
 
                       hintText: LocaleKeys.to.localize,
-                      hintStyle: Styles.mediumText(fontSize: 32),
+                      hintStyle: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
                       // prefix: Sizer(
                       //   width: 20.w,
                       // ),
@@ -428,7 +428,7 @@ class _FilterAdDynamicInputWidgetState
                     padding: const EdgeInsets.all(5),
                     // margin: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: const Color(0xffF5F5F5),
+                      color:AppColors.getFillColor(context),
                       border: value == e
                           ? Border.all(
                               color: AppColors.SECONDARY_COLOR_DARK2,
@@ -438,7 +438,7 @@ class _FilterAdDynamicInputWidgetState
                     ),
                     child: Label(
                       text: getLang() == 'ar' ? e.nameAr : e.nameEn,
-                      style: Styles.mediumText(fontSize: 32),
+                      style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
                     ),
                   ),
                 ),

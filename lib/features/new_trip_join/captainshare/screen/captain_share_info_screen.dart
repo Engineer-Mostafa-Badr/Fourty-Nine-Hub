@@ -30,14 +30,14 @@ class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
           height: 80.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: AppColors.PRIMARY_COLOR,
+            color:AppColors.getButtonPrimaryColor(context),
           ),
           child: Center(
             child: Text(
               context.isArabic ? "انضم الآن !" : "Join Now!",
               style: TextStyle(
                 fontSize: 32.sp,
-                color: Colors.white,
+                color:context.isDarkMode?AppColors.black: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -71,33 +71,24 @@ class CaptainShareInfoBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          SvgPicture.asset(Assets.captainInfoIcon),
+          context.isDarkMode?Image.asset(Assets.captainDarkInfoIcon,height: MediaQuery.of(context).size.height*0.4,fit: BoxFit.cover,):SvgPicture.asset(Assets.captainInfoIcon),
           const SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 70),
-            child: RowTextWidget(
-              text: context.isArabic
-                  ? "وفر المال واحجز مقعدًا واحدًا."
-                  : 'Save money & Book 1 seat.',
-            ),
+          RowTextWidget(
+            text: context.isArabic
+                ? "وفر المال واحجز مقعدًا واحدًا."
+                : 'Save money & Book 1 seat.',
           ),
           SizedBox(height: 15.h),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 70),
-            child: RowTextWidget(
-              text: context.isArabic
-                  ? "متجه إلى الوجهة النهائية."
-                  : 'Heading final destination.',
-            ),
+          RowTextWidget(
+            text: context.isArabic
+                ? "متجه إلى الوجهة النهائية."
+                : 'Heading final destination.',
           ),
           SizedBox(height: 15.h),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 70),
-            child: RowTextWidget(
-              text: context.isArabic
-                  ? "انتظر حتى يشارك الآخرون مقاعد الطريق مع قائدك"
-                  : "Wait for others to share route  seats with your captain",
-            ),
+          RowTextWidget(
+            text: context.isArabic
+                ? "انتظر حتى يشارك الآخرون مقاعد الطريق مع قائدك"
+                : "Wait for others to share route  seats with your captain",
           ),
         ],
       ),
@@ -112,33 +103,36 @@ class RowTextWidget extends StatelessWidget {
   const RowTextWidget({
     super.key,
     required this.text,
-    this.fontSize = 30,
+    this.fontSize = 34,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: fontSize * 0.19),
-          child: Icon(
-            Icons.circle,
-            size: fontSize * 0.4,
-          ),
-        ),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: fontSize.sp,
-              fontWeight: FontWeight.w700,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 50.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: fontSize * 0.19),
+            child: Icon(
+              Icons.circle,
+              size: fontSize * 0.4,
             ),
-            softWrap: true,
           ),
-        ),
-      ],
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: fontSize.sp,
+                fontWeight: FontWeight.w700,
+              ),
+              softWrap: true,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

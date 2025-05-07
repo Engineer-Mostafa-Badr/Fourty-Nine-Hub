@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/infoButton.dart';
@@ -18,7 +19,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../routes/routes.dart';
 
 class TripJoinCreateAdView extends StatefulWidget {
@@ -143,14 +144,27 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                 const Sizer(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.h),
-                  child: NewPhoneNumberTextFormField(
-                      style: Styles.mediumText(color: Colors.black),
+                  child: FormTextField(
+                      textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                      type: TextInputType.phone,
+                      height: 76.h,
+                      style: Styles.mediumText(
+                          color:
+                          AppColors.getTextColor(context)),
                       constraints:
                           const BoxConstraints(maxHeight: 52, minHeight: 52),
-                      fillColor: AppColors.colorGreyLight,
-                      currentController: phoneController,
-                      isRequired: true,
-                  ),
+                      fillColor: AppColors.getFillColor(context),
+                      borderRadius: BorderRadius.circular(30.h),
+                      borderColor: AppColors.getFillColor(context),
+                      borderSide: AppColors.getFillColor(context),
+                      controller: phoneController,
+                      hint: LocaleKeys.phoneNumber.localize,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocaleKeys.please_enter_phone_number.localize;
+                        }
+                        return null;
+                      }),
                 ),
                 const Sizer(),
                 Padding(
@@ -161,23 +175,21 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           title: LocaleKeys.vehicleBrand.localize,
                           items: carBrands,
                           selectedItem: selectedBrand,
-                        onSelected: (value){
+                          onSelected: (value) {
                             setState(() {
-                              selectedBrand=value;
+                              selectedBrand = value;
                             });
-                        }
-                      ),
+                          }),
                       const Sizer(),
                       _buildMenuButton(
                           title: LocaleKeys.vehicleModel.localize,
                           items: carModels,
                           selectedItem: selectedModel,
-                          onSelected: (value){
-                           setState(() {
-                             selectedModel=value;
-                           });
-                          }
-                      ),
+                          onSelected: (value) {
+                            setState(() {
+                              selectedModel = value;
+                            });
+                          }),
                     ],
                   ),
                 ),
@@ -209,7 +221,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
         Overlay.of(context).context.findRenderObject() as RenderBox;
 
     final selected = await showMenu<String>(
-      color: AppColors.colorGreyLight,
+      color: AppColors.getFillColor(context),
       context: context,
       position: RelativeRect.fromLTRB(
         position.dx,
@@ -222,7 +234,8 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                 value: brand,
                 child: Text(
                   brand,
-                  style: Styles.mediumText(color: Colors.black),
+                  style: Styles.mediumText(
+                      color: AppColors.getTextColor(context)),
                 ),
               ))
           .toList(),
@@ -243,21 +256,19 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 16.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.h),
-          color: AppColors.colorGreyLight,
-        ),
+            borderRadius: BorderRadius.circular(30.h),
+            color: AppColors.getFillColor(context)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               selectedItem ?? title,
-              style: Styles.mediumText(color: Colors.black),
+              style: Styles.mediumText(
+                  color: AppColors.getTextColor(context)),
             ),
             GestureDetector(
-              child: const Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.black,
-              ),
+              child: Icon(Icons.keyboard_arrow_down,
+                  color: AppColors.getTextColor(context)),
               onTapDown: (details) => _showDropdownMenu(
                 onSelected: onSelected,
                 context: context,
@@ -292,7 +303,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color(0xFFEEEEEE),
+          color: AppColors.getFillColor(context),
         ),
         child: Row(
           children: [
@@ -301,8 +312,8 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
               child: CircleAvatar(
                 backgroundColor: color,
                 radius: 10,
-                child: const CircleAvatar(
-                    backgroundColor: Colors.white, radius: 5),
+                child: CircleAvatar(
+                    backgroundColor: AppColors.getFillColor(context), radius: 5),
               ),
             ),
             Expanded(
@@ -318,7 +329,8 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           : text,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Styles.mediumText(color: Colors.black)),
+                  style: Styles.mediumText(
+                      color: AppColors.getTextColor(context))),
             ),
           ],
         ),

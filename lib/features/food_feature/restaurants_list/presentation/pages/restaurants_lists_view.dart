@@ -32,6 +32,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/constants/registration_status.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'favorite_ads.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -314,7 +315,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                     ),
                                   );
                                 } else {
-                                  context.push(Routes.REGISTER);
+                                  return pleaseLoginDialog(context);
+                                  // context.push(Routes.REGISTER);
                                 }
                               },
                     style: ElevatedButton.styleFrom(
@@ -403,7 +405,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       }
                     });
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 child:Icon(
@@ -440,7 +444,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     }
                   });
                 } else {
-                  context.push(Routes.LOGIN);
+                  return pleaseLoginDialog(context);
+
+                  // context.push(Routes.LOGIN);
                 }
               },
               child: Container(
@@ -456,7 +462,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         ? AppColors.PRIMARY_COLOR
                         : AppColors.cD9D9D9),
                 child: Label(
-                  text: LocaleKeys.favouriteAds.localize,
+                  text: context.isArabic?'مفضلة':'Favourites',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 12,
@@ -485,7 +491,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             }
                           });
                         } else {
-                          context.push(Routes.LOGIN);
+                          return pleaseLoginDialog(context);
+
+                          // context.push(Routes.LOGIN);
                         }
                       },
                       child: Container(
@@ -559,7 +567,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     }
                   });
                 } else {
-                  context.push(Routes.LOGIN);
+                  return pleaseLoginDialog(context);
+
+                  // context.push(Routes.LOGIN);
                 }
               },
               child: Container(
@@ -575,7 +585,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         ? AppColors.PRIMARY_COLOR
                         : AppColors.cD9D9D9),
                 child: Label(
-                  text: LocaleKeys.expiredRequests.localize,
+                  text: context.isArabic?'منتهي':'Expired',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 12,

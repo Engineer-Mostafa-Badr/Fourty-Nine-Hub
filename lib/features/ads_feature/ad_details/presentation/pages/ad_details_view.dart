@@ -68,9 +68,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     return CustomScaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back,
-              color: Colors.black,
+              color: AppColors.getTextColor(context),
             ),
             onPressed: () {
               context.pop();

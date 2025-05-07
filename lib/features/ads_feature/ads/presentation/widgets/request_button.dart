@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../routes/routes.dart';
@@ -33,7 +34,9 @@ class RequestButton extends StatelessWidget {
         onTap: !context.read<UserCubit>().isLoggedIn
             ? () {
                 context.pop();
-                context.push(Routes.LOGIN);
+                return pleaseLoginDialog(context);
+
+          // context.push(Routes.LOGIN);
               }
             : subscriptionStatus == 'premium'
                 ? null
@@ -76,13 +79,14 @@ class RequestButton extends StatelessWidget {
                                   child: Form(
                                     key: controller.formKey,
                                     child: NewPhoneNumberTextFormField(
-                                      style: const TextStyle(
-                                        color: AppColors.DARK_BLUE_COLOR,
+                                      style: TextStyle(
+                                        color: AppColors.getTextColor(context),
                                       ),
                                       currentController: TextEditingController(),
                                       isRequired: true,
                                       maxLines: null,
                                       maxLength: 150,
+                                      hintColor:AppColors.getTextColor(context) ,
                                       onChanged: (c) =>
                                           controller.changePhone(v: c),
                                       // controller: controller,
@@ -121,7 +125,8 @@ class RequestButton extends StatelessWidget {
                                                 }
                                               });
                                             } else {
-                                              context.go(Routes.LOGIN);
+                                              return pleaseLoginDialog(context);
+                                              // context.go(Routes.LOGIN);
                                             }
                                           },
                                           child: Container(
@@ -129,14 +134,14 @@ class RequestButton extends StatelessWidget {
                                             height: 80.h,
                                             padding: const EdgeInsets.all(5),
                                             decoration: BoxDecoration(
-                                                color: AppColors.PRIMARY_COLOR,
+                                                color: AppColors.getButtonPrimaryColor(context),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             alignment: Alignment.center,
                                             child: Label(
                                               text: LocaleKeys.send.localize,
                                               style: Styles.headerText(
-                                                  color: Colors.white),
+                                                  color: AppColors.getReversedTextColor(context)),
                                             ),
                                           ),
                                         ),

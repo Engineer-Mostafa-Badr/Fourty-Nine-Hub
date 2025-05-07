@@ -8,7 +8,7 @@ ThemeData get darkTheme => ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       primaryColor: AppColors.AUTH_CONTAINER_COLOR,
-      scaffoldBackgroundColor:AppColors.QUANTITY_COLOR,
+      scaffoldBackgroundColor:AppColors.Scaffold_Color_DARK,
           // const Color(0xff0E0E0E), // AppColors.QUANTITY_COLOR,
       // timePickerTheme: TimePickerThemeData(
       //   backgroundColor: AppColors.QUANTITY_COLOR,
@@ -72,7 +72,7 @@ ThemeData get darkTheme => ThemeData(
       ),
       appBarTheme: const AppBarTheme(
         // color: Color(0xff0E0E0E),
-      color:  AppColors.QUANTITY_COLOR,
+      color:  AppColors.Scaffold_Color_DARK,
         iconTheme: IconThemeData(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/val
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
 
@@ -243,7 +244,9 @@ class _MoreInformationRegisterCardWidgetState
                           if (context.isUserLoggedIn) {
                             registerRider.model.airCondition = value;
                           } else {
-                            context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           }
                         });
                       },
@@ -265,7 +268,9 @@ class _MoreInformationRegisterCardWidgetState
                           if (context.isUserLoggedIn) {
                             registerRider.model.smoker = value;
                           } else {
-                            context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           }
                         });
                       },

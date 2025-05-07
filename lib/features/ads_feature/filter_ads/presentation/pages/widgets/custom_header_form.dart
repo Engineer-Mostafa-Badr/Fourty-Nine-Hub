@@ -51,7 +51,7 @@ class CustomHeaderForm extends StatelessWidget {
                   text:
                   categorization.mainCategory.name == LocaleKeys.health.localize
                       ? LocaleKeys.medicalService.localize
-                      : categorization.mainCategory.name  ?? "",
+                      : context.isArabic?categorization.mainCategory.name??'':categorization.mainCategory.nameEn ?? "",
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w500,
                     fontSize: 32,

@@ -285,6 +285,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.spotlight.localize,
                                 image: Assets.spotlight,
                                 onTap: () {
+                                  if(!context.read<UserCubit>().isLoggedIn){
+                                    return pleaseLoginDialog(context);
+                                  }
                                   context.pop();
                                   context.push(Routes.SPOTLIGHT);
                                 },
@@ -301,6 +304,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.live.localize,
                                 image: Assets.liveIcon,
                                 onTap: () {
+                                  if(!context.read<UserCubit>().isLoggedIn){
+                                    return pleaseLoginDialog(context);
+                                  }
                                   context.pop();
                                   context.push(Routes.LIVE);
                                 },
@@ -318,6 +324,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.chat.localize,
                                 image: Assets.whatsApp,
                                 onTap: () {
+                                  if(!context.read<UserCubit>().isLoggedIn){
+                                    return pleaseLoginDialog(context);
+                                  }
                                   context.pop();
                                   context.push(Routes.CHAT,
                                       extra: ChatsViewParams());

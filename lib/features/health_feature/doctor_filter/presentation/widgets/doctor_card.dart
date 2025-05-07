@@ -25,6 +25,7 @@ import '../../../../../common/widgets/stateless/dynamic/rating_stars.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../doctor_details/presentation/widgets/doctor_image.dart';
 import '../../../doctor_details/presentation/widgets/info.dart';
@@ -46,7 +47,9 @@ class DoctorCard extends StatelessWidget {
               extra: DoctorDetailsParams(
                   doctorId: doctor.id, fromSearch: false, type: type));
         } else {
-          context.push(Routes.LOGIN);
+          return pleaseLoginDialog(context);
+
+          // context.push(Routes.LOGIN);
         }
       },
       child: Container(

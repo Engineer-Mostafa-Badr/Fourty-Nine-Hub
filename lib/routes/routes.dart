@@ -59,6 +59,9 @@ abstract class Routes {
   static const SEARCHPLACES = '/Social/CreatePost/SearchPlaces';
 
   static const Tinder = '/Social/Tinder';
+  static const UserProfilePage = '/Social/UserProfilePage';
+  static const FindMyProfileScreen = '/Social/FindMyProfileScreen';
+  static const EditProfileTinder = '/Social/EditProfileTinder';
   static const LIVE = '/Social/Live';
   static const LIVEView = '/Social/Live/LiveView';
   static const CLUBHOUSE = '/Social/ClubHouse';
@@ -357,6 +360,9 @@ abstract class Paths {
   static const SEARCHFRIENDS = 'SearchFriend';
   static const SEARCHPLACES = 'SearchPlaces';
   static const TINDER = 'Tinder';
+  static const UserProfilePage = 'UserProfilePage';
+  static const EditProfileTinder = 'EditProfileTinder';
+  static const FindMyProfileScreen = 'FindMyProfileScreen';
   static const LIVE = 'Live';
   static const LIVEVIEW = 'LiveView';
   static const CLUBHOUSE = 'ClubHouse';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
@@ -86,7 +87,7 @@ class MarriageRequestListViewItem extends StatelessWidget {
                         width: 4,
                       ),
                       Label(
-                        text: 'Giza , Egypt',
+                        text:context.isArabic?'الجيزة، مصر': 'Giza , Egypt',
                         style: Styles.headerText(
                           fontSize: 24,
                           color: Colors.black,

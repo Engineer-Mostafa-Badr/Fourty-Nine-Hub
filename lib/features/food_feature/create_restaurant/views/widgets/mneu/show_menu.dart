@@ -109,7 +109,7 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR),
+                                            color:AppColors.getFillColor(context)),
                                         child: Row(
                                           children: [
                                             Text(
@@ -127,7 +127,7 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
+                                            color:AppColors.getFillColor(context),
                                       ),
                                         child: Row(
                                           children: [
@@ -142,7 +142,7 @@ class ShowMneu extends StatelessWidget {
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
-                                              AppColors.SECONDARY_COLOR_DARK2,
+                                          AppColors.getRedColor(context),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -189,7 +189,7 @@ class ShowMneu extends StatelessWidget {
                       Center(
                         child: Label(
                           text: LocaleKeys.menu.localize,
-                          style: Styles.headerText(color: Colors.red),
+                          style: Styles.headerText(color: AppColors.getRedColor(context)),
                         ),
                       ),
                       16.verticalSpace,
@@ -261,7 +261,7 @@ class ShowMneu extends StatelessWidget {
                               children: [
                                 TextFormField(
                                   style: Styles.mediumText(
-                                    color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                                    color:  AppColors.getFillColor(context)
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -277,7 +277,7 @@ class ShowMneu extends StatelessWidget {
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.itemName.tr(),
                                     hintStyle: Styles.mediumText(),
-                                    fillColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
+                                    fillColor: AppColors.getFillColor(context),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
@@ -320,7 +320,7 @@ class ShowMneu extends StatelessWidget {
                                 const Sizer(),
                                 TextFormField(
                                   style: Styles.mediumText(
-                                      color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                                      color:  AppColors.getTextColor(context)
 
                                   ),
                                   validator: (value) {
@@ -341,7 +341,7 @@ class ShowMneu extends StatelessWidget {
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.price.tr(),
                                     hintStyle: Styles.mediumText(),
-                                    fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
+                                    fillColor:  AppColors.getFillColor(context),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
@@ -389,6 +389,13 @@ class ShowMneu extends StatelessWidget {
                                   children: [
                                     Center(
                                       child: Container(
+                                        width: 210.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color:
+                                          AppColors.getRedColor(context),
+                                        ),
                                         child: IconButton(
                                           visualDensity: VisualDensity.compact,
                                           onPressed: () {
@@ -431,13 +438,6 @@ class ShowMneu extends StatelessWidget {
                                           },
                                           icon: Icon(Icons.add),
                                           color: Colors.black,
-                                        ),
-                                        width: 210.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color:
-                                              AppColors.SECONDARY_COLOR_DARK2,
                                         ),
                                       ),
                                     ),

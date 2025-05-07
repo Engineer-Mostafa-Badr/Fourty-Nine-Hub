@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/bookgins.dart';
@@ -111,7 +113,13 @@ class _HealthViewState extends State<HealthView> {
                             ? 'سجل الحجوزات'
                             : 'Booking History',
                         isSelected: _showHistory,
-                        onTap: () => _toggleView('history'),
+                        onTap: () {
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('history');
+                          }
+                        },
                       ),
                     ),
                     const Sizer(),
@@ -123,7 +131,13 @@ class _HealthViewState extends State<HealthView> {
                             ? 'الحجوزات الحالية'
                             : 'Current Booking',
                         isSelected: _showCurrent,
-                        onTap: () => _toggleView('current'),
+                        onTap: () {
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('current');
+                          }
+                        },
                       ),
                     ),
                   ],

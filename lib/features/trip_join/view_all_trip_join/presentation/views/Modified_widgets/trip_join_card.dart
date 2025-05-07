@@ -16,7 +16,6 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      // padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border.all(
           color: context.isDarkMode

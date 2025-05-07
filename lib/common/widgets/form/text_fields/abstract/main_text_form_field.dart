@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -197,7 +198,8 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
               }
               (widget.onChanged ?? (_) {})(text);
             } else {
-              context.push(Routes.LOGIN);
+              return pleaseLoginDialog(context);
+              // context.push(Routes.LOGIN);
             }
           } else {
             if (text.isEmpty) {

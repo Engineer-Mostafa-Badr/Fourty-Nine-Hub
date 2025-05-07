@@ -530,6 +530,8 @@
   "userTrips": "رحلات أفراد",
   "userOwnCarsShareWithThem": "عملاء يملكون سيارات . يمكنك مشاركة الرحلات معهم",
   "noTripsAvailable": "لا يوجد رحلات متوفرة",
+  "noTripsRunning": "لا يوجد رحلات حالية",
+  "noTripsPast": "لا يوجد رحلات سابقة",
   "tripjoinPremuimSubscription": "اشتراك مميز بمشاركة الرحلات",
   "chatSubscription": "أشتراك مميز بخدمة الرسائل",
   "premuimRequest": "طلب مميز",

@@ -35,22 +35,21 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
           height: 80.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: AppColors.PRIMARY_COLOR,
+            color: AppColors.getButtonPrimaryColor(context),
           ),
           child: Center(
             child: Text(
               context.isArabic ? "بدء الرحلة!" : "Start Journey!",
               style: TextStyle(
                 fontSize: 32.sp,
-                color: Colors.white,
+                color: context.isDarkMode?AppColors.black:Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
       ),
-      body: const PickMeInfoInfoBody(),
-      mainCategoryId: 1,
+      body: const PickMeInfoInfoBody(), mainCategoryId: 1,
     );
   }
 }
@@ -65,9 +64,9 @@ class PickMeInfoInfoBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 30.h),
+          SizedBox(height: 50.h),
           Text(
-            context.isArabic ? "وصلني معاك!" : 'Pick me!',
+            context.isArabic ? "وصلني معاك !" : 'Pick Me !',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -76,7 +75,13 @@ class PickMeInfoInfoBody extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20.h),
-          SvgPicture.asset(Assets.pickMeInfoIcon),
+          context.isDarkMode
+              ? Image.asset(
+                  Assets.pickMeDarkInfoIcon,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  fit: BoxFit.cover,
+                )
+              : SvgPicture.asset(Assets.pickMeInfoIcon),
           SizedBox(height: 30.h),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
@@ -94,22 +99,16 @@ class PickMeInfoInfoBody extends StatelessWidget {
             ),
           ),
           SizedBox(height: 15.h),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60),
-            child: RowTextWidget(
-              text: context.isArabic
-                  ? "قم بالإعلان عن رحلتك المتكررة يوميًا."
-                  : 'Advertise your daily repeat trip.',
-            ),
+          RowTextWidget(
+            text: context.isArabic
+                ? "اعلن عن رحلتك المتكررة يوميًا."
+                : 'Advertise your daily repeat trip.',
           ),
           SizedBox(height: 15.h),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60),
-            child: RowTextWidget(
-              text: context.isArabic
-                  ? "انتظر حتى يتصل بك أصحاب السيارات."
-                  : 'Wait for car owners to contact .',
-            ),
+          RowTextWidget(
+            text: context.isArabic
+                ? "انتظر حتى يتواصل معك أصحاب السيارات."
+                : 'Wait for car owners to contact you.',
           ),
           SizedBox(height: 15.h),
           Padding(

@@ -534,6 +534,8 @@
   "userTrips": "User Trips",
   "userOwnCarsShareWithThem": "Users own cars/share the trip with them",
   "noTripsAvailable": "There are no trips available till now",
+  "noTripsRunning": "There are no trips available till now",
+  "noTripsPast": "There are no trips available till now",
   "tripjoinPremuimSubscription": "Trip Join Subscription",
   "chatSubscription": "Chat Subscription",
   "premuimRequest": "Premium Request",

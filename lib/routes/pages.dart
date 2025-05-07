@@ -251,7 +251,10 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/my_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
@@ -1572,6 +1575,18 @@ class AppPages {
                         path: Paths.TINDER,
                         name: Routes.Tinder,
                         builder: (context, state) => const TinderView()),
+                    GoRoute(
+                        path: Paths.UserProfilePage,
+                        name: Routes.UserProfilePage,
+                        builder: (context, state) => const UserProfilePage()),
+                    GoRoute(
+                        path: Paths.FindMyProfileScreen,
+                        name: Routes.FindMyProfileScreen,
+                        builder: (context, state) => const FindMyProfileScreen()),
+                    GoRoute(
+                        path: Paths.EditProfileTinder,
+                        name: Routes.EditProfileTinder,
+                        builder: (context, state) => const EditProfileTinder()),
                     GoRoute(
                         path: Paths.LIVE,
                         name: Routes.LIVE,

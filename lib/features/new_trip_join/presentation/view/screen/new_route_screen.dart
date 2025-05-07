@@ -3,27 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../settings/presentation/pages/widgets/custombutton.dart';
-import '../../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
-import '../../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/find_location_button.dart';
 import '../widget/alert_text_widget.dart';
 import '../widget/premium_and_request_widget.dart';
 import '../widget/price_and_seat_widget.dart';
@@ -38,27 +31,12 @@ class NewRouteScreen extends StatefulWidget {
 }
 
 class _NewRouteScreenState extends State<NewRouteScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          key: _scaffoldKey,
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-          ),
-        ),
-      ),
-      body: const NewRouteBody(),
+    return const SharedScaffold(
+      mainCategoryId: 1,isWithBackArrow: true,
+      body: NewRouteBody(),
     );
   }
 }
@@ -80,7 +58,6 @@ class _NewRouteBodyState extends State<NewRouteBody> {
   List<double>? toLocation;
   String? currentAddress;
   String? toAddress;
-
 
   @override
   Widget build(BuildContext context) {
@@ -112,11 +89,12 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   extra: RideOpenStreetMapSearchAndPickParams(
                     onPicked: (pickedData) async {
                       currentAddress = pickedData.addressName;
-                      currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                      currentLocation = [
+                        pickedData.latLong.latitude,
+                        pickedData.latLong.longitude
+                      ];
                       context.pop();
-                      setState(() {
-
-                      });
+                      setState(() {});
                     },
                   ),
                 );
@@ -129,23 +107,24 @@ class _NewRouteBodyState extends State<NewRouteBody> {
               isTo: true,
               context: context,
               color: Colors.blue,
-              text:toAddress,
+              text: toAddress,
               onPressed: () async {
                 context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                     extra: RideOpenStreetMapSearchAndPickParams(
-                      onPicked: (pickedData) async {
-                        toAddress = pickedData.addressName;
-                        toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
-                        context.pop();
-                        setState(() {});
-                      },
-                    ));
+                  onPicked: (pickedData) async {
+                    toAddress = pickedData.addressName;
+                    toLocation = [
+                      pickedData.latLong.latitude,
+                      pickedData.latLong.longitude
+                    ];
+                    context.pop();
+                    setState(() {});
+                  },
+                ));
               },
             ),
           ),
-           const PriceAndSeatWidget(
-
-           ),
+          const PriceAndSeatWidget(),
           SizedBox(height: 10.h),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -179,9 +158,9 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                 context.isArabic
                     ? "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار"
                     : 'You will find fewer drivers if you select this option!',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 10,
-                  color: AppColors.SECONDARY_COLOR,
+                  color: AppColors.getRedColor(context),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -211,7 +190,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     ),
                   ],
                 ),
-                SvgPicture.asset(Assets.visaIcon, width: 40),
+                SvgPicture.asset(Assets.visaIcon, width: 40,color: context.isDarkMode?AppColors.Floating_Button_COLOR_DARK:null,),
               ],
             ),
           ),
@@ -228,7 +207,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
         context: context,
         builder: (context) {
           return Dialog(
-            backgroundColor: AppColors.whiteColor,
+            backgroundColor: AppColors.getFillColor(context),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30), // زوايا مدورة
             ),
@@ -241,9 +220,9 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   Center(
                     child: Text(
                       context.isArabic ? 'تحذير' : 'Alert!',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
-                        color: Colors.red,
+                        color: AppColors.getRedColor(context),
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -270,9 +249,11 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     onPressed: () {
                       context.pop();
                     },
-                    color: AppColors.PRIMARY_COLOR,
+                    color: AppColors.getButtonPrimaryColor(context),
                     text: LocaleKeys.cancel.localize,
-                    textStyle: const TextStyle(color: Colors.white),
+                    textStyle: TextStyle(
+                        color:
+                            context.isDarkMode ? Colors.black : Colors.white),
                   )),
                 ],
               ),
@@ -302,7 +283,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color(0xFFEEEEEE),
+          color: AppColors.getFillColor(context),
         ),
         child: Row(
           children: [
@@ -311,26 +292,25 @@ class _NewRouteBodyState extends State<NewRouteBody> {
               child: CircleAvatar(
                 backgroundColor: color,
                 radius: 10,
-                child: const CircleAvatar(
-                    backgroundColor: Colors.white, radius: 5),
+                child: CircleAvatar(
+                    backgroundColor: AppColors.getFillColor(context),
+                    radius: 5),
               ),
             ),
             Expanded(
               child: Text(
                 text == 'From'
                     ? context.isArabic
-                    ? "من"
-                    : "From"
+                        ? "من"
+                        : "From"
                     : text == 'To'
-                    ? context.isArabic
-                    ? "إلى"
-                    : "To"
-                    : text!,
+                        ? context.isArabic
+                            ? "إلى"
+                            : "To"
+                        : text,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.black
-                ),
+                style: TextStyle(color: AppColors.getTextColor(context)),
               ),
             ),
           ],
@@ -340,7 +320,6 @@ class _NewRouteBodyState extends State<NewRouteBody> {
   }
 
   Widget _buildTopMap(BuildContext context) {
-
     if (currentLocation != null && currentLocation!.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
@@ -352,12 +331,12 @@ class _NewRouteBodyState extends State<NewRouteBody> {
 
     return SizedBox(
       width: double.infinity,
-      height:MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.5,
       child: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
           initialCenter: LatLng(
-            currentLocation?[0]?? 30.0596113,
+            currentLocation?[0] ?? 30.0596113,
             currentLocation?[1] ?? 31.1760625,
           ),
           initialZoom: 12.0,
@@ -371,8 +350,9 @@ class _NewRouteBodyState extends State<NewRouteBody> {
               if (currentLocation != null && currentLocation!.isNotEmpty)
                 Marker(
                   point: LatLng(
-                    currentLocation?[0]?? 0.0,
-                    currentLocation?[1] ?? 0.0,),
+                    currentLocation?[0] ?? 0.0,
+                    currentLocation?[1] ?? 0.0,
+                  ),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
@@ -386,7 +366,6 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   child: const Icon(Icons.location_pin,
                       color: Colors.red, size: 40),
                 ),
-
             ],
           ),
           // if (routePoints.isNotEmpty)
@@ -403,10 +382,10 @@ class _NewRouteBodyState extends State<NewRouteBody> {
       ),
     );
   }
-
-  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => LatLng(point[1], point[0])).toList();
-  }
+  //
+  // List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+  //   return polyline.map((point) => LatLng(point[1], point[0])).toList();
+  // }
 
   Widget _buildTopImage() {
     return BlocBuilder<RideCubit, RideState>(builder: (context, state) {

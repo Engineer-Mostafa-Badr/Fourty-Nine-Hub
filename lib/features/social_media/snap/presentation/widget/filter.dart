@@ -21,6 +21,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -262,7 +263,8 @@ class _HomePageState extends State<HomePage> {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
                   } else {
-                    context.go(Routes.LOGIN);
+                      return pleaseLoginDialog(context);
+                    // context.go(Routes.LOGIN);
                   }
                 },
                 child: CircleAvatar(
