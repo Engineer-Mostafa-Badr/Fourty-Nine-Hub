@@ -456,7 +456,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         ? AppColors.PRIMARY_COLOR
                         : AppColors.cD9D9D9),
                 child: Label(
-                  text: LocaleKeys.favouriteAds.localize,
+                  text: context.isArabic?'مفضلة':'Favourites',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 12,
@@ -575,7 +575,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         ? AppColors.PRIMARY_COLOR
                         : AppColors.cD9D9D9),
                 child: Label(
-                  text: LocaleKeys.expiredRequests.localize,
+                  text: context.isArabic?'منتهي':'Expired',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 12,
