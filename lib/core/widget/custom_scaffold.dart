@@ -445,7 +445,7 @@ class MainScaffold extends StatelessWidget {
             if (enableCustomAppBar) {
               return Scaffold(
                 backgroundColor: scaffoldBackgroundWithAppBarColor ??
-                    AppColors.PRIMARY_COLOR,
+                    AppColors.getButtonPrimaryColor(context),
                 floatingActionButtonLocation: floatingActionButtonLocation,
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,
