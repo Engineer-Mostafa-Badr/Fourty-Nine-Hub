@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -82,8 +84,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   context.read<UserCubit>().isLoggedIn
                       ? accountWidget(context: context, user: state.data)
                       : _buildLoginWidget(context: context),
-                  const Divider(
-                    color: Colors.grey,
+                  Divider(
+                    color: context.isDarkMode
+                        ? Color(0xff333333)
+                        : Color(0xffD9D9D9),
                   ),
                   IntrinsicHeight(
                     child: Row(
@@ -691,15 +695,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         padding: EdgeInsets.all(20.w),
         margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            color: AppColors.LIGHT_GRAY_COLOR),
+            borderRadius: BorderRadius.circular(15.r),
+            color: context.isDarkMode ? Color(0xff333333) : Color(0xffD9D9D9)),
         child: Row(
           children: [
             SizedBox(
               height: kToolbarHeight,
               width: kToolbarHeight,
               child: Image.asset(
-                Assets.spinWheel,
+                context.isDarkMode ? Assets.spinWheelDark : Assets.spinWheel,
                 // height: kToolbarHeight,
                 // width: kToolbarHeight,
               ),
@@ -712,12 +716,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       text: LocaleKeys.luckyWheel.localize,
                       style: Styles.mediumText(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.QUANTITY_COLOR)),
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.QUANTITY_COLOR)),
                   Label(
                       text: LocaleKeys.feelLucky.localize,
                       style: Styles.mediumText(
                           fontWeight: FontWeight.w400,
-                          color: AppColors.QUANTITY_COLOR)),
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.QUANTITY_COLOR)),
                 ],
               ),
             ),
@@ -834,6 +842,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           context: context,
                           asAlertDialog: true,
                           isDismissible: false,
+                          backColor:
+                              context.isDarkMode ? Color(0xff0D0D0D) : null,
                           widget: Wrap(
                             spacing: 20,
                             runSpacing: 20,
@@ -842,11 +852,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: context.isDarkMode
-                                      ? AppColors.LIGHT_GRAY_COLOR2
+                                      ? Color(0xff131313)
                                       : HexColor('f9f9f9'),
                                 ),
                                 child: ListTile(
-                                  leading: const Icon(Icons.photo_library),
+                                  leading: SvgPicture.asset(
+                                    context.isDarkMode
+                                        ? Assets.drawerGalleryIconDark
+                                        : Assets.drawerGalleryIcon,
+                                  ),
                                   title: Label(
                                     text: LocaleKeys.gallery.localize,
                                   ),
@@ -862,11 +876,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: context.isDarkMode
-                                      ? AppColors.LIGHT_GRAY_COLOR2
+                                      ? Color(0xff131313)
                                       : HexColor('f9f9f9'),
                                 ),
                                 child: ListTile(
-                                  leading: const Icon(Icons.camera_alt),
+                                  // leading: const Icon(Icons.camera_alt),
+                                  leading: SvgPicture.asset(
+                                    context.isDarkMode
+                                        ? Assets.drawerCameraIconDark
+                                        : Assets.drawerCameraIcon,
+                                  ),
                                   title:
                                       Label(text: LocaleKeys.camera.localize),
                                   onTap: () async {
@@ -881,12 +900,23 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: context.isDarkMode
-                                        ? AppColors.DARK_GRAY_COLOR
+                                        ? Color(0xff333333)
                                         : AppColors.BG_GRAY_COLOR),
                                 child: ListTile(
                                   // leading: const Icon(Icons.camera_alt),
-                                  title: const Center(
-                                      child: Label(text: 'Cancel')),
+                                  title: Center(
+                                    child: Label(
+                                      text: LocaleKeys.cancel.localize,
+                                      style: Styles.mediumText(
+                                        fontSize: 36,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.60,
+                                      ),
+                                    ),
+                                  ),
                                   onTap: () async {
                                     Navigator.pop(context);
 
@@ -985,7 +1015,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           const Sizer(),
                           Expanded(
                             child: Label(
-                              text: '${user?.wallet ?? 0}',
+                              text: FormatNumbers().formatNumberByComma(
+                                  user?.wallet.toString() ?? '0',
+                                  isArabic: context.isArabic),
+                              // text: '${user?.wallet ?? 0}',
                               style: Styles.mediumText(
                                 decoration: TextDecoration.underline,
                                 color: context.isDarkMode

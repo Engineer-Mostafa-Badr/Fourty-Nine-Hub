@@ -36,6 +36,7 @@ class CustomScaffold extends StatefulWidget {
     this.bottomSheet,
     this.showNavBAr = true,
     this.resizeToAvoidBottomInset,
+    this.scaffoldBackgroundWithAppBarColor,
   });
 
   final Widget body;
@@ -51,6 +52,7 @@ class CustomScaffold extends StatefulWidget {
   final bool? resizeToAvoidBottomInset;
   final Widget? bottomSheet;
   final bool enableCustomAppBar;
+  final Color? scaffoldBackgroundWithAppBarColor;
 
   @override
   State<CustomScaffold> createState() => _CustomScaffoldState();
@@ -87,6 +89,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
                 enableCustomAppBar: widget.enableCustomAppBar,
                 rulerWidget: rulerWidget(),
+                scaffoldBackgroundWithAppBarColor:
+                    widget.scaffoldBackgroundWithAppBarColor,
               ),
               floatingWidget: GestureDetector(
                 onTap: () {
@@ -141,6 +145,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
             resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
             enableCustomAppBar: widget.enableCustomAppBar,
             rulerWidget: rulerWidget(),
+            scaffoldBackgroundWithAppBarColor:
+                widget.scaffoldBackgroundWithAppBarColor,
           );
         }
       },
@@ -396,6 +402,7 @@ class MainScaffold extends StatelessWidget {
     this.bottomSheet,
     this.resizeToAvoidBottomInset,
     required this.rulerWidget,
+    this.scaffoldBackgroundWithAppBarColor,
   });
 
   final Widget body;
@@ -412,6 +419,7 @@ class MainScaffold extends StatelessWidget {
   final Widget? bottomSheet;
   final bool enableCustomAppBar;
   final Widget rulerWidget;
+  final Color? scaffoldBackgroundWithAppBarColor;
 
   @override
   Widget build(BuildContext context) {
@@ -424,7 +432,8 @@ class MainScaffold extends StatelessWidget {
             var choiceRulerCubit = context.read<ChoiceRulerCubit>();
             if (enableCustomAppBar) {
               return Scaffold(
-                backgroundColor: AppColors.PRIMARY_COLOR,
+                backgroundColor: scaffoldBackgroundWithAppBarColor ??
+                    AppColors.PRIMARY_COLOR,
                 floatingActionButtonLocation: floatingActionButtonLocation,
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,
