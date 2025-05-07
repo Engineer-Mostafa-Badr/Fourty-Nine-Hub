@@ -41,7 +41,7 @@ class _UserAdsState extends State<UserAds> {
     _adsManager.preloadAds();
     _cubit = context.read<AdvertisementCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-
+    print('widget.params.mainCategory.id ${widget.params.mainCategory.id}');
   }
 
 

@@ -33,6 +33,7 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class FacebookGlobalPostCard extends StatefulWidget {
   final PostEntity post;
@@ -436,7 +437,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       context.read<UserCubit>().isLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 child: ImageFromInternet(
@@ -464,7 +467,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           context.read<UserCubit>().isLoggedIn) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                       } else {
-                        context.push(Routes.LOGIN);
+                        return pleaseLoginDialog(context);
+
+                        // context.push(Routes.LOGIN);
                       }
                     },
                     child: Column(
@@ -478,7 +483,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                 context.push(Routes.OTHERSACCOUNT,
                                     extra: post.user.id);
                               } else {
-                                context.push(Routes.LOGIN);
+                                return pleaseLoginDialog(context);
+
+                                // context.push(Routes.LOGIN);
                               }
                             }),
                         RichText(

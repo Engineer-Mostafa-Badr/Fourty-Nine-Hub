@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/bookgins.dart';
@@ -22,8 +24,6 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../../service_locator/service_locator.dart';
-
-
 
 class HealthView extends StatefulWidget {
   HealthView({super.key});
@@ -81,8 +81,8 @@ class _HealthViewState extends State<HealthView> {
               state.isDoctor == false
                   ? const RegistrationBanner()
                   : DoctorModeBanner(
-                isWaitingApproval: isWaitingApproval,
-              ),
+                      isWaitingApproval: isWaitingApproval,
+                    ),
               if (isWaitingApproval) WaitingAprovalText(),
               const Sizer(),
               Padding(
@@ -113,10 +113,17 @@ class _HealthViewState extends State<HealthView> {
                             ? 'تاريخ الحجوزات'
                             : 'Booking History',
                         isSelected: _showHistory,
-                        onTap: () => _toggleView('history'),
+                        onTap: () {
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('history');
+                          }
+                        },
                       ),
                     ),
                     const Sizer(),
+
                     /// Current Booking
                     Expanded(
                       child: CurrentHistoryBooking(
@@ -124,7 +131,13 @@ class _HealthViewState extends State<HealthView> {
                             ? 'الحجوزات الحالية'
                             : 'Current Booking',
                         isSelected: _showCurrent,
-                        onTap: () => _toggleView('current'),
+                        onTap: () {
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('current');
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -151,8 +164,9 @@ class _HealthViewState extends State<HealthView> {
               if (_showCurrent)
                 BlocProvider(
                   create: (context) => serviceLocator<HealthCubit>(
-                    // Pass your dependencies here
-                  )..loadInitialBooking('current'),
+                      // Pass your dependencies here
+                      )
+                    ..loadInitialBooking('current'),
                   child: CurrentBookingsScreen(
                     onClose: () => setState(() => _showCurrent = false),
                   ),
@@ -161,23 +175,23 @@ class _HealthViewState extends State<HealthView> {
               // History view
               if (_showHistory)
                 BlocProvider(
-                  create: (context) => serviceLocator<HealthCubit>()..loadInitialBooking('history'),
+                  create: (context) => serviceLocator<HealthCubit>()
+                    ..loadInitialBooking('history'),
                   child: BookingHistoryScreen(
                     onClose: () => setState(() => _showHistory = false),
                   ),
                 ),
 
-
               // Favourite Ads view
               if (_showMost)
                 BlocProvider(
                   key: ValueKey('MostBookingScreen'),
-                  create: (context) => serviceLocator<HealthCubit>()..loadInitialMostBooking(),
+                  create: (context) =>
+                      serviceLocator<HealthCubit>()..loadInitialMostBooking(),
                   child: MostBookingScreen(
                     onClose: () => setState(() => _showMost = false),
                   ),
                 ),
-
             ],
           );
         },

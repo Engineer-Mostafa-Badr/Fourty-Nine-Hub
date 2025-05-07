@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class CarInfoRider extends StatefulWidget {
   const CarInfoRider({super.key});
@@ -65,7 +66,9 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                     fetchCarModelsCubit.fetchCarModel(brand: value);
                     fetchCarBrandsCubit.fetchCarBrand(search: value);
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 validator: (value) {
@@ -90,7 +93,8 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                 riderCubit.pickBrand(value);
                 setState(() {});
               } else {
-                context.push(Routes.LOGIN);
+                return pleaseLoginDialog(context);
+                // context.push(Routes.LOGIN);
               }
             },
             suggestionsCallback: (search) async {
@@ -130,7 +134,9 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                     }
                   } else {
                     riderCubit.pickModel(value);
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 validator: (value) {
@@ -155,7 +161,9 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                 fetchCarModelsCubit.model = value;
                 setState(() {});
               } else {
-                context.push(Routes.LOGIN);
+                return pleaseLoginDialog(context);
+
+                // context.push(Routes.LOGIN);
               }
             },
             suggestionsCallback: (search) async {
@@ -190,7 +198,9 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   if (context.isUserLoggedIn) {
                     fetchCarYearTypeCubit.year = value;
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
               );
@@ -209,7 +219,9 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                 riderCubit.pickYear(value);
                 setState(() {});
               } else {
-                context.push(Routes.LOGIN);
+                return pleaseLoginDialog(context);
+
+                // context.push(Routes.LOGIN);
               }
             },
             suggestionsCallback: (search) {

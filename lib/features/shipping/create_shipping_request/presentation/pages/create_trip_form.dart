@@ -27,6 +27,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
@@ -238,7 +239,9 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                       time = pickedTime;
                                     }
                                   } else {
-                                    context.push(Routes.LOGIN);
+                                    return pleaseLoginDialog(context);
+
+                                    // context.push(Routes.LOGIN);
                                   }
 
                                   setState(() {});
@@ -274,7 +277,8 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                     );
                                     date = pickedDate;
                                   } else {
-                                    context.push(Routes.LOGIN);
+                                    return pleaseLoginDialog(context);
+                                    // context.push(Routes.LOGIN);
                                   }
 
                                   setState(() {});
@@ -317,7 +321,9 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           onChanged: (value) {
                             log(value.toString());
                             if (!context.isUserLoggedIn) {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           },
                           focusNode: decorationFocusNode,
@@ -478,7 +484,9 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                           );
                                     }
                                   } else {
-                                    context.push(Routes.LOGIN);
+                                    return pleaseLoginDialog(context);
+
+                                    // context.push(Routes.LOGIN);
                                   }
                                 },
                               ),

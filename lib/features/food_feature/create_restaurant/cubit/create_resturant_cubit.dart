@@ -26,6 +26,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 part 'create_resturant_state.dart';
 
@@ -79,8 +80,10 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
           emit(CreateResturantError(failure.message));
         } else if (failure is UnauthorizedFailure) {
           emit(CreateResturantError(failure.toString()));
-          AppPages.router.routerDelegate.navigatorKey.currentContext!
-              .pushNamed(Routes.LOGIN);
+
+            return pleaseLoginDialog(context);
+          // AppPages.router.routerDelegate.navigatorKey.currentContext!
+          //     .pushNamed(Routes.LOGIN);
         }
         res = 'fail';
       }, (data) {

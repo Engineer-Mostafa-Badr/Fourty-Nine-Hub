@@ -25,6 +25,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../routes/routes.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class SnapView extends StatelessWidget {
   const SnapView({super.key});
@@ -498,7 +499,10 @@ class _AdvancedSnapchatCameraScreenState
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
                   } else {
-                    context.go(Routes.LOGIN);
+
+                      return pleaseLoginDialog(context);
+
+                    // context.go(Routes.LOGIN);
                   }
                 },
                 child: CircleAvatar(

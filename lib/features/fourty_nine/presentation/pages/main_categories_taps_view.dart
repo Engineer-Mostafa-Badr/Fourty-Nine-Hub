@@ -20,6 +20,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/widget/custom_notification_badge.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -179,7 +180,9 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                         .selectedCategory,
                                     subCategory: item));
                           } else {
-                            context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           }
                         },
                       ),
@@ -623,7 +626,9 @@ class _MainCategoriesGridViewCustomPageState
                                 ),
                               );
                             } else {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

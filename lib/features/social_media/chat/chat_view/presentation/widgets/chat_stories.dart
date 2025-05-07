@@ -489,6 +489,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For loca
 
 import '../../../../stories/presentation/pages/more_stories.dart';
 import '../../../../tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class ChatStories extends StatelessWidget {
   const ChatStories({super.key});
@@ -581,14 +582,17 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-          context.read<UserCubit>().isLoggedIn
-              ? await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CameraScreen(),
-                  ),
-                )
-              : context.push(Routes.LOGIN);
+          if (context.read<UserCubit>().isLoggedIn) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CameraScreen(),
+              ),
+            );
+          } else {
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          }
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()
@@ -695,17 +699,21 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-          context.read<UserCubit>().isLoggedIn
-              ? await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<StoryCubit>(),
-                      child: const MutedStories(),
-                    ),
-                  ),
-                )
-              : context.push(Routes.LOGIN);
+          if (context.read<UserCubit>().isLoggedIn) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: serviceLocator<StoryCubit>(),
+                  child: const MutedStories(),
+                ),
+              ),
+            );
+          } else {
+            return pleaseLoginDialog(context);
+
+            // context.push(Routes.LOGIN);
+          }
 
           context.read<StoryCubit>()
             ..fetchStories()
@@ -766,7 +774,8 @@ class ChatStories extends StatelessWidget {
                     ),
                   ),
                 )
-              : context.push(Routes.LOGIN);
+              : pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()

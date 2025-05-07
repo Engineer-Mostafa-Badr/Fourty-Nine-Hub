@@ -1,13 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import '../../../../carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import '../../../../ride/RideRequest/presentation/widgets/start_text_field_and_find_widget.dart';
@@ -65,7 +68,11 @@ class _MapSectionState extends State<MapSection> {
           child: CustomRideButton(
             text: LocaleKeys.carTruckRegister.tr(),
             onPressed: () {
-              context.push(Routes.rideModeScreen, extra: const RideModeParams(modeType: 'truk'));
+              if(context.read<UserCubit>().isLoggedIn) {
+                context.push(Routes.rideModeScreen, extra: const RideModeParams(modeType: 'truk'));
+              }else {
+                return pleaseLoginDialog(context);
+              }
               // customBottomSheet(context,
               //     child: Padding(
               //       padding: const EdgeInsets.all(12.0),

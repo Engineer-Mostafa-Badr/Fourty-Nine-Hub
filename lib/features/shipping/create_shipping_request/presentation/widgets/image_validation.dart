@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class ImageValidation extends StatefulWidget {
   const ImageValidation(
@@ -75,7 +76,9 @@ class _ImageValidationState extends State<ImageValidation> {
                       }
                     }
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 } else {
                   var pickedFlie = await ImagePicker()
