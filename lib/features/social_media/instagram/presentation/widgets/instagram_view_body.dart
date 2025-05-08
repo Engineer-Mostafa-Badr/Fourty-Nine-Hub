@@ -337,13 +337,13 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                     onTap: () {
                       // يقوم بنقلك لصفحة انشاء منشور او ريلز للانستقرام
                       if (index == 1) {
-                        context.goNamed(
+                        context.push(
                           Routes.CREATEPOSTINSTAGRAM,
                         );
                       }
                       // يقوم بتحويلك لصفحة الملف الشخصي
                       if (index == 2) {
-                        context.goNamed(
+                        context.push(
                           Routes.INSTAGRAMPROFILE,
                           extra: UserCubit.to.state.data?.id ?? '',
                         );

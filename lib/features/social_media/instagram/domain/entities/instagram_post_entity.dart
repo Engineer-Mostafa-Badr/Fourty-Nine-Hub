@@ -17,6 +17,7 @@ class InstagramPostEntity {
   final int favoritesCounter;
   final int commentsCounter;
   final int likesCounter;
+  final int shearsCounter;
   final String? createdAt;
   final int countOfStory;
   final bool isFriend;
@@ -37,6 +38,7 @@ class InstagramPostEntity {
     required this.hashtags,
     required this.favoritesCounter,
     required this.commentsCounter,
+    required this.shearsCounter,
     required this.likesCounter,
     required this.createdAt,
     required this.countOfStory,

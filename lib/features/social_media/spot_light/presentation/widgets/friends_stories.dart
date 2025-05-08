@@ -17,6 +17,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_view/controller/story_controller.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class FriendsStories extends StatelessWidget {
   const FriendsStories({super.key});
 
@@ -115,7 +117,8 @@ class FriendsStories extends StatelessWidget {
               builder: (context) => const CameraScreen(),
             ),
           )
-              : context.push(Routes.LOGIN);
+              : pleaseLoginDialog(context);
+          // context.push(Routes.LOGIN);
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()
@@ -291,7 +294,8 @@ class FriendsStories extends StatelessWidget {
               ),
             ),
           )
-              : context.push(Routes.LOGIN);
+              :pleaseLoginDialog(context);
+          // context.push(Routes.LOGIN);
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()

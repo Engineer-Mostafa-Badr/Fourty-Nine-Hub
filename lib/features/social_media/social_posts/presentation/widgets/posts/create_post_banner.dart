@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -46,7 +47,8 @@ class CreatePostBanner extends StatelessWidget {
               child: InkWell(
             onTap: () {
               !context.read<UserCubit>().isLoggedIn
-                  ? context.push(Routes.LOGIN)
+                  ? pleaseLoginDialog(context)
+              // context.push(Routes.LOGIN)
                   : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
             child:Container(

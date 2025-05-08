@@ -68,7 +68,7 @@ class _HealthViewState extends State<HealthView> {
 
   @override
   Widget build(BuildContext context) {
-    bool isWaitingApproval = true;
+    bool isWaitingApproval = false;
     return SharedScaffold(
       mainCategoryId: 1,
       body: BlocBuilder<HealthCubit, HealthState>(

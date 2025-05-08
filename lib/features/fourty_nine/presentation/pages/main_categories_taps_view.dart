@@ -342,6 +342,9 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                   .read<SubcategoriesCubit>()
                                   .isFavouriteAdsOpen,
                               onPressed: () {
+    if (!context.isUserLoggedIn) {
+    return pleaseLoginDialog(context);
+    } else {
                                 context
                                     .read<SubcategoriesCubit>()
                                     .getRequestsLog(controller
@@ -350,7 +353,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
 
                                 context
                                     .read<SubcategoriesCubit>()
-                                    .toggleMyAds('isFavouriteAdsOpen');
+                                    .toggleMyAds('isFavouriteAdsOpen');}
                               },
                             ),
                           ),
@@ -391,12 +394,15 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                 context.read<SubcategoriesCubit>().isMyAdsOpen,
                             onPressed: () {
                               // TODO: EDIT THIS
+                              if (!context.isUserLoggedIn) {
+                              return pleaseLoginDialog(context);
+                              } else {
                               context
                                   .read<SubcategoriesCubit>()
                                   .getMarriageMyAds('62c8b5b09332225799fe335e');
                               context
                                   .read<SubcategoriesCubit>()
-                                  .toggleMyAds('isMyAdsOpen');
+                                  .toggleMyAds('isMyAdsOpen');}
                               // context.push(Routes.MYADDS);
                             },
                           ),
@@ -784,6 +790,9 @@ class _MainCategoriesGridViewCustomPageState
                                   .read<SubcategoriesCubit>()
                                   .isFavouriteAdsOpen,
                               onPressed: () {
+    if (!context.isUserLoggedIn) {
+    return pleaseLoginDialog(context);
+    } else {
                                 context
                                     .read<SubcategoriesCubit>()
                                     .getRequestsLog(controller
@@ -792,7 +801,7 @@ class _MainCategoriesGridViewCustomPageState
 
                                 context
                                     .read<SubcategoriesCubit>()
-                                    .toggleMyAds('isFavouriteAdsOpen');
+                                    .toggleMyAds('isFavouriteAdsOpen');}
                               },
                             ),
                           ),
@@ -833,12 +842,15 @@ class _MainCategoriesGridViewCustomPageState
                                 context.read<SubcategoriesCubit>().isMyAdsOpen,
                             onPressed: () {
                               // TODO: EDIT THIS
+                              if (!context.isUserLoggedIn) {
+                              return pleaseLoginDialog(context);
+                              } else {
                               context
                                   .read<SubcategoriesCubit>()
                                   .getMarriageMyAds('62c8b5b09332225799fe335e');
                               context
                                   .read<SubcategoriesCubit>()
-                                  .toggleMyAds('isMyAdsOpen');
+                                  .toggleMyAds('isMyAdsOpen');}
                               // context.push(Routes.MYADDS);
                             },
                           ),

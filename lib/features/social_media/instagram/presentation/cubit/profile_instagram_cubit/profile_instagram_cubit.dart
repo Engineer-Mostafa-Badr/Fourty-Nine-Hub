@@ -198,14 +198,17 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
   // متابعة مستخدم
   Future<void> followUser(String userId) async {
+    emit(state.copyWith(addFollowStatus: LoadingStatus.loading));
     final res =
         await _postFollowUserUC(PostFollowUserInstagramParams(userId: userId));
 
     res.fold(
       (f) {
-        // يمكن معالجة الخطأ هنا
-      },
+        emit(state.copyWith(
+            addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
+        },
       (success) {
+        emit(state.copyWith(addFollowStatus: LoadingStatus.success));
         removeFollowUser(userId);
       },
     );

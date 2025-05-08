@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/liked_by_widget.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../common/widgets/dynamic/sizer.dart';
+
 class InstagramPostReviewWidget extends StatelessWidget {
   const InstagramPostReviewWidget(
       {super.key, required this.instagramPostEntity});
@@ -21,14 +23,12 @@ class InstagramPostReviewWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         IconsActionPostInsta(
-          likes: instagramPostEntity.likesCounter,
-          comments: instagramPostEntity.commentsCounter,
-          shares: 2021,
-          postId: instagramPostEntity.id,
+          instagramPostEntity: instagramPostEntity,
         ),
         const SizedBox(
           height: 10,
         ),
+        if (instagramPostEntity.likesCounter!=0)
         LikedByWidget(
           imageUrl: testImage2,
           name: 'craig_love',
@@ -38,14 +38,11 @@ class InstagramPostReviewWidget extends StatelessWidget {
           height: 10,
         ),
         DescriptionPost(
-          name: instagramPostEntity.username,
-          description: instagramPostEntity.content,
+          instagramPostEntity: instagramPostEntity,
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const Sizer(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Label(
             text: FormatDate().fromatDateLikeMonthDay(
                 context, instagramPostEntity.createdAt!),

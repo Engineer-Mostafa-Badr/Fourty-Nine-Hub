@@ -836,7 +836,8 @@ class EndPoints {
       '/user-follow/suggestions?page=$page&limit=$limit';
 
   static String postFollowUserInstagram({required String userId}) =>
-      '/user-follow/follow/$userId';
+      "/inst/follows/$userId";
+      // '/user-follow/follow/$userId';
 
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';

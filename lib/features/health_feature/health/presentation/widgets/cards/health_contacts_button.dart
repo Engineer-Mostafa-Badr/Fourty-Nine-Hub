@@ -22,6 +22,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class HealthContactsButtons extends StatefulWidget {
   const HealthContactsButtons(
       {super.key,
@@ -249,7 +251,10 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                   Assets.mailIcon,
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () => context.push(Routes.LOGIN)
+                    ? () {
+                  pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
                     : snap.data == true
                         ? () async {
                             ChatEntity? chat = await context
@@ -282,7 +287,10 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                   Icons.report,
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () => context.push(Routes.LOGIN)
+                    ? () {
+                  pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
                     : () {
                         bottomSheet(
                             context: context,

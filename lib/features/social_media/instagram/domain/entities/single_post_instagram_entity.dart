@@ -7,6 +7,7 @@ class SinglePostInstagramEntity {
   final List<TaggedUserEntity> taggedUsers;
   final int likesCounter;
   final int commentsCounter;
+  final int shearsCounter;
   final int favoritesCounter;
   final List<CommentEntity> comments;
 
@@ -19,6 +20,7 @@ class SinglePostInstagramEntity {
     required this.taggedUsers,
     required this.likesCounter,
     required this.commentsCounter,
+    required this.shearsCounter,
     required this.favoritesCounter,
     required this.comments,
   });
