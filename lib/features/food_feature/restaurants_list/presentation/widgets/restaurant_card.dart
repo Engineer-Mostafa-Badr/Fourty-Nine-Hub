@@ -18,10 +18,10 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
-        child: isVert ? _buildVerticalCard() : _buildHorizontalCard());
+        child: isVert ? _buildVerticalCard(context) : _buildHorizontalCard());
   }
 
-  Widget _buildVerticalCard() {
+  Widget _buildVerticalCard(BuildContext context) {
     return SizedBox(
       width: kToolbarHeight * 2.5,
       height: kToolbarHeight * 3,
@@ -45,7 +45,7 @@ class RestaurantCard extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 2.h),
                         decoration: BoxDecoration(
-                            color: AppColors.SECONDARY_COLOR,
+                            color: AppColors.getRedColor(context),
                             borderRadius: BorderRadius.circular(5)),
                         child: Label(
                             text: '20% off some items',

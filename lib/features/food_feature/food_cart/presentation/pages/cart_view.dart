@@ -247,7 +247,7 @@ class _FoodCartViewState extends State<FoodCartView> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              '${LocaleKeys.restaurant_total.tr()} ${cartItem.total.toStringAsFixed(2)}',
+              '${LocaleKeys.restaurant_total.tr()} ${cartItem.total.toStringAsFixed(2)} ${currency}',
               style: Styles.headerText(),
             ),
           ),
@@ -281,10 +281,10 @@ class _FoodCartViewState extends State<FoodCartView> {
                   foodId: foodId,
                 );
               },
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.getRedColor(context),
               foregroundColor: Colors.white,
               icon: Icons.delete,
-              label: LocaleKeys.delete.tr(),
+              label:context.isArabic?'تأكيد المسح؟': LocaleKeys.delete.tr(),
             ),
           ],
         ),

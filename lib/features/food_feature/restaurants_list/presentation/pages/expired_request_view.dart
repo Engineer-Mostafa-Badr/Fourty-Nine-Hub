@@ -101,38 +101,43 @@ class _RestaurantExpiredRequestsScreenState
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
           final controller = context.read<RestaurantsCubit>();
-
           if (!state.isLoading) {
             return SizedBox(
-              height:MediaQuery.sizeOf(context).height * .8,
+              // height:double.minPositive,
               child: Column(
                 children: [
-                  Expanded(
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      itemCount: controller.expiredOrders.length,
-                      itemBuilder: (context, index) {
-                        final request = controller.expiredOrders[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: TripRequestCard(orderData: request),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Sizer();
-                      },
-                    ),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    // controller: _scrollController,
+                    itemCount: controller.expiredOrders.length,
+                    itemBuilder: (context, index) {
+                      final request = controller.expiredOrders[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TripRequestCard(orderData: request),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Sizer();
+                    },
                   ),
                   if (controller.isLoadingExpiredOrdersMore)
-                    const Center(
-                      child: CircularProgressIndicator(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     )
                 ],
               ),
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         });
@@ -155,7 +160,7 @@ class TripRequestCard extends StatelessWidget {
            decoration: BoxDecoration(
              // color: cardDarkColor(context),
              border: Border.all(
-               color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+               color:AppColors.getTextColor(context),
              ),
              borderRadius: BorderRadius.circular(15)
            ),
@@ -209,7 +214,7 @@ class TripRequestCard extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(width: 16.h),
+        SizedBox(width: 8.h),
         Expanded(
           flex: 1,
           child: Column(
@@ -235,7 +240,7 @@ class TripRequestCard extends StatelessWidget {
           orderData.user?.firstName ?? LocaleKeys.noName.tr()),
       style: Styles.mediumText(
         fontWeight: FontWeight.w600,
-        color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+        color:AppColors.getTextColor(context),
 
 
       ),
@@ -253,7 +258,7 @@ class TripRequestCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           style: Styles.mediumText(
             fontWeight: FontWeight.w700,
-            color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+            color:AppColors.getTextColor(context),
 
           ),),
         if (orderData.restaurant?.subcategory != null)
@@ -264,7 +269,7 @@ class TripRequestCard extends StatelessWidget {
                       orderData.restaurant!.subcategory!.nameEn ?? ''),
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
-              color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
+              color:AppColors.getTextColor(context),
 
             ),
           ),
@@ -278,7 +283,7 @@ class TripRequestCard extends StatelessWidget {
     if (orderData.orders == null || orderData.orders!.isEmpty) {
       return Text(
         LocaleKeys.noOrders.tr(),
-        style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+        style: Styles.headerText(color: AppColors.getRedColor(context)),
       );
     }
 
@@ -292,7 +297,7 @@ class TripRequestCard extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: Styles.mediumText(
         fontWeight: FontWeight.w700,
-        color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+        color:AppColors.getTextColor(context),
       ),
     );
   }
@@ -308,7 +313,7 @@ class TripRequestCard extends StatelessWidget {
                 : orderData.currencyEn ?? ''}",
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
-              color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+              color:AppColors.getTextColor(context),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -329,7 +334,7 @@ class TripRequestCard extends StatelessWidget {
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
             fontWeight: FontWeight.w600,
-            color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+            color:AppColors.getTextColor(context),
 
           ),
         ),
@@ -340,7 +345,7 @@ class TripRequestCard extends StatelessWidget {
             (context.isArabic ? orderData.subscriptionType?.ar : orderData.subscriptionType?.en)
                 ?? LocaleKeys.noSubscription.tr(),
             style: Styles.smallText(
-              color: AppColors.SECONDARY_COLOR_DARK,
+              color: AppColors.getRedColor(context),
               fontWeight: FontWeight.w600,
             ),
           ),

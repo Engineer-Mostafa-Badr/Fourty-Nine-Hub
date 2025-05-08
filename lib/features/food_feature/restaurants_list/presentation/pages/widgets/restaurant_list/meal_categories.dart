@@ -71,11 +71,11 @@ class _MealCategoriesState extends State<MealCategories> {
                         text: context.isArabic ? 'مشاهدة المزيد' : 'See More',
                         style: Styles.mediumText(
                             decoration: TextDecoration.underline,
-                            color: AppColors.PRIMARY_COLOR_DARK),
+                            color: AppColors.getRedColor(context)),
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: AppColors.PRIMARY_COLOR_DARK,
+                        color: AppColors.getRedColor(context),
                         size: 0.04.sw,
                       ),
                       const Sizer()

@@ -60,14 +60,17 @@ class _RestaurantRequestLogsScreenState
         builder: (context, state) {
           final controller = context.read<RestaurantsCubit>();
           if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
           if (controller.reqLogs.isEmpty) {
             return Center(
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * .8, // Make sure it takes up full height
+                height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
                 child: Center( // This will center it vertically and horizontally
                   child: Text(
                     LocaleKeys.noResultsFound.tr(),
@@ -81,7 +84,7 @@ class _RestaurantRequestLogsScreenState
           if (!state.isLoading) {
             return ListView.separated(
               shrinkWrap: true,
-              controller: _scrollController,
+              physics: NeverScrollableScrollPhysics(),
               itemCount: controller.reqLogs.length,
               itemBuilder: (context, index) {
                 final request = controller.reqLogs[index];
@@ -95,8 +98,11 @@ class _RestaurantRequestLogsScreenState
               },
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         });
