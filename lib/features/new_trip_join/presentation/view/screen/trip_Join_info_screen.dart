@@ -27,14 +27,14 @@ class TripJoinInfoScreen extends StatelessWidget {
           height: 80.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: AppColors.PRIMARY_COLOR,
+            color: AppColors.getButtonPrimaryColor(context),
           ),
           child: Center(
             child: Text(
               context.isArabic ? "بدء الرحلة!" : "Start Journey!",
               style: TextStyle(
                 fontSize: 32.sp,
-                color: Colors.white,
+                color: context.isDarkMode?AppColors.black:Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -56,7 +56,7 @@ class TripJoinInfoInfoBody extends StatelessWidget {
       children: [
         SizedBox(height: 30.h),
         Text(
-          context.isArabic ? "جاي معاك!" : 'Trip Join!',
+          context.isArabic ? "جاي معاك !" : 'Trip Join !',
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -64,40 +64,28 @@ class TripJoinInfoInfoBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20.h),
-        SvgPicture.asset(Assets.tripInfoIcon),
+        context.isDarkMode?Image.asset(Assets.tripDarkInfoIcon,height: MediaQuery.of(context).size.height*0.4,fit: BoxFit.cover,):SvgPicture.asset(Assets.tripInfoIcon),
         SizedBox(height: 30.h),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 70),
-          child: RowTextWidget(
-            text:
-                context.isArabic ? "أنت مالك السيارة." : 'You are a car Owner.',
-          ),
+        RowTextWidget(
+          text:
+              context.isArabic ? "أنت مالك السيارة." : 'You are a car Owner.',
         ),
         SizedBox(height: 15.h),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 70),
-          child: RowTextWidget(
-              text: context.isArabic
-                  ? "قم بالإعلان عن رحلتك المتكررة يوميًا."
-                  : 'Advertise your daily repeat trip.'),
-        ),
-        SizedBox(height: 15.h),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 70),
-          child: RowTextWidget(
+        RowTextWidget(
             text: context.isArabic
-                ? "انتظر حتى يتواصل معك المستخدمون."
-                : 'Wait for users to contact you.',
-          ),
+                ? "قم بالإعلان عن رحلتك المتكررة يوميًا."
+                : 'Advertise your daily repeat trip.'),
+        SizedBox(height: 15.h),
+        RowTextWidget(
+          text: context.isArabic
+              ? "انتظر حتى يتواصل معك المستخدمون."
+              : 'Wait for users to contact you.',
         ),
         SizedBox(height: 15.h),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 70),
-          child: RowTextWidget(
-            text: context.isArabic
-                ? "شارك رحلتك واكسب المال."
-                : 'Share your trip & gain money.',
-          ),
+        RowTextWidget(
+          text: context.isArabic
+              ? "شارك رحلتك واكسب المال."
+              : 'Share your trip & gain money.',
         ),
       ],
     );

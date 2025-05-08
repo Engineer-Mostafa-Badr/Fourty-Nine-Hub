@@ -24,6 +24,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class RiderRegisterNoSocketScreen extends StatefulWidget {
   const RiderRegisterNoSocketScreen({super.key, required this.formKey});
@@ -254,7 +255,9 @@ class _RiderRegisterNoSocketScreenState
                             if (context.isUserLoggedIn) {
                               registerRider.registerTow(context);
                             } else {
-                              context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_my_ads_list_view_item.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class MarriageMyAds extends StatelessWidget {
@@ -41,7 +42,7 @@ class MarriageMyAds extends StatelessWidget {
                   text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
                   style: Styles.headerText(
                     fontSize: 28,
-                    color: const Color(0xFFFF3308),
+                    color: AppColors.getRedColor(context),
                     height: 1.57,
                   ),
                 ),

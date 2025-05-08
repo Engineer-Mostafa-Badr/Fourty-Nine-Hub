@@ -159,7 +159,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SvgPicture.asset(
-                                          Assets.facebookAppBarIcon,
+                                          context.isDarkMode
+                                              ? Assets.facebookAppBarIconDark
+                                              : Assets.facebookAppBarIcon,
                                           height: 35,
                                           width: 35,
                                         ),
@@ -261,7 +263,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SvgPicture.asset(
-                                          Assets.instagramAppBarIcon,
+                                          context.isDarkMode
+                                              ? Assets.instagramAppBarIconDark
+                                              : Assets.instagramAppBarIcon,
                                           height: 35,
                                           width: 35,
                                         ),
@@ -305,7 +309,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SvgPicture.asset(
-                                          Assets.twitterAppBarIcon,
+                                          context.isDarkMode
+                                              ? Assets.twitterAppBarIconDark
+                                              : Assets.twitterAppBarIcon,
                                           height: 35,
                                           width: 35,
                                         ),

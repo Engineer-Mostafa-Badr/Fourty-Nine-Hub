@@ -95,6 +95,7 @@ abstract class  LocaleKeys {
   static const selectCity = 'selectCity';
   static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
   static const premium = 'premium';
+  static const premium2 = 'premium2';
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
   static const restaurantDashboard = 'restaurantDashboard';
@@ -714,6 +715,8 @@ abstract class  LocaleKeys {
   static const currency = 'currency';
   static const friend = 'friend';
   static const view = 'view';
+  static const oneView = 'oneView';
+  static const twoViews = 'twoViews';
   static const playedSpins = 'playedSpins';
   static const noFavouriteCategory = 'noFavouriteCategory';
   static const noFavouriteSubCategory = 'noFavouriteSubCategory';
@@ -1388,6 +1391,7 @@ abstract class  LocaleKeys {
   static const showStories = 'showStories';
   static const delete_talent = 'delete_talent';
   static const views = 'views';
+  static const noViews = 'noViews';
   static const talent_upload_image = 'talent_upload_image';
   static const talent_upload_video = 'talent_upload_video';
   static const showReels = 'showReels';
@@ -1525,6 +1529,8 @@ abstract class  LocaleKeys {
   static const socialExplain = 'socialExplain';
   static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
   static const mostBooking = 'mostBooking';
+  static const editProfileDataSuccessfully = 'editProfileDataSuccessfully';
+  static const editSomethingFirst = 'editSomethingFirst';
   static const firstImpressionMessage = 'firstImpressionMessage';
   static const endToEndDescription = 'endToEndDescription';
   static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';
@@ -1559,5 +1565,21 @@ abstract class  LocaleKeys {
   static const failedDeleteItem = 'failedDeleteItem';
   static const favoritesUpdated = 'favoritesUpdated';
   static const failedUpdateFavorites = 'failedUpdateFavorites';
+  static const pleaseSelectAUser = 'pleaseSelectAUser';
+  static const invalidEmailAddress = 'invalidEmailAddress';
+  static const phoneNumbersNotAllowed = 'phoneNumbersNotAllowed';
+  static const enterPositiveNumber = 'enterPositiveNumber';
+  static const yellowCardMember = 'yellowCardMember';
+  static const paymob = 'paymob';
+  static const fawry = 'fawry';
+  static const instaPay = 'instaPay';
+  static const card = 'card';
+  static const link = 'link';
+  static const payAtFawry = 'payAtFawry';
+  static const cardName = 'cardName';
+  static const expiryYear = 'expiryYear';
+  static const expiryMonth = 'expiryMonth';
+  static const ccv = 'ccv';
+  static const errorDecodingQrCode = 'errorDecodingQrCode';
 
 }

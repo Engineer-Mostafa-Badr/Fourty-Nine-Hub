@@ -8,7 +8,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_bottom_section.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/show_bottom_sheet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -171,6 +170,7 @@ class _TripJoinCardState extends State<TripJoinCard> {
             icon,
             width: 48.h,
             fit: BoxFit.cover,
+            color: context.isDarkMode&&icon==Assets.tripJoinCarIcon?Colors.white:null,
           ),
           const Sizer(),
           Text(
@@ -188,18 +188,18 @@ class _TripJoinCardState extends State<TripJoinCard> {
                     style: Styles.headerText(
                         fontWeight: FontWeight.bold)),
                 TextSpan(
-                  text: context.isArabic ? 'جنيه' : 'EGP',
+                  text: context.isArabic ? 'ج.م' : 'EGP',
                   style: Styles.mediumText(
                       fontSize: context.locale.languageCode == "ar" ? 35 : 28,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.SECONDARY_COLOR),
+                      color: AppColors.getRedColor(context)),
                 )
               ])),
               Label(
                 text: LocaleKeys.seat.localize,
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
-                    color: context.isDarkMode ? Colors.white : Colors.black),
+                    color: AppColors.getTextColor(context)),
               )
             ],
           )
@@ -222,7 +222,7 @@ class _TripJoinCardState extends State<TripJoinCard> {
         child: Text(
           LocaleKeys.subscribeToContactClient.localize,
           style: Styles.headerText(
-            color: AppColors.getSecondryColor(context),
+            color: AppColors.getRedColor(context),
             fontSize: 30,
           ),
           textAlign: TextAlign.start,

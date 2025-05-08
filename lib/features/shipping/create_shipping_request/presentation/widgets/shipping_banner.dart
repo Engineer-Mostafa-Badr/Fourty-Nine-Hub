@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/functions/helper/lang_helper.dart';
 
@@ -66,8 +67,10 @@ class _ShippingBannerState extends State<ShippingBanner> {
         if (context.read<UserCubit>().isLoggedIn) {
           context.push(Routes.SHIPPING_REGISTER);
         } else {
+          return pleaseLoginDialog(context);
+
           // context.push(Routes.SHIPPING_REGISTER);
-          context.push(Routes.LOGIN);
+          // context.push(Routes.LOGIN);
         }
       },
       // canRegister: true,

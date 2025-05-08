@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../res/assets/assets.dart';
@@ -62,8 +63,7 @@ class TripOptionWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 5.h),
-          SvgPicture.asset(Assets.shadowTripIcon),
+          SvgPicture.asset(Assets.shadowTripIcon,color: context.isDarkMode?const Color(0xFF333333):null,),
           Text(
             title,
             textAlign: TextAlign.center,

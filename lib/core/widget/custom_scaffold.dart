@@ -9,8 +9,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
+import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import '../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
@@ -36,6 +38,7 @@ class CustomScaffold extends StatefulWidget {
     this.bottomSheet,
     this.showNavBAr = true,
     this.resizeToAvoidBottomInset,
+    this.scaffoldBackgroundWithAppBarColor,
   });
 
   final Widget body;
@@ -51,6 +54,7 @@ class CustomScaffold extends StatefulWidget {
   final bool? resizeToAvoidBottomInset;
   final Widget? bottomSheet;
   final bool enableCustomAppBar;
+  final Color? scaffoldBackgroundWithAppBarColor;
 
   @override
   State<CustomScaffold> createState() => _CustomScaffoldState();
@@ -87,6 +91,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
                 enableCustomAppBar: widget.enableCustomAppBar,
                 rulerWidget: rulerWidget(),
+                scaffoldBackgroundWithAppBarColor:
+                    widget.scaffoldBackgroundWithAppBarColor,
               ),
               floatingWidget: GestureDetector(
                 onTap: () {
@@ -141,6 +147,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
             resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
             enableCustomAppBar: widget.enableCustomAppBar,
             rulerWidget: rulerWidget(),
+            scaffoldBackgroundWithAppBarColor:
+                widget.scaffoldBackgroundWithAppBarColor,
           );
         }
       },
@@ -287,6 +295,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               onTap: () {
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
+                                if(!context.read<UserCubit>().isLoggedIn){
+                                  return pleaseLoginDialog(context);
+                                }
                                 context.push(Routes.SPOTLIGHT);
                               },
                             ),
@@ -294,8 +305,12 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.live.localize,
                               image: Assets.liveIcon,
                               onTap: () {
+
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
+                                if(!context.read<UserCubit>().isLoggedIn){
+                                  return pleaseLoginDialog(context);
+                                }
                                 context.push(Routes.LIVE);
                               },
                             ),
@@ -315,6 +330,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               onTap: () {
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
+                                if(!context.read<UserCubit>().isLoggedIn){
+                                  return pleaseLoginDialog(context);
+                                }
                                 context.push(Routes.CHAT,
                                     extra: ChatsViewParams());
                               },
@@ -396,6 +414,7 @@ class MainScaffold extends StatelessWidget {
     this.bottomSheet,
     this.resizeToAvoidBottomInset,
     required this.rulerWidget,
+    this.scaffoldBackgroundWithAppBarColor,
   });
 
   final Widget body;
@@ -412,6 +431,7 @@ class MainScaffold extends StatelessWidget {
   final Widget? bottomSheet;
   final bool enableCustomAppBar;
   final Widget rulerWidget;
+  final Color? scaffoldBackgroundWithAppBarColor;
 
   @override
   Widget build(BuildContext context) {
@@ -424,7 +444,8 @@ class MainScaffold extends StatelessWidget {
             var choiceRulerCubit = context.read<ChoiceRulerCubit>();
             if (enableCustomAppBar) {
               return Scaffold(
-                backgroundColor: AppColors.PRIMARY_COLOR,
+                backgroundColor: scaffoldBackgroundWithAppBarColor ??
+                    AppColors.getButtonPrimaryColor(context),
                 floatingActionButtonLocation: floatingActionButtonLocation,
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,

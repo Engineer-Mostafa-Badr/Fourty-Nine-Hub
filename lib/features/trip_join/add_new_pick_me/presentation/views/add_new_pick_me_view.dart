@@ -36,22 +36,6 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
   int? selectedSeatNum;
   bool isChecked = false;
   TimeOfDay? time;
-  List<String> carBrands = [
-    'Alfa Romeo',
-    'Aston Martin',
-    'Audi',
-    'BMW',
-    'Baic',
-    'Bestune',
-    'Brilliance',
-    'Buick',
-  ];
-
-  List<String> carModels = [
-    'A1',
-    'MZ 40',
-    'X3',
-  ];
   int seatNum = 1;
   var phoneController = TextEditingController();
   String? selectedCountry;
@@ -131,12 +115,14 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: FormTextField(
                     type: TextInputType.phone,
+                    textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
                     height: 76.h,
-                    style: Styles.mediumText(),
+                    style: Styles.mediumText(color: AppColors.getTextColor(context)),
                     constraints:
                     const BoxConstraints(maxHeight: 52, minHeight: 52),
-                    fillColor: AppColors.colorGreyLight,
+                    fillColor: AppColors.getFillColor(context),
                     borderRadius: BorderRadius.circular(30.h),
+                    borderColor: AppColors.getFillColor(context),borderSide: AppColors.getFillColor(context),
                     controller: phoneController,
                     hint: LocaleKeys.phoneNumber.localize,
                     validator: (value) {
@@ -182,7 +168,7 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color(0xFFEEEEEE),
+          color: AppColors.getFillColor(context),
         ),
         child: Row(
           children: [
@@ -205,10 +191,10 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                     ? context.isArabic
                     ? "إلى"
                     : "To"
-                    : text!,
+                    : text,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Styles.mediumText(color: Colors.black),
+                style: Styles.mediumText(color: AppColors.getTextColor(context)),
               ),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
@@ -27,18 +28,22 @@ class BirthdaySection extends StatelessWidget {
                   Container(
                     height: 70,
                     width: 70,
-                    decoration: const ShapeDecoration(
+                    decoration: ShapeDecoration(
                       shape: OvalBorder(
                         side: BorderSide(
                           width: 0.50,
                           strokeAlign: BorderSide.strokeAlignOutside,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Icon(
                         Icons.add,
-                        color: Colors.black87,
+                        color: context.isDarkMode
+                            ? const Color(0xCCFFFFFF)
+                            : Colors.black87,
                       ),
                     ),
                   ),
@@ -48,7 +53,9 @@ class BirthdaySection extends StatelessWidget {
                   Label(
                     text: LocaleKeys.nnew.localize,
                     style: Styles.mediumText(
-                      color: Colors.black.withValues(alpha: 153),
+                      color: context.isDarkMode
+                          ? const Color(0x99FFFFFF)
+                          : Colors.black.withValues(alpha: 153),
                     ),
                   ),
                 ],
@@ -63,12 +70,14 @@ class BirthdaySection extends StatelessWidget {
                 Container(
                   height: 58,
                   width: 58,
-                  decoration: const ShapeDecoration(
+                  decoration: ShapeDecoration(
                     shape: OvalBorder(
                       side: BorderSide(
                         width: 1,
                         strokeAlign: BorderSide.strokeAlignOutside,
-                        color: Color(0xFFDBDBDB),
+                        color: context.isDarkMode
+                            ? const Color(0xff303030)
+                            : const Color(0xFFDBDBDB),
                       ),
                     ),
                   ),
@@ -87,7 +96,9 @@ class BirthdaySection extends StatelessWidget {
                 Label(
                   text: 'birthday',
                   style: Styles.mediumText(
-                    color: Colors.black.withValues(alpha: 153),
+                    color: context.isDarkMode
+                        ? const Color(0x99FFFFFF)
+                        : Colors.black.withValues(alpha: 153),
                   ),
                 ),
               ],

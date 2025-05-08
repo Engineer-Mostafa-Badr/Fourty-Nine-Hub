@@ -15,6 +15,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class RiderBanner extends StatefulWidget {
   const RiderBanner({
     super.key,
@@ -43,6 +45,7 @@ class _RiderBannerState extends State<RiderBanner> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print(context.read<UserCubit>().isLoggedIn);
         if (context.read<UserCubit>().isLoggedIn) {
           showModalBottomSheet(
             context: context,
@@ -57,7 +60,8 @@ class _RiderBannerState extends State<RiderBanner> {
             },
           );
         } else {
-          context.push(Routes.REGISTER);
+          return pleaseLoginDialog(context);
+          // context.push(Routes.REGISTER);
         }
       },
       child: MainCategoryBanner(

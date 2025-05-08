@@ -46,7 +46,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color:const Color(0xffFFFFFF),
+                  color:AppColors.getFillColor(context),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -57,7 +57,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
                   style: TextStyle(
                     fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black
+                    color: AppColors.getTextColor(context)
                   ),
                 ),
               ),
@@ -80,10 +80,10 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
       children: [
         Text(
           LocaleKeys.welcomeToCaptainShare.localize,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w700,
-            color: AppColors.SECONDARY_COLOR,
+            color: AppColors.getRedColor(context),
           ),
         ),
         const Spacer(),
@@ -95,14 +95,14 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
           child: Container(
             width: 30,
             height: 30,
-            decoration: const BoxDecoration(
-              color: AppColors.PRIMARY_COLOR,
-              shape: BoxShape.circle,
+            decoration:  BoxDecoration(
+                color: AppColors.getButtonPrimaryColor(context),
+                borderRadius: BorderRadius.circular(20.h)
             ),
-            child: const Icon(
+            child: Icon(
               size: 18,
               Icons.question_mark,
-              color: Colors.white,
+              color: context.isDarkMode?Colors.black: Colors.white,
             ),
           ),
         ),

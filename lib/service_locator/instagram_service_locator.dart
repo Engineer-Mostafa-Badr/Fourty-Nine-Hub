@@ -29,6 +29,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/single_post_instagram_cubit/single_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -198,6 +199,12 @@ class InstagramServiceLocator {
 
     serviceLocator.registerLazySingleton<FollowRequestsInstagramCubit>(
       () => FollowRequestsInstagramCubit(
+        serviceLocator<GetSuggestFollowInstagramUseCase>(),
+      ),
+    );
+
+    serviceLocator.registerLazySingleton<SuggestFollowCubit>(
+      () => SuggestFollowCubit(
         serviceLocator<GetSuggestFollowInstagramUseCase>(),
       ),
     );

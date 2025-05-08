@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../res/style/styles.dart';
 
@@ -26,8 +27,10 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
                 Navigator.pop(context);
               }
             },
-            label: context.isArabic ? 'ارسال' : 'Submit',
-            // textStyle: Styles.headerText(color: Colors.white),
+            color: AppColors.getReversedTextColor(context),
+            label: context.isArabic ? 'ارسال' : 'Submit' ,
+            backColor: AppColors.getRedColor(context),
+            //textStyle: ,
           ),
         ),
       ],

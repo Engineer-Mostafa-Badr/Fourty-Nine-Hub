@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -63,7 +64,7 @@ class CaptainRideDetails extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        context.isArabic ? "150 جنيه مصري" : '150 EGP',
+                        context.isArabic ? "150 ج.م" : '150 EGP',
                         style: TextStyle(
                           color: context.isDarkMode
                               ? Colors.white
@@ -79,58 +80,66 @@ class CaptainRideDetails extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               rideLocation(
+                context,
                 context.isArabic
                     ? "مطار القاهرة الدولي"
                     : 'Cairo International Airport',
-                context.isArabic ? "12:10 مساءً" : '12:10 PM',
-                Assets.circleGreen,
+                context.isArabic ? "12:10 م" : '12:10 PM',
+               Colors.green,
               ),
               rideLocation(
+                context,
                 context.isArabic
                     ? "مطار القاهرة الدولي"
                     : 'Cairo International Airport',
-                context.isArabic ? "12:10 مساءً" : '12:10 PM',
-                Assets.circleBlue,
+                context.isArabic ? "12:10 م" : '12:10 PM',
+                Colors.blue,
               ),
               const SizedBox(height: 16),
               ratingSection(
+                context,
                 context.isArabic
-                    ? "أنت تقيم العميل الأول"
+                    ? "تقييمك للعميل الأول"
                     : 'You rate 1st client',
                 isRated: false,
               ),
               const SizedBox(height: 5),
               ratingSection(
+                context,
                 context.isArabic
-                    ? "أنت تقيم العميل التاني"
+                    ? "تقييمك للعمل الثاني"
                     : 'You rate 2nd client',
                 isRated: false,
               ),
               const SizedBox(height: 5),
               ratingSection(
+                context,
                 context.isArabic
-                    ? "أنت تقيم العميل الثالث "
+                    ? "تقييمك للعميل الثالث "
                     : 'You rate 3rd client',
                 isRated: false,
               ),
               const SizedBox(height: 16),
               ratingSection(
+                context,
                 context.isArabic
-                    ? "العميل الأول الذي قيمك"
+                    ? "تقييم العميل الاول لك"
                     : 'First client rate you',
                 isModifiable: false,
               ),
               SizedBox(height: 30.h),
               ratingSection(
+                context,
                 context.isArabic
-                    ? "العميل الثاني الذي قيمك"
+                    ? "تقييم العميل الثاني لك"
                     : 'Second client rate you',
                 isModifiable: false,
               ),
               SizedBox(height: 30.h),
               ratingSection(
+                context,
                 context.isArabic
-                    ? "العميل الثالث الذي قيمك"
+                    ? "تقييم العميل الثالث لك"
                     : 'Third client rate you',
                 isModifiable: false,
               ),
@@ -142,8 +151,12 @@ class CaptainRideDetails extends StatelessWidget {
                 ),
                 hint: context.isArabic ? "اكتب مشكلتك" : "Write your problem",
                 fillColor:
-                    context.isDarkMode ? Colors.white : const Color(0xffF5F5F5),
+                AppColors.getFillColor(context),
                 borderRadius: BorderRadius.circular(15),
+                borderSide: AppColors.getFillColor(context),
+                textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                borderColor: AppColors.getFillColor(context),
+
               ),
               const SizedBox(height: 16),
               FormTextField(
@@ -155,15 +168,19 @@ class CaptainRideDetails extends StatelessWidget {
                     ? "اكتب رقم هاتفك"
                     : "Write your phone number",
                 fillColor:
-                    context.isDarkMode ? Colors.white : const Color(0xffF5F5F5),
+                AppColors.getFillColor(context),
                 borderRadius: BorderRadius.circular(15),
+                borderSide: AppColors.getFillColor(context),
+                type: TextInputType.phone,
+                textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                borderColor: AppColors.getFillColor(context),
               ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.PRIMARY_COLOR,
+                    backgroundColor: AppColors.getButtonPrimaryColor(context),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                   onPressed: () {},
@@ -174,7 +191,7 @@ class CaptainRideDetails extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 28.sp,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color:context.isDarkMode?Colors.black: Colors.white,
                       )),
                 ),
               ),
@@ -185,9 +202,19 @@ class CaptainRideDetails extends StatelessWidget {
     );
   }
 
-  Widget rideLocation(String title, String time, String icon) {
+  Widget rideLocation(BuildContext context,String title, String time, Color color) {
     return ListTile(
-      leading: SvgPicture.asset(icon),
+      contentPadding: EdgeInsets.zero,
+      visualDensity:const  VisualDensity(horizontal: -4,vertical: -4),
+      leading: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        child: CircleAvatar(
+          backgroundColor: color,
+          radius: 10,
+          child: CircleAvatar(
+              backgroundColor: AppColors.getFillColor(context), radius: 5),
+        ),
+      ),
       title: Text(
         title,
         style: TextStyle(
@@ -196,11 +223,13 @@ class CaptainRideDetails extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        'Heliopolis, El Nozha, Cairo Governorate',
+        context.isArabic?'هليوبليس ،النزهة ,القاهرة':'Heliopolis, El Nozha, Cairo Governorate',
         style: TextStyle(
           fontSize: 25.sp,
           fontWeight: FontWeight.w400,
         ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       trailing: Text(
         time,
@@ -213,6 +242,7 @@ class CaptainRideDetails extends StatelessWidget {
   }
 
   Widget ratingSection(
+      BuildContext context,
     String text, {
     bool isModifiable = true,
     bool isRated = true,
@@ -232,9 +262,9 @@ class CaptainRideDetails extends StatelessWidget {
             if (isRated)
               Row(
                 children: [
-                  const Text(
-                    "Good",
-                    style: TextStyle(
+                  Text(
+                    context.isArabic?'جيد':"Good",
+                    style:const TextStyle(
                       fontSize: 16,
                     ),
                   ),
@@ -257,13 +287,13 @@ class CaptainRideDetails extends StatelessWidget {
                 height: 75.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
-                  color: Color(0xffF3F3F3),
+                  color: AppColors.getFillColor(context)
                 ),
                 child: Center(
                   child: Text(
                     LocaleKeys.rate.localize,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: AppColors.getTextColor(context),
                       fontSize: 28.sp,
                       fontWeight: FontWeight.w700,
                     ),

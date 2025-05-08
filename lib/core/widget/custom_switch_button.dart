@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
-
-import '../../res/style/app_colors.dart';
 
 class CustomSwitchButton extends StatelessWidget {
   const CustomSwitchButton({
@@ -32,13 +29,26 @@ class CustomSwitchButton extends StatelessWidget {
         value: value,
         onChanged: onChanged,
         thumbColor:
-            thumbColor ?? WidgetStatePropertyAll(context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR),
-        trackOutlineColor: value
-            ? const WidgetStatePropertyAll(Colors.transparent)
-            : trackOutlineColor ??
-            WidgetStatePropertyAll(context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR),
-        inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
-        activeTrackColor: activeTrackColor ?? HexColor('4CDA64'),
+            // thumbColor ?? WidgetStatePropertyAll(context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR),
+            thumbColor ??
+                WidgetStatePropertyAll(
+                    context.isDarkMode ? Color(0xff0D0D0D) : Colors.white),
+        // trackOutlineColor: value
+        //     ? const WidgetStatePropertyAll(Colors.transparent)
+        //     : trackOutlineColor ??
+        //         WidgetStatePropertyAll(context.isDarkMode
+        //             ? Colors.white
+        //             : AppColors.PRIMARY_COLOR),
+        trackOutlineColor: WidgetStatePropertyAll(context.isDarkMode
+            ? const Color(0xffF45560)
+            : const Color(0xffF33D49)),
+        trackOutlineWidth: const WidgetStatePropertyAll(1),
+        // inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
+        inactiveTrackColor:
+            context.isDarkMode ? Color(0xff333333) : const Color(0xffD9D9D9),
+        // activeTrackColor: activeTrackColor ?? HexColor('4CDA64'),
+        activeTrackColor: activeTrackColor ??
+            (context.isDarkMode ? Colors.white : Colors.black),
       ),
     );
   }

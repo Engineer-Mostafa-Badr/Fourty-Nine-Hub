@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/widget/custom_text_no_login.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
@@ -23,6 +24,7 @@ import 'package:video_player/video_player.dart';
 
 // import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 // import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
@@ -56,7 +58,7 @@ class _BeStarViewState extends State<BeStarView> {
     _adsManager.preloadAds();
   }
 
-  void _onScroll2(){
+  void _onScroll2() {
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       isFloatingButtonVisible = false;
@@ -65,6 +67,7 @@ class _BeStarViewState extends State<BeStarView> {
     }
     setState(() {});
   }
+
   void _onScroll() {
     _onScroll2();
     if (_scrollController.position.pixels >=
@@ -128,7 +131,9 @@ class _BeStarViewState extends State<BeStarView> {
       // ),
       // floatingActionButton: const FloatingActionButtonStar(),
       floatingActionButton: context.read<UserCubit>().isLoggedIn
-          ? isFloatingButtonVisible?const FloatingActionButtonStar():null
+          ? isFloatingButtonVisible
+              ? const FloatingActionButtonStar()
+              : null
           : null,
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
@@ -182,7 +187,9 @@ class _BeStarViewState extends State<BeStarView> {
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(
                       fontSize: 60.sp,
-                      color: context.isDarkMode?Colors.white:AppColors.SECONDARY_COLOR,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.SECONDARY_COLOR,
                     ),
                   ),
                   const Sizer(),
@@ -193,7 +200,9 @@ class _BeStarViewState extends State<BeStarView> {
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(
                       fontSize: 60.sp,
-                      color:context.isDarkMode?Colors.white: AppColors.SECONDARY_COLOR,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.SECONDARY_COLOR,
                     ),
                   ),
                   const Sizer(),
@@ -629,16 +638,20 @@ class _BeStarViewState extends State<BeStarView> {
           Text(
             LocaleKeys.tube.localize,
             style: TextStyle(
-              color: context.isDarkMode?Colors.white:Colors.black,
+              color: context.isDarkMode ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 32.sp,
             ),
           ),
           GestureDetector(
             onTap: () {
-              context.push(
-                Routes.MY_TALENT,
-              );
+              if (!context.read<UserCubit>().isLoggedIn) {
+                pleaseLoginDialog(context);
+              } else {
+                context.push(
+                  Routes.MY_TALENT,
+                );
+              }
             },
             child: Container(
               margin: EdgeInsets.only(
@@ -670,21 +683,25 @@ class _BeStarViewState extends State<BeStarView> {
           padding: const EdgeInsets.only(right: 8.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) => serviceLocator<StarCubit>(),
-                    child: const AllWinnerView(),
+              if (!context.read<UserCubit>().isLoggedIn) {
+                pleaseLoginDialog(context);
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => serviceLocator<StarCubit>(),
+                      child: const AllWinnerView(),
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             },
             child: Row(
               children: [
                 Text(
                   LocaleKeys.winners.localize,
                   style: TextStyle(
-                    color:context.isDarkMode?Colors.white: Colors.black,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 32.sp,
                   ),

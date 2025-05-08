@@ -23,6 +23,7 @@ import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'widgets/pickup_target_location_widget.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
   final bool isTruk;
@@ -338,7 +339,9 @@ class _RidePersonalMoreInfoScreenState
                                       }
                                     }
                                   } else {
-                                    context.push(Routes.LOGIN);
+                                    return pleaseLoginDialog(context);
+
+                                    // context.push(Routes.LOGIN);
                                   }
                                 },
                                 backColor: AppColors.SECONDARY_COLOR_DARK2,
@@ -404,7 +407,9 @@ class _RidePersonalMoreInfoScreenState
                                       }
                                     }
                                   } else {
-                                    context.push(Routes.LOGIN);
+                                    return pleaseLoginDialog(context);
+
+                                    // context.push(Routes.LOGIN);
                                   }
                                 },
                                 backColor: AppColors.PRIMARY_COLOR,

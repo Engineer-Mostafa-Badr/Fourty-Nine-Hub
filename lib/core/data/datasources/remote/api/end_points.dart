@@ -736,8 +736,9 @@ class EndPoints {
     return '/inst/posts?page=${params.page}&limit=${params.limit}';
   }
 
-  static String getUserTag({required int page, required int limit}) =>
-      '/inst/tags?page=$page&limit=$limit';
+  static String getUserTag(
+          {required String username, required int page, required int limit}) =>
+      '/inst/tags?page=$page&limit=$limit&username=$username';
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
@@ -1012,7 +1013,8 @@ class EndPoints {
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
   static const favouriteAds = '/ads-favorites/allFavoriteAds';
-  static  myFavouriteAds(GetMyAdByIdParams params) => '/ads-favorites?mainCategoryId=${params.mainCategoryId}&page=${params.page}';
+  static myFavouriteAds(GetMyAdByIdParams params) =>
+      '/ads-favorites?mainCategoryId=${params.mainCategoryId}&page=${params.page}';
   static const favouriteSubCategories = '/favorite-sub-category';
 
   static String deleteFavouriteAds(String id) {

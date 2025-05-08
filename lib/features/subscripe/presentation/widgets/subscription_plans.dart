@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -47,11 +48,11 @@ class SubscriptionPlansWidget extends StatefulWidget {
 class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
   bool _isPremium = true;
 
-  // WalletTypes? selectedWallet;
+  WalletTypes? selectedWallet;
 
   @override
   void initState() {
-    // selectedWallet = widget.paymentMenthods?[0];
+    selectedWallet = widget.paymentMenthods?[0];
     print("widget.paymentMenthods ${widget.paymentMenthods?.length}");
     super.initState();
   }
@@ -65,29 +66,51 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: widget.title ?? '',
-                      style: Styles.headerText(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 40,
-                      ),
+              context.isArabic
+                  ? Text.rich(
+                      textAlign: TextAlign.center,
+                      TextSpan(children: [
+                        TextSpan(
+                          text: LocaleKeys.subscription.localize,
+                          style: Styles.headerText(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: "  ",
+                        ),
+                        TextSpan(
+                          text: widget.title ?? '',
+                          style: Styles.headerText(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 40,
+                          ),
+                        ),
+                      ]),
+                    )
+                  : Text.rich(
+                      textAlign: TextAlign.center,
+                      TextSpan(children: [
+                        TextSpan(
+                          text: widget.title ?? '',
+                          style: Styles.headerText(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 40,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: "  ",
+                        ),
+                        TextSpan(
+                          text: LocaleKeys.subscription.localize,
+                          style: Styles.headerText(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ]),
                     ),
-                    const TextSpan(
-                      text: "  ",),
-                    TextSpan(
-                      text: LocaleKeys.subscription.localize,
-                      style: Styles.headerText(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 30,
-                      ),
-                    ),
-                  ]
-                ),
-              ),
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.center,
               //   children: [
@@ -158,23 +181,22 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               //         // context.read<WalletCubit>().onSelectWallet(value!);
               //       }),
               // ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 7,
-                ),
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side: const BorderSide(color: Colors.grey, width: 1),
-                  ),
-                ),
-                child: Label(
-                  text: LocaleKeys.wallet.localize,
-                  style: Styles.headerText(
-                    fontSize: 32,
-                  ),
-                ),
+              Row(
+                children: widget.paymentMenthods!
+                    .map((e) => Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            child: CardWalletTypeWidget(
+                              title: e.translatedName,
+                              isSelected: e == selectedWallet,
+                              onTap: () {
+                                selectedWallet = e;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ))
+                    .toList(),
               ),
               const SizedBox(height: 16),
               Row(
@@ -188,7 +210,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           // padding: EdgeInsets.symmetric(vertical: 12.h),
                           decoration: BoxDecoration(
                             color: !_isPremium
-                                ? AppColors.PRIMARY_COLOR
+                                ? (context.isDarkMode
+                                    ? const Color(0xffCACFF4)
+                                    : AppColors.PRIMARY_COLOR)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(25),
                             border: Border.all(color: Colors.grey, width: 1),
@@ -200,7 +224,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                               style: Styles.headerText(
                                 fontSize: 28,
                                 color: !_isPremium
-                                    ? AppColors.AUTH_CONTAINER_COLOR
+                                    ? (context.isDarkMode
+                                        ? const Color(0xff0D0D0D)
+                                        : AppColors.AUTH_CONTAINER_COLOR)
                                     : Theme.of(context).primaryColor,
                               ),
                               // TextStyle(
@@ -225,7 +251,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                         // padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
                           color: _isPremium
-                              ? AppColors.SECONDARY_COLOR_DARK2
+                              ? (context.isDarkMode
+                                  ? const Color(0xffF45560)
+                                  : AppColors.SECONDARY_COLOR_DARK2)
                               : Colors.transparent,
                           // : Colors.red,
                           borderRadius: BorderRadius.circular(15),
@@ -238,7 +266,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             style: Styles.headerText(
                               fontSize: 28,
                               color: _isPremium
-                                  ? AppColors.AUTH_CONTAINER_COLOR
+                                  ? (context.isDarkMode
+                                      ? const Color(0xff0D0D0D)
+                                      : AppColors.AUTH_CONTAINER_COLOR)
                                   : Theme.of(context).primaryColor,
                             ),
                           ),
@@ -261,10 +291,15 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                     child: ElevatedAppButton(
                       label: LocaleKeys.confirm.localize,
                       radius: 15,
+                      backColor: context.isDarkMode
+                          ? const Color(0xFFCACFF4)
+                          : const Color(0xff0B1035),
                       textStyle: Styles.mediumText(
                         fontWeight: FontWeight.w500,
                         fontSize: 36,
-                        color: Colors.white,
+                        color: context.isDarkMode
+                            ? const Color(0xFF0D0D0D)
+                            : Colors.white,
                       ),
                       onPressed: () async {
                         List<num> list = _isPremium
@@ -280,21 +315,22 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                         if (selectedIndex != -1 &&
                             selectedIndex < list.length) {
                           final selectedPlanPrice = list[selectedIndex];
-                          // print('selectedWallet $selectedWallet');
-                          // final walletPrice = selectedWallet?.name == 'mainWallet'
-                          //     ? state.wallet?.realAmount ?? 0
-                          //     : selectedWallet?.name == 'balance'
-                          //         ? state.wallet?.balance ?? 0
-                          //         : state.wallet?.giftWallet ?? 0;
-                          final walletPrice = state.wallet?.realAmount ?? 0;
+                          print('selectedWallet $selectedWallet');
+                          final walletPrice =
+                              selectedWallet?.name == 'mainWallet'
+                                  ? state.wallet?.realAmount ?? 0
+                                  : selectedWallet?.name == 'balance'
+                                      ? state.wallet?.balance ?? 0
+                                      : state.wallet?.giftWallet ?? 0;
+                          // final walletPrice = state.wallet?.realAmount ?? 0;
                           print(walletPrice);
                           print(
                               "state.wallet?.giftWallet${state.wallet?.giftWallet}");
                           print(state.wallet?.realAmount);
                           print(state.wallet?.balance);
-                          // print(walletPrice);
-                          // print(selectedPlanPrice);
-                          // print(_groupValue);
+                          print(walletPrice);
+                          print(selectedPlanPrice);
+                          print(_groupValue);
 
                           if (selectedPlanPrice < walletPrice) {
                             // print('selectedWallet${selectedWallet!.name}');
@@ -303,15 +339,17 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             await context.read<WalletCubit>().addSubscription(
                                   params: AddSubscriptionParams(
                                     subCategoryId: widget.subCategoryId,
-                                    // paymentMethod: selectedWallet!.name,
-                                    paymentMethod: 'mainWallet',
+                                    paymentMethod: selectedWallet!.name,
+                                    // paymentMethod: 'mainWallet',
                                     isPremium: _isPremium,
                                     period: _groupValue,
                                     periodType: 'days',
                                   ),
                                 );
                             if (context.mounted) {
-                              widget.onSubscribe != null ? widget.onSubscribe!() : context.push(Routes.HOME);
+                              widget.onSubscribe != null
+                                  ? widget.onSubscribe!()
+                                  : context.push(Routes.HOME);
 
                               // context.pushReplacement(Routes.HOME);
                               context
@@ -344,7 +382,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   Expanded(
                     child: ElevatedAppButton(
                       label: LocaleKeys.cancel.localize,
-                      backColor: const Color(0xffD9D9D9),
+                      backColor: context.isDarkMode
+                          ? const Color(0xff333333)
+                          : const Color(0xffD9D9D9),
                       radius: 15,
                       textStyle: Styles.mediumText(
                         fontWeight: FontWeight.w500,
@@ -495,6 +535,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           Radio<int>(
             value: value,
             groupValue: _groupValue,
+            activeColor: context.isDarkMode
+                ? const Color(0xffD6DADE)
+                : const Color(0xff212529),
             onChanged: (v) {
               setState(() => _groupValue = v!);
             },
@@ -504,12 +547,19 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               label: period,
               onPressed: () {},
               backColor: _isPremium
-                  ? AppColors.SECONDARY_COLOR_DARK2
-                  : AppColors.PRIMARY_COLOR,
+                  ? (context.isDarkMode
+                      ? const Color(0xffF45560)
+                      : AppColors.SECONDARY_COLOR_DARK2)
+                  : (context.isDarkMode
+                      ? const Color(0xffCACFF4)
+                      : AppColors.PRIMARY_COLOR),
               textStyle: Styles.mediumText(
-                color: _isPremium
-                    ? AppColors.AUTH_CONTAINER_COLOR
+                color: context.isDarkMode
+                    ? const Color(0xff0D0D0D)
                     : AppColors.AUTH_CONTAINER_COLOR,
+                // color: _isPremium
+                //     ? AppColors.AUTH_CONTAINER_COLOR
+                //     : AppColors.AUTH_CONTAINER_COLOR,
               ),
             ),
           ),
@@ -519,16 +569,68 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               label: '$price',
               onPressed: () {},
               backColor: _isPremium
-                  ? AppColors.SECONDARY_COLOR_DARK2
-                  : AppColors.PRIMARY_COLOR,
+                  ? (context.isDarkMode
+                      ? const Color(0xffF45560)
+                      : AppColors.SECONDARY_COLOR_DARK2)
+                  : (context.isDarkMode
+                      ? const Color(0xffCACFF4)
+                      : AppColors.PRIMARY_COLOR),
               textStyle: Styles.mediumText(
-                color: _isPremium
-                    ? AppColors.AUTH_CONTAINER_COLOR
+                color: context.isDarkMode
+                    ? const Color(0xff0D0D0D)
                     : AppColors.AUTH_CONTAINER_COLOR,
+                // color: _isPremium
+                //     ? AppColors.AUTH_CONTAINER_COLOR
+                //     : AppColors.AUTH_CONTAINER_COLOR,
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CardWalletTypeWidget extends StatelessWidget {
+  const CardWalletTypeWidget({
+    super.key,
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String title;
+  final bool isSelected;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 7,
+        ),
+        decoration: ShapeDecoration(
+          color: isSelected
+              ? (context.isDarkMode
+                  ? const Color(0xFF323232)
+                  : const Color(0xffD9D9D9))
+              : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: const BorderSide(color: Colors.grey, width: 1),
+          ),
+        ),
+        child: Center(
+          child: Label(
+            text: title,
+            style: Styles.headerText(
+              fontSize: 32,
+            ),
+          ),
+        ),
       ),
     );
   }

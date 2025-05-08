@@ -1,7 +1,4 @@
-
-
 import '../../domain/entities/most_booking_entity.dart';
-
 
 class MostBookingModel extends MostBookingEntity {
   MostBookingModel({
@@ -22,27 +19,27 @@ class MostBookingModel extends MostBookingEntity {
     String? waitingTime,
     bool? isPremium,
     String? appointmentType,
-    String? price,
+    num? price,
   }) : super(
-    id: id,
-    firstName: firstName,
-    lastName: lastName,
-    userId: userId,
-    address: address,
-    subCategory: subCategory,
-    averageRating: averageRating,
-    totalRatings: totalRatings,
-    ratingText: ratingText,
-    bookingCount: bookingCount,
-    viewCount: viewCount,
-    profilePicture: profilePicture,
-    subscriptionType: subscriptionType,
-    subscriptionRank: subscriptionRank,
-    waitingTime: waitingTime,
-    isPremium: isPremium,
-    appointmentType: appointmentType,
-    price: price,
-  );
+          id: id,
+          firstName: firstName,
+          lastName: lastName,
+          userId: userId,
+          address: address,
+          subCategory: subCategory,
+          averageRating: averageRating,
+          totalRatings: totalRatings,
+          ratingText: ratingText,
+          bookingCount: bookingCount,
+          viewCount: viewCount,
+          profilePicture: profilePicture,
+          subscriptionType: subscriptionType,
+          subscriptionRank: subscriptionRank,
+          waitingTime: waitingTime,
+          isPremium: isPremium,
+          appointmentType: appointmentType,
+          price: price,
+        );
 
   factory MostBookingModel.fromJson(Map<String, dynamic>? json) {
     if (json == null) return MostBookingModel();
@@ -52,7 +49,9 @@ class MostBookingModel extends MostBookingEntity {
       firstName: json['firstName'],
       lastName: json['lastName'],
       userId: json['userId'],
-      address: json['address'] != null ? AddressModel.fromJson(json['address']) : null,
+      address: json['address'] != null
+          ? AddressModel.fromJson(json['address'])
+          : null,
       subCategory: (json['subCategory'] as List<dynamic>?)
           ?.map((e) => MostSubCategoryModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -78,10 +77,10 @@ class AddressModel extends AddressEntity {
     MostCityEntity? city,
     String? address,
   }) : super(
-    governorate: governorate,
-    city: city,
-    address: address,
-  );
+          governorate: governorate,
+          city: city,
+          address: address,
+        );
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
@@ -101,11 +100,11 @@ class MostGovernorateModel extends MostGovernorateEntity {
     String? governorateNameAr,
     String? governorateNameEn,
   }) : super(
-    id: id,
-    provinceId: provinceId,
-    governorateNameAr: governorateNameAr,
-    governorateNameEn: governorateNameEn,
-  );
+          id: id,
+          provinceId: provinceId,
+          governorateNameAr: governorateNameAr,
+          governorateNameEn: governorateNameEn,
+        );
 
   factory MostGovernorateModel.fromJson(Map<String, dynamic> json) {
     return MostGovernorateModel(
@@ -124,11 +123,11 @@ class MostCityModel extends MostCityEntity {
     String? cityNameAr,
     String? cityNameEn,
   }) : super(
-    id: id,
-    governorateId: governorateId,
-    cityNameAr: cityNameAr,
-    cityNameEn: cityNameEn,
-  );
+          id: id,
+          governorateId: governorateId,
+          cityNameAr: cityNameAr,
+          cityNameEn: cityNameEn,
+        );
 
   factory MostCityModel.fromJson(Map<String, dynamic> json) {
     return MostCityModel(
@@ -146,10 +145,10 @@ class MostSubCategoryModel extends MostSubCategoryEntity {
     String? nameAr,
     String? nameEn,
   }) : super(
-    id: id,
-    nameAr: nameAr,
-    nameEn: nameEn,
-  );
+          id: id,
+          nameAr: nameAr,
+          nameEn: nameEn,
+        );
 
   factory MostSubCategoryModel.fromJson(Map<String, dynamic> json) {
     return MostSubCategoryModel(
@@ -159,7 +158,3 @@ class MostSubCategoryModel extends MostSubCategoryEntity {
     );
   }
 }
-
-
-
-

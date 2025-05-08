@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -20,7 +22,7 @@ class GoverDropdown extends StatefulWidget {
 }
 
 class _GoverDropdownState extends State<GoverDropdown> {
-  String? _selectedCountry;
+  String? _selectedCountry = LocaleKeys.governorate.localize;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class _GoverDropdownState extends State<GoverDropdown> {
         builder: (context, state) {
       return DropdownMenu<String>(
         width: double.infinity,
-        textStyle:Styles.mediumText(
+        textStyle: Styles.mediumText(
             color:
                 context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
         initialSelection: _selectedCountry,
@@ -55,13 +57,20 @@ class _GoverDropdownState extends State<GoverDropdown> {
         selectedTrailingIcon: const Icon(Icons.keyboard_arrow_up),
         hintText: _selectedCountry ?? widget.country,
         inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: const OutlineInputBorder(
+          enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(UIConst.radius)),
-            borderSide: BorderSide(color: Colors.black),
+            borderSide: BorderSide(
+                color: context.isDarkMode
+                    ? const Color(0xffCACFF4)
+                    : Colors.black),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular((UIConst.radius))),
-            borderSide: BorderSide(color: Colors.black),
+          focusedBorder: OutlineInputBorder(
+            borderRadius:
+                const BorderRadius.all(Radius.circular((UIConst.radius))),
+            borderSide: BorderSide(
+                color: context.isDarkMode
+                    ? const Color(0xffCACFF4)
+                    : Colors.black),
           ),
           errorBorder: const OutlineInputBorder(
             borderSide: BorderSide(
@@ -81,10 +90,10 @@ class _GoverDropdownState extends State<GoverDropdown> {
           constraints: const BoxConstraints(maxHeight: 45, minHeight: 45),
           hintStyle: Styles.mediumText(
               color:
-              context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
+                  context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
           labelStyle: Styles.mediumText(
               color:
-              context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
+                  context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
           // fillColor: AppColors.GREYFIELD,
           contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         ),

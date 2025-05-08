@@ -32,7 +32,7 @@ dependencies:
   elegant_notification: ^2.3.0
   emoji_picker_flutter: any
   equatable: ^2.0.5
-  ffmpeg_kit_flutter: ^6.0.3
+#  ffmpeg_kit_flutter: 6.0.1
   file_picker: ^8.0.6
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
@@ -149,6 +149,7 @@ dependencies:
   expandable: ^5.0.1
   deepar_flutter: ^0.0.5
 
+  percent_indicator: ^4.2.2
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   http: ^0.13.3
@@ -188,6 +189,7 @@ flutter:
     # - assets/images/butterfly.png
     # - assets/images/salary.png
     - assets/icons/
+    - assets/icons/tinder/
     - assets/lottie/
     - assets/filters/
     - assets/audio/

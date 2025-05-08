@@ -37,9 +37,9 @@ showErrorMessage(BuildContext context, String message) {
           Expanded(
             child: Text(
               message,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+                color: AppColors.getTextColor(context),
               ),
             ),
           ),
@@ -50,7 +50,7 @@ showErrorMessage(BuildContext context, String message) {
           ),
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.getFillColor(context),
       behavior: SnackBarBehavior.floating,
       padding: EdgeInsets.symmetric(
         vertical: 20.h,
@@ -84,9 +84,9 @@ showSuccessMessage(
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.QUANTITY_COLOR,
+                  color:AppColors.getTextColor(context),
                 ),
               ),
             ),
@@ -97,7 +97,8 @@ showSuccessMessage(
             ),
           ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.getFillColor(context),
+
         behavior: SnackBarBehavior.floating,
         padding: EdgeInsets.symmetric(
           vertical: 20.h,

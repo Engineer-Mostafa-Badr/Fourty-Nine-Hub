@@ -12,6 +12,7 @@ final class ForgotPasswordSendOTPFailure extends ForgotPasswordState {
 }
 
 final class ChangePasswordLoading extends ForgotPasswordState {}
+final class ConfirmPasswordNotMache extends ForgotPasswordState {}
 final class ChangePasswordSuccess extends ForgotPasswordState {}
 final class ChangePasswordFailure extends ForgotPasswordState {
   final Failure failure;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
+import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
 
@@ -48,14 +49,14 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: Icon(
               Icons.arrow_back,
               size: 40.w,
-              color: enableCustomAppBar ? Colors.white : iconColor,
+              color: enableCustomAppBar ? AppColors.getReversedTextColor(context) : iconColor,
             ),
           ),
       title: label != null
           ? Label(
               text: label ?? '',
               style: Styles.headerText().copyWith(
-                  color: enableCustomAppBar ? Colors.white : textColor))
+                  color: enableCustomAppBar ? AppColors.getReversedTextColor(context) : textColor))
           : null,
       actions: actions,
       bottom: subTitle?.isEmpty ?? true ? null : PreferredSize(

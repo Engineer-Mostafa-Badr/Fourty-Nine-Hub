@@ -27,9 +27,9 @@ class DialogContent extends StatelessWidget {
         children: [
           Text(
             LocaleKeys.alert.localize,
-            style: const TextStyle(
+            style:  TextStyle(
               fontSize: 18,
-              color: AppColors.SECONDARY_COLOR,
+              color:context.isDarkMode?AppColors.red_Color_DARK: AppColors.SECONDARY_COLOR,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -51,7 +51,7 @@ class DialogContent extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: (){ Navigator.of(context).pop();},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor:context.isDarkMode?AppColors.red_Color_DARK:  AppColors.SECONDARY_COLOR,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -63,7 +63,7 @@ class DialogContent extends StatelessWidget {
                   ),
                   child: Text(
                     leftButtonTitle,
-                    style: Styles.headerText(),
+                    style: Styles.headerText(color:context.isDarkMode?Colors.black:Colors.white ),
                   ),
                 ),
               ),
@@ -74,7 +74,7 @@ class DialogContent extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: (){ Navigator.of(context).pop();},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.buttonDialog,
+                    backgroundColor:context.isDarkMode?AppColors.Floating_Button_COLOR_DARK: AppColors.buttonDialog,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -86,7 +86,7 @@ class DialogContent extends StatelessWidget {
                   ),
                   child: Text(
                     rightButtonTitle,
-                    style: Styles.headerText(),
+                    style: Styles.headerText(color:context.isDarkMode?Colors.black:Colors.white ),
                   ),
                 ),
               ),

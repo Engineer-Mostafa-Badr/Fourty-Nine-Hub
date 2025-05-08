@@ -31,6 +31,7 @@ class AllWinnerView extends StatefulWidget {
 class _AllWinnerViewState extends State<AllWinnerView> {
   late ScrollController _scrollController;
   late StarCubit _cubit;
+
   @override
   void initState() {
     super.initState();

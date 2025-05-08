@@ -11,6 +11,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class HealthBookingTypeCard extends StatelessWidget {
   final HealthBookingFilterModel bookingFilterModel;
   const HealthBookingTypeCard({super.key, required this.bookingFilterModel});
@@ -25,7 +27,8 @@ class HealthBookingTypeCard extends StatelessWidget {
           context.push(bookingFilterModel.route,
               extra: bookingFilterModel.bookingType.name);
         } else {
-          context.push(Routes.REGISTER);
+          return pleaseLoginDialog(context);
+          // context.push(Routes.REGISTER);
         }
       },
       child: Container(

@@ -19,7 +19,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.SECONDARY_COLOR,
+              backgroundColor: AppColors.getRedColor(context),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -28,7 +28,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 context.isArabic?'نشر مميز':'Premium Publish',
-                style:Styles.headerText(color: Colors.white,
+                style:Styles.headerText(color:context.isDarkMode?Colors.black: Colors.white,
                   fontWeight: FontWeight.bold, fontSize: 30)
               ),
             ),
@@ -38,7 +38,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.PRIMARY_COLOR,
+              backgroundColor:AppColors.getButtonPrimaryColor(context),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -47,7 +47,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 LocaleKeys.publish.localize,
-                style: Styles.headerText(color: Colors.white,
+                style: Styles.headerText(color:context.isDarkMode?Colors.black: Colors.white,
                   fontWeight: FontWeight.bold,fontSize: 30),
               ),
             ),

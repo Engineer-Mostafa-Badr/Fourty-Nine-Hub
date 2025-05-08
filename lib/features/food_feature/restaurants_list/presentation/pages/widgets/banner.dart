@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class MealBanner extends StatelessWidget {
   const MealBanner({super.key});
 
@@ -36,7 +38,8 @@ class MealBanner extends StatelessWidget {
               if (context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.CREATERESTURANT);
               } else {
-                context.push(Routes.REGISTER);
+                return pleaseLoginDialog(context);
+                // context.push(Routes.REGISTER);
               }
             },
             onFavorite: () {

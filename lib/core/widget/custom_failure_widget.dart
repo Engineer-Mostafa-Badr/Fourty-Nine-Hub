@@ -42,10 +42,15 @@ class CustomFailureWidget extends StatelessWidget {
             width: 343,
             height: 44,
             decoration: ShapeDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment(-0.60, 0.50),
                 end: Alignment(1.00, 0.50),
-                colors: [Color(0xFF0B1035), Color(0xFFF33D49)],
+                colors: [
+                  (context.isDarkMode
+                      ? const Color(0xFFCAD0F4)
+                      : const Color(0xFF0B1035)),
+                  Color(0xFFF33D49)
+                ],
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -62,7 +67,9 @@ class CustomFailureWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(Assets.refreshIcon),
+                SvgPicture.asset(context.isDarkMode
+                    ? Assets.refreshIconDark
+                    : Assets.refreshIcon),
                 const SizedBox(
                   width: 0.5,
                 ),
@@ -71,7 +78,8 @@ class CustomFailureWidget extends StatelessWidget {
                   style: Styles.headerText(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color:
+                        context.isDarkMode ? Color(0xFF0D0D0D) : Colors.white,
                   ),
                 ),
               ],

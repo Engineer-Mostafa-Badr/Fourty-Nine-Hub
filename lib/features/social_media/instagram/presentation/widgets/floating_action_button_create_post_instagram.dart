@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
@@ -27,7 +28,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
           // end: 15,
         ),
         decoration: ShapeDecoration(
-          color: AppColors.c0B1035,
+          color: context.isDarkMode ? Colors.white : AppColors.c0B1035,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(200),
           ),
@@ -38,7 +39,9 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
               height: 16,
               width: 18,
               child: SvgPicture.asset(
-                Assets.imageWhiteIcon,
+                context.isDarkMode
+                    ? Assets.imageWhiteIconDark
+                    : Assets.imageWhiteIcon,
               ),
             ),
             const SizedBox(
@@ -82,7 +85,9 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                               .postTypes[index]
                               .title,
                           style: Styles.mediumText(
-                            color: Colors.white,
+                            color: context.isDarkMode
+                                ? const Color(0xff0D0D0D)
+                                : Colors.white,
                             fontWeight: state.postTypeSelectedIndex == index
                                 ? FontWeight.w600
                                 : FontWeight.w400,

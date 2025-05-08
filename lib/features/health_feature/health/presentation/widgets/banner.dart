@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class HealthBanner extends StatefulWidget {
   const HealthBanner({super.key});
 
@@ -48,7 +50,8 @@ class _HealthBannerState extends State<HealthBanner> {
               if (context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.CREATEDOCTOR);
               } else {
-                context.push(Routes.REGISTER);
+                return pleaseLoginDialog(context);
+                // context.push(Routes.REGISTER);
               }
             },
             onFavorite: () {

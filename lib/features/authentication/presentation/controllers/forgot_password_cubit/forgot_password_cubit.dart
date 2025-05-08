@@ -81,6 +81,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     if (!changePasswordFormKey.currentState!.validate()) return;
     if (state is ChangePasswordLoading) return;
     emit(ChangePasswordLoading());
+
     final result = await changePasswordUseCase(
       ChangePasswordParams(
         currentPassword: odlPasswordController.text,

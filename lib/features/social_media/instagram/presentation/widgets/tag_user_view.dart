@@ -1,10 +1,10 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/tag_user_view_body.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TagUserView extends StatefulWidget {
@@ -27,8 +28,7 @@ class _TagUserViewState extends State<TagUserView> {
   late ScrollController _scrollController;
   late final TextEditingController searchController;
   late final FocusNode _focusNode;
-  final Debouncer _debouncer =
-      Debouncer(duration: const Duration(milliseconds: 650));
+  final Debouncer _debouncer = Debouncer();
 
   @override
   void initState() {
@@ -137,8 +137,14 @@ class _TagUserViewState extends State<TagUserView> {
                     ? Container(
                         height: 40,
                         margin: const EdgeInsets.symmetric(horizontal: 16),
+                        // decoration: BoxDecoration(
+                        //   color: context.isDarkMode
+                        //       ? Colors.grey[700]
+                        //       : const Color(0xffF0F0F0),
+                        //   borderRadius: BorderRadius.circular(6),
+                        // ),
+                        clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                          color: const Color(0xffF0F0F0),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: TextField(
@@ -148,31 +154,57 @@ class _TagUserViewState extends State<TagUserView> {
                             _handleTextFieldChange(value);
                           },
                           decoration: InputDecoration(
+                            filled: true,
+                            fillColor: context.isDarkMode
+                                ? const Color(0xFF1B1B1B)
+                                : const Color(0xffF0F0F0),
+                            // contentPadding:
+                            //     const EdgeInsets.fromLTRB(16, 20, 16, 12),
                             contentPadding:
-                                const EdgeInsets.fromLTRB(16, 20, 16, 12),
+                                const EdgeInsets.symmetric(vertical: 11),
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             errorBorder: InputBorder.none,
                             focusedErrorBorder: InputBorder.none,
-                            prefixIcon: const Icon(
-                              Icons.search_rounded,
-                              color: Color(0x80000000),
+                            // prefixIcon: const Icon(
+                            //   Icons.search_rounded,
+                            //   color: Color(0x80000000),
+                            // ),
+                            prefixIcon: SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: Center(
+                                child: SvgPicture.asset(context.isDarkMode
+                                    ? Assets.instagramSearchIconDark
+                                    : Assets.instagramSearchIcon),
+                              ),
                             ),
                             suffixIcon: IconButton(
-                                onPressed: () {
-                                  isSearchClicked = false;
-                                  _focusNode.unfocus();
-                                  searchController.clear();
-                                  setState(() {});
-                                },
-                                icon: const Icon(Icons.close)),
+                              onPressed: () {
+                                isSearchClicked = false;
+                                _focusNode.unfocus();
+                                searchController.clear();
+                                setState(() {});
+                              },
+                              icon: Icon(
+                                Icons.close,
+                                color: context.isDarkMode
+                                    ? const Color(0x80FFFFFF)
+                                    : const Color(0x80000000),
+                              ),
+                            ),
                             hintText: LocaleKeys.searchForAUser.localize,
                             hintStyle: Styles.mediumText(
-                              color: Colors.black.withValues(alpha: 128),
-                              fontSize: 32,
+                              color: context.isDarkMode
+                                  ? const Color(0x80FFFFFF)
+                                  : const Color(0x80000000),
                             ),
+                            // hintStyle: Styles.mediumText(
+                            //   color: Colors.black.withValues(alpha: 128),
+                            //   fontSize: 32,
+                            // ),
                           ),
                         ),
                       )
@@ -209,12 +241,13 @@ class _TagUserViewState extends State<TagUserView> {
                 ),
                 searchController.text.isNotEmpty
                     ? Expanded(
-                      child: Builder(
+                        child: Builder(
                           builder: (context) {
                             // if (state.status.isInitial) {
                             //   return Container();
                             // }
-                            if (state.status.isLoading || state.status.isInitial) {
+                            if (state.status.isLoading ||
+                                state.status.isInitial) {
                               return const CustomLoading();
                             }
                             if (state.status.isError) {
@@ -226,14 +259,19 @@ class _TagUserViewState extends State<TagUserView> {
                             return ListView.builder(
                               controller: _scrollController,
                               physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount:
-                                  context.read<TagUsersCubit>().users.length +
-                                      (context.read<TagUsersCubit>().isLoadingMore
-                                          ? 1
-                                          : 0),
+                              itemCount: context
+                                      .read<TagUsersCubit>()
+                                      .users
+                                      .length +
+                                  (context.read<TagUsersCubit>().isLoadingMore
+                                      ? 1
+                                      : 0),
                               itemBuilder: (context, index) {
                                 if (index ==
-                                    context.read<TagUsersCubit>().users.length) {
+                                    context
+                                        .read<TagUsersCubit>()
+                                        .users
+                                        .length) {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 }
@@ -265,7 +303,8 @@ class _TagUserViewState extends State<TagUserView> {
                                               .usersTag
                                               .any((u) => u.id == user.id)
                                           ? const Icon(
-                                              Icons.check_circle_outline_rounded,
+                                              Icons
+                                                  .check_circle_outline_rounded,
                                               color: Colors.green,
                                             )
                                           : null,
@@ -281,16 +320,16 @@ class _TagUserViewState extends State<TagUserView> {
                             );
                           },
                         ),
-                    )
+                      )
                     : Expanded(
-                      child: TagUserViewBody(
+                        child: TagUserViewBody(
                           onTap: () {
                             _focusNode.requestFocus();
                             isSearchClicked = true;
                             setState(() {});
                           },
                         ),
-                    ),
+                      ),
               ],
             ),
           ),
