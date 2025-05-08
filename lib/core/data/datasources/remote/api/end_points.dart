@@ -1482,4 +1482,10 @@ class EndPoints {
 
   static const getDoctorList = '/health/doctors';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
+  static const getClientPendingUntrackedTrips = '/ride/non-tracking/trips/client/pending';
+  static const getClientAcceptedUntrackedTrips = '/ride/non-tracking/trips/client';
+  static const getClientOfferUntrackedTrips = '/ride/non-tracking/offers';
+  static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
+  static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
 }

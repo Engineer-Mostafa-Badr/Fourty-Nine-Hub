@@ -13,6 +13,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_offer_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_pending_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
@@ -27,10 +30,13 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_en
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_non_track_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
@@ -362,5 +368,35 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params) async{
     return rideRemoteDataSource.createNonTrackTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, List<ClientPendingTripEntity>>> getClientPendingUntrackedTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientPendingUntrackedTrips(params: params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> cancelNonTrackTrip(CancelNonTrackTripParams params) {
+    return rideRemoteDataSource.cancelNonTrackTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, List<ClientAcceptedTripEntity>>> getClientAcceptedUntrackedTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientAcceptedUntrackedTrips(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferUntrackedTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientOfferUntrackedTrips(params: params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> acceptNonTrackTrip(AcceptNonTrackTripParams params) {
+    return rideRemoteDataSource.acceptNonTrackTrip( params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params) {
+    return rideRemoteDataSource.refuseNonTrackTrip( params);
   }
 }

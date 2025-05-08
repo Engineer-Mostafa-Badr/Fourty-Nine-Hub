@@ -42,8 +42,9 @@ class PickUpTextFormField extends StatelessWidget {
           : [],
       enableInteractiveSelection: false,
       contextMenuBuilder: (context, editableTextState) => const SizedBox.shrink(),
-
+      cursorColor: AppColors.PRIMARY_COLOR,
       decoration: InputDecoration(
+
         hintText: hintText,
         labelStyle: Styles.mediumText(
           color: AppColors.PRIMARY_COLOR

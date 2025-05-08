@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_date_picker.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_pickup_container.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/image_text_row.dart';
@@ -17,6 +18,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pi
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../helpers/subscription_method.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
@@ -26,6 +28,14 @@ import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'widgets/pickup_target_location_widget.dart';
+
+
+
+
+import 'package:flutter/material.dart';
+import 'ride_personal_more_info_screen.dart';
+
+
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
   final bool isTruk;
@@ -43,12 +53,10 @@ class _RidePersonalMoreInfoScreenState
     extends State<RidePersonalMoreInfoScreen> {
   String _selectedTime = '';
   String _selectedDate = '';
-
-  int _numberOfPassengers = 0;
-  bool _isExpanded = false;
   String offerPrice = '';
   late ClientTripsCubit cubit;
   TextEditingController phoneController = TextEditingController();
+  TextEditingController passengerController = TextEditingController();
 
   @override
   void initState() {
@@ -78,17 +86,29 @@ class _RidePersonalMoreInfoScreenState
           errorName == 'DebtError'
               ? showDebtDialog(context, '')
               : errorName == 'SubscribeError'
-                  ? showSubscribeDialog(context, '')
+                  ? showSubscribeDialog(context, widget.subCategoryId)
                   : showErrorMessage(
                       context, getFailureMessage(state.failure!, context));
         }
         if (state.status == ClientTripsStates.error) {
           String errorName = getFailureName(state.failure!, context);
-        showErrorMessage(
-              context, getFailureMessage(state.failure!, context));
+          final failure = state.failure;
+          if (failure is ServerFailure) {
+            // Try to get errors from the errors list first
+            if (failure.errors != null && failure.errors!.isNotEmpty) {
+              showErrorMessage(context, failure.errors!.first);
+                          return;
+            }
+            errorName == 'DebtError'
+                ? showDebtDialog(context,widget.subCategoryId)
+                : errorName == 'SubscribeError'
+                ? showSubscribeDialog(context, widget.subCategoryId)
+                : showErrorMessage(
+                context, getFailureMessage(state.failure!, context));
+
+          }
         }
-        if (state.status == ClientTripsStates.success &&
-            state.createNonTrackTripEntity!.message.isNotEmpty) {
+        if (state.isSuccessCreateTrip) {
           showCustomSnackBar(
             context,
             // "Cart Update Successfully",
@@ -96,21 +116,6 @@ class _RidePersonalMoreInfoScreenState
                 LocaleKeys.requestSentSuccess.localize,
             Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
           );
-        }
-        if (state.isSuccessCreateTrip) {
-          showSuccessMessage(context, LocaleKeys.requestSentSuccess.localize);
-          _selectedTime = LocaleKeys.pickupTime.localize;
-          _selectedDate = LocaleKeys.pickupDate.localize;
-          _numberOfPassengers = 0;
-          _isExpanded = false;
-          offerPrice = '';
-          phoneController.clear();
-          if (widget.isTruk) {
-            cubit.makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
-          } else {
-            cubit.makeNonTrackingTripParam =
-                MakeNonTrackingRequestTripUsecaseParam();
-          }
         }
       },
       builder: (context, state) {
@@ -149,7 +154,7 @@ class _RidePersonalMoreInfoScreenState
                       if (selectedTime != null) {
                         final now = DateTime.now();
                         final selectedDateParsed =
-                            DateFormat('dd/MM/yyyy').parse(_selectedDate);
+                        DateFormat('dd/MM/yyyy').parse(_selectedDate);
                         final selectedDateTime = DateTime(
                             selectedDateParsed.year,
                             selectedDateParsed.month,
@@ -163,11 +168,12 @@ class _RidePersonalMoreInfoScreenState
                             selectedDateParsed.day == now.day;
 
                         // If today is selected, validate that time is not in the past
-                        if (isToday && selectedDateTime.isBefore(now)) {
+                        final minTime = now.add(Duration(minutes: 15));
+                        if (isToday && selectedDateTime.isBefore(minTime)) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(
-                                    LocaleKeys.youCantChoosePastTime.tr())),
+                              content: Text(LocaleKeys.youCantChoosePastTime.tr()),
+                            ),
                           );
                           return;
                         }
@@ -185,8 +191,63 @@ class _RidePersonalMoreInfoScreenState
                         });
                       }
                     },
+
+                    // onTap: () async {
+                    //   // First check if date is selected
+                    //   if (_selectedDate.isEmpty) {
+                    //     ScaffoldMessenger.of(context).showSnackBar(
+                    //       SnackBar(
+                    //           content: Text(LocaleKeys.pleaseSelectDateFirst
+                    //               .localize)), // Please select date first
+                    //     );
+                    //     return;
+                    //   }
+                    //   final TimeOfDay? selectedTime = await showTimePicker(
+                    //     context: context,
+                    //     initialTime: TimeOfDay.now(),
+                    //   );
+                    //
+                    //   if (selectedTime != null) {
+                    //     final now = DateTime.now();
+                    //     final selectedDateParsed =
+                    //         DateFormat('dd/MM/yyyy').parse(_selectedDate);
+                    //     final selectedDateTime = DateTime(
+                    //         selectedDateParsed.year,
+                    //         selectedDateParsed.month,
+                    //         selectedDateParsed.day,
+                    //         selectedTime.hour,
+                    //         selectedTime.minute);
+                    //
+                    //     // Check if selected date is today
+                    //     final isToday = selectedDateParsed.year == now.year &&
+                    //         selectedDateParsed.month == now.month &&
+                    //         selectedDateParsed.day == now.day;
+                    //
+                    //     // If today is selected, validate that time is not in the past
+                    //     if (isToday && selectedDateTime.isBefore(now)) {
+                    //       ScaffoldMessenger.of(context).showSnackBar(
+                    //         SnackBar(
+                    //             content: Text(
+                    //                 LocaleKeys.youCantChoosePastTime.tr())),
+                    //       );
+                    //       return;
+                    //     }
+                    //
+                    //     // Valid time selected - update state
+                    //     setState(() {
+                    //       _selectedTime = selectedTime.format(context);
+                    //
+                    //       if (widget.isTruk) {
+                    //         cubit.makeLoadingTripParam.date = selectedDateTime;
+                    //       } else {
+                    //         cubit.makeNonTrackingTripParam.date =
+                    //             selectedDateTime;
+                    //       }
+                    //     });
+                    //   }
+                    // },
                     child: PickUpContainer(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                       title: _selectedTime.isEmpty
                           ? LocaleKeys.chooseTheTime.localize
                           : _selectedTime, // <-- show the actual selected time
@@ -233,75 +294,47 @@ class _RidePersonalMoreInfoScreenState
               ],
             ),
             const SizedBox(height: 8),
-            if (widget.isTruk) ...[
-              PickUpTextFormField(
-                onFieldSubmitted: (value) {
-                  cubit.makeLoadingTripParam.description = value;
-                  log(cubit.makeLoadingTripParam.description.toString());
-                },
-                hintText: LocaleKeys.cargoDescription.localize,
-                maxLines: 3,
-                controller: TextEditingController(),
-              ),
-              const SizedBox(height: 8)
-            ] else ...[
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isExpanded = !_isExpanded;
-                  });
-                },
-                child: PickUpContainer(
-                  title: _numberOfPassengers == 0
-                      ? LocaleKeys.numberOfPassenger.localize
-                      : '$_numberOfPassengers',
-                ),
-              ),
-              if (_isExpanded)
-                Column(
-                  children: List.generate(10, (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _numberOfPassengers = index + 1;
-                          cubit.makeNonTrackingTripParam.passengers =
-                              _numberOfPassengers;
-                          _isExpanded = false;
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        height: 48,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF5F5F5),
-                        ),
-                        child: Text(
-                          '${index + 1}',
-                          style: const TextStyle(
-                              color: AppColors.PRIMARY_COLOR,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-            ],
+
+            PickUpTextFormField(
+              fieldType: FieldType.phone,
+              controller: passengerController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return LocaleKeys.required.localize;
+                }
+
+                if (_phonePattern.hasMatch(value)) {
+                  return context.isArabic
+                      ? 'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود'
+                      : 'Phone numbers are not allowed. Please remove any phone number pattern.';
+                }
+
+                final parsedNumber = int.tryParse(value);
+                if (parsedNumber == null) {
+                  return context.isArabic
+                      ? 'الرجاء إدخال رقم صالح'
+                      : 'Please enter a valid number.';
+                }
+
+                if (parsedNumber < 0) {
+                  return context.isArabic
+                      ? 'لا يمكن أن يكون الرقم سالباً'
+                      : 'Number cannot be negative.';
+                }
+
+                if (parsedNumber > 1000) {
+                  return context.isArabic
+                      ? 'لا يمكن أن يكون الرقم أكبر من 1000'
+                      : 'Number cannot be greater than 1000.';
+                }
+
+                return null;
+              }, hintText: LocaleKeys.numberOfPassenger.localize,
+            ),
             const SizedBox(height: 8),
             PickUpTextFormField(
               fieldType: FieldType.phone,
               controller: phoneController,
-              // validator: (value) {
-              //   if (value == null || value.isEmpty) {
-              //     return LocaleKeys.phoneIsRequired.localize;
-              //   }
-              //   final regex = RegExp(r'^(010|011|012|015)\d{8}$');
-              //   if (!regex.hasMatch(value)) {
-              //     return LocaleKeys.enterValidPhoneNumber.localize;
-              //   }
-              //   return null;
-              // },
               validator: (value) {
                 if ((value == null || value.isEmpty)) {
                   return LocaleKeys.required.localize;
@@ -365,41 +398,43 @@ class _RidePersonalMoreInfoScreenState
                                 context.push(Routes.LOGIN);
                                 return;
                               }
-
                               final price = double.tryParse(offerPrice) ?? 0.0;
+                              final passengerText = passengerController.text;
+                              final passengerCount = int.tryParse(passengerText) ?? 0;
 
-                              if (widget.isTruk) {
-                                cubit.makeLoadingTripParam
-                                  ..isPremium = true
-                                  ..price = price;
-
-                                if (_validateLoadingTripParams(
-                                    cubit.makeLoadingTripParam)) {
-                                  cubit.makeLoadingRequestTrip(context);
-                                } else {
-                                  showErrorMessage(context,
-                                      "Please fill all required fields.");
-                                }
-                              } else {
-                                final p = cubit.makeNonTrackingTripParam;
-                                if (_validateRequiredFields(p, price)) {
-                                  final tripParams = CreateNonTrackTripParams(
-                                    subcategoryId: widget.subCategoryId,
-                                    fromTitle: p.fromTitle!,
-                                    toTitle: p.toTitle!,
-                                    price: price,
-                                    date: p.date!,
-                                    phone: p.phone!,
-                                    passengers: p.passengers!,
-                                    isPremium: true,
-                                    description: p.description ?? '',
-                                  );
-                                  cubit.createNonTrackTrip(params: tripParams);
-                                } else {
-                                  showErrorMessage(context,
-                                      "Please fill all required fields.");
-                                }
+                              if (passengerCount > 1000) {
+                                showErrorMessage(
+                                  context,
+                                  context.isArabic
+                                      ? 'لا يمكن أن يكون عدد الركاب أكبر من 1000'
+                                      : 'Passenger count cannot be greater than 1000',
+                                );
+                                return;
                               }
+
+                              final p = cubit.makeNonTrackingTripParam..passengers = passengerCount;
+
+                              if (!_validateRequiredFields(p, price)) {
+                                showErrorMessage(
+                                  context,
+                                  LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                );
+                                return;
+                              }
+
+                              final tripParams = CreateNonTrackTripParams(
+                                subcategoryId: widget.subCategoryId,
+                                fromTitle: p.fromTitle!,
+                                toTitle: p.toTitle!,
+                                price: price,
+                                date: p.date!,
+                                phone: p.phone!,
+                                passengers: passengerCount,
+                                isPremium: true,
+                                description: p.description ?? '',
+                              );
+
+                              cubit.createNonTrackTrip(params: tripParams, context: context);
                             },
                             backColor: AppColors.SECONDARY_COLOR_DARK2,
                             width: MediaQuery.of(context).size.width,
@@ -417,23 +452,105 @@ class _RidePersonalMoreInfoScreenState
                               }
 
                               final price = double.tryParse(offerPrice) ?? 0.0;
+                              final passengerText = passengerController.text;
+                              final passengerCount = int.tryParse(passengerText) ?? 0;
+
+                              if (passengerCount > 1000) {
+                                showErrorMessage(
+                                  context,
+                                  context.isArabic
+                                      ? 'لا يمكن أن يكون عدد الركاب أكبر من 1000'
+                                      : 'Passenger count cannot be greater than 1000',
+                                );
+                                return;
+                              }
 
                               if (widget.isTruk) {
                                 cubit.makeLoadingTripParam
                                   ..isPremium = false
                                   ..price = price;
 
-                                if (_validateLoadingTripParams(
-                                    cubit.makeLoadingTripParam)) {
+                                if (!_validateLoadingTripParams(cubit.makeLoadingTripParam)) {
+                                  showErrorMessage(
+                                    context,
+                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  );
+                                  return;
+                                }
+
+                                // cubit.makeLoadingRequestTrip(context);
+                              } else {
+                                final p = cubit.makeNonTrackingTripParam..passengers = passengerCount;
+
+                                if (!_validateRequiredFields(p, price)) {
+                                  showErrorMessage(
+                                    context,
+                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  );
+                                  return;
+                                }
+
+                                final tripParams = CreateNonTrackTripParams(
+                                  subcategoryId: widget.subCategoryId,
+                                  fromTitle: p.fromTitle!,
+                                  toTitle: p.toTitle!,
+                                  price: price,
+                                  date: p.date!,
+                                  phone: p.phone!,
+                                  passengers: passengerCount,
+                                  isPremium: false,
+                                  description: p.description ?? '',
+                                );
+
+                                cubit.createNonTrackTrip(params: tripParams, context: context);
+                              }
+                            },
+                            backColor: AppColors.PRIMARY_COLOR,
+                            width: MediaQuery.of(context).size.width,
+                          ),
+                        ),
+
+
+                        /*
+                        Expanded(
+                          flex: 2,
+                          child: AppButton(
+                            radius: 15,
+                            label: LocaleKeys.premiumRequest.tr(),
+                            onPressed: () {
+                              if (!context.isUserLoggedIn) {
+                                context.push(Routes.LOGIN);
+                                return;
+                              }
+
+                              final price = double.tryParse(offerPrice) ?? 0.0;
+                              final passengerText = passengerController.text;
+                              final passengerCount = int.tryParse(passengerText) ?? 0;
+
+                              if (passengerCount > 1000) {
+                                showErrorMessage(
+                                  context,
+                                  context.isArabic
+                                      ? 'لا يمكن أن يكون عدد الركاب أكبر من 1000'
+                                      : 'Passenger count cannot be greater than 1000',
+                                );
+                                return;
+                              }
+
+
+
+                                if (_validateLoadingTripParams(cubit.makeLoadingTripParam)) {
                                   cubit.makeLoadingRequestTrip(context);
                                 } else {
                                   showErrorMessage(
-                                      context,
-                                      LocaleKeys.pleaseFillAllRequiredFields
-                                          .localize);
+                                    context,
+                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  );
                                 }
-                              } else {
-                                final p = cubit.makeNonTrackingTripParam;
+
+                                final p = cubit.makeNonTrackingTripParam
+                                  ..passengers = passengerCount;
+
                                 if (_validateRequiredFields(p, price)) {
                                   final tripParams = CreateNonTrackTripParams(
                                     subcategoryId: widget.subCategoryId,
@@ -442,16 +559,83 @@ class _RidePersonalMoreInfoScreenState
                                     price: price,
                                     date: p.date!,
                                     phone: p.phone!,
-                                    passengers: p.passengers!,
+                                    passengers: passengerCount,
+                                    isPremium: true,
+                                    description: p.description ?? '',
+                                  );
+                                  cubit.createNonTrackTrip(params: tripParams,context: context);
+                                } else {
+                                  showErrorMessage(
+                                    context,
+                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  );
+                                }
+
+                            },
+                            backColor: AppColors.SECONDARY_COLOR_DARK2,
+                            width: MediaQuery.of(context).size.width,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: AppButton(
+                            radius: 15,
+                            label: LocaleKeys.request.tr(),
+                            onPressed: () {
+                              if (!context.isUserLoggedIn) {
+                                context.push(Routes.LOGIN);
+                                return;
+                              }
+
+                              final price = double.tryParse(offerPrice) ?? 0.0;
+                              final passengerText = passengerController.text;
+                              final passengerCount = int.tryParse(passengerText) ?? 0;
+
+                              if (passengerCount > 1000) {
+                                showErrorMessage(
+                                  context,
+                                  context.isArabic
+                                      ? 'لا يمكن أن يكون عدد الركاب أكبر من 1000'
+                                      : 'Passenger count cannot be greater than 1000',
+                                );
+                                return;
+                              }
+
+                              if (widget.isTruk) {
+                                cubit.makeLoadingTripParam
+                                  ..isPremium = false
+                                  ..price = price;
+
+                                if (_validateLoadingTripParams(cubit.makeLoadingTripParam)) {
+                                  cubit.makeLoadingRequestTrip(context);
+                                } else {
+                                  showErrorMessage(
+                                    context,
+                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  );
+                                }
+                              } else {
+                                final p = cubit.makeNonTrackingTripParam
+                                  ..passengers = passengerCount;
+
+                                if (_validateRequiredFields(p, price)) {
+                                  final tripParams = CreateNonTrackTripParams(
+                                    subcategoryId: widget.subCategoryId,
+                                    fromTitle: p.fromTitle!,
+                                    toTitle: p.toTitle!,
+                                    price: price,
+                                    date: p.date!,
+                                    phone: p.phone!,
+                                    passengers: passengerCount,
                                     isPremium: false,
                                     description: p.description ?? '',
                                   );
-                                  cubit.createNonTrackTrip(params: tripParams);
+                                  cubit.createNonTrackTrip(params: tripParams, context: context);
                                 } else {
                                   showErrorMessage(
-                                      context,
-                                      LocaleKeys.pleaseFillAllRequiredFields
-                                          .localize);
+                                    context,
+                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  );
                                 }
                               }
                             },
@@ -459,6 +643,7 @@ class _RidePersonalMoreInfoScreenState
                             width: MediaQuery.of(context).size.width,
                           ),
                         ),
+*/
 
                         // Expanded(
                         //     flex: 2,
@@ -484,7 +669,7 @@ class _RidePersonalMoreInfoScreenState
                         //                   cubit.makeLoadingTripParam.price ==
                         //                       0.0) {
                         //                 showErrorMessage(context,
-                        //                     "Please fill all required fields.");
+                        //                     LocaleKeys.pleaseFillAllRequiredFields.localize);
                         //               } else {
                         //                 cubit.makeLoadingRequestTrip(context);
                         //               }
@@ -514,7 +699,7 @@ class _RidePersonalMoreInfoScreenState
                         //                                   .passengers ==
                         //                               0))) {
                         //                 showErrorMessage(context,
-                        //                     "Please fill all required fields.");
+                        //                     LocaleKeys.pleaseFillAllRequiredFields.localize);
                         //               } else {
                         //                 cubit.makeNonTrackingRequestTrip(
                         //                     context);
@@ -674,6 +859,7 @@ class _RidePersonalMoreInfoScreenState
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    cursorColor: AppColors.PRIMARY_COLOR,
                     controller: offerPriceController,
                     decoration: const InputDecoration(
                       filled: true,

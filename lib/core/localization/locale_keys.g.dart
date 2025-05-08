@@ -1564,5 +1564,9 @@ abstract class  LocaleKeys {
   static const chooseTheTime = 'chooseTheTime';
   static const chooseTheDate = 'chooseTheDate';
   static const pleaseSelectDateFirst = 'pleaseSelectDateFirst';
+  static const errorHappen = 'errorHappen';
+  static const accepted = 'accepted';
+  static const rideOffer = 'rideOffer';
+  static const dontHaveOffer = 'dontHaveOffer';
 
 }

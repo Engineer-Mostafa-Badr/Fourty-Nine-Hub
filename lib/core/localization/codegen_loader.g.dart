@@ -1584,10 +1584,14 @@ class CodegenLoader extends AssetLoader{
   "favoritesUpdated": "تم تحديث المفضلة بنجاح",
   "failedUpdateFavorites": "فشل تحديث المفضلة",
   "pleaseFillAllRequiredFields": "يرجى ملء جميع الحقول المطلوبة",
-  "youCantChoosePastTime": "لا يمكنك اختيار وقت في الماضي!",
+  "youCantChoosePastTime": "من فضلك اختار وقت بعد ربع ساعه من الان",
   "chooseTheTime": "اختر الوقت",
   "chooseTheDate": "اختر التاريخ",
-  "pleaseSelectDateFirst": "يرجى تحديد التاريخ أولاً"
+  "pleaseSelectDateFirst": "يرجى تحديد التاريخ أولاً",
+  "errorHappen": "حدث خطأ",
+  "accepted": "المقبولة",
+  "rideOffer": "عروض الرحلات",
+  "dontHaveOffer": "ليس لديك أي عروض حتى الآن"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3175,10 +3179,14 @@ static const Map<String,dynamic> _en = {
   "favoritesUpdated": "Favorites Update Successfully",
   "failedUpdateFavorites": "Failed Update Favorites",
   "pleaseFillAllRequiredFields": "Please fill all required fields",
-  "youCantChoosePastTime": "You can't choose a time in the past!",
+  "youCantChoosePastTime": "Please choose a time after a quarter of an hour from now",
   "chooseTheTime": "Choose The Time",
   "chooseTheDate": "Choose The Date",
-  "pleaseSelectDateFirst": "Please select a date first."
+  "pleaseSelectDateFirst": "Please select a date first.",
+  "errorHappen": "Error Happen",
+  "accepted": "Accepted",
+  "rideOffer": "Ride Offer",
+  "dontHaveOffer": "You don\\'t have any offers yet"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

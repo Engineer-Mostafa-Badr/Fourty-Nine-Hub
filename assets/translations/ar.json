@@ -1568,9 +1568,13 @@
   "favoritesUpdated": "تم تحديث المفضلة بنجاح",
   "failedUpdateFavorites": "فشل تحديث المفضلة",
   "pleaseFillAllRequiredFields": "يرجى ملء جميع الحقول المطلوبة",
-  "youCantChoosePastTime": "لا يمكنك اختيار وقت في الماضي!",
+  "youCantChoosePastTime": "من فضلك اختار وقت بعد ربع ساعه من الان",
   "chooseTheTime": "اختر الوقت",
   "chooseTheDate": "اختر التاريخ",
-  "pleaseSelectDateFirst": "يرجى تحديد التاريخ أولاً"
+  "pleaseSelectDateFirst": "يرجى تحديد التاريخ أولاً",
+  "errorHappen": "حدث خطأ",
+  "accepted": "المقبولة",
+  "rideOffer": "عروض الرحلات",
+  "dontHaveOffer": "ليس لديك أي عروض حتى الآن"
 
 }

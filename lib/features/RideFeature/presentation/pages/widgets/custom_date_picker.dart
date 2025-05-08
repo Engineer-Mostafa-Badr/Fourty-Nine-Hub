@@ -188,7 +188,7 @@ class CustomDatePickerButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showCustomDatePicker(context),
       child: PickUpContainer(
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
         title: displayDate,
       ),
     );

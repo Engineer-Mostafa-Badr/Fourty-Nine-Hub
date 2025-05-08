@@ -35,7 +35,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
       builder: (context, state) {
         String? title = widget.isStartLocation
             ? (widget.cubit.makeNonTrackingTripParam.fromTitle ??
-                LocaleKeys.pickupLocation.localize)
+                LocaleKeys.startPoint.localize)
             : (widget.cubit.makeNonTrackingTripParam.toTitle ??
                 LocaleKeys.destination.localize);
         return GestureDetector(

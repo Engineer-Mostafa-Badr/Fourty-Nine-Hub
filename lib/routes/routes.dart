@@ -283,6 +283,8 @@ abstract class Routes {
   static const INSTAGRAMADDLOCATION = '/InstagramAddLocation';
   static const INSTAGRAMADDMUSIC = '/InstagramAddMusic';
   static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
+  static const rideOffer = '/RiderOffer';
+
 }
 
 abstract class Paths {
@@ -528,6 +530,7 @@ abstract class Paths {
   static const completeRideScreen = 'CompleteRideScreen';
   static const newRideModeScreen = 'NewRideModeScreen';
   static const registerVerifyPhoneOTP = 'RegisterVerifyPhoneOTP';
+  static const rideOffer = 'RiderOffer';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';

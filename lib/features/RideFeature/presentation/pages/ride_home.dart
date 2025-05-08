@@ -740,7 +740,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildBottomSheet() {
     return Positioned(
-      // bottom: 0,
+      bottom: !context.read<RideCubit>().selectedCategoryIsSocket ? null : 0,
       left: 0,
       right: 0,
       child: Column(
@@ -765,7 +765,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideLoadingRequestScreen,extra: false);
+                                  context.push(Routes.rideOffer,extra: false);
                                 } else {
                                   context.push(Routes.LOGIN);
                                 }
@@ -787,7 +787,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideLoadingRequestScreen,extra: true);
+                                  context.push(Routes.rideOffer,extra: true);
                                 } else {
                                   context.push(Routes.LOGIN);
                                 }

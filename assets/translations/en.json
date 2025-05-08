@@ -1585,10 +1585,14 @@
   "favoritesUpdated": "Favorites Update Successfully",
   "failedUpdateFavorites": "Failed Update Favorites",
   "pleaseFillAllRequiredFields": "Please fill all required fields",
-  "youCantChoosePastTime": "You can't choose a time in the past!",
+  "youCantChoosePastTime": "Please choose a time after a quarter of an hour from now",
   "chooseTheTime": "Choose The Time",
   "chooseTheDate": "Choose The Date",
   "pleaseSelectDateFirst": "Please select a date first.",
+  "errorHappen": "Error Happen",
+  "accepted": "Accepted",
+  "rideOffer": "Ride Offer",
+  "dontHaveOffer": "You don\\'t have any offers yet"
 
 
 }
