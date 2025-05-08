@@ -46,7 +46,7 @@ class _PagePreviewState extends State<PagePreview>
 
   @override
   initState() {
-    serviceLocator<MainCategoriesCubit>().loadData();
+    serviceLocator<MainCategoriesCubit>().loadData(context);
     super.initState();
   }
 

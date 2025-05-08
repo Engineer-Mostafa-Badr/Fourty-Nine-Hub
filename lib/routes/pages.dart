@@ -475,7 +475,7 @@ class AppPages {
                 ),
                 BlocProvider(
                   create: (context) =>
-                      serviceLocator<MainCategoriesCubit>()..loadData(),
+                      serviceLocator<MainCategoriesCubit>()..loadData(context),
                 ),
                 // BlocProvider(
                 //   create: (context) => serviceLocator<ThumbnailsCubit>(),
@@ -1095,7 +1095,7 @@ class AppPages {
                 name: Routes.GIFT,
                 builder: (context, state) => BlocProvider(
                   create: (context) =>
-                      serviceLocator<MainCategoriesCubit>()..loadData(),
+                      serviceLocator<MainCategoriesCubit>()..loadData(context),
                   child: const GiftView(),
                 ),
               ),

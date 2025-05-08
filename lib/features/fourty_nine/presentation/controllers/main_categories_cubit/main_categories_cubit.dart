@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -14,7 +16,10 @@ import 'package:fourtyninehub/core/utils/location_tracker.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -29,6 +34,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -53,6 +59,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final GetCurrencyUseCase _currencyUseCase;
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final UpdateSocketLocationUseCase updateSocketLocationUseCase;
+  final ListenToNewTripUseCase listenToNewTripUseCase;
+  final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
 
   MainCategoriesCubit(
@@ -66,12 +74,12 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._getQuestionUseCase,
     this._answerQuestionUseCase,
     this._getMainCategoryDetailsUseCase,
-    this.getSettingsDashboardUsecase,
+    this.getSettingsDashboardUsecase, this.listenToNewTripUseCase, this.listenToAcceptOfferUseCase,
   ) : super(MainCategoriesState());
 
-  Future<void> loadDataCategory() async {
+  Future<void> loadDataCategory(BuildContext context) async {
     print("loadDataCategory");
-    await loadData();
+    await loadData(context);
     await getMainCategoryDetails();
     // await getQuestion();
     await getMainCategoryCustomPage();
@@ -90,14 +98,14 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     // }
   }
 
-  Future<void> loadData() async {
+  Future<void> loadData(BuildContext context) async {
     print("loadData");
 
     emit(state.copyWith(status: StateStatus.loading));
     // await UserCubit.to.getUser();
     // getWallet();
     getCurrency();
-    getSettings();
+    getSettings(context);
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
@@ -284,7 +292,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     });
   }
 
-  Future<void> getSettings() async {
+  Future<void> getSettings(BuildContext context) async {
     log("getSettingsgetSettings");
 
 
@@ -303,6 +311,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         log("SuccessIsReady : $isReady");
         if(isReady){
           updateDriverLocation();
+          listenToNewTrip(context,settings.data.enableNotificationSound);
+          listenToAcceptOffer(context);
         }
         emit(state.copyWith(
             status: StateStatus.success,));
@@ -329,6 +339,43 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
             (r) async {
           if(r==true)log("Location Updated Successfully");
         });
+  }
+
+  void listenToNewTrip(BuildContext context,bool enableSound) {
+    CliLogger.info('Listen To New Trip');
+    // TripsResponseEntity
+    AudioPlayer player = AudioPlayer();
+
+    listenToNewTripUseCase((trip) async {
+      CliLogger.info('Listen To New ss');
+      if(enableSound){
+        await Future.delayed(
+          const Duration(seconds: 1),
+              () {
+            if(context.isArabic){
+              player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
+            }else{
+              player.play(AssetSource("audio/u_have_a_new_ride_en.mp3"));
+            }
+          },
+        );
+      }
+      context.push(Routes.rideModeScreen,
+          extra: const RideModeParams(
+              modeType: 'ride',
+              isSocket: true));
+    });
+  }
+
+  void listenToAcceptOffer(BuildContext context) {
+    CliLogger.info('Listen To Update Trip Auto Accept');
+    listenToAcceptOfferUseCase((trip) {
+      context.push(Routes.rideModeScreen,
+          extra: const RideModeParams(
+              modeType: 'ride',
+              currentIndex: 1,
+              isSocket: true));
+    });
   }
 
   updateDriverLocation(){

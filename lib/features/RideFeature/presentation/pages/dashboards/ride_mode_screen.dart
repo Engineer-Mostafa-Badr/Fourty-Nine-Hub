@@ -1,7 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/available_ride_trip_item.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_arrived_sheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_otp_sheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_complete_trip_sheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_rate_client_sheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_go_to_client_sheet.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
@@ -20,7 +26,8 @@ import 'widgets/truk_bus_widget.dart';
 class RideModeParams {
   final String modeType;
   final bool? isSocket;
-  const RideModeParams({required this.modeType, this.isSocket});
+  final int? currentIndex;
+  const RideModeParams({required this.modeType, this.isSocket, this.currentIndex});
 }
 
 class RideModeScreen extends StatefulWidget {
@@ -39,28 +46,31 @@ class _RideModeScreenState extends State<RideModeScreen> {
   void initState() {
     print("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
-    _availableTripsScrollController = ScrollController()
-      ..addListener(_onScroll);
+    _availableTripsScrollController = ScrollController()..addListener(_onScroll);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
       // if (!dashboardCubit.isClosed) {
-        widget.params.isSocket == true
-            ? [dashboardCubit.loadAvailableRideTrips(context),dashboardCubit.listenToUpdateTripAutoAccept(),dashboardCubit.listenToUpdateTripPrice(),dashboardCubit.listenToAcceptOffer(),dashboardCubit.listenToNewTrip(),dashboardCubit.listenToRemoveTrip()]
-            : dashboardCubit.getAvailableTrips(context);
-        dashboardCubit.getPastTrips(context,
-            widget.params.isSocket == true ? "tracking" : 'non-tracking');
-        dashboardCubit.getSettings(context);
+      widget.params.isSocket == true
+          ? [
+              if (widget.params.currentIndex != null) dashboardCubit.changeIndex(widget.params.currentIndex ?? 0, context),
+              if (widget.params.currentIndex == null || widget.params.currentIndex == 0) dashboardCubit.loadAvailableRideTrips(context),
+              dashboardCubit.listenToUpdateTripAutoAccept(),
+              dashboardCubit.listenToUpdateTripPrice(),
+              dashboardCubit.listenToAcceptOffer(context),
+              dashboardCubit.listenToNewTrip(),
+              dashboardCubit.listenToRemoveTrip()
+            ]
+          : dashboardCubit.getAvailableTrips(context);
+      dashboardCubit.getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
+      dashboardCubit.getSettings(context);
       // }
     });
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      widget.params.isSocket == true
-          ? context.read<DashboardsCubit>().getAvailableRideTrips(context)
-          : context.read<DashboardsCubit>().getAvailableTrips(context);
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      widget.params.isSocket == true ? context.read<DashboardsCubit>().getAvailableRideTrips(context) : context.read<DashboardsCubit>().getAvailableTrips(context);
     }
   }
 
@@ -111,9 +121,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                       // : widget.params.modeType == 'truk'?
                                       : LocaleKeys.trukMode.tr(),
                                   // : LocaleKeys.busMode.tr(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16)),
+                                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                             ],
                           ),
                         ),
@@ -124,31 +132,46 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _buildTabItem(cubit.state.currentIndex??0,0, LocaleKeys.availableTrips.tr(),() {
-                              cubit.changeIndex(0,context);
-                              // setState(() {
-                              //   _selectedIndex = 0;
-                              // });
-                            },),
-                            if (widget.params.isSocket == true)
-                              _buildTabItem(cubit.state.currentIndex??0,1, LocaleKeys.runningTrips.tr(),() {
-                                cubit.changeIndex(1,context);
+                            _buildTabItem(
+                              cubit.state.currentIndex ?? 0,
+                              0,
+                              LocaleKeys.availableTrips.tr(),
+                              () {
+                                cubit.changeIndex(0, context);
                                 // setState(() {
-                                //   _selectedIndex = 1;
+                                //   _selectedIndex = 0;
                                 // });
-                              },),
-                            _buildTabItem(cubit.state.currentIndex??0,2, LocaleKeys.pastTrips.tr(),() {
-                              cubit.changeIndex(2,context);
-                              // setState(() {
-                              //   _selectedIndex = 2;
-                              // });
-                            },),
-                            _buildFilterIcon( () {
-                              cubit.changeIndex(3,context);
+                              },
+                            ),
+                            if (widget.params.isSocket == true)
+                              _buildTabItem(
+                                cubit.state.currentIndex ?? 0,
+                                1,
+                                LocaleKeys.runningTrips.tr(),
+                                () {
+                                  cubit.changeIndex(1, context);
+                                  // setState(() {
+                                  //   _selectedIndex = 1;
+                                  // });
+                                },
+                              ),
+                            _buildTabItem(
+                              cubit.state.currentIndex ?? 0,
+                              2,
+                              LocaleKeys.pastTrips.tr(),
+                              () {
+                                cubit.changeIndex(2, context);
+                                // setState(() {
+                                //   _selectedIndex = 2;
+                                // });
+                              },
+                            ),
+                            _buildFilterIcon(() {
+                              cubit.changeIndex(3, context);
                               // setState(() {
                               //   _selectedIndex = 3;
                               // });
-                            },cubit.state.currentIndex??0),
+                            }, cubit.state.currentIndex ?? 0),
                           ],
                         ),
                       ),
@@ -158,48 +181,28 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         Expanded(
                           child: (state.settings?.isReady ?? true)
                               ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                   child: state.isLoadingAvailable
-                                      ? const Center(
-                                          child: CircularProgressIndicator())
+                                      ? const Center(child: CircularProgressIndicator())
                                       : widget.params.isSocket == true
                                           ? cubit.isLoadingMore
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator())
+                                              ? const Center(child: CircularProgressIndicator())
                                               : state.availableRideTrips != null
                                                   ? ListView.separated(
-                                                      controller:
-                                                          _availableTripsScrollController,
-                                                      itemBuilder: (context,
-                                                              index) =>
-                                                          AvailableRideTripItem(
-                                                              tripEntity:
-                                                                  state.availableRideTrips![
-                                                                      index]),
-                                                      itemCount: state
-                                                          .availableRideTrips!
-                                                          .length,
-                                                      separatorBuilder:
-                                                          (BuildContext context,
-                                                                  int index) =>
-                                                              const SizedBox(
-                                                                  height: 15))
+                                                      controller: _availableTripsScrollController,
+                                                      itemBuilder: (context, index) => AvailableRideTripItem(tripEntity: state.availableRideTrips![index]),
+                                                      itemCount: state.availableRideTrips!.length,
+                                                      separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15))
                                                   : const SizedBox.shrink()
                                           : state.availableTrips == null
                                               ? const SizedBox.shrink()
                                               : cubit.isLoadingMore
-                                                  ? const Center(
-                                                      child: CircularProgressIndicator())
+                                                  ? const Center(child: CircularProgressIndicator())
                                                   : ListView.separated(
                                                       controller: _availableTripsScrollController,
                                                       itemBuilder: (context, index) => TrukBusWidget(
-                                                            contextScreen:
-                                                                context,
-                                                            tripEntity: state
-                                                                    .availableTrips![
-                                                                index],
+                                                            contextScreen: context,
+                                                            tripEntity: state.availableTrips![index],
                                                             modeType: 'bus',
                                                           ),
                                                       // : const TrukBusWidget(),
@@ -211,30 +214,51 @@ class _RideModeScreenState extends State<RideModeScreen> {
                       // running Trips
                       else if (cubit.state.currentIndex == 1)
                         Expanded(
-                            child: DynamicMapWithPolyline(
-                                url: getMapUrl(context, type: "mapBox"),
-                                apiKey: getApiKey(context, type: "mapBox")))
+                            child: Stack(
+                          children: [
+                            DynamicMapWithPolyline(url: getMapUrl(context, type: "mapBox"), apiKey: getApiKey(context, type: "mapBox")),
+                            if(state.tripStatus==TripState.goToClient.name)
+                            BuildDriverArrivedSheet(onPressed: (String message) {
+                              cubit.arrivedToClient(context, state.activeTrip?.tripId??'',message);
+                            },),
+                            if(state.tripStatus==TripState.accepted.name) BuildGoToClientSheet(onGoingToClient:(){
+                              cubit.goingToClient(context, state.activeTrip?.tripId??'');
+                            }),
+                            if(state.tripStatus==TripState.inLocation.name) BuildDriverOtpSheet(
+                              onPressed: (String otp) {
+                                cubit.startDriverTrip(context, state.activeTrip?.tripId??'',otp);
+                              },
+                            ),
+                            if(state.tripStatus==TripState.started.name)BuildDriverCompleteTripSheet(
+                              onPressed: (String) {},
+                              onStartRecord: () {
+                                cubit.startRecord();
+                              },
+                              onStopRecord: () {
+                                cubit.stopRecord(context: context, subcategoryId: state.activeTrip?.subCategoryId ?? '', tripId: state.activeTrip?.tripId ?? '');
+                              },
+                              onCompleteRide: () {
+                                cubit.completeDriverTrip(context, state.activeTrip?.tripId ?? '', '');
+                              }, tripId: state.activeTrip?.tripId ?? '',
+                            ),
+                            if(state.tripStatus==TripState.completed.name)BuildDriverRateClientSheet(onPressed: (message,rate){
+                              print("message $message ||| rate $rate");
+                              cubit.rateTheClient(context: context, tripId: state.activeTrip?.tripId??'', comment: message, rate: rate);
+                            },),
+                          ],
+                        ))
                       // Past Trips
                       else if (cubit.state.currentIndex == 2)
                         Expanded(
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
                             child: state.isLoadingPast
-                                ? const Center(
-                                    child: CircularProgressIndicator())
+                                ? const Center(child: CircularProgressIndicator())
                                 : state.pastTrips == null
                                     ? Container()
                                     : ListView.builder(
                                         itemBuilder: (context, index) =>
-                                            PastTripsWidget(
-                                                modeType:
-                                                    widget.params.isSocket ==
-                                                            true
-                                                        ? 'ride'
-                                                        : 'truk',
-                                                tripEntity:
-                                                    state.pastTrips![index]),
+                                            PastTripsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', tripEntity: state.pastTrips![index]),
                                         itemCount: state.pastTrips!.length,
                                       ),
                           ),
@@ -243,13 +267,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                       else if (cubit.state.currentIndex == 3)
                         Expanded(
                             child: state.isLoadingSettings
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : SettingsWidget(
-                                    modeType: widget.params.isSocket == true
-                                        ? 'ride'
-                                        : 'truk',
-                                    settings: state.settings))
+                                ? const Center(child: CircularProgressIndicator())
+                                : SettingsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', settings: state.settings))
                     ],
                   ),
                 );
@@ -261,52 +280,42 @@ class _RideModeScreenState extends State<RideModeScreen> {
     );
   }
 
-  Widget _buildTabItem(int currentIndex,int index, String title,GestureTapCallback? onTap) {
+  Widget _buildTabItem(int currentIndex, int index, String title, GestureTapCallback? onTap) {
     return Expanded(
       flex: 3,
       child: GestureDetector(
-        onTap:onTap,
-
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
           margin: const EdgeInsets.symmetric(horizontal: 5),
           height: 30,
           alignment: AlignmentDirectional.center,
           decoration: BoxDecoration(
-            color: currentIndex == index
-                ? AppColors.PRIMARY_COLOR
-                : AppColors.GREYBG,
+            color: currentIndex == index ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                color: currentIndex == index
-                    ? AppColors.whiteColor
-                    : AppColors.black,
-                fontSize: 10,
-                fontWeight: FontWeight.w600),
+            style: TextStyle(color: currentIndex == index ? AppColors.whiteColor : AppColors.black, fontSize: 10, fontWeight: FontWeight.w600),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildFilterIcon(GestureTapCallback? onTap,int selectedIndex) {
+  Widget _buildFilterIcon(GestureTapCallback? onTap, int selectedIndex) {
     return Expanded(
       flex: 2,
       child: GestureDetector(
-        onTap:onTap,
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           margin: const EdgeInsets.symmetric(horizontal: 5),
           height: 30,
           decoration: BoxDecoration(
-            color: selectedIndex == 3
-                ? AppColors.PRIMARY_COLOR
-                : AppColors.GREYBG,
+            color: selectedIndex == 3 ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Image.asset(

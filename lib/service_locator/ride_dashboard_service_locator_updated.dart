@@ -1,12 +1,18 @@
 
 
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/RideFeature/data/datasources/dashboard_remote_data_source.dart';
@@ -20,6 +26,7 @@ import '../features/RideFeature/domain/usecases/dashboards/get_settings_dashboar
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 
 class RideDashboardServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {
@@ -48,10 +55,25 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<ListenToNewTripUseCase>(() => ListenToNewTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToRemoveTripUseCase>(() => ListenToRemoveTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AutoAcceptTripUseCase>(() => AutoAcceptTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetRunningTripUseCase>(() => GetRunningTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GoingToClientUseCase>(() => GoingToClientUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ArrivedToClientUseCase>(() => ArrivedToClientUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<StartDriverTripUseCase>(() => StartDriverTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CompleteDriverTripUseCase>(() => CompleteDriverTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CancelTripByRiderUseCase>(() => CancelTripByRiderUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DriverRateClientUseCase>(() => DriverRateClientUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

@@ -6,6 +6,7 @@ import 'sub_category_model.dart';
 class SettingsDashboardModel extends SettingsDashboardEntity {
   SettingsDashboardModel({
     required super.isReady,
+    required super.enableNotificationSound,
     required List<SubCategoryModel> super.categoryIds,
     required super.subscriptionType,
     required super.pricingPerKm,
@@ -20,7 +21,8 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
 
   factory SettingsDashboardModel.fromJson(Map<String, dynamic> json) {
     return SettingsDashboardModel(
-      isReady: json['isReady'],
+      isReady: json['isReady']??false,
+      enableNotificationSound: json['isVoiceCommentAlertsEnabled']??false,
       categoryIds: List<SubCategoryModel>.from((json['categoryIds'] as List)
           .map((x) => SubCategoryModel.fromJson(x))),
       subscriptionType: json['subscriptionType'],

@@ -48,6 +48,11 @@ class DashboardsState
   final SettingsDashboardEntity? settings;
   final int? currentIndex;
   final List<AvailableRideTripEntity>? availableRideTrips;
+  final String? tripStatus;
+  final RunningTripEntity? activeTrip;
+  final bool? isChangedMindReason;
+  final bool? isOtherReason;
+  final bool? isClientNotShownReason;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -56,6 +61,11 @@ class DashboardsState
       this.status = DashboardsStates.initState,
       this.availableTrips,
       this.availableRideTrips,
+      this.tripStatus,
+      this.activeTrip,
+      this.isChangedMindReason=false,
+      this.isOtherReason=false,
+      this.isClientNotShownReason=false,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -65,6 +75,12 @@ class DashboardsState
       List<AvailableRideTripEntity>? availableRideTrips,
       SettingsDashboardEntity? settings,
       int? currentIndex,
+        String? tripStatus,
+        RunningTripEntity? activeTrip,
+        bool? isChangedMindReason,
+        bool? isOtherReason,
+        bool? isClientNotShownReason,
+
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -74,6 +90,11 @@ class DashboardsState
       currentIndex: currentIndex ?? this.currentIndex,
       availableTrips: availableTrips ?? this.availableTrips,
       availableRideTrips: availableRideTrips ?? this.availableRideTrips,
+      activeTrip: activeTrip ?? this.activeTrip,
+      tripStatus: tripStatus ?? this.tripStatus,
+      isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
+      isOtherReason: isOtherReason ?? this.isOtherReason,
+      isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,
     );
   }
 

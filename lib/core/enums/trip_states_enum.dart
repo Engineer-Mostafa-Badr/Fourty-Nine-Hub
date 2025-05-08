@@ -4,5 +4,6 @@ enum TripState {
   started,
   canceled,
   accepted,
+  goToClient,
   inLocation,
 }

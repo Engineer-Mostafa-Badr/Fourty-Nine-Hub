@@ -169,7 +169,7 @@ class TabBarRowRideModeWidget extends StatelessWidget {
         Expanded(
           child: ItemTabRideModeWidget(
             onTap: onTap,
-            text: context.isArabic ? "الرحلات السابقة" : "Past Trips",
+            text: context.isArabic ? "رحلات السابقة" : "Past Trips",
             icon: Assets.ideaIcon,
             index: 1,
             tabController: tabController,
