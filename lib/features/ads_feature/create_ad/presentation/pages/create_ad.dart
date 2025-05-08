@@ -602,7 +602,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                       const SizedBox(
                         height: 16,
                       ),
-                      state.isLoadingCreateAd? const Center(child: CircularProgressIndicator()):AppButton(
+                      state.isLoadingCreateAd? const Center(child: CircularProgressIndicator())
+                          :AppButton(
                         label: LocaleKeys.publish.localize,
                         backColor: AppColors.getButtonPrimaryColor(context),
                         style: Styles.headerText(
