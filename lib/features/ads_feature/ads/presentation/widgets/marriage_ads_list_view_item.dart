@@ -42,7 +42,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: context.isDarkMode ? Colors.white : Colors.black,
+            color: AppColors.getTextColor(context),
           ),
         ),
         child: Column(
@@ -69,7 +69,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                         text: marriageAds.title,
                         style: Styles.headerText(
                           color:
-                              context.isDarkMode ? Colors.white : Colors.black,
+                          AppColors.getTextColor(context),
                           height: 1.60,
                         ),
                       ),
@@ -83,7 +83,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                     style: Styles.mediumText(
                       fontSize: 24,
                       height: 1.40,
-                      color: context.isDarkMode ? Colors.white : Colors.black,
+                      color: AppColors.getTextColor(context),
                     ),
                     maxLines: 5,
                   ),
@@ -109,7 +109,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                         style: Styles.headerText(
                           fontSize: 24,
                           color:
-                              context.isDarkMode ? Colors.white : Colors.black,
+                          AppColors.getTextColor(context),
                         ),
                       ),
                     ],
@@ -118,7 +118,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
               ),
             ),
             Divider(
-              color: context.isDarkMode ? Colors.white : Colors.black,
+              color:AppColors.getTextColor(context),
               height: 0,
             ),
             Padding(
@@ -150,7 +150,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                           width: 141,
                           child: AvaialbleTripsButton(
                             title: LocaleKeys.request.localize,
-                            color: AppColors.SECONDARY_COLOR_DARK2,
+                            color: AppColors.getRedColor(context),
                             radius: 15,
                             // padding: const EdgeInsets.symmetric(
                             //     horizontal: 15, vertical: 5,),

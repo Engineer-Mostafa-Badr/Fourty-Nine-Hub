@@ -150,7 +150,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        widget.totalPrice.toStringAsFixed(2),
+                                        '${widget.totalPrice.toStringAsFixed(2)} ${widget.currency}' ,
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
