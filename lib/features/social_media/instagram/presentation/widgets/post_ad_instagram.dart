@@ -37,48 +37,19 @@ class PostAdInstagram extends StatelessWidget {
         HeaderPostInstagram(
           imageUrl: instagramPostEntity.profilePictureUrl!,
           userTags: instagramPostEntity.userTags,
-          userName: instagramPostEntity.username,
+          userName: '${instagramPostEntity.firstName} ${instagramPostEntity.lastName}',
           isReel: MediaHelper.getMediaTypeFromExtension(
                   instagramPostEntity.medias.first) ==
               MediaType.video,
           country: instagramPostEntity.locationName,
           // songName: instagramPostEntity,
           userId: instagramPostEntity.userId,
+          postId: instagramPostEntity.id,
+          isFollow: instagramPostEntity.isFollow,
         ),
-        // Container(
-        //   child: Row(
-        //     children: [
-        //       const InstagramUserInfoWithMentionPostWidget(
-        //         imageUrl: testImage,
-        //         userName: 'Ruffles',
-        //         isMenchan: false,
-        //       ),
-        //       const Spacer(),
-        //       GestureDetector(
-        //           onTap: () {
-        //             showModalBottomSheet(
-        //               backgroundColor: Colors.white,
-        //               context: context,
-        //               builder: (context) =>
-        //                   const InstagramPostButtomSheetWithoutMentionWidget(),
-        //             );
-        //           },
-        //           child: const Icon(Icons.more_horiz)),
-        //     ],
-        //   ),
-        // ),
-
         const SizedBox(
           height: 5,
         ),
-        // InstgramImagesPostWidget(
-        //   // images: images,
-        //   instagramPostEntity: ,
-        // ),
-        // Container(
-        //   height: 350,
-        //   color: Colors.red,
-        // ),
         Container(
           width: double.infinity,
           height: 54,

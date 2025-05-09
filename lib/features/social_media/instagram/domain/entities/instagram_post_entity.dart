@@ -21,6 +21,7 @@ class InstagramPostEntity {
   final String? createdAt;
   final int countOfStory;
   final bool isFriend;
+  final bool isFollow;
 
   InstagramPostEntity({
     required this.id,
@@ -43,6 +44,7 @@ class InstagramPostEntity {
     required this.createdAt,
     required this.countOfStory,
     required this.isFriend,
+    required this.isFollow,
   });
 }
 

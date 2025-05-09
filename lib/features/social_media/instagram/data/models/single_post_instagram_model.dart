@@ -50,6 +50,7 @@ class OwnerModel extends OwnerEntity {
     required super.profilePictureUrl,
     required super.hasStory,
     required super.verifiedBadge,
+    required super.isFollow,
   });
 
   factory OwnerModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +62,7 @@ class OwnerModel extends OwnerEntity {
       profilePictureUrl: json['profilePictureUrl'] ?? '',
       hasStory: json['hasStory'] ?? 0,
       verifiedBadge: json['verifiedBadge'] ?? false,
+      isFollow: json['isFollowed'] ?? false,
     );
   }
 }

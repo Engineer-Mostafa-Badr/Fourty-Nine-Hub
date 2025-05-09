@@ -28,15 +28,16 @@ class InstagramPostReviewWidget extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        if (instagramPostEntity.likesCounter!=0)
-        LikedByWidget(
-          imageUrl: testImage2,
-          name: 'craig_love',
-          others: instagramPostEntity.likesCounter - 1,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
+        if (instagramPostEntity.likesCounter != 0)
+          LikedByWidget(
+            imageUrl: testImage2,
+            name: 'craig_love',
+            others: instagramPostEntity.likesCounter - 1,
+          ),
+        if (instagramPostEntity.likesCounter != 0)
+          const SizedBox(
+            height: 10,
+          ),
         DescriptionPost(
           instagramPostEntity: instagramPostEntity,
         ),
@@ -45,6 +46,7 @@ class InstagramPostReviewWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Label(
             text: FormatDate().fromatDateLikeMonthDay(
+                // context, '2025-04-05T22:39:39.466Z'),
                 context, instagramPostEntity.createdAt!),
             style: Styles.mediumText(
               color: context.isDarkMode

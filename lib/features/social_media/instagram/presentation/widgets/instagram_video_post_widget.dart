@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 class InstagramVideoPostWidget extends StatelessWidget {
   const InstagramVideoPostWidget(
       {super.key, required this.instagramPostEntity});
+
   final InstagramPostEntity instagramPostEntity;
 
   @override
@@ -44,7 +45,10 @@ class InstagramVideoPostWidget extends StatelessWidget {
                             backgroundColor: Colors.white,
                             context: context,
                             builder: (context) =>
-                                const InstagramPostButtomSheetWithoutMentionWidget(),
+                                InstagramPostButtomSheetWithoutMentionWidget(
+                              userId: instagramPostEntity.userId,
+                              postId: instagramPostEntity.id,
+                            ),
                           );
                         },
                         child: const Icon(

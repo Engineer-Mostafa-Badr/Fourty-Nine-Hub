@@ -20,9 +20,13 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/unfollow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -74,4 +78,12 @@ abstract class InstagramRepo {
 
   Future<Either<Failure, bool>> postFollowUserInstagram(
       PostFollowUserInstagramParams params);
+
+  Future<Either<Failure, bool>> unFollowUserInstagram(PostFollowUserInstagramParams params) ;
+
+  Future<Either<Failure, bool>> likePostInstagram(LikePostInstagramParams params);
+
+  Future<Either<Failure, bool>> savePostInstagram(SavePostInstagramParams params) ;
+
+  Future<Either<Failure, bool>> removeSavePostInstagram(SavePostInstagramParams params);
 }

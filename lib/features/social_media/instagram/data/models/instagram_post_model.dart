@@ -28,6 +28,7 @@ class InstagramPostModel extends InstagramPostEntity {
     required super.createdAt,
     required super.countOfStory,
     required super.isFriend,
+    required super.isFollow,
   });
 
   factory InstagramPostModel.fromJson(Map<String, dynamic> json) {
@@ -66,6 +67,7 @@ class InstagramPostModel extends InstagramPostEntity {
       createdAt: json['createdAt']?.toString() ?? '', // Default to empty string if null
       countOfStory: json['owner']?['countOfStory'] ?? 0, // Default to 0 if null
       isFriend: json['owner']?['isFriend'] ?? false, // Default to false if null
+      isFollow: json['owner']?['isFollowed'] ?? false, // Default to false if null
     );
   }
 }

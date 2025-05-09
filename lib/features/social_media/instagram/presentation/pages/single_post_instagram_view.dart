@@ -130,6 +130,7 @@ class SinglePostInstagramViewBody extends StatelessWidget {
             ),
           ),
         ),
+        isFollow: post.owner.isFollow,
       ),
     );
   }

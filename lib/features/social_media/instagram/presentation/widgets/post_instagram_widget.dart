@@ -18,22 +18,6 @@ class PostInstagramWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if ((MediaHelper.getMediaTypeFromExtension(
-                instagramPostEntity.medias.first)) !=
-            MediaType.video)
-          HeaderPostInstagram(
-            imageUrl: instagramPostEntity.profilePictureUrl ?? '',
-            userName: instagramPostEntity.username,
-            userTags: instagramPostEntity.userTags,
-            isReel: (MediaHelper.getMediaTypeFromExtension(
-                    instagramPostEntity.medias.first)) ==
-                MediaType.video,
-            country: instagramPostEntity.locationName,
-            userId: instagramPostEntity.userId,
-          ),
-        const SizedBox(
-          height: 5,
-        ),
         InstgramImagesPostWidget(
           // images: instagramPostEntity.medias,
           instagramPostEntity: instagramPostEntity,

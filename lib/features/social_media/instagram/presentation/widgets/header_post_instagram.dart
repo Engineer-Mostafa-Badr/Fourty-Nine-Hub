@@ -18,6 +18,7 @@ class HeaderPostInstagram extends StatelessWidget {
     this.songName,
     required this.isReel,
     required this.userId,
+    required this.isFollow, required this.postId,
   });
 
   final List<InstagramPostUserTagEntity> userTags;
@@ -27,6 +28,8 @@ class HeaderPostInstagram extends StatelessWidget {
   final String? songName;
   final bool isReel;
   final String userId;
+  final String postId;
+  final bool isFollow;
 
   @override
   Widget build(BuildContext context) {
@@ -34,43 +37,57 @@ class HeaderPostInstagram extends StatelessWidget {
       create: (context) => serviceLocator<ProfileInstagramCubit>(),
       child: BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 19),
-            child: Row(
-              children: [
-                InstagramUserInfoWithMentionPostWidget(
-                  country: country,
-                  isReel: isReel,
-                  songName: songName,
-                  imageUrl: imageUrl,
-                  userName: userName,
-                  userTags: userTags,
-                  userId: userId,
-                ),
-                const Spacer(),
-                FollowButtonInstagram(
-                  isReel: isReel,
-                  onPressed: () {
-                    context
-                        .read<ProfileInstagramCubit>()
-                        .followUser(userId);
-                  },
-                ),
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      backgroundColor: Colors.white,
-                      context: context,
-                      builder: (context) =>
-                      const InstagramPostButtomSheetWithoutMentionWidget(),
-                    );
-                  },
-                  child: Icon(
-                    Icons.more_vert_sharp,
-                    color: isReel ? Colors.white : Colors.black,
+          return SizedBox(
+            height: 35,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InstagramUserInfoWithMentionPostWidget(
+                    country: country,
+                    isReel: isReel,
+                    songName: songName,
+                    imageUrl: imageUrl,
+                    userName: userName,
+                    userTags: userTags,
+                    userId: userId,
                   ),
-                ),
-              ],
+                  const Spacer(),
+                  FollowButtonInstagram(
+                    isReel: isReel,
+                    isFollow: isFollow,
+                    onPressed: () {
+                      if (isFollow) {
+                        context
+                            .read<ProfileInstagramCubit>()
+                            .unFollowUser(userId);
+                      } else {
+                        context
+                            .read<ProfileInstagramCubit>()
+                            .followUser(userId);
+                      }
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (context) =>
+                            InstagramPostButtomSheetWithoutMentionWidget(
+                          userId: userId,
+                              postId: postId,
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.more_vert_sharp,
+                      color: isReel ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

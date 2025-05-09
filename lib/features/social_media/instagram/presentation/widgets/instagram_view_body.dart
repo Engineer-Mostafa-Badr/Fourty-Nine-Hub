@@ -337,7 +337,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                     onTap: () {
                       // يقوم بنقلك لصفحة انشاء منشور او ريلز للانستقرام
                       if (index == 1) {
-                        context.push(
+                        context.go(
                           Routes.CREATEPOSTINSTAGRAM,
                         );
                       }

@@ -34,6 +34,7 @@ class OwnerEntity {
   final String profilePictureUrl;
   final int hasStory;
   final bool verifiedBadge;
+  final bool isFollow;
 
   OwnerEntity({
     required this.id,
@@ -43,6 +44,7 @@ class OwnerEntity {
     required this.profilePictureUrl,
     required this.hasStory,
     required this.verifiedBadge,
+    required this.isFollow,
   });
 }
 
