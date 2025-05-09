@@ -19,7 +19,7 @@ class CommentsInstagramCubit extends Cubit<CommentsInstagramState> {
   final DeleteCommentUseCase _deleteCommentUseCase;
 
   Future<void> getComments(String postId) async {
-    emit(const CommentsInstagramState(status: CommentsInstagramStatus.loading));
+    emit( CommentsInstagramState(status: CommentsInstagramStatus.loading));
     final result = await _getCommentUseCase(postId);
     result.fold(
       (failure) {

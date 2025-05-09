@@ -7,7 +7,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/in
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 
 class InstagramPostModel extends InstagramPostEntity {
-  InstagramPostModel({
+  InstagramPostModel( {
     required super.id,
     required super.content,
     required super.userId,
@@ -21,12 +21,14 @@ class InstagramPostModel extends InstagramPostEntity {
     required super.hashtags,
     required super.favoritesCounter,
     required super.commentsCounter,
+    required super.shearsCounter,
     required super.likesCounter,
     required super.firstName,
     required super.lastName,
     required super.createdAt,
     required super.countOfStory,
     required super.isFriend,
+    required super.isFollow,
   });
 
   factory InstagramPostModel.fromJson(Map<String, dynamic> json) {
@@ -60,10 +62,12 @@ class InstagramPostModel extends InstagramPostEntity {
           : [],
       favoritesCounter: json['favoritesCounter'] ?? 0, // Default to 0 if null
       commentsCounter: json['commentsCounter'] ?? 0, // Default to 0 if null
+      shearsCounter: json['shearsCounter'] ?? 0, // Default to 0 if null
       likesCounter: json['likesCounter'] ?? 0, // Default to 0 if null
       createdAt: json['createdAt']?.toString() ?? '', // Default to empty string if null
       countOfStory: json['owner']?['countOfStory'] ?? 0, // Default to 0 if null
       isFriend: json['owner']?['isFriend'] ?? false, // Default to false if null
+      isFollow: json['owner']?['isFollowed'] ?? false, // Default to false if null
     );
   }
 }

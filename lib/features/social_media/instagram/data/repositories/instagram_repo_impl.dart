@@ -22,7 +22,9 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../domain/repositories/social_posts_repo.dart';
@@ -30,7 +32,9 @@ import '../datasources/instagram_remote_datasource.dart';
 
 class InstagramRepoImpl implements InstagramRepo {
   final InstagramRemoteDataSource _remoteDataSource;
+
   InstagramRepoImpl(this._remoteDataSource);
+
   @override
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params}) {
@@ -141,5 +145,30 @@ class InstagramRepoImpl implements InstagramRepo {
   Future<Either<Failure, bool>> postFollowUserInstagram(
       PostFollowUserInstagramParams params) {
     return _remoteDataSource.postFollowUserInstagram(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> unFollowUserInstagram(
+      PostFollowUserInstagramParams params) {
+    return _remoteDataSource.unFollowUserInstagram(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> likePostInstagram(
+      LikePostInstagramParams params) {
+    return _remoteDataSource.likePostInstagram(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> savePostInstagram(
+      SavePostInstagramParams params) {
+    return _remoteDataSource.savePostInstagram(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeSavePostInstagram(
+      SavePostInstagramParams params) {
+    return _remoteDataSource.removeSavePostInstagram(params);
+
   }
 }

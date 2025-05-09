@@ -13,6 +13,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class HeaderProfileInstagram extends StatelessWidget {
   const HeaderProfileInstagram({super.key});
 
@@ -45,7 +47,8 @@ class HeaderProfileInstagram extends StatelessWidget {
                               builder: (context) => const CameraScreen(),
                             ),
                           )
-                        : context.push(Routes.LOGIN);
+                        : pleaseLoginDialog(context);
+                    // context.push(Routes.LOGIN);
 
                     BlocProvider.of<StoryCubit>(context)
                       ..fetchStories()

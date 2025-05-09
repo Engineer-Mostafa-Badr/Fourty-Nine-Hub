@@ -115,7 +115,7 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
               return SizedBox(
                 height: state.suggestFollowsData!.suggestions.isEmpty
                     ? 0
-                    : MediaQuery.of(context).size.height * 0.2,
+                    : MediaQuery.of(context).size.height * 0.23,
                 child: ListView.separated(
                   itemCount: state.suggestFollowsData!.suggestions.length,
                   scrollDirection: Axis.horizontal,

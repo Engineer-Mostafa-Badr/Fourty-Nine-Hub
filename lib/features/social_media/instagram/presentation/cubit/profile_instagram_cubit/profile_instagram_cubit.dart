@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_specific_user_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
+
+import '../../../domain/usecases/unfollow_user_instagram_use_case.dart';
 part 'profile_instagram_state.dart';
 
 class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
@@ -15,12 +17,14 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
     this._getReelsUC,
     this._getSuggestFollowUC,
     this._postFollowUserUC,
+      this._unFollowUserInstagramUC,
   ) : super(const ProfileInstagramState());
 
   final GetInstagramProfileUseCase _getProfileUC;
   final GetInstagramReelsSpecificUserUseCase _getReelsUC;
   final GetSuggestFollowInstagramUseCase _getSuggestFollowUC;
   final PostFollowUserInstagramUseCase _postFollowUserUC;
+  final UnFollowUserInstagramUseCase _unFollowUserInstagramUC;
 
   final int postsLimit = 10;
   final int reelsLimit = 10;
@@ -198,15 +202,33 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
   // متابعة مستخدم
   Future<void> followUser(String userId) async {
+    emit(state.copyWith(addFollowStatus: LoadingStatus.loading));
     final res =
         await _postFollowUserUC(PostFollowUserInstagramParams(userId: userId));
 
     res.fold(
       (f) {
-        // يمكن معالجة الخطأ هنا
-      },
+        emit(state.copyWith(
+            addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
+        },
       (success) {
+        emit(state.copyWith(addFollowStatus: LoadingStatus.success));
         removeFollowUser(userId);
+      },
+    );
+  }
+  Future<void> unFollowUser(String userId) async {
+    emit(state.copyWith(addFollowStatus: LoadingStatus.loading));
+    final res =
+        await _unFollowUserInstagramUC(PostFollowUserInstagramParams(userId: userId));
+
+    res.fold(
+      (f) {
+        emit(state.copyWith(
+            addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
+        },
+      (success) {
+        emit(state.copyWith(addFollowStatus: LoadingStatus.success));
       },
     );
   }

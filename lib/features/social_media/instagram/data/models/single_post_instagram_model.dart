@@ -10,6 +10,7 @@ class SinglePostInstagramModel extends SinglePostInstagramEntity {
     required super.taggedUsers,
     required super.likesCounter,
     required super.commentsCounter,
+    required super.shearsCounter,
     required super.favoritesCounter,
     required super.comments,
   });
@@ -29,6 +30,7 @@ class SinglePostInstagramModel extends SinglePostInstagramEntity {
           : [],
       likesCounter: json['likesCounter'] ?? 0,
       commentsCounter: json['commentsCounter'] ?? 0,
+      shearsCounter: json['shearsCounter'] ?? 0,
       favoritesCounter: json['favoritesCounter'] ?? 0,
       comments: json['comments'] != null
           ? List<CommentModel>.from(
@@ -48,6 +50,7 @@ class OwnerModel extends OwnerEntity {
     required super.profilePictureUrl,
     required super.hasStory,
     required super.verifiedBadge,
+    required super.isFollow,
   });
 
   factory OwnerModel.fromJson(Map<String, dynamic> json) {
@@ -59,6 +62,7 @@ class OwnerModel extends OwnerEntity {
       profilePictureUrl: json['profilePictureUrl'] ?? '',
       hasStory: json['hasStory'] ?? 0,
       verifiedBadge: json['verifiedBadge'] ?? false,
+      isFollow: json['isFollowed'] ?? false,
     );
   }
 }

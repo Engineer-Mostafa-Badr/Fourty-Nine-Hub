@@ -448,7 +448,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                               if (controller.globalFeedPagingController
                                   .itemList![index].content!.isEmpty) ...[
                                 InkWell(
-                                    onTap: () => context.push(Routes.LOGIN),
+                                    onTap: () {
+                                      pleaseLoginDialog(context);
+                                      // context.push(Routes.LOGIN);
+                                      },
                                     child: Label(
                                         text: LocaleKeys.showComments.localize))
                               ],
@@ -464,7 +467,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                           '${controller.globalFeedPagingController.itemList?[index].firstComment?.firstName} ${controller.globalFeedPagingController.itemList?[index].firstComment?.lastName}\t\t',
                                       recognizer: TapGestureRecognizer()
                                         ..onTap =
-                                            () => context.push(Routes.LOGIN),
+                                            () {
+                                              pleaseLoginDialog(context);
+                                              // context.push(Routes.LOGIN);
+                                            },
                                       style: Styles.mediumText(
                                         color: context.isDarkMode
                                             ? AppColors.SECONDARY_COLOR
