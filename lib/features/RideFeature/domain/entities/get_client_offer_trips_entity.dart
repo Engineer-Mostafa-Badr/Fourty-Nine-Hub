@@ -3,8 +3,9 @@
 class ClientOfferTripEntity {
   final String? id;
   final String? status;
-  final double? price;
-  final double? newOfferPrice;
+  final num? price;
+  final num? passengers;
+  final num? newOfferPrice;
   final DriverDetailsEntity? driverDetails;
   final TripDetailsEntity? tripDetails;
 
@@ -12,6 +13,7 @@ class ClientOfferTripEntity {
     this.id,
     this.status,
     this.price,
+    this.passengers,
     this.newOfferPrice,
     this.driverDetails,
     this.tripDetails,

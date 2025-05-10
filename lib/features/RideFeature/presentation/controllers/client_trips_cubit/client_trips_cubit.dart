@@ -20,6 +20,7 @@ import '../../../domain/entities/create_no_track_trip_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/get_client_accepted_trips_entity.dart';
 import '../../../domain/entities/get_client_offer_trips_entity.dart';
+import '../../../domain/entities/get_client_past_trips_entity.dart';
 import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../../domain/entities/get_offers_entity.dart';
 import '../../../domain/usecases/accept_non_track_trip_use_case.dart';
@@ -28,6 +29,7 @@ import '../../../domain/usecases/create_non_track_trip_use_case.dart';
 import '../../../domain/usecases/get_client_accepted_untracked_trips_use_case.dart';
 import '../../../domain/usecases/get_client_offer_untracked_trips_use_case.dart';
 import '../../../domain/usecases/get_client_offers_usecase.dart';
+import '../../../domain/usecases/get_client_past_untracked_trips_use_case.dart';
 import '../../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../../domain/usecases/get_loading_offers_usecase.dart';
 import '../../../domain/usecases/make_loading_request_trip_usecase.dart';
@@ -50,6 +52,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
   final GetClientOfferUntrackedTripsUseCase getClientOfferUntrackedTripsUseCase;
   final AcceptNonTrackTripUseCase acceptNonTrackTripUseCase;
   final RefuseNonTrackTripUseCase refuseNonTrackTripUseCase;
+  final GetClientPastUntrackedTripsUseCase getClientPastUntrackedTripsUseCase;
   ClientTripsCubit(
     this.makeNonTrackingRequestTripUsecase,
     this.getClientOffersUseCase,
@@ -57,8 +60,55 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     this._getCitiesUseCase,
     this._getGovernoratesUseCase,
     this.makeLoadingRequestTripUsecase,
-    this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase,
+    this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase,
   ) : super(const ClientTripsState());
+
+
+
+  List<ClientPastTripEntity> clientPastTripsData = [];
+  bool hasMoreClientPastTrips = true;
+  int currentPageClientPastTrips = 1;
+  bool isLoadingMoreClientPastTrips = false;
+
+  void loadInitialClientPastTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    clientPastTripsData.clear();
+    currentPageClientPastTrips = 1;
+    hasMoreClientPastTrips = true;
+    await getClientPastTrips();
+    emit(state.copyWith(status: ClientTripsStates.success));
+  }
+
+  Future<void> getClientPastTrips() async {
+    if (!hasMoreClientPastTrips || isLoadingMoreClientPastTrips) return;
+    isLoadingMoreClientPastTrips = true;
+    emit(state.copyWith(status: ClientTripsStates.loading));
+    final response = await getClientPastUntrackedTripsUseCase(
+        ClientPendingTripParams(page: currentPageClientPastTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMoreClientPastTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: ClientTripsStates.error));
+      },
+          (data) {
+        clientPastTripsData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreClientPastTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: ClientTripsStates.loading));
+
+        } else {
+          currentPageClientPastTrips++;
+        }
+
+        isLoadingMoreClientPastTrips = false;
+        emit(state.copyWith(clientPastTripData: data,));
+      },
+    );
+  }
 
   Future<void> cancelClientTrip(String tripId) async {
     emit(state.copyWith(status: ClientTripsStates.loading));

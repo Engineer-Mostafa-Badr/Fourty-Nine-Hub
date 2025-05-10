@@ -54,6 +54,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statis
 import '../entities/create_no_track_trip_entity.dart';
 import '../entities/get_client_accepted_trips_entity.dart';
 import '../entities/get_client_offer_trips_entity.dart';
+import '../entities/get_client_past_trips_entity.dart';
 import '../entities/get_client_pending_trips_entity.dart';
 import '../entities/get_offers_entity.dart';
 import '../usecases/accept_non_track_trip_use_case.dart';
@@ -127,5 +128,6 @@ abstract class RideRepository {
   Future<Either<Failure, List<ClientPendingTripEntity>>> getClientPendingUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, List<ClientAcceptedTripEntity>>> getClientAcceptedUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferUntrackedTrips({required ClientPendingTripParams params});
+  Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
 
 }

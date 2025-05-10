@@ -8,6 +8,7 @@ class ClientOfferTripModel extends ClientOfferTripEntity {
     super.status,
     super.price,
     super.newOfferPrice,
+    super.passengers,
     super.driverDetails,
     super.tripDetails,
   });
@@ -16,8 +17,10 @@ class ClientOfferTripModel extends ClientOfferTripEntity {
     return ClientOfferTripModel(
       id: json['id'],
       status: json['status'],
-      price: (json['price'] as num?)?.toDouble(),
-      newOfferPrice: (json['newOfferPrice'] as num?)?.toDouble(),
+      price: (json['price'] as num?),
+      newOfferPrice: (json['newOfferPrice'] as num?),
+      passengers: json['passengers']?.toInt(),
+
       driverDetails: json['driverDetails'] != null
           ? DriverDetailsModel.fromJson(json['driverDetails'])
           : null,

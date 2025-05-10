@@ -273,7 +273,8 @@ class ClientPendingWidget extends StatelessWidget {
                               ],
                             ),
                             Label(
-                                text: 'Passenger :10',
+                                text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
+
                                 style: Styles.mediumText())
                           ],
                         ),

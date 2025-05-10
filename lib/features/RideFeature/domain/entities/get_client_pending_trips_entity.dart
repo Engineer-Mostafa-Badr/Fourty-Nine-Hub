@@ -13,6 +13,7 @@ class TripDetailsEntity {
   final String? status;
   final bool? isPremium;
   final num? price;
+  final num? passengers;
   final String? date;
   final String? note;
   final LocationEntity? location;
@@ -24,6 +25,7 @@ class TripDetailsEntity {
     this.status,
     this.isPremium,
     this.price,
+    this.passengers,
     this.date,
     this.note,
     this.location,

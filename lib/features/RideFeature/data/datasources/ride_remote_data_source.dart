@@ -82,6 +82,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/availa
 import '../../domain/entities/create_no_track_trip_entity.dart';
 import '../../domain/entities/get_client_accepted_trips_entity.dart';
 import '../../domain/entities/get_client_offer_trips_entity.dart';
+import '../../domain/entities/get_client_past_trips_entity.dart';
 import '../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/accept_non_track_trip_use_case.dart';
@@ -97,6 +98,7 @@ import '../../../account_taps/my_adds/data/model/click_model.dart';
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../models/get_client_accepted_trips_model.dart';
 import '../models/get_client_offer_trips_model.dart';
+import '../models/get_client_past_trips_model.dart';
 import '../models/get_client_pending_trips_model.dart';
 
 abstract class RideRemoteDataSource {
@@ -219,6 +221,9 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, CreateNonTrackTripEntity>> acceptNonTrackTrip(AcceptNonTrackTripParams params);
 
   Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params);
+
+  Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
+
 
 }
 
@@ -1206,6 +1211,24 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
           (data) {
         final deleteTrip = CreateNonTrackTripModel.fromJson(data);
         return Right(deleteTrip);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ClientPastTripEntity>>> getClientPastUntrackedTrips({required ClientPendingTripParams params}) async{
+    final url =
+        "${EndPoints.getClientPastUntrackedTrips}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['pastTrips'] as List)
+            .map((e) => ClientPastTripModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
       },
     );
   }

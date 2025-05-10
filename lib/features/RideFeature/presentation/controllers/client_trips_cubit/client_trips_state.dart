@@ -51,6 +51,7 @@ class ClientTripsState {
   final List<ClientPendingTripEntity>? clientPendingTripData;
   final List<ClientAcceptedTripEntity>? clientAcceptedTripData;
   final List<ClientOfferTripEntity>? clientOfferTripData;
+  final List<ClientPastTripEntity>? clientPastTripData;
   final String? message;
   final bool showSnackbar;
   const ClientTripsState({
@@ -65,6 +66,7 @@ class ClientTripsState {
     this.showSnackbar = false,
     this.clientAcceptedTripData,
     this.clientOfferTripData,
+    this.clientPastTripData,
   });
   ClientTripsState copyWith({
     ClientTripsStates? status,
@@ -78,6 +80,7 @@ class ClientTripsState {
     List<ClientAcceptedTripEntity>? clientAcceptedTripData,
     bool? showSnackbar,
     List<ClientOfferTripEntity>? clientOfferTripData,
+    List<ClientPastTripEntity>? clientPastTripData,
   }) {
     return ClientTripsState(
       status: status ?? this.status,
@@ -91,6 +94,7 @@ class ClientTripsState {
       showSnackbar: showSnackbar ?? this.showSnackbar,
       clientAcceptedTripData: clientAcceptedTripData ?? this.clientAcceptedTripData,
       clientOfferTripData: clientOfferTripData ?? this.clientOfferTripData,
+      clientPastTripData: clientPastTripData ?? this.clientPastTripData,
     );
   }
 }

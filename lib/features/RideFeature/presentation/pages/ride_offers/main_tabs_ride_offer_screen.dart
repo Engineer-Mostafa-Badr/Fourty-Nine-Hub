@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/past_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
@@ -26,7 +27,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
     LocaleKeys.offers.localize,
     LocaleKeys.accepted.localize,
     LocaleKeys.pending.localize,
-    // LocaleKeys.past.localize
+    LocaleKeys.past.localize
   ];
 
   @override
@@ -42,6 +43,10 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
   void _loadInitialClientOfferTrips() {
     print("✅ loadInitialClientOfferTrips called");
     context.read<ClientTripsCubit>()..loadInitialClientOfferTrips();
+  }
+  void _loadInitialClientPastTrips() {
+    print("✅ loadInitialClientPastTrips called");
+    context.read<ClientTripsCubit>()..loadInitialClientPastTrips();
   }
 
   @override
@@ -66,7 +71,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
           bottom: BorderSide(color: Colors.transparent, width: 0),
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(30),
           child: _buildTabBar(),
         ),
       ),
@@ -74,11 +79,11 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
-          const OfferRideOfferScreen(),
-          const AcceptRideOfferScreen(),
-          const PendingRideOfferScreen(),
-          // _buildCenteredContainer("Completed Tab"),
+        children: const [
+          OfferRideOfferScreen(),
+          AcceptRideOfferScreen(),
+          PendingRideOfferScreen(),
+          PastRideOfferScreen(),
         ],
       ),
     );
@@ -102,6 +107,9 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
           }
           if (index == 0) {
             _loadInitialClientOfferTrips();
+          }
+          if (index == 3) {
+            _loadInitialClientPastTrips();
           }
           setState(() {});
         },
@@ -135,18 +143,5 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
     );
   }
 
-  Widget _buildCenteredContainer(String text) {
-    return Center(
-      child: Container(
-        width: 200,
-        height: 200,
-        color: Colors.grey,
-        alignment: Alignment.center,
-        child: Text(
-          text,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-        ),
-      ),
-    );
-  }
+
 }

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_pric
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_offer_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_past_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_pending_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
@@ -398,5 +399,10 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params) {
     return rideRemoteDataSource.refuseNonTrackTrip( params);
+  }
+
+  @override
+  Future<Either<Failure, List<ClientPastTripEntity>>> getClientPastUntrackedTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientPastUntrackedTrips( params: params);
   }
 }

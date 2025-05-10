@@ -141,6 +141,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
     });
   }
+
   Future<void> getAvailableTrips(BuildContext context) async {
     if (!hasMoreData || isLoadingMore) return;
     emit(state.copyWith(status: DashboardsStates.loadingAvailable));

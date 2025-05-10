@@ -27,6 +27,7 @@ class TripDetailsModel extends TripDetailsEntity {
     String? status,
     bool? isPremium,
     num? price,
+    num? passengers,
     String? date,
     String? note,
     LocationModel? location,
@@ -37,6 +38,7 @@ class TripDetailsModel extends TripDetailsEntity {
     status: status,
     isPremium: isPremium,
     price: price,
+    passengers: passengers,
     date: date,
     note: note,
     location: location,
@@ -50,6 +52,8 @@ class TripDetailsModel extends TripDetailsEntity {
       status: json['status'],
       isPremium: json['isPremium'],
       price: json['price'],
+      passengers: json['passengers']?.toInt(),
+
       date: json['date'],
       note: json['note'],
       location: json['location'] != null

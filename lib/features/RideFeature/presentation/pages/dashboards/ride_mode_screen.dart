@@ -47,7 +47,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
       // if (!dashboardCubit.isClosed) {
         widget.params.isSocket == true
             ? [dashboardCubit.loadAvailableRideTrips(context),dashboardCubit.listenToUpdateTripAutoAccept(),dashboardCubit.listenToUpdateTripPrice(),dashboardCubit.listenToAcceptOffer(),dashboardCubit.listenToNewTrip(),dashboardCubit.listenToRemoveTrip()]
-            : dashboardCubit.getAvailableTrips(context);
+            : null;
         dashboardCubit.getPastTrips(context,
             widget.params.isSocket == true ? "tracking" : 'non-tracking');
         dashboardCubit.getSettings(context);
@@ -106,7 +106,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             children: [
                               // const Icon(Icons.arrow_back),
                               Text(
-                                  widget.params.isSocket == true
+                                 widget.params.modeType == "ride"
                                       ? LocaleKeys.rideMode.tr()
                                       // : widget.params.modeType == 'truk'?
                                       : LocaleKeys.trukMode.tr(),

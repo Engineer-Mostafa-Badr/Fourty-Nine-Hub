@@ -673,7 +673,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     } else {
                       context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
-                              modeType: 'ride',
+                              modeType: 'truk',
                               isSocket: driverInfo?.driverType == 'socket'
                                   ? true
                                   : false));

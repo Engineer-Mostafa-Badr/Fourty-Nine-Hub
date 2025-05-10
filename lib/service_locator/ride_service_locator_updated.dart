@@ -45,6 +45,7 @@ import '../features/RideFeature/domain/usecases/create_non_track_trip_use_case.d
 import '../features/RideFeature/domain/usecases/get_client_accepted_untracked_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_client_offer_untracked_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_client_offers_usecase.dart';
+import '../features/RideFeature/domain/usecases/get_client_past_untracked_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_loading_offers_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
@@ -153,6 +154,8 @@ class RideServiceLocatorUpdated {
         AcceptNonTrackTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RefuseNonTrackTripUseCase>(() =>
         RefuseNonTrackTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetClientPastUntrackedTripsUseCase>(() =>
+        GetClientPastUntrackedTripsUseCase(serviceLocator()));
 
 
     // ---------------------------------- cubits ----------------------------------
@@ -208,6 +211,7 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
