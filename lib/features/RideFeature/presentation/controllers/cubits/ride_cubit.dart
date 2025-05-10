@@ -2228,7 +2228,7 @@ class RideCubit extends Cubit<RideState> {
   }
 
   ///record trip
-  final record = Record();
+  final record = AudioRecorder();
 
   // Start recording
   Future<void> startRecord() async {
@@ -2239,7 +2239,7 @@ class RideCubit extends Cubit<RideState> {
         Directory tempDir = await getTemporaryDirectory();
         String tempPath =
             '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.wav';
-        await record.start(
+        await record.start(const RecordConfig(),
           path: tempPath,
         );
         print("object");

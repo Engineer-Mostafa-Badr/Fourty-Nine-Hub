@@ -45,7 +45,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="fourtyninehub"
         android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        >
         <meta-data
             android:name="com.mapbox.token"
             android:value="sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg" />
