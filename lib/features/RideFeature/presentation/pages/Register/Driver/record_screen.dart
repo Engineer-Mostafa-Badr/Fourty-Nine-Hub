@@ -13,7 +13,7 @@ class VoiceNoteRecorder extends StatefulWidget {
 }
 
 class _VoiceNoteRecorderState extends State<VoiceNoteRecorder> {
-  final _record = Record();
+  final _record = AudioRecorder();
   bool _isRecording = false;
   String? _audioPath;
 
@@ -25,11 +25,9 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder> {
       final uniqueId = const Uuid().v4();
       _audioPath = '${directory.path}/voice_note_$uniqueId.m4a';
 
-      await _record.start(
-        path: _audioPath,
-        encoder: AudioEncoder.aacHe,
-        bitRate: 128000,
-        samplingRate: 44100,
+ 
+        
+        await _record.start(const RecordConfig(),path: _audioPath!,
       );
 
       setState(() => _isRecording = true);

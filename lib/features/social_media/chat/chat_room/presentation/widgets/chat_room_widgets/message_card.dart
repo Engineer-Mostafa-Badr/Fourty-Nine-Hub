@@ -30,7 +30,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swipe_to/swipe_to.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+// import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
 import '../../../../../../../core/utils/custom_show_dialog.dart';
@@ -2221,7 +2222,7 @@ class TowMediaCard extends StatelessWidget {
 }
 
 generateThumbnaill({required String videoUrl}) async {
-  return await VideoThumbnail.thumbnailData(
+  return await FlutterVideoThumbnailPlus.thumbnailData(
     video: videoUrl,
   );
 }

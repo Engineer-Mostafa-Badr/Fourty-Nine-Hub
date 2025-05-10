@@ -13,7 +13,7 @@ import 'package:record/record.dart';
 
 class RecordRideCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
-  final record = Record();
+  final record = AudioRecorder();
 
   RecordRideCubit({required this.repository}) : super(RiderInitial());
 
@@ -27,7 +27,7 @@ class RecordRideCubit extends Cubit<RiderState> {
         Directory tempDir = await getTemporaryDirectory();
         String tempPath =
             '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.wav';
-        await record.start(
+        await record.start(const RecordConfig(),
           path: tempPath,
         );
       } else {

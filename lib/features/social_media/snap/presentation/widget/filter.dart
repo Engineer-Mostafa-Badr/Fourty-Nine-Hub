@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:deepar_flutter/deepar_flutter.dart';
+import 'package:deepar_flutter_plus/deepar_flutter_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,7 +33,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late DeepArController deepArController;
+  late DeepArControllerPlus deepArController;
   final GlobalKey _key = GlobalKey();
   File? _selectedImage;
 
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    deepArController = DeepArController();
+    deepArController = DeepArControllerPlus();
     _initializeDeepArController();
   }
 
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
       height: MediaQuery.of(context).size.height * 0.78,
       child: Transform.scale(
         scale: 1.6,
-        child: DeepArPreview(deepArController),
+        child: DeepArPreviewPlus(deepArController),
       ),
     ),
   );

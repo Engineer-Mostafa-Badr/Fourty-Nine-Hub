@@ -7,12 +7,13 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/count_down.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/custom_circular_percent_indicator.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+// import 'package:percent_indicator/percent_indicator.dart';
 
 class FindMyProfileScreen extends StatefulWidget {
   const FindMyProfileScreen({super.key});
@@ -55,7 +56,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
               child: Image.asset(
             Assets.shield,
             height: 50.h,
-                color: context.isDarkMode?null:Colors.black54,
+            color: context.isDarkMode ? null : Colors.black54,
           )),
           const Sizer(
             width: 30,
@@ -64,7 +65,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
               child: Image.asset(
             Assets.setting,
             height: 50.h,
-                color: context.isDarkMode?null:Colors.black54,
+            color: context.isDarkMode ? null : Colors.black54,
           )),
           const Sizer(),
         ],
@@ -259,7 +260,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
-          color: AppColors.getFillColor(context),
+        color: AppColors.getFillColor(context),
       ),
       child: Center(
         child: Column(
@@ -269,18 +270,16 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(bottom: 20.h),
-                  child: CircularPercentIndicator(
+                  child: CustomCircularProgressIndicator(
                     radius: 140.0.h,
                     lineWidth: 6.0,
                     startAngle: 180,
-                    linearGradient: LinearGradient(
-                        colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0.4, 0.8]),
                     percent: progress,
                     backgroundColor: Colors.grey.shade800,
-                    circularStrokeCap: CircularStrokeCap.round,
+                    gradientColors: [
+                      AppColors.getTextColor(context),
+                      AppColors.getFillColor(context),
+                    ],
                     center: CircleAvatar(
                       radius: 125.h,
                       backgroundImage: AssetImage(Assets.personalImage),
@@ -293,7 +292,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                   child: Stack(
                     children: [
                       ClickableWidget(
-                        onTap: ()=>context.push(Routes.EditProfileTinder),
+                        onTap: () => context.push(Routes.EditProfileTinder),
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
@@ -367,7 +366,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                     color: AppColors.getTextColor(context),
                     fontWeight: FontWeight.bold,
                     fontSize: 50.sp,
-                    shadows:  [
+                    shadows: [
                       Shadow(
                         offset: Offset(1.0, 1.0),
                         blurRadius: 4.0,
