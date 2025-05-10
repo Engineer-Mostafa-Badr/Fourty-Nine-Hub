@@ -96,7 +96,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         },
 
         child: state.isLoading
-            ? const Center(child: CircularProgressIndicator.adaptive())
+            ? const Center(child: CircularProgressIndicator())
             : _buildLoggedInView(state),
       ),
     );
@@ -107,8 +107,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       padding: EdgeInsets.all(10.w),
       child: SingleChildScrollView(
         child: Column(
-          // controller: _scrollController,
-          // shrinkWrap: true,
           children: [
             const MealBanner(),
             _buildRegisterRestaurantPrompt(state),
