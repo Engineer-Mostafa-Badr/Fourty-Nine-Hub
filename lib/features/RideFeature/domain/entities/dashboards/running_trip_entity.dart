@@ -15,7 +15,9 @@ class RunningTripEntity {
   final String clientName;
   final String clientGender;
   final String clientPicture;
+  final int distance;
+  final int duration;
 
-  RunningTripEntity({required this.tripId, this.status, this.startLocation, this.targetLocation, this.wayPointOne, this.wayPointTwo, required this.polyline, required this.subCategoryId, required this.subCategoryNameAr, required this.subCategoryNameEn, required this.subCategoryPicture, required this.clientName, required this.clientGender, required this.clientPicture});
+  RunningTripEntity({required this.tripId,required this.distance,required this.duration, this.status, this.startLocation, this.targetLocation, this.wayPointOne, this.wayPointTwo, required this.polyline, required this.subCategoryId, required this.subCategoryNameAr, required this.subCategoryNameEn, required this.subCategoryPicture, required this.clientName, required this.clientGender, required this.clientPicture});
 
 }

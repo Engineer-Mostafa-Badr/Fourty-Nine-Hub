@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/tr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -48,6 +49,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params);
+  Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
   Future<Either<Failure, bool>> createNewOfferNonSocket(
       CreateNewOfferDashboardUsecaseParam params);
   Future<Either<Failure, bool>> createDriverRating(
@@ -392,6 +394,20 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     try {
       final response = await _apiConsumer.post(
           EndPoints.createDriverRating, data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params) async {
+    try {
+      final response = await _apiConsumer.post(
+          EndPoints.emergencySupport, data: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);

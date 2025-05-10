@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/tr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 
 import '../../../../core/error/failure.dart';
@@ -31,6 +32,7 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> goingToClient(String id);
    Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams id);
    Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
+   Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
    Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);

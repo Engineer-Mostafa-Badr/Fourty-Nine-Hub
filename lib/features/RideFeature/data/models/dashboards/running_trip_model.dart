@@ -18,6 +18,8 @@ class RunningTripModel extends RunningTripEntity {
     required super.clientName,
     required super.clientGender,
     required super.clientPicture,
+    required super.duration,
+    required super.distance,
   });
 
   factory RunningTripModel.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,8 @@ class RunningTripModel extends RunningTripEntity {
 
     return RunningTripModel(
       tripId: tripDetails['id'] ?? 0,
+      duration: tripDetails['duration'] ?? 0,
+      distance: tripDetails['distance'] ?? 0,
       status: tripDetails['status'] ?? '',
       startLocation:location['start'] == null ? null : TripLocationModel.fromJson(location['start']),
       targetLocation: location['target'] == null ? null : TripLocationModel.fromJson(location['target']),

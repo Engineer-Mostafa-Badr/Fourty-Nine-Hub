@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
@@ -13,8 +15,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 
 class BuildGoToClientSheet extends StatelessWidget {
-  const BuildGoToClientSheet({super.key, this.onGoingToClient});
+  const BuildGoToClientSheet({super.key, this.onGoingToClient, this.activeTrip});
   final GestureTapCallback? onGoingToClient;
+  final RunningTripEntity? activeTrip;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +40,9 @@ class BuildGoToClientSheet extends StatelessWidget {
               child: Column(
                 children: [
                   ActionButtonsWidget(
-                    driverImageUrl: '',
+                    driverImageUrl: activeTrip?.clientPicture??'',
                     driverRating: 12.2,
-                    driverName: 'Driver Name',
+                    driverName: activeTrip?.clientName??'',
                     onContactDriver: () {
                       context.push(Routes.ratingDriverScreen);
                     },
@@ -102,14 +105,14 @@ class BuildGoToClientSheet extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(12)),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.info_outline,
                               color: Colors.black54),
                           SizedBox(width: 5),
                           Text(
-                            "Travel time: ~14 min. Distance: 6.58 Km.",
+                            "Travel time: ~${(activeTrip?.duration??0)/60} min. Distance: ${((activeTrip?.distance??0) / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}.",
                             style: TextStyle(
                                 color: Colors.black54, fontSize: 14),
                           ),

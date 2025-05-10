@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_complete_trip_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_rate_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_go_to_client_sheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_safety_sheet.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
@@ -223,7 +224,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             },),
                             if(state.tripStatus==TripState.accepted.name) BuildGoToClientSheet(onGoingToClient:(){
                               cubit.goingToClient(context, state.activeTrip?.tripId??'');
-                            }),
+                            },activeTrip: state.activeTrip,),
                             if(state.tripStatus==TripState.inLocation.name) BuildDriverOtpSheet(
                               onPressed: (String otp) {
                                 cubit.startDriverTrip(context, state.activeTrip?.tripId??'',otp);
@@ -245,6 +246,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               print("message $message ||| rate $rate");
                               cubit.rateTheClient(context: context, tripId: state.activeTrip?.tripId??'', comment: message, rate: rate);
                             },),
+                            // BuildSafetySheet(),
                           ],
                         ))
                       // Past Trips

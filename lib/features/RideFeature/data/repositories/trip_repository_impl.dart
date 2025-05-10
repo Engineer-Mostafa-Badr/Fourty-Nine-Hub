@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 
@@ -123,6 +124,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params) async {
     return await remoteDataSource.driverRateClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params) async {
+    return await remoteDataSource.emergencySupport(params);
   }
 
 }

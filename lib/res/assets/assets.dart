@@ -14,6 +14,15 @@ abstract class Assets {
   static String icon = 'assets/images/icon.png';
   static String logoHub = 'assets/icons/logoHub.png';
   static String logoWithoutText = 'assets/icons/logoWithoutText.png';
+  static String supportIcon = 'assets/icons/support_icon.svg';
+  static String callEmergencyIcon = 'assets/icons/call_emergency_icon.svg';
+  static String beforeRide = 'assets/icons/before_ride.svg';
+  static String driverIdentityIcon = 'assets/icons/driver_identity_icon.svg';
+  static String safetyRideIcon = 'assets/icons/safety_ride_icon.svg';
+  static String emergencyChatIcon = 'assets/icons/emergency_chat_icon.svg';
+  static String checkCarIcon = 'assets/icons/check_car_icon.svg';
+  static String safeCommunications = 'assets/icons/safe_communications.svg';
+  static String emergencyContactsIcon = 'assets/icons/emergency_contacts_icon.svg';
   static String tube = 'assets/images/tube.png';
   static String joinTrip = 'assets/images/join_trip.png';
   static String tube1 = 'assets/images/tube1.png';
