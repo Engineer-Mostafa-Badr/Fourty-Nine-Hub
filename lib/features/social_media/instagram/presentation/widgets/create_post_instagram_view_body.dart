@@ -138,7 +138,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           bool isGalleryReelEmpty = context
                               .read<CreatePostInstagramCubit>()
                               .state
-                              .selectedGalleryPost
+                              .selectedGalleryReels
                               .isEmpty;
                           if (isGalleryReelEmpty) {
                             showErrorMessage(
@@ -405,7 +405,8 @@ class _ReelBodyCreatePostInstagramState
             bottom: 6,
             end: 5,
             child: Label(
-              text: _formatDuration(assets.duration),
+              text:
+                  assets.duration == 0 ? "" : _formatDuration(assets.duration),
               style: Styles.smallText(
                 fontSize: 24,
                 color:

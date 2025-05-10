@@ -20,6 +20,9 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../social_posts/presentation/pages/Social_home.dart';
+
 class CreatePostSecondPageInstagramViewBody extends StatefulWidget {
   const CreatePostSecondPageInstagramViewBody({
     super.key,
@@ -189,6 +192,7 @@ class _CreatePostSecondPageInstagramViewBodyState
                 context.read<CreatePostInstagramCubit>().createPost(
                       caption: captionController.text,
                     );
+                context.go(Routes.SOCIAL,extra: SocialParams(userId: UserCubit.to.state.data?.id ?? '', index: 1));
               }
             },
           ),

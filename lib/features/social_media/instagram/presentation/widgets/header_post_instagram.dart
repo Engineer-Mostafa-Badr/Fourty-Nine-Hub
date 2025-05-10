@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/follow_button_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_buttom_sheet_without_mention_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_user_info_with_mention_post_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/error/failure.dart';
 import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
 
 class HeaderPostInstagram extends StatelessWidget {
@@ -18,7 +21,8 @@ class HeaderPostInstagram extends StatelessWidget {
     this.songName,
     required this.isReel,
     required this.userId,
-    required this.isFollow, required this.postId,
+    required this.isFollow,
+    required this.postId,
   });
 
   final List<InstagramPostUserTagEntity> userTags;
@@ -54,19 +58,35 @@ class HeaderPostInstagram extends StatelessWidget {
                     userId: userId,
                   ),
                   const Spacer(),
-                  FollowButtonInstagram(
-                    isReel: isReel,
-                    isFollow: isFollow,
-                    onPressed: () {
-                      if (isFollow) {
-                        context
-                            .read<ProfileInstagramCubit>()
-                            .unFollowUser(userId);
-                      } else {
-                        context
-                            .read<ProfileInstagramCubit>()
-                            .followUser(userId);
+                  if(userId!= context.read<UserCubit>().state.data?.id)
+                  BlocConsumer<ProfileInstagramCubit, ProfileInstagramState>(
+                    listener: (context, state) {
+                      if (state.addFollowStatus == LoadingStatus.failure) {
+                        showErrorMessage(
+                          context,
+                          getFailureMessage(
+                            state.addFollowFailure!,
+                            context,
+                          ),
+                        );
                       }
+                    },
+                    builder: (context, state) {
+                      return FollowButtonInstagram(
+                        isReel: isReel,
+                        isFollow: isFollow,
+                        onPressed: () {
+                          if (isFollow) {
+                            context
+                                .read<ProfileInstagramCubit>()
+                                .unFollowUser(userId);
+                          } else {
+                            context
+                                .read<ProfileInstagramCubit>()
+                                .followUser(userId);
+                          }
+                        },
+                      );
                     },
                   ),
                   GestureDetector(
@@ -77,7 +97,7 @@ class HeaderPostInstagram extends StatelessWidget {
                         builder: (context) =>
                             InstagramPostButtomSheetWithoutMentionWidget(
                           userId: userId,
-                              postId: postId,
+                          postId: postId,
                         ),
                       );
                     },
