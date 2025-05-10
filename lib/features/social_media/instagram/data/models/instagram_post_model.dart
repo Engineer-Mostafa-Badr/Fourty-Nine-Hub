@@ -21,7 +21,7 @@ class InstagramPostModel extends InstagramPostEntity {
     required super.hashtags,
     required super.favoritesCounter,
     required super.commentsCounter,
-    required super.shearsCounter,
+    required super.shareCounter,
     required super.likesCounter,
     required super.firstName,
     required super.lastName,
@@ -62,7 +62,7 @@ class InstagramPostModel extends InstagramPostEntity {
           : [],
       favoritesCounter: json['favoritesCounter'] ?? 0, // Default to 0 if null
       commentsCounter: json['commentsCounter'] ?? 0, // Default to 0 if null
-      shearsCounter: json['shearsCounter'] ?? 0, // Default to 0 if null
+      shareCounter: json['shareCounter'] ?? 0, // Default to 0 if null
       likesCounter: json['likesCounter'] ?? 0, // Default to 0 if null
       createdAt: json['createdAt']?.toString() ?? '', // Default to empty string if null
       countOfStory: json['owner']?['countOfStory'] ?? 0, // Default to 0 if null

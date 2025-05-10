@@ -829,6 +829,8 @@ class EndPoints {
 
   static String createRequestPostInstagram = '/inst/posts/create-request';
 
+  static String postConfirmWebhook = '/inst/posts/confirm-webhook';
+
   static String getProfileInstagram(
           {required String userId, required int page, required int limit}) =>
       '/inst/profiles/$userId?page=$page&limit=$limit';

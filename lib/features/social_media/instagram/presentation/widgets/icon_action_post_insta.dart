@@ -90,7 +90,7 @@ class IconsActionPostInsta extends StatelessWidget {
               width: 30,
             ),
             value: FormatNumbers().formatNumber(
-                instagramPostEntity.shearsCounter,
+                instagramPostEntity.shareCounter,
                 useArabicNumerals: context.isArabic),
             onPressed: () {},
           ),

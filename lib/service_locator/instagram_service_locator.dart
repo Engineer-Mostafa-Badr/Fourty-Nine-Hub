@@ -33,6 +33,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
 import '../features/social_media/instagram/domain/usecases/remove_save_post_instagram_use_case.dart';
 import '../features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 import '../features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
@@ -117,6 +118,11 @@ class InstagramServiceLocator {
               serviceLocator<InstagramRepo>(),
             ));
 
+    serviceLocator.registerLazySingleton<PostConfirmWebhookUseCase>(
+        () => PostConfirmWebhookUseCase(
+              serviceLocator<InstagramRepo>(),
+            ));
+
     serviceLocator.registerLazySingleton<GetInstagramProfileUseCase>(
         () => GetInstagramProfileUseCase(
               serviceLocator<InstagramRepo>(),
@@ -172,6 +178,7 @@ class InstagramServiceLocator {
     serviceLocator.registerFactory<CreatePostInstagramCubit>(
       () => CreatePostInstagramCubit(
         serviceLocator<CreateRequestPostInstagramUseCase>(),
+        serviceLocator<PostConfirmWebhookUseCase>(),
       ),
     );
 

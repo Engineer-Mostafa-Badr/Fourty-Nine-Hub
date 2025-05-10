@@ -23,13 +23,34 @@ class InstgramImagesPostWidget extends StatefulWidget {
 
 class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     if (widget.instagramPostEntity.medias.length == 1) {
-      return ImagePostWidget(
-        // imageUrl: widget.images.first,
-        currentIndex: 0,
-        instagramPostEntity: widget.instagramPostEntity,
+      return Column(
+        children: [
+          if (MediaHelper.getMediaTypeFromExtension(
+                  widget.instagramPostEntity.medias[0]) !=
+              MediaType.video)
+            HeaderPostInstagram(
+              imageUrl: widget.instagramPostEntity.profilePictureUrl ?? '',
+              userName:
+                  '${widget.instagramPostEntity.firstName} ${widget.instagramPostEntity.lastName}',
+              userTags: widget.instagramPostEntity.userTags,
+              isReel: MediaHelper.getMediaTypeFromExtension(
+                      widget.instagramPostEntity.medias[0]) ==
+                  MediaType.video,
+              country: widget.instagramPostEntity.locationName,
+              userId: widget.instagramPostEntity.userId,
+              postId: widget.instagramPostEntity.id,
+              isFollow: widget.instagramPostEntity.isFollow,
+            ),
+          ImagePostWidget(
+            // imageUrl: widget.images.first,
+            currentIndex: 0,
+            instagramPostEntity: widget.instagramPostEntity,
+          ),
+        ],
       );
     } else {
       return Column(
@@ -44,26 +65,28 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
               },
               itemCount: widget.instagramPostEntity.medias.length,
               itemBuilder: (context, index) {
+                print(MediaHelper.getMediaTypeFromExtension(
+                    widget.instagramPostEntity.medias[index]));
                 return Column(
                   children: [
-                    if ((MediaHelper.getMediaTypeFromExtension(
-                        widget.instagramPostEntity.medias[index])) !=
+                    if (MediaHelper.getMediaTypeFromExtension(
+                            widget.instagramPostEntity.medias[index]) !=
                         MediaType.video)
                       HeaderPostInstagram(
-                        imageUrl: widget.instagramPostEntity.profilePictureUrl ?? '',
-                        userName: '${widget.instagramPostEntity.firstName} ${widget.instagramPostEntity.lastName}',
+                        imageUrl:
+                            widget.instagramPostEntity.profilePictureUrl ?? '',
+                        userName:
+                            '${widget.instagramPostEntity.firstName} ${widget.instagramPostEntity.lastName}',
                         userTags: widget.instagramPostEntity.userTags,
-                        isReel: (MediaHelper.getMediaTypeFromExtension(
-                            widget.instagramPostEntity.medias[index])) ==
+                        isReel: MediaHelper.getMediaTypeFromExtension(
+                                widget.instagramPostEntity.medias[index]) ==
                             MediaType.video,
                         country: widget.instagramPostEntity.locationName,
                         userId: widget.instagramPostEntity.userId,
                         postId: widget.instagramPostEntity.id,
                         isFollow: widget.instagramPostEntity.isFollow,
                       ),
-                    const SizedBox(
-                      height: 5,
-                    ),
+                    const SizedBox(height: 5),
                     ImagePostWidget(
                       currentIndex: index,
                       instagramPostEntity: widget.instagramPostEntity,
@@ -73,9 +96,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
               },
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

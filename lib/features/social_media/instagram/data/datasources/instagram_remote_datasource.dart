@@ -35,6 +35,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
@@ -108,6 +109,8 @@ abstract class InstagramRemoteDataSource {
 
   Future<Either<Failure, bool>> removeSavePostInstagram(
       SavePostInstagramParams params);
+
+  Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params);
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -603,6 +606,31 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
           return Left(l);
         },
         (data) {
+          return const Right(true);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params) async {
+    final response = await _apiConsumer.put(
+      EndPoints.postConfirmWebhook,
+      data: {
+        "mediaIds": params.mediaIds
+      }
+    );
+    try {
+      return response.fold(
+            (l) {
+          return Left(l);
+        },
+            (data) {
           return const Right(true);
         },
       );
