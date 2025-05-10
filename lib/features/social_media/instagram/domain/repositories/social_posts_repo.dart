@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/unfollow_user_instagram_use_case.dart';
@@ -86,4 +87,6 @@ abstract class InstagramRepo {
   Future<Either<Failure, bool>> savePostInstagram(SavePostInstagramParams params) ;
 
   Future<Either<Failure, bool>> removeSavePostInstagram(SavePostInstagramParams params);
+
+  Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params);
 }

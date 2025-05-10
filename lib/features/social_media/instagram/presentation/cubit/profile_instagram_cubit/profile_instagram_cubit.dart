@@ -32,9 +32,9 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
   // يمكن استدعاء هذه الدالة لتحميل كل البيانات مرة واحدة
   Future<void> getUserProfile({required String userId}) async {
-    fetchProfile(userId);
-    fetchReels(userId);
-    fetchSuggestFollow();
+   await fetchProfile(userId);
+   await fetchReels(userId);
+   await fetchSuggestFollow();
   }
 
   // تحميل ملف الشخصية فقط

@@ -1290,8 +1290,8 @@ class AppPages {
                 name: Routes.INSTAGRAMPROFILE,
                 builder: (context, state) {
                   final String? id = state.extra as String?;
-                  return BlocProvider(
-                    create: (_) => serviceLocator<ProfileInstagramCubit>()
+                  return BlocProvider.value(
+                    value: serviceLocator<ProfileInstagramCubit>()
                       ..getUserProfile(userId: id ?? ''),
                     child: ProfileInstagramView(
                       userId: id ?? '',

@@ -80,7 +80,7 @@ class SinglePostInstagramViewBody extends StatelessWidget {
       instagramPostEntity: InstagramPostEntity(
         id: post.id,
         commentsCounter: post.commentsCounter,
-        shearsCounter: post.shearsCounter,
+        shareCounter: post.shearsCounter,
         createdAt: DateTime.now().toString(), // post.createdAt,
         content: post.content,
         countOfStory: post.owner.hasStory,

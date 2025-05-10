@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -11,13 +12,17 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/cr
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import '../../../domain/usecases/post_confirm_webhook_use_case.dart';
+
 part 'create_post_instagram_state.dart';
 
 class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
-  CreatePostInstagramCubit(this.createPostInstagramUseCase)
+  CreatePostInstagramCubit(
+      this.createPostInstagramUseCase, this.postConfirmWebhookUseCase)
       : super(const CreatePostInstagramState());
 
   final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
+  final PostConfirmWebhookUseCase postConfirmWebhookUseCase;
 
   // Future<File?>? selectedImage;
   List<CteatePostTypeInstagram> postTypes = CteatePostTypeInstagram.postTypes;
@@ -106,7 +111,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
 
     // الحصول على جميع الفيديوهات من الجهاز
     final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
-      type: RequestType.video,
+      type: RequestType.all,
       onlyAll: true,
     );
 
@@ -152,23 +157,98 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   }
 
   Future<void> createPost({required String caption}) async {
-    final List<CreatePostRequestEntity> createPostRequests =
-        await createRequestPost(CreatePostRequestInstagramParams(
-            content: caption,
-            media: await Future.wait(
-                state.selectedGalleryPost.map((AssetEntity e) async {
-              final num size = await _getAssetFileSize(e);
-              return MediaCreatePostInstagramParams(
-                itemId: state.selectedGalleryPost.indexOf(e).toString(),
-                type: "image",
-                size: size,
-              );
-            }).toList())));
+    List<AssetEntity> uploadMedia=[];
+    if(state.selectedGalleryPost.isNotEmpty){
+      uploadMedia.addAll(state.selectedGalleryPost);
+    }else if(state.selectedGalleryReels.isNotEmpty){
+      uploadMedia.addAll(state.selectedGalleryReels);
+    }
+    await createRequestPost(
+      CreatePostRequestInstagramParams(
+        content: caption,
+        media: await Future.wait(
+          uploadMedia.map((AssetEntity e) async {
+            final num size = await _getAssetFileSize(e);
+            return MediaCreatePostInstagramParams(
+              itemId: (uploadMedia.indexOf(e)+1).toString(),
+              type: e.mimeType ?? '',
+              size: size,
+            );
+          }).toList(),
+        ),
+      ),
+      await Future.wait(
+        uploadMedia.map((AssetEntity e) async {
+          final file = await e.file;
+          return file?.path ?? '';
+        }).toList(),
+      ),
+    );
   }
 
   Future<List<CreatePostRequestEntity>> createRequestPost(
-      CreatePostRequestInstagramParams params) async {
+      CreatePostRequestInstagramParams params, List<String> path) async {
     final result = await createPostInstagramUseCase.call(params);
+    result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            status: CreatePostInstagramStates.failure,
+            failure: failure,
+          ),
+        );
+        return [];
+      },
+      (data) async {
+        List<String> mediaIds = [];
+        for (int i = 0; i < data.length; i++) {
+          await uploadMedia(signedUrl: data[i].signedUrl, path: path[i]);
+          mediaIds.add(data[i].mediaHolderId);
+        }
+        await postConfirmWebhook(mediaIds: mediaIds);
+        return data;
+      },
+    );
+    return [];
+  }
+
+  Future<void> uploadMedia({
+    required String signedUrl,
+    required String path,
+  }) async {
+    final dio = Dio();
+    final file = File(path);
+
+    try {
+      final response = await dio.put(
+        signedUrl,
+        data: file.openRead(), // stream the file
+        options: Options(
+          headers: {
+            HttpHeaders.contentLengthHeader: await file.length(),
+            // required
+            HttpHeaders.contentTypeHeader: 'application/octet-stream',
+            // or the actual MIME type
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print('Upload successful');
+      } else {
+        print('Upload failed: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Upload error: $e');
+    }
+  }
+
+  Future<void> postConfirmWebhook({required List<String> mediaIds}) async {
+    final result = await postConfirmWebhookUseCase.call(
+      PostConfirmWebhookParams(
+        mediaIds: mediaIds,
+      ),
+    );
     result.fold(
       (failure) {
         emit(
@@ -183,7 +263,6 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
         return data;
       },
     );
-    return [];
   }
 
   // Future<void> _uploadMedia() async {
@@ -564,15 +643,17 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
       page: page,
       size: pageSize,
     );
-    for (var asset in media) {
-      if (asset.type == AssetType.image) {
-        final file = await asset.file;
-        if (file != null) {
-          assets.add(asset);
-          // _file = path[0];
-        }
-      }
-    }
+    assets = media;
+    // for (var asset in media) {
+    //   final file = await asset.file;
+    //   if (file != null) {
+    //     assets.add(asset);
+    //     // _file = path[0];
+    //   }
+      // if (asset.type == AssetType.image) {
+      //
+      // }
+    // }
     return assets;
     // final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
     //   type: RequestType.image,
@@ -615,6 +696,7 @@ class CteatePostTypeInstagram {
     required this.title,
     required this.index,
   });
+
   static List<CteatePostTypeInstagram> postTypes = [
     CteatePostTypeInstagram(
       postType: PostType.post,
