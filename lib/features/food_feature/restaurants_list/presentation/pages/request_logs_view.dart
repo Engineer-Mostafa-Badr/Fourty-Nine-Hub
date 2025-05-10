@@ -21,7 +21,8 @@ import '../cubit/restaurants_list_cubit.dart';
 import 'log_details_screen.dart';
 
 class RestaurantRequestLogsScreen extends StatefulWidget {
-  const  RestaurantRequestLogsScreen({super.key, this.onClose});
+  const RestaurantRequestLogsScreen({super.key, this.onClose});
+
   final VoidCallback? onClose;
 
   @override
@@ -54,58 +55,65 @@ class _RestaurantRequestLogsScreenState
     super.dispose();
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
-          final controller = context.read<RestaurantsCubit>();
-          if (state.isLoading) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
-              child: const Center(
-                child: CircularProgressIndicator(),
+      final controller = context.read<RestaurantsCubit>();
+      if (state.isLoading) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height *
+              .65, // Make sure it takes up full height
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+      if (controller.reqLogs.isEmpty) {
+        return Center(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height *
+                .65, // Make sure it takes up full height
+            child: Center(
+              // This will center it vertically and horizontally
+              child: Text(
+                LocaleKeys.noResultsFound.tr(),
+                textAlign: TextAlign.center,
               ),
-            );
-          }
-          if (controller.reqLogs.isEmpty) {
-            return Center(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
-                child: Center( // This will center it vertically and horizontally
-                  child: Text(
-                    LocaleKeys.noResultsFound.tr(),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            );
-          }
+            ),
+          ),
+        );
+      }
 
-          if (!state.isLoading) {
-            return ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: controller.reqLogs.length,
-              itemBuilder: (context, index) {
-                final request = controller.reqLogs[index];
-                return Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: TripLogRequestCard(orderData: request,index: index,),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Sizer();
-              },
-            );
-          } else {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
-              child: const Center(
-                child: CircularProgressIndicator(),
+      if (!state.isLoading) {
+        return ListView.separated(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: controller.reqLogs.length,
+          itemBuilder: (context, index) {
+            final request = controller.reqLogs[index];
+            return Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: TripLogRequestCard(
+                orderData: request,
+                index: index,
               ),
             );
-          }
-        });
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Sizer();
+          },
+        );
+      } else {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height *
+              .65, // Make sure it takes up full height
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+    });
   }
 }
 
@@ -113,24 +121,27 @@ class TripLogRequestCard extends StatelessWidget {
   final LogsRequestLogsEntity orderData;
   final int index;
 
-  const TripLogRequestCard({super.key, required this.orderData, required this.index});
+  const TripLogRequestCard(
+      {super.key, required this.orderData, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 16,),
-        Label(text: orderData.restaurantId?.name ?? "N/A",
-        style: const TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 20
+        const SizedBox(
+          height: 16,
         ),
+        Label(
+          text: orderData.restaurantId?.name ?? "N/A",
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
         ),
         InkWell(
           onTap: () async {
-            if(orderData.seen == false)
-              context.read<RestaurantsCubit>().setReqSeen(params: orderData.id ?? '');
+            if (orderData.seen == false)
+              context
+                  .read<RestaurantsCubit>()
+                  .setReqSeen(params: orderData.id ?? '');
             final updatedLogsEntity = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -145,20 +156,24 @@ class TripLogRequestCard extends StatelessWidget {
             }
           },
           child: Container(
-                  // elevation: context.isDarkMode ? 0 : 2,
+            // elevation: context.isDarkMode ? 0 : 2,
             decoration: BoxDecoration(
-              color: context.isDarkMode
-                  ? (orderData.seen == true ? AppColors.PRIMARY_COLOR : AppColors.SECONDARY_COLOR_DARK)
-                  : (orderData.seen == true ? AppColors.GRAY_LIGHT_COLOR3 : AppColors.grey),
+              color: (orderData.seen == true
+                  ? AppColors.getButtonPrimaryColor(context)
+                  : AppColors.getRedColor(context)),
               borderRadius: BorderRadius.circular(15),
             ),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: orderData.userId?.userProfile?.profilePictureKey != null && orderData.userId!.userProfile!.profilePictureKey!.mediaKey!.isNotEmpty
-                            ? Image.network(
-                          orderData.userId!.userProfile!.profilePictureKey!.mediaKey!,
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: orderData.userId?.userProfile?.profilePictureKey !=
+                              null &&
+                          orderData.userId!.userProfile!.profilePictureKey!
+                              .mediaKey!.isNotEmpty
+                      ? Image.network(
+                          orderData.userId!.userProfile!.profilePictureKey!
+                              .mediaKey!,
                           width: 100,
                           height: 80,
                           fit: BoxFit.cover,
@@ -175,7 +190,7 @@ class TripLogRequestCard extends StatelessWidget {
                             );
                           },
                         )
-                            : Container(
+                      : Container(
                           width: 100,
                           height: 70,
                           color: Colors.grey[200],
@@ -185,49 +200,48 @@ class TripLogRequestCard extends StatelessWidget {
                             color: Colors.grey,
                           ),
                         ),
+                ),
+                const SizedBox(width: 12),
+
+                // MAIN CONTENT
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        (orderData.orders != null &&
+                                index < orderData.orders!.length)
+                            ? orderData.orders![index].foodId?.foodName ??
+                                'Unknown'
+                            : 'Unknown',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.getReversedTextColor(context)),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(width: 12),
-
-                      // MAIN CONTENT
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              (orderData.orders != null && index < orderData.orders!.length)
-                                  ? orderData.orders![index].foodId?.foodName ?? 'Unknown'
-                                  : 'Unknown',
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              (orderData.orders != null && index < orderData.orders!.length)
-                                  ? (orderData.orders![index].price ?? 0.0).toStringAsFixed(2)
-                                  : '0.00',
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600
-                              ),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(height: 8),
+                      Text(
+                        (orderData.orders != null &&
+                                index < orderData.orders!.length)
+                            ? (orderData.orders![index].price ?? 0.0)
+                                .toStringAsFixed(2)
+                            : '0.00',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.getReversedTextColor(context)),
                       ),
-
-
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
-
-
 }
-
