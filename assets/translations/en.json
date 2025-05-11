@@ -1610,5 +1610,7 @@
   "expiryMonth": "Expiry Month",
   "ccv": "CCV",
   "errorDecodingQrCode": "Error decoding QR code",
-  "youHaveNoAds": "You have no ads"
+  "youHaveNoAds": "You have no ads",
+  "hide": "Hide",
+  "aboutThisAccount": "About this account"
 }

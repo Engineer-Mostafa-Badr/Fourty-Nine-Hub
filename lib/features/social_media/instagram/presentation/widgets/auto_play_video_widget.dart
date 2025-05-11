@@ -208,11 +208,13 @@ class _AutoplayVideoWidgetState extends State<AutoplayVideoWidget> {
                 child: HeaderPostInstagram(
                   imageUrl:
                       widget.instagramPostEntity?.profilePictureUrl ?? '****',
-                  userName: widget.instagramPostEntity?.username ?? '****',
+                  userName: '${widget.instagramPostEntity?.firstName} ${widget.instagramPostEntity?.lastName}' ?? '****',
                   userTags: widget.instagramPostEntity?.userTags ?? [],
                   isReel: widget.isReel,
                   country: widget.instagramPostEntity?.locationName ?? '****',
                   userId: widget.instagramPostEntity!.userId,
+                  postId: widget.instagramPostEntity!.id,
+                  isFollow: widget.instagramPostEntity!.isFollow,
                   // songName: songName,
                   // numberUserNamesMenchan: numberUserNamesMenchan,
                   // userNameMenchan: userNameMenchan,

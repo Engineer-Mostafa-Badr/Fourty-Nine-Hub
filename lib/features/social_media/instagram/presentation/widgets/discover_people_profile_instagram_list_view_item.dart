@@ -20,14 +20,14 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
       // width: MediaQuery.of(context).size.width * 0.3,
-      aspectRatio: 121 / 151,
+      aspectRatio: .7,
       child: Stack(
         children: [
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const ImageFromInternet(
-                image: testImage,
+              ImageFromInternet(
+                image: suggest.profilePictureUrl,
                 height: 60,
                 width: 60,
                 isCircle: true,

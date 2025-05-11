@@ -7,34 +7,35 @@ import 'package:fourtyninehub/helpers/media_helper.dart';
 class ImagePostWidget extends StatelessWidget {
   final InstagramPostEntity instagramPostEntity;
   final bool isVisible;
-  final int index;
+  final int currentIndex;
 
   const ImagePostWidget({
     super.key,
     required this.instagramPostEntity,
+    required this.currentIndex,
     this.isVisible = false,
-    required this.index,
+
   });
 
   bool _mediaIsVideo() =>
       (MediaHelper.getMediaTypeFromExtension(
-          instagramPostEntity.medias[index])) ==
+          instagramPostEntity.medias[currentIndex])) ==
       MediaType.video;
 
   @override
   Widget build(BuildContext context) {
     if (_mediaIsVideo()) {
       return AutoplayVideoWidget(
-        videoUrl: instagramPostEntity.medias[index],
+        videoUrl: instagramPostEntity.medias[currentIndex],
         videoId:
-            instagramPostEntity.medias[index], // استخدام رابط الفيديو كمعرّف
+            instagramPostEntity.medias[currentIndex], // استخدام رابط الفيديو كمعرّف
         showControls: true,
         isReel: _mediaIsVideo(),
         instagramPostEntity: instagramPostEntity,
       );
     }
     return ImageFromInternet(
-      image: instagramPostEntity.medias[index],
+      image: instagramPostEntity.medias[currentIndex],
       height: 400,
       width: double.infinity,
     );

@@ -46,13 +46,13 @@ class ProviderAdsView extends StatelessWidget {
                       child: BadgedLabel(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.filter.localize,
-                          style: Styles.headerText(
-                              color: AppColors.whiteColor,
-                              fontWeight: FontWeight.w400),
+                          style: Styles.headerText(color: AppColors.getReversedTextColor(context),
+                              fontWeight:FontWeight.w400 ),
+                          color: AppColors.getButtonPrimaryColor(context),
                           width: 170.h,
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
-                          iconLeading: Icons.keyboard_arrow_down_rounded,
+                          iconLeading: Icons.keyboard_arrow_down_rounded,textColor: AppColors.getReversedTextColor(context),
                           onTap: () async {
                             dynamic data = await context.push(Routes.FILTERADS,
                                 extra: CategorizationEntity(
@@ -78,11 +78,11 @@ class ProviderAdsView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.city.localize,
                           width: 170.h,
-                          style: Styles.headerText(
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.whiteColor),
+                          style: Styles.headerText(fontWeight:FontWeight.w400 ,color: AppColors.getReversedTextColor(context)),
+                          textColor: AppColors.getReversedTextColor(context),
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
+                          color: AppColors.getButtonPrimaryColor(context),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
                             dynamic data = await context.push(

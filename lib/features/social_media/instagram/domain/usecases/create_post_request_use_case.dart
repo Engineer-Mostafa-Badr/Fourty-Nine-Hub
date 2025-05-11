@@ -26,13 +26,12 @@ class CreatePostRequestInstagramParams {
     this.userTagIds,
   });
 
-
   Map<String, dynamic> toJson() {
     return {
       'content': content,
       'media': media.map((e) => e.toJson()).toList(),
-      'location': location?.toJson(),
-      'userTagIds': userTagIds,
+      if (location != null) 'location': location!.toJson(),
+      if (userTagIds != null) 'userTagIds': userTagIds,
     };
   }
 }

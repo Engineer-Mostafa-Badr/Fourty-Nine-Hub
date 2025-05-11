@@ -13,6 +13,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
   const FloatingActionButtonCreatePostInstagram({
     super.key,
@@ -62,7 +64,8 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                                   builder: (context) => const CameraScreen(),
                                 ),
                               )
-                            : context.push(Routes.LOGIN);
+                            : pleaseLoginDialog(context);
+                        // context.push(Routes.LOGIN);
                         if (!context.mounted) return;
                         BlocProvider.of<StoryCubit>(context)
                           ..fetchStories()

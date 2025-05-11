@@ -21,6 +21,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 
@@ -122,17 +123,21 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                 child: CustomNotificationBadge(
                   count: 0,
                   child: HeaderButtonWidget(
-                    title: context.isArabic?'مفضلة':'Favourites',
+                    title: context.isArabic ? 'مفضلة' : 'Favourites',
                     isOpened:
                         context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
                     onPressed: () {
-                      context
-                          .read<SubcategoriesCubit>()
-                          .getRequestsLog('62c8b5b09332225799fe335e');
+                      if (!context.isUserLoggedIn) {
+                        return pleaseLoginDialog(context);
+                      } else {
+                        context
+                            .read<SubcategoriesCubit>()
+                            .getRequestsLog('62c8b5b09332225799fe335e');
 
-                      context
-                          .read<SubcategoriesCubit>()
-                          .toggleMyAds('isFavouriteAdsOpen');
+                        context
+                            .read<SubcategoriesCubit>()
+                            .toggleMyAds('isFavouriteAdsOpen');
+                      }
                     },
                   ),
                 ),
@@ -148,12 +153,16 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     isOpened:
                         context.read<SubcategoriesCubit>().isRequestLogOpen,
                     onPressed: () {
-                      context
-                          .read<SubcategoriesCubit>()
-                          .getRequestsLog('62c8b5b09332225799fe335e');
-                      context
-                          .read<SubcategoriesCubit>()
-                          .toggleMyAds('isRequestLogOpen');
+                      if (!context.isUserLoggedIn) {
+                        return pleaseLoginDialog(context);
+                      } else {
+                        context
+                            .read<SubcategoriesCubit>()
+                            .getRequestsLog('62c8b5b09332225799fe335e');
+                        context
+                            .read<SubcategoriesCubit>()
+                            .toggleMyAds('isRequestLogOpen');
+                      }
 
                       // context.read<SubcategoriesCubit>().toggleRequestLog();
                     },
@@ -169,7 +178,9 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
                     // TODO: EDIT THIS
-                    context.read<SubcategoriesCubit>().getMarriageMyAds('62c8b5b09332225799fe335e');
+                    context
+                        .read<SubcategoriesCubit>()
+                        .getMarriageMyAds('62c8b5b09332225799fe335e');
                     context
                         .read<SubcategoriesCubit>()
                         .toggleMyAds('isMyAdsOpen');
@@ -231,7 +242,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       Label(
                         text: LocaleKeys.filter.localize,
                         style: Styles.mediumText(
-                          color:AppColors.getReversedTextColor(context),
+                          color: AppColors.getReversedTextColor(context),
                         ),
                       ),
                     ],
@@ -285,7 +296,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       Label(
                         text: LocaleKeys.city.localize,
                         style: Styles.mediumText(
-                          color:AppColors.getReversedTextColor(context),
+                          color: AppColors.getReversedTextColor(context),
                         ),
                       ),
                     ],
@@ -511,7 +522,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     print('state.adds ${widget.state.ads}');
     if (widget.state.ads == null) {
       return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
-        // const SizedBox();
+      // const SizedBox();
     }
     if (widget.state.ads!.isEmpty) {
       return CustomEmptyWidget(

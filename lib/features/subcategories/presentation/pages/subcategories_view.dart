@@ -258,12 +258,17 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,
                           onPressed: () async {
-                            await context
-                                .read<SubcategoriesCubit>()
-                                .loadMyFavouriteAds(id: widget.mainCategory.id);
-                            context
-                                .read<SubcategoriesCubit>()
-                                .toggleMyAds('isFavouriteAdsOpen');
+                            if (!context.isUserLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            } else {
+                              await context
+                                  .read<SubcategoriesCubit>()
+                                  .loadMyFavouriteAds(
+                                      id: widget.mainCategory.id);
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .toggleMyAds('isFavouriteAdsOpen');
+                            }
                           },
                         ),
                       ),
@@ -302,13 +307,16 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                             context.read<SubcategoriesCubit>().isMyAdsOpen,
                         onPressed: () {
                           // TODO: EDIT THIS
-                          context
-                              .read<SubcategoriesCubit>()
-                              .loadMyAds(id: widget.mainCategory.id);
-                          context
-                              .read<SubcategoriesCubit>()
-                              .toggleMyAds('isMyAdsOpen');
-                          // context.push(Routes.MYADDS);
+                          if (!context.isUserLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            context
+                                .read<SubcategoriesCubit>()
+                                .loadMyAds(id: widget.mainCategory.id);
+                            context
+                                .read<SubcategoriesCubit>()
+                                .toggleMyAds('isMyAdsOpen');
+                          }
                         },
                       ),
                     ),

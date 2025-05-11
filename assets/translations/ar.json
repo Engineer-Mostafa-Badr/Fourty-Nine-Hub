@@ -1593,5 +1593,8 @@
   "expiryMonth": "شهر الانتهاء",
   "ccv": "CCV",
   "errorDecodingQrCode": "خطأ في توليد رمز الاستجابة السريع",
-  "youHaveNoAds": "ليس لديك اعلانات"
+  "youHaveNoAds": "ليس لديك اعلانات",
+  "unfollow": "الغاء المتابعة",
+  "hide": "اخفاء",
+  "aboutThisAccount": "حول هذا الحساب"
 }

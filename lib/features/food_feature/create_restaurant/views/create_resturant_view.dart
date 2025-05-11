@@ -73,7 +73,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
         }
       },
       child: CustomScaffold(
-          appBar: const HomeAppbar(),
+          appBar: const HomeAppbar(isWithBackArrow: true,),
           body: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
               builder: (context, state) {
             if (state is CreateRestaurantLoading) {
@@ -161,7 +161,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 20.h),
                     const CreateRestaurantCitiesDropdowns(),
                     Sizer(height: 20.h),
-                    /// mneu
+                    /// menu
                     if (widget.from != 'update')
                       BlocProvider(
                         create: (_) => RestaurantMenuCubit(serviceLocator()),

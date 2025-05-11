@@ -33,6 +33,14 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
+import '../features/social_media/instagram/domain/usecases/remove_save_post_instagram_use_case.dart';
+import '../features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
+import '../features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
+import '../features/social_media/instagram/domain/usecases/unfollow_user_instagram_use_case.dart';
+import '../features/social_media/instagram/presentation/cubit/like_post_instagram/like_post_instagram_cubit.dart';
+import '../features/social_media/instagram/presentation/cubit/save_post_instagram/save_post_instagram_cubit.dart';
+
 class InstagramServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<InstagramRemoteDataSource>(
@@ -92,9 +100,26 @@ class InstagramServiceLocator {
         .registerLazySingleton<DeleteCommentUseCase>(() => DeleteCommentUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<LikePostInstagramUseCase>(
+        () => LikePostInstagramUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<SavePostInstagramUseCase>(
+        () => SavePostInstagramUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<RemoveSavePostInstagramUseCase>(
+        () => RemoveSavePostInstagramUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<CreateRequestPostInstagramUseCase>(
         () => CreateRequestPostInstagramUseCase(
+              serviceLocator<InstagramRepo>(),
+            ));
+
+    serviceLocator.registerLazySingleton<PostConfirmWebhookUseCase>(
+        () => PostConfirmWebhookUseCase(
               serviceLocator<InstagramRepo>(),
             ));
 
@@ -120,6 +145,10 @@ class InstagramServiceLocator {
 
     serviceLocator.registerLazySingleton<PostFollowUserInstagramUseCase>(
         () => PostFollowUserInstagramUseCase(
+              serviceLocator<InstagramRepo>(),
+            ));
+    serviceLocator.registerLazySingleton<UnFollowUserInstagramUseCase>(
+        () => UnFollowUserInstagramUseCase(
               serviceLocator<InstagramRepo>(),
             ));
 
@@ -149,6 +178,7 @@ class InstagramServiceLocator {
     serviceLocator.registerFactory<CreatePostInstagramCubit>(
       () => CreatePostInstagramCubit(
         serviceLocator<CreateRequestPostInstagramUseCase>(),
+        serviceLocator<PostConfirmWebhookUseCase>(),
       ),
     );
 
@@ -168,6 +198,7 @@ class InstagramServiceLocator {
         serviceLocator<GetInstagramReelsSpecificUserUseCase>(),
         serviceLocator<GetSuggestFollowInstagramUseCase>(),
         serviceLocator<PostFollowUserInstagramUseCase>(),
+        serviceLocator<UnFollowUserInstagramUseCase>(),
       ),
     );
     serviceLocator.registerLazySingleton<ReelInstagramCubit>(
@@ -180,6 +211,18 @@ class InstagramServiceLocator {
         serviceLocator<GetCommentUseCase>(),
         serviceLocator<AddCommentUseCase>(),
         serviceLocator<DeleteCommentUseCase>(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<LikePostInstagramCubit>(
+      () => LikePostInstagramCubit(
+        serviceLocator(),
+      ),
+    );
+
+    serviceLocator.registerLazySingleton<SavePostInstagramCubit>(
+      () => SavePostInstagramCubit(
+        serviceLocator(),
+        serviceLocator(),
       ),
     );
 

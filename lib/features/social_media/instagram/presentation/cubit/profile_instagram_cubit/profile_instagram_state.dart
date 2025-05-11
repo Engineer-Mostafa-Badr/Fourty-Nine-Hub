@@ -18,6 +18,7 @@ class ProfileInstagramState {
   final LoadingStatus profileStatus;
   final LoadingStatus reelsStatus;
   final LoadingStatus suggestFollowStatus;
+  final LoadingStatus addFollowStatus;
 
   final ProfileInstagramDataEntity? profileData;
   // final List<InstagramProfilePostEntity>? allPosts;
@@ -31,11 +32,13 @@ class ProfileInstagramState {
   final Failure? profileFailure;
   final Failure? reelsFailure;
   final Failure? suggestFollowFailure;
+  final Failure? addFollowFailure;
 
   const ProfileInstagramState({
     this.profileStatus = LoadingStatus.initial,
     this.reelsStatus = LoadingStatus.initial,
     this.suggestFollowStatus = LoadingStatus.initial,
+    this.addFollowStatus = LoadingStatus.initial,
     this.profileData,
     // this.allPosts,
     this.reelsData,
@@ -46,12 +49,14 @@ class ProfileInstagramState {
     this.profileFailure,
     this.reelsFailure,
     this.suggestFollowFailure,
+    this.addFollowFailure,
   });
 
   ProfileInstagramState copyWith({
     LoadingStatus? profileStatus,
     LoadingStatus? reelsStatus,
     LoadingStatus? suggestFollowStatus,
+    LoadingStatus? addFollowStatus,
     ProfileInstagramDataEntity? profileData,
     // List<InstagramProfilePostEntity>? allPosts,
     ReelsSpecificUserDataEntity? reelsData,
@@ -62,11 +67,13 @@ class ProfileInstagramState {
     Failure? profileFailure,
     Failure? reelsFailure,
     Failure? suggestFollowFailure,
+    Failure? addFollowFailure,
   }) {
     return ProfileInstagramState(
       profileStatus: profileStatus ?? this.profileStatus,
       reelsStatus: reelsStatus ?? this.reelsStatus,
       suggestFollowStatus: suggestFollowStatus ?? this.suggestFollowStatus,
+      addFollowStatus: addFollowStatus ?? this.addFollowStatus,
       profileData: profileData ?? this.profileData,
       // allPosts: allPosts ?? this.allPosts,
       reelsData: reelsData ?? this.reelsData,
@@ -77,6 +84,7 @@ class ProfileInstagramState {
       profileFailure: profileFailure ?? this.profileFailure,
       reelsFailure: reelsFailure ?? this.reelsFailure,
       suggestFollowFailure: suggestFollowFailure ?? this.suggestFollowFailure,
+      addFollowFailure: addFollowFailure ?? this.addFollowFailure,
     );
   }
 

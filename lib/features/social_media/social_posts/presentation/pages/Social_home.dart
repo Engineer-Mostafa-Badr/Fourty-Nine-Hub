@@ -24,6 +24,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
@@ -465,7 +466,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 if (i == 1) {
                   context.read<UserCubit>().isLoggedIn
                       ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
-                      : context.push(Routes.LOGIN);
+                      : pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
                 }
               },
               child: Container(

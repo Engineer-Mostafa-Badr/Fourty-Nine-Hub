@@ -96,9 +96,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     return CustomScaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: true,
-        ),
+        child: HomeAppbar(isWithBackArrow: true,),
       ),
 
       body: BlocConsumer<AdvertisementCubit, AdsState>(
@@ -137,9 +135,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                   const Sizer(),
                   TabBar(
                     controller: _tabController,
-                    labelColor: AppColors.SECONDARY_COLOR,
+                    labelColor: AppColors.getRedColor(context),
                     unselectedLabelColor: Theme.of(context).primaryColor,
-                    indicatorColor: AppColors.SECONDARY_COLOR,
+                    indicatorColor: AppColors.getRedColor(context),
                     indicatorSize: TabBarIndicatorSize.tab,
                     labelStyle: Styles.headerText(),
                     onTap: (i) {
@@ -269,15 +267,15 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
           // context.push(Routes.LOGIN);
         }
       },
-      backgroundColor: AppColors.PRIMARY_COLOR,
-      icon: const Icon(
+      backgroundColor: AppColors.getButtonPrimaryColor(context),
+      icon: Icon(
         Icons.add,
-        color: Colors.white,
+        color:AppColors.getReversedTextColor(context),
       ),
       label: Label(
         text: LocaleKeys.addAde.localize,
         style:
-            Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),
+            Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.getReversedTextColor(context)),
       ),
     );
   }

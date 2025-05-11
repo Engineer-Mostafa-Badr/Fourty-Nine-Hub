@@ -343,7 +343,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                       }
                       // يقوم بتحويلك لصفحة الملف الشخصي
                       if (index == 2) {
-                        context.goNamed(
+                        context.push(
                           Routes.INSTAGRAMPROFILE,
                           extra: UserCubit.to.state.data?.id ?? '',
                         );

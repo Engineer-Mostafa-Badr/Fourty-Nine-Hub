@@ -172,7 +172,7 @@ abstract class AppColors {
   static Color getFillColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.fill_Color_DARK
-        : AppColors.colorGreyLight;
+        : AppColors.LIGHT_GRAY_COLOR;
   }
 
   static Color getFindFillColor(BuildContext context) {
