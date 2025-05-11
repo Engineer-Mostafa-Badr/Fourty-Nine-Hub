@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -31,17 +32,18 @@ class NotificationView extends StatefulWidget {
   State<NotificationView> createState() => _NotificationViewState();
 }
 
-int index = 0;
-List<String> titles = [
-  LocaleKeys.fourtyNineNotifications.localize,
-  LocaleKeys.socialNotifications.localize,
-  LocaleKeys.serviceNoifications.localize,
-  LocaleKeys.responseStatus.localize,
-];
 
 class _NotificationViewState extends State<NotificationView> {
+  int index = 0;
   @override
   Widget build(BuildContext context) {
+    final _ = context.locale;/// بيجبر الwidgets تعمل rebuild لما اللغة تتغير (setState لما اللغه تتغير)
+  List<String> titles = [
+    LocaleKeys.fourtyNineNotifications,
+    LocaleKeys.socialNotifications,
+    LocaleKeys.serviceNoifications,
+    LocaleKeys.responseStatus,
+  ];
     // serviceLocator<FirebaseHelper>().getToken();
     return MultiBlocProvider(
       providers: [
@@ -115,14 +117,13 @@ class _NotificationViewState extends State<NotificationView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Label(
-                      text: titles[index],
+                      text: titles[index].localize,
                       style: Styles.headerText(),
                     ),
                     const Sizer(),
                     TabBar(
                       onTap: (value) {
-                        index = value;
-                        setState(() {});
+                        setState(() {index = value;});
                       },
                       tabs: const [
                         AppIconBuilder(),

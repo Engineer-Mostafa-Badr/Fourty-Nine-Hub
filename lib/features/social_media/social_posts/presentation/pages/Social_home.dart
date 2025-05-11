@@ -111,7 +111,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 child: Label(
                   text: LocaleKeys.socialExplain.localize,
                   style: Styles.headerText(
-                    color: AppColors.SECONDARY_COLOR,
+                    color: AppColors.getRedColor(context),
                     shadows: const [
                       Shadow(
                         color: Colors.black12,
@@ -186,7 +186,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                     ],
                                   ),
                                   Label(
-                                    text: LocaleKeys.Face.localize,
+                                    text:context.isArabic?'فيس بوك': LocaleKeys.Face.localize,
                                     style: Styles.headerText(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,

@@ -121,9 +121,11 @@ class _FacebookSuggestedPeopleState extends State<FacebookSuggestedPeople> {
                                   ? MediaQuery.of(context).size.width * 0.6
                                   : null,
                               backColor: user.addedSuccessfully == true
-                                  ? AppColors.GREY_DARK_COLOR
-                                  : AppColors.PRIMARY_COLOR,
-                              color: Colors.white,
+                                  ? AppColors.getFillColor(context)
+                                  : AppColors.getButtonPrimaryColor(context),
+                              color: user.addedSuccessfully == true
+                                  ?AppColors.getTextColor(context):
+                              AppColors.getReversedTextColor(context),
                               padding: 15.w,
                               label: user.addedSuccessfully == true
                                   ? LocaleKeys.remove.localize
@@ -157,7 +159,8 @@ class _FacebookSuggestedPeopleState extends State<FacebookSuggestedPeople> {
                               AppButton(
                                 height: 50.h,
                                 padding: 15.w,
-                                color: Colors.white,
+                                backColor: AppColors.getRedColor(context),
+                                color: AppColors.getReversedTextColor(context),
                                 label: LocaleKeys.remove.localize,
                                 onPressed: () async {
                                   bool data = await cubit.removeSuggestUser(

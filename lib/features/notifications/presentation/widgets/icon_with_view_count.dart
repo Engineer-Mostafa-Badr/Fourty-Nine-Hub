@@ -62,13 +62,13 @@ class CustomNotificationWidget extends StatelessWidget {
             right: -5,
             child: Container(
               padding: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: AppColors.SECONDARY_COLOR),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: AppColors.getRedColor(context)),
               child: Center(
                 child: Text(
                   unreadCount == 0 ? '   ' : '$unreadCount',
                   style: Styles.smallText(
-                      color: AppColors.whiteColor, fontSize: 20),
+                      color: AppColors.getReversedTextColor(context), fontSize: 20),
                 ),
               ),
             ),

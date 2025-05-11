@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
 
 import '../../../../res/assets/assets.dart';
 
@@ -10,9 +12,12 @@ class StatusIconBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      return Image.asset(
-        Assets.status,
-        height: 30,
+      return CustomNotificationWidget(
+        icon: Image.asset(
+          context.isDarkMode?Assets.status_dark:Assets.status,
+          height: 30,
+          fit: BoxFit.cover,
+        ), unreadCount: 0,
       );
     });
   }

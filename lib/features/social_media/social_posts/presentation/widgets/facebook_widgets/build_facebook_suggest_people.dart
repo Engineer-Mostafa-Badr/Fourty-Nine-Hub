@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
@@ -48,8 +49,8 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
         return Container(
           width: double.infinity,
           // margin: const EdgeInsets.only(bottom: 16),
-          decoration: const BoxDecoration(
-            color: AppColors.BG_GRAY_COLOR,
+          decoration: BoxDecoration(
+            color: AppColors.getFillColor(context),
             // border: Border(bottom: BorderSide(color: AppColors.BG_GRAY_COLOR,width: 6)),
           ),
           padding: const EdgeInsetsDirectional.only(start: 10,bottom: 16,top: 12),
@@ -62,7 +63,7 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                     Expanded(
                       child: Row(
                         children: [
-                          SvgPicture.asset(Assets.groupIcon,height: 18,width: 24,),
+                          SvgPicture.asset(Assets.groupIcon,height: 18,width: 24,color: context.isDarkMode?Colors.white:null,),
                           // const Icon(
                           //   Icons.group_rounded,
                           //   size: 24,
@@ -73,9 +74,9 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                             context.locale == Locales.english
                                 ? 'People you may know'
                                 : 'أشخاص قد تعرفهم',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 14,
-                                color: AppColors.black,
+                                color: AppColors.getTextColor(context),
                                 fontWeight: FontWeight.w400
                             ),
                           ),
@@ -90,9 +91,9 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                         context.locale == Locales.english
                             ? 'See More'
                             : 'عرض الكل',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 14,
-                            color: AppColors.black,
+                            color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.w400
                         ),
                       ),
@@ -221,7 +222,7 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                                     context: context,
                                                     builder: (BuildContext context) {
                                                       return AlertDialog(
-                                                        backgroundColor: AppColors.BACKGROUND_COLOR,
+                                                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                                                         surfaceTintColor: AppColors.BACKGROUND_COLOR,
                                                         title: Label(
                                                           text: LocaleKeys.enterGreetMessage.localize,
@@ -233,32 +234,26 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                                           maxLength: 150,
                                                           decoration: InputDecoration(
                                                             hintText: LocaleKeys.greetMessage.localize,
-                                                            fillColor: Colors.white,
+                                                            fillColor:AppColors.getFillColor(context),
+                                                            border: OutlineInputBorder( borderSide: BorderSide(color: AppColors.getFillColor(context),)),
                                                             hintStyle: Styles.mediumText(
-                                                              color: AppColors.DARK_GRAY_COLOR,
+                                                              color:AppColors.getTextColor(context),
                                                             ),
                                                           ),
                                                         ),
                                                         actions: <Widget>[
-                                                          TextButton(
-                                                            onPressed: () {
+                                                          ClickableWidget(
+                                                            onTap: () {
                                                               Navigator.of(context).pop();
                                                             },
-                                                            child: Container(
+                                                            child: SizedBox(
                                                               width: 100,
-                                                              padding: const EdgeInsets.all(2),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.white,
-                                                                borderRadius: BorderRadius.circular(4),
-                                                                border: Border.all(
-                                                                  color: AppColors.PRIMARY_COLOR,
-                                                                ),
-                                                              ),
-                                                              alignment: Alignment.center,
-                                                              child: Label(
-                                                                text: LocaleKeys.cancel.localize,
-                                                                style: Styles.headerText(
-                                                                  color: Colors.red,
+                                                              child: Center(
+                                                                child: Label(
+                                                                  text: LocaleKeys.cancel.localize,
+                                                                  style: Styles.headerText(
+                                                                    color: AppColors.getTextColor(context),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
@@ -294,19 +289,20 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                                               width: 100,
                                                               padding: const EdgeInsets.all(2),
                                                               decoration: BoxDecoration(
-                                                                color: AppColors.PRIMARY_COLOR,
+                                                                color: AppColors.getButtonPrimaryColor(context),
                                                                 borderRadius: BorderRadius.circular(4),
                                                               ),
                                                               alignment: Alignment.center,
                                                               child: Label(
                                                                 text: LocaleKeys.send.localize,
                                                                 style: Styles.headerText(
-                                                                  color: Colors.white,
+                                                                  color: AppColors.getReversedTextColor(context),
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
                                                         ],
+                                                        actionsAlignment: MainAxisAlignment.center,
                                                       );
                                                     },
                                                   );

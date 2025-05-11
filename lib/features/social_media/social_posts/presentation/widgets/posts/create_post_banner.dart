@@ -56,6 +56,7 @@ class CreatePostBanner extends StatelessWidget {
               height: 38,
               padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12), // Adjust left padding
               decoration: BoxDecoration(
+                color: AppColors.getFillColor(context),
                 border: Border.all(color: Colors.grey, width: 1.5),
                 borderRadius: BorderRadius.circular(50.r),
               ),
@@ -65,10 +66,10 @@ class CreatePostBanner extends StatelessWidget {
                   text: context.locale == Locales.english
                       ? 'What’s on your mind?'
                       : 'بم تفكر؟',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: AppColors.black
+                    color: AppColors.getTextColor(context)
                   ),
                 ),
               ),
