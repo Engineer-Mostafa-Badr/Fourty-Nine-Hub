@@ -94,7 +94,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
     );
 
     final String? selected = await showMenu<String>(
-        color:context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
         menuPadding: EdgeInsets.zero,
         shadowColor: Colors.grey.shade300,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -226,7 +226,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                   children: [
                     Icon(
                       Icons.search,
-                      color: context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
                     ),
                     const SizedBox(
                       width: 8,
@@ -239,13 +241,18 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           isOpened: context
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,
-                          onPressed: () async{
-                           await context
-                                .read<SubcategoriesCubit>()
-                                .loadMyFavouriteAds(id:widget.mainCategory.id);
-                            context
-                                .read<SubcategoriesCubit>()
-                                .toggleMyAds('isFavouriteAdsOpen');
+                          onPressed: () async {
+                            if (!context.isUserLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            } else {
+                              await context
+                                  .read<SubcategoriesCubit>()
+                                  .loadMyFavouriteAds(
+                                      id: widget.mainCategory.id);
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .toggleMyAds('isFavouriteAdsOpen');
+                            }
                           },
                         ),
                       ),
@@ -264,7 +271,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           onPressed: () {
                             context
                                 .read<SubcategoriesCubit>()
-                                .loadRequestsLog(id:widget.mainCategory.id);
+                                .loadRequestsLog(id: widget.mainCategory.id);
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isRequestLogOpen');
@@ -284,11 +291,16 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                             context.read<SubcategoriesCubit>().isMyAdsOpen,
                         onPressed: () {
                           // TODO: EDIT THIS
-                          context.read<SubcategoriesCubit>().loadMyAds(id:widget.mainCategory.id);
-                          context
-                              .read<SubcategoriesCubit>()
-                              .toggleMyAds('isMyAdsOpen');
-                          // context.push(Routes.MYADDS);
+                          if (!context.isUserLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            context
+                                .read<SubcategoriesCubit>()
+                                .loadMyAds(id: widget.mainCategory.id);
+                            context
+                                .read<SubcategoriesCubit>()
+                                .toggleMyAds('isMyAdsOpen');
+                          }
                         },
                       ),
                     ),
@@ -299,10 +311,20 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 height: 8,
               ),
               if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen)
-                Expanded(child: FavouriteAdsView(id: widget.mainCategory.id,)),
+                Expanded(
+                    child: FavouriteAdsView(
+                  id: widget.mainCategory.id,
+                )),
               if (context.read<SubcategoriesCubit>().isRequestLogOpen)
-                Expanded(child: AdsRequestLogView(id: widget.mainCategory.id,)),
-              if (context.read<SubcategoriesCubit>().isMyAdsOpen) Expanded(child: MyAdsView(id: widget.mainCategory.id,)),
+                Expanded(
+                    child: AdsRequestLogView(
+                  id: widget.mainCategory.id,
+                )),
+              if (context.read<SubcategoriesCubit>().isMyAdsOpen)
+                Expanded(
+                    child: MyAdsView(
+                  id: widget.mainCategory.id,
+                )),
               if (!context.read<SubcategoriesCubit>().isMyAdsOpen &&
                   !context.read<SubcategoriesCubit>().isFavouriteAdsOpen &&
                   !context.read<SubcategoriesCubit>().isRequestLogOpen)

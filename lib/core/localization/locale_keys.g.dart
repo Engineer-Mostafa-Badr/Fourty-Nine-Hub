@@ -1581,5 +1581,8 @@ abstract class  LocaleKeys {
   static const expiryMonth = 'expiryMonth';
   static const ccv = 'ccv';
   static const errorDecodingQrCode = 'errorDecodingQrCode';
+  static const unfollow = 'unfollow';
+  static const hide = 'hide';
+  static const aboutThisAccount = 'aboutThisAccount';
 
 }

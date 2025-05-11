@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +40,10 @@ class DoctorContactButtons extends StatelessWidget {
                   textColor: Colors.white,
                   // onPressed: () {},
                   onPressed: !context.read<UserCubit>().isLoggedIn
-                      ? () => context.push(Routes.LOGIN)
+                      ? () {
+                    pleaseLoginDialog(context);
+                    // context.push(Routes.LOGIN);
+                  }
                       : state.enabled == true
                           ? () {
                               LaunchURLHelper()
@@ -62,7 +66,10 @@ class DoctorContactButtons extends StatelessWidget {
                   textColor: Colors.white,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: !context.read<UserCubit>().isLoggedIn
-                      ? () => context.push(Routes.LOGIN)
+                      ? () {
+                    pleaseLoginDialog(context);
+                    // context.push(Routes.LOGIN);
+                  }
                       : state.enabled == true
                           ? () {
                               LaunchURLHelper()
@@ -207,7 +214,10 @@ class DoctorContactButtons extends StatelessWidget {
                     child: Icon(Icons.mail_sharp,
                         color: AppColors.colorRed, size: 48.sp),
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+                      pleaseLoginDialog(context);
+                      // context.push(Routes.LOGIN);
+                    }
                         : state.enabled == true
                             ? () {}
                             : () async {

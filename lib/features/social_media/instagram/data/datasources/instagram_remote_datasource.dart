@@ -34,7 +34,10 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
@@ -43,14 +46,19 @@ import '../../../../../core/error/failure.dart';
 abstract class InstagramRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params});
+
   Future<Either<Failure, List<PostEntity>>> getUserMedia(
       {required InstagramUserMediaParams params});
+
   Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params});
+
   Future<Either<Failure, ReelInstagramDataEntity>> getReels(
       {required TwitterFeedParams params});
+
   Future<Either<Failure, List<PostEntity>>> getUserReels(
       {required UserReelsParams params});
+
   Future<Either<Failure, List<PostEntity>>> getSavedReels(
       {required TwitterFeedParams params});
 
@@ -59,8 +67,10 @@ abstract class InstagramRemoteDataSource {
 
   Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
       TwitterFeedParams params);
+
   Future<Either<Failure, InstagramPostDataModel>> getPosts(
       PaginationParams params);
+
   Future<Either<Failure, List<UserTagEntity>>> getUserTag(
       GetUserTagParams username);
 
@@ -87,11 +97,27 @@ abstract class InstagramRemoteDataSource {
 
   Future<Either<Failure, bool>> postFollowUserInstagram(
       PostFollowUserInstagramParams params);
+
+  Future<Either<Failure, bool>> unFollowUserInstagram(
+      PostFollowUserInstagramParams params);
+
+  Future<Either<Failure, bool>> likePostInstagram(
+      LikePostInstagramParams params);
+
+  Future<Either<Failure, bool>> savePostInstagram(
+      SavePostInstagramParams params);
+
+  Future<Either<Failure, bool>> removeSavePostInstagram(
+      SavePostInstagramParams params);
+
+  Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params);
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   final ApiConsumer _apiConsumer;
+
   InstagramRemoteDataSourceImpl(this._apiConsumer);
+
   @override
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params}) async {
@@ -474,7 +500,7 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   @override
   Future<Either<Failure, bool>> postFollowUserInstagram(
       PostFollowUserInstagramParams params) async {
-    final response = await _apiConsumer.get(
+    final response = await _apiConsumer.post(
       EndPoints.postFollowUserInstagram(userId: params.userId),
     );
 
@@ -484,6 +510,127 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
           return Left(l);
         },
         (data) {
+          return const Right(true);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> unFollowUserInstagram(
+      PostFollowUserInstagramParams params) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.unFollowUserInstagram(userId: params.userId),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          return const Right(true);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> likePostInstagram(
+      LikePostInstagramParams params) async {
+    final response = await _apiConsumer.put(
+      EndPoints.likePostInstagram(postId: params.postId),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          return Right(data['data']['likeStatus']);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> savePostInstagram(
+      SavePostInstagramParams params) async {
+    final response = await _apiConsumer.put(
+      EndPoints.savePostInstagram(postId: params.postId),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          return const Right(true);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeSavePostInstagram(
+      SavePostInstagramParams params) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.removeSavePostInstagram(postId: params.postId),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          return const Right(true);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params) async {
+    final response = await _apiConsumer.put(
+      EndPoints.postConfirmWebhook,
+      data: {
+        "mediaIds": params.mediaIds
+      }
+    );
+    try {
+      return response.fold(
+            (l) {
+          return Left(l);
+        },
+            (data) {
           return const Right(true);
         },
       );

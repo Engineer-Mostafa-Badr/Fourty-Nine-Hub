@@ -2,7 +2,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+// import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart';
+
 
 enum FileTypeEnum {
   video,
@@ -133,14 +135,14 @@ Future<Uint8List?> generateThumbnail({
   required String path,
   Map<String, String>? headers,
   String? thumbnailPath,
-  ImageFormat imageFormat = ImageFormat.JPEG,
+  ImageFormat imageFormat = ImageFormat.jpeg,
   int maxHeight = 0,
   int maxWidth = 0,
   int timeMs = 0,
   int quality = 10,
 }) async {
   try {
-    final thumbnailData = await VideoThumbnail.thumbnailData(
+    final thumbnailData = await FlutterVideoThumbnailPlus.thumbnailData(
       video: path,
       imageFormat: imageFormat,
       maxHeight: maxHeight,

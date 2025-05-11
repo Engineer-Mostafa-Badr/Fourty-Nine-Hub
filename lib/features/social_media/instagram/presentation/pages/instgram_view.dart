@@ -1,28 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_view.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_view_body.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_ad_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_for_you_slider_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_video_post_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/suggest_reels_instagram_section.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class InstagramView extends StatelessWidget {
@@ -30,40 +11,12 @@ class InstagramView extends StatelessWidget {
 
   const InstagramView(
       {super.key, this.hideAppBar = false}); // Default: show AppBar
-  // ScrollController scrollController = ScrollController();
-  // bool _isScrollingDown = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   scrollController.addListener(() {
-  //     if (scrollController.position.userScrollDirection ==
-  //         ScrollDirection.reverse) {
-  //       if (!_isScrollingDown) {
-  //         setState(() {
-  //           _isScrollingDown = true;
-  //         });
-  //       }
-  //     } else if (scrollController.position.userScrollDirection ==
-  //         ScrollDirection.forward) {
-  //       if (_isScrollingDown) {
-  //         setState(() {
-  //           _isScrollingDown = false;
-  //         });
-  //       }
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      //  child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-      //   builder: (context, state) {
       child:
-          // context.read<UserCubit>().isLoggedIn
-          // ?
           MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -82,14 +35,6 @@ class InstagramView extends StatelessWidget {
         ],
         child: const InstagramViewBody(),
       ),
-      // : Column(
-      //     children: [
-      //       _buildTabBar(context),
-      //       Expanded(
-      //           child: InstagramGlobalPosts(
-      //               scrollController: scrollController)),
-      //     ],
-      //   );
     );
   }
 }

@@ -61,6 +61,7 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
                   ),
                   trailing: FollowButtonInstagram(
                     isReel: false,
+                    isFollow: false,
                     onPressed: () {},
                   ),
                 );

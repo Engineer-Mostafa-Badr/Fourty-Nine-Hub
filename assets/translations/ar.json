@@ -1590,5 +1590,8 @@
   "expiryYear": "سنة الانتهاء",
   "expiryMonth": "شهر الانتهاء",
   "ccv": "CCV",
-  "errorDecodingQrCode": "خطأ في توليد رمز الاستجابة السريع"
+  "errorDecodingQrCode": "خطأ في توليد رمز الاستجابة السريع",
+  "unfollow": "الغاء المتابعة",
+  "hide": "اخفاء",
+  "aboutThisAccount": "حول هذا الحساب"
 }

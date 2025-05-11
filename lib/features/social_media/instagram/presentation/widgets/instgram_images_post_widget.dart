@@ -4,6 +4,9 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/in
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_post_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../helpers/media_helper.dart';
+import 'header_post_instagram.dart';
+
 class InstgramImagesPostWidget extends StatefulWidget {
   const InstgramImagesPostWidget({
     super.key,
@@ -20,25 +23,40 @@ class InstgramImagesPostWidget extends StatefulWidget {
 
 class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     if (widget.instagramPostEntity.medias.length == 1) {
-      return ImagePostWidget(
-        // imageUrl: widget.images.first,
-        instagramPostEntity: widget.instagramPostEntity,
+      return Column(
+        children: [
+          if (MediaHelper.getMediaTypeFromExtension(
+                  widget.instagramPostEntity.medias[0]) !=
+              MediaType.video)
+            HeaderPostInstagram(
+              imageUrl: widget.instagramPostEntity.profilePictureUrl ?? '',
+              userName:
+                  '${widget.instagramPostEntity.firstName} ${widget.instagramPostEntity.lastName}',
+              userTags: widget.instagramPostEntity.userTags,
+              isReel: MediaHelper.getMediaTypeFromExtension(
+                      widget.instagramPostEntity.medias[0]) ==
+                  MediaType.video,
+              country: widget.instagramPostEntity.locationName,
+              userId: widget.instagramPostEntity.userId,
+              postId: widget.instagramPostEntity.id,
+              isFollow: widget.instagramPostEntity.isFollow,
+            ),
+          ImagePostWidget(
+            // imageUrl: widget.images.first,
+            currentIndex: 0,
+            instagramPostEntity: widget.instagramPostEntity,
+          ),
+        ],
       );
-      // return Container(
-      //   height: 400,
-      //   decoration: BoxDecoration(
-      //       color: Colors.green,
-      //       image: DecorationImage(
-      //           image: NetworkImage(widget.images.first), fit: BoxFit.cover)),
-      // );
     } else {
       return Column(
         children: [
           SizedBox(
-            height: 400,
+            height: 450,
             child: PageView.builder(
               onPageChanged: (value) {
                 setState(() {
@@ -47,36 +65,38 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
               },
               itemCount: widget.instagramPostEntity.medias.length,
               itemBuilder: (context, index) {
-                return ImagePostWidget(
-                  // imageUrl: widget.images[index],
-                  instagramPostEntity: widget.instagramPostEntity,
+                print(MediaHelper.getMediaTypeFromExtension(
+                    widget.instagramPostEntity.medias[index]));
+                return Column(
+                  children: [
+                    if (MediaHelper.getMediaTypeFromExtension(
+                            widget.instagramPostEntity.medias[index]) !=
+                        MediaType.video)
+                      HeaderPostInstagram(
+                        imageUrl:
+                            widget.instagramPostEntity.profilePictureUrl ?? '',
+                        userName:
+                            '${widget.instagramPostEntity.firstName} ${widget.instagramPostEntity.lastName}',
+                        userTags: widget.instagramPostEntity.userTags,
+                        isReel: MediaHelper.getMediaTypeFromExtension(
+                                widget.instagramPostEntity.medias[index]) ==
+                            MediaType.video,
+                        country: widget.instagramPostEntity.locationName,
+                        userId: widget.instagramPostEntity.userId,
+                        postId: widget.instagramPostEntity.id,
+                        isFollow: widget.instagramPostEntity.isFollow,
+                      ),
+                    const SizedBox(height: 5),
+                    ImagePostWidget(
+                      currentIndex: index,
+                      instagramPostEntity: widget.instagramPostEntity,
+                    ),
+                  ],
                 );
-
-                // return Container(
-                //   alignment: Alignment.topRight,
-                //   padding: const EdgeInsets.all(8),
-                //   height: 400,
-                //   color: Colors.red,
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(20),
-                //       color: Colors.black.withValues(alpha: 0.5),
-                //     ),
-                //     padding:
-                //         const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                //     child: Text(
-                //       "${currentIndex + 1}/${widget.images.length}",
-                //       style: Styles.mediumText(
-                //           color: Colors.white, fontWeight: FontWeight.w400),
-                //     ),
-                //   ),
-                // );
               },
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

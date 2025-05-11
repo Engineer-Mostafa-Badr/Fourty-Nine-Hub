@@ -818,7 +818,18 @@ class EndPoints {
     return '/inst/posts/$postId/comments/$commentId';
   }
 
+  static String likePostInstagram({required String postId}) =>
+      '/inst/posts/$postId/like';
+
+  static String savePostInstagram({required String postId}) =>
+      '/inst/posts/$postId/favorite';
+
+  static String removeSavePostInstagram({required String postId}) =>
+      '/inst/posts/$postId/unfavorite';
+
   static String createRequestPostInstagram = '/inst/posts/create-request';
+
+  static String postConfirmWebhook = '/inst/posts/confirm-webhook';
 
   static String getProfileInstagram(
           {required String userId, required int page, required int limit}) =>
@@ -837,6 +848,9 @@ class EndPoints {
 
   static String postFollowUserInstagram({required String userId}) =>
       '/user-follow/follow/$userId';
+
+  static String unFollowUserInstagram({required String userId}) =>
+      '/user-follow/unfollow/$userId';
 
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';

@@ -467,13 +467,19 @@ class _CustomPageSubCategoriesViewState
                             .read<SubcategoriesCubit>()
                             .isFavouriteAdsOpen,
                         onPressed: () {
-                          context
-                              .read<SubcategoriesCubit>()
-                              .getRequestsLog(widget.mainCategory.id);
+                          if (context.isUserLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+    if (!context.isUserLoggedIn) {
+    return pleaseLoginDialog(context);
+    } else { context
+                                .read<SubcategoriesCubit>()
+                                .getRequestsLog(widget.mainCategory.id);
 
-                          context
-                              .read<SubcategoriesCubit>()
-                              .toggleMyAds('isFavouriteAdsOpen');
+                            context
+                                .read<SubcategoriesCubit>()
+                                .toggleMyAds('isFavouriteAdsOpen');}
+                          }
                         },
                       ),
                     ),
@@ -510,10 +516,16 @@ class _CustomPageSubCategoriesViewState
                       isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                       onPressed: () {
                         // TODO: EDIT THIS
-                        context.read<SubcategoriesCubit>().getMarriageMyAds(widget.mainCategory.id);
-                        context
-                            .read<SubcategoriesCubit>()
-                            .toggleMyAds('isMyAdsOpen');
+                        if (!context.isUserLoggedIn) {
+                          return pleaseLoginDialog(context);
+                        } else {
+                          context
+                              .read<SubcategoriesCubit>()
+                              .getMarriageMyAds(widget.mainCategory.id);
+                          context
+                              .read<SubcategoriesCubit>()
+                              .toggleMyAds('isMyAdsOpen');
+                        }
                         // context.push(Routes.MYADDS);
                       },
                     ),
