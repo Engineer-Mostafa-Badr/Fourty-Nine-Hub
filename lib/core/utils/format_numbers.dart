@@ -117,7 +117,7 @@ class FormatNumbers {
 }
 
 class FormatDate {
-  String formatDate(String dateString) {
+  String formatDate(String dateString, {bool isArabic = false}) {
     DateTime date = DateTime.parse(dateString).toLocal();
     DateTime now = DateTime.now();
 
@@ -128,18 +128,43 @@ class FormatDate {
     if (date.year == today.year &&
         date.month == today.month &&
         date.day == today.day) {
-      return "Today";
+      return isArabic ? "اليوم" : "Today";
     } else if (date.year == yesterday.year &&
         date.month == yesterday.month &&
         date.day == yesterday.day) {
-      return "Yesterday";
+      return isArabic ? "الأمس" : "Yesterday";
     } else if (date.year == tomorrow.year &&
         date.month == tomorrow.month &&
         date.day == tomorrow.day) {
-      return "Tomorrow";
+      return isArabic ? "غداً" : "Tomorrow";
     } else {
-      return DateFormat('dd/MM/yyyy').format(date);
+      return isArabic
+          ? DateFormat('yyyy/MM/dd', 'ar').format(date)
+          : DateFormat('yyyy/MM/dd', 'en').format(date);
     }
+
+    //   DateTime date = DateTime.parse(dateString).toLocal();
+    //   DateTime now = DateTime.now();
+
+    //   DateTime today = DateTime(now.year, now.month, now.day);
+    //   DateTime yesterday = today.subtract(Duration(days: 1));
+    //   DateTime tomorrow = today.add(Duration(days: 1));
+
+    //   if (date.year == today.year &&
+    //       date.month == today.month &&
+    //       date.day == today.day) {
+    //     return "Today";
+    //   } else if (date.year == yesterday.year &&
+    //       date.month == yesterday.month &&
+    //       date.day == yesterday.day) {
+    //     return "Yesterday";
+    //   } else if (date.year == tomorrow.year &&
+    //       date.month == tomorrow.month &&
+    //       date.day == tomorrow.day) {
+    //     return "Tomorrow";
+    //   } else {
+    //     return DateFormat('dd/MM/yyyy').format(date);
+    //   }
   }
 
   String fromatDateLikeMonthDay(BuildContext context, String dateString) {

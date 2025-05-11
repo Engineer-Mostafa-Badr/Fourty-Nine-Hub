@@ -44,22 +44,21 @@ class _UserAdsState extends State<UserAds> {
     print('widget.params.mainCategory.id ${widget.params.mainCategory.id}');
   }
 
-
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       if (widget.params.mainCategory.nameEn == 'Dating') {
         context.read<AdvertisementCubit>().getAds(
-          subCategoryId: widget.params.subCategory.id,
-          filter: 'male',
-        );
+              subCategoryId: widget.params.subCategory.id,
+              filter: 'male',
+            );
       } else {
         context.read<AdvertisementCubit>().getAds(
-          subCategoryId: widget.params.subCategory.id,
-          filter: widget.params.subCategory.hasAuction == true
-              ? 'sale'
-              : 'provider',
-        );
+              subCategoryId: widget.params.subCategory.id,
+              filter: widget.params.subCategory.hasAuction == true
+                  ? 'sale'
+                  : 'provider',
+            );
       }
     }
   }
@@ -79,15 +78,18 @@ class _UserAdsState extends State<UserAds> {
       itemCount: context.read<AdvertisementCubit>().ads.length +
           (context.read<AdvertisementCubit>().isLoadingAdsMore ? 1 : 0),
       itemBuilder: (context, index) {
-        if(context.read<AdvertisementCubit>().ads.isEmpty) {
-          return Center(
-            child: Text(
-              LocaleKeys.noAds.localize,
-              style: TextStyle(
-                color: context.isDarkMode
-                    ? AppColors.LIGHT_COLOR
-                    : AppColors.DARK_BLUE_COLOR,
-                fontSize: 18,
+        if (context.read<AdvertisementCubit>().ads.isEmpty) {
+          return SizedBox(
+            height: 100,
+            child: Center(
+              child: Text(
+                LocaleKeys.noAds.localize,
+                style: TextStyle(
+                  color: context.isDarkMode
+                      ? AppColors.LIGHT_COLOR
+                      : AppColors.DARK_BLUE_COLOR,
+                  fontSize: 18,
+                ),
               ),
             ),
           );
@@ -95,26 +97,22 @@ class _UserAdsState extends State<UserAds> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (index > nativeAdStart &&
-                index % adFrequency == adFrequency - 1)
+            if (index > nativeAdStart && index % adFrequency == adFrequency - 1)
               SizedBox(
                 height: 50,
                 child: getAdIfNeeded(index, _adsManager),
               ),
-            CategoriesExtension.fromId(
-                widget.params.mainCategory.id ?? '')
+            CategoriesExtension.fromId(widget.params.mainCategory.id ?? '')
                 .view(
               item: context.read<AdvertisementCubit>().ads[index],
               onFav: (String id) async {
-                var result = await context
-                    .read<AdvertisementCubit>()
-                    .favouriteAd(id);
+                var result =
+                    await context.read<AdvertisementCubit>().favouriteAd(id);
                 return result;
               },
               onRemoveFav: (String id) async {
-                var result = await context
-                    .read<AdvertisementCubit>()
-                    .unFavouriteAd(id);
+                var result =
+                    await context.read<AdvertisementCubit>().unFavouriteAd(id);
                 return result;
               },
             ),
@@ -122,6 +120,5 @@ class _UserAdsState extends State<UserAds> {
         );
       },
     );
-
   }
 }

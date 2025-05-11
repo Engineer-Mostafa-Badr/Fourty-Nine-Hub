@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -12,7 +13,9 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/favourite_ads_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/search_bar_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
@@ -40,6 +43,7 @@ class SubCategoriesView extends StatefulWidget {
 class _SubCategoriesViewState extends State<SubCategoriesView> {
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
+  bool isSearchOpen = false;
 
   @override
   void initState() {
@@ -94,7 +98,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
     );
 
     final String? selected = await showMenu<String>(
-        color:context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
         menuPadding: EdgeInsets.zero,
         shadowColor: Colors.grey.shade300,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -224,9 +228,23 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.search,
-                      color: context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR,
+                    IconButton(
+                      padding: const EdgeInsets.all(0),
+                      onPressed: () {
+                        setState(() {
+                          isSearchOpen = !isSearchOpen;
+                        });
+                      },
+                      icon: SvgPicture.asset(
+                        Assets.searchIcon,
+                        colorFilter: ColorFilter.mode(
+                          isSearchOpen
+                              ? const Color(0xffF33D49)
+                              : AppColors.PRIMARY_COLOR,
+                          BlendMode.srcIn,
+                        ),
+                        // color: context.isDarkMode ? Colors.white : null,
+                      ),
                     ),
                     const SizedBox(
                       width: 8,
@@ -239,10 +257,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           isOpened: context
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,
-                          onPressed: () async{
-                           await context
+                          onPressed: () async {
+                            await context
                                 .read<SubcategoriesCubit>()
-                                .loadMyFavouriteAds(id:widget.mainCategory.id);
+                                .loadMyFavouriteAds(id: widget.mainCategory.id);
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isFavouriteAdsOpen');
@@ -264,7 +282,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           onPressed: () {
                             context
                                 .read<SubcategoriesCubit>()
-                                .loadRequestsLog(id:widget.mainCategory.id);
+                                .loadRequestsLog(id: widget.mainCategory.id);
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isRequestLogOpen');
@@ -284,7 +302,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                             context.read<SubcategoriesCubit>().isMyAdsOpen,
                         onPressed: () {
                           // TODO: EDIT THIS
-                          context.read<SubcategoriesCubit>().loadMyAds(id:widget.mainCategory.id);
+                          context
+                              .read<SubcategoriesCubit>()
+                              .loadMyAds(id: widget.mainCategory.id);
                           context
                               .read<SubcategoriesCubit>()
                               .toggleMyAds('isMyAdsOpen');
@@ -296,13 +316,24 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 16,
               ),
+              if (isSearchOpen) const SearchBarWidget(),
               if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen)
-                Expanded(child: FavouriteAdsView(id: widget.mainCategory.id,)),
+                Expanded(
+                    child: FavouriteAdsView(
+                  id: widget.mainCategory.id,
+                )),
               if (context.read<SubcategoriesCubit>().isRequestLogOpen)
-                Expanded(child: AdsRequestLogView(id: widget.mainCategory.id,)),
-              if (context.read<SubcategoriesCubit>().isMyAdsOpen) Expanded(child: MyAdsView(id: widget.mainCategory.id,)),
+                Expanded(
+                    child: AdsRequestLogView(
+                  id: widget.mainCategory.id,
+                )),
+              if (context.read<SubcategoriesCubit>().isMyAdsOpen)
+                Expanded(
+                    child: MyAdsView(
+                  id: widget.mainCategory.id,
+                )),
               if (!context.read<SubcategoriesCubit>().isMyAdsOpen &&
                   !context.read<SubcategoriesCubit>().isFavouriteAdsOpen &&
                   !context.read<SubcategoriesCubit>().isRequestLogOpen)

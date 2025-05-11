@@ -7,7 +7,7 @@ abstract class AppColors {
   static const black = Color(0xFF000000);
   static const buttonDialog = Color(0xFF0A0A2A);
   static const Color colorNavy = Color(0xFF0A0A2A); // لون داكن للأزرار
-  static const Color colorRed = Color(0xFFFF4C4C);  // لون أحمر للأزرار
+  static const Color colorRed = Color(0xFFFF4C4C); // لون أحمر للأزرار
   static const Color colorGreyLight = Color(0xFFF5F5F5);
 
   static const DARK_BLUE_COLOR = Color.fromARGB(255, 22, 23, 24);
@@ -148,35 +148,36 @@ abstract class AppColors {
         ? AppColors.SECONDARY_COLOR_DARK
         : AppColors.SECONDARY_COLOR;
   }
+
   static Color getTextColor(BuildContext context) {
-    return context.isDarkMode
-        ? AppColors.whiteColor
-        : AppColors.black;
+    return context.isDarkMode ? AppColors.whiteColor : AppColors.black;
   }
+
   static Color getReversedTextColor(BuildContext context) {
-    return context.isDarkMode
-        ? AppColors.black
-        : AppColors.whiteColor;
+    return context.isDarkMode ? AppColors.black : AppColors.whiteColor;
   }
+
   static Color getRedColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.red_Color_DARK
         : AppColors.SECONDARY_COLOR;
   }
+
   static Color getButtonPrimaryColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.Floating_Button_COLOR_DARK
         : AppColors.PRIMARY_COLOR;
   }
+
   static Color getFillColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.fill_Color_DARK
         : AppColors.colorGreyLight;
   }
+
   static Color getFindFillColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.Find_fill_DARK
         : AppColors.LIGHT_GRAY_COLOR;
   }
-  
 }

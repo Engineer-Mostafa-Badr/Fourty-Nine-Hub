@@ -49,15 +49,15 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
 
     if (widget.params.mainCategory.nameEn == 'Dating') {
       context.read<AdvertisementCubit>().loadAdsData(
-          subCategoryId: widget.params.subCategory.id,
-          filter: 'male',
+            subCategoryId: widget.params.subCategory.id,
+            filter: 'male',
           );
     } else {
       context.read<AdvertisementCubit>().loadAdsData(
-          subCategoryId: widget.params.subCategory.id,
-          filter: widget.params.subCategory.hasAuction == true
-              ? 'sale'
-              : 'provider',
+            subCategoryId: widget.params.subCategory.id,
+            filter: widget.params.subCategory.hasAuction == true
+                ? 'sale'
+                : 'provider',
           );
     }
   }
@@ -96,8 +96,11 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     return CustomScaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(30),
-        child: HomeAppbar(),
+        child: HomeAppbar(
+          isWithBackArrow: true,
+        ),
       ),
+
       body: BlocConsumer<AdvertisementCubit, AdsState>(
           listener: (context, state) {
         if (state.status == AdsStates.loading) {
@@ -145,32 +148,30 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                         state.governorate = '';
                         if (widget.params.mainCategory.nameEn == 'Dating') {
                           controller.loadAdsData(
-                              subCategoryId: widget.params.subCategory.id,
-                              filter: 'female',
-                              );
+                            subCategoryId: widget.params.subCategory.id,
+                            filter: 'female',
+                          );
                         } else {
                           controller.loadAdsData(
-                              subCategoryId: widget.params.subCategory.id,
-                              filter:
-                                  widget.params.subCategory.hasAuction == true
-                                      ? 'rent'
-                                      : 'user',
-                              );
+                            subCategoryId: widget.params.subCategory.id,
+                            filter: widget.params.subCategory.hasAuction == true
+                                ? 'rent'
+                                : 'user',
+                          );
                         }
                       } else {
                         if (widget.params.mainCategory.nameEn == 'Dating') {
                           controller.loadAdsData(
-                              subCategoryId: widget.params.subCategory.id,
-                              filter: 'male',
-                              );
+                            subCategoryId: widget.params.subCategory.id,
+                            filter: 'male',
+                          );
                         } else {
                           controller.loadAdsData(
-                              subCategoryId: widget.params.subCategory.id,
-                              filter:
-                                  widget.params.subCategory.hasAuction == true
-                                      ? 'sale'
-                                      : 'provider',
-                              );
+                            subCategoryId: widget.params.subCategory.id,
+                            filter: widget.params.subCategory.hasAuction == true
+                                ? 'sale'
+                                : 'provider',
+                          );
                         }
                       }
                     },
@@ -189,6 +190,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                   : LocaleKeys.user.localize),
                     ],
                   ),
+
                   /// Provider Ads and User Ads
                   state.status == AdsStates.loading
                       ? Center(
@@ -208,6 +210,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                               userType: userType,
                               controller: controller,
                             ),
+
                             /// user ads View
                             UserAdsView(
                               params: widget.params,

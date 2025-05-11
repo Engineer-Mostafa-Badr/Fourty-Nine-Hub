@@ -35,7 +35,7 @@ class AdDetailsEntity {
   final UserEntity? user;
   List<AdDetailsPropEntity> details;
   DateTime createdAt;
-  String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
+  String get formatedDate => DateFormat('yyyy/MM/dd').format(createdAt);
   Duration get restTimeDuration => DateTime.now().difference(createdAt);
 
   String get formattedRestTime =>

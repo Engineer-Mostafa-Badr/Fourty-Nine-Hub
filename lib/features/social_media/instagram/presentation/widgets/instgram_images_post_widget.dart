@@ -26,6 +26,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
       return ImagePostWidget(
         // imageUrl: widget.images.first,
         instagramPostEntity: widget.instagramPostEntity,
+        index: 0,
       );
       // return Container(
       //   height: 400,
@@ -50,6 +51,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                 return ImagePostWidget(
                   // imageUrl: widget.images[index],
                   instagramPostEntity: widget.instagramPostEntity,
+                  index: index,
                 );
 
                 // return Container(

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_card.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 class AdsRequestLogView extends StatefulWidget {
   const AdsRequestLogView({super.key, required this.id});
@@ -33,22 +40,30 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
-        builder: (context,state) {
-          final controller = context.read<SubcategoriesCubit>();
-          if(controller.isLoadingRequestsLog==true){
-            return const Center(child: CircularProgressIndicator(),);
-          }
-          if(controller.requestsLog.isEmpty){return Column(
-            children: List.generate(2, (i)=>const AdsRequestLogCard()),
-          );}
-          // if(controller.requestsLog.isEmpty){return Center(child: Label(text: "No Requests Found.",style: Styles.mediumText(color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),),);}
-          return ListView.builder(
-            shrinkWrap: true,
-            controller: _scrollController,
-            itemCount: controller.requestsLog.length,
-            itemBuilder: (context,i)=>AdsRequestLogCard(item: controller.requestsLog[i]),
-          );
-        }
-    );
+        builder: (context, state) {
+      final controller = context.read<SubcategoriesCubit>();
+      if (controller.isLoadingRequestsLog == true) {
+        return const CustomLoading();
+      }
+      if (controller.requestsLog.isEmpty) {
+        return Center(
+          child: Label(
+            text: LocaleKeys.noRequests.localize,
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? AppColors.whiteColor
+                    : AppColors.PRIMARY_COLOR),
+          ),
+        );
+      }
+      // if(controller.requestsLog.isEmpty){return Center(child: Label(text: "No Requests Found.",style: Styles.mediumText(color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),),);}
+      return ListView.builder(
+        shrinkWrap: true,
+        controller: _scrollController,
+        itemCount: controller.requestsLog.length,
+        itemBuilder: (context, i) =>
+            AdsRequestLogCard(item: controller.requestsLog[i]),
+      );
+    });
   }
 }

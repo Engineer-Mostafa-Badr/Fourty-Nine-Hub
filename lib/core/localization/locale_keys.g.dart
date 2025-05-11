@@ -211,6 +211,7 @@ abstract class  LocaleKeys {
   static const disableAccount = 'disableAccount';
   static const deleteAccount = 'deleteAccount';
   static const alert = 'alert';
+  static const areYouSureAboutDeletingTheAD = 'areYouSureAboutDeletingTheAD';
   static const disable = 'disable';
   static const delete = 'delete';
   static const specialAds = 'specialAds';
@@ -528,6 +529,8 @@ abstract class  LocaleKeys {
   static const userTrips = 'userTrips';
   static const userOwnCarsShareWithThem = 'userOwnCarsShareWithThem';
   static const noTripsAvailable = 'noTripsAvailable';
+  static const noTripsRunning = 'noTripsRunning';
+  static const noTripsPast = 'noTripsPast';
   static const tripjoinPremuimSubscription = 'tripjoinPremuimSubscription';
   static const chatSubscription = 'chatSubscription';
   static const premuimRequest = 'premuimRequest';
@@ -600,6 +603,7 @@ abstract class  LocaleKeys {
   static const booked = 'booked';
   static const inProgress = 'inProgress';
   static const muted = 'muted';
+  static const exp = 'exp';
   static const egp = 'egp';
   static const pleaseUploadVideo = 'pleaseUploadVideo';
   static const pleaseUploadImage = 'pleaseUploadImage';
@@ -1581,5 +1585,6 @@ abstract class  LocaleKeys {
   static const expiryMonth = 'expiryMonth';
   static const ccv = 'ccv';
   static const errorDecodingQrCode = 'errorDecodingQrCode';
+  static const youHaveNoAds = 'youHaveNoAds';
 
 }

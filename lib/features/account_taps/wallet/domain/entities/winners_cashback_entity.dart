@@ -5,6 +5,8 @@ class WinnersCashbackEntity {
   final String? profilePictureKey;
   final num profitAmount;
   final String winAt;
+  final String currencyAr;
+  final String currencyEn;
 
   WinnersCashbackEntity({
     required this.userId,
@@ -13,5 +15,7 @@ class WinnersCashbackEntity {
     required this.profilePictureKey,
     required this.profitAmount,
     required this.winAt,
+    required this.currencyAr,
+    required this.currencyEn,
   });
 }

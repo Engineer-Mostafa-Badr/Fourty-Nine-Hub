@@ -209,6 +209,7 @@
   "disableAccount": "تعطيل الحساب",
   "deleteAccount": "حذف الحساب",
   "alert": "تنبيه!",
+    "areYouSureAboutDeletingTheAD": "هل أنت متأكد من حذف الإعلان؟",
   "disable": "هل أنت متأكد من أنك تريد تعطيل حسابك؟",
   "delete": "هل أنت متأكد من أنك تريد حذف حسابك؟",
   "specialAds": "إعلانات خاصة",
@@ -609,6 +610,7 @@
   "booked": "محجوز",
   "inProgress": "قيد التقدم",
   "muted": "مكتوم",
+  "exp": "خبرة",
   "egp": "جنيه",
   "pleaseUploadVideo": "من فضلك قم باختيار فيديو",
   "pleaseUploadImage": "من فضلك قم باختيار صورة",
@@ -1590,5 +1592,6 @@
   "expiryYear": "سنة الانتهاء",
   "expiryMonth": "شهر الانتهاء",
   "ccv": "CCV",
-  "errorDecodingQrCode": "خطأ في توليد رمز الاستجابة السريع"
+  "errorDecodingQrCode": "خطأ في توليد رمز الاستجابة السريع",
+  "youHaveNoAds": "ليس لديك اعلانات"
 }
