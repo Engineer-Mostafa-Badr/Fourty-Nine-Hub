@@ -286,6 +286,7 @@ abstract class Routes {
   static const INSTAGRAMADDLOCATION = '/InstagramAddLocation';
   static const INSTAGRAMADDMUSIC = '/InstagramAddMusic';
   static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
+  static const followersScreen = '/FollowersScreen';
 }
 
 abstract class Paths {
@@ -559,4 +560,5 @@ abstract class Paths {
   static const INSTAGRAMADDMUSIC = 'InstagramAddMusic';
   static const SINGLEPOSTINSTAGRAM = 'SinglePostInstagram';
   static const FOLLOWREQUESTSINSTAGRAM = 'FollowRequestsInstagram';
+  static const followersScreen = 'FollowersScreen';
 }

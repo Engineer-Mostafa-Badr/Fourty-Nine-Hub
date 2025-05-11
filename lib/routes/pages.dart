@@ -413,6 +413,7 @@ import '../features/social_media/club_house/presentation/pages/club_house_home_s
 import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
+import '../features/social_media/instagram/presentation/pages/followers_screen.dart';
 import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
 import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -1356,6 +1357,16 @@ class AppPages {
                 builder: (context, state) => BlocProvider<InstagramCubit>(
                   create: (_) => serviceLocator(),
                   child: const InstagramAllDiscoverPeople(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.followersScreen,
+                name: Routes.followersScreen,
+                builder: (context, state) => BlocProvider<InstagramCubit>(
+                  create: (_) => serviceLocator(),
+                  child: FollowersScreen(
+                    args: state.extra as FollowersScreenArguments,
+                  ),
                 ),
               ),
               GoRoute(
