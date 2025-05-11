@@ -1376,6 +1376,7 @@ class EndPoints {
 
   static String createDriverRating = '/ride/trip/rating/driver';
   static String emergencySupport = '/users/emergencySupport';
+  static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';

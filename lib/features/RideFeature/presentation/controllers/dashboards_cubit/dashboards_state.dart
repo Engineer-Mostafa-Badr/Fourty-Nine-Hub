@@ -3,6 +3,7 @@ part of 'dashboards_cubit.dart';
 enum DashboardsStates {
   initState,
   loading,
+  loadingSubmitRequest,
   loadingAcceptOffer,
   loadingAvailable,
   loadingAcceptTrip,
@@ -22,6 +23,7 @@ enum DashboardsStates {
 extension DashboardsStatex on DashboardsState {
   bool get isInitial => status == DashboardsStates.initState;
   bool get isLoading => status == DashboardsStates.loading;
+  bool get isLoadingSubmitRequest => status == DashboardsStates.loadingSubmitRequest;
   bool get isLoadingAcceptTrip => status == DashboardsStates.loadingAcceptTrip;
   bool get isLoadingAcceptOffer => status == DashboardsStates.loadingAcceptOffer;
   bool get isLoadingModels => status == DashboardsStates.loadingModels;

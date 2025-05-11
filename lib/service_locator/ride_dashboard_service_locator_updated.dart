@@ -3,8 +3,10 @@
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
@@ -62,10 +64,14 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<CompleteDriverTripUseCase>(() => CompleteDriverTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<CancelTripByRiderUseCase>(() => CancelTripByRiderUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<DriverRateClientUseCase>(() => DriverRateClientUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSupportDetailsUseCase>(() => GetSupportDetailsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<EmergencySupportUseCase>(() => EmergencySupportUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
-    serviceLocator.registerLazySingleton<DashboardsCubit>(() => DashboardsCubit(
+    serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

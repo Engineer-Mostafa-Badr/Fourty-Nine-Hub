@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_so
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/accept_offer_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/running_trip_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/support_details_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update_trip_auto_accept_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update_trip_price_model.dart';
@@ -13,12 +14,14 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/ac
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -50,6 +53,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params);
   Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
+  Future<Either<Failure, SupportDetailsEntity>> getSupportDetails(GetSupportDetailsParams params);
   Future<Either<Failure, bool>> createNewOfferNonSocket(
       CreateNewOfferDashboardUsecaseParam params);
   Future<Either<Failure, bool>> createDriverRating(
@@ -411,6 +415,20 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SupportDetailsEntity>> getSupportDetails(GetSupportDetailsParams params) async {
+    try {
+      final response = await _apiConsumer.get(
+          EndPoints.supportDetails, queryParameters: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(SupportDetailsModel.fromJson(data['data']));
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

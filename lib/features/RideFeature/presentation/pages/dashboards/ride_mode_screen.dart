@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/available_ride_trip_item.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_arrived_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_otp_sheet.dart';
@@ -54,8 +55,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
       // if (!dashboardCubit.isClosed) {
       widget.params.isSocket == true
           ? [
-              if (widget.params.currentIndex != null) dashboardCubit.changeIndex(widget.params.currentIndex ?? 0, context),
-              if (widget.params.currentIndex == null || widget.params.currentIndex == 0) dashboardCubit.loadAvailableRideTrips(context),
+              dashboardCubit.changeIndex(widget.params.currentIndex ?? 0, context),
+              // if (widget.params.currentIndex == null || widget.params.currentIndex == 0) dashboardCubit.loadAvailableRideTrips(context),
               dashboardCubit.listenToUpdateTripAutoAccept(),
               dashboardCubit.listenToUpdateTripPrice(),
               dashboardCubit.listenToAcceptOffer(context),
@@ -246,7 +247,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               print("message $message ||| rate $rate");
                               cubit.rateTheClient(context: context, tripId: state.activeTrip?.tripId??'', comment: message, rate: rate);
                             },),
-                            // BuildSafetySheet(),
+                            BuildSafetySheet(params: GetSupportDetailsParams(tripId: state.activeTrip?.tripId??'6820ee01ec9da31b68d1afd9', tripType: 'notSpecial', userType: 'driver'),),
                           ],
                         ))
                       // Past Trips
