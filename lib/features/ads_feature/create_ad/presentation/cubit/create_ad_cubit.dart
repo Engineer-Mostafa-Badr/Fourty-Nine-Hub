@@ -296,9 +296,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
               ));
             })
         .then((value) {
-      if (value == null) {
-        emit(state.copyWith(status: CreateAdStates.initState));
-      }
+      // if (value == null) {
+      emit(state.copyWith(status: CreateAdStates.initState));
+      // }
     });
     // final mediaResponse = await pickImage(
     //         subCategoryId: subCategoryId,
@@ -469,7 +469,6 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           page: 1,
           subCategoryId: categorize.subCategory.id);
       if (categorize.fromMarriage == true) {
-
         // final response = await _filterAdUseCase(model);
         // response.fold(
         //         (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),

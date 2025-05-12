@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/subcategories/data/datasources/subcategor
 import 'package:fourtyninehub/features/subcategories/data/repositories/subcategories_repo_impl.dart';
 import 'package:fourtyninehub/features/subcategories/domain/repositories/subcategories_repo.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/search_ads_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -23,8 +24,11 @@ class SubcategoriesServiceLocator {
         () => GetCustomPageSubCategoriesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetMyFavouriteAdsUsecase>(
         () => GetMyFavouriteAdsUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<SearchAdsUseCase>(
+        () => SearchAdsUseCase(serviceLocator()));
     // --------------------Cubit ---------------------------
     serviceLocator.registerFactory<SubcategoriesCubit>(() => SubcategoriesCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

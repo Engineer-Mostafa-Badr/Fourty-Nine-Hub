@@ -19,11 +19,16 @@ import '../../../../../common/widgets/form/text_fields/new_phone_number_text_fie
 import '../../../../../routes/routes.dart';
 
 class RequestButton extends StatelessWidget {
-  const RequestButton(
-      {super.key, required this.adId, required this.subscriptionStatus});
+  const RequestButton({
+    super.key,
+    required this.adId,
+    required this.subscriptionStatus,
+    this.dontPop = false,
+  });
 
   final String adId;
   final String subscriptionStatus;
+  final bool dontPop;
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +41,12 @@ class RequestButton extends StatelessWidget {
                 context.pop();
                 return pleaseLoginDialog(context);
 
-          // context.push(Routes.LOGIN);
+                // context.push(Routes.LOGIN);
               }
             : subscriptionStatus == 'premium'
                 ? null
                 : () {
-                    context.pop();
+                    if (!dontPop) context.pop();
                     showModalBottomSheet(
                       backgroundColor: context.isDarkMode
                           ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
@@ -82,11 +87,13 @@ class RequestButton extends StatelessWidget {
                                       style: TextStyle(
                                         color: AppColors.getTextColor(context),
                                       ),
-                                      currentController: TextEditingController(),
+                                      currentController:
+                                          TextEditingController(),
                                       isRequired: true,
                                       maxLines: null,
                                       maxLength: 150,
-                                      hintColor:AppColors.getTextColor(context) ,
+                                      hintColor:
+                                          AppColors.getTextColor(context),
                                       onChanged: (c) =>
                                           controller.changePhone(v: c),
                                       // controller: controller,
@@ -134,14 +141,18 @@ class RequestButton extends StatelessWidget {
                                             height: 80.h,
                                             padding: const EdgeInsets.all(5),
                                             decoration: BoxDecoration(
-                                                color: AppColors.getButtonPrimaryColor(context),
+                                                color: AppColors
+                                                    .getButtonPrimaryColor(
+                                                        context),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             alignment: Alignment.center,
                                             child: Label(
                                               text: LocaleKeys.send.localize,
                                               style: Styles.headerText(
-                                                  color: AppColors.getReversedTextColor(context)),
+                                                  color: AppColors
+                                                      .getReversedTextColor(
+                                                          context)),
                                             ),
                                           ),
                                         ),

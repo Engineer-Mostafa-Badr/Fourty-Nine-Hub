@@ -110,6 +110,12 @@ abstract class Assets {
   static String musicNoteIcon = 'assets/icons/music_note.svg';
   static String aMailIcon = 'assets/icons/a_mail_icon.svg';
   static String aMailIconDark = 'assets/icons/a_mail_icon_dark.svg';
+  static String adsCashIcon = 'assets/icons/ads_cash_icon.svg';
+  static String adsTimeIcon = 'assets/icons/ads_time_icon.svg';
+  static String adsViewsIcon = 'assets/icons/ads_views_icon.svg';
+  static String adsBagIcon = 'assets/icons/ads_bag_icon.svg';
+  static String adsEducationIcon = 'assets/icons/ads_education_icon.svg';
+  static String adsLocationIcon = 'assets/icons/ads_location_icon.svg';
   static String facebook2Icon = 'assets/icons/facebook_2_icon.svg';
   static String appsBlackIcon = 'assets/icons/apps_black_icon.svg';
   static String appsBlackIconDark = 'assets/icons/apps_black_icon_dark.svg';
@@ -499,7 +505,7 @@ abstract class Assets {
   static String viewCountIcon = 'assets/icons/view_count_icon.svg';
   static String eyeIcon = 'assets/icons/eye.svg';
   static String viewCountIconDark = 'assets/icons/view_count_icon_dark.svg';
-
+  static String adsEyeIcon = 'assets/icons/ads_eye_icon.svg';
   static String phoneRed = 'assets/icons/phone_red.svg';
   static String mailRed = 'assets/icons/mail_red.svg';
   static String reportRed = 'assets/icons/report_red.svg';
@@ -647,34 +653,33 @@ abstract class Assets {
   static String login = "assets/icons/login.png";
 
   //tinder
-  static String tinder_account ='assets/icons/tinder/Account.png';
-  static String about ='assets/icons/tinder/about.png';
-  static String tinder_ads ='assets/icons/tinder/ads.png';
-  static String blue_star ='assets/icons/tinder/blue_star.png';
-  static String chatting ='assets/icons/tinder/chatting.png';
-  static String drinking ='assets/icons/tinder/drinking.png';
-  static String tinder_comments ='assets/icons/tinder/Comments.png';
-  static String tinder_gift ='assets/icons/tinder/Gift.png';
-  static String graduation ='assets/icons/tinder/graduation.png';
-  static String green_heart ='assets/icons/tinder/Green_Heart.png';
-  static String tinder_gym ='assets/icons/tinder/gym.png';
-  static String tinder_home ='assets/icons/tinder/home.png';
-  static String inbox ='assets/icons/tinder/inbox.png';
-  static String interest ='assets/icons/tinder/interests.png';
-  static String location ='assets/icons/tinder/location.png';
-  static String love_style ='assets/icons/tinder/love_style.png';
-  static String male_profile ='assets/icons/tinder/male_profile.png';
-  static String pet ='assets/icons/tinder/pet.png';
-  static String pin ='assets/icons/tinder/pin.png';
-  static String profile_card ='assets/icons/tinder/profile_card.png';
-  static String tinder_ruler ='assets/icons/tinder/ruler.png';
-  static String setting ='assets/icons/tinder/setting.png';
-  static String tinder_search ='assets/icons/tinder/search.png';
-  static String shield ='assets/icons/tinder/shield.png';
-  static String smoking ='assets/icons/tinder/smoking.png';
-  static String unavailable ='assets/icons/tinder/Unavailable.png';
-  static String verified ='assets/icons/tinder/verified.png';
-  static String volt ='assets/icons/tinder/volt.png';
-  static String zodiac ='assets/icons/tinder/zodiac.png';
-
+  static String tinder_account = 'assets/icons/tinder/Account.png';
+  static String about = 'assets/icons/tinder/about.png';
+  static String tinder_ads = 'assets/icons/tinder/ads.png';
+  static String blue_star = 'assets/icons/tinder/blue_star.png';
+  static String chatting = 'assets/icons/tinder/chatting.png';
+  static String drinking = 'assets/icons/tinder/drinking.png';
+  static String tinder_comments = 'assets/icons/tinder/Comments.png';
+  static String tinder_gift = 'assets/icons/tinder/Gift.png';
+  static String graduation = 'assets/icons/tinder/graduation.png';
+  static String green_heart = 'assets/icons/tinder/Green_Heart.png';
+  static String tinder_gym = 'assets/icons/tinder/gym.png';
+  static String tinder_home = 'assets/icons/tinder/home.png';
+  static String inbox = 'assets/icons/tinder/inbox.png';
+  static String interest = 'assets/icons/tinder/interests.png';
+  static String location = 'assets/icons/tinder/location.png';
+  static String love_style = 'assets/icons/tinder/love_style.png';
+  static String male_profile = 'assets/icons/tinder/male_profile.png';
+  static String pet = 'assets/icons/tinder/pet.png';
+  static String pin = 'assets/icons/tinder/pin.png';
+  static String profile_card = 'assets/icons/tinder/profile_card.png';
+  static String tinder_ruler = 'assets/icons/tinder/ruler.png';
+  static String setting = 'assets/icons/tinder/setting.png';
+  static String tinder_search = 'assets/icons/tinder/search.png';
+  static String shield = 'assets/icons/tinder/shield.png';
+  static String smoking = 'assets/icons/tinder/smoking.png';
+  static String unavailable = 'assets/icons/tinder/Unavailable.png';
+  static String verified = 'assets/icons/tinder/verified.png';
+  static String volt = 'assets/icons/tinder/volt.png';
+  static String zodiac = 'assets/icons/tinder/zodiac.png';
 }

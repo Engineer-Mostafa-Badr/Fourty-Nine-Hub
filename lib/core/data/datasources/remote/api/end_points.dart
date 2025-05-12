@@ -592,6 +592,8 @@ class EndPoints {
     return '/navigators/navigateCategories-enable/${params.mainCategoryId ?? '62c8b5779332225799fe3304'}';
   }
 
+  static const searchAds = '/ads/searchAds';
+
   static const riderInfoRegister = '/ride/riders/register';
   static const sendComeWithYou = '/ride/come-with-you';
   static const sendPickMe = '/ride/pick-me';
