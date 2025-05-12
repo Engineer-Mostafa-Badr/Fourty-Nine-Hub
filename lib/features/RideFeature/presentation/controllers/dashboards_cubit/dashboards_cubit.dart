@@ -564,7 +564,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> cancelDriverTrip({required BuildContext context, required String tripId, required String note, required String reasonId}) async {
-    showLoadingDialog(context);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
     final Either<Failure, bool> result = await cancelTripByRiderUseCase(CancelTripByRiderUseCaseParams(tripId: tripId, note: note, reasonId: reasonId));
@@ -572,14 +571,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     result.fold(
       (failure) {
-        Navigator.of(context).pop();
         log("Failure ${getFailureMessage(failure, context)}");
         showErrorMessage(context, getFailureMessage(failure, context));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (activeTrip) {
         log("Suzccess");
-        Navigator.of(context).pop();
         emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
       },
     );
