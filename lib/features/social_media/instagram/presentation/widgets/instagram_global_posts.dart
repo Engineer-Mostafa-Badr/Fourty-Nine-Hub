@@ -31,6 +31,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class InstagramGlobalPosts extends StatefulWidget {
   const InstagramGlobalPosts({super.key, required this.scrollController});
@@ -259,8 +260,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                   // }
                                                 }
                                                 setState(() {});
-                                              } else {
-                                                context.push(Routes.LOGIN);
+                                              } else {                                  return pleaseLoginDialog(context);
+
+                                                // context.push(Routes.LOGIN);
                                               }
                                             },
                                             color: controller
@@ -400,8 +402,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                         },
                                                       ),
                                                     ));
-                                              } else {
-                                                context.push(Routes.LOGIN);
+                                              } else {                                  return pleaseLoginDialog(context);
+
+                                              // context.push(Routes.LOGIN);
                                               }
                                             },
                                             color: Colors.grey,
@@ -445,7 +448,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                               if (controller.globalFeedPagingController
                                   .itemList![index].content!.isEmpty) ...[
                                 InkWell(
-                                    onTap: () => context.push(Routes.LOGIN),
+                                    onTap: () {
+                                      pleaseLoginDialog(context);
+                                      // context.push(Routes.LOGIN);
+                                      },
                                     child: Label(
                                         text: LocaleKeys.showComments.localize))
                               ],
@@ -461,7 +467,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                           '${controller.globalFeedPagingController.itemList?[index].firstComment?.firstName} ${controller.globalFeedPagingController.itemList?[index].firstComment?.lastName}\t\t',
                                       recognizer: TapGestureRecognizer()
                                         ..onTap =
-                                            () => context.push(Routes.LOGIN),
+                                            () {
+                                              pleaseLoginDialog(context);
+                                              // context.push(Routes.LOGIN);
+                                            },
                                       style: Styles.mediumText(
                                         color: context.isDarkMode
                                             ? AppColors.SECONDARY_COLOR
@@ -549,8 +558,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
           onTap: () {
             if (context.read<UserCubit>().isLoggedIn) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-            } else {
-              context.push(Routes.LOGIN);
+            } else {                                  return pleaseLoginDialog(context);
+
+              // context.push(Routes.LOGIN);
             }
           },
           child: CircleAvatar(
@@ -572,8 +582,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                     if (context.read<UserCubit>().isLoggedIn) {
                       context.push(Routes.INSTAGRAMPROFILE,
                           extra: post.user.id);
-                    } else {
-                      context.push(Routes.LOGIN);
+                    } else {                                  return pleaseLoginDialog(context);
+
+                      // context.push(Routes.LOGIN);
                     }
                   },
                   child: TextAppButton(
@@ -583,8 +594,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                         if (context.read<UserCubit>().isLoggedIn) {
                           context.push(Routes.INSTAGRAMPROFILE,
                               extra: post.user.id);
-                        } else {
-                          context.push(Routes.LOGIN);
+                        } else {                                  return pleaseLoginDialog(context);
+
+                          // context.push(Routes.LOGIN);
                         }
                       }),
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -46,10 +47,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
-        if (widget.property.adPropertyType.isText) _buildTextFieldWidget(),
-        if (widget.property.adPropertyType.isSelect) _buildSelectFieldWidget(),
-        if (widget.property.adPropertyType.isNumber) _buildNumberFieldWidget(),
-        if (widget.property.adPropertyType.isDropDown) _buildDropDownWidget(),
+        if (widget.property.adPropertyType.isText) ...[const Sizer(),_buildTextFieldWidget()],
+        if (widget.property.adPropertyType.isSelect) ...[const Sizer(),_buildSelectFieldWidget()],
+        if (widget.property.adPropertyType.isNumber) ...[const Sizer(),_buildNumberFieldWidget()],
+        if (widget.property.adPropertyType.isDropDown) ...[const Sizer(),_buildDropDownWidget()],
       ],
     );
   }
@@ -59,12 +60,12 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.only(start: 16),
+          padding: const EdgeInsetsDirectional.only(bottom: 8),
           child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
+            style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
           ),
         ),
         const SizedBox(
@@ -119,9 +120,9 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           padding: const EdgeInsetsDirectional.only(start: 16),
           child: Label(
             text: getLang() == 'ar'
-                ? widget.property.nameAr
-                : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
+                ? widget.property.nameAr.replaceAll('_', ' ')
+                : widget.property.nameEn.replaceAll('_', ' '),
+            style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
           ),
         ),
         const SizedBox(
@@ -298,7 +299,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               padding: const EdgeInsets.all(5),
               // margin: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
+                color: AppColors.getFillColor(context),
                 border: value == widget.property.values[index]
                     ? Border.all(
                   color: AppColors.SECONDARY_COLOR_DARK2,

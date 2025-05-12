@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -55,9 +56,11 @@ class TenPercentViewBody extends StatelessWidget {
                     ButtonWalletAndBill(
                       icon: state.trafficFile != null &&
                               state.trafficFile!.isNotEmpty
-                          ? const Icon(
+                          ? Icon(
                               Icons.check_circle_outline_rounded,
-                              color: Colors.grey,
+                              color: context.isDarkMode
+                                  ? Colors.black
+                                  : Colors.grey,
                             )
                           : SvgPicture.asset(
                               Assets.uploadIcon,
@@ -279,6 +282,35 @@ class TenPercentViewBody extends StatelessWidget {
                   : CustomButtonWalletAndGiftAndCashback(
                       title: LocaleKeys.sendRequest.localize,
                       onPressed: () {
+                        // if (state.mobileId == null &&
+                        //     state.electricityId == null &&
+                        //     state.trafficId == null) {
+                        //   showErrorMessage(context,
+                        //       LocaleKeys.uploadAtLeastOneBill.localize);
+                        //   return;
+                        // }
+                        // if (state.mobileId != null || cubit.mobileController.text.isNotEmpty) {
+                        //   if (cubit.mobileController.text.isEmpty) {
+                        //     showErrorMessage(context,
+                        //         LocaleKeys.uploadAtLeastOneBill.localize);
+                        //     return;
+                        //   }
+                        // }
+                        // if (state.electricityId != null) {
+                        //   if (cubit.electricityController.text.isEmpty) {
+                        //     showErrorMessage(context,
+                        //         LocaleKeys.uploadAtLeastOneBill.localize);
+                        //     return;
+                        //   }
+                        // }
+                        // if (state.trafficId != null) {
+                        //   if (cubit.trafficController.text.isEmpty) {
+                        //     showErrorMessage(context,
+                        //         LocaleKeys.uploadAtLeastOneBill.localize);
+                        //     return;
+                        //   }
+                        // }
+                        // cubit.fetchAdRequests(context);
                         if (cubit.formKey.currentState!.validate()) {
                           if ((state.mobileId == null ||
                                   state.mobileId == '') &&

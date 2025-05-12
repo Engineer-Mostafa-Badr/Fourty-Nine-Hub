@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_specific_user_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
+
+import '../../../domain/usecases/unfollow_user_instagram_use_case.dart';
 part 'profile_instagram_state.dart';
 
 class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
@@ -15,22 +17,24 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
     this._getReelsUC,
     this._getSuggestFollowUC,
     this._postFollowUserUC,
+      this._unFollowUserInstagramUC,
   ) : super(const ProfileInstagramState());
 
   final GetInstagramProfileUseCase _getProfileUC;
   final GetInstagramReelsSpecificUserUseCase _getReelsUC;
   final GetSuggestFollowInstagramUseCase _getSuggestFollowUC;
   final PostFollowUserInstagramUseCase _postFollowUserUC;
+  final UnFollowUserInstagramUseCase _unFollowUserInstagramUC;
 
-  final int postsLimit = 10;
-  final int reelsLimit = 10;
+  final int postsLimit = 50;
+  final int reelsLimit = 50;
   final int suggestFollowLimit = 10;
 
   // يمكن استدعاء هذه الدالة لتحميل كل البيانات مرة واحدة
   Future<void> getUserProfile({required String userId}) async {
-    fetchProfile(userId);
-    fetchReels(userId);
-    fetchSuggestFollow();
+   await fetchProfile(userId);
+   await fetchReels(userId);
+   await fetchSuggestFollow();
   }
 
   // تحميل ملف الشخصية فقط
@@ -50,7 +54,7 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
             profileStatus: LoadingStatus.success,
             profileData: data,
             // allPosts: data.postsEntity,
-            postsPage: state.postsPage + 1));
+            postsPage: state.postsPage));
       },
     );
   }
@@ -102,7 +106,7 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
         emit(state.copyWith(
             reelsStatus: LoadingStatus.success,
             reelsData: data,
-            reelsPage: state.reelsPage + 1));
+            reelsPage: state.reelsPage));
       },
     );
   }
@@ -156,7 +160,7 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
         emit(state.copyWith(
             suggestFollowStatus: LoadingStatus.success,
             suggestFollowsData: data,
-            suggestFollowPage: state.suggestFollowPage + 1));
+            suggestFollowPage: state.suggestFollowPage));
       },
     );
   }
@@ -198,15 +202,33 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
   // متابعة مستخدم
   Future<void> followUser(String userId) async {
+    emit(state.copyWith(addFollowStatus: LoadingStatus.loading));
     final res =
         await _postFollowUserUC(PostFollowUserInstagramParams(userId: userId));
 
     res.fold(
       (f) {
-        // يمكن معالجة الخطأ هنا
-      },
+        emit(state.copyWith(
+            addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
+        },
       (success) {
+        emit(state.copyWith(addFollowStatus: LoadingStatus.success));
         removeFollowUser(userId);
+      },
+    );
+  }
+  Future<void> unFollowUser(String userId) async {
+    emit(state.copyWith(addFollowStatus: LoadingStatus.loading));
+    final res =
+        await _unFollowUserInstagramUC(PostFollowUserInstagramParams(userId: userId));
+
+    res.fold(
+      (f) {
+        emit(state.copyWith(
+            addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
+        },
+      (success) {
+        emit(state.copyWith(addFollowStatus: LoadingStatus.success));
       },
     );
   }

@@ -28,6 +28,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class MarriageCallMessageButtons extends StatefulWidget {
   const MarriageCallMessageButtons({
@@ -79,7 +80,10 @@ class _MarriageCallMessageButtonsState
                       EdgeInsetsDirectional.only(start: widget.startPadding),
                   child: InkWell(
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+                      return pleaseLoginDialog(context);
+              // context.push(Routes.LOGIN);
+          }
                         : snap.data == true
                             ? () {
                                 showModalBottomSheet(
@@ -227,7 +231,7 @@ class _MarriageCallMessageButtonsState
                           : Assets.phoneIcon,
                       color:!(snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)?
-                      context.isDarkMode ? Colors.white : null: null,
+                      context.isDarkMode ? Colors.white : null: null,height: 37.h,
                       // color: (snap.data == true &&
                       //         context.read<UserCubit>().isLoggedIn)
                       //     ? AppColors.PRIMARY_COLOR
@@ -242,7 +246,10 @@ class _MarriageCallMessageButtonsState
                   //         ? AppColors.PRIMARY_COLOR
                   //         : AppColors.DARK_GRAY_COLOR,
                   onTap: !context.read<UserCubit>().isLoggedIn
-                      ? () => context.push(Routes.LOGIN)
+                      ? () {
+          return pleaseLoginDialog(context);
+          // context.push(Routes.LOGIN);
+          }
                       : snap.data == true
                           ? () async {
                               ChatEntity? chat = await context
@@ -275,14 +282,17 @@ class _MarriageCallMessageButtonsState
                         : Assets.mailIcon,
                     color:!(snap.data == true &&
                         context.read<UserCubit>().isLoggedIn)?
-                    context.isDarkMode ? Colors.white : null: null,
+                    context.isDarkMode ? Colors.white : null: null,height: 30.h,
                   ),
                 ),
                 if (widget.hasReport == true) ...[
                   InkWell(
                     // color: AppColors.SECONDARY_COLOR,
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+          return pleaseLoginDialog(context);
+          // context.push(Routes.LOGIN);
+          }
                         : () {
                             bottomSheet(
                                 context: context,
@@ -292,9 +302,10 @@ class _MarriageCallMessageButtonsState
                                 ));
                           },
                     // color: AppColors.SECONDARY_COLOR,
-                    child: const Icon(
+                    child: Icon(
                       Icons.report,
                       color: AppColors.SECONDARY_COLOR_DARK2,
+                      size:50.h,
                     ),
                   ),
                 ]

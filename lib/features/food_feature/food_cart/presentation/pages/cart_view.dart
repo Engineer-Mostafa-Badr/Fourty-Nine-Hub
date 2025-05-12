@@ -130,7 +130,7 @@ class _FoodCartViewState extends State<FoodCartView> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      backgroundColor: context.isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       builder: (context) {
         return BlocProvider.value(
           value: serviceLocator<RestaurantDetailsCubit>(),
@@ -247,7 +247,7 @@ class _FoodCartViewState extends State<FoodCartView> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              '${LocaleKeys.restaurant_total.tr()} ${cartItem.total.toStringAsFixed(2)}',
+              '${LocaleKeys.restaurant_total.tr()} ${cartItem.total.toStringAsFixed(2)} ${currency}',
               style: Styles.headerText(),
             ),
           ),
@@ -281,10 +281,10 @@ class _FoodCartViewState extends State<FoodCartView> {
                   foodId: foodId,
                 );
               },
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.getRedColor(context),
               foregroundColor: Colors.white,
               icon: Icons.delete,
-              label: LocaleKeys.delete.tr(),
+              label:context.isArabic?'تأكيد المسح؟': LocaleKeys.delete.tr(),
             ),
           ],
         ),
@@ -303,13 +303,6 @@ class _FoodCartViewState extends State<FoodCartView> {
       ),
     );
   }
-
-
-
-
-
-
-
 
   Widget _buildCartSummary(Cart cart, String currency) {
     return Padding(
@@ -342,7 +335,7 @@ class _FoodCartViewState extends State<FoodCartView> {
             Text(
               ' $currency',
               style: Styles.mediumText(
-                  color: AppColors.SECONDARY_COLOR,
+                  color:AppColors.getRedColor(context),
                   fontWeight: FontWeight.bold),
             ),
           ],
@@ -367,12 +360,12 @@ class _FoodCartViewState extends State<FoodCartView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              backgroundColor: AppColors.SECONDARY_COLOR,
+              backgroundColor: AppColors.getRedColor(context),
             ),
             child: FittedBox(
               child: Text(
                 LocaleKeys.premium_request.tr(),
-                style: Styles.headerText(color: Colors.white),
+                style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
               ),
             ),
           ),
@@ -391,12 +384,12 @@ class _FoodCartViewState extends State<FoodCartView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              backgroundColor: AppColors.PRIMARY_COLOR,
+              backgroundColor: AppColors.getButtonPrimaryColor(context),
             ),
             child: FittedBox(
               child: Text(
                 LocaleKeys.request.tr(),
-                style: Styles.headerText(color: Colors.white),
+                style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
               ),
             ),
           ),
@@ -476,6 +469,8 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                 TextFormField(
                   controller: _phoneController,
                   decoration: InputDecoration(
+                    fillColor: AppColors.getFillColor(context),
+
                     hintStyle: Styles.mediumText(
                       fontWeight: FontWeight.w600
                     ),
@@ -535,7 +530,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                      backgroundColor: AppColors.getRedColor(context),
                     ),
                     child: state.status == RestaurantDetailsStates.loading
                         ? const SizedBox(
@@ -548,7 +543,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                           )
                         : Text(
                             LocaleKeys.submit_order.tr(),
-                            style: Styles.headerText(color: Colors.white),
+                            style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
                           ),
                   ),
                 ),

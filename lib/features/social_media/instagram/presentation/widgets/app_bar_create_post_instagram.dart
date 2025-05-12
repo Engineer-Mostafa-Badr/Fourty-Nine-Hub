@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -34,9 +35,9 @@ class AppBarCreatePostInstagram extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.close,
-            color: Colors.black,
+            color: context.isDarkMode ? Colors.white : Colors.black,
           ),
           onPressed: () {
             context.pop();
@@ -57,7 +58,7 @@ class AppBarCreatePostInstagram extends StatelessWidget {
           child: Label(
             text: LocaleKeys.next.localize,
             style: Styles.headerText(
-              color: AppColors.c1B2781,
+              color: context.isDarkMode ? Colors.white : AppColors.c1B2781,
             ),
           ),
         )

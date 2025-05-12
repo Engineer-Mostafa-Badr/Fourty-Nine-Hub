@@ -46,8 +46,8 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                 Container(
                   decoration: BoxDecoration(
                     color:widget.subCategory?.isSelected == true
-                        ? AppColors.SECONDARY_COLOR:
-                   context.isDarkMode ? Colors.deepOrange : AppColors.grey,
+                        ? AppColors.getRedColor(context):
+                    AppColors.getFillColor(context),
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(width: 0.5, color: AppColors.black),
                   ),
@@ -86,7 +86,7 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                               "",
                           style: Styles.headerText(
                             color: widget.subCategory?.isSelected == true
-                                ? Colors.white
+                                ?AppColors.getReversedTextColor(context)
                                 : null,
                           ),
                         ),

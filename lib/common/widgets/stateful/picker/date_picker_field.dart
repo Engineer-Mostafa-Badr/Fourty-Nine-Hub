@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class DatePickerTextField extends StatefulWidget {
   final String? title;
@@ -71,7 +72,10 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
               widget.onDateSelected(_selectedDate);
             }
           } else {
-            context.push(Routes.LOGIN);
+
+              return pleaseLoginDialog(context);
+              // context.push(Routes.LOGIN);
+
           }
         } else {
           final DateTime? picked = await showDatePicker(

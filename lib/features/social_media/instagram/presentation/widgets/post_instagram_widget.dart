@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instgram_images_post_widget.dart';
 import 'package:fourtyninehub/helpers/media_helper.dart';
 
+import '../../../../../common/widgets/dynamic/sizer.dart';
+
 class PostInstagramWidget extends StatelessWidget {
   const PostInstagramWidget({
     super.key,
@@ -16,33 +18,11 @@ class PostInstagramWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if ((MediaHelper.getMediaTypeFromExtension(
-                instagramPostEntity.medias.first)) !=
-            MediaType.video)
-          HeaderPostInstagram(
-            imageUrl: instagramPostEntity.profilePictureUrl ?? '',
-            userName: instagramPostEntity.username,
-            userTags: instagramPostEntity.userTags,
-            isReel: (MediaHelper.getMediaTypeFromExtension(
-                    instagramPostEntity.medias.first)) ==
-                MediaType.video,
-            country: instagramPostEntity.locationName,
-            userId: instagramPostEntity.userId,
-            // songName: songName,
-            // numberUserNamesMenchan: numberUserNamesMenchan,
-            // userNameMenchan: userNameMenchan,
-            // userImageMenchan: userImageMenchan,
-          ),
-        const SizedBox(
-          height: 5,
-        ),
         InstgramImagesPostWidget(
           // images: instagramPostEntity.medias,
           instagramPostEntity: instagramPostEntity,
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const Sizer(),
         InstagramPostReviewWidget(
           instagramPostEntity: instagramPostEntity,
         ),

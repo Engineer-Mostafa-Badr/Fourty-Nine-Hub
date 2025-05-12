@@ -81,6 +81,7 @@ class _FavouriteScreensViewState extends State<FavouriteScreensView> {
                         index = value;
                         setState(() {});
                       },
+                      indicatorColor: Colors.transparent,
                       tabs: [
                         CustomNotificationWidget(
                           icon: SvgPicture.asset(

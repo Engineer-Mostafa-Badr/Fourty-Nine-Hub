@@ -480,7 +480,7 @@ class Stories extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Label(
-                              text: context.isArabic ? 'إضافة\n بكره' : 'Create\n Reel',
+                              text: context.isArabic ? 'إضافة\n ريل' : 'Create\n Reel',
                               // Localized text
                               color: Theme.of(context).primaryColor,
                               maxLines: 2,
@@ -602,15 +602,15 @@ class Stories extends StatelessWidget {
               Positioned(
                 bottom: 10,
                 left: 6,
-                right: 0,
+                right: 4,
                 child: Label(
-                  text: context.isArabic ? 'صامته' :  serviceLocator<UserCubit>().state.data != null &&
+                  text: context.isArabic ? 'مخفية' :  serviceLocator<UserCubit>().state.data != null &&
                       serviceLocator<UserCubit>().state.data!.profilePicture != null
                       ? serviceLocator<UserCubit>().state.data!.fullName! :"",
                   style:const TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 10,
-                    color: Colors.white
+                    fontSize: 12,
+                    color: Colors.white,
                   ),
                   maxLines: 1,
                 ),

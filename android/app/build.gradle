@@ -26,7 +26,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-//    useAndroidX = true
+    // useAndroidX = true
 
     namespace "com.app.fourtynine"
     compileSdk 34
@@ -69,6 +69,8 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
     }
 

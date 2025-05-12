@@ -16,6 +16,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../restaurant_details/presentation/widgets/restaurant_header.dart';
 import '../cubit/restaurant_details_cubit.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
   final GetAllRestaurantEntity restaurant;
@@ -139,25 +140,27 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                 if (context.isUserLoggedIn) {
                   context.push(Routes.FOODCART);
                 }else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                        style: Styles.smallText(
-                            color: AppColors.whiteColor
-                        ),
-                      ),
-                      backgroundColor: Colors.red,
-                      duration: Duration(seconds: 4),
-                      action: SnackBarAction(
-                        label: LocaleKeys.login.localize,
-                        textColor: Colors.white,
-                        onPressed: () {
-                          context.push(Routes.LOGIN);
-                        },
-                      ),
-                    ),
-                  );
+                  return pleaseLoginDialog(context);
+
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                  //       style: Styles.smallText(
+                  //           color: AppColors.whiteColor
+                  //       ),
+                  //     ),
+                  //     backgroundColor: Colors.red,
+                  //     duration: Duration(seconds: 4),
+                  //     action: SnackBarAction(
+                  //       label: LocaleKeys.login.localize,
+                  //       textColor: Colors.white,
+                  //       onPressed: () {
+                  //        // context.push(Routes.LOGIN);
+                  //       },
+                  //     ),
+                  //   ),
+                  // );
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -165,7 +168,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                backgroundColor: AppColors.SECONDARY_COLOR,
+                backgroundColor: AppColors.getRedColor(context),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -175,13 +178,13 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                     LocaleKeys.view_cart.tr(),
                     style: Styles.headerText(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColors.getReversedTextColor(context),
                     ),
                   ),
                   const Sizer(),
-                  const Icon(
+                   Icon(
                     Icons.shopping_cart_rounded,
-                    color: Colors.white,
+                    color: AppColors.getReversedTextColor(context),
                   ),
                 ],
               ),

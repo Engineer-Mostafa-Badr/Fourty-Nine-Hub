@@ -24,8 +24,8 @@ class SubCategoryListViewItem extends StatelessWidget {
       // width: 116,
       decoration: BoxDecoration(
         color: subCategory?.isSelected == true
-            ? AppColors.PRIMARY_COLOR
-            : const Color(0xFFD9D9D9),
+            ? AppColors.getButtonPrimaryColor(context)
+            : AppColors.getFillColor(context),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Label(
@@ -34,7 +34,7 @@ class SubCategoryListViewItem extends StatelessWidget {
             : (subCategory?.nameEn ?? ''),
         style: Styles.mediumText(
           fontSize: 24,
-          color: subCategory?.isSelected == true ? Colors.white : Colors.black,
+          color: subCategory?.isSelected == true ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context),
         ),
       ),
     );

@@ -25,7 +25,7 @@ class CustomFloatingActionButton extends StatelessWidget {
       height: 56,
       child: RawMaterialButton(
         onPressed: onPressed,
-        fillColor: AppColors.PRIMARY_COLOR,
+        fillColor: AppColors.getButtonPrimaryColor(context),
         shape: RoundedRectangleBorder(
           borderRadius:
               BorderRadius.circular(28), // نصف القطر لجعل الشكل دائريًا جزئيًا
@@ -38,13 +38,13 @@ class CustomFloatingActionButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) Icon(icon, color: Colors.white, size:iconSize?? 24),
+              if (icon != null) Icon(icon, color: AppColors.getReversedTextColor(context), size:iconSize?? 24),
               if (icon != null) const SizedBox(width: 8),
               if (text != null)
                 Text(
                   text ?? '',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.getReversedTextColor(context),
                     fontSize: fontSize ?? 16,
                     fontWeight: FontWeight.bold,
                   ),

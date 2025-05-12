@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../routes/routes.dart';
@@ -21,19 +22,18 @@ class _NewRideModeScreenState extends State<NewRideModeScreen> {
     return CustomScaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: true,
-          language: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
+    child:HomeAppbar(
+        isWithBackArrow: true,
+        language: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
           ),
         ),
-      ),
+      ),),
       body: const NewRideModeBody(),
     );
   }
@@ -82,6 +82,7 @@ class NewRideModeBody extends StatelessWidget {
                 onTap: () {
                   context.push(Routes.captainShareScreen);
                 },
+                iconColor: AppColors.getButtonPrimaryColor(context),
               ),
               TripOptionWidget(
                 icon: Assets.car,
@@ -90,14 +91,14 @@ class NewRideModeBody extends StatelessWidget {
                 onTap: () {
                   context.push(Routes.AVAILABLE_TRIPS);
                 },
+                iconColor: AppColors.getButtonPrimaryColor(context),
               ),
               TripOptionWidget(
                 icon: Assets.pickMeIcon,
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "وصلني معاك" : "Pick me",
-                onTap: () {
-                  context.push(Routes.All_PickMe_View);
-                },
+                onTap: () {context.push(Routes.All_PickMe_View);},
+                iconColor: AppColors.getButtonPrimaryColor(context),
               ),
             ],
           ),
@@ -164,7 +165,7 @@ class RideModeButton extends StatelessWidget {
                   context.isArabic ? 'وضع السائق' : 'Ride Mode',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

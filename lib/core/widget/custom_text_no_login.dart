@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -17,7 +18,10 @@ class CustomTextNoLogin extends StatelessWidget {
     return Center(
       child: SingleChildScrollView(
         child: GestureDetector(
-          onTap: () => context.push(Routes.LOGIN),
+          onTap: () {
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          },
           child: Container(
             padding: EdgeInsets.all(12.w),
             width: 500.w,
@@ -53,7 +57,10 @@ class CustomTextNoLoginNew extends StatelessWidget {
     return Center(
       child: SingleChildScrollView(
         child: GestureDetector(
-          onTap: () => context.push(Routes.LOGIN),
+          onTap: () {
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          },
           child: Center(
             child: Text(
               // 'Please Login,\n Register to enjoy the app',

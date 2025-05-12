@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -183,7 +184,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 if (context.read<UserCubit>().isLoggedIn) {
                   return widget.showPostComments(widget.post.id);
                 } else {
-                  context.push(Routes.LOGIN);
+                  return pleaseLoginDialog(context);
+
+                  // context.push(Routes.LOGIN);
                 }
               },
             ),
@@ -201,7 +204,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   }
                   setState(() {});
                 } else {
-                  context.push(Routes.LOGIN);
+                  return pleaseLoginDialog(context);
+
+                  // context.push(Routes.LOGIN);
                 }
               },
             ),
@@ -216,7 +221,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   if (context.read<UserCubit>().isLoggedIn) {
                     widget.onReact();
                   } else {
-                    context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 iconColor: post.isReact == false ? Colors.grey : Colors.red),

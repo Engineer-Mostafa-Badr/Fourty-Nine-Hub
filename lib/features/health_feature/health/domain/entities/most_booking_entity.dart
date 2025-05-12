@@ -16,7 +16,7 @@ class MostBookingEntity {
   final String? waitingTime;
   final bool? isPremium;
   final String? appointmentType;
-  final String? price;
+  final num? price;
 
   MostBookingEntity({
     this.id,

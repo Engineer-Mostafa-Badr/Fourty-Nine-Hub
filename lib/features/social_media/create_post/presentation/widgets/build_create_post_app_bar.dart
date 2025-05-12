@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -27,14 +28,14 @@ class BuildCreatePostAppBar extends StatelessWidget {
                     extra: SocialParams(
                         userId: UserCubit.to.state.data?.id ?? '', index: 0));
               },
-              child: SvgPicture.asset(Assets.backIcon,height: 18,width: 10,)),
+              child: SvgPicture.asset(Assets.backIcon,height: 18,width: 10,color: context.isDarkMode?Colors.white:null)),
           const SizedBox(
             width: 18,
           ),
-          Text(LocaleKeys.createPost.localize,style: const TextStyle(
+          Text(LocaleKeys.createPost.localize,style:  TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w400,
-            color: AppColors.PRIMARY_COLOR
+            color:context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR
           ),),
           const Spacer(),
           ClickableWidget(
@@ -44,13 +45,13 @@ class BuildCreatePostAppBar extends StatelessWidget {
             width: 74,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.r),
-              color: AppColors.PRIMARY_COLOR
+              color: AppColors.getButtonPrimaryColor(context)
             ),
             alignment: Alignment.center,
-            child: Text(LocaleKeys.post.localize,style: const TextStyle(
+            child: Text(LocaleKeys.post.localize,style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w400,
-              color: AppColors.whiteColor
+              color: AppColors.getReversedTextColor(context)
             ),),
           ))
 

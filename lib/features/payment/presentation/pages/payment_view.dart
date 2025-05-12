@@ -6,7 +6,9 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_dropdown.dart';
@@ -80,7 +82,7 @@ class _PaymentViewState extends State<PaymentView> {
                               await launchUrl(Uri.parse(url));
                             }
                           },
-                          title: 'Paymob',
+                          title: LocaleKeys.paymob.localize,
                           titleId: 'Paymob',
                           icon: Image.asset(
                             Assets.paymob,
@@ -98,7 +100,7 @@ class _PaymentViewState extends State<PaymentView> {
                       ),
                       Expanded(
                         child: _buildCustomCard(
-                          title: 'Fawry',
+                          title: LocaleKeys.fawry.localize,
                           titleId: 'Fawry',
                           icon: Image.asset(
                             Assets.fawry,
@@ -115,7 +117,7 @@ class _PaymentViewState extends State<PaymentView> {
                       ),
                       Expanded(
                         child: _buildCustomCard(
-                          title: 'InstaPay',
+                          title: LocaleKeys.instaPay.localize,
                           titleId: 'manual',
                           icon: Image.asset(
                             Assets.instaPay,
@@ -149,25 +151,25 @@ class _PaymentViewState extends State<PaymentView> {
     required Color color,
     required String details,
     VoidCallback? onTap,
-    String? titleId,
+    required String titleId,
     required BuildContext context,
   }) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedPaymentMethod = title;
+          _selectedPaymentMethod = titleId;
         });
 
         final cubit = context.read<PaymentCubit>();
         _selectedProviderId = cubit.paymentProviderMap[titleId];
 
         if (_selectedProviderId != null) {
-          print('Provider ID for $title: $_selectedProviderId');
+          print('Provider ID for $titleId: $_selectedProviderId');
 
           cubit.getPaymobData(
               amountId: widget.amountId, providerId: _selectedProviderId!);
         } else {
-          print('Provider ID not found for $title');
+          print('Provider ID not found for $titleId');
         }
 
         if (onTap != null) {
@@ -179,19 +181,29 @@ class _PaymentViewState extends State<PaymentView> {
         // margin: const EdgeInsets.symmetric(horizontal: 8.0),
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.isDarkMode ? const Color(0xff0E0E0E) : Colors.white,
           borderRadius: BorderRadius.circular(15.r),
           border: Border.all(
-            color: _selectedPaymentMethod == title ? color : Colors.grey,
+            color: _selectedPaymentMethod == titleId
+                ? color
+                : (context.isDarkMode ? const Color(0xff333333) : Colors.grey),
             width: 2.0,
           ),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 8,
+              color: _selectedPaymentMethod == titleId
+                  ? color.withValues(alpha: 0.4)
+                  : const Color(0x66D9D9D9),
+              blurRadius: 4,
               offset: const Offset(0, 4),
-            ),
+              spreadRadius: 0,
+            )
+            // BoxShadow(
+            //   color: color.withOpacity(0.3),
+            //   spreadRadius: 2,
+            //   blurRadius: 8,
+            //   offset: const Offset(0, 4),
+            // ),
           ],
         ),
         child: Column(
@@ -221,7 +233,7 @@ class _PaymentViewState extends State<PaymentView> {
           providerId: _selectedProviderId ?? '',
           amount: widget.amount,
         );
-      case 'InstaPay':
+      case 'manual':
         return _bankTransferPayment();
       default:
         return Center(
@@ -325,16 +337,21 @@ class _PaymentViewState extends State<PaymentView> {
               text: item,
               style: Styles.headerText(
                 height: 1.60,
+                color: context.isDarkMode ? Colors.white : Colors.black,
               ),
             ),
           ),
           dropdownDecoration: BoxDecoration(
-            color: Colors.white,
+            color: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.black, width: 2),
+            border: Border.all(
+                color: context.isDarkMode ? Colors.white : Colors.black,
+                width: 2),
           ),
           buttonDecoration: BoxDecoration(
-            color: const Color(0xffF3F3F3),
+            color: context.isDarkMode
+                ? const Color(0xff191919)
+                : const Color(0xffF3F3F3),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: const Color(0xff7D569E), width: 1),
           ),
@@ -371,7 +388,9 @@ class _PaymentViewState extends State<PaymentView> {
         const SizedBox(height: 32),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.c0B1035,
+            backgroundColor: context.isDarkMode
+                ? const Color(0xFFCAD0F4)
+                : AppColors.c0B1035,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
@@ -382,7 +401,7 @@ class _PaymentViewState extends State<PaymentView> {
             style: Styles.headerText(
               fontSize: 32,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: context.isDarkMode ? Colors.black : Colors.white,
               height: 1.6,
             ),
           ),
@@ -411,18 +430,23 @@ class _PaymentViewState extends State<PaymentView> {
                   previous.uploadStatus != current.uploadStatus,
               builder: (context, state) {
                 if (state.uploadStatus == StateStatus.loading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const CustomLoading();
                 }
                 return ButtonUploadImage(
                   height: 48,
                   icon: state.uploadStatus == StateStatus.success &&
                           state.uploadedImage != null
-                      ? const Icon(
+                      ? Icon(
                           Icons.check_circle_outline_rounded,
-                          color: Colors.grey,
+                          color: context.isDarkMode
+                              ? const Color(0xff0D0D0D)
+                              : Colors.grey,
                         )
-                      : SvgPicture.asset(
-                          Assets.uploadIcon,
+                      : Icon(
+                          Icons.file_upload_outlined,
+                          color: context.isDarkMode
+                              ? const Color(0xff0D0D0D)
+                              : Colors.grey,
                         ),
                   label: LocaleKeys.uploadImage.localize,
                   onPressed: () async {
@@ -481,6 +505,9 @@ class _PaymentViewState extends State<PaymentView> {
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: context.isDarkMode
+                          ? const Color(0xFFF45560)
+                          : const Color(0xffF33D49),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                     ),
@@ -488,7 +515,8 @@ class _PaymentViewState extends State<PaymentView> {
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
                       print(" the provider $_selectedProviderId");
-                      if (phoneNumbers.isEmpty) {
+                      // if (phoneNumbers.isEmpty) {
+                      if (bankNameController.text.isEmpty) {
                         showErrorMessage(context,
                             LocaleKeys.pleaseEnterPhoneNumber.localize);
                         return;
@@ -513,7 +541,9 @@ class _PaymentViewState extends State<PaymentView> {
                       style: Styles.mediumText(
                         fontSize: 32,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        color: context.isDarkMode
+                            ? const Color(0xff0D0D0D)
+                            : AppColors.AUTH_CONTAINER_COLOR,
                         height: 1.60,
                       ),
                     ),

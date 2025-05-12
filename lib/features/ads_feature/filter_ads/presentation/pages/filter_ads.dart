@@ -91,27 +91,27 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                     const SizedBox(
                       height: 8,
                     ),
-                    // ListView.builder(
-                    //   physics: const NeverScrollableScrollPhysics(),
-                    //   shrinkWrap: true,
-                    //   itemCount: state.filterAdProperties?.length ?? 0,
-                    //   itemBuilder: (context, index) {
-                    //     final property = state.filterAdProperties![index];
-                    //     return FilterAdDynamicInputWidget(
-                    //       property: property,
-                    //       onChanged: (SelectionEntity v) =>
-                    //           controller.onChanged(v: v, index: index),
-                    //       onTextChanged: (String v, bool from, String type) =>
-                    //           controller.onTextChanged(
-                    //               v: v,
-                    //               index: index,
-                    //               isNumber: property.type == 'number',
-                    //               from: from,
-                    //               type: type),
-                    //     );
-                    //   },
-                    //   // separatorBuilder: (context, index) => const Sizer(),
-                    // ),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.filterAdProperties?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final property = state.filterAdProperties![index];
+                        return FilterAdDynamicInputWidget(
+                          property: property,
+                          onChanged: (SelectionEntity v) =>
+                              controller.onChanged(v: v, index: index),
+                          onTextChanged: (String v, bool from, String type) =>
+                              controller.onTextChanged(
+                                  v: v,
+                                  index: index,
+                                  isNumber: property.type == 'number',
+                                  from: from,
+                                  type: type),
+                        );
+                      },
+                      // separatorBuilder: (context, index) => const Sizer(),
+                    ),
                     const SizedBox(
                       height: 16,
                     ),

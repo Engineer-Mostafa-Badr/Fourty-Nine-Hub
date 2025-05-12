@@ -24,11 +24,11 @@ class HeaderButtonWidget extends StatelessWidget {
         height: 32,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: ShapeDecoration(
-          color: isOpened ? AppColors.PRIMARY_COLOR : const Color(0xFFD9D9D9),
+          color: isOpened ? AppColors.getButtonPrimaryColor(context) : AppColors.getFillColor(context),
           shape: RoundedRectangleBorder(
             side: BorderSide(
               width: 1,
-              color: isOpened ? AppColors.cF33D49 : AppColors.PRIMARY_COLOR,
+              color: isOpened ? AppColors.cF33D49 :AppColors.getButtonPrimaryColor(context),
             ),
             borderRadius: BorderRadius.circular(15),
           ),
@@ -37,8 +37,8 @@ class HeaderButtonWidget extends StatelessWidget {
           child: Text(
             title,
             style: Styles.headerText(
-              fontSize: 20,
-              color: isOpened ? Colors.white : Colors.black,
+              fontSize: 22,
+              color: isOpened ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context),
             ),
           ),
         ),

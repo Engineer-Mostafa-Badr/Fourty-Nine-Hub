@@ -13,7 +13,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
+// import 'package:video_thumbnail/video_thumbnail.dart'
+ import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart' as thumb;
 
 import '../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
@@ -66,11 +67,11 @@ class MixVoiceVideoRecordingScreenState
 
   Future<void> _generateThumbnail(String videoThumbnail) async {
     final directory = await getTemporaryDirectory();
-    final thumbnail = await thumb.VideoThumbnail.thumbnailFile(
+    final thumbnail = await thumb.FlutterVideoThumbnailPlus.thumbnailFile(
       video: videoThumbnail,
       // Replace with your video URL or file path
       thumbnailPath: directory.path,
-      imageFormat: thumb.ImageFormat.JPEG,
+      imageFormat: thumb.ImageFormat.jpeg,
       maxWidth: 128,
       quality: 75,
     );

@@ -37,6 +37,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class OtherAccountView extends StatefulWidget {
   OtherAccountView({super.key, payload}) {
@@ -223,7 +224,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     }
                                   }
                                 } else {
-                                  context.push(Routes.LOGIN);
+                                  return pleaseLoginDialog(context);
+
+                                  // context.push(Routes.LOGIN);
                                 }
                               },
                               onAddFriend: () async {
@@ -255,7 +258,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     }
                                   }
                                 } else {
-                                  context.push(Routes.LOGIN);
+                                  return pleaseLoginDialog(context);
+
+                                  // context.push(Routes.LOGIN);
                                 }
                               },
                               onAcceptFriend: () async {
@@ -869,7 +874,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               );
                             }
                           } else {
-                            context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           }
                         },
                         anonymousPress: () async {
@@ -889,7 +896,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               ),
                             );
                           } else {
-                            context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           }
                         },
                       ),

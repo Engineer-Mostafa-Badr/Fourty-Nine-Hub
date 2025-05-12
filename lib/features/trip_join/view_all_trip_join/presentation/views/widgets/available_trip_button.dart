@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class AvaialbleTripsButton extends StatelessWidget {
@@ -37,12 +38,12 @@ class AvaialbleTripsButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             icon != null
-                ? Icon(icon, color: Colors.white, size: 20)
+                ? Icon(icon, color: AppColors.getReversedTextColor(context), size: 20)
                 : const SizedBox(),
             const Sizer(width: 5),
             Text(
               title,
-              style: Styles.headerText(color: Colors.white, fontSize: 30),
+              style: Styles.headerText(color: AppColors.getReversedTextColor(context), fontSize: 30),
               textAlign: TextAlign.center,
             ),
           ],

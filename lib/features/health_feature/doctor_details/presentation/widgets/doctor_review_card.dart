@@ -21,6 +21,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class DoctorReviewCard extends StatelessWidget {
   final UserDoctorRateEntity review;
@@ -63,7 +64,10 @@ class DoctorReviewCard extends StatelessWidget {
               if (fromDashboard == true)
                 ClickableWidget(
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+                      pleaseLoginDialog(context);
+                      // context.push(Routes.LOGIN);
+                    }
                         : () {
                             bottomSheet(
                                 context: context,
@@ -98,7 +102,10 @@ class DoctorReviewCard extends StatelessWidget {
                         : AppColors.DARK_GRAY_COLOR,
                     icon: Icons.call,
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+                      pleaseLoginDialog(context);
+                      // context.push(Routes.LOGIN);
+                    }
                         : review.openCall == true
                             ? () {
                                 LaunchURLHelper()
@@ -122,7 +129,10 @@ class DoctorReviewCard extends StatelessWidget {
                         : AppColors.DARK_GRAY_COLOR,
                     icon: Icons.email,
                     onTap: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
+                        ? () {
+                      pleaseLoginDialog(context);
+                      // context.push(Routes.LOGIN);
+                    }
                         : review.openCall == true
                             ? () {}
                             : () {

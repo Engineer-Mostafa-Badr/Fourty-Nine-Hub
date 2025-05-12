@@ -16,26 +16,32 @@ class ShowImagesCreatePostSecond extends StatelessWidget {
       height: MediaQuery.sizeOf(context).height * 0.35,
       child: BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
         builder: (context, state) {
-          return PageView.builder(
-            itemCount: state.selectedGalleryPost.length,
-            itemBuilder: (context, index) {
-              return AssetEntityImage(
-                state.selectedGalleryPost[index],
-                fit: BoxFit.cover,
-              );
-              // return Image.file(state.selectedGalleryPost[index], fit: BoxFit.cover);
-              // return FutureBuilder<File?>(
-              //   future: state.selectedImages[index],
-              //   builder: (context, snapshot) {
-              //     if (snapshot.hasData) {
-              //       return Image.file(snapshot.data!);
-              //     } else {
-              //       return const CircularProgressIndicator();
-              //     }
-              //   },
-              // );
-            },
-          );
+          print('state.selectedGalleryPost ${state.selectedGalleryPost.length}');
+          print('state.selectedGalleryReels ${state.selectedGalleryReels.length}');
+          if (state.selectedGalleryPost.isNotEmpty) {
+            return PageView.builder(
+              itemCount: state.selectedGalleryPost.length,
+              itemBuilder: (context, index) {
+                return AssetEntityImage(
+                  state.selectedGalleryPost[index],
+                  fit: BoxFit.cover,
+                );
+              },
+            );
+          }else if (state.selectedGalleryReels.isNotEmpty) {
+            return PageView.builder(
+              itemCount: state.selectedGalleryReels.length,
+              itemBuilder: (context, index) {
+                return AssetEntityImage(
+                  state.selectedGalleryReels[index],
+                  thumbnailFormat: ThumbnailFormat.jpeg,
+                  isOriginal: false,
+                  fit: BoxFit.cover,
+                );
+              },
+            );
+          }
+          return Container();
         },
       ),
     );

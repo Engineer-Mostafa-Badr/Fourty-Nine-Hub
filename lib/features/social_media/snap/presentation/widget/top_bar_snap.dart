@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/file.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -167,7 +168,8 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
                   } else {
-                    context.go(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
+                    // context.go(Routes.LOGIN);
                   }
                 },
                 child: CircleAvatar(

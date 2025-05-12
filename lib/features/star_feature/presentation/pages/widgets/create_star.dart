@@ -20,8 +20,10 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../add_talent_widget.dart';
 import '../all_winner_view.dart';
 
@@ -84,7 +86,10 @@ class _CreateStarState extends State<CreateStar> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
+                        if (!context.read<UserCubit>().isLoggedIn) {
+                          pleaseLoginDialog(context);
+                        }else {
+                          Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => BlocProvider(
                               create: (context) => serviceLocator<StarCubit>(),
@@ -92,6 +97,7 @@ class _CreateStarState extends State<CreateStar> {
                             ),
                           ),
                         );
+                        }
                       },
                       child: Text(
                         LocaleKeys.winners.localize,

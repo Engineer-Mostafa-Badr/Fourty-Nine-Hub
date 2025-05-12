@@ -13,6 +13,9 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../pages/followers_screen.dart';
+
 class HeaderProfileInstagram extends StatelessWidget {
   const HeaderProfileInstagram({super.key});
 
@@ -45,7 +48,8 @@ class HeaderProfileInstagram extends StatelessWidget {
                               builder: (context) => const CameraScreen(),
                             ),
                           )
-                        : context.push(Routes.LOGIN);
+                        : pleaseLoginDialog(context);
+                    // context.push(Routes.LOGIN);
 
                     BlocProvider.of<StoryCubit>(context)
                       ..fetchStories()
@@ -82,21 +86,30 @@ class HeaderProfileInstagram extends StatelessWidget {
           ValueAndTitleHeaderProfileInstagram(
             value: FormatNumbers().formatNumber(dataProfile.postsCount),
             title: LocaleKeys.post.localize,
+            dataProfile: dataProfile,
+            index: -1,
           ),
           const Spacer(),
           ValueAndTitleHeaderProfileInstagram(
             value: FormatNumbers().formatNumber(dataProfile.friendsCount),
             title: LocaleKeys.friend.localize,
+            dataProfile: dataProfile,
+            index: 0,
+
           ),
           const Spacer(),
           ValueAndTitleHeaderProfileInstagram(
             value: FormatNumbers().formatNumber(dataProfile.followersCount),
             title: LocaleKeys.follower.localize,
+            dataProfile: dataProfile,
+            index: 1,
           ),
           const Spacer(),
           ValueAndTitleHeaderProfileInstagram(
             value: FormatNumbers().formatNumber(dataProfile.followingCount),
             title: LocaleKeys.following.localize,
+            dataProfile: dataProfile,
+            index: -1,
           ),
         ],
       ),

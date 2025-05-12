@@ -80,7 +80,7 @@ class _CreateAdViewState extends State<CreateAdView> {
       return CustomScaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(30),
-          child:HomeAppbar(),
+          child:HomeAppbar(isWithBackArrow: true,),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           // buildWhen: (previous, current) => previous.status == current.status,
@@ -133,14 +133,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                    color: (state.isUser == true &&
-                                            state.isSale == true &&
-                                            state.isMale == true)
-                                        ? AppColors.PRIMARY_COLOR
-                                        : context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.white,
+                                    color: AppColors.getFillColor(context),
                                     borderRadius: BorderRadius.circular(15),
                                     border: Border.all(
-                                        color: AppColors.PRIMARY_COLOR)),
+                                        color: (state.isUser == true &&
+                                            state.isSale == true &&
+                                            state.isMale == true)
+                                            ? AppColors.getRedColor(context):AppColors.getFillColor(context))),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
                                   widget.categorization.mainCategory.nameEn ==
@@ -152,11 +151,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                           ? LocaleKeys.sale.localize
                                           : LocaleKeys.user.localize,
                                   style: Styles.mediumText(
-                                      color: (state.isUser == false ||
-                                              state.isSale == false ||
-                                              state.isMale == false)
-                                          ? context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR
-                                          : Colors.white),
+                                      color:  AppColors.getTextColor(context)),
                                 ),
                               ),
                             )),
@@ -183,14 +178,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                      color: (state.isUser == false ||
-                                              state.isSale == false ||
-                                              state.isMale == false)
-                                          ? AppColors.PRIMARY_COLOR
-                                          : context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.white,
+                                      color:AppColors.getFillColor(context),
                                       borderRadius: BorderRadius.circular(15),
                                       border: Border.all(
-                                          color: AppColors.PRIMARY_COLOR)),
+                                          color: (state.isUser == false ||
+                                              state.isSale == false ||
+                                              state.isMale == false)
+                                              ? AppColors.getRedColor(context):AppColors.getFillColor(context))),
                                   alignment: AlignmentDirectional.center,
                                   child: Text(
                                     widget.categorization.mainCategory.nameEn ==
@@ -202,11 +196,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                             ? LocaleKeys.rent.localize
                                             : LocaleKeys.provider.localize,
                                     style: Styles.mediumText(
-                                        color: (state.isUser == true &&
-                                                state.isSale == true &&
-                                                state.isMale == true)
-                                            ? context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR
-                                            : Colors.white),
+                                        color: AppColors.getTextColor(context)),
                                   ),
                                 ),
                               ),
@@ -337,9 +327,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //     style: Styles.mediumText(fontSize: 32),
                       //   ),
                       // ),
-
                       CreateAdDropdownMenu<GovernorateEntity>(
-                        value: state.governorate!.isEmpty
+                        value:state.governorate!.isEmpty
                             ? null
                             : state.governorates!
                                 .where((gov) => gov.id == state.governorate)
@@ -603,11 +592,12 @@ class _CreateAdViewState extends State<CreateAdView> {
                       const SizedBox(
                         height: 16,
                       ),
-                      state.isLoadingCreateAd? const Center(child: CircularProgressIndicator()):AppButton(
+                      state.isLoadingCreateAd? const Center(child: CircularProgressIndicator())
+                          :AppButton(
                         label: LocaleKeys.publish.localize,
-                        backColor: AppColors.c0B1035,
+                        backColor: AppColors.getButtonPrimaryColor(context),
                         style: Styles.headerText(
-                          color: Colors.white,
+                          color: AppColors.getReversedTextColor(context),
                           fontSize: 28,
                         ),
                         height: 44,
@@ -658,7 +648,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                 padding: const EdgeInsets.all(16),
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xFFD9D9D9),
+                  color:AppColors.getFillColor(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -704,7 +694,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ],
                     ),
                     const Sizer(
-                      height: 4,
+                      height: 8,
                     ),
                     // BadgedLabel(
                     //   label: LocaleKeys.addImages.localize,

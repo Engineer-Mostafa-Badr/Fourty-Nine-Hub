@@ -97,7 +97,7 @@ class _TripJoinViewState extends State<TripJoinView>
 
   @override
   Widget build(BuildContext context) {
-    return SharedScaffold(
+    return SharedScaffold(mainCategoryId: 1,isWithBackArrow: true,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -106,15 +106,7 @@ class _TripJoinViewState extends State<TripJoinView>
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.h),
                 child: Column(children: [
-                  Align(
-                    alignment: AlignmentDirectional.topStart,
-                    child: IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: const Icon(
-                          Icons.arrow_back,
-                        )),
-                  ),
-                  const Sizer(),
+                  const Sizer(height: 30,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,12 +124,12 @@ class _TripJoinViewState extends State<TripJoinView>
                         icon: getIconForIndex(index),
                         borderColor: index == selectedIndex ? Colors.red : null,
                         containerColor:
-                            index == selectedIndex ? Colors.white : null,
+                            index == selectedIndex ? context.isDarkMode?AppColors.Scaffold_Color_DARK:Colors.white : null,
                         iconColor: index == selectedIndex
-                            ? const Color(0xffF33D49)
-                            : null,
+                            ? AppColors.getRedColor(context)
+                            : AppColors.getButtonPrimaryColor(context),
                         textColor: index == selectedIndex
-                            ? const Color(0xffF33D49)
+                            ? AppColors.getRedColor(context)
                             : null,
                       );
 
@@ -192,12 +184,12 @@ class _TripJoinViewState extends State<TripJoinView>
                   height: 48.h,
                   width: 48.h,
                   decoration: BoxDecoration(
-                      color: const Color(0xff0B1035),
+                      color: AppColors.getButtonPrimaryColor(context),
                       borderRadius: BorderRadius.circular(10)),
-                  child: const Icon(
+                  child: Icon(
                     size: 19,
                     Icons.question_mark,
-                    color: Colors.white,
+                    color: context.isDarkMode?AppColors.black:Colors.white,
                   ),
                 ),
               ),
@@ -206,8 +198,7 @@ class _TripJoinViewState extends State<TripJoinView>
           ],
         ),
       ),
-      mainCategoryId: 1,
-      isWithBackArrow: false,
+
     );
   }
 

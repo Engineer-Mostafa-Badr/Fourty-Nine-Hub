@@ -41,8 +41,9 @@ class TagUsersCubit extends Cubit<TagUsersState> {
     );
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: TagUsersStates.error)),
+      (failure) {
+        emit(state.copyWith(failure: failure, status: TagUsersStates.error));
+      },
       (data) {
         users.addAll(data);
 
@@ -51,7 +52,6 @@ class TagUsersCubit extends Cubit<TagUsersState> {
         } else {
           currentPage++;
         }
-
 
         emit(state.copyWith(status: TagUsersStates.success));
       },

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
@@ -194,11 +195,11 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
               height: 70.h,
               hint: LocaleKeys.search.localize,
               borderRadius: BorderRadius.circular(40.r),
-              style: Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
+              style: Styles.mediumText(color: context.isDarkMode?Colors.black:AppColors.GREY_NORMAL_COLOR),
               prefix: Icon(
                 Icons.search,
                 size: 30.h,
-                color: AppColors.GREY_NORMAL_COLOR,
+                color:context.isDarkMode?Colors.black:AppColors.GREY_NORMAL_COLOR,
               ),
               noBorder: true,
               action: (_) {}, // no-op now
@@ -411,7 +412,7 @@ class CustomTapWidget extends StatelessWidget {
         height: 35,
         // padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).primaryColor :AppColors.cE0E0E0,
+          color: isSelected ? AppColors.getButtonPrimaryColor(context):AppColors.getFillColor(context),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
@@ -419,7 +420,7 @@ class CustomTapWidget extends StatelessWidget {
             text,
             style: Styles.mediumText(
               // fontSize: 15,
-              color: isSelected ? Colors.white : AppColors.GREY_NORMAL_COLOR,
+              color: isSelected ? AppColors.getReversedTextColor(context) : AppColors.GREY_NORMAL_COLOR,
             ),
           ),
         ),
