@@ -268,7 +268,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     child: SnappingBottomSheet(
                       controller: sheetController,
                       duration: const Duration(milliseconds: 500),
-                      color: Colors.white,
+                      color:context.isDarkMode?AppColors.getFillColor(context):Colors.white,
                       shadowColor: Colors.black26,
                       elevation: 0,
                       maxWidth: MediaQuery.of(context).size.width,
@@ -288,17 +288,17 @@ class _CreatePostViewState extends State<CreatePostView> {
                               width: double.infinity,
                               height: 10.h,
                               margin: const EdgeInsets.only(bottom: 30),
-                              color: Colors.white,
-                              child: const Center(
+                              color: context.isDarkMode?AppColors.getFillColor(context):Colors.white,
+                              child: Center(
                                 child: Icon(
                                   Icons.keyboard_arrow_up,
-                                  color: Colors.black,
+                                  color:AppColors.getTextColor(context),
                                 ),
                               )),
                           const Divider(),
                           if((state.gifImage==null||(state.gifImage?.isEmpty??false))&&(state.selectedLifeEvent==null||(state.selectedLifeEvent?.id.isEmpty??false)))BuildSheetItem(
                               icon: Assets.imageIcon,
-                              title: "Photo/video",
+                              title:context.isArabic?'صورة/فيديو': "Photo/video",
                               onTap: () async {
                                 await controller.uploadPhoto(context: context);
                                 sheetController.collapse();
@@ -306,7 +306,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.tagIcon,
-                              title: "Tag people",
+                              title: context.isArabic?'اشارة لأشخاص':"Tag people",
                               onTap: () {
                                 sheetController.collapse();
                                 bottomSheet(
@@ -322,7 +322,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.feelingIcon,
-                              title: "Feeling",
+                              title: context.isArabic?'شعور':"Feeling",
                               onTap: () {
                                 sheetController.collapse();
                                 bottomSheet(
@@ -340,7 +340,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.feelingIcon,
-                              title: "Activity",
+                              title: context.isArabic?'نشاط':"Activity",
                               onTap: () {
                                 sheetController.collapse();
                                 bottomSheet(
@@ -357,7 +357,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.locationIcon,
-                              title:state.place!=null||(state.place?.name.isEmpty??false)?"Remove Location":"Check in",
+                              title:state.place!=null||(state.place?.name.isEmpty??false)?context.isArabic?'ازالة الموقع':"Remove Location":context.isArabic?'موقع':"Check in",
                               onTap: () async{
                                 // if(state.place!=null||(state.place?.name.isEmpty??false)){
                                 //   context.read<CreatePostCubit>().removeAddress();
@@ -377,7 +377,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                           //     hasDivider: true),
                           if((state.gifImage==null&&(state.gifImage?.isEmpty??false))&&state.selectedLifeEvent==null&&(state.selectedLifeEvent?.id.isEmpty??false))BuildSheetItem(
                               icon: Assets.backgroundIcon,
-                              title: "Background color",
+                              title: context.isArabic?'لون الخلفية':"Background color",
                               onTap: () {
                                 controller.showRemoveBalletColors();
                                 sheetController.collapse();
@@ -385,7 +385,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                               hasDivider: true),
                           if((state.gifImage==null||(state.gifImage?.isEmpty??false))&&(state.selectedLifeEvent==null||(state.selectedLifeEvent?.id.isEmpty??false)))BuildSheetItem(
                               icon: Assets.cameraIcon,
-                              title: "Camera",
+                              title: context.isArabic?'كاميرا':"Camera",
+                              color: context.isDarkMode?Colors.white:null,
                               onTap: () async {
                                 await controller.uploadPhoto(
                                     context: context, isGallery: false);
@@ -395,7 +396,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                           if((state.images==null||(state.images?.isEmpty??false))&&(state.selectedLifeEvent==null||(state.selectedLifeEvent?.id.isEmpty??false)))
                             BuildSheetItem(
                               icon: Assets.gifIcon,
-                              title: "GIF",
+                              title: context.isArabic?'صورة متحركة':"GIF",
                               onTap: () async {
                                 print(state.images);
                                 print(state.images?.length);
@@ -410,7 +411,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                       ? GiphyLanguage.arabic
                                       : GiphyLanguage.english,
                                   randomID: "",
-                                  searchText: "Search GIF",
+                                  searchText: context.isArabic?'بحث عن صورة متحركة':"Search GIF",
                                   tabColor: Colors.blue,
                                 );
 
@@ -426,7 +427,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                           if((state.images==null||(state.images?.isEmpty??false))&&(state.gifImage==null||(state.gifImage?.isEmpty??false)))
                           BuildSheetItem(
                               icon: Assets.lifeEventIcon,
-                              title: "Life event",
+                              title: context.isArabic?'حدث':"Life event",
                               onTap: () {
                                 sheetController.collapse();
                                 context.push(Routes.LIFEEVENT);

@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -36,11 +38,11 @@ class NormalPostScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
-          //   child: BuildFacebookHeader(user:postEntity.user, sinceTime: postEntity.sinceTime,activity: postEntity.activity,feeling: postEntity.feeling,users: postEntity.users,location: postEntity.location,),
-          // ),
-          // const SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
+            child: BuildFacebookHeader(user:postEntity.user, sinceTime: '\u200E 2h',activity: postEntity.activity,feeling: postEntity.feeling,users: postEntity.users,location: postEntity.location,),
+          ),
+          const SizedBox(height: 16.0),
 
           // if (postEntity.images?.isNotEmpty??false)
             Column(
@@ -50,10 +52,10 @@ class NormalPostScreen extends StatelessWidget {
                   child: ReadMoreLabel(
                     text: postEntity.content??'',
                     // textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.black),
+                        color: AppColors.getTextColor(context)),
                   ),
                 ),
                 // if(postEntity.type=="live_event_post")FacebookLifeEventWidget(postEntity: postEntity,),
@@ -92,8 +94,8 @@ class NormalPostScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 // Increased space between reactions and text
-                const Label(
-                  text: "Claude-Arthur Mbonzi And 276 Others",
+                 Label(
+                  text: "Claude-Arthur Mbonzi ${context.isArabic?'و':'and'} 276 ${context.isArabic?'اخرين':'Others'}",
                   style: TextStyle(
                     color: AppColors.c46484B,
                     fontSize: 16,
@@ -106,7 +108,7 @@ class NormalPostScreen extends StatelessWidget {
           const SizedBox(height: 10.0),
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               // Align the items to the start
@@ -126,7 +128,6 @@ class NormalPostScreen extends StatelessWidget {
                 //   ],
                 // ),
                 SizedBox(
-                  height: 250,
                   child: BuildReactionsButtons(
                     post: postEntity,
                     from: "posts",
@@ -195,12 +196,12 @@ class NormalPostScreen extends StatelessWidget {
                     },
                   child: Row(
                     children: [
-                      SvgPicture.asset(Assets.commentIcon), // Comment Icon
-                      SizedBox(width: 4.w), // Space between icon and text
+                      SvgPicture.asset(Assets.commentIcon,color: context.isDarkMode?Colors.white:null), // Comment Icon
+                      SizedBox(width: 8.w), // Space between icon and text
                       Label(
                         text: LocaleKeys.comment.localize,
-                        style: const TextStyle(
-                            color: AppColors.black,
+                        style: TextStyle(
+                            color:AppColors.getTextColor(context),
                             fontSize: 14,
                             fontWeight: FontWeight.w400),
                       ), // Comment Text
@@ -212,12 +213,12 @@ class NormalPostScreen extends StatelessWidget {
                 // Send button
                 Row(
                   children: [
-                    SvgPicture.asset(Assets.sendIcon), // Send Icon
-                    SizedBox(width: 4.w), // Space between icon and text
+                    SvgPicture.asset(Assets.sendIcon,color: context.isDarkMode?Colors.white:null,), // Send Icon
+                    SizedBox(width: 8.w), // Space between icon and text
                     Label(
                       text: LocaleKeys.send.localize,
-                      style: const TextStyle(
-                          color: AppColors.black,
+                      style: TextStyle(
+                          color: AppColors.getTextColor(context),
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
                     ), // Send Text
@@ -228,12 +229,12 @@ class NormalPostScreen extends StatelessWidget {
                 // Share button
                 Row(
                   children: [
-                    SvgPicture.asset(Assets.shareIcon), // Share Icon
-                    SizedBox(width: 4.w), // Space between icon and text
+                    SvgPicture.asset(Assets.shareIcon,color: context.isDarkMode?Colors.white:null), // Share Icon
+                    SizedBox(width: 8.w), // Space between icon and text
                     Label(
                       text: LocaleKeys.share.localize,
-                      style: const TextStyle(
-                          color: AppColors.black,
+                      style: TextStyle(
+                          color:AppColors.getTextColor(context),
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
                     ), // Share Text
@@ -241,7 +242,9 @@ class NormalPostScreen extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
+          const Sizer(),
+
         ],
       ),
     );

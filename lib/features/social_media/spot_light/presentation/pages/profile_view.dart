@@ -99,7 +99,8 @@ class SpotLightProfileScreen extends StatelessWidget {
               child: Container(
                 // height: MediaQuery.of(context).size.height,
                 decoration:  BoxDecoration(
-                  color:context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  // color:context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
                 ),
                 child: Column(

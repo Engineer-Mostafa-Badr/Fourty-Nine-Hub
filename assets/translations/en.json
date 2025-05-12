@@ -1612,5 +1612,21 @@
   "errorDecodingQrCode": "Error decoding QR code",
   "youHaveNoAds": "You have no ads ",
   "hide": "Hide",
-  "aboutThisAccount": "About this account"
+  "aboutThisAccount": "About this account",
+  "pleaseFillAllRequiredFields": "Please fill all required fields",
+  "youCantChoosePastTime": "Please choose a time after a quarter of an hour from now",
+  "chooseTheTime": "Choose The Time",
+  "chooseTheDate": "Choose The Date",
+  "pleaseSelectDateFirst": "Please select a date first.",
+  "errorHappen": "Error Happen",
+  "accepted": "Accepted",
+  "rideOffer": "Ride Offer",
+  "dontHaveOffer": "You don't have any offers yet",
+  "current": "Current",
+  "youDontHaveAcceptedOffer": "You don't Have Accepted Offers",
+  "youDontHavePendingOffer": "You don't Have Pending Offers",
+  "youDontHavePastOffer": "You don't Have Past Offers",
+  "youDontHaveAvailableOffer": "You don't Have Available Offers"
+
+
 }

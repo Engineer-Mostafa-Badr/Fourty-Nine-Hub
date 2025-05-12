@@ -1596,5 +1596,20 @@
   "youHaveNoAds": "ليس لديك اعلانات",
   "unfollow": "الغاء المتابعة",
   "hide": "اخفاء",
-  "aboutThisAccount": "حول هذا الحساب"
+  "aboutThisAccount": "حول هذا الحساب",
+  "pleaseFillAllRequiredFields": "يرجى ملء جميع الحقول المطلوبة",
+  "youCantChoosePastTime": "من فضلك اختار وقت بعد ربع ساعه من الان",
+  "chooseTheTime": "اختر الوقت",
+  "chooseTheDate": "اختر التاريخ",
+  "pleaseSelectDateFirst": "يرجى تحديد التاريخ أولاً",
+  "errorHappen": "حدث خطأ",
+  "accepted": "المقبولة",
+  "rideOffer": "عروض الرحلات",
+  "dontHaveOffer": "ليس لديك أي عروض حتى الآن",
+  "current": "حالية",
+  "youDontHaveAcceptedOffer": "ليس لديك أي عروض مقبولة حتى الآن",
+  "youDontHavePendingOffer": "ليس لديك أي عروض قيد الانتظار حتى الآن",
+  "youDontHavePastOffer": "ليس لديك أي عروض سابقة حتى الآن",
+  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن"
+
 }

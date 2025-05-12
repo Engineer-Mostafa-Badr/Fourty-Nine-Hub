@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/description_post.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/icon_action_post_insta.dart';
@@ -28,10 +30,13 @@ class InstagramPostReviewWidget extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        if (instagramPostEntity.likesCounter != 0)
+        if (instagramPostEntity.lastLikeEntity != null)
           LikedByWidget(
-            imageUrl: testImage2,
-            name: 'craig_love',
+            imageUrl: instagramPostEntity.lastLikeEntity!.profilePic,
+            name: instagramPostEntity.lastLikeEntity!.userId ==
+                    context.read<UserCubit>().state.data!.id
+                ? 'You'
+                : instagramPostEntity.lastLikeEntity!.username,
             others: instagramPostEntity.likesCounter - 1,
           ),
         if (instagramPostEntity.likesCounter != 0)
@@ -47,7 +52,8 @@ class InstagramPostReviewWidget extends StatelessWidget {
           child: Label(
             text: FormatDate().fromatDateLikeMonthDay(
                 // context, '2025-04-05T22:39:39.466Z'),
-                context, instagramPostEntity.createdAt!),
+                context,
+                instagramPostEntity.createdAt!),
             style: Styles.mediumText(
               color: context.isDarkMode
                   ? const Color(0x66FFFFFF)

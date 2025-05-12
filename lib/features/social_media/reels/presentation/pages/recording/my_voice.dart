@@ -387,7 +387,7 @@ class MyVoiceVideoRecordingScreenState
                   right: 0,
                   child: Column(
                     children: [
-                      //   _buildControls(),
+                        _buildControls(),
                     ],
                   ),
                 ),

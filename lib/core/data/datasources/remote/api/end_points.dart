@@ -1499,4 +1499,17 @@ class EndPoints {
   static const getMostBooking = '/health/doctors';
 
   static const getDoctorList = '/health/doctors';
+  static const createNonTrackTrip = '/ride/non-tracking/trips/client';
+  static const getClientPendingUntrackedTrips = '/ride/non-tracking/trips/client/pending';
+  static const getClientAcceptedUntrackedTrips = '/ride/non-tracking/trips/client';
+  static const getClientPastUntrackedTrips = '/ride/non-tracking/trips/client/history';
+  static const getClientOfferUntrackedTrips = '/ride/non-tracking/offers';
+  static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
+  static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
+
+
+  static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
+  static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
+  static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
 }

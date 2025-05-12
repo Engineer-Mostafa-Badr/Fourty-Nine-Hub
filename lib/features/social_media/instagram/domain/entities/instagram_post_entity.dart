@@ -1,5 +1,7 @@
 import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
 
+import 'last_like_enyity.dart';
+
 class InstagramPostEntity {
   final String id;
   final String content;
@@ -22,6 +24,8 @@ class InstagramPostEntity {
   final int countOfStory;
   final bool isFriend;
   final bool isFollow;
+  final bool isLiked;
+  final LastLikeEntity? lastLikeEntity;
 
   InstagramPostEntity({
     required this.id,
@@ -45,6 +49,8 @@ class InstagramPostEntity {
     required this.countOfStory,
     required this.isFriend,
     required this.isFollow,
+    required this.isLiked,
+     this.lastLikeEntity,
   });
 }
 

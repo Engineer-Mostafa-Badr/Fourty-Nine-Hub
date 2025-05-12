@@ -121,10 +121,10 @@ class ShareTheApp extends StatelessWidget {
           child: BadgedLabel(
               height: 52,
               width: double.infinity,
-              color: AppColors.PRIMARY_COLOR,
+              color: AppColors.getButtonPrimaryColor(context),
               radius: 15,
               style: Styles.mediumText(
-                color: context.isDarkMode ? Colors.white : Colors.black,
+                color: context.isDarkMode ? AppColors.PRIMARY_COLOR :Colors.white ,
               ),
               label: '${LocaleKeys.yourReferralID.localize} $referralId'),
         ),
@@ -132,8 +132,11 @@ class ShareTheApp extends StatelessWidget {
           height: 32,
         ),
         AppButton(
-          color: AppColors.AUTH_CONTAINER_COLOR,
+          color: AppColors.getRedColor(context),
           label: LocaleKeys.shareTheApp.localize,
+          style: Styles.mediumText(
+            color: AppColors.getReversedTextColor(context) ,
+          ),
           radius: 15,
           height: 52,
           onPressed: () async {
@@ -192,7 +195,8 @@ https://example.com/download
         children: [
           Expanded(
             child: _buildStatisticsItem(
-              color: AppColors.PRIMARY_COLOR,
+              context,
+              color: AppColors.getButtonPrimaryColor(context),
               title: LocaleKeys.userShare.localize,
               subTitle: '$user',
             ),
@@ -200,7 +204,8 @@ https://example.com/download
           const Sizer(),
           Expanded(
             child: _buildStatisticsItem(
-              color: AppColors.PRIMARY_COLOR,
+              context,
+              color: AppColors.getButtonPrimaryColor(context),
               title: LocaleKeys.balance.localize,
               subTitle: '$balance',
             ),
@@ -208,7 +213,8 @@ https://example.com/download
           const Sizer(),
           Expanded(
             child: _buildStatisticsItem(
-                color: AppColors.PRIMARY_COLOR,
+              context,
+                color: AppColors.getButtonPrimaryColor(context),
                 title: LocaleKeys.gift.localize,
                 subTitle: '$gift'),
           ),
@@ -217,7 +223,9 @@ https://example.com/download
     );
   }
 
-  Widget _buildStatisticsItem({
+  Widget _buildStatisticsItem(
+      BuildContext context ,
+      {
     required Color color,
     required String title,
     required String subTitle,
@@ -235,14 +243,14 @@ https://example.com/download
           Label(
             text: title,
             style: Styles.mediumText(
-              color: Colors.white,
+              color: AppColors.getReversedTextColor(context),
               fontSize: 32,
             ),
           ),
           Label(
             text: subTitle,
             style: Styles.mediumText(
-              color: Colors.white,
+              color: AppColors.getReversedTextColor(context),
               fontSize: 32,
             ),
           ),

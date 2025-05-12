@@ -36,6 +36,7 @@ class _ContactUsViewState extends State<ContactUsView> {
           label: LocaleKeys.contactUs.localize,
           subTitle: LocaleKeys.TeamHelp.localize,
           enableCustomAppBar: true,
+          textColor: AppColors.getReversedTextColor(context),
         ),
       ),
       enableCustomAppBar: true,
@@ -83,6 +84,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       DefaultTextFormField(
                         contentPadding: EdgeInsets.zero,
                         fillColor: Colors.transparent,
+                        borderColor: AppColors.getTextColor(context),
                         currentController: controller.phoneController,
                         hint: LocaleKeys.phoneOptional.localize,
                         keyboardType: TextInputType.phone,
@@ -106,6 +108,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                         contentPadding: const EdgeInsets.all(16),
                         // contentPadding: EdgeInsets.all(32),
                         fillColor: Colors.transparent,
+                        borderColor: AppColors.getTextColor(context),
                         currentController: controller.messageController,
                         hint: '${LocaleKeys.message.localize}...',
                         hintColor:
@@ -120,10 +123,10 @@ class _ContactUsViewState extends State<ContactUsView> {
                       const Spacer(),
                       AppButton(
                           radius: 25,
-                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          color: AppColors.getReversedTextColor(context),
                           label: LocaleKeys.send.localize,
                           margin: 10,
-                          backColor: AppColors.SECONDARY_COLOR,
+                          backColor: AppColors.getRedColor(context),
                           onPressed: () => controller.createContactUs(context)),
                     ],
                   ),
@@ -148,7 +151,7 @@ class _ContactUsViewState extends State<ContactUsView> {
         height: 80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
+          color: context.isDarkMode?AppColors.getFindFillColor(context):AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

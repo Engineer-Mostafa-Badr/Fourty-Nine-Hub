@@ -34,7 +34,7 @@ class BuildCreatePostHeader extends StatelessWidget {
           Container(
             width: 53,
             height: 53,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.GREYBG
             ),
@@ -52,10 +52,10 @@ class BuildCreatePostHeader extends StatelessWidget {
                 RichText(text: TextSpan(children: [
                   TextSpan(
                       text: UserCubit.to.state.data?.fullName??'',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.PRIMARY_COLOR)),
+                          color:context.isDarkMode?Colors.white: AppColors.PRIMARY_COLOR)),
                   if(
                   (controller.state.selectedActivity!=null&&(controller.state.selectedActivity?.id.isNotEmpty??false))
                       ||(controller.state.selectedFeeling!=null&&(controller.state.selectedFeeling?.id.isNotEmpty??false))
@@ -66,7 +66,6 @@ class BuildCreatePostHeader extends StatelessWidget {
                   if(controller.state.selectedFeeling!=null&&(controller.state.selectedFeeling?.id.isNotEmpty??false))TextSpan(
                     children: [
                       WidgetSpan(child:
-
                       CircleAvatar(
                         radius: 15,
                         backgroundColor: Colors.white,
@@ -79,18 +78,18 @@ class BuildCreatePostHeader extends StatelessWidget {
                       const WidgetSpan(child: SizedBox(width: 5,)),
                       TextSpan(
                           text: LocaleKeys.feeling.localize,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.PRIMARY_COLOR)
+                              color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR)
                       ),
                       const WidgetSpan(child: SizedBox(width: 5,)),
                       TextSpan(
                           text: context.isArabic?controller.state.selectedFeeling?.name??'':controller.state.selectedFeeling?.nameEn??'',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.PRIMARY_COLOR)
+                              color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR)
                       )
                     ],
                       ),
@@ -109,18 +108,18 @@ class BuildCreatePostHeader extends StatelessWidget {
                         const WidgetSpan(child: SizedBox(width: 5,)),
                         TextSpan(
                             text: context.isArabic?controller.state.selectedActivity?.mainActivity?.name??'':controller.state.selectedActivity?.mainActivity?.nameEn??'',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.PRIMARY_COLOR)
+                                color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR)
                         ),
                         const WidgetSpan(child: SizedBox(width: 5,)),
                         TextSpan(
                             text: context.isArabic?controller.state.selectedActivity?.name??'':controller.state.selectedActivity?.nameEn??'',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.PRIMARY_COLOR)
+                                color:context.isDarkMode?Colors.white: AppColors.PRIMARY_COLOR)
                         )
                       ],
                       ),
@@ -135,10 +134,10 @@ class BuildCreatePostHeader extends StatelessWidget {
                                 color: AppColors.GREY_DARK_COLOR)),
                         const WidgetSpan(child: Sizer()),
                         TextSpan(text: state.selectedUsers?.first.fullName??'',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.PRIMARY_COLOR)),
+                                color:context.isDarkMode?Colors.white: AppColors.PRIMARY_COLOR)),
                         if((state.selectedUsers?.length??0)>1)WidgetSpan(child: ClickableWidget(
                             onTap: (){
                               sheetController.collapse();
@@ -168,10 +167,10 @@ class BuildCreatePostHeader extends StatelessWidget {
                               color: AppColors.GREY_DARK_COLOR)),
                       const WidgetSpan(child: Sizer()),
                       TextSpan(text: state.place?.name??'',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.PRIMARY_COLOR))
+                              color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR))
                     ]
                   ),
                 ])),

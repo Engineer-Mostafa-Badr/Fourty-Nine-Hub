@@ -393,6 +393,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
               ? Image.asset(
                   item.imageAsset(),
                   fit: BoxFit.fill,
+              color: context.isDarkMode?Colors.white:null
                 )
               : Lottie.asset(
                   item.lottieAsset(),
@@ -411,12 +412,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SvgPicture.asset(Assets.likeIcon),
-        SizedBox(width: 4.w), // Space between icon and text
+        SvgPicture.asset(Assets.likeIcon,color:AppColors.getTextColor(context)),
+        SizedBox(width: 8.w), // Space between icon and text
         Label(
           text: LocaleKeys.like.localize,
-          style: const TextStyle(
-              color: AppColors.black,
+          style: TextStyle(
+              color:AppColors.getTextColor(context),
               fontSize: 14,
               fontWeight: FontWeight.w400),
         ),

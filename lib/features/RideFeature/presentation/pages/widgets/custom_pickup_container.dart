@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/app_colors.dart';
 
 class PickUpContainer extends StatelessWidget {
   const PickUpContainer(
@@ -13,7 +15,7 @@ class PickUpContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.centerLeft,
+        alignment:context.isArabic ? Alignment.centerRight : Alignment.centerLeft,
         padding: const EdgeInsetsDirectional.only(start: 16),
         height: 48,
         decoration: BoxDecoration(
@@ -24,7 +26,9 @@ class PickUpContainer extends StatelessWidget {
           text: title,
           style: TextStyle(
               fontWeight: fontWeight ?? FontWeight.w400,
-              fontSize: fontSize ?? 16),
+              fontSize: fontSize ?? 16,
+          color:  AppColors.PRIMARY_COLOR
+          ),
           textAlign: TextAlign.center,
         ));
   }

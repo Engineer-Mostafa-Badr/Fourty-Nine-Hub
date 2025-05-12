@@ -67,7 +67,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
             Label(
                 text: subTitle ?? '',
                 style: Styles.mediumText().copyWith(
-                    color: enableCustomAppBar ? Colors.white : textColor)),
+                    color: !enableCustomAppBar ? Colors.white : textColor)),
           ],
         ),
       ),
