@@ -131,6 +131,8 @@ class SinglePostInstagramViewBody extends StatelessWidget {
           ),
         ),
         isFollow: post.owner.isFollow,
+        isLiked: post.isLiked,
+        lastLikeEntity: post.lastLikeEntity,
       ),
     );
   }

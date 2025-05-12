@@ -33,18 +33,24 @@ class IconsActionPostInsta extends StatelessWidget {
               builder: (context, state) {
                 final cubit = context.read<LikePostInstagramCubit>();
                 return IconAndValueWidget(
-                  icon: state.isLike ? const Icon(
-                    Icons.favorite,
-                    color: Color(0xffFE0135),
-                  ) : const Icon(
-                    Icons.favorite_border_rounded,
-                    color: Colors.grey,
-                  ),
+                  icon: state.isLike ?? instagramPostEntity.isLiked
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      : const Icon(
+                          Icons.favorite_border_rounded,
+                          color: Colors.black,
+                        ),
                   value: FormatNumbers().formatNumber(
-                     state.likeCount ?? instagramPostEntity.likesCounter,
+                      state.likeCount ?? instagramPostEntity.likesCounter,
                       useArabicNumerals: context.isArabic),
                   onPressed: () {
-                    cubit.likePostInstagram(instagramPostEntity.id,instagramPostEntity.likesCounter);
+                    cubit.likePostInstagram(
+                      instagramPostEntity.id,
+                      instagramPostEntity.likesCounter,
+                      instagramPostEntity.isLiked,
+                    );
                   },
                 );
               },
@@ -69,8 +75,7 @@ class IconsActionPostInsta extends StatelessWidget {
                 isScrollControlled: true,
                 padding: 0,
                 widget: BlocProvider(
-                  create: (context) =>
-                  serviceLocator<CommentsInstagramCubit>()
+                  create: (context) => serviceLocator<CommentsInstagramCubit>()
                     ..getComments(instagramPostEntity.id),
                   child: CommentInstagramView(
                     postId: instagramPostEntity.id,
