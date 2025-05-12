@@ -47,6 +47,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.wayPointTwo,
     required super.wayPointOneTitle,
     required super.wayPointTwoTitle,
+    required super.otp,
   });
 
   factory RideRequestTripModel.fromJson(Map<String, dynamic> json) {
@@ -75,10 +76,10 @@ class RideRequestTripModel extends RideRequestTripEntity {
       // subCategoryId: json['subCategoryId'] ?? '',
       subCategoryId: '',
       carTypeId: json['carTypeId'] ?? '',
-      from: json['fromTitle'] ?? 'Unknown',
-      to: json['toTitle'] ?? 'Unknown',
-      wayPointOneTitle: json['wayPointOneTitle'] ?? 'Unknown',
-      wayPointTwoTitle: json['wayPointTwoTitle'] ?? 'Unknown',
+      from: json['fromTitle'],
+      to: json['toTitle'],
+      wayPointOneTitle: json['wayPointOneTitle'],
+      wayPointTwoTitle: json['wayPointTwoTitle'],
       startCoordinates: (json['startLocation']?['coordinates'] as List<dynamic>?)
           ?.map((coord) => (coord as num?)?.toDouble() ?? 0.0)
           .toList() ??
@@ -99,6 +100,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
       duration: json['duration'] ?? 0, // Default to 0
       passengers: json['passengers'] ?? 1, // Default to 1 passenger
       price: (json['price'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
+      otp: json['OTP'],
       lowestFare: (json['lowestFare'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
       highestFare: (json['highestFare'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
       paymentMethod: json['paymentMethod'] ?? 'Cash', // Default payment method
@@ -112,27 +114,19 @@ class RideRequestTripModel extends RideRequestTripEntity {
       updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) ?? DateTime.now() : DateTime.now(),
       expireAt: json['expireAt'] != null ? DateTime.tryParse(json['expireAt']) ?? DateTime.now() : DateTime.now(),
       rating: (json['rate'] as num?)?.toDouble() ?? 0.0, // Default rating to 0.0
-      driverId: json['driverDetails']?['driverId'] ?? '',
-      driverUserId: json['driverDetails']?['driverUserId'] ?? '',
-      driverFirstName: json['driverDetails']?['firstName'] ?? '',
-      driverIsArrivingIn: (json['driverIsArrivingIn'] as num?)?.toDouble() ?? 0,
+      driverId: json['driverDetails']?['driverId'],
+      driverUserId: json['driverDetails']?['driverUserId'],
+      driverFirstName: json['driverDetails']?['firstName'],
+      driverIsArrivingIn: (json['driverDetails']?['driverIsArrivingIn'] as num?)?.toDouble() ?? 0,
       driverPhoneNumber: json['driverDetails']?['phoneNumber'] ?? '',
       driverProfilePicture: json['driverDetails']?['profilePictureUrl'],
       driverRating: (json['driverDetails']?['rating']?['averageRating'] as num?)?.toDouble() ?? 0.0,
       driverRatingCount: (json['driverDetails']?['rating']?['totalRatings'] as num?)?.toInt() ?? 0,
-      vehicleBrand: json['vehicleDetails']?['brand'] ?? '',
-      vehicleModel: json['vehicleModel']?['model'] ?? '',
-      vehicleColor: json['vehicleDetails']?['color'] ?? '',
-      vehiclePlateNumber: json['vehicleDetails']?['plateInfo'] ?? '',
-      vehiclePicture: json['vehicleDetails']?['carPictureUrl'],
-      // polyline: json['polyline'] != null
-      //     ? (json['polyline'] as List)
-      //     .map((e) =>
-      //     (e as List)
-      //         .map((p) => (p as num).toDouble())
-      //         .toList())
-      //     .toList()
-      //     : [],
+      vehicleBrand: json['driverDetails']?['vehicleDetails']?['brand'],
+      vehicleModel: json['driverDetails']?['vehicleModel']?['model'],
+      vehicleColor: json['driverDetails']?['vehicleDetails']?['color'],
+      vehiclePlateNumber: json['driverDetails']?['vehicleDetails']?['plateInfo'],
+      vehiclePicture: (json['driverDetails']?['vehicleDetails']?['carPictureUrl'] as List<dynamic>?)?[0],
       polyline: parsedPolyline,
     );
   }

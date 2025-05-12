@@ -961,7 +961,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         EndPoints.acceptOfferByClient(offerId),
       );
       return response.fold((failure) => Left(failure), (data) {
+        log("55555555555555555555555555 before");
         RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['tripDetails']);
+        log("55555555555555555555555555 after");
         rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
         rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
         return Right(rideRequestTripModel);

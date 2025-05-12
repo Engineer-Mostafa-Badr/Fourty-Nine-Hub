@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
@@ -46,6 +47,18 @@ class FareBottomSheetWidget extends StatelessWidget {
                   cursorColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                   cursorHeight: 50,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    TextInputFormatter.withFunction((oldValue, newValue) {
+                      if (newValue.text.isEmpty) return newValue;
+                      if (newValue.text == '0') return newValue;
+                      if (newValue.text.startsWith('0')) {
+                        return oldValue;
+                      }
+                      return newValue;
+                    }),
+                  ],
+
                   style:  TextStyle(
                     color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w500,
@@ -99,17 +112,26 @@ class FareBottomSheetWidget extends StatelessWidget {
                   label: LocaleKeys.done.tr(),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      if (selectedCategoryName == "Captain") {
+                      if (selectedCategoryName.trim().toLowerCase() == "Captain".toLowerCase()) {
                         state.rideExpectedPrice?.priceForCaptain =
                             double.parse(_controller.text);
-                      } else if (selectedCategoryName == "Scooter") {
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Scooter".toLowerCase()) {
                         state.rideExpectedPrice?.priceForScooter =
                             double.parse(_controller.text);
-                      } else if (selectedCategoryName == "Taxi") {
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Taxi".toLowerCase()) {
                         state.rideExpectedPrice?.priceForTaxi =
                             double.parse(_controller.text);
-                      } else if (selectedCategoryName == "Suv") {
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Suv".toLowerCase()) {
                         state.rideExpectedPrice?.priceForSUV =
+                            double.parse(_controller.text);
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Lady".toLowerCase()) {
+                        state.rideExpectedPrice?.priceForWomen =
+                            double.parse(_controller.text);
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Premium".toLowerCase()) {
+                        state.rideExpectedPrice?.priceForPremium =
+                            double.parse(_controller.text);
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Intercity".toLowerCase()) {
+                        state.rideExpectedPrice?.priceForIntercity =
                             double.parse(_controller.text);
                       }
                       rideCubit.emitRefreshState();

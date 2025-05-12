@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../res/assets/assets.dart';
 import 'widgets/bottom_button_ride_status_widget.dart';
 import 'widgets/driver_header_widget.dart';
 import 'widgets/feedback_widget.dart';
@@ -16,7 +18,6 @@ class RideStatusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     const driverName = 'Mohamed';
     const driverImage =
         'https://maps.gstatic.com/tactile/pane/default_geocode-2x.png';
@@ -30,8 +31,7 @@ class RideStatusScreen extends StatelessWidget {
       body: SafeArea(
         child: SharedScaffold(
           mainCategoryId: 2,
-          body:
-          Stack(
+          body: Stack(
             children: [
               const MapSection(),
               DraggableScrollableSheet(
@@ -40,7 +40,7 @@ class RideStatusScreen extends StatelessWidget {
                 maxChildSize: 0.9,
                 builder: (context, scrollController) {
                   return Container(
-                    decoration:  BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(16),
@@ -54,7 +54,7 @@ class RideStatusScreen extends StatelessWidget {
                           children: [
                             const DriverHeaderWidget(
                               carModel: carModel,
-                              rideStatus: rideStatus,
+                              rideStatusWidget: SizedBox(),
                               carImageUrl: driverImage,
                               carName: driverName,
                               carNumber: carNumber,
@@ -63,12 +63,18 @@ class RideStatusScreen extends StatelessWidget {
                               height: 2,
                             ),
 
-                            ActionButtonsWidget(driverImageUrl: driverImage, driverRating: 12.2, driverName: driverName, onContactDriver: () {
-                              context.push(Routes.ratingClientScreen);
-
-                            }, onSafety: () {
-                              context.push(Routes.rideArrivedScreen);
-                            },is_show_message: true,onMessage: (){},
+                            ActionButtonsWidget(
+                              driverImageUrl: driverImage,
+                              driverRating: 12.2,
+                              driverName: driverName,
+                              onContactDriver: () {
+                                context.push(Routes.ratingClientScreen);
+                              },
+                              onSafety: () {
+                                context.push(Routes.rideArrivedScreen);
+                              },
+                              is_show_message: true,
+                              onMessage: () {},
                             ),
                             const Divider(
                               height: 2,
@@ -87,17 +93,22 @@ class RideStatusScreen extends StatelessWidget {
                             //   to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                             // ),
 
-                            BottomRideStatusWidget(price: 200,
+                            BottomRideStatusWidget(
+                              price: 200,
                               fromLocation: 'أول العاشر من رمضان',
-                              toLocation: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                              toLocation:
+                                  'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                               onGoogleMap: () {},
                               onPartialPayment: () {},
                               onCallEmergency: () {},
                               onCancelRide: () {},
                               isRecording: true,
                               audioDuration: '',
-                              onMicTap: () {  },
-
+                              onMicTap: () {},
+                              paymentMethod: "cash",
+                              wayPointOne: null,
+                              wayPointTwo: null,
+                              otp: "",
                             ),
                           ],
                         ),
@@ -106,8 +117,6 @@ class RideStatusScreen extends StatelessWidget {
                   );
                 },
               ),
-
-
             ],
           ),
         ),
@@ -117,22 +126,22 @@ class RideStatusScreen extends StatelessWidget {
 }
 
 class ActionButtonsWidget extends StatelessWidget {
-  final String driverImageUrl;
-  final double driverRating;
+  final String? driverImageUrl;
+  final double? driverRating;
   final String driverName;
   final VoidCallback onContactDriver;
   final VoidCallback onSafety;
-  final VoidCallback ?onMessage;
-  final  bool? is_show_message ;
+  final VoidCallback? onMessage;
+  final bool? is_show_message;
   const ActionButtonsWidget({
     super.key,
     required this.driverImageUrl,
     required this.driverRating,
     required this.driverName,
     required this.onContactDriver,
-    this.is_show_message= false,
+    this.is_show_message = false,
     required this.onSafety,
-    this.onMessage =null,
+    this.onMessage = null,
   });
 
   @override
@@ -147,18 +156,16 @@ class ActionButtonsWidget extends StatelessWidget {
             driverName: driverName,
             driverRating: driverRating,
           ),
-
           _buildActionCircle(
             icon: Icons.phone,
-            label: LocaleKeys.contactDriver.localize,
+            label: !context.isArabic ? "Call" : "اتصل",
             onTap: onContactDriver,
           ),
           _buildActionCircle(
             icon: Icons.messenger_outline,
             label: LocaleKeys.message.localize,
-            onTap: onMessage??(){},
+            onTap: onMessage ?? () {},
           ),
-
           _buildActionCircle(
             icon: Icons.security,
             label: LocaleKeys.safety.localize,
@@ -168,8 +175,6 @@ class ActionButtonsWidget extends StatelessWidget {
       ),
     );
   }
-
-
 
   Widget _buildActionCircle({
     required IconData icon,
@@ -185,7 +190,7 @@ class ActionButtonsWidget extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: const BoxDecoration(
-              color:AppColors.buttonDialog,
+              color: AppColors.buttonDialog,
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -205,63 +210,66 @@ class ActionButtonsWidget extends StatelessWidget {
   }
 }
 
-
-
-
 Widget buildDriverCircle({
-  required String driverImageUrl,
+  required String? driverImageUrl,
   required String driverName,
-  required double driverRating,
+  required double? driverRating,
 }) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
       Stack(
         alignment: Alignment.topRight,
+        clipBehavior: Clip.none,
         children: [
           Container(
             width: 60,
             height: 60,
             decoration: const BoxDecoration(
-              color:AppColors.buttonDialog,
+              color: AppColors.buttonDialog,
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child: Image.network(
-                driverImageUrl,
-                fit: BoxFit.cover,
-              ),
+              child: driverImageUrl != null
+                  ? Image.network(
+                      driverImageUrl,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(Assets.maleImagePlaceholder),
             ),
           ),
-          if (driverRating > 0)
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      driverRating.toStringAsFixed(1),
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+          if (driverRating != null)
+            if (driverRating > 0)
+              Positioned(
+                top: 4,
+                right: -16,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        driverRating.toStringAsFixed(1),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 2),
-                    const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 12,
-                    ),
-                  ],
+                      const SizedBox(width: 2),
+                      const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                        size: 12,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
         ],
       ),
       const SizedBox(height: 4),

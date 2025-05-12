@@ -1560,5 +1560,6 @@ abstract class  LocaleKeys {
   static const favoritesUpdated = 'favoritesUpdated';
   static const failedUpdateFavorites = 'failedUpdateFavorites';
   static const pleaseSelectAUser = 'pleaseSelectAUser';
+  static const noInternetConnection = 'noInternetConnection';
 
 }

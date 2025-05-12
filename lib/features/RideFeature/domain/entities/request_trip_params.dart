@@ -48,7 +48,7 @@ class RequestTripUseCaseParams {
     "price": price,
     "fromTitle": fromTitle,
     "toTitle": toTitle,
-    "distance": distance,
+    "distance": distance.toInt(),
     "duration": duration,
     "startLocation": startLocation,
     "targetLocation": targetLocation,

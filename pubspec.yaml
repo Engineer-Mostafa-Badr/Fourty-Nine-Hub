@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   agora_rtc_engine: ^6.5.0
-  open_street_map_search_and_pick: ^0.1.1
+#  open_street_map_search_and_pick: ^0.1.1
   animated_custom_dropdown: ^3.1.1
   audio_video_progress_bar: ^1.0.0
   audioplayers: ^6.1.0

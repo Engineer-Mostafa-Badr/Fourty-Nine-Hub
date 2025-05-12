@@ -1567,5 +1567,6 @@
   "failedDeleteItem": "فشل في حذف العنصر",
   "favoritesUpdated": "تم تحديث المفضلة بنجاح",
   "failedUpdateFavorites": "فشل تحديث المفضلة",
-  "pleaseSelectAUser": "الرجاء اختيار المستخدم"
+  "pleaseSelectAUser": "الرجاء اختيار المستخدم",
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت"
 }

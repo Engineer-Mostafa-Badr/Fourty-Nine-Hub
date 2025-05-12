@@ -198,6 +198,7 @@ class RideState {
     GetLocationFromAddressEntity? toLocation,
     GetLocationFromAddressEntity? wayPointOne,
     GetLocationFromAddressEntity? wayPointTwo,
+    GetLocationFromAddressEntity? carLocation,
     RideExpectedPriceEntity? rideExpectedPrice,
     RideRequestTripEntity? requestedTrip,
     List<CompletedTripsEntity>? completedTrips,
