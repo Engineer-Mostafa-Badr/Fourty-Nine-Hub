@@ -309,7 +309,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RideCubit, RideState>(listener: (context, state) {
+    return BlocConsumer<RideCubit, RideState>(
+        listener: (context, state) {
       log("new state listener");
       var cubit = serviceLocator<RideCubit>();
       if (state.requestedTrip != null) {
@@ -676,7 +677,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     } else {
                       context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
-                              modeType: 'ride',
+                              modeType: 'truk',
                               isSocket: driverInfo?.driverType == 'socket'
                                   ? true
                                   : false));
@@ -743,7 +744,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildBottomSheet() {
     return Positioned(
-      bottom: 0,
+      bottom: !context.read<RideCubit>().selectedCategoryIsSocket ? null : 0,
       left: 0,
       right: 0,
       child: Column(
@@ -768,7 +769,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideLoadingRequestScreen,extra: false);
+                                  context.push(Routes.rideOffer,extra: false);
                                 } else {
                                   // context.push(Routes.LOGIN);
                                     return pleaseLoginDialog(context);
@@ -791,7 +792,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideLoadingRequestScreen,extra: true);
+                                  context.push(Routes.rideOffer,extra: true);
                                 } else {
                                   return pleaseLoginDialog(context);
                                   // context.push(Routes.LOGIN);

@@ -23,6 +23,7 @@ class CarContainer extends StatelessWidget {
       width: 80,
       height: 80,
       child: Column(
+        spacing: 10,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.network(

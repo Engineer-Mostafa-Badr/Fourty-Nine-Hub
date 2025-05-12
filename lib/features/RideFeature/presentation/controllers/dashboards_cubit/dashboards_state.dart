@@ -48,6 +48,9 @@ class DashboardsState
   final SettingsDashboardEntity? settings;
   final int? currentIndex;
   final List<AvailableRideTripEntity>? availableRideTrips;
+  final List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips;
+  final List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips;
+  final List<HistoryTripEntity >? pastRideNonSocketTrips;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -56,6 +59,9 @@ class DashboardsState
       this.status = DashboardsStates.initState,
       this.availableTrips,
       this.availableRideTrips,
+      this.availableRideNonSocketTrips,
+      this.acceptedRideNonSocketTrips,
+      this.pastRideNonSocketTrips,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -65,6 +71,9 @@ class DashboardsState
       List<AvailableRideTripEntity>? availableRideTrips,
       SettingsDashboardEntity? settings,
       int? currentIndex,
+        List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
+        List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
+        List<HistoryTripEntity >? pastRideNonSocketTrips,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -74,6 +83,9 @@ class DashboardsState
       currentIndex: currentIndex ?? this.currentIndex,
       availableTrips: availableTrips ?? this.availableTrips,
       availableRideTrips: availableRideTrips ?? this.availableRideTrips,
+      availableRideNonSocketTrips: availableRideNonSocketTrips ?? this.availableRideNonSocketTrips,
+      acceptedRideNonSocketTrips: acceptedRideNonSocketTrips ?? this.acceptedRideNonSocketTrips,
+      pastRideNonSocketTrips: pastRideNonSocketTrips ?? this.pastRideNonSocketTrips,
     );
   }
 
