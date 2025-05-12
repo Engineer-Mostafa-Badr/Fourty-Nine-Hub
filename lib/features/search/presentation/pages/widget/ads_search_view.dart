@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+
 class AdsSearchView extends StatefulWidget {
   const AdsSearchView({super.key});
 
@@ -74,7 +76,8 @@ class _AdsSearchViewState extends State<AdsSearchView> {
 
             return BlocBuilder<SearchCubit, SearchState>(
               buildWhen: (prev, curr) =>
-              prev.adsSearch != curr.adsSearch || prev.status != curr.status,
+                  prev.adsSearch != curr.adsSearch ||
+                  prev.status != curr.status,
               builder: (context, state) {
                 final ads = _cubit.adsSearch;
 
@@ -85,7 +88,9 @@ class _AdsSearchViewState extends State<AdsSearchView> {
                 if (ads.isEmpty) {
                   return Center(
                     child: Text(
-                      LocaleKeys.noData.localize,
+                      context.isArabic
+                          ? 'قم بالبحث عن اعلانات'
+                          : 'Search for ads',
                       style: Styles.mediumText(),
                     ),
                   );

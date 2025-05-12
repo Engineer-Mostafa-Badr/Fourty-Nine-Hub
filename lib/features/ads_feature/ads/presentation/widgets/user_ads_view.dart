@@ -88,7 +88,7 @@ class UserAdsView extends StatelessWidget {
                   ],
                 ))),
         Expanded(
-            child: controller.state.ads?.isEmpty ?? true
+            child: controller.ads.isEmpty
                 ? Center(
                     child: Label(
                       text: LocaleKeys.noAds.localize,

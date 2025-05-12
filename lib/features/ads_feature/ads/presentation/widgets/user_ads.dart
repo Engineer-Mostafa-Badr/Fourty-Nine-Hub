@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class UserAds extends StatefulWidget {
@@ -72,11 +73,15 @@ class _UserAdsState extends State<UserAds> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: context.read<AdvertisementCubit>().ads.length +
           (context.read<AdvertisementCubit>().isLoadingAdsMore ? 1 : 0),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: 16,
+      ),
       itemBuilder: (context, index) {
         if (context.read<AdvertisementCubit>().ads.isEmpty) {
           return SizedBox(
@@ -94,6 +99,11 @@ class _UserAdsState extends State<UserAds> {
             ),
           );
         }
+        return MyAdCard(
+          item: context.read<AdvertisementCubit>().ads[index],
+          onFav: (id) {},
+          onRemoveFav: (id) {},
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

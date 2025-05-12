@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/search_ads_use_case.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
@@ -33,6 +34,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   final GetMyAdByIdUseCase _getMyAdByIdUseCase;
   final GetMyFavouriteAdsUsecase _getMyFavouriteAdsUsecase;
   final GetAdRequestsUseCase _getAdRequestsUseCase;
+  final SearchAdsUseCase _searchAdsUseCase;
 
   SubcategoriesCubit(
     this._getSubcategoriesUsecase,
@@ -44,6 +46,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     this._getMyAdByIdUseCase,
     this._getMyFavouriteAdsUsecase,
     this._getAdRequestsUseCase,
+    this._searchAdsUseCase,
   ) : super(SubcategoriesState());
 
   String _mainCategoryId = '';
@@ -141,14 +144,15 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   Future<List<SubCategoryEntity>> getSubcategories(
-      {required PaginationParams paginationParams,String? mainCategoryId}) async {
+      {required PaginationParams paginationParams,
+      String? mainCategoryId}) async {
     List<SubCategoryEntity> data = [];
     emit(state.copyWith(status: SubcategoriesStates.loading));
     // await UserCubit.to.getUser();
     final user = UserCubit.to.state.data?.id;
     print('useeeerId===>$user}');
     final response = await _getSubcategoriesUsecase(GetSubCategoriesParams(
-        mainCategoryId: mainCategoryId??_mainCategoryId,
+        mainCategoryId: mainCategoryId ?? _mainCategoryId,
         paginationParams: paginationParams,
         userId: user ?? ''));
     response.fold(
@@ -161,7 +165,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     return data;
   }
 
-  Future<List<SubCategoryEntity>> getCustomPageSubcategories({String? mainCategoryId}) async {
+  Future<List<SubCategoryEntity>> getCustomPageSubcategories(
+      {String? mainCategoryId}) async {
     print('getCustomPageSubcategories');
 
     List<SubCategoryEntity> data = [];
@@ -170,7 +175,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     print('useeeerId===>$user in getCustomPageSubcategories $_mainCategoryId');
     final response = await _getCustomPageSubCategoriesUseCase(
       GetCustomPageSubCategoriesParams(
-        mainCategoryId: mainCategoryId?? _mainCategoryId,
+        mainCategoryId: mainCategoryId ?? _mainCategoryId,
       ),
     );
     response.fold(
@@ -360,14 +365,14 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }) async {
     print("Gettinghiii");
     myFavouriteAds.clear();
-    isLoadingMyFavouriteAds=true;
+    isLoadingMyFavouriteAds = true;
     currentMyFavouriteAdsPage = 1;
     hasMoreMyFavouriteAds = true;
     isLoadingMyFavouriteAdsMore = false;
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     await getMyFavouriteAds(id);
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
-    isLoadingMyFavouriteAds=false;
+    isLoadingMyFavouriteAds = false;
   }
 
   bool isLoadingMyAdsMore = false;
@@ -380,14 +385,14 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }) async {
     print("Gettinghiii");
     myAds.clear();
-    isLoadingMyAds=true;
+    isLoadingMyAds = true;
     currentMyAdsPage = 1;
     hasMoreMyAds = true;
     isLoadingMyAdsMore = false;
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     await getMyAds(id);
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
-    isLoadingMyAds=false;
+    isLoadingMyAds = false;
   }
 
   Future getMyAds(String mainCategoryId) async {
@@ -396,13 +401,13 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
 
     isLoadingMyAdsMore = true;
 
-
-    final response = await _getMyAdByIdUseCase(GetMyAdByIdParams(mainCategoryId: mainCategoryId,page: currentMyAdsPage));
+    final response = await _getMyAdByIdUseCase(GetMyAdByIdParams(
+        mainCategoryId: mainCategoryId, page: currentMyAdsPage));
     response.fold(
-          (failure) => emit(
+      (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
-          (data) {
-            myAds.addAll(data);
+      (data) {
+        myAds.addAll(data);
         if (data.length < pageSize) {
           hasMoreMyAds = false;
         } else {
@@ -430,13 +435,13 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
 
     isLoadingMyFavouriteAdsMore = true;
 
-
-    final response = await _getMyFavouriteAdsUsecase(GetMyAdByIdParams(mainCategoryId: mainCategoryId,page: currentMyFavouriteAdsPage));
+    final response = await _getMyFavouriteAdsUsecase(GetMyAdByIdParams(
+        mainCategoryId: mainCategoryId, page: currentMyFavouriteAdsPage));
     response.fold(
-          (failure) => emit(
+      (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
-          (data) {
-            myFavouriteAds.addAll(data);
+      (data) {
+        myFavouriteAds.addAll(data);
         if (data.length < pageSize) {
           hasMoreMyFavouriteAds = false;
         } else {
@@ -448,10 +453,10 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     );
   }
 
-
   Future getMarriageMyAds(String mainCategoryId) async {
     // final response = await _getMyAdByIdUseCase('62c8b5b09332225799fe335e');
-    final response = await _getMyAdByIdUseCase(GetMyAdByIdParams(mainCategoryId: mainCategoryId,page: 1));
+    final response = await _getMyAdByIdUseCase(
+        GetMyAdByIdParams(mainCategoryId: mainCategoryId, page: 1));
     response.fold(
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
@@ -518,7 +523,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
       (data) {
-
         if (data.length < pageSize) {
           hasMoreData = false;
         } else {
@@ -575,7 +579,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     // );
   }
 
-
   bool isLoadingRequestsLogMore = false;
   bool isLoadingRequestsLog = false;
   bool hasMoreRequestsLog = true;
@@ -585,15 +588,16 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     required String id,
   }) async {
     print("Gettinghiii");
-    isLoadingRequestsLog=true;
+    isLoadingRequestsLog = true;
     currentRequestsLogPage = 1;
     hasMoreRequestsLog = true;
     isLoadingRequestsLogMore = false;
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     await getRequestsLog(id);
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
-    isLoadingRequestsLog=false;
+    isLoadingRequestsLog = false;
   }
+
   getRequestsLog(String id) async {
     if (!hasMoreRequestsLog || isLoadingRequestsLogMore) return;
 
@@ -605,10 +609,10 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
           id: id, page: currentRequestsLogPage, limit: pageSize, username: ''),
     );
     response.fold(
-          (failure) => emit(
-              state.copyWith(failure: failure, status: SubcategoriesStates.error)),
-          (data) {
-            requestsLog.addAll(data);
+      (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+      (data) {
+        requestsLog.addAll(data);
         if (data.length < pageSize) {
           hasMoreData = false;
         } else {
@@ -620,6 +624,29 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         emit(state.copyWith(adsRequestsLog: data));
       },
     );
+  }
 
+  bool isLoadingMoreSearchAds = false;
+  bool hasMoreDataSearchAds = true;
+  int currentPageSearchAds = 1;
+  List<AdModel> searchAdsList = [];
+
+  Future<void> searchAds(String value) async {
+    emit(state.copyWith(status: SubcategoriesStates.loadingAds));
+    final response =
+        await _searchAdsUseCase(SearchAdsParams(searchText: value));
+    response.fold(
+      (failure) => emit(state.copyWith(
+        failure: failure,
+        status: SubcategoriesStates.error,
+      )),
+      (data) {
+        searchAdsList = data;
+        emit(state.copyWith(
+          searchAds: data,
+          status: SubcategoriesStates.adsSuccess,
+        ));
+      },
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -18,6 +19,7 @@ import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
@@ -128,7 +130,7 @@ class _MyAdCardState extends State<MyAdCard> {
                         const Sizer(width: 5),
                         Label(
                           text:
-                              '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} *****',
+                              '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
                           style: Styles.mediumText(
                               fontWeight: FontWeight.bold,
                               color: AppColors.SECONDARY_COLOR),
@@ -197,30 +199,39 @@ class _MyAdCardState extends State<MyAdCard> {
                     SizedBox(
                       height: 8,
                     ),
-                    AppButton(
-                      label: LocaleKeys.deleteAd.localize,
-                      height: 30,
-                      style: Styles.headerText(
-                        fontSize: 24,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        height: 1.60,
-                      ),
-                      onPressed: () {
-                        bottomSheet(
-                            context: context,
-                            isFloating: true,
-                            asAlertDialog: true,
-                            widget: AreYouSureDeleteAdWidget(
-                              title: LocaleKeys.alert.localize,
-                              subTitle: LocaleKeys
-                                  .areYouSureAboutDeletingTheAD.localize,
-                              action: () {
-                                // TODO: delete ad
-                              },
-                            ));
-                      },
-                    ),
+                    userId == widget.item.user?.id
+                        ? AppButton(
+                            label: LocaleKeys.deleteAd.localize,
+                            height: 30,
+                            style: Styles.headerText(
+                              fontSize: 24,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              height: 1.60,
+                            ),
+                            onPressed: () {
+                              bottomSheet(
+                                  context: context,
+                                  isFloating: true,
+                                  asAlertDialog: true,
+                                  widget: AreYouSureDeleteAdWidget(
+                                    title: LocaleKeys.alert.localize,
+                                    subTitle: LocaleKeys
+                                        .areYouSureAboutDeletingTheAD.localize,
+                                    action: () {
+                                      // TODO: delete ad
+                                    },
+                                  ));
+                            },
+                          )
+                        : _buildRequestsButton(
+                            adId: widget.item.id,
+                            userIdOfAd: widget.item.user?.id ?? '',
+                            subcategoryId: widget.item.subCategoryId ?? '',
+                            phone: widget.item.user?.phone ?? '',
+                            subscriptionStatus:
+                                widget.item.subscriptionStatus ?? '',
+                          )
                   ],
                 ),
               ),
@@ -383,41 +394,77 @@ class _MyAdCardState extends State<MyAdCard> {
     );
   }
 
-  Widget _buildRequestsButton() {
+  Widget _buildRequestsButton({
+    required String userIdOfAd,
+    required String subcategoryId,
+    required String phone,
+    required String adId,
+    required String subscriptionStatus,
+  }) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 8),
+      padding: const EdgeInsets.only(
+          // left: 16,
+          // right: 16,
+          // bottom: 32,
+          // top: 8,
+          ),
       child: Row(
         children: [
           Expanded(
             child: AppButton(
-              label: LocaleKeys.deleteRequest.localize,
-              height: 38,
+              label: LocaleKeys.request.localize,
+              height: 30,
               backColor: AppColors.SECONDARY_COLOR_DARK2,
               onPressed: () async {
-                // TODO: delete request
+                if (!context.read<UserCubit>().isLoggedIn) {
+                  return pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                } else {
+                  bottomSheet(
+                    context: context,
+                    widget: BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          PremiumRequestButton(
+                            adId: adId,
+                            subCategoryId: subcategoryId,
+                            subscriptionStatus: subscriptionStatus,
+                            dontPop: true,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          RequestButton(
+                            adId: adId,
+                            subscriptionStatus: subscriptionStatus,
+                            dontPop: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
               },
               style: Styles.headerText(
+                fontSize: 24,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,
+                height: 1.60,
               ),
             ),
           ),
-          const SizedBox(
-            width: 8,
+          SizedBox(
+            width: 80.w,
           ),
           Expanded(
-            child: AppButton(
-              height: 38,
-              backColor: AppColors.c0B1035,
-              onPressed: () async {
-                context.push(Routes.ADRequests,
-                    extra: AdRequestParams(id: widget.item.id, userName: ''));
-              },
-              label: LocaleKeys.showAdRequests.localize,
-              style: Styles.headerText(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
+            child: MarriageCallMessageButtons(
+              otherUserId: userIdOfAd,
+              subcategoryId: subcategoryId,
+              phone: phone,
+              id: adId,
+              hasReport: true,
             ),
           ),
         ],

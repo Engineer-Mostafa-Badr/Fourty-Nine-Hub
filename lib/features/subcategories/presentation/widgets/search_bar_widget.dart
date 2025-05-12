@@ -4,7 +4,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class SearchBarWidget extends StatelessWidget {
-  const SearchBarWidget({super.key});
+  const SearchBarWidget({super.key, required this.onChanged});
+
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class SearchBarWidget extends StatelessWidget {
             color: AppColors.PRIMARY_COLOR,
           ),
         ),
+        onChanged: onChanged,
       ),
     );
   }

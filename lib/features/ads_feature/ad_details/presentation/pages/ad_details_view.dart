@@ -230,74 +230,76 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         builder: (context, state) {
       return Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: AppButton(
-                    label: 'Premium Request',
-                    height: 38,
-                    backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                      height: 1.60,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: AppButton(
-                    label: 'Request',
-                    height: 38,
-                    backColor: AppColors.c0B1035,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                      height: 1.60,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: AppButton(
+          //           label: LocaleKeys.premiumRequest.localize,
+          //           height: 38,
+          //           backColor: AppColors.SECONDARY_COLOR_DARK2,
+          //           style: Styles.headerText(
+          //             fontWeight: FontWeight.w500,
+          //             color: Colors.white,
+          //             height: 1.60,
+          //           ),
+          //           onPressed: () {},
+          //         ),
+          //       ),
+          //       SizedBox(
+          //         width: 8,
+          //       ),
+          //       Expanded(
+          //         child: AppButton(
+          //           label: LocaleKeys.request.localize,
+          //           height: 38,
+          //           backColor: AppColors.c0B1035,
+          //           style: Styles.headerText(
+          //             fontWeight: FontWeight.w500,
+          //             color: Colors.white,
+          //             height: 1.60,
+          //           ),
+          //           onPressed: () {},
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Container(
             padding:
                 const EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 8),
             child: Column(
               children: [
-                if (state.ad?.userSubscriptionStatus ==
-                    SubscriptionStatus.notSubscribed.status)
-                  BlocProvider.value(
-                    value: serviceLocator<AdvertisementCubit>(),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: PremiumRequestButton(
-                            adId: state.ad?.id ?? '',
-                            subCategoryId: state.ad?.subCategoryId ?? '',
-                            subscriptionStatus:
-                                state.ad?.subscriptionStatus ?? '',
-                          ),
+                // if (state.ad?.userSubscriptionStatus ==
+                //     SubscriptionStatus.notSubscribed.status)
+                BlocProvider.value(
+                  value: serviceLocator<AdvertisementCubit>(),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: PremiumRequestButton(
+                          adId: state.ad?.id ?? '',
+                          subCategoryId: state.ad?.subCategoryId ?? '',
+                          subscriptionStatus:
+                              state.ad?.subscriptionStatus ?? '',
+                          dontPop: true,
                         ),
-                        const SizedBox(
-                          width: 8,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: RequestButton(
+                          adId: state.ad?.id ?? '',
+                          subscriptionStatus:
+                              state.ad?.subscriptionStatus ?? '',
+                          dontPop: true,
                         ),
-                        Expanded(
-                          child: RequestButton(
-                            adId: state.ad?.id ?? '',
-                            subscriptionStatus:
-                                state.ad?.subscriptionStatus ?? '',
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                ),
                 // AvaialbleTripsButton(
                 //   title: LocaleKeys.request.localize,
                 //   color: AppColors.SECONDARY_COLOR,
