@@ -50,7 +50,7 @@ class _MainCategorySubscriptionState extends State<MainCategorySubscription> {
       buttonTextStyle: Styles.headerText(
         fontSize: 32,
         height: 1.60,
-        color: context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.black,
+        color: context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.white,
       ),
       buttonDecoration: BoxDecoration(
         color: context.isDarkMode
@@ -60,7 +60,7 @@ class _MainCategorySubscriptionState extends State<MainCategorySubscription> {
       ),
       closedIcon: Icons.keyboard_arrow_down_outlined,
       openedIcon: Icons.keyboard_arrow_up_outlined,
-      iconColor: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.black,
+      iconColor: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
     );
   }
 }

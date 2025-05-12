@@ -28,6 +28,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class SubCategoriesRestaurantCard extends StatelessWidget {
   final GetAllRestaurantEntity? item;
@@ -292,8 +293,6 @@ class HorizontalRestaurantCard extends StatelessWidget {
   }
 }
 
-
-
 class PropertyCardShimmer extends StatelessWidget {
   const PropertyCardShimmer({super.key});
 
@@ -315,55 +314,55 @@ class PropertyCardShimmer extends StatelessWidget {
   }
 }
 
-class EliteBanner extends StatelessWidget {
-  final String subscriptionType;
-
-  const EliteBanner({super.key, required this.subscriptionType});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: subscriptionType == 'Premium subscription'
-            ? const Color(0xFFD4AF37)
-            : AppColors.DARK_GRAY_COLOR,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(15),
-          topRight: Radius.circular(15),
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
-      child: Row(
-        children: [
-          Icon(
-            Icons.workspace_premium_outlined,
-            size: 55.w,
-            color: subscriptionType == 'Premium subscription'
-                ? AppColors.SECONDARY_COLOR
-                : subscriptionType == 'Regular subscription'
-                    ? AppColors.PRIMARY_COLOR
-                    : null,
-          ),
-          const Sizer(),
-          Text(
-            subscriptionType == 'Premium subscription'
-                ? LocaleKeys.premium.localize
-                : subscriptionType == 'Regular subscription'
-                    ? LocaleKeys.regular.localize
-                    : LocaleKeys.notSubscribed.localize,
-            textAlign: TextAlign.start,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class EliteBanner extends StatelessWidget {
+//   final String subscriptionType;
+//
+//   const EliteBanner({super.key, required this.subscriptionType});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: double.infinity,
+//       decoration: BoxDecoration(
+//         color: subscriptionType == 'Premium subscription'
+//             ? const Color(0xFFD4AF37)
+//             : AppColors.DARK_GRAY_COLOR,
+//         borderRadius: const BorderRadius.only(
+//           topLeft: Radius.circular(15),
+//           topRight: Radius.circular(15),
+//         ),
+//       ),
+//       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
+//       child: Row(
+//         children: [
+//           Icon(
+//             Icons.workspace_premium_outlined,
+//             size: 55.w,
+//             color: subscriptionType == 'Premium subscription'
+//                 ? AppColors.SECONDARY_COLOR
+//                 : subscriptionType == 'Regular subscription'
+//                     ? AppColors.PRIMARY_COLOR
+//                     : null,
+//           ),
+//           const Sizer(),
+//           Text(
+//             subscriptionType == 'Premium subscription'
+//                 ? LocaleKeys.premium.localize
+//                 : subscriptionType == 'Regular subscription'
+//                     ? LocaleKeys.regular.localize
+//                     : LocaleKeys.notSubscribed.localize,
+//             textAlign: TextAlign.start,
+//             style: const TextStyle(
+//               fontSize: 18,
+//               fontWeight: FontWeight.bold,
+//               color: Colors.white,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 
 class DetailsSection extends StatelessWidget {
@@ -472,10 +471,10 @@ class DetailsSection extends StatelessWidget {
                     (item.isActive ?? false)
                         ? LocaleKeys.available.localize
                         : LocaleKeys.notAvailable.localize,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 12,
-                      color: AppColors.SECONDARY_COLOR,
+                      color: AppColors.getRedColor(context),
                     ),
                   ),
                 Expanded( // <<< حل المشكلة هنا
@@ -517,8 +516,9 @@ class PremiumAndRequestButtons extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
       child: _buildButton(
+        context,
         label: LocaleKeys.request.localize,
-        color: AppColors.PRIMARY_COLOR_DARK,
+        color: AppColors.getRedColor(context),
         onPressed: () {
           context.push(Routes.RESTAURANTDETAILS, extra: item);
         },
@@ -526,7 +526,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
     );
   }
 
-  Widget _buildButton({
+  Widget _buildButton(
+      BuildContext context,{
     required String label,
     required Color color,
     required VoidCallback onPressed,
@@ -538,7 +539,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
       margin: 0,
       label: label,
       backColor: color,
-      style: Styles.mediumText(color: Colors.white),
+      style: Styles.mediumText(color: AppColors.getReversedTextColor(context)),
       onPressed: onPressed,
     );
   }
@@ -551,7 +552,8 @@ class CallMessageReportButtons extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final isChatEnabled = item.enableOrDisableChat?.toLowerCase() == 'enable';
+    final isChatEnabled =
+        item.enableOrDisableChat?.toLowerCase() == 'enable';
     return Row(
       // spacing: 15,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -563,7 +565,7 @@ class CallMessageReportButtons extends StatelessWidget {
               width: 22,
               height: 22,
               color: isChatEnabled
-                  ? AppColors.PRIMARY_COLOR_DARK
+                  ?AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
             ),
             color: isChatEnabled
@@ -574,7 +576,7 @@ class CallMessageReportButtons extends StatelessWidget {
                 ? () {
               showModalBottomSheet(
                 context: context,
-                // backgroundColor: cardDarkColor(context),
+                backgroundColor:Theme.of(context).scaffoldBackgroundColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
@@ -585,9 +587,23 @@ class CallMessageReportButtons extends StatelessWidget {
                       spacing: 10,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        Align(
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              child: CircleAvatar(
+                                radius: 24.h,
+                                backgroundColor: AppColors.getFillColor(context),
+                                child: Icon(
+                                  Icons.close,
+                                  color: AppColors.getTextColor(context),
+                                ),
+                              ),
+                            ),
+                        alignment: Alignment.topLeft,),
+                        const Sizer(),
                         AppButton(
-                          backColor: AppColors.PRIMARY_COLOR,
-                          color: AppColors.whiteColor,
+                          backColor: AppColors.getButtonPrimaryColor(context),
+                          color: AppColors.getReversedTextColor(context),
                           onPressed: () {
                             Navigator.pop(context);
                             // _showFreeCallBottomSheet(context, item);
@@ -595,8 +611,8 @@ class CallMessageReportButtons extends StatelessWidget {
                           label: LocaleKeys.freeCall.localize,
                         ),
                         AppButton(
-                          backColor: AppColors.cD9D9D9,
-                          color: AppColors.black,
+                          backColor: AppColors.getFillColor(context),
+                          color: AppColors.getTextColor(context),
                           onPressed: () {
                             Navigator.pop(context);
                             _showRegularCallBottomSheet(context, item);
@@ -616,27 +632,27 @@ class CallMessageReportButtons extends StatelessWidget {
               );
             })
                 : () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                    style: Styles
-                        .mediumText()
-                        .copyWith(decoration: TextDecoration.none,
-                    color: AppColors.whiteColor
-                    ), // ✅ Safe
-                  ),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  action: SnackBarAction(
-                    label: LocaleKeys.login.localize,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      context.push(Routes.LOGIN);
-                    },
-                  ),
-                ),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+              //       style: Styles
+              //           .mediumText()
+              //           .copyWith(decoration: TextDecoration.none,
+              //       color: AppColors.whiteColor
+              //       ), // ✅ Safe
+              //     ),
+              //     backgroundColor: Colors.red,
+              //     duration: Duration(seconds: 3),
+              //     action: SnackBarAction(
+              //       label: LocaleKeys.login.localize,
+              //       textColor: Colors.white,
+              //       onPressed: () {
+              //         // context.push(Routes.LOGIN);
+              //       },
+              //     ),
+              //   ),
+              // );
             },
 
 
@@ -696,7 +712,7 @@ class CallMessageReportButtons extends StatelessWidget {
               width: 18,
               height: 18,
               color: isChatEnabled
-                  ? AppColors.PRIMARY_COLOR_DARK
+                  ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
             ),
             color: isChatEnabled
@@ -715,27 +731,29 @@ class CallMessageReportButtons extends StatelessWidget {
               );
             })
                 : () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                    style: Styles
-                        .mediumText()
-                        .copyWith(decoration: TextDecoration.none,
-                        color: AppColors.whiteColor
-                    ), // ✅ Safe
-                  ),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  action: SnackBarAction(
-                    label: LocaleKeys.login.localize,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      context.push(Routes.LOGIN);
-                    },
-                  ),
-                ),
-              );
+              return pleaseLoginDialog(context);
+
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+              //       style: Styles
+              //           .mediumText()
+              //           .copyWith(decoration: TextDecoration.none,
+              //           color: AppColors.whiteColor
+              //       ), // ✅ Safe
+              //     ),
+              //     backgroundColor: Colors.red,
+              //     duration: Duration(seconds: 3),
+              //     action: SnackBarAction(
+              //       label: LocaleKeys.login.localize,
+              //       textColor: Colors.white,
+              //       onPressed: () {
+              //         // context.push(Routes.LOGIN);
+              //       },
+              //     ),
+              //   ),
+              // );
             },
 
 
@@ -748,16 +766,16 @@ class CallMessageReportButtons extends StatelessWidget {
               width: 18,
               height: 18,
               color: isChatEnabled
-                  ? AppColors.PRIMARY_COLOR_DARK
+                  ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
             ),
           
-            color: AppColors.PRIMARY_COLOR_DARK,
+            color:AppColors.getRedColor(context),
             onPressed: () async {
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                backgroundColor: cardDarkColor(context),
+                backgroundColor:Theme.of(context).scaffoldBackgroundColor,
                 builder: (context) {
                   return SizedBox(
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
@@ -786,7 +804,7 @@ class CallMessageReportButtons extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      // backgroundColor: cardDarkColor(context),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -830,10 +848,10 @@ class CallMessageReportButtons extends StatelessWidget {
                       },
                       title: Text(
                         LocaleKeys.imBookingOfAnotherClient.localize,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
-                          color: AppColors.c717171,
+                          color:AppColors.getTextColor(context),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -858,16 +876,16 @@ class CallMessageReportButtons extends StatelessWidget {
                         return null;
                       },
                       style: TextStyle(
-                        color: Colors.black.withOpacity(0.8),
+                        color:AppColors.getTextColor(context),
                       ),
                       decoration: InputDecoration(
                         hintStyle: Styles.mediumText(
-                          color: AppColors.PRIMARY_COLOR_DARK
+                          color: AppColors.getRedColor(context)
                         ),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: SvgPicture.asset(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: AppColors.getTextColor(context),
                             Assets.phoneIconRed,
                             width: 18,
                             height: 18,
@@ -879,7 +897,7 @@ class CallMessageReportButtons extends StatelessWidget {
                             ? LocaleKeys.enterPhoneNumber.localize
                             : null,
                         filled: true,
-                        fillColor: Colors.grey.shade200,
+                        fillColor: AppColors.getFillColor(context),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
@@ -890,8 +908,8 @@ class CallMessageReportButtons extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: AppButton(
-                        backColor: AppColors.PRIMARY_COLOR,
-                        color: AppColors.whiteColor,
+                        backColor: AppColors.getButtonPrimaryColor(context),
+                        color: AppColors.getReversedTextColor(context),
                         label: LocaleKeys.submit.localize,
                         onPressed: () {
                           if (_formKey.currentState?.validate() ?? false) {

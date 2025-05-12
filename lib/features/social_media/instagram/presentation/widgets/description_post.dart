@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/read_more_text.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../../domain/entities/instagram_post_entity.dart';
 
 class DescriptionPost extends StatelessWidget {
   const DescriptionPost({
     super.key,
-    required this.name,
-    required this.description,
+    required this.instagramPostEntity,
   });
-  final String name;
-  final String description;
+  final InstagramPostEntity instagramPostEntity;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 19),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
       child: ReadMoreText(
-        username: name,
-        description: description,
+        username: instagramPostEntity.username,
+        description: instagramPostEntity.content,
         usernameStyle: Styles.mediumText(
           fontWeight: FontWeight.w600,
+          color: AppColors.getTextColor(context),
         ),
-        descriptionStyle: Styles.mediumText(),
+        descriptionStyle: Styles.mediumText(
+          color: AppColors.getTextColor(context),
+        ),
       ),
     );
   }

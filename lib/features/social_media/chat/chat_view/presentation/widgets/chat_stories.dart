@@ -489,6 +489,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For loca
 
 import '../../../../stories/presentation/pages/more_stories.dart';
 import '../../../../tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class ChatStories extends StatelessWidget {
   const ChatStories({super.key});
@@ -581,14 +582,17 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-          context.read<UserCubit>().isLoggedIn
-              ? await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CameraScreen(),
-                  ),
-                )
-              : context.push(Routes.LOGIN);
+          if (context.read<UserCubit>().isLoggedIn) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CameraScreen(),
+              ),
+            );
+          } else {
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          }
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()
@@ -606,7 +610,6 @@ class ChatStories extends StatelessWidget {
                   end: Alignment.bottomCenter,
                 ),
               ),
-
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Container(
@@ -616,8 +619,8 @@ class ChatStories extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
                   child: CircleAvatar(
-                    radius:
-                        MediaQuery.of(context).size.width * 0.1, // Responsive radius
+                    radius: MediaQuery.of(context).size.width *
+                        0.1, // Responsive radius
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -638,7 +641,7 @@ class ChatStories extends StatelessWidget {
                             ),
                           ),
                         ),
-                         Positioned(
+                        Positioned(
                           bottom: -8,
                           right: -12,
                           child: Container(
@@ -651,13 +654,17 @@ class ChatStories extends StatelessWidget {
                               ),
                             ),
                             padding: const EdgeInsets.all(3),
-                            child: const CircleAvatar(
-                              backgroundColor: AppColors.PRIMARY_COLOR,
+                            child: CircleAvatar(
+                              backgroundColor: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.PRIMARY_COLOR,
                               radius: 18,
                               child: Icon(
                                 Icons.add,
                                 size: 24,
-                                color: Colors.white,
+                                color: context.isDarkMode
+                                    ? const Color(0xff0D0D0D)
+                                    : Colors.white,
                               ),
                             ),
                           ),
@@ -673,11 +680,12 @@ class ChatStories extends StatelessWidget {
             ),
             FittedBox(
               child: Text(
-                context.isArabic?"قصتي":"My Story", // Localized text
+                context.isArabic ? "قصتي" : "My Story", // Localized text
                 textScaler: TextScaler.noScaling,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -691,17 +699,21 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-          context.read<UserCubit>().isLoggedIn
-              ? await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<StoryCubit>(),
-                      child: const MutedStories(),
-                    ),
-                  ),
-                )
-              : context.push(Routes.LOGIN);
+          if (context.read<UserCubit>().isLoggedIn) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: serviceLocator<StoryCubit>(),
+                  child: const MutedStories(),
+                ),
+              ),
+            );
+          } else {
+            return pleaseLoginDialog(context);
+
+            // context.push(Routes.LOGIN);
+          }
 
           context.read<StoryCubit>()
             ..fetchStories()
@@ -762,7 +774,8 @@ class ChatStories extends StatelessWidget {
                     ),
                   ),
                 )
-              : context.push(Routes.LOGIN);
+              : pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()
@@ -892,9 +905,11 @@ class StoriesBorderPainter extends CustomPainter {
     final Offset center = Offset(size.width / 2, size.height / 2);
     final Rect rect = Rect.fromCircle(center: center, radius: radius);
 
-
     const Gradient gradient = SweepGradient(
-      colors: [Color(0xFFFF3308), Color(0xFF0B1035), ],
+      colors: [
+        Color(0xFFFF3308),
+        Color(0xFF0B1035),
+      ],
       stops: [0.0, 1.0],
     );
 
@@ -906,10 +921,7 @@ class StoriesBorderPainter extends CustomPainter {
 
     if (storiesCount == 1) {
       canvas.drawCircle(center, radius, paint);
-    }
-
-    else if (storiesCount == 2) {
-
+    } else if (storiesCount == 2) {
       final double dashAngle = (pi * 0.9);
       final double gapAngle = (pi * 0.1);
 
@@ -918,8 +930,7 @@ class StoriesBorderPainter extends CustomPainter {
 
       canvas.drawArc(rect, startAngle1, dashAngle, false, paint);
       canvas.drawArc(rect, startAngle2, dashAngle, false, paint);
-    }
-    else {
+    } else {
       final double totalAngle = 2 * pi;
       final double segmentAngle = totalAngle / storiesCount;
       final double dashAngle = segmentAngle * 0.8;
@@ -935,4 +946,3 @@ class StoriesBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
-

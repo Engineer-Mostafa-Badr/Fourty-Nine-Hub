@@ -628,10 +628,8 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> getFoodAds() async {
     if (!hasMoreFoodAds || isLoadingMoreFoodAds) return;
-
     isLoadingMoreFoodAds = true;
     emit(state.copyWith(isLoadingMoreLogs: true));
-
     final response = await getFoodAdsUseCase(
         params: PaginationParams(page: currentPageFoodAds, limit: 5));
     response.fold(
@@ -644,7 +642,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       },
           (data) {
             foodAdData.addAll(data);
-
         if ((data.length ?? 0) < 5) {
           hasMoreFoodAds = false;
           emit(state.copyWith(isLoadingMore: false));
@@ -658,4 +655,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       },
     );
   }
+
+
 }

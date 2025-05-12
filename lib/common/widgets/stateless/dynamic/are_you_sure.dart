@@ -19,7 +19,7 @@ showAreYouSure({
   showAnimatedDialog(
     context,
     AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       content: AreYouSure(
         title: title,
         subTitle: subTitle,
@@ -62,7 +62,7 @@ class AreYouSure extends StatelessWidget {
               text: title,
               style: Styles.headerText(
                 fontWeight: FontWeight.w700,
-                color: AppColors.SECONDARY_COLOR_DARK2,
+                color: AppColors.getRedColor(context),
               ),
             ),
             const SizedBox(
@@ -74,6 +74,7 @@ class AreYouSure extends StatelessWidget {
               style: Styles.mediumText(
                 fontSize: 32,
                 fontWeight: FontWeight.w500,
+                color: AppColors.getTextColor(context)
               ),
             ),
             const SizedBox(
@@ -83,11 +84,11 @@ class AreYouSure extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppButton(
-                      backColor: AppColors.SECONDARY_COLOR_DARK2,
+                      backColor:AppColors.getRedColor(context),
                       label: LocaleKeys.ok.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color:AppColors.getReversedTextColor(context),
                       ),
                       onPressed: () {
                         action();
@@ -99,11 +100,13 @@ class AreYouSure extends StatelessWidget {
                 ),
                 Expanded(
                   child: AppButton(
-                      backColor: const Color(0xFFD9D9D9),
+                      backColor: context.isDarkMode
+                          ? const Color(0xff333333)
+                          : const Color(0xFFD9D9D9),
                       label: LocaleKeys.close.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
+                        color: AppColors.getTextColor(context),
                       ),
                       onPressed: () => context.pop()),
                 ),

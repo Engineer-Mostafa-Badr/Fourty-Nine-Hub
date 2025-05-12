@@ -81,6 +81,8 @@ class _RestaurantFavAdsScreenState
               child: SizedBox(
                 height: MediaQuery.sizeOf(context).height * .8,
                 child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount:  context
                     .read<RestaurantsCubit>()
                     .foodAdData
@@ -94,7 +96,7 @@ class _RestaurantFavAdsScreenState
               ),
             ): Center(
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * .8, // Make sure it takes up full height
+                height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
                 child: Center( // This will center it vertically and horizontally
                   child: Text(
                     LocaleKeys.noResultsFound.tr(),
@@ -105,8 +107,11 @@ class _RestaurantFavAdsScreenState
             );
 
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         });
@@ -131,7 +136,7 @@ class FavFoodCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-              color: context.isDarkMode ?  AppColors.whiteColor.withOpacity(0.7) : AppColors.black.withOpacity(0.7),
+              color: AppColors.getTextColor(context),
               width: 1
           ),
           borderRadius: BorderRadius.circular(15)
@@ -149,7 +154,7 @@ class FavFoodCard extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       Assets.eyeIcon,
-                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                      color:AppColors.getTextColor(context),
                     ),
                     Label(
                       // text: "100k",
@@ -158,7 +163,7 @@ class FavFoodCard extends StatelessWidget {
                         // fontSize: 12,
                         fontWeight: FontWeight.w400,
                         // color: AppColors.c6C6C6C,
-                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                        color:AppColors.getTextColor(context),
                       ),
                     ),
                     Label(
@@ -166,7 +171,7 @@ class FavFoodCard extends StatelessWidget {
                       style:  Styles.mediumText(
                         // fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                        color:AppColors.getTextColor(context),
                       ),
                     ),
                   ],
@@ -176,7 +181,7 @@ class FavFoodCard extends StatelessWidget {
                   textAlign: TextAlign.right,
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w700,
-                    color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR_DARK,
+                    color:AppColors.getTextColor(context),
                     // fontSize: 16,
                   ),
                 ),
@@ -264,7 +269,7 @@ class FavFoodCard extends StatelessWidget {
                             full: SvgPicture.asset(Assets.star1),
                             half: SvgPicture.asset(Assets.halfStar),
                             empty: SvgPicture.asset(Assets.starEmpty,
-                              color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                              color: AppColors.getTextColor(context)
                             ),
                           ),
                           itemSize: 13,
@@ -281,10 +286,10 @@ class FavFoodCard extends StatelessWidget {
                       (data.isActive ?? false)
                           ? LocaleKeys.available.localize
                           : LocaleKeys.notAvailable.localize,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
-                        color: AppColors.SECONDARY_COLOR,
+                        color: AppColors.getRedColor(context),
                       ),
                     ),
                     Expanded( // <<< حل المشكلة هنا
@@ -348,7 +353,7 @@ class FavoriteButtonAds extends StatelessWidget {
       padding: EdgeInsets.zero,
       icon: Icon(
         (item.isFavorite ?? false) ? Icons.favorite : Icons.favorite,
-        color: AppColors.SECONDARY_COLOR,
+        color: AppColors.getRedColor(context),
       ),
       onPressed: () async {
         await favouriteRestaurant(item.id!);

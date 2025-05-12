@@ -256,7 +256,7 @@ class _ReportViewState extends State<ReportView> {
           opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),
           child: IconButton(
-            color: AppColors.PRIMARY_COLOR_DARK,
+            color: AppColors.getRedColor(context),
             icon: const Icon(
               Icons.send,
             ),

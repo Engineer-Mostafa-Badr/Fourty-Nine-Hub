@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -527,8 +528,9 @@ class _UserAvatarState extends State<_UserAvatar> {
       ),
       child: InkWell(
         onTap: () {
-          if (!serviceLocator<UserCubit>().isLoggedIn) {
-            context.push(Routes.LOGIN);
+          if (!serviceLocator<UserCubit>().isLoggedIn) {                                  return pleaseLoginDialog(context);
+
+            // context.push(Routes.LOGIN);
           } else {
             context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
           }
@@ -577,8 +579,9 @@ class _UserAvatarState extends State<_UserAvatar> {
                               }
                             }
                           }
-                        } else {
-                          context.push(Routes.LOGIN);
+                        } else {                                  return pleaseLoginDialog(context);
+
+                          // context.push(Routes.LOGIN);
                         }
                       },
                       child: Container(
@@ -631,8 +634,9 @@ class _UserInfoState extends State<_UserInfo> {
         children: [
           InkWell(
             onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
+              if (!serviceLocator<UserCubit>().isLoggedIn) {                                  return pleaseLoginDialog(context);
+
+                // context.push(Routes.LOGIN);
               } else {
                 context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
               }
@@ -672,8 +676,9 @@ class _UserInfoState extends State<_UserInfo> {
                                 setState(() {});
                               }
                             }
-                          } else {
-                            context.push(Routes.LOGIN);
+                          } else {                                  return pleaseLoginDialog(context);
+
+                          // context.push(Routes.LOGIN);
                           }
                         },
                         child: Container(
@@ -903,7 +908,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           count: reel.commentCount.toString(),
           onTap: () {
             if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
+              return pleaseLoginDialog(context);
+
+              // context.push(Routes.LOGIN);
             } else {
               _handleCommentAction(
                 context,
@@ -970,7 +977,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
                         count: LocaleKeys.report.localize,
                         onTap: () {
                           if (!serviceLocator<UserCubit>().isLoggedIn) {
-                            context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           } else {
                             _showReportBottomSheet(context);
                           }
@@ -990,7 +999,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
                         count: LocaleKeys.save.localize,
                         onTap: () {
                           if (!serviceLocator<UserCubit>().isLoggedIn) {
-                            context.push(Routes.LOGIN);
+                            return pleaseLoginDialog(context);
+
+                            // context.push(Routes.LOGIN);
                           } else {
                             _handleSaveAction(context, reelsCubit);
                           }

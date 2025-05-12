@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class CarPoolBody extends StatefulWidget {
   const CarPoolBody({super.key});
@@ -294,7 +295,9 @@ class _CarPoolBodyState extends State<CarPoolBody>
                     onPressed: () {
                       context.read<UserCubit>().isLoggedIn
                           ? context.pushReplacement(Routes.ADD_NEW_ROUTE)
-                          : context.push(Routes.LOGIN);
+                          : pleaseLoginDialog(context);
+
+                        // context.push(Routes.LOGIN);
                     },
                   ),
                 ],

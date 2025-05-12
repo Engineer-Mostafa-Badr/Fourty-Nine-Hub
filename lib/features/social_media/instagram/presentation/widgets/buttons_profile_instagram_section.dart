@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -23,10 +24,11 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
             Expanded(
               child: AppButton(
                 label: LocaleKeys.editProfile.localize,
-                backColor: Colors.white,
+                backColor:
+                    context.isDarkMode ? Colors.transparent : Colors.white,
                 radius: 7,
                 border: Border.all(
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
                 style: Styles.mediumText(
                   fontSize: 32,
@@ -41,10 +43,11 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
             Expanded(
               child: AppButton(
                 label: LocaleKeys.shareProfile.localize,
-                backColor: Colors.white,
+                backColor:
+                    context.isDarkMode ? Colors.transparent : Colors.white,
                 radius: 7,
                 border: Border.all(
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
                 style: Styles.mediumText(
                   fontSize: 32,
@@ -64,10 +67,11 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
             Expanded(
               child: AppButton(
                 label: LocaleKeys.friend.localize,
-                backColor: Colors.white,
+                backColor:
+                    context.isDarkMode ? Colors.transparent : Colors.white,
                 radius: 7,
                 border: Border.all(
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
                 style: Styles.mediumText(
                   fontSize: 32,
@@ -80,10 +84,11 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
             Expanded(
               child: AppButton(
                 label: LocaleKeys.message.localize,
-                backColor: Colors.white,
+                backColor:
+                    context.isDarkMode ? Colors.transparent : Colors.white,
                 radius: 7,
                 border: Border.all(
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
                 style: Styles.mediumText(
                   fontSize: 32,

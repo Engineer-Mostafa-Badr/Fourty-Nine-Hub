@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -91,7 +92,9 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                                 mainCategory: widget.mainCategory,
                                 subCategory: widget.item));
                       } else {
-                        context.push(Routes.LOGIN);
+                        // context.push(Routes.LOGIN);
+
+                          return pleaseLoginDialog(context);
                       }
                     }),
                 SizedBox(

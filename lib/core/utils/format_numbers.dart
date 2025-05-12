@@ -36,6 +36,13 @@ class FormatNumbers {
     return formattedNumber;
   }
 
+  String convertNumberToLocalizedString(String number,
+      {required bool isArabic}) {
+    return isArabic
+        ? _convertToArabicNumerals(number.toString())
+        : number.toString();
+  }
+
   String _convertToArabicNumerals(String input) {
     const Map<String, String> numeralsMap = {
       '0': '٠',

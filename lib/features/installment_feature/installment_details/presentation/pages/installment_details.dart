@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/installment_feature/installment_details/p
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/functions/helper/launch_url.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -85,7 +86,8 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                               controller.buyWithInstallment(
                                   installmentId: widget.installmentId);
                             } else {
-                              context.push(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
+                              return pleaseLoginDialog(context);
                             }
                           }),
                       _buildDetailsWidget(ad: state.installment!.ad!),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CustomFloatingButtonAds extends StatelessWidget {
@@ -22,7 +23,7 @@ class CustomFloatingButtonAds extends StatelessWidget {
         // ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: ShapeDecoration(
-          color: const Color(0xFF0B1035),
+          color: AppColors.getButtonPrimaryColor(context),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -38,7 +39,7 @@ class CustomFloatingButtonAds extends StatelessWidget {
         child: Label(
           text: title,
           style: Styles.mediumText(
-            color: Colors.white,
+            color: AppColors.getReversedTextColor(context),
             fontWeight: FontWeight.w600,
             height: 1.60,
           ),

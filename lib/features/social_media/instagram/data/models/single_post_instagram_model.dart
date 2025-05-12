@@ -1,5 +1,7 @@
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/single_post_instagram_entity.dart';
 
+import 'last_like_model.dart';
+
 class SinglePostInstagramModel extends SinglePostInstagramEntity {
   SinglePostInstagramModel({
     required super.id,
@@ -10,8 +12,11 @@ class SinglePostInstagramModel extends SinglePostInstagramEntity {
     required super.taggedUsers,
     required super.likesCounter,
     required super.commentsCounter,
+    required super.shearsCounter,
     required super.favoritesCounter,
     required super.comments,
+    required super.isLiked,
+    required super.lastLikeEntity,
   });
 
   factory SinglePostInstagramModel.fromJson(Map<String, dynamic> json) {
@@ -29,7 +34,10 @@ class SinglePostInstagramModel extends SinglePostInstagramEntity {
           : [],
       likesCounter: json['likesCounter'] ?? 0,
       commentsCounter: json['commentsCounter'] ?? 0,
+      shearsCounter: json['shearsCounter'] ?? 0,
       favoritesCounter: json['favoritesCounter'] ?? 0,
+      lastLikeEntity: LastLikeModel.fromJson(json['lastLikeUser']),
+      isLiked: json['isLiked'] ?? false,
       comments: json['comments'] != null
           ? List<CommentModel>.from(
               (json['comments'] as List).map((t) => CommentModel.fromJson(t)),
@@ -48,6 +56,7 @@ class OwnerModel extends OwnerEntity {
     required super.profilePictureUrl,
     required super.hasStory,
     required super.verifiedBadge,
+    required super.isFollow,
   });
 
   factory OwnerModel.fromJson(Map<String, dynamic> json) {
@@ -59,6 +68,7 @@ class OwnerModel extends OwnerEntity {
       profilePictureUrl: json['profilePictureUrl'] ?? '',
       hasStory: json['hasStory'] ?? 0,
       verifiedBadge: json['verifiedBadge'] ?? false,
+      isFollow: json['isFollowed'] ?? false,
     );
   }
 }

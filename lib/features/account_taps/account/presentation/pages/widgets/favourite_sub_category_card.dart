@@ -16,6 +16,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../../core/localization/locales.dart';
 import '../../../../../../core/utils/hex_color_helper.dart';
 
@@ -112,7 +113,8 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                                   mainCategory: widget.mainCategory,
                                   subCategory: widget.item));
                         } else {
-                          context.push(Routes.LOGIN);
+                          return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
                         }
                       })
                 ],

@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
@@ -106,7 +107,7 @@ class _CreateRestaurantProfilePhotoPickerState
                     width: 210.w,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: AppColors.SECONDARY_COLOR_DARK2,
+                      color:AppColors.getRedColor(context),
                     ),
                     child: IconButton(
                       visualDensity: VisualDensity.compact,
@@ -146,7 +147,7 @@ Widget buildPhotoBox({
     width: width ?? double.infinity,
     height: 200.h,
     decoration: BoxDecoration(
-      color: AppColors.BG_GRAY_COLOR,
+      color: AppColors.getFillColor(context),
       borderRadius: BorderRadius.circular(20),
     ),
     child: Stack(
@@ -179,7 +180,7 @@ Widget buildPhotoBox({
             borderRadius: BorderRadius.circular(20),
             child: Center(
               child: isAddBox
-                  ? SvgPicture.asset(Assets.cameraSvg)
+                  ? SvgPicture.asset(Assets.cameraSvg,color:context.isDarkMode?Colors.white:null,)
                   : const SizedBox.shrink(),
             ),
           ),
@@ -197,7 +198,7 @@ Widget buildPhotoBox({
                 radius: 15,
                 child: Icon(
                   Icons.close,
-                  color: Colors.white,
+                  color: AppColors.getTextColor(context),
                   size: 36.w,
                 ),
               ),

@@ -736,8 +736,9 @@ class EndPoints {
     return '/inst/posts?page=${params.page}&limit=${params.limit}';
   }
 
-  static String getUserTag({required int page, required int limit}) =>
-      '/inst/tags?page=$page&limit=$limit';
+  static String getUserTag(
+          {required String username, required int page, required int limit}) =>
+      '/inst/tags?page=$page&limit=$limit&username=$username';
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
@@ -817,7 +818,18 @@ class EndPoints {
     return '/inst/posts/$postId/comments/$commentId';
   }
 
+  static String likePostInstagram({required String postId}) =>
+      '/inst/posts/$postId/like';
+
+  static String savePostInstagram({required String postId}) =>
+      '/inst/posts/$postId/favorite';
+
+  static String removeSavePostInstagram({required String postId}) =>
+      '/inst/posts/$postId/unfavorite';
+
   static String createRequestPostInstagram = '/inst/posts/create-request';
+
+  static String postConfirmWebhook = '/inst/posts/confirm-webhook';
 
   static String getProfileInstagram(
           {required String userId, required int page, required int limit}) =>
@@ -836,6 +848,9 @@ class EndPoints {
 
   static String postFollowUserInstagram({required String userId}) =>
       '/user-follow/follow/$userId';
+
+  static String unFollowUserInstagram({required String userId}) =>
+      '/user-follow/unfollow/$userId';
 
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
@@ -1012,7 +1027,8 @@ class EndPoints {
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
   static const favouriteAds = '/ads-favorites/allFavoriteAds';
-  static  myFavouriteAds(GetMyAdByIdParams params) => '/ads-favorites?mainCategoryId=${params.mainCategoryId}&page=${params.page}';
+  static myFavouriteAds(GetMyAdByIdParams params) =>
+      '/ads-favorites?mainCategoryId=${params.mainCategoryId}&page=${params.page}';
   static const favouriteSubCategories = '/favorite-sub-category';
 
   static String deleteFavouriteAds(String id) {
@@ -1481,4 +1497,17 @@ class EndPoints {
   static const getMostBooking = '/health/doctors';
 
   static const getDoctorList = '/health/doctors';
+  static const createNonTrackTrip = '/ride/non-tracking/trips/client';
+  static const getClientPendingUntrackedTrips = '/ride/non-tracking/trips/client/pending';
+  static const getClientAcceptedUntrackedTrips = '/ride/non-tracking/trips/client';
+  static const getClientPastUntrackedTrips = '/ride/non-tracking/trips/client/history';
+  static const getClientOfferUntrackedTrips = '/ride/non-tracking/offers';
+  static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
+  static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
+
+
+  static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
+  static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
+  static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
 }

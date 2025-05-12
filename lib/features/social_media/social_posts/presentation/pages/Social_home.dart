@@ -24,6 +24,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
@@ -110,7 +111,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 child: Label(
                   text: LocaleKeys.socialExplain.localize,
                   style: Styles.headerText(
-                    color: AppColors.SECONDARY_COLOR,
+                    color: AppColors.getRedColor(context),
                     shadows: const [
                       Shadow(
                         color: Colors.black12,
@@ -159,7 +160,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SvgPicture.asset(
-                                          Assets.facebookAppBarIcon,
+                                          context.isDarkMode
+                                              ? Assets.facebookAppBarIconDark
+                                              : Assets.facebookAppBarIcon,
                                           height: 35,
                                           width: 35,
                                         ),
@@ -183,7 +186,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                     ],
                                   ),
                                   Label(
-                                    text: LocaleKeys.Face.localize,
+                                    text:context.isArabic?'فيس بوك': LocaleKeys.Face.localize,
                                     style: Styles.headerText(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
@@ -261,7 +264,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SvgPicture.asset(
-                                          Assets.instagramAppBarIcon,
+                                          context.isDarkMode
+                                              ? Assets.instagramAppBarIconDark
+                                              : Assets.instagramAppBarIcon,
                                           height: 35,
                                           width: 35,
                                         ),
@@ -305,7 +310,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SvgPicture.asset(
-                                          Assets.twitterAppBarIcon,
+                                          context.isDarkMode
+                                              ? Assets.twitterAppBarIconDark
+                                              : Assets.twitterAppBarIcon,
                                           height: 35,
                                           width: 35,
                                         ),
@@ -459,7 +466,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 if (i == 1) {
                   context.read<UserCubit>().isLoggedIn
                       ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
-                      : context.push(Routes.LOGIN);
+                      : pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
                 }
               },
               child: Container(

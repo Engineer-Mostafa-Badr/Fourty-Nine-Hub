@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
@@ -11,6 +12,14 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../reels/presentation/pages/main_reel_view.dart';
+import '../../../reels/presentation/pages/recording/my_voice.dart';
+import '../../../reels/presentation/pages/recording/next_media_preview.dart';
+import '../../../reels/presentation/pages/recording/recording_shared.dart';
+import '../../../social_posts/presentation/cubit/social_posts_cubit.dart';
 
 class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
   const FloatingActionButtonCreatePostInstagram({
@@ -27,7 +36,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
           // end: 15,
         ),
         decoration: ShapeDecoration(
-          color: AppColors.c0B1035,
+          color: context.isDarkMode ? Colors.white : AppColors.c0B1035,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(200),
           ),
@@ -38,7 +47,9 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
               height: 16,
               width: 18,
               child: SvgPicture.asset(
-                Assets.imageWhiteIcon,
+                context.isDarkMode
+                    ? Assets.imageWhiteIconDark
+                    : Assets.imageWhiteIcon,
               ),
             ),
             const SizedBox(
@@ -59,11 +70,37 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                                   builder: (context) => const CameraScreen(),
                                 ),
                               )
-                            : context.push(Routes.LOGIN);
+                            : pleaseLoginDialog(context);
+                        // context.push(Routes.LOGIN);
                         if (!context.mounted) return;
                         BlocProvider.of<StoryCubit>(context)
                           ..fetchStories()
                           ..getMutedStories();
+                      } else if (index == 2) {
+                        context.read<UserCubit>().isLoggedIn
+                            // ?context.go(Paths.REELS)
+                            // ? await Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => BlocProvider(
+                            //         create: (context) =>
+                            //             serviceLocator<SocialPostsCubit>(),
+                            //         child: const ReelView(),
+                            //       ),
+                            //     ),
+                            //   )
+                            ? await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ReelsRecordingScreen(
+                                          voiceMediaId:'',
+                                          voiceSignedUrl: '',
+                                      ),
+                                ),
+                              )
+                            : pleaseLoginDialog(context);
+                        // context.push(Paths.REELS);
                       } else {
                         context
                             .read<CreatePostInstagramCubit>()
@@ -82,7 +119,9 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                               .postTypes[index]
                               .title,
                           style: Styles.mediumText(
-                            color: Colors.white,
+                            color: context.isDarkMode
+                                ? const Color(0xff0D0D0D)
+                                : Colors.white,
                             fontWeight: state.postTypeSelectedIndex == index
                                 ? FontWeight.w600
                                 : FontWeight.w400,

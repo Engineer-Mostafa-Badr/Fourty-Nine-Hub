@@ -14,7 +14,9 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
+import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../routes/routes.dart';
 
 class PremiumRequestButton extends StatelessWidget {
@@ -24,6 +26,7 @@ class PremiumRequestButton extends StatelessWidget {
     required this.subCategoryId,
     required this.adId,
   });
+
   final String subscriptionStatus;
   final String subCategoryId;
   final String adId;
@@ -85,24 +88,13 @@ class PremiumRequestButton extends StatelessWidget {
                             constraints: BoxConstraints(maxHeight: 180.h),
                             child: Form(
                               key: controller.formKey,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if ((value == null || value.isEmpty)) {
-                                    return LocaleKeys.required.localize;
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                // focusNode: focusNode,
+                              child: NewPhoneNumberTextFormField(
+                                currentController: TextEditingController(),
+                                isRequired: true,
                                 maxLines: null,
                                 maxLength: 150,
                                 onChanged: (c) => controller.changePhone(v: c),
-                                // controller: controller,
-                                decoration: InputDecoration(
-                                    hintText: LocaleKeys.phoneNumber.localize,
-                                    fillColor: Colors.white,
-                                    hintStyle: Styles.mediumText(
-                                        color: AppColors.DARK_GRAY_COLOR)),
+
                               ),
                             ),
                           ),
@@ -176,7 +168,9 @@ class PremiumRequestButton extends StatelessWidget {
               );
             }
           } else {
-            context.push(Routes.LOGIN);
+            return pleaseLoginDialog(context);
+
+            // context.push(Routes.LOGIN);
           }
         },
       );

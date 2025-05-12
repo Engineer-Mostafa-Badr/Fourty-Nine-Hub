@@ -450,7 +450,7 @@ showCustomSnackBar(BuildContext context, String message, Icon icon) {
       ),
       behavior: SnackBarBehavior.floating, // اجعل الـSnackbar عائمًا
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       content: Row(
         spacing: 10,
         children: [
@@ -460,7 +460,7 @@ showCustomSnackBar(BuildContext context, String message, Icon icon) {
             child: Text(
               message,
               style: TextStyle(
-                color: Colors.black87,
+                color: AppColors.getTextColor(context),
                 fontWeight: FontWeight.w500,
                 fontSize: 30.sp,
               ),

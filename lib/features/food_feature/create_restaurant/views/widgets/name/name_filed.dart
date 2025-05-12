@@ -32,7 +32,7 @@ class CreateRestaurantNameField extends StatelessWidget {
             style: Styles.mediumText(),
             controller: restaurantLoginCubit.name,
             decoration: InputDecoration(
-              fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
+              fillColor:  AppColors.getFillColor(context),
               enabledBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
@@ -102,7 +102,6 @@ class CreateRestaurantNumberField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-          
                style: Styles.mediumText(),
             onChanged: (value) =>
                 restaurantLoginCubit.saveNumberTextEditingController(),
@@ -116,7 +115,7 @@ class CreateRestaurantNumberField extends StatelessWidget {
             decoration: InputDecoration(
               
               // Border when the field is not focused
-              fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
+              fillColor:  AppColors.getFillColor(context),
               enabledBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(

@@ -20,37 +20,65 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
+import '../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
+import '../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
+import '../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import '../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
+import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import '../models/dashboards/get_accepted_ride_non_socket_trip_model.dart';
+import '../models/dashboards/get_available_ride_non_socket_trip_model.dart';
+import '../models/dashboards/get_past_ride_non_socket_trip_model.dart';
 import '../models/dashboards/settings_dashboard_model.dart';
 import '../models/dashboards/trips_response_model.dart';
 
 abstract class TripRemoteDataSource {
   Future<Either<Failure, TripsResponseModel>> getAvailableTrips(
       AvailableRideTripsUseCaseParams params);
+
   Future<Either<Failure, TripsResponseModel>> getPastTrips(String type);
+
   Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
+
   Future<Either<Failure, bool>> updateSettings(
       UpdateSettingsDashboardUsecaseParam params);
+
   Future<Either<Failure, bool>> createNewOffer(
       CreateNewOfferDashboardUsecaseParam params);
+
   Future<Either<Failure, bool>> getRunningTrip();
+
   Future<Either<Failure, bool>> createNewOfferNonSocket(
       CreateNewOfferDashboardUsecaseParam params);
+
   Future<Either<Failure, bool>> createDriverRating(
       CreateUpdateDriverRatingUsecaseParam params);
+
   Future<Either<Failure, bool>> updateDriverRating(
       CreateUpdateDriverRatingUsecaseParam params);
-  Future<Either<Failure, bool>> acceptTrip(
-      String params);
-  void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
+
+  Future<Either<Failure, bool>> acceptTrip(String params);
+
+  void listenToUpdateTripAutoAccept(
+      Function(UpdateTripAutoAcceptEntity trip) params);
+
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
+
   void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
+
   void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
+
   void listenToRemoveTrip(Function(String tripId) params);
+
+  Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>>
+      getAvailableNonSocketTrips(ClientPendingTripParams params);
+
+  Future<Either<Failure, List<AcceptedRideNonSocketTripEntity >>> getAcceptedNonSocketTrips(ClientPendingTripParams params);
+  Future<Either<Failure, List<HistoryTripEntity  >>> getPastNonSocketTrips(ClientPendingTripParams params);
+
 }
 
 class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
@@ -121,10 +149,10 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> acceptTrip(
-      String params) async {
+  Future<Either<Failure, bool>> acceptTrip(String params) async {
     try {
-      final response = await _apiConsumer.put(EndPoints.acceptTripRider(params));
+      final response =
+          await _apiConsumer.put(EndPoints.acceptTripRider(params));
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);
@@ -224,15 +252,18 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   // }
 
   @override
-  void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params) {
+  void listenToUpdateTripAutoAccept(
+      Function(UpdateTripAutoAcceptEntity trip) params) {
     try {
       CliLogger.info("trip listenToUpdateTripAutoAccept ");
-      SharedWebSocket.socket!.on(SocketIOListeners.updateTripAutoAccept, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.updateTripAutoAccept,
+          (data) {
         // // final decodedData = jsonDecode(data);
         // CliLogger.info("offer data :  $decodedData");
         // params(RideOfferModel.fromJson(decodedData));
         CliLogger.info("trip data :  $data");
-        params(UpdateTripAutoAcceptModel.fromJson(data['updatedTripAutoAccept']));
+        params(
+            UpdateTripAutoAcceptModel.fromJson(data['updatedTripAutoAccept']));
       });
     } catch (e) {
       CliLogger.info("can't listen to offer error $e");
@@ -311,7 +342,8 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   Future<Either<Failure, bool>> getRunningTrip() async {
     try {
       final response = await _apiConsumer.get(
-          'EndPoints.updateDriverRating(params.tripId)',);
+        'EndPoints.updateDriverRating(params.tripId)',
+      );
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);
@@ -319,5 +351,63 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>>
+      getAvailableNonSocketTrips(ClientPendingTripParams params) async {
+    final url =
+        "${EndPoints.getAvailableRideNonSocketTrip}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+      (l) => Left(l),
+      (data) {
+        final tripsData = (data['data']['trips'] as List)
+            .map((e) => GetAvailableRideNonSocketTripModel.fromJson(
+                e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<AcceptedRideNonSocketTripEntity>>> getAcceptedNonSocketTrips(ClientPendingTripParams params) async{
+    final url =
+        "${EndPoints.getAcceptedRideNonSocketTrip}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['acceptedTrips'] as List)
+            .map((e) => AcceptedRideNonSocketTripModel .fromJson(
+            e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<HistoryTripEntity>>> getPastNonSocketTrips(ClientPendingTripParams params) async{
+    final url =
+        "${EndPoints.getPastRideNonSocketTrip}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['historyTrips'] as List)
+            .map((e) => HistoryTripModel .fromJson(
+            e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
   }
 }

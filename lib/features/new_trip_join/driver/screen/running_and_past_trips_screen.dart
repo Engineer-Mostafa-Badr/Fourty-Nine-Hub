@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/assets/assets.dart';
 import '../widget/my_running_tab_widget.dart';
@@ -36,23 +38,8 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
   }
 
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      key: _scaffoldKey,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-          ),
-        ),
-      ),
+    return SharedScaffold(
+    mainCategoryId: 1,isWithBackArrow: true,
       body: RunningAndPastTripsBody(
         tabController: _tabController,
       ),
@@ -110,7 +97,7 @@ class ItemTabRideModeWidget extends StatelessWidget {
           Container(
             height: 50,
             decoration: BoxDecoration(
-              color: isSelected ? const Color(0xffF88B92) : Colors.white,
+              color: isSelected ? const Color(0xffF88B92) : AppColors.getFillColor(context),
               borderRadius: BorderRadius.circular(10),
               boxShadow: const [
                 BoxShadow(
@@ -124,7 +111,7 @@ class ItemTabRideModeWidget extends StatelessWidget {
               style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: isSelected ? Colors.black : Colors.grey),
+                  color: isSelected ? Colors.black : context.isDarkMode?Colors.white:Colors.grey),
             ),
           ),
           Positioned(
@@ -226,7 +213,7 @@ class _TabBarContentRideModeWidgetState
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: context.isDarkMode?AppColors.fill_Color_DARK:Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: AnimatedBuilder(
@@ -235,8 +222,8 @@ class _TabBarContentRideModeWidgetState
                   int index = widget.tabController.index;
                   return Text(
                     context.isArabic ? arabicHints[index] : hints[index],
-                    style: const TextStyle(
-                      color: Colors.red,
+                    style: TextStyle(
+                      color: AppColors.getRedColor(context),
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),

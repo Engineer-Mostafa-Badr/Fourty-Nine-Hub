@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_people_view.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
@@ -23,6 +28,7 @@ class FacebookBody extends StatefulWidget {
 class _FacebookBodyState extends State<FacebookBody>
     with TickerProviderStateMixin {
   late TabController tabController;
+
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
@@ -45,21 +51,22 @@ class _FacebookBodyState extends State<FacebookBody>
       ],
       child: Column(
         children: [
-          TabBar(controller: tabController, tabs: [
+          TabBar(controller: tabController,padding: EdgeInsets.zero,labelPadding: EdgeInsets.zero, tabs: [
             Tab(
               height: 44,
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 SvgPicture.asset(
                   Assets.home,
-                  width: 18,
-                  height: 18,
+                  width: 30.h,
+                  height: 30.h,
+                  color: context.isDarkMode ? Colors.white : null,
                 ),
-                const SizedBox(width: 10),
+                const Sizer(),
                 Text(LocaleKeys.home.localize,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
+                    style: TextStyle(
+                        color: AppColors.getTextColor(context),
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w700))
               ]),
               // icon: SvgPicture.asset(Assets.home,width: 18,height: 18,),
@@ -71,14 +78,15 @@ class _FacebookBodyState extends State<FacebookBody>
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 SvgPicture.asset(
                   Assets.people,
-                  width: 18,
-                  height: 18,
+                  width: 30.h,
+                  height: 30.h,
+                  color: context.isDarkMode ? Colors.white : null,
                 ),
-                const SizedBox(width: 10),
+                    const Sizer(),
                 Text(LocaleKeys.people.localize,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
+                    style: TextStyle(
+                        color: AppColors.getTextColor(context),
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w700))
               ]),
               // icon: SvgPicture.asset(Assets.people,width: 18,height: 18,),
@@ -86,33 +94,33 @@ class _FacebookBodyState extends State<FacebookBody>
             ),
             Tab(
               height: 44,
-              child: Flexible(
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  SvgPicture.asset(
-                    Assets.profile,
-                    width: 18,
-                    height: 18,
-                  ),
-                  const SizedBox(width: 10),
-                  Label(
-                    text: LocaleKeys.profile.localize,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ]),
-              ),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SvgPicture.asset(
+                  Assets.profile,
+                  width: 30.h,
+                  height: 30.h,
+                  color: context.isDarkMode ? Colors.white : null,
+                ),
+                    const Sizer(),
+                Label(
+                  text: LocaleKeys.profile.localize,
+                  style: TextStyle(
+                      color: AppColors.getTextColor(context),
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w700),
+                  overflow: TextOverflow.ellipsis,
+                )
+              ]),
               // text: LocaleKeys.profile.localize,
             ),
           ]),
           Expanded(
               child: TabBarView(controller: tabController, children: [
             const FaceBookView(),
-            Container(),
-            Container(),
+            const FacebookPeopleView(),
+            //Expanded(child: Center(child: Label(text: context.isArabic?'لايوجد محتوي':'There is no content'),)),
+            Expanded(child: Center(child: Label(text: context.isArabic?'لايوجد محتوي':'There is no content'),)),
           ]))
         ],
       ),

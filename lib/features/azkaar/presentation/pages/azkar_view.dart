@@ -71,12 +71,12 @@ class _AzkarViewState extends State<AzkarView> {
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    const EdgeInsets.all(16),
                 child: TextField(
                   textDirection: TextDirection.rtl,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: AppColors.GREYBG,
+                    fillColor: AppColors.getFillColor(context),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -90,7 +90,7 @@ class _AzkarViewState extends State<AzkarView> {
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
                     hintText: LocaleKeys.search.localize,
-                    hintStyle: Styles.mediumText(color: Colors.black),
+                    hintStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
                   ),
                   controller: _cubit.searchController,
                   onSubmitted: (value) {

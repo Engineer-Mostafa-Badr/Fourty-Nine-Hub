@@ -101,3 +101,49 @@ class Validator {
     return null;
   }
 }
+
+String? validatorEmail(String? email) {
+  final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
+  if (email == null || email.isEmpty) {
+    return LocaleKeys.emailRequired.localize;
+  } else if (!emailRegex.hasMatch(email)) {
+    return LocaleKeys.invalidEmailAddress.localize;
+  }
+  return null;
+}
+
+String? validatorPhone(String? email) {
+  final phoneRegex = RegExp(r'^\+?\d{7,15}$');
+  if (email == null || email.isEmpty) {
+    return LocaleKeys.phoneIsRequired.localize;
+  } else if (!phoneRegex.hasMatch(email)) {
+    return LocaleKeys.invalidPhoneNumber.localize;
+  }
+  return null;
+}
+
+String? validatorNotHavePhone(String? email) {
+  final phonePattern = RegExp(
+      r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'  // Common formats: +1 (123) 456-7890, 123-456-7890
+      r'\d{10}|'                                                  // 10 consecutive digits
+      r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'                            // 123 456 7890, 123.456.7890
+      r'\+\d{10,}'                                               // International format: +1234567890
+  );
+  if (email == null || email.isEmpty) {
+    return LocaleKeys.required.localize;
+  } else if (phonePattern.hasMatch(email)) {
+    return LocaleKeys.phoneNumbersNotAllowed.localize;
+  }
+  return null;
+}
+
+String? validatorNumber(String? value) {
+  if (value == null || value.isEmpty) {
+    return LocaleKeys.required.localize;
+  }
+  final number = int.tryParse(value);
+  if (number == null || number <= 0) {
+    return 'Enter a positive number';
+  }
+  return null;
+}

@@ -34,7 +34,8 @@ class CreateAdTextFormField extends StatelessWidget {
         inputFormatters: inputFormatters,
         style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
         decoration: InputDecoration(
-          fillColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
+          fillColor:AppColors.getFillColor(context),
+          //context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
           filled: true,
           contentPadding: const EdgeInsetsDirectional.only(start: 16),
           border: OutlineInputBorder(

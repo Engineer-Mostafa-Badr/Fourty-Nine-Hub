@@ -35,10 +35,11 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
   Future<Either<Failure, bool>> cancelAppointment(String id);
 
-  Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params});
+  Future<Either<Failure, List<BookingEntity>>> getBooking(
+      {required GetBookingParams params});
 
-  Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params});
-
+  Future<Either<Failure, List<MostBookingEntity>>> getMostBooking(
+      {required GetMostBookingParams params});
 }
 
 class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
@@ -131,15 +132,16 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params})async {
+  Future<Either<Failure, List<BookingEntity>>> getBooking(
+      {required GetBookingParams params}) async {
     final url =
         "${EndPoints.getBookingCurrent}?type=${params.type}&page=${params.page}&limit=${params.limit}";
 
     final response = await _apiConsumer.get(url);
 
     return response.fold(
-          (l) => Left(l),
-          (data) {
+      (l) => Left(l),
+      (data) {
         final restaurantList = (data['data']['bookings'] as List)
             .map((e) => BookingModel.fromJson(e as Map<String, dynamic>))
             .toList();
@@ -149,15 +151,16 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params}) async{
+  Future<Either<Failure, List<MostBookingEntity>>> getMostBooking(
+      {required GetMostBookingParams params}) async {
     final url =
         "${EndPoints.getMostBooking}?orderBy=popularity&page=${params.page}&limit=${params.limit}";
 
     final response = await _apiConsumer.get(url);
 
     return response.fold(
-          (l) => Left(l),
-          (data) {
+      (l) => Left(l),
+      (data) {
         final restaurantList = (data['data']["doctors"] as List)
             .map((e) => MostBookingModel.fromJson(e as Map<String, dynamic>))
             .toList();

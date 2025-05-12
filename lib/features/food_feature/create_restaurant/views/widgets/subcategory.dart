@@ -30,11 +30,11 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                 return DropdownButtonFormField<FoodCategoryEntity>(
                   icon:  Icon(
                     Icons.keyboard_arrow_down_outlined,
-                    color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                    color: AppColors.getTextColor(context),
                   ),
-                  dropdownColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
+                  dropdownColor: AppColors.getFillColor(context),
                   decoration: InputDecoration(
-                    fillColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
+                    fillColor: AppColors.getFillColor(context),
                     isDense: true,
                     constraints: BoxConstraints.loose(
                       Size.fromHeight(90.h),
@@ -82,7 +82,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                           child: Text(
                             (context.isArabic ? e.nameAr : e.nameEn) ?? "",
                             style: Styles.mediumText(
-                              color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR,
+                              color:AppColors.getTextColor(context),
                                 // color: Theme.of(context)
                                 //     .textTheme
                                 //     .bodyMedium

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -46,7 +47,8 @@ class CreatePostBanner extends StatelessWidget {
               child: InkWell(
             onTap: () {
               !context.read<UserCubit>().isLoggedIn
-                  ? context.push(Routes.LOGIN)
+                  ? pleaseLoginDialog(context)
+              // context.push(Routes.LOGIN)
                   : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
             child:Container(
@@ -54,6 +56,7 @@ class CreatePostBanner extends StatelessWidget {
               height: 38,
               padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12), // Adjust left padding
               decoration: BoxDecoration(
+                color: AppColors.getFillColor(context),
                 border: Border.all(color: Colors.grey, width: 1.5),
                 borderRadius: BorderRadius.circular(50.r),
               ),
@@ -63,10 +66,10 @@ class CreatePostBanner extends StatelessWidget {
                   text: context.locale == Locales.english
                       ? 'What’s on your mind?'
                       : 'بم تفكر؟',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: AppColors.black
+                    color: AppColors.getTextColor(context)
                   ),
                 ),
               ),

@@ -22,17 +22,19 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+
 class HealthContactsButtons extends StatefulWidget {
   const HealthContactsButtons(
       {super.key,
-        required this.otherUserId,
-        required this.subcategoryId,
-        required this.phone,
-        this.senderName,
-        this.senderImage,
-        required this.id,
-        this.hasReport = false,
-        this.clientId});
+      required this.otherUserId,
+      required this.subcategoryId,
+      required this.phone,
+      this.senderName,
+      this.senderImage,
+      required this.id,
+      this.hasReport = false,
+      this.clientId});
 
   final String otherUserId;
   final String? clientId;
@@ -61,29 +63,38 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                visualDensity:const  VisualDensity(
-                    horizontal: -4, vertical: -4),
-                color: (snap.data == true &&
-                    context.read<UserCubit>().isLoggedIn)
-                    ? AppColors.PRIMARY_COLOR
-                    : AppColors.DARK_GRAY_COLOR,
+                visualDensity:
+                    const VisualDensity(horizontal: -4, vertical: -4),
+                color:
+                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                        ? AppColors.PRIMARY_COLOR
+                        : AppColors.DARK_GRAY_COLOR,
                 icon: SvgPicture.asset(
                   Assets.phoneIcon,
                   width: 36.h,
                   height: 36.h,
                   fit: BoxFit.cover,
                 ),
-                onPressed:()=>JoinTripBottomSheet(context,
-                    topButtonColor: AppColors.PRIMARY_COLOR,
-                    topButtonTitle:LocaleKeys.freeCall.localize ,
-                    bottomButtonColor: AppColors.BG_GRAY_COLOR,
-                    bottomButtonTitle: LocaleKeys.regularCall.localize,onTap:() => showDialogTripJoin(
+                onPressed: () => JoinTripBottomSheet(
+                  context,
+                  topButtonColor: AppColors.getButtonPrimaryColor(context),
+                  topButtonTitle: LocaleKeys.freeCall.localize,
+                  bottomButtonColor: context.isDarkMode?AppColors.fill_Color_DARK:const Color(0xFFD9D9D9),
+                  bottomButtonTitle: LocaleKeys.regularCall.localize,
+                  onTap: () => showDialogTripJoin(
                       context,
                       DialogContent(
-                        subTitle: context.isArabic?'برجاء الاشتراك حتي تستطيع التواصل مع الطبيب':'Please Subscribe to contact Doctor',
+                        subTitle: context.isArabic
+                            ? 'برجاء الاشتراك حتي تستطيع التواصل مع الطبيب'
+                            : 'Please Subscribe to contact Doctor',
                         leftButtonTitle: LocaleKeys.close.localize,
                         rightButtonTitle: LocaleKeys.subscribe.localize,
-                      )),),
+                      )),
+                  topTextColor:
+                      context.isDarkMode ? Colors.black : Colors.white,
+                  bottomTextColor:
+                  AppColors.getTextColor(context),
+                ),
                 // !context.read<UserCubit>().isLoggedIn
                 //     ? () => context.push(Routes.LOGIN)
                 //     :
@@ -230,56 +241,64 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                 //           },
               ),
               IconButton(
-                visualDensity:const  VisualDensity(
-                    horizontal: -4, vertical: -4),
-                color: (snap.data == true &&
-                    context.read<UserCubit>().isLoggedIn)
-                    ? AppColors.PRIMARY_COLOR
-                    : AppColors.DARK_GRAY_COLOR,
+                visualDensity:
+                    const VisualDensity(horizontal: -4, vertical: -4),
+                color:
+                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                        ? AppColors.PRIMARY_COLOR
+                        : AppColors.DARK_GRAY_COLOR,
                 icon: SvgPicture.asset(
                   Assets.mailIcon,
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () => context.push(Routes.LOGIN)
-                    : snap.data == true
-                    ? () async {
-                  ChatEntity? chat = await context
-                      .read<UserCubit>()
-                      .createNormalChat(
-                    otherId: widget.otherUserId,
-                    categoryId: widget.subcategoryId,
-                  );
-                  context.push(
-                    Routes.CHAT,
-                    extra: ChatsViewParams(
-                      isFromStartChat: true,
-                      initialTabIndex: 1,
-                      selectedChat: chat,
-                    ),
-                  );
+                    ? () {
+                  pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
                 }
-                    : () {
-                  SubscriptionMethod().subscribe(
-                      subscribeId: widget.subcategoryId,
-                      title: LocaleKeys.ads.localize);
-                },
+                    : snap.data == true
+                        ? () async {
+                            ChatEntity? chat = await context
+                                .read<UserCubit>()
+                                .createNormalChat(
+                                  otherId: widget.otherUserId,
+                                  categoryId: widget.subcategoryId,
+                                );
+                            context.push(
+                              Routes.CHAT,
+                              extra: ChatsViewParams(
+                                isFromStartChat: true,
+                                initialTabIndex: 1,
+                                selectedChat: chat,
+                              ),
+                            );
+                          }
+                        : () {
+                            SubscriptionMethod().subscribe(
+                                subscribeId: widget.subcategoryId,
+                                title: LocaleKeys.ads.localize);
+                          },
               ),
               IconButton(
-                visualDensity:const  VisualDensity(
-                    horizontal: -4, vertical: -4),
+                visualDensity:
+                    const VisualDensity(horizontal: -4, vertical: -4),
                 padding: EdgeInsets.zero,
                 color: AppColors.SECONDARY_COLOR,
-                icon: const Icon(Icons.report,),
+                icon: const Icon(
+                  Icons.report,
+                ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () => context.push(Routes.LOGIN)
+                    ? () {
+                  pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
                     : () {
-                  bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: widget.id,
-                        categoryId: widget.subcategoryId,
-                      ));
-                },
+                        bottomSheet(
+                            context: context,
+                            widget: ReportView(
+                              id: widget.id,
+                              categoryId: widget.subcategoryId,
+                            ));
+                      },
               ),
             ],
           );

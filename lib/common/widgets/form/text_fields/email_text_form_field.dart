@@ -1,31 +1,48 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-
 import '../../../../core/utils/validator.dart';
-import '../../../../res/style/app_colors.dart';
 import 'abstract/main_text_form_field.dart';
 
 class EmailTextFormField extends MainTextFormField {
   EmailTextFormField({
     super.key,
-    required super.currentFocusNode,
+    super.currentFocusNode,
     super.nextFocusNode,
     required super.currentController,
-    super.margin = null,
-    super.hintColor,
-    super.fillColor,
-    final Color? borderColor,
+    required final String hint,
+    super.keyboardType,
+    super.contentPadding,
+    super.style,
+    super.onTap,
+    super.isAuthentcation,
+    super.labelWidget,
+    super.label,
+    super.prefix,
     super.enabled,
+    super.readOnly,
+    super.margin = null,
+    super.noBoarder,
+    final bool isRequired = false,
+    super.expanded,
+    Color super.borderColor = Colors.black,
+    final List<TextInputFormatter>? inputFormatter,
+    super.maxLines,
+    super.minLines,
+    super.obscureText,
+    super.fillColor,
+    final int? maxLength,
+    super.suffixIcon,
+    super.prefixIcon,
+    final String? Function(String?)? validator,
+    super.onChanged,
+    super.constraints,
+    super.hintColor,
+    super.hintStyle,
   }) : super(
-          validator: Validator().validateEmail,
-          hintText: LocaleKeys.lastName.tr(),
-          keyboardType: TextInputType.emailAddress,
-          borderColor: borderColor ?? AppColors.GREY_DARK_COLOR,
-          inputFormatters: [
-            FilteringTextInputFormatter.deny(
-              RegExp(r" "),
-            ),
-          ],
+          validator: (v) =>
+              validator?.call(v) ?? (isRequired ? validatorEmail(v) : null),
+          hintText: hint + (isRequired ? '*' : ''),
+          textCapitalization: TextCapitalization.words,
+          inputFormatters: inputFormatter,
         );
 }

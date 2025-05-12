@@ -80,6 +80,7 @@ class SinglePostInstagramViewBody extends StatelessWidget {
       instagramPostEntity: InstagramPostEntity(
         id: post.id,
         commentsCounter: post.commentsCounter,
+        shareCounter: post.shearsCounter,
         createdAt: DateTime.now().toString(), // post.createdAt,
         content: post.content,
         countOfStory: post.owner.hasStory,
@@ -129,6 +130,9 @@ class SinglePostInstagramViewBody extends StatelessWidget {
             ),
           ),
         ),
+        isFollow: post.owner.isFollow,
+        isLiked: post.isLiked,
+        lastLikeEntity: post.lastLikeEntity,
       ),
     );
   }

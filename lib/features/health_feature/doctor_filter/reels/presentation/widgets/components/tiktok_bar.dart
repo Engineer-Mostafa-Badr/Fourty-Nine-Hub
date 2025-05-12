@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/shared/ti
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../social_media/reels/presentation/pages/recording/recording_shared.dart';
@@ -120,7 +121,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context.isUserLoggedIn) {
                   showTiktokOption(context, generateRandom9DigitNumber);
                 } else {
-                  context.go(Routes.LOGIN);
+                  pleaseLoginDialog(context);
+                  // context.go(Routes.LOGIN);
                 }
               }),
               const Sizer(

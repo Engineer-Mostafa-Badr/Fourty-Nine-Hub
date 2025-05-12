@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -133,23 +134,25 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                             //     .read<CreatePostInstagramCubit>()
                             //     .nextPage(context);
                           }
-                        } else if (state.postTypeSelectedIndex == 2) {
-                          bool isGalleryReelEmpty = context
-                              .read<CreatePostInstagramCubit>()
-                              .state
-                              .selectedGalleryPost
-                              .isEmpty;
-                          if (isGalleryReelEmpty) {
-                            showErrorMessage(
-                              context,
-                              LocaleKeys.youMustSelectAtLeastOneVideo.localize,
-                            );
-                          } else {
-                            context.pushNamed(
-                              Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                              extra: context.read<CreatePostInstagramCubit>(),
-                            );
-                          }
+                        }
+                        else if (state.postTypeSelectedIndex == 2) {
+                          context.push(Routes.REELS);
+                          // bool isGalleryReelEmpty = context
+                          //     .read<CreatePostInstagramCubit>()
+                          //     .state
+                          //     .selectedGalleryReels
+                          //     .isEmpty;
+                          // if (isGalleryReelEmpty) {
+                          //   showErrorMessage(
+                          //     context,
+                          //     LocaleKeys.youMustSelectAtLeastOneVideo.localize,
+                          //   );
+                          // } else {
+                          //   context.pushNamed(
+                          //     Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                          //     extra: context.read<CreatePostInstagramCubit>(),
+                          //   );
+                          // }
                         }
                       },
                     ),
@@ -162,8 +165,9 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                       ),
                     // if (state.postTypeSelectedIndex == 1)
                     //   const Expanded(child: Placeholder()),
-                    if (state.postTypeSelectedIndex == 2)
-                      const Expanded(child: ReelBodyCreatePostInstagram()),
+
+                    // if (state.postTypeSelectedIndex == 2)
+                    //   const Expanded(child: ReelBodyCreatePostInstagram()),
                   ],
                 );
               },
@@ -337,7 +341,9 @@ class _ReelBodyCreatePostInstagramState
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: SvgPicture.asset(
-                              Assets.createPostInstagramMultiImageIcon,
+                              context.isDarkMode
+                                  ? Assets.createPostInstagramMultiImageIconDark
+                                  : Assets.createPostInstagramMultiImageIcon,
                               height: 20,
                               width: 20,
                             ),
@@ -402,10 +408,12 @@ class _ReelBodyCreatePostInstagramState
             bottom: 6,
             end: 5,
             child: Label(
-              text: _formatDuration(assets.duration),
+              text:
+                  assets.duration == 0 ? "" : _formatDuration(assets.duration),
               style: Styles.smallText(
                 fontSize: 24,
-                color: Colors.white,
+                color:
+                    context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.white,
                 fontWeight: FontWeight.w600,
               ),
             ),

@@ -34,6 +34,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class CreateShippingView extends StatefulWidget {
   const CreateShippingView({super.key, this.selectedId});
@@ -192,8 +193,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                           .isLoggedIn) {
                                         context.push(Routes.SHIPPING_REGISTER);
                                       } else {
+                                        return pleaseLoginDialog(context);
+
                                         // context.push(Routes.SHIPPING_REGISTER);
-                                        context.push(Routes.LOGIN);
+                                        // context.push(Routes.LOGIN);
                                       }
                                     },
                                     child: Padding(

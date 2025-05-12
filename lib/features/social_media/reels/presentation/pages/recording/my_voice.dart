@@ -15,7 +15,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
+// import 'package:video_thumbnail/video_thumbnail.dart'
+ import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart' as thumb;
 
 import '../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
@@ -190,10 +191,10 @@ class MyVoiceVideoRecordingScreenState
 
   Future<void> _generateThumbnail(String videoThumbnail) async {
     final directory = await getTemporaryDirectory();
-    final thumbnail = await thumb.VideoThumbnail.thumbnailFile(
+    final thumbnail = await thumb.FlutterVideoThumbnailPlus.thumbnailFile(
       video: videoThumbnail,
       thumbnailPath: directory.path,
-      imageFormat: thumb.ImageFormat.JPEG,
+      imageFormat: thumb.ImageFormat.jpeg,
       maxWidth: 128,
       quality: 75,
     );
@@ -386,7 +387,7 @@ class MyVoiceVideoRecordingScreenState
                   right: 0,
                   child: Column(
                     children: [
-                      //   _buildControls(),
+                        _buildControls(),
                     ],
                   ),
                 ),

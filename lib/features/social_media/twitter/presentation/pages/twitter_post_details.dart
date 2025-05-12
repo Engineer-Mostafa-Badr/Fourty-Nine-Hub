@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -99,7 +100,8 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                           }
                         }
                       } else {
-                        context.push(Routes.LOGIN);
+                        return pleaseLoginDialog(context);
+                        // context.push(Routes.LOGIN);
                       }
                     },
                     showPostComments: (i) {
@@ -172,14 +174,18 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                           ),
                         );
                       } else {
-                        context.push(Routes.LOGIN);
+                        return pleaseLoginDialog(context);
+
+                        // context.push(Routes.LOGIN);
                       }
                     },
                     onShare: () {
                       if (context.read<UserCubit>().isLoggedIn) {
                         controller.onShare(postId: state.postDetails!.id);
                       } else {
-                        context.push(Routes.LOGIN);
+                        return pleaseLoginDialog(context);
+
+                        // context.push(Routes.LOGIN);
                       }
                     },
                     getPost: () {},

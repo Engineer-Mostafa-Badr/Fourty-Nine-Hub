@@ -79,13 +79,27 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
+import '../../domain/entities/create_no_track_trip_entity.dart';
+import '../../domain/entities/get_client_accepted_trips_entity.dart';
+import '../../domain/entities/get_client_offer_trips_entity.dart';
+import '../../domain/entities/get_client_past_trips_entity.dart';
+import '../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../domain/entities/get_offers_entity.dart';
+import '../../domain/usecases/accept_non_track_trip_use_case.dart';
+import '../../domain/usecases/cancel_non_track_trip_use_case.dart';
+import '../../domain/usecases/create_non_track_trip_use_case.dart';
+import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../models/create_no_track_trip_model.dart';
 import '../models/dashboards/get_offers_response_model.dart';
 import '../../../../shared_web_socket.dart';
 import '../../../account_taps/my_adds/data/model/click_model.dart';
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
+import '../models/get_client_accepted_trips_model.dart';
+import '../models/get_client_offer_trips_model.dart';
+import '../models/get_client_past_trips_model.dart';
+import '../models/get_client_pending_trips_model.dart';
 
 abstract class RideRemoteDataSource {
   ////////////////////Nasr////////////////////
@@ -193,6 +207,24 @@ abstract class RideRemoteDataSource {
 
   Future<Either<Failure, bool>> makeLoadingRequestTrip(
       MakeLoadingRequestTripUsecaseParam params);
+
+  Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params);
+
+  Future<Either<Failure, List<ClientPendingTripEntity>>> getClientPendingUntrackedTrips({required ClientPendingTripParams params});
+
+  Future<Either<Failure, CreateNonTrackTripEntity>> cancelNonTrackTrip(CancelNonTrackTripParams params);
+
+  Future<Either<Failure, List<ClientAcceptedTripEntity>>> getClientAcceptedUntrackedTrips({required ClientPendingTripParams params});
+
+  Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferUntrackedTrips({required ClientPendingTripParams params});
+
+  Future<Either<Failure, CreateNonTrackTripEntity>> acceptNonTrackTrip(AcceptNonTrackTripParams params);
+
+  Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params);
+
+  Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
+
+
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -1059,5 +1091,149 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     return response.fold(
             (failure) => Left(failure), (data) => Right(ClickModel.fromJson(data)));
   }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params) async{
+    final url = "${EndPoints.createNonTrackTrip}";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+            final createNonTrackTrip = CreateNonTrackTripModel.fromJson(data);
+
+            return Right(createNonTrackTrip);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ClientPendingTripEntity>>> getClientPendingUntrackedTrips({
+    required ClientPendingTripParams params,
+  }) async {
+    final url =
+        "${EndPoints.getClientPendingUntrackedTrips}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['pendingTrips'] as List)
+            .map((e) => ClientPendingTripModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> cancelNonTrackTrip(CancelNonTrackTripParams params) async{
+    const url = EndPoints.cancelClientUntrackedTrips;
+
+    final body = {
+      "tripIds": params.tripsIds,
+    };
+
+
+    final response = await _apiConsumer.delete(
+      url,
+      data: body,
+    );
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final deleteTrip = CreateNonTrackTripModel.fromJson(data);
+        return Right(deleteTrip);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ClientAcceptedTripEntity>>> getClientAcceptedUntrackedTrips({required ClientPendingTripParams params})async {
+    final url =
+        "${EndPoints.getClientAcceptedUntrackedTrips}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['acceptedTrips'] as List)
+            .map((e) => ClientAcceptedTripModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferUntrackedTrips({required ClientPendingTripParams params}) async{
+    final url =
+        "${EndPoints.getClientOfferUntrackedTrips}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['offers'] as List)
+            .map((e) => ClientOfferTripModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> acceptNonTrackTrip(AcceptNonTrackTripParams params) async{
+    final url = "${EndPoints.acceptClientUntrackedTrips}${params.tripsId}";
+    final response = await _apiConsumer.put(
+      url,
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final deleteTrip = CreateNonTrackTripModel.fromJson(data);
+        return Right(deleteTrip);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params) async{
+    final url = "${EndPoints.refuseClientUntrackedTrips}${params.tripsId}";
+    final response = await _apiConsumer.delete(
+      url,
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final deleteTrip = CreateNonTrackTripModel.fromJson(data);
+        return Right(deleteTrip);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ClientPastTripEntity>>> getClientPastUntrackedTrips({required ClientPendingTripParams params}) async{
+    final url =
+        "${EndPoints.getClientPastUntrackedTrips}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['pastTrips'] as List)
+            .map((e) => ClientPastTripModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
 
 }

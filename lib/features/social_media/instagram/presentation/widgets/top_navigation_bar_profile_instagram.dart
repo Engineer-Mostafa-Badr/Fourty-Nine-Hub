@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 class TopNavigationBarProfileInstagarm extends StatelessWidget {
@@ -20,7 +21,7 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
           controller: tabController,
           onTap: onTap,
           dividerHeight: 0,
-          indicatorColor: Colors.black,
+          indicatorColor: context.isDarkMode ? Colors.white : Colors.black,
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
           indicatorWeight: 2,
@@ -30,24 +31,36 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
               height: 44,
               child: SvgPicture.asset(
                 tabController.index == 0
-                    ? Assets.appsBlackIcon
-                    : Assets.appsGreyIcon,
+                    ? (context.isDarkMode
+                        ? Assets.appsBlackIconDark
+                        : Assets.appsBlackIcon)
+                    : (context.isDarkMode
+                        ? Assets.appsGreyIconDark
+                        : Assets.appsGreyIcon),
               ),
             ),
             Tab(
               height: 44,
               child: SvgPicture.asset(
                 tabController.index == 1
-                    ? Assets.videoIcon
-                    : Assets.videoGreyIcon,
+                    ? (context.isDarkMode
+                        ? Assets.videoIconDark
+                        : Assets.videoIcon)
+                    : (context.isDarkMode
+                        ? Assets.videoGreyIconDark
+                        : Assets.videoGreyIcon),
               ),
             ),
             Tab(
               height: 44,
               child: SvgPicture.asset(
                 tabController.index == 2
-                    ? Assets.profile2BlackIcon
-                    : Assets.profile2GreyIcon,
+                    ? (context.isDarkMode
+                        ? Assets.profile2BlackIconDark
+                        : Assets.profile2BlackIcon)
+                    : (context.isDarkMode
+                        ? Assets.profile2GreyIconDark
+                        : Assets.profile2GreyIcon),
               ),
             ),
           ],
