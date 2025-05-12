@@ -31,15 +31,23 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../core/error/failure.dart';
 
+import '../../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
+import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
+import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/dashboards/trips_response_entity.dart';
 import '../../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import '../../../domain/usecases/dashboards/get_accepted_ride_non_socket_trips_use_case.dart';
+import '../../../domain/usecases/dashboards/get_available_ride_non_socket_trips_use_case.dart';
+import '../../../domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../../../domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../../../domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
+import '../../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import '../../pages/dashboards/ride_mode_screen.dart';
 
 part 'dashboards_state.dart';
 
@@ -60,6 +68,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToNewTripUseCase listenToNewTripUseCase;
   final ListenToRemoveTripUseCase listenToRemoveTripUseCase;
   final AutoAcceptTripUseCase autoAcceptTripUseCase;
+  final GetAvailableNonSocketTripsUseCase getAvailableNonSocketTripsUseCase;
+  final GetAcceptedNonSocketTripsUseCase getAcceptedNonSocketTripsUseCase;
+  final GetPastNonSocketTripsUseCase getPastNonSocketTripsUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -76,14 +87,161 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToAcceptOfferUseCase,
       this.listenToNewTripUseCase,
       this.listenToRemoveTripUseCase,
-      this.autoAcceptTripUseCase,
+      this.autoAcceptTripUseCase, this.getAvailableNonSocketTripsUseCase, this.getAcceptedNonSocketTripsUseCase, this.getPastNonSocketTripsUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
 
-  void changeIndex(int index,BuildContext context){
-    emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
-    if(index==0)loadAvailableRideTrips(context);
+  List<HistoryTripEntity > pastRideNonSocketData = [];
+  bool hasMorePastNonSocketTrips = true;
+  int currentPagePastNonSocketTrips = 1;
+  bool isLoadingMorePastNonSocketTrips = false;
+
+  void loadInitialPastNonSocketTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    pastRideNonSocketData.clear();
+    currentPagePastNonSocketTrips = 1;
+    hasMorePastNonSocketTrips = true;
+    await getPastNonSocketTrips();
+    emit(state.copyWith(status: DashboardsStates.success));
   }
+
+  Future<void> getPastNonSocketTrips() async {
+    if (!hasMorePastNonSocketTrips || isLoadingMorePastNonSocketTrips) return;
+    isLoadingMorePastNonSocketTrips = true;
+    emit(state.copyWith(status: DashboardsStates.loading));
+    final response = await getPastNonSocketTripsUseCase(
+        ClientPendingTripParams(page: currentPagePastNonSocketTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMorePastNonSocketTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: DashboardsStates.error));
+      },
+          (data) {
+        pastRideNonSocketData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMorePastNonSocketTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: DashboardsStates.loading));
+
+        } else {
+          currentPagePastNonSocketTrips++;
+        }
+
+        isLoadingMorePastNonSocketTrips = false;
+        emit(state.copyWith(pastRideNonSocketTrips: data,));
+      },
+    );
+  }
+
+
+
+
+
+
+  List<AcceptedRideNonSocketTripEntity> acceptedRideNonSocketData = [];
+  bool hasMoreAcceptedNonSocketTrips = true;
+  int currentPageAcceptedNonSocketTrips = 1;
+  bool isLoadingMoreAcceptedNonSocketTrips = false;
+
+  void loadInitialAcceptedNonSocketTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    acceptedRideNonSocketData.clear();
+    currentPageAcceptedNonSocketTrips = 1;
+    hasMoreAcceptedNonSocketTrips = true;
+    await getAcceptedNonSocketTrips();
+    emit(state.copyWith(status: DashboardsStates.success));
+  }
+
+  Future<void> getAcceptedNonSocketTrips() async {
+    if (!hasMoreAcceptedNonSocketTrips || isLoadingMoreAcceptedNonSocketTrips) return;
+    isLoadingMoreAcceptedNonSocketTrips = true;
+    emit(state.copyWith(status: DashboardsStates.loading));
+    final response = await getAcceptedNonSocketTripsUseCase(
+        ClientPendingTripParams(page: currentPageAcceptedNonSocketTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMoreAcceptedNonSocketTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: DashboardsStates.error));
+      },
+          (data) {
+        acceptedRideNonSocketData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreAcceptedNonSocketTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: DashboardsStates.loading));
+
+        } else {
+          currentPageAcceptedNonSocketTrips++;
+        }
+
+        isLoadingMoreAcceptedNonSocketTrips = false;
+        emit(state.copyWith(acceptedRideNonSocketTrips: data,));
+      },
+    );
+  }
+
+
+  List<AvailableRideNonSocketTripEntity> availableRideNonSocketData = [];
+  bool hasMoreAvailableNonSocketTrips = true;
+  int currentPageAvailableNonSocketTrips = 1;
+  bool isLoadingMoreAvailableNonSocketTrips = false;
+
+  void loadInitialAvailableNonSocketTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    availableRideNonSocketData.clear();
+    currentPageAvailableNonSocketTrips = 1;
+    hasMoreAvailableNonSocketTrips = true;
+    await getAvailableNonSocketTrips();
+    emit(state.copyWith(status: DashboardsStates.success));
+  }
+
+  Future<void> getAvailableNonSocketTrips() async {
+    if (!hasMoreAvailableNonSocketTrips || isLoadingMoreAvailableNonSocketTrips) return;
+    isLoadingMoreAvailableNonSocketTrips = true;
+    emit(state.copyWith(status: DashboardsStates.loading));
+    final response = await getAvailableNonSocketTripsUseCase(
+        ClientPendingTripParams(page: currentPageAvailableNonSocketTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMoreAvailableNonSocketTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: DashboardsStates.error));
+      },
+          (data) {
+        availableRideNonSocketData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreAvailableNonSocketTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: DashboardsStates.loading));
+
+        } else {
+          currentPageAvailableNonSocketTrips++;
+        }
+
+        isLoadingMoreAvailableNonSocketTrips = false;
+        emit(state.copyWith(availableRideNonSocketTrips: data,));
+      },
+    );
+  }
+
+  void changeIndex(int index,BuildContext context,RideModeParams params){
+
+    emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
+    if(index==0 && params.isSocket == true)loadAvailableRideTrips(context);
+    /// method load
+    if(index== 0&& params.isSocket == false && params.modeType == "ride")loadInitialAvailableNonSocketTrips();
+    if(index== 4&& params.isSocket == false && params.modeType == "ride")loadInitialAcceptedNonSocketTrips();
+    if(index==2&& params.isSocket == false && params.modeType == "ride")loadInitialPastNonSocketTrips();
+  }
+
   void listenToNewTrip() {
     CliLogger.info('Listen To New Trip');
     // TripsResponseEntity
@@ -141,6 +299,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
     });
   }
+
   Future<void> getAvailableTrips(BuildContext context) async {
     if (!hasMoreData || isLoadingMore) return;
     emit(state.copyWith(status: DashboardsStates.loadingAvailable));

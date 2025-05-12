@@ -298,6 +298,7 @@ import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
+import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/drivers_license_screen.dart';
@@ -323,6 +324,9 @@ import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_offers/main_tabs_ride_offer_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_request_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_status_screen.dart';
 import '../features/RideFeature/presentation/pages/safety_ride_screen.dart';
@@ -413,6 +417,7 @@ import '../features/social_media/club_house/presentation/pages/club_house_home_s
 import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
+import '../features/social_media/instagram/presentation/pages/followers_screen.dart';
 import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
 import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -1356,6 +1361,16 @@ class AppPages {
                 builder: (context, state) => BlocProvider<InstagramCubit>(
                   create: (_) => serviceLocator(),
                   child: const InstagramAllDiscoverPeople(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.followersScreen,
+                name: Routes.followersScreen,
+                builder: (context, state) => BlocProvider<InstagramCubit>(
+                  create: (_) => serviceLocator(),
+                  child: FollowersScreen(
+                    args: state.extra as FollowersScreenArguments,
+                  ),
                 ),
               ),
               GoRoute(
@@ -3444,17 +3459,24 @@ class AppPages {
                         child: RideDashboardDetailsScreen(
                             tripEntity: state.extra as TripEntity),
                       )),
+
               GoRoute(
                   path: Paths.rideLoadingRequestScreen,
                   name: Routes.rideLoadingRequestScreen,
-                  builder: (context, state) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (context) => serviceLocator<RideCubit>(),
-                          ),
-                        ],
-                        child: RideLoadingRequestScreen(
-                            isTruk: state.extra as bool),
+                  builder: (context, state) => BlocProvider(
+                        create: (context) => serviceLocator<ClientTripsCubit>()
+                          ..loadInitialClientPendingTrips(),
+                        child: PendingRideOfferScreen(
+                            ),
+                      )),
+              GoRoute(
+                  path: Paths.rideOffer,
+                  name: Routes.rideOffer,
+                  builder: (context, state) => BlocProvider(
+                        create: (context) => serviceLocator<ClientTripsCubit>()
+                          ..loadInitialClientPendingTrips()..loadInitialClientOfferTrips(),
+                        child: MainTabsRideOffer(
+                            ),
                       )),
               GoRoute(
                 path: Paths.supportRideScreen,

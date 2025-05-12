@@ -14,7 +14,10 @@ import '../features/RideFeature/data/repositories/trip_repository_impl.dart';
 import '../features/RideFeature/domain/repositories/trip_repository.dart';
 import '../features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_accepted_ride_non_socket_trips_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_available_ride_non_socket_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_usecase.dart';
@@ -48,10 +51,16 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<ListenToNewTripUseCase>(() => ListenToNewTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToRemoveTripUseCase>(() => ListenToRemoveTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AutoAcceptTripUseCase>(() => AutoAcceptTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetAvailableNonSocketTripsUseCase>(() => GetAvailableNonSocketTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetAcceptedNonSocketTripsUseCase>(() => GetAcceptedNonSocketTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetPastNonSocketTripsUseCase>(() => GetPastNonSocketTripsUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
