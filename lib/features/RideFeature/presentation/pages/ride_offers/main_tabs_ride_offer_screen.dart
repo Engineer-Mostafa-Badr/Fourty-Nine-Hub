@@ -49,6 +49,11 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
     context.read<ClientTripsCubit>()..loadInitialClientPastTrips();
   }
 
+  void _loadInitialClientAcceptedTrips() {
+    print("✅ loadInitialClientAcceptedTrips called");
+    context.read<ClientTripsCubit>()..loadInitialClientAcceptedTrips();
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -71,7 +76,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
           bottom: BorderSide(color: Colors.transparent, width: 0),
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
+          preferredSize: const Size.fromHeight(40),
           child: _buildTabBar(),
         ),
       ),
@@ -108,6 +113,9 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
           if (index == 0) {
             _loadInitialClientOfferTrips();
           }
+          if (index == 2) {
+            _loadInitialClientAcceptedTrips();
+          }
           if (index == 3) {
             _loadInitialClientPastTrips();
           }
@@ -119,8 +127,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
             padding: const EdgeInsets.only(right: 8),
             child: Tab(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? const Color(0xFF0D0C3F)

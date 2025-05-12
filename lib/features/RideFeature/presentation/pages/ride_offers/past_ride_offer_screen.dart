@@ -120,7 +120,7 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
                                 .isEmpty
                         ? Center(
                             child: Label(
-                                text: LocaleKeys.dontHaveOffer.localize,
+                                text: LocaleKeys.youDontHavePastOffer.localize,
                                 style:
                                     TextStyle(color: Colors.red, fontSize: 18)),
                           )

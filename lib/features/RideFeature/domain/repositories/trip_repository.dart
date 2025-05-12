@@ -6,15 +6,22 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 
 import '../../../../core/error/failure.dart';
+import '../entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
+import '../entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
+import '../entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/settings_dashboard_entity.dart';
 import '../entities/dashboards/trips_response_entity.dart';
 import '../usecases/dashboards/create_driver_rating_usecase.dart';
 import '../usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../usecases/dashboards/get_available_ride_trips_use_case.dart';
 import '../usecases/dashboards/update_settings_dashboard_usecase.dart';
+import '../usecases/get_client_pending_untracked_trips_use_case.dart';
 
 abstract class TripRepository {
    Future<Either<Failure, TripsResponseEntity>> getAvailableTrips(AvailableRideTripsUseCaseParams params);
+   Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>> getAvailableNonSocketTrips(ClientPendingTripParams params);
+   Future<Either<Failure, List<AcceptedRideNonSocketTripEntity >>> getAcceptedNonSocketTrips(ClientPendingTripParams params);
+   Future<Either<Failure, List<HistoryTripEntity  >>> getPastNonSocketTrips(ClientPendingTripParams params);
    Future<Either<Failure, TripsResponseEntity>> getPastTrips(String params);
    Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
    Future<Either<Failure, bool>> updateSettings(UpdateSettingsDashboardUsecaseParam params);

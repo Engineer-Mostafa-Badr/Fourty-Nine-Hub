@@ -1591,7 +1591,12 @@ class CodegenLoader extends AssetLoader{
   "errorHappen": "حدث خطأ",
   "accepted": "المقبولة",
   "rideOffer": "عروض الرحلات",
-  "dontHaveOffer": "ليس لديك أي عروض حتى الآن"
+  "dontHaveOffer": "ليس لديك أي عروض حتى الآن",
+  "current": "حالية",
+  "youDontHaveAcceptedOffer": "ليس لديك أي عروض مقبولة حتى الآن",
+  "youDontHavePendingOffer": "ليس لديك أي عروض قيد الانتظار حتى الآن",
+  "youDontHavePastOffer": "ليس لديك أي عروض سابقة حتى الآن",
+  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3186,7 +3191,12 @@ static const Map<String,dynamic> _en = {
   "errorHappen": "Error Happen",
   "accepted": "Accepted",
   "rideOffer": "Ride Offer",
-  "dontHaveOffer": "You don\\'t have any offers yet"
+  "dontHaveOffer": "You don't have any offers yet",
+  "current": "Current",
+  "youDontHaveAcceptedOffer": "You don't Have Accepted Offers",
+  "youDontHavePendingOffer": "You don't Have Pending Offers",
+  "youDontHavePastOffer": "You don't Have Past Offers",
+  "youDontHaveAvailableOffer": "You don't Have Available Offers"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

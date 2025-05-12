@@ -1575,6 +1575,11 @@
   "errorHappen": "حدث خطأ",
   "accepted": "المقبولة",
   "rideOffer": "عروض الرحلات",
-  "dontHaveOffer": "ليس لديك أي عروض حتى الآن"
+  "dontHaveOffer": "ليس لديك أي عروض حتى الآن",
+  "current": "حالية",
+  "youDontHaveAcceptedOffer": "ليس لديك أي عروض مقبولة حتى الآن",
+  "youDontHavePendingOffer": "ليس لديك أي عروض قيد الانتظار حتى الآن",
+  "youDontHavePastOffer": "ليس لديك أي عروض سابقة حتى الآن",
+  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن"
 
 }

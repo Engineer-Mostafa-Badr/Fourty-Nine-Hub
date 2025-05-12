@@ -1489,4 +1489,9 @@ class EndPoints {
   static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
   static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
+
+
+  static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
+  static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
+  static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
 }

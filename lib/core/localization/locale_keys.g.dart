@@ -1568,5 +1568,10 @@ abstract class  LocaleKeys {
   static const accepted = 'accepted';
   static const rideOffer = 'rideOffer';
   static const dontHaveOffer = 'dontHaveOffer';
+  static const current = 'current';
+  static const youDontHaveAcceptedOffer = 'youDontHaveAcceptedOffer';
+  static const youDontHavePendingOffer = 'youDontHavePendingOffer';
+  static const youDontHavePastOffer = 'youDontHavePastOffer';
+  static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
 
 }

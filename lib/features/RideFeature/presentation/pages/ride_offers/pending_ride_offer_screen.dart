@@ -117,7 +117,8 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                             context.read<ClientTripsCubit>().clientPendingTripsData!.isEmpty
                         ?  Center(
                             child: Label(
-                                text: LocaleKeys.dontHaveOffer.localize,
+                                text: LocaleKeys.youDontHavePendingOffer.localize,
+
                                 style:
                                     TextStyle(color: Colors.red, fontSize: 18)),
                           )
