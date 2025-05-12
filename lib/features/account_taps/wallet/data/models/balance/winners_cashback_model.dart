@@ -8,16 +8,19 @@ class WinnersCashbackModel extends WinnersCashbackEntity {
       required super.profilePictureKey,
       required super.profitAmount,
       required super.winAt,
-      });
+      required super.currencyAr,
+      required super.currencyEn});
 
   factory WinnersCashbackModel.fromJson(Map<String, dynamic> json) {
-      return WinnersCashbackModel(
-          userId: json['winnerData']['userId'],
-          firstName: json['winnerData']['firstName'],
-          lastName: json['winnerData']['lastName'],
-          profilePictureKey: json['winnerData']['profilePictureKey'],
-          profitAmount: json['profitAmount'],
-          winAt: json['winAt'],
-      );
+    return WinnersCashbackModel(
+      userId: json['winnerData']['userId'],
+      firstName: json['winnerData']['firstName'],
+      lastName: json['winnerData']['lastName'],
+      profilePictureKey: json['winnerData']['profilePictureKey'],
+      profitAmount: json['profitAmount'],
+      winAt: json['winAt'],
+      currencyAr: json['currencyAr'],
+      currencyEn: json['currencyEn'],
+    );
   }
 }

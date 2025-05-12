@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class UserAds extends StatefulWidget {
@@ -44,22 +45,21 @@ class _UserAdsState extends State<UserAds> {
     print('widget.params.mainCategory.id ${widget.params.mainCategory.id}');
   }
 
-
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       if (widget.params.mainCategory.nameEn == 'Dating') {
         context.read<AdvertisementCubit>().getAds(
-          subCategoryId: widget.params.subCategory.id,
-          filter: 'male',
-        );
+              subCategoryId: widget.params.subCategory.id,
+              filter: 'male',
+            );
       } else {
         context.read<AdvertisementCubit>().getAds(
-          subCategoryId: widget.params.subCategory.id,
-          filter: widget.params.subCategory.hasAuction == true
-              ? 'sale'
-              : 'provider',
-        );
+              subCategoryId: widget.params.subCategory.id,
+              filter: widget.params.subCategory.hasAuction == true
+                  ? 'sale'
+                  : 'provider',
+            );
       }
     }
   }
@@ -73,48 +73,56 @@ class _UserAdsState extends State<UserAds> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: context.read<AdvertisementCubit>().ads.length +
           (context.read<AdvertisementCubit>().isLoadingAdsMore ? 1 : 0),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: 16,
+      ),
       itemBuilder: (context, index) {
-        if(context.read<AdvertisementCubit>().ads.isEmpty) {
-          return Center(
-            child: Text(
-              LocaleKeys.noAds.localize,
-              style: TextStyle(
-                color: context.isDarkMode
-                    ? AppColors.LIGHT_COLOR
-                    : AppColors.DARK_BLUE_COLOR,
-                fontSize: 18,
+        if (context.read<AdvertisementCubit>().ads.isEmpty) {
+          return SizedBox(
+            height: 100,
+            child: Center(
+              child: Text(
+                LocaleKeys.noAds.localize,
+                style: TextStyle(
+                  color: context.isDarkMode
+                      ? AppColors.LIGHT_COLOR
+                      : AppColors.DARK_BLUE_COLOR,
+                  fontSize: 18,
+                ),
               ),
             ),
           );
         }
+        return MyAdCard(
+          item: context.read<AdvertisementCubit>().ads[index],
+          onFav: (id) {},
+          onRemoveFav: (id) {},
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (index > nativeAdStart &&
-                index % adFrequency == adFrequency - 1)
+            if (index > nativeAdStart && index % adFrequency == adFrequency - 1)
               SizedBox(
                 height: 50,
                 child: getAdIfNeeded(index, _adsManager),
               ),
-            CategoriesExtension.fromId(
-                widget.params.mainCategory.id ?? '')
+            CategoriesExtension.fromId(widget.params.mainCategory.id ?? '')
                 .view(
               item: context.read<AdvertisementCubit>().ads[index],
               onFav: (String id) async {
-                var result = await context
-                    .read<AdvertisementCubit>()
-                    .favouriteAd(id);
+                var result =
+                    await context.read<AdvertisementCubit>().favouriteAd(id);
                 return result;
               },
               onRemoveFav: (String id) async {
-                var result = await context
-                    .read<AdvertisementCubit>()
-                    .unFavouriteAd(id);
+                var result =
+                    await context.read<AdvertisementCubit>().unFavouriteAd(id);
                 return result;
               },
             ),
@@ -122,6 +130,5 @@ class _UserAdsState extends State<UserAds> {
         );
       },
     );
-
   }
 }

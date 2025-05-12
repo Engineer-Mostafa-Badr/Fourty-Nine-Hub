@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/subcategories/data/datasources/subcategories_remote_datasource.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/repositories/subcategories_repo.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/search_ads_use_case.dart';
 
 import '../../domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
@@ -34,7 +36,13 @@ class SubcategoriesRepoImpl implements SubcategoriesRepo {
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>> getCustomPageSubcategories(GetCustomPageSubCategoriesParams params) {
+  Future<Either<Failure, List<SubCategoryEntity>>> getCustomPageSubcategories(
+      GetCustomPageSubCategoriesParams params) {
     return _remoteDataSource.getCustomPageSubcategories(params);
+  }
+
+  @override
+  Future<Either<Failure, List<AdModel>>> searchAds(SearchAdsParams params) {
+    return _remoteDataSource.searchAds(params);
   }
 }

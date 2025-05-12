@@ -6,70 +6,77 @@ import '../../domain/entities/ad_entity.dart';
 import 'ads_address_model.dart';
 
 class AdModel extends AdEntity {
-  AdModel(
-      {required super.id,
-      required super.title,
-      required super.description,
-      required super.images,
-      super.price,
-      super.type,
-      super.city,
-      super.governorate,
-      super.isFavourite,
-      super.hasAuction,
-      super.address,
-      super.user,
-      super.mainCategoryId,
-      super.userId,
-      super.subscriptionStatus,
-      super.userSubscriptionStatus,
-      super.statistics,
-      required super.active,
-      required super.approved,
-      required super.createdAt,
-      required super.details,
-      super.subCategoryId,
-      super.phone});
+  AdModel({
+    required super.id,
+    required super.title,
+    required super.description,
+    required super.images,
+    super.price,
+    super.type,
+    super.city,
+    super.governorate,
+    super.isFavourite,
+    super.hasAuction,
+    super.address,
+    super.user,
+    super.mainCategoryId,
+    super.userId,
+    super.subscriptionStatus,
+    super.userSubscriptionStatus,
+    super.views,
+    super.statistics,
+    required super.active,
+    required super.approved,
+    required super.createdAt,
+    required super.details,
+    super.subCategoryId,
+    super.phone,
+    super.currencyEn,
+    super.currencyAr,
+  });
   factory AdModel.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
-    try {
-      images =
-          (json['images'] as List).map((e) => e['photo'] as String).toList();
-    } catch (e) {}
+    // try {
+    images = (json['images'] as List).map((e) => e['photo'] as String).toList();
+    // } catch (e) {}
     UserModel? user;
-    try {
-      if (json['userId'] != null) {
-        user = UserModel.fromJson(json['userId']);
-      }
-      if (json['user'] != null) {
-        user = UserModel.fromJson(json['user']);
-      }
-    } catch (e) {}
+    // try {
+    // if (json['userId'] != null) {
+    //   user = UserModel.fromJson(json['userId']);
+    // }
+    if (json['user'] != null) {
+      user = UserModel.fromJson(json['user']);
+    }
+    // } catch (e) {}
     return AdModel(
-        id: json['_id'] ?? '',
-        title: json['title'] ?? '',
-        description: json['desc'] ?? json['description'],
-        images: images,
-        price: json['price'] ?? 0,
-        subCategoryId: json['subCategoryId'],
-        active: json['isActive'] ?? true,
-        approved: json['isApproved'] ?? true,
-        isFavourite: json['isFavorite'] ?? false,
-        subscriptionStatus: json['ownerSubscriptionStatus'] ?? '',
-        userSubscriptionStatus: json['userLoginSubscriptionStatus'] ?? '',
-        phone: json['phone'] ?? '',
-        userId: json['userId'],
-        statistics: json['statistics'] == null
-            ? null
-            : AdStatisticsModel.fromJson(json['statistics']),
-        address: AdsAddressModel.fromJson(json['address']),
-        user: user,
-        details: json['props'] == null
-            ? []
-            : (json['props'] as List)
-                .map((e) => CreateAdModel.fromJson(e))
-                .toList(),
-        createdAt: DateTime.parse(json['createdAt']));
+      id: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      description: json['desc'] ?? json['description'],
+      images: images,
+      price: json['price'] ?? 0,
+      subCategoryId: json['subCategoryId'],
+      active: json['isActive'] ?? true,
+      approved: json['isApproved'] ?? true,
+      isFavourite: json['isFavorite'] ?? false,
+      subscriptionStatus: json['ownerSubscriptionStatus'] ?? '',
+      views: json['views'] ?? 0,
+      userSubscriptionStatus: json['userLoginSubscriptionStatus'] ?? '',
+      phone: json['phone'] ?? '',
+      userId: json['userId'],
+      statistics: json['statistics'] == null
+          ? null
+          : AdStatisticsModel.fromJson(json['statistics']),
+      address: AdsAddressModel.fromJson(json['address']),
+      user: user,
+      details: json['props'] == null
+          ? []
+          : (json['props'] as List)
+              .map((e) => CreateAdModel.fromJson(e))
+              .toList(),
+      createdAt: DateTime.parse(json['createdAt']),
+      currencyEn: json['currencyEn'] ?? '',
+      currencyAr: json['currencyAr'] ?? '',
+    );
   }
   Map<String, dynamic> toJson() => {
         "desc": description,

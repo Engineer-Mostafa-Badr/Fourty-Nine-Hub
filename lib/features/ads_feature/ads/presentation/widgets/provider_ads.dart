@@ -44,25 +44,23 @@ class _ProviderAdsState extends State<ProviderAds> {
     _adsManager.preloadAds();
     _cubit = context.read<AdvertisementCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-
   }
-
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       if (widget.params.mainCategory.nameEn == 'Dating') {
         context.read<AdvertisementCubit>().getAds(
-          subCategoryId: widget.params.subCategory.id,
-          filter: 'male',
-        );
+              subCategoryId: widget.params.subCategory.id,
+              filter: 'male',
+            );
       } else {
         context.read<AdvertisementCubit>().getAds(
-          subCategoryId: widget.params.subCategory.id,
-          filter: widget.params.subCategory.hasAuction == true
-              ? 'sale'
-              : 'provider',
-        );
+              subCategoryId: widget.params.subCategory.id,
+              filter: widget.params.subCategory.hasAuction == true
+                  ? 'sale'
+                  : 'provider',
+            );
       }
     }
   }
@@ -82,7 +80,7 @@ class _ProviderAdsState extends State<ProviderAds> {
       itemCount: context.read<AdvertisementCubit>().ads.length +
           (context.read<AdvertisementCubit>().isLoadingAdsMore ? 1 : 0),
       itemBuilder: (context, index) {
-        if(context.read<AdvertisementCubit>().ads.isEmpty) {
+        if (context.read<AdvertisementCubit>().ads.isEmpty) {
           return Center(
             child: Text(
               LocaleKeys.noAds.localize,
@@ -96,8 +94,7 @@ class _ProviderAdsState extends State<ProviderAds> {
           );
         }
 
-        final ad =
-        context.read<AdvertisementCubit>().ads[index];
+        final ad = context.read<AdvertisementCubit>().ads[index];
         // return // if (index > 0 && index % 3 == 0) {
 /*
    if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
@@ -109,8 +106,8 @@ class _ProviderAdsState extends State<ProviderAds> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height *
-                    0.5, // Reduced height
+                height:
+                    MediaQuery.of(context).size.height * 0.5, // Reduced height
                 child: const AdsManagerWidget(),
               ),
               _buildAdContent(ad), // Your content for the ad
@@ -121,13 +118,10 @@ class _ProviderAdsState extends State<ProviderAds> {
         return _buildAdContent(ad);
       },
     );
-
   }
 
   Widget _buildAdContent(AdModel item) {
-    return CategoriesExtension.fromId(
-            widget.params.mainCategory.id ?? '')
-        .view(
+    return CategoriesExtension.fromId(widget.params.mainCategory.id ?? '').view(
       item: item,
       onFav: (String id) async {
         var result = await widget.controller.favouriteAd(id);
