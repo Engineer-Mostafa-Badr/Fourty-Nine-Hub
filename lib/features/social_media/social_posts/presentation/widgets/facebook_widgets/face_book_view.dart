@@ -52,7 +52,8 @@ class _FaceBookViewState extends State<FaceBookView>
       }
     }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
-      return RefreshIndicator(
+      return RefreshIndicator(backgroundColor: AppColors.getFillColor(context),
+        color:AppColors.getTextColor(context) ,
         onRefresh: () async {
           controller.loadData();
           context.read<StoryCubit>()
