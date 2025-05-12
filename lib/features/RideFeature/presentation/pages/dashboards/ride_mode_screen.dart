@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/available_ride_trip_item.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_arrived_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_otp_sheet.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_go_to_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_safety_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
@@ -20,7 +22,9 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../widgets/accepted_non_socket_widget.dart';
 import '../widgets/map_section.dart';
+import '../widgets/past_trip_non_socket_widget.dart';
 import 'widgets/not_ready_available_trips_widget.dart';
 import 'widgets/past_trips_widget.dart';
 import 'widgets/settings_widget.dart';
@@ -35,6 +39,7 @@ class RideModeParams {
 
 class RideModeScreen extends StatefulWidget {
   final RideModeParams params;
+
   const RideModeScreen({super.key, required this.params});
 
   @override
@@ -64,7 +69,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToNewTrip(),
               dashboardCubit.listenToRemoveTrip()
             ]
-          : dashboardCubit.getAvailableTrips(context);
+          : dashboardCubit.getAvailableNonSocketTrips();
+      //dashboardCubit.getAvailableTrips(context);
       dashboardCubit.getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
       dashboardCubit.getSettings(context);
       // }
@@ -72,8 +78,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      widget.params.isSocket == true ? context.read<DashboardsCubit>().getAvailableRideTrips(context) : context.read<DashboardsCubit>().getAvailableTrips(context);
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      widget.params.isSocket == true
+          ? context.read<DashboardsCubit>().getAvailableRideTrips(context)
+          : context.read<DashboardsCubit>().getAvailableTrips(context);
     }
   }
 
@@ -119,7 +128,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             children: [
                               // const Icon(Icons.arrow_back),
                               Text(
-                                  widget.params.isSocket == true
+                                  widget.params.modeType == "ride"
                                       ? LocaleKeys.rideMode.tr()
                                       // : widget.params.modeType == 'truk'?
                                       : LocaleKeys.trukMode.tr(),
@@ -138,9 +147,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             _buildTabItem(
                               cubit.state.currentIndex ?? 0,
                               0,
-                              LocaleKeys.availableTrips.tr(),
+                              LocaleKeys.available.tr(),
                               () {
-                                cubit.changeIndex(0, context);
+                                cubit.changeIndex(0, context, widget.params);
                                 // setState(() {
                                 //   _selectedIndex = 0;
                                 // });
@@ -152,7 +161,20 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 1,
                                 LocaleKeys.runningTrips.tr(),
                                 () {
-                                  cubit.changeIndex(1, context);
+                                  cubit.changeIndex(1, context, widget.params);
+                                  // setState(() {
+                                  //   _selectedIndex = 1;
+                                  // });
+                                },
+                              ),
+                            if (widget.params.isSocket == false &&
+                                widget.params.modeType == "ride")
+                              _buildTabItem(
+                                cubit.state.currentIndex ?? 0,
+                                4,
+                                LocaleKeys.current.localize,
+                                () {
+                                  cubit.changeIndex(4, context, widget.params);
                                   // setState(() {
                                   //   _selectedIndex = 1;
                                   // });
@@ -161,16 +183,16 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             _buildTabItem(
                               cubit.state.currentIndex ?? 0,
                               2,
-                              LocaleKeys.pastTrips.tr(),
+                              LocaleKeys.past.tr(),
                               () {
-                                cubit.changeIndex(2, context);
+                                cubit.changeIndex(2, context, widget.params);
                                 // setState(() {
                                 //   _selectedIndex = 2;
                                 // });
                               },
                             ),
                             _buildFilterIcon(() {
-                              cubit.changeIndex(3, context);
+                              cubit.changeIndex(3, context, widget.params);
                               // setState(() {
                               //   _selectedIndex = 3;
                               // });
@@ -192,26 +214,49 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                               ? const Center(child: CircularProgressIndicator())
                                               : state.availableRideTrips != null
                                                   ? ListView.separated(
-                                                      controller: _availableTripsScrollController,
-                                                      itemBuilder: (context, index) => AvailableRideTripItem(tripEntity: state.availableRideTrips![index]),
-                                                      itemCount: state.availableRideTrips!.length,
-                                                      separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15))
+                                                      controller:
+                                                          _availableTripsScrollController,
+                                                      itemBuilder: (context,
+                                                              index) =>
+                                                          AvailableRideTripItem(
+                                                              tripEntity: state
+                                                                      .availableRideTrips![
+                                                                  index]),
+                                                      itemCount: state
+                                                          .availableRideTrips!
+                                                          .length,
+                                                      separatorBuilder:
+                                                          (BuildContext context,
+                                                                  int index) =>
+                                                              const SizedBox(
+                                                                  height: 15))
                                                   : const SizedBox.shrink()
-                                          : state.availableTrips == null
+                                          : cubit.availableRideNonSocketData == null
                                               ? const SizedBox.shrink()
-                                              : cubit.isLoadingMore
+                                              : cubit.isLoadingMoreAvailableNonSocketTrips
                                                   ? const Center(child: CircularProgressIndicator())
-                                                  : ListView.separated(
-                                                      controller: _availableTripsScrollController,
-                                                      itemBuilder: (context, index) => TrukBusWidget(
-                                                            contextScreen: context,
-                                                            tripEntity: state.availableTrips![index],
-                                                            modeType: 'bus',
+                                                  : cubit.availableRideNonSocketData.isEmpty
+                                                      ? Center(child: Text(LocaleKeys.youDontHaveAvailableOffer.localize))
+                                                      : ListView.separated(
+                                                          controller:
+                                                              _availableTripsScrollController,
+                                                          itemBuilder: (context,
+                                                                  index) =>
+                                                              AvailableNonSocketWidget(
+                                                            offers: cubit
+                                                                    .availableRideNonSocketData[
+                                                                index],
                                                           ),
-                                                      // : const TrukBusWidget(),
-                                                      itemCount: state.availableTrips!.length,
-                                                      separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15)),
-                                )
+                                                          itemCount: cubit
+                                                              .availableRideNonSocketData
+                                                              .length,
+                                                          separatorBuilder:
+                                                              (context,
+                                                                      index) =>
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          15),
+                                                        ))
                               : const NotReadyAvailableTripsWidget(),
                         )
                       // running Trips
@@ -264,24 +309,71 @@ class _RideModeScreenState extends State<RideModeScreen> {
                       else if (cubit.state.currentIndex == 2)
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: state.isLoadingPast
-                                ? const Center(child: CircularProgressIndicator())
-                                : state.pastTrips == null
-                                    ? Container()
-                                    : ListView.builder(
-                                        itemBuilder: (context, index) =>
-                                            PastTripsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', tripEntity: state.pastTrips![index]),
-                                        itemCount: state.pastTrips!.length,
-                                      ),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: widget.params.isSocket == false &&
+                                    widget.params.modeType == "ride"
+                                ? ListView.builder(
+                                    itemCount:
+                                        cubit.pastRideNonSocketData.length,
+                                    itemBuilder: (context, index) {
+                                      return PastNonSocketTripsWidget(
+                                        tripEntity:
+                                            cubit.pastRideNonSocketData[index],
+                                      );
+                                    })
+                                : state.isLoadingPast
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : state.pastTrips == null
+                                        ? Container()
+                                        : ListView.builder(
+                                            itemBuilder: (context, index) =>
+                                                PastTripsWidget(
+                                                    modeType: widget.params
+                                                                .isSocket ==
+                                                            true
+                                                        ? 'ride'
+                                                        : 'truk',
+                                                    tripEntity: state
+                                                        .pastTrips![index]),
+                                            itemCount: state.pastTrips!.length,
+                                          ),
                           ),
                         )
                       // Settings
                       else if (cubit.state.currentIndex == 3)
                         Expanded(
                             child: state.isLoadingSettings
-                                ? const Center(child: CircularProgressIndicator())
-                                : SettingsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', settings: state.settings))
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : SettingsWidget(
+                                    modeType: widget.params.isSocket == true
+                                        ? 'ride'
+                                        : 'truk',
+                                    settings: state.settings))
+                      else if (cubit.state.currentIndex == 4)
+                        Expanded(
+                          child: cubit.isLoadingMoreAcceptedNonSocketTrips
+                              ? const Center(child: CircularProgressIndicator())
+                              : cubit.acceptedRideNonSocketData.isEmpty
+                                  ? Center(
+                                      child: Text(LocaleKeys
+                                          .youDontHaveAcceptedOffer.localize))
+                                  : ListView.builder(
+                                      itemCount: cubit
+                                          .acceptedRideNonSocketData.length,
+                                      itemBuilder: (context, index) => Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                start: 16, end: 16, bottom: 16),
+                                        child: AcceptedNonSocketWidget(
+                                          offers: cubit
+                                              .acceptedRideNonSocketData[index],
+                                        ),
+                                      ),
+                                    ),
+                        )
                     ],
                   ),
                 );
@@ -293,7 +385,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
     );
   }
 
-  Widget _buildTabItem(int currentIndex, int index, String title, GestureTapCallback? onTap) {
+  Widget _buildTabItem(
+      int currentIndex, int index, String title, GestureTapCallback? onTap) {
     return Expanded(
       flex: 3,
       child: GestureDetector(
@@ -328,7 +421,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 5),
           height: 30,
           decoration: BoxDecoration(
-            color: selectedIndex == 3 ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
+            color:
+                selectedIndex == 3 ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Image.asset(

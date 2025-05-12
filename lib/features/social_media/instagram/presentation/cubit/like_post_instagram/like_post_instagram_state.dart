@@ -14,7 +14,7 @@ extension LikePostInstagramStatusX on LikePostInstagramStatus {
 
 class LikePostInstagramState extends Equatable {
   final LikePostInstagramStatus? status;
-  final bool isLike;
+  final bool? isLike;
   final int? likeCount;
   final String? message;
 
@@ -22,7 +22,7 @@ class LikePostInstagramState extends Equatable {
     this.status,
     this.message,
     this.likeCount,
-    this.isLike = false,
+    this.isLike,
   });
 
   LikePostInstagramState copyWith({
@@ -44,5 +44,6 @@ class LikePostInstagramState extends Equatable {
         status,
         message,
         likeCount,
+        isLike,
       ];
 }

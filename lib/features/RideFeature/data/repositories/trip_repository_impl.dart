@@ -5,6 +5,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/ar
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
@@ -16,6 +19,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/em
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../domain/repositories/trip_repository.dart';
@@ -136,6 +140,21 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, SupportDetailsEntity>> getSupportDetails(GetSupportDetailsParams params) async{
     return await remoteDataSource.getSupportDetails(params);
+  }
+
+  @override
+  Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>> getAvailableNonSocketTrips(ClientPendingTripParams params) {
+    return  remoteDataSource.getAvailableNonSocketTrips(params);
+  }
+
+  @override
+  Future<Either<Failure, List<AcceptedRideNonSocketTripEntity>>> getAcceptedNonSocketTrips(ClientPendingTripParams params) {
+    return  remoteDataSource.getAcceptedNonSocketTrips(params);
+  }
+
+  @override
+  Future<Either<Failure, List<HistoryTripEntity>>> getPastNonSocketTrips(ClientPendingTripParams params) {
+    return  remoteDataSource.getPastNonSocketTrips(params);
   }
 
 }

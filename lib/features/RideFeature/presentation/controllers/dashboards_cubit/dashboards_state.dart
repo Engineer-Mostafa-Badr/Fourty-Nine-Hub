@@ -56,6 +56,9 @@ class DashboardsState
   final bool? isChangedMindReason;
   final bool? isOtherReason;
   final bool? isClientNotShownReason;
+  final List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips;
+  final List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips;
+  final List<HistoryTripEntity >? pastRideNonSocketTrips;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -64,6 +67,9 @@ class DashboardsState
       this.status = DashboardsStates.initState,
       this.availableTrips,
       this.availableRideTrips,
+      this.availableRideNonSocketTrips,
+      this.acceptedRideNonSocketTrips,
+      this.pastRideNonSocketTrips,
       this.tripStatus,
       this.lastStatus,
       this.activeTrip,
@@ -86,6 +92,9 @@ class DashboardsState
         bool? isOtherReason,
         bool? isClientNotShownReason,
 
+        List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
+        List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
+        List<HistoryTripEntity >? pastRideNonSocketTrips,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -95,6 +104,9 @@ class DashboardsState
       currentIndex: currentIndex ?? this.currentIndex,
       availableTrips: availableTrips ?? this.availableTrips,
       availableRideTrips: availableRideTrips ?? this.availableRideTrips,
+      availableRideNonSocketTrips: availableRideNonSocketTrips ?? this.availableRideNonSocketTrips,
+      acceptedRideNonSocketTrips: acceptedRideNonSocketTrips ?? this.acceptedRideNonSocketTrips,
+      pastRideNonSocketTrips: pastRideNonSocketTrips ?? this.pastRideNonSocketTrips,
       activeTrip: activeTrip ?? this.activeTrip,
       tripStatus: tripStatus ?? this.tripStatus,
       lastStatus: lastStatus ?? this.lastStatus,
