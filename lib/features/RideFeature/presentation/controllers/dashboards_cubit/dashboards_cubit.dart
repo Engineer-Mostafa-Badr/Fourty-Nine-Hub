@@ -276,11 +276,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  void changeIndex(int index,BuildContext context,RideModeParams params){
 
   TextEditingController reasonController = TextEditingController();
 
-  void changeIndex(int index, BuildContext context) {
+  void changeIndex(int index,BuildContext context,RideModeParams params){
     emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
     if(index==0 && params.isSocket == true)loadAvailableRideTrips(context);
     if(index==1 && params.isSocket == true)getActiveTrip(context);
@@ -337,10 +336,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     });
   }
 
-  void listenToAcceptOffer(BuildContext context) {
+  void listenToAcceptOffer(BuildContext context,RideModeParams params) {
     CliLogger.info('Listen To Update Trip Auto Accept');
     listenToAcceptOfferUseCase((trip) {
-      changeIndex(1, context);
+      changeIndex(1, context,params);
       // List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
       // list.firstWhere((e)=>e.id==trip.id).isAutoAccept = trip.isAutoAccept;
       // log(trip.toString());

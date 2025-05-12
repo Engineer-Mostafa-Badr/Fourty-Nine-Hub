@@ -61,11 +61,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
       // if (!dashboardCubit.isClosed) {
       widget.params.isSocket == true
           ? [
-              dashboardCubit.changeIndex(widget.params.currentIndex ?? 0, context),
+              dashboardCubit.changeIndex(widget.params.currentIndex ?? 0, context, widget.params),
               // if (widget.params.currentIndex == null || widget.params.currentIndex == 0) dashboardCubit.loadAvailableRideTrips(context),
               dashboardCubit.listenToUpdateTripAutoAccept(),
               dashboardCubit.listenToUpdateTripPrice(),
-              dashboardCubit.listenToAcceptOffer(context),
+              dashboardCubit.listenToAcceptOffer(context,widget.params),
               dashboardCubit.listenToNewTrip(),
               dashboardCubit.listenToRemoveTrip()
             ]
