@@ -63,7 +63,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                                 Text(
                                   ' 76+ ${context.isArabic ? 'اقتراح كان نشط اليوم السابق' : 'suggestions were active in the last day!'}',
                                   style: const TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       overflow: TextOverflow.ellipsis),
                                 ),
                               ],
@@ -84,10 +84,12 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                   FormTextField(
                     prefix: Icon(
                       Icons.search,
-                      color: Colors.black,
+                      color: AppColors.getTextColor(context),
                     ),
                     hint: context.isArabic ? 'بحث...' : 'Search...',
-                    fillColor: const Color(0xFFEDEDED),
+                    style: Styles.mediumText(color: AppColors.getTextColor(context)),
+                    textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                    fillColor: AppColors.getFillColor(context),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   const Sizer(),
@@ -228,7 +230,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       //margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       padding: EdgeInsets.symmetric(vertical: 6.h),
       decoration: BoxDecoration(
-        color: Colors.grey.shade300,
+        color: context.isDarkMode?AppColors.getFindFillColor(context):Colors.grey.shade300,
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -292,9 +294,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         icon: Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-              color: Colors.black, borderRadius: BorderRadius.circular(6)),
+              color: AppColors.getTextColor(context), borderRadius: BorderRadius.circular(6)),
           child: Text(context.isArabic ? 'جديد' : "New",
-              style: Styles.mediumText(color: Colors.white)),
+              style: Styles.mediumText(color:AppColors.getReversedTextColor(context))),
         ),
         label: Text(
           context.isArabic ? 'مشاهدة 2 اخرين' : "view 2 more",

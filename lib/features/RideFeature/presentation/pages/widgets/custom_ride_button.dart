@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/constants/registration_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 
 class CustomRideButton extends StatelessWidget {
@@ -31,7 +33,7 @@ class CustomRideButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        // crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: Stack(
@@ -89,9 +91,7 @@ class CustomRideButton extends StatelessWidget {
                     ),
                     child: Text(
                       text,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                      style: Styles.headerText(
                         color: isDisabled ? Colors.grey[400] : Colors.white,
                         shadows: isDisabled
                             ? [
@@ -166,6 +166,84 @@ class CustomRideButton extends StatelessWidget {
                           ),
                         ],
                       ),
+                      // style: TextStyle(
+                      //   fontSize: 40.sp,
+                      //   fontWeight: FontWeight.w600,
+                      //   color: isDisabled ? Colors.grey[400] : Colors.white,
+                      //   shadows: isDisabled
+                      //       ? [
+                      //     const Shadow(
+                      //       color: Color(0xFFFFFFFF),
+                      //       offset: Offset(0, 1),
+                      //       blurRadius: 4,
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFFD9D9D9),
+                      //       offset: Offset(1, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFFFFFFFF),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFFD9D9D9),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFF3C3C43),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFF818181),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //   ] :  [
+                      //     const Shadow(
+                      //       color: Color(0xFFFFFFFF),
+                      //       offset: Offset(0, 1),
+                      //       blurRadius: 4,
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFFD9D9D9),
+                      //       offset: Offset(1, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFFFFFFFF),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFFD9D9D9),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFF3C3C43),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //     const Shadow(
+                      //       color: Color(0xFF818181),
+                      //       offset: Offset(0, 0),
+                      //       blurRadius: 4,
+                      //
+                      //     ),
+                      //   ],
+                      // ),
+                      // textAlign: TextAlign.start,
                     ),
                   ),
                 ),
@@ -184,48 +262,5 @@ class CustomRideButton extends StatelessWidget {
   }
 }
 
-// class TestButtonRide extends StatelessWidget {
-//   const TestButtonRide({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         crossAxisAlignment: CrossAxisAlignment.stretch,
-//         children: [
-//           const SizedBox(
-//             height: 200,
-//           ),
-//           const LoadingTripWidget(),
-//           Row(
-//             children: [
-//               Expanded(
-//                 child: CustomRideButton(
-//                   text: "Ride Mode",
-//                   onPressed: () {},
-//                   isRed: true,
-//                   isDisabled: true,
-//                 ),
-//               ),
-//               Expanded(
-//                 child: CustomRideButton(
-//                   text: "Ride Mode",
-//                   onPressed: () {},
-//                   isRed: true,
-//                 ),
-//               ),
-//             ],
-//           ),
-//           CustomRideButton(
-//             text: "Car/Truck Register",
-//             onPressed: () {},
-//             // isDisabled: true,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-//
+
 

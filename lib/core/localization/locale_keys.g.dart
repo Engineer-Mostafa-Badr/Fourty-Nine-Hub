@@ -528,6 +528,8 @@ abstract class  LocaleKeys {
   static const userTrips = 'userTrips';
   static const userOwnCarsShareWithThem = 'userOwnCarsShareWithThem';
   static const noTripsAvailable = 'noTripsAvailable';
+  static const noTripsRunning = 'noTripsRunning';
+  static const noTripsPast = 'noTripsPast';
   static const tripjoinPremuimSubscription = 'tripjoinPremuimSubscription';
   static const chatSubscription = 'chatSubscription';
   static const premuimRequest = 'premuimRequest';
@@ -1584,5 +1586,19 @@ abstract class  LocaleKeys {
   static const unfollow = 'unfollow';
   static const hide = 'hide';
   static const aboutThisAccount = 'aboutThisAccount';
+  static const pleaseFillAllRequiredFields = 'pleaseFillAllRequiredFields';
+  static const youCantChoosePastTime = 'youCantChoosePastTime';
+  static const chooseTheTime = 'chooseTheTime';
+  static const chooseTheDate = 'chooseTheDate';
+  static const pleaseSelectDateFirst = 'pleaseSelectDateFirst';
+  static const errorHappen = 'errorHappen';
+  static const accepted = 'accepted';
+  static const rideOffer = 'rideOffer';
+  static const dontHaveOffer = 'dontHaveOffer';
+  static const current = 'current';
+  static const youDontHaveAcceptedOffer = 'youDontHaveAcceptedOffer';
+  static const youDontHavePendingOffer = 'youDontHavePendingOffer';
+  static const youDontHavePastOffer = 'youDontHavePastOffer';
+  static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
 
 }
