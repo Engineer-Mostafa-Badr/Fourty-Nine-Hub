@@ -10,7 +10,19 @@ class LikePostInstagramCubit extends Cubit<LikePostInstagramState> {
       : super(LikePostInstagramState(status: LikePostInstagramStatus.initial));
   final LikePostInstagramUseCase _likePostInstagramUseCase;
 
-  Future<void> likePostInstagram(String postId, int likeCount) async {
+  Future<void> fetchLikePostInstagram(bool isLiked, int likeCount) async {
+    print('likeCount $likeCount');
+    print('isLiked $isLiked');
+    emit(
+      state.copyWith(
+        isLike: isLiked,
+        likeCount: likeCount,
+      ),
+    );
+  }
+
+  Future<void> likePostInstagram(
+      String postId, int likeCount, bool isLiked) async {
     emit(state.copyWith(status: LikePostInstagramStatus.loading));
     final result = await _likePostInstagramUseCase(
       LikePostInstagramParams(
@@ -20,20 +32,21 @@ class LikePostInstagramCubit extends Cubit<LikePostInstagramState> {
     print('likeCount $likeCount');
     result.fold(
         (l) => emit(state.copyWith(status: LikePostInstagramStatus.failure)),
-        (r) {
-          if (r) {
-            likeCount++;
-          } else {
-            likeCount;
-          }
+        (likeStatus) {
+      int newLikeCount = state.likeCount ?? likeCount;
+      if (state.isLike ?? isLiked && !likeStatus) {
+        newLikeCount--;
+      } else if (!(state.isLike ?? isLiked) && likeStatus) {
+        newLikeCount++;
+      }
       emit(
         state.copyWith(
           status: LikePostInstagramStatus.success,
-          isLike: r,
-          likeCount: likeCount,
+          isLike: likeStatus,
+          likeCount: newLikeCount,
         ),
       );
     });
-    print('likeCount $likeCount');
+    print('likeCount ${state.likeCount}');
   }
 }
