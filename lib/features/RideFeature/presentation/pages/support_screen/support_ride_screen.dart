@@ -11,9 +11,19 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
+class SupportRideParams{
+  final String tripId;
+  final String tripType;
+  final String userType;
+  final String driverId;
+  final String clientId;
+
+  SupportRideParams({required this.tripId,required this.driverId,required this.clientId, required this.tripType, required this.userType});
+
+}
 class SupportRideScreen extends StatefulWidget {
   const SupportRideScreen({super.key, required this.params});
-  final GetSupportDetailsParams params;
+  final SupportRideParams params;
   @override
   State<SupportRideScreen> createState() => _SupportRideScreenState();
 }
@@ -86,20 +96,20 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                     ],
                   ),
                 ),
-              const SizedBox(
-                height: 30,
-              ),
-              GestureDetector(
-                onTap: () {
-                  context.push(Routes.supportClientDetailsScreen);
-                },
-                child: const Text(
-                  "go to client screen",
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-              )
+              // const SizedBox(
+              //   height: 30,
+              // ),
+              // GestureDetector(
+              //   onTap: () {
+              //     context.push(Routes.supportClientDetailsScreen);
+              //   },
+              //   child: const Text(
+              //     "go to client screen",
+              //     style: TextStyle(
+              //       color: Colors.red,
+              //     ),
+              //   ),
+              // )
             ],
           ),
         );

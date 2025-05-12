@@ -34,6 +34,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
@@ -329,6 +330,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
+  showSafety(String lastStatus){
+    emit(state.copyWith(tripStatus: 'support',lastStatus: lastStatus));
+  }
+  closeSafety(){
+    emit(state.copyWith(tripStatus: state.lastStatus));
+  }
+
   Future<void> arrivedToClient(BuildContext context, String id, String message) async {
     showLoadingDialog(context);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
@@ -404,14 +412,14 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     result.fold(
       (failure) {
-        context.pop();
+        Navigator.of(context).pop();
         log("Failure ${getFailureMessage(failure, context)}");
         showErrorMessage(context, getFailureMessage(failure, context));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (activeTrip) {
         log("Suzccess");
-        context.pop();
+        Navigator.of(context).pop();
         emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
       },
     );
@@ -757,8 +765,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     return false;
   }
 
-  getEmergencyDetails(BuildContext context, GetSupportDetailsParams params) async {
+  getEmergencyDetails(BuildContext context, SupportRideParams mainParams) async {
     // showLoadingDialog(context);
+    GetSupportDetailsParams params = GetSupportDetailsParams(tripId: mainParams.tripId, tripType:mainParams.tripType, userType: mainParams.userType);
     emit(state.copyWith(status: DashboardsStates.loading));
     final Either<Failure, SupportDetailsEntity> result = await getSupportDetailsUseCase(params);
 
@@ -797,9 +806,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         phone: supportPhoneController.text,
         type: 'driver',
         clientId: clientId,
-        latitude: currentPosition?.latitude ?? 0,
+        latitude: currentPosition?.latitude,
         tripId: tripId,
-        longitude: currentPosition?.longitude ?? 0));
+        longitude: currentPosition?.longitude));
 
     result.fold(
           (failure) {
@@ -812,7 +821,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   ///record trip
-  Record record = Record();
+  final record = AudioRecorder();
 
   // Start recording
   Future<void> startRecord() async {
@@ -822,7 +831,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         log('record.hasPermission');
         Directory tempDir = await getTemporaryDirectory();
         String tempPath = '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.wav';
-        await record.start(
+        await record.start(const RecordConfig(),
           path: tempPath,
         );
         print("object");

@@ -24,10 +24,10 @@ class EmergencySupportParams{
   final String phone;
   final String type;
   final String description;
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
 
-  EmergencySupportParams({required this.driverId, required this.tripId, required this.clientId, required this.phone, required this.type, required this.description, required this.latitude, required this.longitude});
+  EmergencySupportParams({required this.driverId, required this.tripId, required this.clientId, required this.phone, required this.type, required this.description, this.latitude, this.longitude});
 
   //toJson
   Map<String, dynamic> toJson() => {
@@ -37,7 +37,7 @@ class EmergencySupportParams{
     "phone":phone,
     "type": type,
     "description": description,
-    "location": {
+    if(latitude!=null&&longitude!=null)"location": {
       "latitude": latitude,
       "longitude": longitude
     }

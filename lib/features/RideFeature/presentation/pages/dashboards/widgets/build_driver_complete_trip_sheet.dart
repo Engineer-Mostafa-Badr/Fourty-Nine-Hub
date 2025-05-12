@@ -378,7 +378,8 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text('Why do you want to cancel ?',
+                Text(
+                    context.isArabic?'لماذا تريد الغاء الرحلة':'Why do you want to cancel ?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,

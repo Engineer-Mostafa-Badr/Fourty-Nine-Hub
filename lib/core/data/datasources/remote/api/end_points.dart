@@ -1411,7 +1411,7 @@ class EndPoints {
   static String getActiveTrip = '/ride/driver/trips/active';
   static String goingToClient(String id) => '/ride/driver/trips/$id/going';
   static String arrivedToClient(String id) => '/ride/driver/trips/$id/arrived';
-  static String startDriverTrip(String id) => '/ride/trips/start/$id/start';
+  static String startDriverTrip(String id) => '/ride/driver/trips/$id/start';
   static String completeDriverTrip(String id) => '/ride/driver/trips/$id/completed';
 
   static String updateDriverLocation() {

@@ -20,6 +20,8 @@ class RunningTripModel extends RunningTripEntity {
     required super.clientPicture,
     required super.duration,
     required super.distance,
+    required super.clientId,
+    required super.driverId,
   });
 
   factory RunningTripModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class RunningTripModel extends RunningTripEntity {
 
     return RunningTripModel(
       tripId: tripDetails['id'] ?? 0,
+      driverId: tripDetails['driverId'] ?? '',
       duration: tripDetails['duration'] ?? 0,
       distance: tripDetails['distance'] ?? 0,
       status: tripDetails['status'] ?? '',
@@ -57,6 +60,7 @@ class RunningTripModel extends RunningTripEntity {
       subCategoryNameEn: subCategory['nameEn'] ?? '',
       subCategoryPicture: subCategory['picture'] ?? '',
       clientName: clientDetails['firstName'] ?? '',
+      clientId: clientDetails['id'] ?? '',
       clientGender: clientDetails['gender'] ?? '',
       clientPicture: clientDetails['profilePicture'] ?? '',
     );

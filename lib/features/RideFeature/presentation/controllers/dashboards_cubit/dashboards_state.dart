@@ -51,6 +51,7 @@ class DashboardsState
   final int? currentIndex;
   final List<AvailableRideTripEntity>? availableRideTrips;
   final String? tripStatus;
+  final String? lastStatus;
   final RunningTripEntity? activeTrip;
   final bool? isChangedMindReason;
   final bool? isOtherReason;
@@ -64,6 +65,7 @@ class DashboardsState
       this.availableTrips,
       this.availableRideTrips,
       this.tripStatus,
+      this.lastStatus,
       this.activeTrip,
       this.isChangedMindReason=false,
       this.isOtherReason=false,
@@ -78,6 +80,7 @@ class DashboardsState
       SettingsDashboardEntity? settings,
       int? currentIndex,
         String? tripStatus,
+        String? lastStatus,
         RunningTripEntity? activeTrip,
         bool? isChangedMindReason,
         bool? isOtherReason,
@@ -94,6 +97,7 @@ class DashboardsState
       availableRideTrips: availableRideTrips ?? this.availableRideTrips,
       activeTrip: activeTrip ?? this.activeTrip,
       tripStatus: tripStatus ?? this.tripStatus,
+      lastStatus: lastStatus ?? this.lastStatus,
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
       isOtherReason: isOtherReason ?? this.isOtherReason,
       isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,

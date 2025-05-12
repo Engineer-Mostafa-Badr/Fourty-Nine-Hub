@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_rate_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_go_to_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_safety_sheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
@@ -222,14 +223,21 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if(state.tripStatus==TripState.goToClient.name)
                             BuildDriverArrivedSheet(onPressed: (String message) {
                               cubit.arrivedToClient(context, state.activeTrip?.tripId??'',message);
-                            },),
+                            }, onSafety: () {
+                              cubit.showSafety(state.tripStatus??'');
+                            },activeTrip: state.activeTrip),
                             if(state.tripStatus==TripState.accepted.name) BuildGoToClientSheet(onGoingToClient:(){
                               cubit.goingToClient(context, state.activeTrip?.tripId??'');
-                            },activeTrip: state.activeTrip,),
+                            },activeTrip: state.activeTrip, onSafety: () {
+                              cubit.showSafety(state.tripStatus??'');
+                            },),
                             if(state.tripStatus==TripState.inLocation.name) BuildDriverOtpSheet(
                               onPressed: (String otp) {
                                 cubit.startDriverTrip(context, state.activeTrip?.tripId??'',otp);
-                              },
+                              }, onSafety: () {
+                              cubit.showSafety(state.tripStatus??'');
+                            },
+                              activeTrip: state.activeTrip,
                             ),
                             if(state.tripStatus==TripState.started.name)BuildDriverCompleteTripSheet(
                               onPressed: (String) {},
@@ -247,7 +255,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               print("message $message ||| rate $rate");
                               cubit.rateTheClient(context: context, tripId: state.activeTrip?.tripId??'', comment: message, rate: rate);
                             },),
-                            BuildSafetySheet(params: GetSupportDetailsParams(tripId: state.activeTrip?.tripId??'6820ee01ec9da31b68d1afd9', tripType: 'notSpecial', userType: 'driver'),),
+                            if(state.tripStatus==TripState.support.name)BuildSafetySheet(params: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'notSpecial', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''),onClose: (){
+                              cubit.closeSafety();
+                            },),
                           ],
                         ))
                       // Past Trips

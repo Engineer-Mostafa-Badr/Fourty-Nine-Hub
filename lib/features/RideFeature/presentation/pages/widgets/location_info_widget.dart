@@ -34,9 +34,11 @@ class LocationInfoWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                from,
-                style: const TextStyle(fontSize:  FontSize.s14),
+              Expanded(
+                child: Text(
+                  from,
+                  style: const TextStyle(fontSize:  FontSize.s14),
+                ),
               ),
             ],
           ),

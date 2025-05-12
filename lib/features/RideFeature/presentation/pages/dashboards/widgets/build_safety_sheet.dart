@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/Build_safety_item.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/saftey_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -16,9 +17,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 
 class BuildSafetySheet extends StatefulWidget {
-  const BuildSafetySheet({super.key, this.onGoingToClient, required this.params});
+  const BuildSafetySheet({super.key, this.onGoingToClient, required this.params, this.onClose});
   final GestureTapCallback? onGoingToClient;
-  final GetSupportDetailsParams params;
+  final SupportRideParams params;
+  final GestureTapCallback? onClose;
 
   @override
   State<BuildSafetySheet> createState() => _BuildSafetySheetState();
@@ -73,14 +75,17 @@ class _BuildSafetySheetState extends State<BuildSafetySheet> {
                           style: const TextStyle(fontSize: FontSize.s16, fontWeight: FontWeight.bold),
                         ),
                         const Spacer(),
-                        Container(
-                          height: 35,
-                          width: 35,
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.DIVIDER_GRAY_COLOR),
-                          child: const Icon(
-                            Icons.close,
-                            color: AppColors.black,
+                        ClickableWidget(
+                          onTap: widget.onClose,
+                          child: Container(
+                            height: 35,
+                            width: 35,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.DIVIDER_GRAY_COLOR),
+                            child: const Icon(
+                              Icons.close,
+                              color: AppColors.black,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -96,7 +101,7 @@ class _BuildSafetySheetState extends State<BuildSafetySheet> {
                           context.push(Routes.supportRideScreen, extra: widget.params);
                         }, context),
                         _buildFeatureButton(Assets.emergencyContactsIcon, LocaleKeys.emergencyContacts.localize, () {
-                          context.push(Routes.rideFindingScreen);
+                          context.push(Routes.emergencyContactsScreen);
                         }, context),
                       ],
                     ),

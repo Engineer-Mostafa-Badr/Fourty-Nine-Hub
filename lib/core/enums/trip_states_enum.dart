@@ -6,4 +6,5 @@ enum TripState {
   accepted,
   goToClient,
   inLocation,
+  support,
 }

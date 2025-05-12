@@ -3462,7 +3462,7 @@ class AppPages {
                 name: Routes.supportRideScreen,
                 builder: (context, state) => BlocProvider(
                     create: (context) => serviceLocator<DashboardsCubit>(),
-                    child: SupportRideScreen(params: state.extra as GetSupportDetailsParams,)),
+                    child: SupportRideScreen(params: state.extra as SupportRideParams,)),
               ),
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
