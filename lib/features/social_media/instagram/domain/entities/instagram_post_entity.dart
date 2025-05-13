@@ -52,6 +52,59 @@ class InstagramPostEntity {
     required this.isLiked,
      this.lastLikeEntity,
   });
+
+
+  InstagramPostEntity copyWith({
+    String? id,
+    String? content,
+    String? userId,
+    String? username,
+    String? firstName,
+    String? lastName,
+    String? locationName,
+    String? profilePictureUrl,
+    bool? verifiedBadge,
+    List<String>? medias,
+    List<CommentInstagramModel>? comments,
+    List<InstagramPostUserTagEntity>? userTags,
+    List<String>? hashtags,
+    int? favoritesCounter,
+    int? commentsCounter,
+    int? likesCounter,
+    int? shareCounter,
+    String? createdAt,
+    int? countOfStory,
+    bool? isFriend,
+    bool? isFollow,
+    bool? isLiked,
+    LastLikeEntity? lastLikeEntity,
+  }) {
+    return InstagramPostEntity(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      userId: userId ?? this.userId,
+      username: username ?? this.username,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      locationName: locationName ?? this.locationName,
+      profilePictureUrl: profilePictureUrl ?? this.profilePictureUrl,
+      verifiedBadge: verifiedBadge ?? this.verifiedBadge,
+      medias: medias ?? this.medias,
+      comments: comments ?? this.comments,
+      userTags: userTags ?? this.userTags,
+      hashtags: hashtags ?? this.hashtags,
+      favoritesCounter: favoritesCounter ?? this.favoritesCounter,
+      commentsCounter: commentsCounter ?? this.commentsCounter,
+      likesCounter: likesCounter ?? this.likesCounter,
+      shareCounter: shareCounter ?? this.shareCounter,
+      createdAt: createdAt ?? this.createdAt,
+      countOfStory: countOfStory ?? this.countOfStory,
+      isFriend: isFriend ?? this.isFriend,
+      isFollow: isFollow ?? this.isFollow,
+      isLiked: isLiked ?? this.isLiked,
+      lastLikeEntity: lastLikeEntity ?? this.lastLikeEntity,
+    );
+  }
 }
 
 class InstagramPostUserTagEntity {

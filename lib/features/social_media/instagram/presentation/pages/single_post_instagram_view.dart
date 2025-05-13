@@ -70,18 +70,24 @@ class SinglePostInstagramView extends StatelessWidget {
 }
 
 class SinglePostInstagramViewBody extends StatelessWidget {
-  const SinglePostInstagramViewBody({super.key, required this.post});
+  const SinglePostInstagramViewBody({
+    super.key,
+    required this.post,
+  });
 
   final SinglePostInstagramEntity post;
 
   @override
   Widget build(BuildContext context) {
     return PostInstagramWidget(
+      posts: [],
+      currentIndex: 0,
       instagramPostEntity: InstagramPostEntity(
         id: post.id,
         commentsCounter: post.commentsCounter,
         shareCounter: post.shearsCounter,
-        createdAt: DateTime.now().toString(), // post.createdAt,
+        createdAt: DateTime.now().toString(),
+        // post.createdAt,
         content: post.content,
         countOfStory: post.owner.hasStory,
         favoritesCounter: post.favoritesCounter,
@@ -90,9 +96,11 @@ class SinglePostInstagramViewBody extends StatelessWidget {
         username: post.owner.username,
         verifiedBadge: post.owner.verifiedBadge,
         hashtags: post.hashtags,
-        isFriend: false, // post.isFriend,
+        isFriend: false,
+        // post.isFriend,
         likesCounter: post.likesCounter,
-        locationName: null, // post.locationName,
+        locationName: null,
+        // post.locationName,
         medias: post.mediaUrls,
         profilePictureUrl: post.owner.profilePictureUrl,
         userId: post.owner.id,
@@ -111,8 +119,10 @@ class SinglePostInstagramViewBody extends StatelessWidget {
               username: c.owner.username,
               userId: c.owner.id,
               createdAt: c.createdAt,
-              likesCounter: 0, // c.likesCounter,
-              repliesCount: 0, // c.repliesCount,
+              likesCounter: 0,
+              // c.likesCounter,
+              repliesCount: 0,
+              // c.repliesCount,
               replies: List<CommentInstagramModel>.from(
                 c.replies.map(
                   (r) => CommentInstagramModel(
@@ -121,8 +131,10 @@ class SinglePostInstagramViewBody extends StatelessWidget {
                     username: r.owner.username,
                     userId: r.owner.id,
                     createdAt: r.createdAt,
-                    likesCounter: 0, // r.likesCounter,
-                    repliesCount: 0, // r.repliesCount,
+                    likesCounter: 0,
+                    // r.likesCounter,
+                    repliesCount: 0,
+                    // r.repliesCount,
                     replies: [],
                   ),
                 ),

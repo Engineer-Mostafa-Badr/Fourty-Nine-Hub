@@ -8,10 +8,16 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
 
 class InstagramVideoPostWidget extends StatelessWidget {
-  const InstagramVideoPostWidget(
-      {super.key, required this.instagramPostEntity});
+  const InstagramVideoPostWidget({
+    super.key,
+    required this.instagramPostEntity,
+    required this.posts,
+    required this.currentIndex,
+  });
 
   final InstagramPostEntity instagramPostEntity;
+  final List<InstagramPostEntity> posts;
+  final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +125,8 @@ class InstagramVideoPostWidget extends StatelessWidget {
             child: Column(
               children: [
                 InstagramPostReviewWidget(
-                  instagramPostEntity: instagramPostEntity,
+                  posts: posts,
+                  currentPost: currentIndex,
                 )
               ],
             ),
