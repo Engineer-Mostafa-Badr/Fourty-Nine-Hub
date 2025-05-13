@@ -16,7 +16,7 @@ class FollowState {
   final Failure? failure;
   final bool? isLast;
   final List<FollowersEntity>? followers;
-  final List<FollowingEntity>? following;
+  final List<FollowersEntity>? following;
 
   FollowState({
     this.status,
@@ -29,7 +29,7 @@ class FollowState {
     FollowStates? status,
     Failure? failure,
     List<FollowersEntity>? followers,
-    List<FollowingEntity>? following,
+    List<FollowersEntity>? following,
     bool? isLast,
   }) {
     return FollowState(

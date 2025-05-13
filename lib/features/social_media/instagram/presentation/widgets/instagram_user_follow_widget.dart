@@ -8,6 +8,7 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../domain/entities/followers_entity.dart';
 import 'follow_button_instagram.dart';
 
 class InstagramUserFollowWidget extends StatelessWidget {
@@ -16,11 +17,19 @@ class InstagramUserFollowWidget extends StatelessWidget {
     this.inFriends = false,
     this.inFollowers = false,
     this.inBlock = false,
+    required this.image,
+    required this.userName,
+    required this.fullName,
+    required this.userId,
   });
 
   final bool inFriends;
   final bool inFollowers;
   final bool inBlock;
+  final String? image;
+  final String? userName;
+  final String?fullName;
+  final String? userId;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +38,7 @@ class InstagramUserFollowWidget extends StatelessWidget {
         ImageFromInternet(
           width: 35,
           height: 35,
-          image: testImage,
+          image: image ?? testImage,
           isCircle: true,
           fit: BoxFit.cover,
         ),
@@ -37,9 +46,9 @@ class InstagramUserFollowWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Label(text: 'ahmed13'),
+            Label(text: fullName??'ahmed ahmed'),
             Label(
-              text: 'ahmed13',
+              text: userName??'ahmed13',
               color: Colors.black45,
             ),
           ],
@@ -108,12 +117,15 @@ class InstagramUserFollowWidget extends StatelessWidget {
                     style: Styles.mediumText(
                       color: AppColors.getReversedTextColor(context),
                     ),
-
                   ),
                 ),
               ),
               Sizer(),
-              Icon(Icons.close, color: Colors.black45,size: 18,),
+              Icon(
+                Icons.close,
+                color: Colors.black45,
+                size: 18,
+              ),
             ],
           ),
         if (inBlock)
@@ -131,7 +143,6 @@ class InstagramUserFollowWidget extends StatelessWidget {
                 style: Styles.mediumText(
                   color: AppColors.getReversedTextColor(context),
                 ),
-
               ),
             ),
           ),
