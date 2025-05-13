@@ -124,7 +124,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               child: VehicleInformationScreen(params: params,))));
           params.isShipping==true?context.read<RideRegisterCubit>().fetchLoaderInfo(context,false):context.read<RideRegisterCubit>().fetchRideDriverInfo(context,false);
           // context.push(Routes.vehicleInformationScreen);
-        },disableUpload: (state.driverInfo?.isUploadCarLicense==true),),
+        },disableUpload: (state.driverInfo?.isUploadCarLicense==true&&state.driverInfo?.isUploadCarImage==true),),
         const SizedBox(
           height: 40,
         ),

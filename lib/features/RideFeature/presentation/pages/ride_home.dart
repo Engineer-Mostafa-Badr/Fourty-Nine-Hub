@@ -631,6 +631,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     context.push(Routes.rideModeScreen,
                         extra: RideModeParams(
                             modeType: 'ride',
+                            currentIndex: 0,
                             isSocket: driverInfo?.driverType == 'socket'
                                 ? true
                                 : false));

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
@@ -458,7 +459,7 @@ class AppPages {
                 ),
                 BlocProvider(
                   create: (context) =>
-                      serviceLocator<MainCategoriesCubit>()..loadData(),
+                      serviceLocator<MainCategoriesCubit>()..loadData(context),
                 ),
                 // BlocProvider(
                 //   create: (context) => serviceLocator<ThumbnailsCubit>(),
@@ -3481,7 +3482,9 @@ class AppPages {
               GoRoute(
                 path: Paths.supportRideScreen,
                 name: Routes.supportRideScreen,
-                builder: (context, state) => SupportRideScreen(),
+                builder: (context, state) => BlocProvider(
+                    create: (context) => serviceLocator<DashboardsCubit>(),
+                    child: SupportRideScreen(params: state.extra as SupportRideParams,)),
               ),
               GoRoute(
                 path: Paths.supportClientDetailsScreen,

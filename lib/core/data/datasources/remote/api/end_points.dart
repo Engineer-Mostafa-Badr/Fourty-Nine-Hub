@@ -1391,6 +1391,8 @@ class EndPoints {
   }
 
   static String createDriverRating = '/ride/trip/rating/driver';
+  static String emergencySupport = '/users/emergencySupport';
+  static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
@@ -1408,6 +1410,11 @@ class EndPoints {
   static String makeLoadingTripRequest = '/loading/trip/createLoadingTrip';
   static String getClientOffers = '/ride/non-tracking/offers';
   static String getLoadingOffers = '/loading/trip/offers';
+  static String getActiveTrip = '/ride/driver/trips/active';
+  static String goingToClient(String id) => '/ride/driver/trips/$id/going';
+  static String arrivedToClient(String id) => '/ride/driver/trips/$id/arrived';
+  static String startDriverTrip(String id) => '/ride/driver/trips/$id/start';
+  static String completeDriverTrip(String id) => '/ride/driver/trips/$id/completed';
 
   static String updateDriverLocation() {
     return '/ride/update-driver-location';

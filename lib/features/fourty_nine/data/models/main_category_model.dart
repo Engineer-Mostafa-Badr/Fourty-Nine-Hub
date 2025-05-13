@@ -26,9 +26,7 @@ class MainCategoryModel extends MainCategoryEntity {
 
     return MainCategoryModel(
       id: categoryData?['_id'] ?? json['_id'] ?? '',
-      name: (getLang() == 'ar')
-          ? (json['nameAr'] ?? categoryData?['nameAr'] ?? '')
-          : (json['nameEn'] ?? categoryData?['nameEn'] ?? ''),
+      name: json['nameAr'] ?? categoryData?['nameAr'] ?? '',
       nameEn: json['nameEn'] ?? categoryData?['nameEn'] ?? '',
       image:
           json['image'] ?? categoryData?['image'] ?? UIConst.imagePlaceHolder,

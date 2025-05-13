@@ -5,15 +5,24 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/accept_offer_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/running_trip_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/support_details_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update_trip_auto_accept_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update_trip_price_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -48,9 +57,14 @@ abstract class TripRemoteDataSource {
 
   Future<Either<Failure, bool>> createNewOffer(
       CreateNewOfferDashboardUsecaseParam params);
-
-  Future<Either<Failure, bool>> getRunningTrip();
-
+  Future<Either<Failure, RunningTripEntity>> getRunningTrip();
+  Future<Either<Failure, bool>> goingToClient(String id);
+  Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
+  Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
+  Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
+  Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params);
+  Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
+  Future<Either<Failure, SupportDetailsEntity>> getSupportDetails(GetSupportDetailsParams params);
   Future<Either<Failure, bool>> createNewOfferNonSocket(
       CreateNewOfferDashboardUsecaseParam params);
 
@@ -279,7 +293,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         // CliLogger.info("offer data :  $decodedData");
         // params(RideOfferModel.fromJson(decodedData));
         CliLogger.info("trip offer data :  $data");
-        params(AcceptOfferModel.fromJson(data['updatedTripAutoAccept']));
+        params(AcceptOfferModel.fromJson(data['acceptedTrip']));
       });
     } catch (e) {
       CliLogger.info("can't listen to offer error $e");
@@ -331,7 +345,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.removeTrip, (data) {
         CliLogger.info("Remove Trip data :  $data");
         log("Remove Trip data :  $data");
-        params(data['removedTripId']['id']);
+        params(data['removedTrip']['id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
@@ -339,11 +353,52 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> getRunningTrip() async {
+  Future<Either<Failure, RunningTripEntity>> getRunningTrip() async {
     try {
       final response = await _apiConsumer.get(
-        'EndPoints.updateDriverRating(params.tripId)',
-      );
+          EndPoints.getActiveTrip,);
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(RunningTripModel.fromJson(data['data']['activeTrip']));
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> goingToClient(String id) async{
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.goingToClient(id),);
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params) async{
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.arrivedToClient(params.tripId),data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params) async{
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.startDriverTrip(params.tripId),data: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);
@@ -409,5 +464,61 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         return Right(tripsData);
       },
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params) async{
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.completeDriverTrip(params.tripId));
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params) async {
+    try {
+      final response = await _apiConsumer.post(
+          EndPoints.createDriverRating, data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params) async {
+    try {
+      final response = await _apiConsumer.post(
+          EndPoints.emergencySupport, data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SupportDetailsEntity>> getSupportDetails(GetSupportDetailsParams params) async {
+    try {
+      final response = await _apiConsumer.get(
+          EndPoints.supportDetails, queryParameters: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(SupportDetailsModel.fromJson(data['data']));
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
   }
 }

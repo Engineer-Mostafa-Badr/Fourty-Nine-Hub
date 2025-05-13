@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -29,6 +29,7 @@ class SettingsWidget extends StatefulWidget {
 
 class _SettingsWidgetState extends State<SettingsWidget> {
   late bool isReady;
+  late bool enableSound;
   late bool isCaptainShare;
   late bool isCaptain;
   late bool isIntercity;
@@ -59,6 +60,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     planTrailing = widget.settings?.subscriptionType ?? '';
     cityTrailing = widget.settings?.city ?? '';
     isReady = widget.settings?.isReady ?? false;
+    enableSound =  widget.settings?.enableNotificationSound ?? false;
     isCaptainShare = false;
     isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
     isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
@@ -81,6 +83,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 });
               }),
           if (widget.modeType == 'ride') ...[
+            switchWidget(
+                title: "Enable Sound",
+                subText: enableSound ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+                valuee: enableSound,
+                onChanged: (value) {
+                  setState(() {
+                    enableSound = value;
+                  });
+                }),
             switchWidget(
                 title: LocaleKeys.captainShare.tr(), //'Captain share',
                 subText:
@@ -292,6 +303,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           context,
                           UpdateSettingsDashboardUsecaseParam(
                               isReady: isReady,
+                              enableSound: enableSound,
                               subscriptionPlan: planTrailing,
                               favoriteCity: cityTrailing,
                               subCategoriesActive: [
@@ -362,7 +374,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ? Text(title ?? '',
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500))
-              : Image.network(title ?? '', width: 60, height: 25),
+              : ImageFromInternet(image:title ?? '', width: 60, height: 25),
           const Spacer(),
           Text(subText ?? '',
               style:

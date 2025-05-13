@@ -16,7 +16,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   local_auth_windows
   permission_handler_windows
   record_windows
-  sentry_flutter
   share_plus
   url_launcher_windows
   zego_express_engine

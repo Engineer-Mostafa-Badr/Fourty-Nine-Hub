@@ -3,6 +3,7 @@ part of 'dashboards_cubit.dart';
 enum DashboardsStates {
   initState,
   loading,
+  loadingSubmitRequest,
   loadingAcceptOffer,
   loadingAvailable,
   loadingAcceptTrip,
@@ -22,6 +23,7 @@ enum DashboardsStates {
 extension DashboardsStatex on DashboardsState {
   bool get isInitial => status == DashboardsStates.initState;
   bool get isLoading => status == DashboardsStates.loading;
+  bool get isLoadingSubmitRequest => status == DashboardsStates.loadingSubmitRequest;
   bool get isLoadingAcceptTrip => status == DashboardsStates.loadingAcceptTrip;
   bool get isLoadingAcceptOffer => status == DashboardsStates.loadingAcceptOffer;
   bool get isLoadingModels => status == DashboardsStates.loadingModels;
@@ -48,6 +50,12 @@ class DashboardsState
   final SettingsDashboardEntity? settings;
   final int? currentIndex;
   final List<AvailableRideTripEntity>? availableRideTrips;
+  final String? tripStatus;
+  final String? lastStatus;
+  final RunningTripEntity? activeTrip;
+  final bool? isChangedMindReason;
+  final bool? isOtherReason;
+  final bool? isClientNotShownReason;
   final List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips;
   final List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips;
   final List<HistoryTripEntity >? pastRideNonSocketTrips;
@@ -62,6 +70,12 @@ class DashboardsState
       this.availableRideNonSocketTrips,
       this.acceptedRideNonSocketTrips,
       this.pastRideNonSocketTrips,
+      this.tripStatus,
+      this.lastStatus,
+      this.activeTrip,
+      this.isChangedMindReason=false,
+      this.isOtherReason=false,
+      this.isClientNotShownReason=false,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -71,6 +85,13 @@ class DashboardsState
       List<AvailableRideTripEntity>? availableRideTrips,
       SettingsDashboardEntity? settings,
       int? currentIndex,
+        String? tripStatus,
+        String? lastStatus,
+        RunningTripEntity? activeTrip,
+        bool? isChangedMindReason,
+        bool? isOtherReason,
+        bool? isClientNotShownReason,
+
         List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
         List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
         List<HistoryTripEntity >? pastRideNonSocketTrips,
@@ -86,6 +107,12 @@ class DashboardsState
       availableRideNonSocketTrips: availableRideNonSocketTrips ?? this.availableRideNonSocketTrips,
       acceptedRideNonSocketTrips: acceptedRideNonSocketTrips ?? this.acceptedRideNonSocketTrips,
       pastRideNonSocketTrips: pastRideNonSocketTrips ?? this.pastRideNonSocketTrips,
+      activeTrip: activeTrip ?? this.activeTrip,
+      tripStatus: tripStatus ?? this.tripStatus,
+      lastStatus: lastStatus ?? this.lastStatus,
+      isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
+      isOtherReason: isOtherReason ?? this.isOtherReason,
+      isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,
     );
   }
 

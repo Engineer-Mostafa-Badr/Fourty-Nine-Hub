@@ -252,7 +252,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             return LocaleKeys.required.localize;
                           }
                           if (_phonePattern.hasMatch(value)) {
-                            return 'Phone numbers are not allowed. Please remove any phone number pattern.';
+                            return context.isArabic?'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود':'Phone numbers are not allowed. Please remove any phone number pattern.';
                           }
 
                           return null;
