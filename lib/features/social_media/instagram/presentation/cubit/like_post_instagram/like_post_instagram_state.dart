@@ -17,12 +17,16 @@ class LikePostInstagramState extends Equatable {
   final bool? isLike;
   final int? likeCount;
   final String? message;
+ final List<InstagramPostEntity>? posts;
+ final int? currentPost;
 
   const LikePostInstagramState({
     this.status,
     this.message,
     this.likeCount,
     this.isLike,
+    this.posts,
+    this.currentPost
   });
 
   LikePostInstagramState copyWith({
@@ -30,12 +34,16 @@ class LikePostInstagramState extends Equatable {
     String? message,
     bool? isLike,
     int? likeCount,
+     List<InstagramPostEntity>? posts,
+     int? currentPost,
   }) {
     return LikePostInstagramState(
       status: status ?? this.status,
       message: message ?? this.message,
       isLike: isLike ?? this.isLike,
       likeCount: likeCount ?? this.likeCount,
+      posts: posts ?? this.posts,
+      currentPost: currentPost ?? this.currentPost
     );
   }
 
