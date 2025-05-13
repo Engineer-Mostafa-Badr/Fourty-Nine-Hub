@@ -47,6 +47,7 @@ import '../../../../../features/ads_feature/ad_requests/domain/usecases/get_ad_r
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import '../../../../../features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
 import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
@@ -850,6 +851,10 @@ class EndPoints {
 
   static String postFollowUserInstagram({required String userId}) =>
       '/user-follow/follow/$userId';
+
+  static String getFriends = '/friendship/friends';
+  static String getSocialFollowers({required GetAllFollowersParams params}) => '/user-follow/followers?limit=${params.limit}&page=${params.page}';
+  static String getSocialFollowing({required GetAllFollowersParams params}) => '/user-follow/following?limit=${params.limit}&page=${params.page}';
 
   static String unFollowUserInstagram({required String userId}) =>
       '/user-follow/unfollow/$userId';
