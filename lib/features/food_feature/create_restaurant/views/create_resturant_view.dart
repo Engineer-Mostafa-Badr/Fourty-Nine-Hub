@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -98,12 +99,12 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                             child: Text(
                               widget.from == 'update'
                                   ? LocaleKeys.updateYourRestaurant.localize
-                                  : LocaleKeys.welcomeToResturantRegisteration
+                                  : context.isArabic?'مرحباً بك في تسجيل مطعم':LocaleKeys.welcomeToResturantRegisteration
                                       .tr(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Styles.headerText(
-                                  color: AppColors.SECONDARY_COLOR),
+                                  color: AppColors.getRedColor(context)),
                             ),
                           ),
                         ),
