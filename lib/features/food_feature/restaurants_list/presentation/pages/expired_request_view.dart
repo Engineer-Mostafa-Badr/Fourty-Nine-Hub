@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -185,10 +186,25 @@ class TripRequestCard extends StatelessWidget {
         Stack(
           alignment: Alignment.topRight,
           children: [
-            CircleAvatar(
-              radius: 65.w,
-              backgroundColor: Colors.grey[600],
-              backgroundImage: AssetImage(_getGenderImage(orderData.user)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:14.0),
+              child:CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.grey[600],
+                backgroundImage:
+                orderData.user?.userProfile?.profilePictureKey !=
+                    null
+                    ? NetworkImage(orderData.user?.userProfile?.profilePictureKey?.mediaKey??'')
+                    : null,
+                child: orderData.user?.userProfile?.profilePictureKey ==
+                    null
+                    ? const Icon(
+                  Icons.person,
+                  size: 40,
+                  color: Colors.white,
+                )
+                    : null,
+              ),
             ),
             Container(
               width: 32,
@@ -216,7 +232,7 @@ class TripRequestCard extends StatelessWidget {
         ),
         SizedBox(width: 8.h),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +243,7 @@ class TripRequestCard extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Expanded(
-          flex: 1,
+          flex: 3,
           child: Center(child: _buildRestaurantDetails(context)),
         ),
       ],
@@ -241,9 +257,9 @@ class TripRequestCard extends StatelessWidget {
       style: Styles.mediumText(
         fontWeight: FontWeight.w600,
         color:AppColors.getTextColor(context),
-
-
       ),
+      maxLines: 2,
+      textAlign: TextAlign.start,
     );
   }
 
@@ -330,7 +346,7 @@ class TripRequestCard extends StatelessWidget {
       children: [
         Text(
           orderData.createdAt != null
-              ? DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!)
+              ? (context.isArabic?DateFormat('MMM d, yyyy h:mm a','ar').format(orderData.createdAt!):DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!))
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
             fontWeight: FontWeight.w600,

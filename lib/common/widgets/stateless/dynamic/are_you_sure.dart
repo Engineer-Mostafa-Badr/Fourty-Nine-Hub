@@ -85,7 +85,7 @@ class AreYouSure extends StatelessWidget {
                 Expanded(
                   child: AppButton(
                       backColor:AppColors.getRedColor(context),
-                      label: LocaleKeys.ok.localize,
+                      label: LocaleKeys.yes.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,
                         color:AppColors.getReversedTextColor(context),

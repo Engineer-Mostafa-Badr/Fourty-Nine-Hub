@@ -132,7 +132,7 @@ class ShareTheApp extends StatelessWidget {
           height: 32,
         ),
         AppButton(
-          color: AppColors.getRedColor(context),
+          backColor:AppColors.getRedColor(context) ,
           label: LocaleKeys.shareTheApp.localize,
           style: Styles.mediumText(
             color: AppColors.getReversedTextColor(context) ,
