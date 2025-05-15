@@ -108,40 +108,6 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Text.rich(
-                //   maxLines: 1,
-                //   overflow: TextOverflow.ellipsis,
-                //   TextSpan(
-                //     children: [
-                //       TextSpan(
-                //         text: userTags.first.username,
-                //         style: Styles.headerText(
-                //           fontSize: 32,
-                //           height: 1.25,
-                //           color: isReel ? Colors.white : Colors.black,
-                //         ),
-                //       ),
-                //       TextSpan(
-                //         text: " ${LocaleKeys.and.localize} ",
-                //         style: Styles.headerText(
-                //           fontSize: 32,
-                //           height: 1.25,
-                //           fontWeight: FontWeight.w400,
-                //           color: isReel ? Colors.white : Colors.black,
-                //         ),
-                //       ),
-                //       TextSpan(
-                //         text:
-                //             "${userTags.length - 1} ${LocaleKeys.others.localize}",
-                //         style: Styles.headerText(
-                //           fontSize: 32,
-                //           height: 1.25,
-                //           color: isReel ? Colors.white : Colors.black,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: Row(
@@ -179,11 +145,12 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                SubTitleHeaderPost(
-                  country: country ?? '',
-                  isReel: isReel,
-                  songName: songName,
-                ),
+                if (country != null || songName != null || isReel)
+                  SubTitleHeaderPost(
+                    country: country ?? '',
+                    isReel: isReel,
+                    songName: songName,
+                  ),
               ],
             ),
           ),
