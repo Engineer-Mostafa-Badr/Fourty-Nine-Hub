@@ -152,6 +152,7 @@ dependencies:
   # deepar_flutter: ^0.0.4
   deepar_flutter_plus: ^0.2.0
   # percent_indicator: ^4.2.2
+  video_compress: ^3.1.4
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   http: ^0.13.3

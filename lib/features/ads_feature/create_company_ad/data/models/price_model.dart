@@ -6,7 +6,9 @@ class PriceModel extends PriceEntity {
       required super.photoPrice,
       required super.postPrice,
       required super.postAndPhotoPrice,
-      required super.reelPrice});
+      required super.reelPrice,
+      required super.isSubscribed,
+      });
 
   factory PriceModel.fromJson(Map<String, dynamic> json) {
     return PriceModel(
@@ -15,6 +17,7 @@ class PriceModel extends PriceEntity {
       postPrice: json['advertisementPostPrice'],
       postAndPhotoPrice: json['advertisementPostAndPhotoPrice'],
       reelPrice: json['advertisementReelPrice'],
+      isSubscribed: json['isUserSubscribed'],
     );
   }
 }

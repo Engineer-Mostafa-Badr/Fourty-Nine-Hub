@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/au
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
@@ -32,6 +33,8 @@ import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_
 import '../features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_emergency_contacts_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/edit_emergency_contacts_usecase.dart';
 
 class RideDashboardServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {
@@ -72,10 +75,16 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<DriverRateClientUseCase>(() => DriverRateClientUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetSupportDetailsUseCase>(() => GetSupportDetailsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<EmergencySupportUseCase>(() => EmergencySupportUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetEmergencyContactsUseCase>(() => GetEmergencyContactsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<EditEmergencyContactsUseCase>(() => EditEmergencyContactsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<AddEmergencyContactsUseCase>(() => AddEmergencyContactsUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
