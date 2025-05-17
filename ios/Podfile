@@ -33,6 +33,7 @@ target 'Runner' do
   pod 'Firebase/Auth', $FirebaseSDKVersion
   pod 'Firebase/Messaging', $FirebaseSDKVersion
 
+
   # Required for proper header resolution
   pod 'Firebase', $FirebaseSDKVersion
   pod 'FirebaseCore', $FirebaseSDKVersion
