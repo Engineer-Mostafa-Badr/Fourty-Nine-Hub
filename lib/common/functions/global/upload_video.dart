@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -24,119 +23,53 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../core/error/failure.dart';
 import '../helper/file_picker_helper.dart';
-import 'package:video_compress/video_compress.dart';
 
-class UploadFile {
+class UploadVideo {
   Future<Either<Failure, bool>?> uploadImage(
       {bool isGallery = true,
       required String subCategoryId,
       bool? hasLoading,
       required BuildContext context,
-      required Function(UploadFileEntity) onUploaded,
+      required Function(UploadVideoEntity) onUploaded,
       bool useWeChatPicker =false}) async {
       if(!useWeChatPicker) {
         final file = await FilePickerHelper()
-        .pickImage(isGallery: isGallery)
+        .pickVideo(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
-        // Crop the image
-        
-        final CroppedFile? croppedFile = await ImageCropper().cropImage(
-          sourcePath: file.path,
-          uiSettings: [
-            AndroidUiSettings(
-              toolbarTitle: LocaleKeys.cropImage.localize,
-              toolbarColor: AppColors.SECONDARY_COLOR,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false,
-            ),
-            IOSUiSettings(
-              title: 'Crop Image',
-            ),
-          ],
-        );
-
-        XFile finalFile = XFile(croppedFile?.path ?? '');
+        XFile finalFile = XFile(file.path ?? '');
         final tempDir = await getTemporaryDirectory();
         final uniqueFileName =
             'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
         final targetPath = '${tempDir.path}/$uniqueFileName';
         print("finalFile.path${finalFile.path}");
         print("finalFile.path$targetPath");
+        print("image/${finalFile.mimeType ?? 'png'}");
         print("objectUpload2");
-        var result = await FlutterImageCompress.compressAndGetFile(
-          finalFile.path,
-          targetPath,
-          quality: 50,
-          rotate: 360,
-        );
-        if (result == null) {
-          context.pop();
-        }
+        // var result = await FlutterImageCompress.compressAndGetFile(
+        //   finalFile.path,
+        //   targetPath,
+        //   quality: 50,
+        //   rotate: 360,
+        // );
+        // if (result == null) {
+        //   context.pop();
+        // }
 
-        final bytes = await result!.readAsBytes();
+        final bytes = await finalFile.readAsBytes();
         int size = bytes.length;
+        print("objectUpload2 $size");
         // get signed url
         final signedURLResponse =
             await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-          "type": "image/${finalFile.mimeType ?? 'png'}",
+          "type": "video/${finalFile.mimeType ?? 'mp4'}",
           "size": size,
           "subcategoryId": subCategoryId
         });
         // send to w3 storage
         signedURLResponse.fold((l) {
-          print(l.toString());
+          print("l.toString()${l.toString()}");
         }, (data) async {
-          if (hasLoading != false) {
-            showGeneralDialog(
-            context: context,
-            barrierDismissible: true,
-            barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-            transitionDuration: const Duration(milliseconds: 400),
-            pageBuilder: (context, _, __) {
-              return PopScope(
-                canPop: false,
-                child: Center(
-                  child: Material(
-                    type: MaterialType.transparency,
-                    child: AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const CircularProgressIndicator.adaptive(),
-                          const SizedBox(height: 20),
-                          Text(
-                            'Loading...',
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        right: 20,
-                        left: 20,
-                        top: 20,
-                        bottom: 40,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            transitionBuilder: (context, animation, secondaryAnimation, child) {
-              return ScaleTransition(
-                scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
-                ),
-                child: child,
-              );
-            },
-          );
-          };
-
           log("responseData: ${jsonEncode(data)}");
           final tempDir = await getTemporaryDirectory();
           final uniqueFileName =
@@ -163,7 +96,7 @@ class UploadFile {
               return Left(l);
             }, (data) { */
             print("object111");
-            onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
+            onUploaded(UploadVideoEntity(mediaId: mediaId, file: finalFile));
 
             return const Right(true);
             // });
@@ -236,127 +169,6 @@ class UploadFile {
         final size = bytes.length;
 
         // يظهر لودينغ إن أردت
-        if (hasLoading != false) {
-          showLoadingDialog(context);
-        }
-
-        // 2) استدعاء السيرفر لجلب signedUrl
-        final signedURLResponse = await serviceLocator<ApiConsumer>()
-            .post(EndPoints.mediaUrl, data: {
-          "type": "image/${finalFile.mimeType ?? 'png'}",
-          "size": size,
-          "subcategoryId": subCategoryId,
-        });
-
-        // 3) رفع الصورة على الـ signedUrl
-        signedURLResponse.fold((failure) {
-          print(failure.toString());
-        }, (data) async {
-          final signedUrl = data['data']['signedUrl'];
-          final mediaId = data['data']['mediaId'];
-
-          // ارفع البيانات الثنائية
-          await sendBinaryFileData(file: result, signedUrl: signedUrl).then((_) async {
-            // 4) تأكيد الرفع
-            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
-                .put(EndPoints.confirmUpload(mediaId));
-
-            confirmUploadResponse.fold((l) {
-              return Left(l);
-            }, (data) {
-              // نعيد الـmediaId والملف في الكول باك
-              onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
-              return const Right(true);
-            });
-          });
-        });
-
-        // أغلق الـLoading
-        if (hasLoading != false) {
-          context.pop();
-        }
-      } catch (e) {
-        print('Error using wechat_assets_picker: $e');
-        return null;
-      }
-      }
-    return null;
-  }
-
-  Future<Either<Failure, bool>?> uploadAudio({
-    bool isGallery = true,
-    required String subCategoryId,
-    required Function(UploadFileEntity) onUploaded,
-  }) async {
-    final file = await FilePickerHelper()
-        .pickMedia(isGallery: isGallery)
-        .then((file) async {
-      if (file != null) {
-        final bytes = await file.readAsBytes();
-        int size = bytes.length;
-        // Step 2: Get a signed URL for uploading.
-        final signedURLResponse = await serviceLocator<ApiConsumer>().post(
-          EndPoints.mediaUrl,
-          data: {
-            "type": "audio/${file.mimeType ?? 'mp3'}",
-            "size": size,
-            "subcategoryId": subCategoryId,
-          },
-        );
-
-        // Step 3: Handle the signed URL response.
-        return signedURLResponse.fold(
-          (failure) {
-            // Log and handle failure in getting signed URL.
-            print(failure.toString());
-            return Left(failure);
-          },
-          (data) async {
-            log("Signed URL response: ${jsonEncode(data)}");
-
-            // Step 4: Upload the audio to the signed URL.
-            await sendBinaryFileData(
-              file: file,
-              signedUrl: data['data']['signedUrl'],
-            ).then((value) async {
-              // Step 5: Confirm the upload.
-              final mediaId = data['data']['mediaId'];
-              final confirmUploadResponse = await serviceLocator<ApiConsumer>()
-                  .put(EndPoints.confirmUpload(mediaId));
-
-              // Handle the confirmation response.
-              confirmUploadResponse.fold(
-                (failure) {
-                  print("Error confirming upload: $failure");
-                  return Left(failure);
-                },
-                (confirmation) {
-                  print("Upload confirmed.");
-                  // Pass the uploaded file details to the callback function.
-                  onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
-                  return const Right(true);
-                },
-              );
-            });
-          },
-        );
-      }
-    });
-    return null;
-  }
-
-  Future<Either<Failure, bool>?> uploadVideo({
-    bool isGallery = true,
-    required String subCategoryId,
-    required BuildContext context,
-    required Function(UploadFileEntity) onUploaded,
-  }) async {
-    final file = await FilePickerHelper()
-        .pickVideo(
-            isGallery:
-                isGallery) // Assuming you have a method to pick video files
-        .then((file) async {
-      if (file != null) {
         showGeneralDialog(
           context: context,
           barrierDismissible: true,
@@ -403,57 +215,150 @@ class UploadFile {
             );
           },
         );
-        final tempDir = await getTemporaryDirectory();
-        final uniqueFileName =
-            'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
 
-        final targetPath = '${tempDir.path}/$uniqueFileName';
-        // Compress the video
-        final result = await VideoCompressionService.compressVideo(
-          path: '/path/to/input/video.mp4',
-          quality: VideoQuality.MediumQuality,
-          onProgress: (p) {
+        // 2) استدعاء السيرفر لجلب signedUrl
+        final signedURLResponse = await serviceLocator<ApiConsumer>()
+            .post(EndPoints.mediaUrl, data: {
+          "type": "image/${finalFile.mimeType ?? 'png'}",
+          "size": size,
+          "subcategoryId": subCategoryId,
+        });
+
+        // 3) رفع الصورة على الـ signedUrl
+        signedURLResponse.fold((failure) {
+          print(failure.toString());
+        }, (data) async {
+          final signedUrl = data['data']['signedUrl'];
+          final mediaId = data['data']['mediaId'];
+
+          // ارفع البيانات الثنائية
+          await sendBinaryFileData(file: result, signedUrl: signedUrl).then((_) async {
+            // 4) تأكيد الرفع
+            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                .put(EndPoints.confirmUpload(mediaId));
+
+            confirmUploadResponse.fold((l) {
+              return Left(l);
+            }, (data) {
+              // نعيد الـmediaId والملف في الكول باك
+              onUploaded(UploadVideoEntity(mediaId: mediaId, file: finalFile));
+              return const Right(true);
+            });
+          });
+        });
+
+        // أغلق الـLoading
+        if (hasLoading != false) {
+          context.pop();
+        }
+      } catch (e) {
+        print('Error using wechat_assets_picker: $e');
+        return null;
+      }
+      }
+    return null;
+  }
+
+  Future<Either<Failure, bool>?> uploadAudio({
+    bool isGallery = true,
+    required String subCategoryId,
+    required Function(UploadVideoEntity) onUploaded,
+  }) async {
+    final file = await FilePickerHelper()
+        .pickMedia(isGallery: isGallery)
+        .then((file) async {
+      if (file != null) {
+        final bytes = await file.readAsBytes();
+        int size = bytes.length;
+        // Step 2: Get a signed URL for uploading.
+        final signedURLResponse = await serviceLocator<ApiConsumer>().post(
+          EndPoints.mediaUrl,
+          data: {
+            "type": "audio/${file.mimeType ?? 'mp3'}",
+            "size": size,
+            "subcategoryId": subCategoryId,
           },
         );
-        XFile? finalFile;
-        if(result != null){
-          finalFile = XFile(result.file?.path??'');
-        }else{
-          finalFile = XFile(file.path);
-        }
-        final bytes = await finalFile.readAsBytes();
+
+        // Step 3: Handle the signed URL response.
+        return signedURLResponse.fold(
+          (failure) {
+            // Log and handle failure in getting signed URL.
+            print(failure.toString());
+            return Left(failure);
+          },
+          (data) async {
+            log("Signed URL response: ${jsonEncode(data)}");
+
+            // Step 4: Upload the audio to the signed URL.
+            await sendBinaryFileData(
+              file: file,
+              signedUrl: data['data']['signedUrl'],
+            ).then((value) async {
+              // Step 5: Confirm the upload.
+              final mediaId = data['data']['mediaId'];
+              final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                  .put(EndPoints.confirmUpload(mediaId));
+
+              // Handle the confirmation response.
+              confirmUploadResponse.fold(
+                (failure) {
+                  print("Error confirming upload: $failure");
+                  return Left(failure);
+                },
+                (confirmation) {
+                  print("Upload confirmed.");
+                  // Pass the uploaded file details to the callback function.
+                  onUploaded(UploadVideoEntity(mediaId: mediaId, file: file));
+                  return const Right(true);
+                },
+              );
+            });
+          },
+        );
+      }
+    });
+    return null;
+  }
+
+  Future<Either<Failure, bool>?> uploadVideo({
+    bool isGallery = true,
+    required String subCategoryId,
+    required Function(UploadVideoEntity) onUploaded,
+  }) async {
+    final file = await FilePickerHelper()
+        .pickVideo(
+            isGallery:
+                isGallery) // Assuming you have a method to pick video files
+        .then((file) async {
+      if (file != null) {
+        final bytes = await file.readAsBytes();
         int size = bytes.length;
         // Get signed URL
         final signedURLResponse =
             await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
           "type":
-              "video/${finalFile.mimeType ?? 'mp4'}", // Change to video MIME type
+              "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
           "size": size,
           "subcategoryId": subCategoryId
         });
 
         // Send to W3 storage
         signedURLResponse.fold((l) {
-          log("Test Loading 1");
-          context.pop();
           print(l.toString());
         }, (data) async {
           log("responseData: ${jsonEncode(data)}");
           await sendBinaryFileData(
-                  file: finalFile!, signedUrl: data['data']['signedUrl'])
+                  file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
 
             confirmUploadResponse.fold((l) {
-              log("Test Loading 2");
-              context.pop();
               return Left(l);
             }, (data) {
-              log("Test Loading 3");
-              context.pop();
-              onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+              onUploaded(UploadVideoEntity(mediaId: mediaId, file: file));
               return const Right(true);
             });
           });
@@ -541,161 +446,12 @@ class UploadFile {
   }
 }
 
-class UploadFile2 {
-  Future<Either<Failure, bool>?> uploadImage({
-    required XFile file, // Change to XFile
-    required String subCategoryId,
-    required Function(UploadFileEntity) onUploaded,
-  }) async {
-    try {
-      final bytes = await file.readAsBytes(); // XFile method
-      int size = bytes.length;
-
-      // Step 1: Get a signed URL
-      final signedURLResponse = await serviceLocator<ApiConsumer>().post(
-        EndPoints.mediaUrl,
-        data: {
-          "type": "image/${file.path.split('.').last}",
-          "size": size,
-          "subcategoryId": subCategoryId,
-        },
-      );
-
-      return signedURLResponse.fold((failure) {
-        print("Error getting signed URL: $failure");
-        return Left(failure);
-      }, (data) async {
-        final signedUrl = data['data']['signedUrl'];
-        final mediaId = data['data']['mediaId'];
-
-        // Step 2: Upload the image to the signed URL
-        await sendBinaryFileData(file: file, signedUrl: signedUrl);
-
-        // Step 3: Confirm the upload
-        final confirmUploadResponse = await serviceLocator<ApiConsumer>()
-            .put(EndPoints.confirmUpload(mediaId));
-
-        return confirmUploadResponse.fold((failure) {
-          print("Error confirming upload: $failure");
-          return Left(failure);
-        }, (_) {
-          onUploaded(
-              UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
-          return const Right(true);
-        });
-      });
-    } catch (e) {
-      print("Error uploading image: $e");
-      return null;
-    }
-  }
-
-  Future<Either<Failure, bool>?> uploadVideo({
-    required XFile file, // Change to XFile
-    required String subCategoryId,
-    required Function(UploadFileEntity) onUploaded,
-  }) async {
-    try {
-      final bytes = await file.readAsBytes(); // XFile method
-      int size = bytes.length;
-
-      // Step 1: Get a signed URL
-      final signedURLResponse = await serviceLocator<ApiConsumer>().post(
-        EndPoints.mediaUrl,
-        data: {
-          "type": "video/${file.path.split('.').last}",
-          "size": size,
-          "subcategoryId": subCategoryId,
-        },
-      );
-
-      return signedURLResponse.fold((failure) {
-        print("Error getting signed URL: $failure");
-        return Left(failure);
-      }, (data) async {
-        final signedUrl = data['data']['signedUrl'];
-        final mediaId = data['data']['mediaId'];
-
-        // Step 2: Upload the video to the signed URL
-        await sendBinaryFileData(file: file, signedUrl: signedUrl);
-
-        // Step 3: Confirm the upload
-        final confirmUploadResponse = await serviceLocator<ApiConsumer>()
-            .put(EndPoints.confirmUpload(mediaId));
-
-        return confirmUploadResponse.fold((failure) {
-          print("Error confirming upload: $failure");
-          return Left(failure);
-        }, (_) {
-          onUploaded(
-              UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
-          return const Right(true);
-        });
-      });
-    } catch (e) {
-      print("Error uploading video: $e");
-      return null;
-    }
-  }
-
-  Future<void> sendBinaryFileData({
-    required XFile file, // Change to XFile
-    required String signedUrl,
-  }) async {
-    final fileBytes = await file.readAsBytes(); // XFile method
-    final options = Options(
-      contentType: 'application/octet-stream',
-      headers: {
-        'Content-Length': fileBytes.length,
-      },
-    );
-
-    await Dio().put(signedUrl, data: fileBytes, options: options);
-  }
-}
-
-class UploadFileEntity {
+class UploadVideoEntity {
   final String mediaId;
   final XFile file;
 
-  UploadFileEntity({
+  UploadVideoEntity({
     required this.mediaId,
     required this.file,
   });
-}
-
-
-class VideoCompressionService {
-  static Future<MediaInfo?> compressVideo({
-    required String path,
-    VideoQuality quality = VideoQuality.MediumQuality,
-    bool deleteOrigin = false,
-    Function(double)? onProgress,
-  }) async {
-    try {
-      // Subscribe to progress updates if callback provided
-      StreamSubscription<double>? progressSub;
-      if (onProgress != null) {
-        VideoCompress.compressProgress$.subscribe((progress) {
-          onProgress(progress.toDouble());
-        });
-      }
-
-      // Compress the video
-      final compressedInfo = await VideoCompress.compressVideo(
-        path,
-        quality: quality,
-        deleteOrigin: deleteOrigin,
-      );
-
-      await progressSub?.cancel();
-      return compressedInfo;
-    } catch (e) {
-      print('Video compression error: $e');
-      return null;
-    } finally {
-      // You may want to dispose when you're completely done with compression
-      // VideoCompress.dispose();
-    }
-  }
 }

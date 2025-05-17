@@ -71,7 +71,52 @@ class UploadImages{
 
         XFile finalFile = XFile(croppedImages[0].path??'');
         List<XFile> finalFiles = List<XFile>.generate(croppedImages.length, (index) => XFile(croppedImages[index].path));
-        showLoadingDialog(context);
+        showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          transitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (context, _, __) {
+            return PopScope(
+              canPop: false,
+              child: Center(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CircularProgressIndicator.adaptive(),
+                        const SizedBox(height: 20),
+                        Text(
+                           'Loading...',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    contentPadding: const EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                      top: 20,
+                      bottom: 40,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+              ),
+              child: child,
+            );
+          },
+        );
         List<File> compressedImages = [];
         final tempDir = await getTemporaryDirectory();
 

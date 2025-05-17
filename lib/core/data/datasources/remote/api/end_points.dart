@@ -1519,4 +1519,7 @@ class EndPoints {
   static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
   static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
   static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
+  static const getEmergencyContacts = '/users/emergency-contacts';
+  static const addEmergencyContacts = '/users/add-emergency-contacts';
+  static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
 }
