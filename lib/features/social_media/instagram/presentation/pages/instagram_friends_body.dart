@@ -37,12 +37,12 @@ class InstagramFriendsBody extends StatelessWidget {
             Column(
               spacing: 16,
               children: [
-                InstagramUserFollowWidget(inFriends: true,),
-                InstagramUserFollowWidget(inFriends: true,),
-                InstagramUserFollowWidget(inFriends: true,),
-                InstagramUserFollowWidget(inFriends: true,),
-                InstagramUserFollowWidget(inFriends: true,),
-                InstagramUserFollowWidget(inFriends: true,),
+                // InstagramUserFollowWidget(inFriends: true,),
+                // InstagramUserFollowWidget(inFriends: true,),
+                // InstagramUserFollowWidget(inFriends: true,),
+                // InstagramUserFollowWidget(inFriends: true,),
+                // InstagramUserFollowWidget(inFriends: true,),
+                // InstagramUserFollowWidget(inFriends: true,),
               ],
             ),
           ],

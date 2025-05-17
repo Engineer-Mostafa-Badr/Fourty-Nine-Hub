@@ -451,6 +451,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
       emit(state.copyWith(postDetails: data, status: StateStatus.initial));
+      print('data:: ${data.content}');
     });
   }
 

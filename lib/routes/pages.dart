@@ -1338,15 +1338,15 @@ class AppPages {
                 path: Paths.SINGLEPOSTINSTAGRAM,
                 name: Routes.SINGLEPOSTINSTAGRAM,
                 builder: (context, state) {
-                  final InstagramProfilePostEntity post =
-                      state.extra as InstagramProfilePostEntity;
+                  final String postId =
+                      state.extra as String;
 
                   return BlocProvider(
                     create: (context) =>
                         serviceLocator<SinglePostInstagramCubit>()
-                          ..getPost(post.id),
+                          ..getPost(postId),
                     child: SinglePostInstagramView(
-                      postId: post.id,
+                      postId: postId,
                     ),
                   );
                 },

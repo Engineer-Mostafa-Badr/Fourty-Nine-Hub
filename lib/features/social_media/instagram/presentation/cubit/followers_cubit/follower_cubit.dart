@@ -13,7 +13,7 @@ class FollowCubit extends Cubit<FollowState> {
 
   TextEditingController searchController = TextEditingController();
   List<FollowersEntity> followers = [];
-  List<FollowingEntity> following = [];
+  List<FollowersEntity> following = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
@@ -46,14 +46,14 @@ class FollowCubit extends Cubit<FollowState> {
   }
 
   Future<void> _fetchData<T>(String search, String otherId,
-      Function(TwitterFeedParams) useCase, List<T> dataList) async {
+      Function(GetAllFollowersParams) useCase, List<T> dataList) async {
     if (!hasMoreData || isLoadingMore) return;
 
     emit(state.copyWith(status: FollowStates.loading));
     isLoadingMore = true;
 
     final response = await useCase(
-      TwitterFeedParams(
+      GetAllFollowersParams(
           page: currentPage, limit: pageSize, search: search, otherId: otherId),
     );
 

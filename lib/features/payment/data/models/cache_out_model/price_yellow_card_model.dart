@@ -2,11 +2,12 @@ import 'package:fourtyninehub/features/payment/domain/entities/cache_out_entity/
 
 class PriceYellowCardModel extends PriceYellowCardEntity {
   PriceYellowCardModel(
-      {required super.currency, required super.yellowCardCharge});
+      {required super.currencyEn,required super.currencyAr, required super.yellowCardCharge});
 
   factory PriceYellowCardModel.fromJson(Map<String, dynamic> json) {
     return PriceYellowCardModel(
-        currency: json['currency'] ?? '',
+        currencyEn: json['currencyEn'] ?? '',
+        currencyAr: json['currencyAr'] ?? '',
         yellowCardCharge: json['yellowCardCharge'] ?? 0);
   }
 }

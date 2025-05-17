@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/data/mode
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:intl/intl.dart';
 
 class BuildCartItem extends StatefulWidget {
   const BuildCartItem(
@@ -150,7 +151,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        '${widget.totalPrice.toStringAsFixed(2)} ${widget.currency}' ,
+                                        '${context.isArabic?NumberFormat.decimalPattern('ar').format(widget.totalPrice):(widget.totalPrice).toStringAsFixed(0)} ${widget.currency}' ,
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,

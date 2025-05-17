@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
@@ -47,6 +48,7 @@ class MarriageSubCategoriesView extends StatefulWidget {
 
 class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   late ScrollController _scrollController;
+  bool _isFabVisible = true;
 
   @override
   void initState() {
@@ -64,6 +66,15 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       context.read<SubcategoriesCubit>().filterAds(
           model: context.read<SubcategoriesCubit>().state.filterModel!,
           filter: '');
+    }
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (_isFabVisible) {
+        setState(() => _isFabVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (!_isFabVisible) {
+        setState(() => _isFabVisible = true);
+      }
     }
   }
 
@@ -116,29 +127,38 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             label: context.isArabic ? 'زواج' : 'Marriage',
           ),
         ),
-        floatingActionButton:state.isLoading?null: CustomFloatingButtonAds(
-          title:
+        floatingActionButton: AnimatedSlide(
+          duration: const Duration(milliseconds: 300),
+          offset: _isFabVisible ? Offset.zero : const Offset(0, 2),
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            opacity: _isFabVisible ? 1 : 0,
+            child:state.isLoading?null: CustomFloatingButtonAds(
+              title:
               "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr??''}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn??''}"}",
-          onPressed: () {
-            if (AuthHelper().isLoggedIn()) {
-              context.push(
-                Routes.CREATEAD,
-                extra: CategorizationEntity(
-                  mainCategory: state.mainCategory!,
-                  // mainCategory: widget.mainCategory,
-                  subCategory: state.subCategories![state.subCategories
+              onPressed: () {
+                if (AuthHelper().isLoggedIn()) {
+                  context.push(
+                    Routes.CREATEAD,
+                    extra: CategorizationEntity(
+                      mainCategory: state.mainCategory!,
+                      // mainCategory: widget.mainCategory,
+                      subCategory: state.subCategories![state.subCategories
                           ?.indexWhere(
                               (element) => element.isSelected == true) ??
-                      0],
-                  fromMarriage: true,
-                ),
-              );
-            } else {
-              return pleaseLoginDialog(context);
-              // context.push(Routes.LOGIN);
-            }
-          },
+                          0],
+                      fromMarriage: true,
+                    ),
+                  );
+                } else {
+                  return pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
+              },
+            )
+          ),
         ),
+
         body: state.isLoading?CustomLoading():MarriageAdsViewBody(
           controller: controller,
           state: state,
