@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
@@ -214,7 +215,7 @@ class TripLogRequestCard extends StatelessWidget {
                                 index < orderData.orders!.length)
                             ? orderData.orders![index].foodId?.foodName ??
                                 'Unknown'
-                            : 'Unknown',
+                            : context.isArabic?'غير معروف':'Unknown',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -225,10 +226,9 @@ class TripLogRequestCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         (orderData.orders != null &&
-                                index < orderData.orders!.length)
-                            ? (orderData.orders![index].price ?? 0.0)
-                                .toStringAsFixed(2)
-                            : '0.00',
+                                index < orderData.orders!.length) ?
+                        (context.isArabic?numAr(orderData.orders![index].price??0):orderData.orders![index].price.toString()
+                        ): context.isArabic?'صفر':'00',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

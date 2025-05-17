@@ -52,8 +52,9 @@ class _EditPageState extends State<EditPage> {
             enableCustomAppBar: true,
             // backgroundColor: Colors.transparent,
             appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(30),
+              preferredSize: const Size.fromHeight(45),
               child: BackAppBar(
+                labelSize: 32,
                 enableCustomAppBar: true,
                 leading: Builder(builder: (context) {
                   return IconButton(
@@ -73,7 +74,7 @@ class _EditPageState extends State<EditPage> {
                       icon: Icon(
                         Icons.arrow_back,
                         size: 40.w,
-                        color: Colors.white,
+                        color: AppColors.getReversedTextColor(context),
                       ));
                 }),
                 label: appBarTitle[

@@ -9,6 +9,7 @@ import '../../stateless/labels/label.dart';
 class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool automaticallyImplyLeading;
   final String? label;
+  final double? labelSize;
   final String? subTitle;
   final Color? backColor;
   final Color? iconColor;
@@ -29,7 +30,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.textColor,
     this.enableCustomAppBar = false,
-    this.subTitle,
+    this.subTitle, this.labelSize,
   });
 
   @override
@@ -46,6 +47,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
+            visualDensity: VisualDensity(horizontal: -4),
             icon: Icon(
               Icons.arrow_back,
               size: 40.w,
@@ -55,7 +57,8 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: label != null
           ? Label(
               text: label ?? '',
-              style: Styles.headerText().copyWith(
+              maxLines: 2,
+              style: Styles.headerText(fontSize: labelSize??36).copyWith(
                   color: enableCustomAppBar ? AppColors.getReversedTextColor(context) : textColor))
           : null,
       actions: actions,

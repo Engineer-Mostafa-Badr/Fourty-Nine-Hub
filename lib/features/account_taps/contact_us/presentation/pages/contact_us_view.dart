@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -34,7 +35,7 @@ class _ContactUsViewState extends State<ContactUsView> {
         preferredSize: const Size.fromHeight(46),
         child: BackAppBar(
           label: LocaleKeys.contactUs.localize,
-          subTitle: LocaleKeys.TeamHelp.localize,
+          subTitle:context.isArabic? 'فريق ٤٩ هاب جاهز للمساعدة':LocaleKeys.TeamHelp.localize,
           enableCustomAppBar: true,
           textColor: AppColors.getReversedTextColor(context),
         ),
@@ -84,7 +85,10 @@ class _ContactUsViewState extends State<ContactUsView> {
                           height: 50,
                         ),
                         DefaultTextFormField(
-                          contentPadding: EdgeInsets.zero,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                          inputFormatter: [
+                            FilteringTextInputFormatter.digitsOnly, // يسمح بالأرقام فقط
+                          ],
                           fillColor: Colors.transparent,
                           borderColor: AppColors.getTextColor(context),
                           currentController: controller.phoneController,

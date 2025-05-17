@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
@@ -218,7 +219,7 @@ class TripRequestCard extends StatelessWidget {
                 children: [
                   Icon(Icons.star,size: 6.6,color: AppColors.ACCENT_COLOR,),
                   Text(
-                    '4.5',
+                    context.isArabic?numAr(4.5):'4.5',
                     style: Styles.smallText(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -323,9 +324,8 @@ class TripRequestCard extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            "${LocaleKeys.total.tr()}:"
-                "${orderData.total?.toString() ?? '0'}"
-                "${context.isArabic ? orderData.currencyAr
+                "${context.isArabic?numAr(orderData.total??0):orderData.total?.toString() ?? '0'}"
+                " ${context.isArabic ? orderData.currencyAr
                 : orderData.currencyEn ?? ''}",
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,

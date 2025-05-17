@@ -19,7 +19,7 @@ showAreYouSure({
   showAnimatedDialog(
     context,
     AlertDialog(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: AppColors.getFindFillColor(context),
       content: AreYouSure(
         title: title,
         subTitle: subTitle,

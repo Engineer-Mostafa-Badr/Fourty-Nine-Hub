@@ -559,7 +559,7 @@
   "addressMustBeAtLeast10Chars": "العنوان يجب ان يكون علي الأقل 10 أحرف",
   "searchFind": "ابحث",
   "markAllNotificationAsSeen": "هل ترغب بجعل جميع الأشعارات مرئية؟",
-  "requestLog": "سجل الطلبات",
+  "requestLog": "سجل طلبات",
   "requestsHistory": "تاريخ الطلبات",
   "subscribe": "أشترك",
   "deleteRequest": "حذف",

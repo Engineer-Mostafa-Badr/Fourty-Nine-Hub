@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -87,6 +88,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       mainCategoryId: 1,
       // backgroundColor: scaffoldDarkColor(context),
       body: RefreshIndicator(
+        backgroundColor: AppColors.getFindFillColor(context),
+        color: AppColors.getTextColor(context),
         onRefresh: () async {
           if (context.read<UserCubit>().isLoggedIn) {
             setState(() {
@@ -506,7 +509,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                               : AppColors.getFillColor(context),
                         ),
                         child: Label(
-                          text: LocaleKeys.requestLog.localize,
+                          text: context.isArabic?'سجل طلبات':'requestLog',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
@@ -535,7 +538,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                           ),
                           child: Center(
                             child: Text(
-                              '${context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
+                              '${context.isArabic?numAr(context.read<RestaurantsCubit>().state.reqCount?.count??0):context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
                               style: TextStyle(
                                 color:AppColors.getReversedTextColor(context),
                                 fontSize: 10,
@@ -583,7 +586,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                           ? AppColors.getButtonPrimaryColor(context)
                           : AppColors.getFillColor(context)),
                   child: Label(
-                    text: context.isArabic?'منتهي':'Expired',
+                    text: context.isArabic?'منتهية':'Expired',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 12,

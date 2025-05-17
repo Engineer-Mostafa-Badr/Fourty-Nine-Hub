@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:intl/intl.dart';
@@ -344,7 +345,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                     color: AppColors.ACCENT_COLOR,
                   ),
                   Text(
-                    "${widget.logsEntity.userId?.restaurantRate ?? 0}",
+                    context.isArabic?numAr(widget.logsEntity.userId?.restaurantRate??0):"${widget.logsEntity.userId?.restaurantRate ?? 0}",
                     style: Styles.smallText(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -448,8 +449,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
       children: [
         Expanded(
           child: Text(
-            "${LocaleKeys.total.tr()}"
-                ":${widget.logsEntity.total?.toString() ?? '0'} ${context.isArabic?widget.logsEntity.currencyAr:widget.logsEntity.currencyEn}",
+                "${context.isArabic?numAr(widget.logsEntity.total??0):widget.logsEntity.total?.toString() ?? '0'} ${context.isArabic?widget.logsEntity.currencyAr:widget.logsEntity.currencyEn}",
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
               color: context.isDarkMode ? AppColors.whiteColor : AppColors.black,
