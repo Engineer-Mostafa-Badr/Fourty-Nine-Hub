@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -135,7 +136,7 @@ class _NotificationCardState extends State<NotificationCard> {
                               false) ...[
                             Text(
                               context.isArabic
-                                  ? widget.notificationEntity.title ?? ''
+                                  ? convertToArabicNumbers(widget.notificationEntity.title??'')
                                   : _capitalizeTitle(
                                       widget.notificationEntity.title ?? ''),
                               style: Styles.headerText(
@@ -147,7 +148,7 @@ class _NotificationCardState extends State<NotificationCard> {
                             Sizer(height: 5.h),
                           ],
                           Text(
-                            widget.notificationEntity.body ?? '',
+                            context.isArabic?convertToArabicNumbers(widget.notificationEntity.body??'نتبيه غير معروف'):widget.notificationEntity.body ?? 'Unknown Notification Content',
                             style: Styles.mediumText(
                               color: context.isDarkMode
                                   ? Colors.white

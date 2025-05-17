@@ -63,7 +63,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
         children: [
           ListTile(
             // title: Text(LocaleKeys.chooseCategoryView.localize),
-            subtitle: Text(LocaleKeys.youCanChooseOneWayAtLeast.localize),
+            subtitle: Text(LocaleKeys.youCanChooseOneWayAtLeast.localize,style: Styles.headerText(fontSize: 32),),
           ),
           Expanded(
             child: ListView.builder(
@@ -73,7 +73,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
                   leading: Radio<int>(
                     value: index,
                     groupValue: _selectedItem,
-                    activeColor: AppColors.SECONDARY_COLOR,
+                    activeColor: AppColors.getRedColor(context),
                     onChanged: (int? value) {
                       setState(() {
                         _selectedItem = value!;
@@ -88,7 +88,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  trailing: _icons(color: _selectedItem == index ? AppColors.SECONDARY_COLOR : Colors.grey)[index],
+                  trailing: _icons(color: _selectedItem == index ? AppColors.getRedColor(context) : Colors.grey)[index],
                   selected: _selectedItem == index,
                   selectedTileColor: Colors.transparent,
                 );

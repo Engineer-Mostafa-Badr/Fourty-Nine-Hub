@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 
 class BuildColorsBallet extends StatelessWidget {
@@ -10,7 +11,7 @@ class BuildColorsBallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> colors = [
-      "#FFFFFFFF", // Colors.white
+      context.isDarkMode?'#00000000':"#FFFFFFFF", // Colors.white
       "#FFFFA500", // Colors.orange
       "#FF0000FF", // Colors.blue
       "#FFFF0000", // Colors.red
