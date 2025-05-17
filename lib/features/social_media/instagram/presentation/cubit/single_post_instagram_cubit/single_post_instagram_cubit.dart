@@ -14,15 +14,23 @@ class SinglePostInstagramCubit extends Cubit<SinglePostInstagramState> {
   Future<void> getPost(String postId) async {
     emit(state.copyWith(status: SinglePostInstagramStatus.loading));
     final result = await _getSinglePostInstagramUseCase.call(postId);
+    print('result get post ${result.toString()}');
     result.fold(
       (failure) => emit(state.copyWith(
         status: SinglePostInstagramStatus.failure,
         failure: failure,
       )),
-      (postData) => emit(state.copyWith(
-        status: SinglePostInstagramStatus.success,
-        postData: postData,
-      )),
+      (postData)
+      {
+        print('POST is ${postData}');
+
+        emit(state.copyWith(
+          status: SinglePostInstagramStatus.success,
+          postData: postData,
+        ));
+        print('state POST is ${state.postData}');
+
+      },
     );
   }
 }

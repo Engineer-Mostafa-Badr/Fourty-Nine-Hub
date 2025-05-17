@@ -30,6 +30,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../usecases/get_all_followers_use_case.dart';
 
 abstract class InstagramRepo {
   Future<Either<Failure, List<PostEntity>>> getFeed(
@@ -48,10 +49,10 @@ abstract class InstagramRepo {
       {required UserReelsParams params});
 
   Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
-      TwitterFeedParams params);
+      GetAllFollowersParams params);
 
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
-      TwitterFeedParams params);
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowing(
+      GetAllFollowersParams params);
 
   Future<Either<Failure, InstagramPostDataModel>> getPosts(
       PaginationParams params);

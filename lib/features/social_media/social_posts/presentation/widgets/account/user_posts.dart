@@ -47,7 +47,7 @@ class _UserPostsState extends State<UserPosts> {
         }
       }, builder: (context, state) {
         final controller = context.read<SocialPostsCubit>();
-        return Container();
+        return SliverToBoxAdapter(child: Container());
         // return PagedSliverList<int, PostEntity>(
         //   pagingController: controller.userPostsPagingController,
         //   builderDelegate: PagedChildBuilderDelegate<PostEntity>(
