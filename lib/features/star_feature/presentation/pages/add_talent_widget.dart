@@ -152,7 +152,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               height: 330.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[300],
+                color: AppColors.getFindFillColor(context),
               ),
               child: _selectedVideo != null
                   ? _videoController?.value.isInitialized ?? false
@@ -187,15 +187,15 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () => _showMediaPicker(true),
-                    icon: Image.asset(Assets.uploadIcon, color: Colors.white),
+                    icon: Image.asset(Assets.uploadIcon, color:AppColors.getReversedTextColor(context)),
                     label: FittedBox(
                       child: Text(
                         LocaleKeys.talent_upload_image.localize,
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color:  AppColors.getReversedTextColor(context)),
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.colorRed,
+                      backgroundColor:  AppColors.getRedColor(context),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -206,15 +206,15 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () => _showMediaPicker(false),
-                    icon: Image.asset(Assets.uploadIcon, color: Colors.white),
+                    icon: Image.asset(Assets.uploadIcon, color: AppColors.getReversedTextColor(context)),
                     label: FittedBox(
                       child: Text(
                         LocaleKeys.talent_upload_video.localize,
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.getReversedTextColor(context)),
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.colorRed,
+                      backgroundColor:AppColors.getRedColor(context),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -237,7 +237,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               decoration: InputDecoration(
                 hintText: LocaleKeys.title.localize,
                 filled: true,
-                fillColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[200],
+                fillColor: AppColors.getFindFillColor(context),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -263,7 +263,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               decoration: InputDecoration(
                 hintText: LocaleKeys.desc.localize,
                 filled: true,
-                fillColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[200],
+                fillColor:  AppColors.getFindFillColor(context),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -278,7 +278,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
             ElevatedButton(
               onPressed: _handleSubmit,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.colorRed,
+                backgroundColor: AppColors.getRedColor(context),
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -286,7 +286,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               ),
               child: Text(
                 LocaleKeys.publish.localize,
-                style: Styles.mediumText(color: Colors.white),
+                style: Styles.mediumText(color:AppColors.getReversedTextColor(context)),
                 // const TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),

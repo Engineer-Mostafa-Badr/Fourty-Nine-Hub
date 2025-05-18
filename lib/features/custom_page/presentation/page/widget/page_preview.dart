@@ -216,7 +216,7 @@ class _PagePreviewState extends State<PagePreview>
                   child: Positioned(
                     right: 0,
                     left: 0,
-                    bottom: 20,
+                    bottom: 5,
                     child: AnimatedSlide(
                       duration: const Duration(milliseconds: 300),
                       offset: _showButtons ? Offset.zero : const Offset(0, 2),
