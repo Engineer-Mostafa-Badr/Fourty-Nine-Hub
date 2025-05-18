@@ -1,6 +1,9 @@
 source 'https://github.com/CocoaPods/Specs.git'
-source 'https://cdn.cocoapods.org/'
+# source 'https://cdn.cocoapods.org/'
 platform :ios, '14.0'
+
+# Add Firebase modules explicitly
+$FirebaseSDKVersion = '11.10.0'  # Match version from Podfile.lock
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -30,6 +33,11 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
+  # Explicit Firebase dependencies
+  pod 'Firebase/Core', $FirebaseSDKVersion
+  pod 'Firebase/Auth', $FirebaseSDKVersion
+  pod 'Firebase/Messaging', $FirebaseSDKVersion
+  pod 'ZegoExpressEngine', :path => 'ZegoExpressEngine/'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
@@ -41,17 +49,23 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-
     target.build_configurations.each do |config|
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'PERMISSION_CAMERA=1',
+        'PERMISSION_MICROPHONE=1',
+      ]
       # Exclude arm64 for simulator (optional, fixes Apple Silicon sim issues)
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
 
       # Optional: skip embedding if needed
-      if target.name == 'deepar_flutter'
-        config.build_settings['SKIP_INSTALL'] = 'YES'
-        config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
-        config.build_settings['VALID_ARCHS'] = 'arm64 armv7'
+      if target.name == 'deepar_flutter_plus'
+        config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -framework "DeepAR"'
+        config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
+          '$(inherited)',
+          '$(PODS_ROOT)/deepar_flutter_plus/ios'
+        ]
       end
     end
   end
