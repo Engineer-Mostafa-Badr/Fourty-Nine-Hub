@@ -143,7 +143,6 @@ dependencies:
   zego_express_engine: ^3.16.2
   zego_uikit_signaling_plugin: ^2.8.8
   zego_uikit_prebuilt_call: ^4.16.22
-  sentry_flutter: ^8.13.2
   circular_menu: ^4.0.0
   timeago: ^3.7.0
   fluttertoast:
@@ -153,6 +152,7 @@ dependencies:
   # deepar_flutter: ^0.0.4
   deepar_flutter_plus: ^0.2.0
   # percent_indicator: ^4.2.2
+  video_compress: ^3.1.4
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   http: ^0.13.3

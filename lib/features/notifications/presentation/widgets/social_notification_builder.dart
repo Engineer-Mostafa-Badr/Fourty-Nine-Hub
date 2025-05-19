@@ -35,6 +35,7 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   late final GetUnreadNotificationsCountCubit getUnreadNotificationsCountCubit;
   late final DeleteNotificationCubit deleteNotificationCubit;
   late final DeleteAllNotificationsCubit deleteAllNotificationsCubit;
+
   @override
   void initState() {
     getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
@@ -116,9 +117,17 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
                       .then(
                         (value) => getUnreadNotificationsCountCubit
                             .getUnreadNotificationsCount()
-                            .then((value) => context.push(
-                                notificationEntity.path ?? '',
-                                extra: notificationEntity.payload)),
+                            .then((value) {
+                              if(notificationEntity.path =="/SinglePostInstagram"){
+                                context.push(notificationEntity.path ?? '',
+                                    extra: notificationEntity.payload!['postId']);
+                              }
+                              else{
+                                context.push(notificationEntity.path ?? '',
+                                    extra: notificationEntity.payload);
+                              }
+
+                        }),
                       );
                 },
                 notificationDeleteCallback: () {

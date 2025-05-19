@@ -154,6 +154,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.email),
                               label: LocaleKeys.email.localize,
                               privacy:
                                   state.personalPrivacyEntity?.email ?? '',
@@ -194,6 +195,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.birthDay),
                               label: LocaleKeys.birthDate.localize,
                               privacy:
                                   state.personalPrivacyEntity?.birthDay ?? '',
@@ -236,6 +238,7 @@ class PrivacyView extends StatelessWidget {
                             ),
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.job),
                               label: LocaleKeys.job.localize,
                               privacy: state.personalPrivacyEntity?.job ?? '',
                               onChoose: (PrivacyStatus value,
@@ -278,6 +281,7 @@ class PrivacyView extends StatelessWidget {
 
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.city),
                               label: LocaleKeys.city.localize,
                               privacy:
                                   state.personalPrivacyEntity?.city ?? '',
@@ -385,6 +389,7 @@ class PrivacyView extends StatelessWidget {
                             ),
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.gender),
                               label: LocaleKeys.gender.localize,
                               privacy:
                                   state.personalPrivacyEntity?.gender ?? '',
@@ -426,6 +431,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.language),
                               label: LocaleKeys.language.localize,
                               privacy:
                                   state.personalPrivacyEntity?.language ?? '',
@@ -477,6 +483,7 @@ class PrivacyView extends StatelessWidget {
 
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.lastSeen),
                               label: LocaleKeys.lastSeen.localize,
                               privacy: state.communicationPrivacyEntity?.lastSeen ?? '',
                               onChoose: (PrivacyStatus value,
@@ -518,6 +525,7 @@ class PrivacyView extends StatelessWidget {
                             ),
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.friendsList),
                               label: LocaleKeys.friendsList.localize,
                               privacy: state
                                       .connectionPrivacyEntity?.friendsList ??
@@ -560,6 +568,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.followerList),
                               label: LocaleKeys.followerList.localize,
                               privacy: state.connectionPrivacyEntity
                                       ?.followerList ??
@@ -607,6 +616,7 @@ class PrivacyView extends StatelessWidget {
                             //        List<String>?
                             //             selectedUsers) {}),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.receiveCalls),
                               label: LocaleKeys.call.localize,
                               privacy: state.communicationPrivacyEntity
                                       ?.receiveCalls ??
@@ -651,6 +661,7 @@ class PrivacyView extends StatelessWidget {
 
                             ///
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.receiveAnonymousMessages),
                               label: LocaleKeys.anonymousMessage.localize,
                               privacy: state.communicationPrivacyEntity
                                       ?.receiveAnonymousMessages ??
@@ -693,6 +704,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.receiveGreetMessages),
                               label: LocaleKeys.greetMessage.localize,
                               privacy: state.communicationPrivacyEntity
                                       ?.receiveGreetMessages ??
@@ -735,6 +747,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.receiveSocialMessages),
                               label: LocaleKeys.socialMessage.localize,
                               privacy: state.communicationPrivacyEntity
                                       ?.receiveSocialMessages ??
@@ -780,6 +793,7 @@ class PrivacyView extends StatelessWidget {
                             ///
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.randomAppearance),
                               label: LocaleKeys.randomAppearance.localize,
                               privacy: state.connectionPrivacyEntity
                                       ?.randomAppearance ??
@@ -822,6 +836,8 @@ class PrivacyView extends StatelessWidget {
                             ),
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.friendRequests),
+
                               label: LocaleKeys.friendRequest.localize,
                               privacy: state.connectionPrivacyEntity
                                       ?.friendRequests ??
@@ -865,6 +881,8 @@ class PrivacyView extends StatelessWidget {
 
 
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.followerRequests),
+
                               label: LocaleKeys.followRequest.localize,
                               privacy: state.connectionPrivacyEntity?.followerRequests ?? '',
                               onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
@@ -905,6 +923,8 @@ class PrivacyView extends StatelessWidget {
 
                             ///
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.showPosts),
+
                               label: LocaleKeys.showPosts.localize,
                               privacy: state.mediaPrivacyEntity?.showPosts ?? '',
                               onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
@@ -943,6 +963,8 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.showStories),
+
                               label: LocaleKeys.showStories.localize,
                               privacy: state.mediaPrivacyEntity?.showStories ?? '',
                               onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
@@ -981,6 +1003,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name: mapPrivacyFeatureToString(PrivacyFeature.showReels),
                               label: LocaleKeys.showReels.localize,
                               privacy: state.mediaPrivacyEntity?.showReels ?? '',
                               onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
@@ -1019,6 +1042,7 @@ class PrivacyView extends StatelessWidget {
                               },
                             ),
                             PrivacyMultiSelectItem(
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.writeComments),
                               label: LocaleKeys.writeComments.localize,
                               privacy: state.mediaPrivacyEntity?.writeComments ?? '',
                               onChoose: (PrivacyStatus value, List<String>? selectedUsers) {

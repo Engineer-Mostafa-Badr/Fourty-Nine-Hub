@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/entities/instagram_post_entity.dart';
 import '../../../domain/usecases/like_post_instagram_use_case.dart';
 
 part 'like_post_instagram_state.dart';
@@ -10,30 +11,60 @@ class LikePostInstagramCubit extends Cubit<LikePostInstagramState> {
       : super(LikePostInstagramState(status: LikePostInstagramStatus.initial));
   final LikePostInstagramUseCase _likePostInstagramUseCase;
 
-  Future<void> likePostInstagram(String postId, int likeCount) async {
-    emit(state.copyWith(status: LikePostInstagramStatus.loading));
-    final result = await _likePostInstagramUseCase(
-      LikePostInstagramParams(
-        postId: postId,
+  Future<void> fetchLikePostInstagram(
+      List<InstagramPostEntity> posts, int currentPost) async {
+    emit(
+      state.copyWith(
+        posts: posts,
+        currentPost: currentPost,
       ),
     );
-    print('likeCount $likeCount');
+  }
+
+  Future<void> likePostInstagram(
+    String postId,
+    int likeCount,
+    bool isLiked,
+    int currentPost,
+  ) async {
+    emit(state.copyWith(status: LikePostInstagramStatus.loading));
+
+    print("postId $postId");
+    print("currentPost $currentPost");
+    print("state.posts ${state.posts}");
+    final result = await _likePostInstagramUseCase(
+      LikePostInstagramParams(postId: postId),
+    );
+
     result.fold(
-        (l) => emit(state.copyWith(status: LikePostInstagramStatus.failure)),
-        (r) {
-          if (r) {
-            likeCount++;
-          } else {
-            likeCount;
-          }
-      emit(
-        state.copyWith(
-          status: LikePostInstagramStatus.success,
-          isLike: r,
-          likeCount: likeCount,
-        ),
-      );
-    });
-    print('likeCount $likeCount');
+      (l) => emit(state.copyWith(status: LikePostInstagramStatus.failure)),
+      (likeStatus) {
+        final List<InstagramPostEntity> updatedPosts = List.from(state.posts!);
+        InstagramPostEntity currentPostEntity = updatedPosts[currentPost];
+
+        int updatedLikeCount = currentPostEntity.likesCounter;
+
+        if (isLiked && !likeStatus) {
+          updatedLikeCount--;
+        } else if (!isLiked && likeStatus) {
+          updatedLikeCount++;
+        }
+
+        updatedPosts[currentPost] = currentPostEntity.copyWith(
+          isLiked: likeStatus,
+          likesCounter: updatedLikeCount,
+        );
+
+        print('likesCounter:: ${updatedPosts[currentPost].likesCounter}');
+        emit(
+          state.copyWith(
+            status: LikePostInstagramStatus.success,
+            posts: updatedPosts,
+            // isLike: likeStatus,
+            // likeCount: updatedLikeCount,
+          ),
+        );
+      },
+    );
   }
 }

@@ -38,6 +38,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_non_tr
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
@@ -408,6 +409,12 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, List<ClientPastTripEntity>>> getClientPastUntrackedTrips({required ClientPendingTripParams params}) {
     return rideRemoteDataSource.getClientPastUntrackedTrips( params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> emitWatchingTrips(WatchingTripsParams params) async {
+    final data = await rideRemoteDataSource.watchingTripsParams(params);
+    return data;
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/search_ads_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
 import '../usecases/get_custom_page_sub_categories_use_case.dart';
@@ -17,4 +19,6 @@ abstract class SubcategoriesRepo {
 
   Future<Either<Failure, List<SubCategoryEntity>>> getCustomPageSubcategories(
       GetCustomPageSubCategoriesParams params);
+
+  Future<Either<Failure, List<AdModel>>> searchAds(SearchAdsParams params);
 }

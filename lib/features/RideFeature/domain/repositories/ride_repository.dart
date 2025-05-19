@@ -29,6 +29,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_b
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
@@ -124,6 +125,7 @@ abstract class RideRepository {
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
   void listenToRideOffers(Function(RideOfferEntity offer) params);
   Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params);
+  Future<Either<Failure, bool>> emitWatchingTrips(WatchingTripsParams params);
   Future<Either<Failure, ClickEntity>> click(ClickParams params);
   Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params);
   Future<Either<Failure, CreateNonTrackTripEntity>> cancelNonTrackTrip(CancelNonTrackTripParams params);

@@ -155,9 +155,10 @@ class SafetyCard extends StatelessWidget {
 class ProtectionItem {
   final String title;
   final IconData icon;
+  final String? image;
   final Color color;
 
-  ProtectionItem({required this.title, required this.icon, required this.color});
+  ProtectionItem({required this.title, required this.icon, this.image, required this.color});
 }
 
 List<ProtectionItem> items = [

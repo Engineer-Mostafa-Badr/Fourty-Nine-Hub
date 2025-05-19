@@ -4,7 +4,15 @@ import 'dart:developer';
 import 'package:either_dart/either.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
+import 'package:go_router/go_router.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import '../../../features/notifications/presentation/widgets/notification_snackbar.dart';
+import '../../../main.dart';
 import '../call_helper/call_with_notification_helper.dart';
 import 'send_notification_params.dart';
 import '../../../service_locator/service_locator.dart';
@@ -16,7 +24,9 @@ abstract class FcmNotificationHelper {
   Future<void> setup();
 
   Future<Either<Exception, String>> getFcmToken();
+
   Future<String> getFcmUserToken();
+
   Future onFcmTokenChanges();
 
   Future<Either<Exception, void>> subscribeTopic(String topic);
@@ -70,7 +80,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   Future onFcmTokenChanges() async {
     try {
       _firebaseMessaging.onTokenRefresh.listen((token) {
-        log('+++++ FCM Token +++++++++ $token');
+        debugPrint('+++++ FCM Token +++++++++ $token');
 
         /// TODO: send token to server
       });
@@ -83,7 +93,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   Future<Either<Exception, void>> subscribeTopic(String topic) async {
     try {
       await _firebaseMessaging.subscribeToTopic(topic);
-      log('+++++ FCM Topic +++++++++ $topic');
+      debugPrint('+++++ FCM Topic +++++++++ $topic');
       return const Right(null);
     } catch (e) {
       return Left(Exception('Unable to subscribe to topic $topic'));
@@ -103,15 +113,17 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      log('+++++ FCM Message +++++++++ ${message.data}');
+      debugPrint('+++++ FCM Message +++++++++ ${message.data}');
       await _handleNotification(message);
     });
 
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
-      (RemoteMessage message) {
+      (RemoteMessage message) async {
         /// TODO: handle on message open app
+        debugPrint('+++++ FCM Message +++++++++ ${message.data}');
+        await _handleNotification(message);
       },
     );
   }
@@ -128,7 +140,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       final token = await _generateAccessKey();
       print('Access token inside sendNotification $token');
       if (token == null) {
-        log('++++++++++++++notification sent++ no data');
+        debugPrint('++++++++++++++notification sent++ no data');
 
         return Left(Exception('Unable to send notification'));
       }
@@ -176,29 +188,70 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    await DI.execute();
+    // await DI.execute();
   }
 
-  await _handleNotification(message);
+  await _handleNotificationOnBackground(message);
 }
 
 Future<void> _handleNotification(RemoteMessage message) async {
-  log('++++++++++++++notification received++ ${message.data}');
-  
+  debugPrint('++++++++++++++notification received (data): ${message.data}');
+  debugPrint('++++++++++++++notification received (title): ${message.notification?.title ?? 'No title'}');
+  debugPrint('++++++++++++++notification received (body): ${message.notification?.body ?? 'No body'}');
+
+
   try {
     // Using Future.delayed to ensure the app is more stable when accessing Provider
     await Future.delayed(const Duration(milliseconds: 300));
-    
+
+    //TODO Get Context to show SnackBar
+    final overlayContext = navigatorKey.currentContext!;
+    showTopSnackBar(
+      Overlay.of(overlayContext),
+      GestureDetector(
+        onTap: () {
+          overlayContext.push(message.data['path'] ?? '');
+        },
+        child: CustomSnackBar.error(
+          message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+          maxLines: 3,
+        ),
+      ),
+    );
+
     if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
       serviceLocator<CallWithNotificationHelper>()
           .handleIncomingCallNotification(message.data);
     } else {
-      log('Warning: CallWithNotificationHelper not registered in serviceLocator');
+      debugPrint('Warning: CallWithNotificationHelper not registered in serviceLocator');
     }
   } catch (e, stackTrace) {
     // Prevent app crashes by handling the exception
-    log('Error handling notification: $e');
-    log('Stack trace: $stackTrace');
+    debugPrint('Error handling notification: $e');
+    debugPrint('Stack trace: $stackTrace');
+  }
+
+  // TODO: Handle other notification types
+}
+Future<void> _handleNotificationOnBackground(RemoteMessage message) async {
+  debugPrint('++++++++++++++notification received (data): ${message.data}');
+  debugPrint('++++++++++++++notification received (title): ${message.notification?.title ?? 'No title'}');
+  debugPrint('++++++++++++++notification received (body): ${message.notification?.body ?? 'No body'}');
+
+
+  try {
+    // Using Future.delayed to ensure the app is more stable when accessing Provider
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+      serviceLocator<CallWithNotificationHelper>()
+          .handleIncomingCallNotification(message.data);
+    } else {
+      debugPrint('Warning: CallWithNotificationHelper not registered in serviceLocator');
+    }
+  } catch (e, stackTrace) {
+    // Prevent app crashes by handling the exception
+    debugPrint('Error handling notification: $e');
+    debugPrint('Stack trace: $stackTrace');
   }
 
   // TODO: Handle other notification types

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -38,8 +40,9 @@ class UserAdsView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.filter.localize,
                           icon: Icons.filter_alt_rounded,
-                          style: Styles.headerText(color: AppColors.whiteColor,
-                              fontWeight:FontWeight.w400 ),
+                          style: Styles.headerText(
+                              color: AppColors.whiteColor,
+                              fontWeight: FontWeight.w400),
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
@@ -61,8 +64,9 @@ class UserAdsView extends StatelessWidget {
                       child: BadgedLabel(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.city.localize,
-                          style: Styles.headerText(fontWeight:FontWeight.w400 ,color: AppColors.whiteColor),
-
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.whiteColor),
                           width: 170.h,
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
@@ -84,10 +88,20 @@ class UserAdsView extends StatelessWidget {
                   ],
                 ))),
         Expanded(
-            child: UserAds(
-          params: params,
-          userType: userType,
-        ))
+            child: controller.ads.isEmpty
+                ? Center(
+                    child: Label(
+                      text: LocaleKeys.noAds.localize,
+                      style: Styles.mediumText(
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.PRIMARY_COLOR),
+                    ),
+                  )
+                : UserAds(
+                    params: params,
+                    userType: userType,
+                  ))
       ]);
     });
   }

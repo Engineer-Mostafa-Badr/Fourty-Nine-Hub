@@ -25,11 +25,13 @@ class PremiumRequestButton extends StatelessWidget {
     required this.subscriptionStatus,
     required this.subCategoryId,
     required this.adId,
+    this.dontPop = false,
   });
 
   final String subscriptionStatus;
   final String subCategoryId;
   final String adId;
+  final bool dontPop;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class PremiumRequestButton extends StatelessWidget {
         radius: 15,
         height: 38,
         onPressed: () {
-          context.pop();
+          if (!dontPop) context.pop();
           if (context.read<UserCubit>().isLoggedIn) {
             if (subscriptionStatus != 'premium') {
               SubscriptionMethod().subscribe(
@@ -94,7 +96,6 @@ class PremiumRequestButton extends StatelessWidget {
                                 maxLines: null,
                                 maxLength: 150,
                                 onChanged: (c) => controller.changePhone(v: c),
-
                               ),
                             ),
                           ),

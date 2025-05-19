@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -6,22 +7,44 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/support_status_enum.dart';
+import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/upload_record.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_emergency_contacts_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/edit_emergency_contacts_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -30,6 +53,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:path/path.dart';
 
 import '../../../../../common/functions/global/upload_image.dart';
@@ -61,6 +86,8 @@ import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.da
 import '../../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../pages/Register/Driver/upload_rider_images.dart';
 import '../../pages/dashboards/ride_mode_screen.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:record/record.dart';
 
 part 'dashboards_state.dart';
 
@@ -75,12 +102,23 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final CreateDriverRatingUsecase createDriverRatingUsecase;
   final UpdateDriverRatingUsecase updateDriverRatingUsecase;
   final CreateRiderOfferUseCase createRiderOfferUseCase;
+  final WatchingTripsUseCase watchingTripsUseCase;
   final ListenToUpdateTripAutoAcceptUseCase listenToUpdateTripAutoAcceptUseCase;
   final ListenToUpdateTripPriceUseCase listenToUpdateTripPriceUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
   final ListenToNewTripUseCase listenToNewTripUseCase;
   final ListenToRemoveTripUseCase listenToRemoveTripUseCase;
   final AutoAcceptTripUseCase autoAcceptTripUseCase;
+  final GetRunningTripUseCase getRunningTripUseCase;
+  final GoingToClientUseCase goingToClientUseCase;
+  final ArrivedToClientUseCase arrivedToClientUseCase;
+  final StartDriverTripUseCase startDriverTripUseCase;
+  final CompleteDriverTripUseCase completeDriverTripUseCase;
+  final RecordingTripUseCase recordingTripUseCase;
+  final CancelTripByRiderUseCase cancelTripByRiderUseCase;
+  final DriverRateClientUseCase driverRateClientUseCase;
+  final GetSupportDetailsUseCase getSupportDetailsUseCase;
+  final EmergencySupportUseCase emergencySupportUseCase;
   final GetAvailableNonSocketTripsUseCase getAvailableNonSocketTripsUseCase;
   final GetAcceptedNonSocketTripsUseCase getAcceptedNonSocketTripsUseCase;
   final GetPastNonSocketTripsUseCase getPastNonSocketTripsUseCase;
@@ -88,6 +126,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final UpdateDriverSettingsUseCase updateDriverSettingsUseCase;
   final GetDriverSettingsUseCase getDriverSettingsUseCase;
   final ListenToRemoveUntrackedTripUseCase listenToRemoveUntrackedTripUseCase;
+  final GetEmergencyContactsUseCase getEmergencyContactsUseCase;
+  final AddEmergencyContactsUseCase addEmergencyContactsUseCase;
+  final EditEmergencyContactsUseCase editEmergencyContactsUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -99,6 +140,29 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     this.createDriverRatingUsecase,
     this.updateDriverRatingUsecase,
     this.createRiderOfferUseCase,
+    this.listenToUpdateTripAutoAcceptUseCase,
+    this.listenToUpdateTripPriceUseCase,
+    this.listenToAcceptOfferUseCase,
+    this.listenToNewTripUseCase,
+    this.listenToRemoveTripUseCase,
+    this.autoAcceptTripUseCase,
+    this.getAvailableNonSocketTripsUseCase,
+    this.getAcceptedNonSocketTripsUseCase,
+    this.getPastNonSocketTripsUseCase,
+    this.getRunningTripUseCase,
+    this.goingToClientUseCase,
+    this.arrivedToClientUseCase,
+    this.startDriverTripUseCase,
+    this.completeDriverTripUseCase,
+    this.recordingTripUseCase,
+    this.cancelTripByRiderUseCase,
+    this.driverRateClientUseCase,
+    this.getSupportDetailsUseCase,
+    this.emergencySupportUseCase,
+    this.getEmergencyContactsUseCase,
+    this.addEmergencyContactsUseCase,
+    this.editEmergencyContactsUseCase,
+    this.watchingTripsUseCase,
       this.listenToUpdateTripAutoAcceptUseCase,
       this.listenToUpdateTripPriceUseCase,
       this.listenToAcceptOfferUseCase,
@@ -359,7 +423,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   List<TripEntity> availableTripsNonSocket = [];
 
-  List<HistoryTripEntity > pastRideNonSocketData = [];
+  List<HistoryTripEntity> pastRideNonSocketData = [];
   bool hasMorePastNonSocketTrips = true;
   int currentPagePastNonSocketTrips = 1;
   bool isLoadingMorePastNonSocketTrips = false;
@@ -373,41 +437,49 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     emit(state.copyWith(status: DashboardsStates.success));
   }
 
+
+  Future<void> emitWatchingTrips(List<String> tripIds) async {
+    var user = UserCubit.to.state.data;
+    final result = await watchingTripsUseCase(
+        WatchingTripsParams(tripIds: tripIds, driverImage: user?.profilePicture??'',driverId:user?.id??'')
+    );
+    result.fold(
+            (l) => emit(state.copyWith(failure: l, status: DashboardsStates.error)),
+            (r) async {
+          if(r==true)log("Location Updated Successfully");
+        });
+  }
+
   Future<void> getPastNonSocketTrips() async {
     if (!hasMorePastNonSocketTrips || isLoadingMorePastNonSocketTrips) return;
     isLoadingMorePastNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
-    final response = await getPastNonSocketTripsUseCase(
-        ClientPendingTripParams(page: currentPagePastNonSocketTrips, limit: 5));
+    final response = await getPastNonSocketTripsUseCase(ClientPendingTripParams(page: currentPagePastNonSocketTrips, limit: 5));
     response.fold(
-          (failure) {
+      (failure) {
         isLoadingMorePastNonSocketTrips = false;
         emit(state.copyWith(
             failure: failure,
             // isLoadingMoreLogs: false,
             status: DashboardsStates.error));
       },
-          (data) {
+      (data) {
         pastRideNonSocketData.addAll(data);
         if ((data.length ?? 0) < 5) {
           hasMorePastNonSocketTrips = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));
-
         } else {
           currentPagePastNonSocketTrips++;
         }
 
         isLoadingMorePastNonSocketTrips = false;
-        emit(state.copyWith(pastRideNonSocketTrips: data,));
+        emit(state.copyWith(
+          pastRideNonSocketTrips: data,
+        ));
       },
     );
   }
-
-
-
-
-
 
   List<AcceptedRideNonSocketTripEntity> acceptedRideNonSocketData = [];
   bool hasMoreAcceptedNonSocketTrips = true;
@@ -427,33 +499,32 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (!hasMoreAcceptedNonSocketTrips || isLoadingMoreAcceptedNonSocketTrips) return;
     isLoadingMoreAcceptedNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
-    final response = await getAcceptedNonSocketTripsUseCase(
-        ClientPendingTripParams(page: currentPageAcceptedNonSocketTrips, limit: 5));
+    final response = await getAcceptedNonSocketTripsUseCase(ClientPendingTripParams(page: currentPageAcceptedNonSocketTrips, limit: 5));
     response.fold(
-          (failure) {
+      (failure) {
         isLoadingMoreAcceptedNonSocketTrips = false;
         emit(state.copyWith(
             failure: failure,
             // isLoadingMoreLogs: false,
             status: DashboardsStates.error));
       },
-          (data) {
+      (data) {
         acceptedRideNonSocketData.addAll(data);
         if ((data.length ?? 0) < 5) {
           hasMoreAcceptedNonSocketTrips = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));
-
         } else {
           currentPageAcceptedNonSocketTrips++;
         }
 
         isLoadingMoreAcceptedNonSocketTrips = false;
-        emit(state.copyWith(acceptedRideNonSocketTrips: data,));
+        emit(state.copyWith(
+          acceptedRideNonSocketTrips: data,
+        ));
       },
     );
   }
-
 
   List<AvailableRideNonSocketTripEntity> availableRideNonSocketData = [];
   bool hasMoreAvailableNonSocketTrips = true;
@@ -473,32 +544,36 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (!hasMoreAvailableNonSocketTrips || isLoadingMoreAvailableNonSocketTrips) return;
     isLoadingMoreAvailableNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
-    final response = await getAvailableNonSocketTripsUseCase(
-        ClientPendingTripParams(page: currentPageAvailableNonSocketTrips, limit: 5));
+    final response = await getAvailableNonSocketTripsUseCase(ClientPendingTripParams(page: currentPageAvailableNonSocketTrips, limit: 5));
     response.fold(
-          (failure) {
+      (failure) {
         isLoadingMoreAvailableNonSocketTrips = false;
         emit(state.copyWith(
             failure: failure,
             // isLoadingMoreLogs: false,
             status: DashboardsStates.error));
       },
-          (data) {
+      (data) {
         availableRideNonSocketData.addAll(data);
         if ((data.length ?? 0) < 5) {
           hasMoreAvailableNonSocketTrips = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));
-
         } else {
           currentPageAvailableNonSocketTrips++;
         }
 
         isLoadingMoreAvailableNonSocketTrips = false;
-        emit(state.copyWith(availableRideNonSocketTrips: data,));
+        emit(state.copyWith(
+          availableRideNonSocketTrips: data,
+        ));
       },
     );
   }
+
+  TextEditingController reasonController = TextEditingController();
+
+  void changeIndex(int index, BuildContext context, RideModeParams params) {
   void changeIndex(int index, BuildContext context, RideModeParams params) {
     final settings = state.driverSettingsEntity; // Assuming this contains `isReady`
 
@@ -513,6 +588,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       }
       return; // prevent loading other data if index is 0
     }
+    if (index == 1 && params.isSocket == true) getActiveTrip(context);
 
     // Index 2: Past Trips
     if (index == 2 && params.isSocket == false && params.modeType == "ride") {
@@ -547,7 +623,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     listenToRemoveTripUseCase((tripId) {
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
       log("tripId.toString()${tripId.toString()}");
-      if(tripId.isNotEmpty)list.removeWhere((e)=>e.id==tripId);
+      if (tripId.isNotEmpty) list.removeWhere((e) => e.id == tripId);
       // log(trip.toString());
       // list.insert(0, trip);
       emit(state.copyWith(availableRideTrips: list));
@@ -571,6 +647,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     listenToRemoveUntrackedTripUseCase((tripId) {
       List<AvailableRideNonSocketTripEntity> list = availableRideNonSocketData ?? [];
       log("tripId.toString()${tripId.toString()}");
+      if (tripId.isNotEmpty) list.removeWhere((e) => e.id == tripId);
       if(tripId.isNotEmpty)list.removeWhere((e)=>e.tripDetails?.id==tripId);
       // log(trip.toString());
       // list.insert(0, trip);
@@ -582,10 +659,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     CliLogger.info('Listen To Update Trip Auto Accept');
     listenToUpdateTripAutoAcceptUseCase((trip) {
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.firstWhere((e)=>e.id==trip.id).isAutoAccept = trip.isAutoAccept;
+      list.firstWhere((e) => e.id == trip.id).isAutoAccept = trip.isAutoAccept;
       log(trip.toString());
       emit(state.copyWith(availableRideTrips: list));
-
     });
   }
 
@@ -596,20 +672,22 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       CliLogger.info('Listen To Update TripId ${trip.tripId}');
 
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.firstWhere((e)=>e.id==trip.tripId).price = trip.price;
+      list.firstWhere((e) => e.id == trip.tripId).price = trip.price;
       log(trip.toString());
       emit(state.copyWith(availableRideTrips: list));
     });
   }
 
+  void listenToAcceptOffer(BuildContext context, RideModeParams params) {
+
   void listenToAcceptOffer() {
     CliLogger.info('Listen To Update Trip Auto Accept');
     listenToAcceptOfferUseCase((trip) {
+      changeIndex(1, context, params);
       // List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
       // list.firstWhere((e)=>e.id==trip.id).isAutoAccept = trip.isAutoAccept;
       // log(trip.toString());
       // emit(state.copyWith(availableRideTrips: list));
-
     });
   }
 
@@ -617,9 +695,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (!hasMoreData || isLoadingMore) return;
     emit(state.copyWith(status: DashboardsStates.loadingAvailable));
     isLoadingMore = true;
-    final Either<Failure, TripsResponseEntity> result =
-        await getAvailableTripsUsecase(AvailableRideTripsUseCaseParams(
-            page: currentPage, limit: pageSize));
+    final Either<Failure, TripsResponseEntity> result = await getAvailableTripsUsecase(AvailableRideTripsUseCaseParams(page: currentPage, limit: pageSize));
     result.fold(
       (failure) {
         showErrorMessage(context, getFailureMessage(failure, context));
@@ -640,21 +716,23 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         }
         isLoadingMore = false;
         availableTripsNonSocket = availableRideTrips;
-        emit(state.copyWith(
-            status: DashboardsStates.success,
-            availableTrips: availableRideTrips));
+        emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableRideTrips));
         // emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableTrips.data.trips));
       },
     );
   }
 
+  bool isLoadingAvailableRideTrips = false;
   void loadAvailableRideTrips(BuildContext context) async {
+    isLoadingAvailableRideTrips=true;
     print("loadAvailableRideTrips1");
     emit(state.copyWith(availableRideTrips: []));
     currentPage = 1;
+    availableRideTrips.clear();
     hasMoreData = true;
     await getAvailableRideTrips(context);
     print("loadAvailableRideTrips2");
+    isLoadingAvailableRideTrips=false;
   }
 
   // List<AvailableRideTripEntity> availableRideTrips = [];
@@ -662,6 +740,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
+  List<AvailableRideTripEntity> availableRideTrips = [];
 
   Future<void> getAvailableRideTrips(BuildContext context) async {
     if (!hasMoreData || isLoadingMore) return;
@@ -680,9 +759,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         emit(state.copyWith(failure: failure, status: DashboardsStates.error));
       },
       (data) {
-        print("objectavailableRideTrips");
-        List<AvailableRideTripEntity> availableRideTrips = [];
-        availableRideTrips.addAll(state.availableRideTrips ?? []);
+        List<String> tripIds = data.map((e) => e.id).toList();
+        emitWatchingTrips(tripIds);
+        // availableRideTrips.addAll(state.availableRideTrips ?? []);
         availableRideTrips.addAll(data);
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -690,9 +769,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           currentPage++;
         }
         isLoadingMore = false;
-        emit(state.copyWith(
-            status: DashboardsStates.success,
-            availableRideTrips: availableRideTrips));
+        emit(state.copyWith(status: DashboardsStates.success, availableRideTrips: availableRideTrips));
       },
     );
   }
@@ -703,8 +780,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     }
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, TripsResponseEntity> result =
-        await getPastTripsUsecase(type);
+    final Either<Failure, TripsResponseEntity> result = await getPastTripsUsecase(type);
 
     if (isClosed) return;
     result.fold(
@@ -714,8 +790,166 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (pastTrips) {
         log("Suzccess");
-        emit(state.copyWith(
-            status: DashboardsStates.success, pastTrips: pastTrips.data.trips));
+        emit(state.copyWith(status: DashboardsStates.success, pastTrips: pastTrips.data.trips));
+      },
+    );
+  }
+
+  Future<void> getActiveTrip(BuildContext context) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, RunningTripEntity> result = await getRunningTripUseCase(const NoParams());
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure, tripStatus: TripState.pending.name));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, activeTrip: activeTrip, tripStatus: activeTrip.status));
+      },
+    );
+  }
+
+  Future<void> goingToClient(BuildContext context, String id) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await goingToClientUseCase(id);
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.goToClient.name));
+      },
+    );
+  }
+
+  showSafety(String lastStatus) {
+    emit(state.copyWith(tripStatus: 'support', lastStatus: lastStatus));
+  }
+
+  closeSafety() {
+    emit(state.copyWith(tripStatus: state.lastStatus));
+  }
+
+  Future<void> arrivedToClient(BuildContext context, String id, String message) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await arrivedToClientUseCase(ArrivedToClientEntity(tripId: id, message: message));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.inLocation.name));
+      },
+    );
+  }
+
+  Future<void> startDriverTrip(BuildContext context, String id, String otp) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await startDriverTripUseCase(StartDriverTripParams(tripId: id, otp: otp));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
+      },
+    );
+  }
+
+  Future<void> completeDriverTrip(BuildContext context, String id, String otp) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await completeDriverTripUseCase(StartDriverTripParams(tripId: id, otp: otp));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
+      },
+    );
+  }
+
+  Future<void> cancelDriverTrip({required BuildContext context, required String tripId, required String note, required String reasonId}) async {
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await cancelTripByRiderUseCase(CancelTripByRiderUseCaseParams(tripId: tripId, note: note, reasonId: reasonId));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
+      },
+    );
+  }
+
+  Future<void> rateTheClient({required BuildContext context, required String tripId, required String comment, required double rate}) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await driverRateClientUseCase(DriverRateClientParams(tripId: tripId, comment: comment, rate: rate));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
       },
     );
   }
@@ -726,8 +960,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     }
     emit(state.copyWith(status: DashboardsStates.loadingSettings));
 
-    final Either<Failure, SettingsDashboardEntityResponse> result =
-        await getSettingsDashboardUsecase(const NoParams());
+    final Either<Failure, SettingsDashboardEntityResponse> result = await getSettingsDashboardUsecase(const NoParams());
 
     if (isClosed) return;
     result.fold(
@@ -737,21 +970,18 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (settings) {
         log("Suzccess");
-        emit(state.copyWith(
-            status: DashboardsStates.success, settings: settings.data));
+        emit(state.copyWith(status: DashboardsStates.success, settings: settings.data));
       },
     );
   }
 
-  Future<void> updateSettings(
-      BuildContext context, UpdateSettingsDashboardUsecaseParam param) async {
+  Future<void> updateSettings(BuildContext context, UpdateSettingsDashboardUsecaseParam param) async {
     if (isClosed) {
       return;
     }
     emit(state.copyWith(status: DashboardsStates.loadingSettings));
 
-    final Either<Failure, bool> result =
-        await updateSettingsDashboardUsecase(param);
+    final Either<Failure, bool> result = await updateSettingsDashboardUsecase(param);
 
     if (isClosed) return;
     result.fold(
@@ -776,23 +1006,23 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> createNewOffer(
-      BuildContext context, CreateNewOfferDashboardUsecaseParam param) async {
+  Future<void> createNewOffer(BuildContext context, CreateNewOfferDashboardUsecaseParam param) async {
     if (isClosed) {
       return;
     }
-    emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
-
-    final Either<Failure, bool> result =
-        await createNewOfferDashboardUsecase(param);
+    // emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
+    showLoadingDialog(context);
+    final Either<Failure, bool> result = await createNewOfferDashboardUsecase(param);
 
     if (isClosed) return;
     result.fold(
       (failure) {
+        context.pop();
         log("Failure ${getFailureMessage(failure, context)}");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (settings) {
+        context.pop();
         log("Suzccess");
         emit(state.copyWith(status: DashboardsStates.successOffer));
       },
@@ -814,15 +1044,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> createNewOfferNonSocket(BuildContext context,
-      CreateNewOfferDashboardUsecaseParam param, String subCategoryId) async {
+  Future<void> createNewOfferNonSocket(BuildContext context, CreateNewOfferDashboardUsecaseParam param, String subCategoryId) async {
     if (isClosed) {
       return;
     }
     emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
 
-    final Either<Failure, bool> result =
-        await createNewOfferNonSocketUsecase(param);
+    final Either<Failure, bool> result = await createNewOfferNonSocketUsecase(param);
 
     if (isClosed) return;
     result.fold(
@@ -832,10 +1060,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
             ? showDebtDialog(context, subCategoryId)
             : errorName == 'SubscribeError'
                 ? showSubscribeDialog(context, subCategoryId)
-                : showErrorMessage(
-                    context, getFailureMessage(failure, context));
-        emit(state.copyWith(
-            status: DashboardsStates.errorOffers, failure: failure));
+                : showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.errorOffers, failure: failure));
       },
       (settings) {
         log("Suzccess");
@@ -845,20 +1071,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> createOffer(
-      {required String tripId,
-      required num price,
-      required BuildContext context,
-      required String subCategoryId}) async {
-    emit(state.copyWith(status: DashboardsStates.loadingAcceptOffer));
-    Position currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final response = await createRiderOfferUseCase(CreateRiderOfferParams(
-        tripId: tripId,
-        price: price,
-        lat: currentPosition.latitude,
-        lng: currentPosition.longitude));
+  Future<void> createOffer({required String tripId, required num price, required BuildContext context, required String subCategoryId}) async {
+    // emit(state.copyWith(status: DashboardsStates.loadingAcceptOffer));
+    showLoadingDialog(context);
+    Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    final response = await createRiderOfferUseCase(CreateRiderOfferParams(tripId: tripId, price: price, lat: currentPosition.latitude, lng: currentPosition.longitude));
     response.fold((l) {
+      context.pop();
       String errorName = getFailureName(l, context);
       errorName == 'DebtError'
           ? showDebtDialog(context, subCategoryId)
@@ -867,12 +1086,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
               : showErrorMessage(context, getFailureMessage(l, context));
       emit(state.copyWith(failure: l, status: DashboardsStates.error));
     }, (data) {
+      context.pop();
       emit(state.copyWith(status: DashboardsStates.success));
     });
   }
 
-  Future<void> createDriverRating(
-      BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
+  Future<void> createDriverRating(BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
     if (isClosed) {
       return;
     }
@@ -893,8 +1112,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> updateDriverRating(
-      BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
+  Future<void> updateDriverRating(BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
     if (isClosed) {
       return;
     }
@@ -917,11 +1135,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   Future<void> refuseTrip(BuildContext context, String id) async {
     emit(state.copyWith(status: DashboardsStates.loadingAvailable));
-    availableTripsNonSocket
-        .removeWhere((element) => element.tripDetails!.id == id);
-    emit(state.copyWith(
-        status: DashboardsStates.successOffer,
-        availableTrips: availableTripsNonSocket));
+    availableTripsNonSocket.removeWhere((element) => element.tripDetails!.id == id);
+    emit(state.copyWith(status: DashboardsStates.successOffer, availableTrips: availableTripsNonSocket));
   }
 
   showSubscribeDialog(BuildContext context, String subCategoryId) {
@@ -964,10 +1179,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       Navigator.of(context).pop();
-                      SubscriptionMethod().subscribe(
-                          subscribeId: subCategoryId,
-                          showRegular: true,
-                          title: '');
+                      SubscriptionMethod().subscribe(subscribeId: subCategoryId, showRegular: true, title: '');
                     }),
               ],
             ),
@@ -1016,14 +1228,344 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       Navigator.of(context).pop();
-                      serviceLocator<SubscriptionController>()
-                          .showActiveSubscriptionAmounts(
-                              walletType: WalletTypes.mainWallet, price: 50);
+                      serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.mainWallet, price: 50);
                     }),
               ],
             ),
             const SizedBox(height: 16),
           ],
         ));
+  }
+
+  uploadRecord(BuildContext context, String tripId, String mediaId) async {
+    final Either<Failure, bool> result = await recordingTripUseCase(RecordingTripUseCaseParams(tripId, mediaId));
+
+    result.fold(
+      (failure) {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success));
+      },
+    );
+  }
+
+  bool _isRequestingPermission = false;
+
+  Future<bool> _checkPermissions() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // You can show a dialog here asking user to enable location
+      return false;
+    }
+
+    // Step 2: Request permission
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    // Step 3: Check if permission is whileInUse
+    if (permission == LocationPermission.whileInUse) {
+      return true;
+    }
+
+    // Optional: Handle permanently denied
+    if (permission == LocationPermission.deniedForever) {
+      await Geolocator.openAppSettings();
+    }
+
+    return false;
+  }
+
+  getEmergencyDetails(BuildContext context, SupportRideParams mainParams) async {
+    GetSupportDetailsParams params = GetSupportDetailsParams(tripId: mainParams.tripId, tripType: mainParams.tripType, userType: mainParams.userType);
+    emit(state.copyWith(status: DashboardsStates.loading));
+    final Either<Failure, SupportDetailsEntity> result = await getSupportDetailsUseCase(params);
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        emit(state.copyWith(supportDetails: data, supportStatus: data.status, status: DashboardsStates.success));
+      },
+    );
+  }
+
+
+  var firstFormKey = GlobalKey<FormState>();
+  var secondFormKey = GlobalKey<FormState>();
+  var thirdFormKey = GlobalKey<FormState>();
+  var fourthFormKey = GlobalKey<FormState>();
+  var fifthFormKey = GlobalKey<FormState>();
+
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController firstPhoneController = TextEditingController();
+  final TextEditingController secondNameController = TextEditingController();
+  final TextEditingController secondPhoneController = TextEditingController();
+  final TextEditingController thirdNameController = TextEditingController();
+  final TextEditingController thirdPhoneController = TextEditingController();
+  final TextEditingController fourthNameController = TextEditingController();
+  final TextEditingController fourthPhoneController = TextEditingController();
+  final TextEditingController fifthNameController = TextEditingController();
+  final TextEditingController fifthPhoneController = TextEditingController();
+
+  getEmergencyContacts(BuildContext context) async {
+    emit(state.copyWith(status: DashboardsStates.loading));
+    final Either<Failure, List<EmergencyContactEntity>> result = await getEmergencyContactsUseCase(NoParams());
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        if(data.length==1) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+        }else if(data.length==2) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+        }else if(data.length==3) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+          thirdNameController.text=data[2].name;
+          thirdPhoneController.text=data[2].phoneNumber;
+        }else if(data.length==4) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+          thirdNameController.text=data[2].name;
+          thirdPhoneController.text=data[2].phoneNumber;
+          fourthNameController.text=data[3].name;
+          fourthPhoneController.text=data[3].phoneNumber;
+        }else if(data.length>4) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+          thirdNameController.text=data[2].name;
+          thirdPhoneController.text=data[2].phoneNumber;
+          fourthNameController.text=data[3].name;
+          fourthPhoneController.text=data[3].phoneNumber;
+          fifthNameController.text=data[4].name;
+          fifthPhoneController.text=data[4].phoneNumber;
+        }
+        emit(state.copyWith(emergencyContacts: data, status: DashboardsStates.success));
+      },
+    );
+  }
+  addEmergencyContacts({required BuildContext context, required String name, required String phoneNumber,required int index}) async {
+    showLoadingDialog(context);
+
+    final Either<Failure, EmergencyContactEntity> result = await addEmergencyContactsUseCase(EmergencyContactEntity(name: name,phoneNumber: phoneNumber,id: ''));
+
+    result.fold(
+      (failure) {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (addedContact) async {
+        context.pop();
+        List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
+        contacts.add(addedContact);
+        if(contacts.length>index){
+          if(index==1) {
+            firstNameController.clear();
+            firstPhoneController.clear();
+          }else if(index == 2) {
+            secondNameController.clear();
+            secondPhoneController.clear();
+          }else if(index == 3) {
+            thirdNameController.clear();
+            thirdPhoneController.clear();
+          }else if(index == 4) {
+            fourthNameController.clear();
+            fourthPhoneController.clear();
+          }else if(index == 5) {
+            fifthNameController.clear();
+            fifthPhoneController.clear();
+          }
+        }
+        if(contacts.length==1) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+        }else if(contacts.length==2) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+        }else if(contacts.length==3) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+        }else if(contacts.length==4) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+        }else if(contacts.length==5) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+          fifthNameController.text=contacts[4].name;
+          fifthPhoneController.text=contacts[4].phoneNumber;
+        }
+        emit(state.copyWith(emergencyContacts: contacts, status: DashboardsStates.success));
+      },
+    );
+  }
+
+  editEmergencyContacts(BuildContext context,EmergencyContactEntity contact, int index) async {
+    showLoadingDialog(context);
+    final Either<Failure, EmergencyContactEntity> result = await editEmergencyContactsUseCase(contact);
+
+    result.fold(
+      (failure) {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        context.pop();
+        List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
+        contacts.removeAt(index);
+        contacts.insert(index, data);
+        if(index==0) {
+          firstNameController.text=data.name;
+          firstPhoneController.text=data.phoneNumber;
+        }else if(index==1) {
+          secondNameController.text=data.name;
+          secondPhoneController.text=data.phoneNumber;
+        }else if(index==2) {
+          thirdNameController.text=data.name;
+          thirdPhoneController.text=data.phoneNumber;
+        }else if(index==3) {
+          fourthNameController.text=data.name;
+          fourthPhoneController.text=data.phoneNumber;
+        }else if(index==4) {
+          fifthNameController.text=data.name;
+          fifthPhoneController.text=data.phoneNumber;
+        }
+        emit(state.copyWith(emergencyContacts: contacts, status: DashboardsStates.success));
+      },
+    );
+  }
+
+  TextEditingController supportDescriptionController = TextEditingController();
+  TextEditingController supportPhoneController = TextEditingController();
+  requestEmergencySupport({
+    required BuildContext context,
+    required String driverId,
+    required String tripId,
+    required String clientId,
+  }) async {
+    FocusScope.of(context).requestFocus( FocusNode());
+    emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
+    bool hasPermission = await _checkPermissions();
+    print("hasPermission $hasPermission");
+    Position? currentPosition;
+    if (hasPermission) {
+      currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      print("currentPosition.latitude ${currentPosition.latitude}");
+      print("currentPosition.latitude ${currentPosition.longitude}");
+    }
+    final Either<Failure, bool> result = await emergencySupportUseCase(EmergencySupportParams(
+        driverId: driverId,
+        description: supportDescriptionController.text,
+        phone: supportPhoneController.text,
+        type: 'driver',
+        clientId: clientId,
+        latitude: currentPosition?.latitude,
+        tripId: tripId,
+        longitude: currentPosition?.longitude));
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        supportDescriptionController.clear();
+        supportPhoneController.clear();
+        FocusScope.of(context).requestFocus( FocusNode());
+        emit(state.copyWith(status: DashboardsStates.success,supportStatus: RequestEmergencyStatus.pending.status));
+      },
+    );
+  }
+
+  ///record trip
+  final record = AudioRecorder();
+
+  // Start recording
+  Future<void> startRecord() async {
+    log('startRecorddd${await record.hasPermission()}');
+    try {
+      if (await record.hasPermission()) {
+        log('record.hasPermission');
+        Directory tempDir = await getTemporaryDirectory();
+        String tempPath = '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.wav';
+        await record.start(
+          const RecordConfig(),
+          path: tempPath,
+        );
+        print("object");
+      } else {
+        throw Exception('Microphone permission not granted');
+      }
+    } catch (e) {
+      log('Error starting record: $e');
+    }
+  }
+
+  Future<String?> stopRecord({required BuildContext context, required String subcategoryId, required String tripId}) async {
+    try {
+      showLoadingDialog(context);
+      log('stopRecord');
+      String? path = await record.stop();
+      await UploadRecord().mediaUrl(
+        tripId: tripId,
+        path: path ?? "",
+        subcategoryId: subcategoryId,
+        onSuccess: (String mediaId, String tripId) async {
+          log("tripId$tripId");
+          log("mediaId$mediaId");
+          await uploadRecord(context, tripId, mediaId);
+        },
+      );
+      // await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  'mediaId'));
+      return path;
+    } catch (e) {
+      log('Error stopping record: $e');
+      return null;
+    }
+  }
+
+  changeReasonSelection({bool? isOther, bool? isChangedMind, bool? isClientNotShown}) {
+    if (isOther == true) {
+      emit(state.copyWith(isOtherReason: true, isChangedMindReason: false, isClientNotShownReason: false, status: DashboardsStates.success));
+    }
+    if (isChangedMind == true) {
+      emit(state.copyWith(isOtherReason: false, isChangedMindReason: true, isClientNotShownReason: false, status: DashboardsStates.success));
+    }
+    if (isClientNotShown == true) {
+      emit(state.copyWith(isOtherReason: false, isChangedMindReason: false, isClientNotShownReason: true, status: DashboardsStates.success));
+    }
   }
 }

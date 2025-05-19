@@ -14,11 +14,15 @@ class BuildDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      constraints: BoxConstraints(
+        maxWidth: 150, //  حسب الحاجة
+      ),
       decoration: BoxDecoration(
         color: context.isDarkMode?AppColors.getFillColor(context):AppColors.GREYCARD,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min, // دي مهمة جداً
         children: [
           SvgPicture.asset(icon, width: width??16,height: height??16,color: context.isDarkMode?Colors.white:null,),
           const SizedBox(width: 6),

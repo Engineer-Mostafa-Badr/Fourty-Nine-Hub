@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
@@ -37,6 +38,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/marriage_ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/create_post_reel_company.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/create_posts_company.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/governorate_filter_ads.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
@@ -458,7 +461,7 @@ class AppPages {
                 ),
                 BlocProvider(
                   create: (context) =>
-                      serviceLocator<MainCategoriesCubit>()..loadData(),
+                      serviceLocator<MainCategoriesCubit>()..loadData(context),
                 ),
                 // BlocProvider(
                 //   create: (context) => serviceLocator<ThumbnailsCubit>(),
@@ -758,9 +761,24 @@ class AppPages {
                           path: Paths.CREATECOMPANYAD,
                           name: Routes.CREATECOMPANYAD,
                           builder: (context, state) =>
+                              const CreateCompanyAdView(),
+                        ),
+                        GoRoute(
+                          path: Paths.CREATECOMPANYPOSTAD,
+                          name: Routes.CREATECOMPANYPOSTAD,
+                          builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
-                                  create: (_) => serviceLocator()..loadData(),
-                                  child: const CreateCompanyAdView()),
+                                  create: (_) => serviceLocator(),
+                                  child: CreatePostCompany(params: state.extra as CreatePostCompanyParams,)),
+                        ),
+
+                        GoRoute(
+                          path: Paths.CREATECOMPANYPOSTREALAD,
+                          name: Routes.CREATECOMPANYPOSTREALAD,
+                          builder: (context, state) =>
+                              BlocProvider<CreateCompanyAdCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: CreatePostReelCompany(totalPrice: state.extra as num,)),
                         ),
                       ]),
                 ],
@@ -1320,15 +1338,15 @@ class AppPages {
                 path: Paths.SINGLEPOSTINSTAGRAM,
                 name: Routes.SINGLEPOSTINSTAGRAM,
                 builder: (context, state) {
-                  final InstagramProfilePostEntity post =
-                      state.extra as InstagramProfilePostEntity;
+                  final String postId =
+                      state.extra as String;
 
                   return BlocProvider(
                     create: (context) =>
                         serviceLocator<SinglePostInstagramCubit>()
-                          ..getPost(post.id),
+                          ..getPost(postId),
                     child: SinglePostInstagramView(
-                      postId: post.id,
+                      postId: postId,
                     ),
                   );
                 },
@@ -3481,7 +3499,9 @@ class AppPages {
               GoRoute(
                 path: Paths.supportRideScreen,
                 name: Routes.supportRideScreen,
-                builder: (context, state) => SupportRideScreen(),
+                builder: (context, state) => BlocProvider(
+                    create: (context) => serviceLocator<DashboardsCubit>(),
+                    child: SupportRideScreen(params: state.extra as SupportRideParams,)),
               ),
 
 
