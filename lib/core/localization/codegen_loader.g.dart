@@ -1157,7 +1157,7 @@ class CodegenLoader extends AssetLoader{
     "airConditionAc": "مكيف الهواء",
     "Smoker": "مدخن",
     "dragAnalysis": "تحليل السحب",
-    "welcomeToRideRegister": "مرحبًا بك في تسجيل الرحلات",
+    "welcomeToRideRegister": "مرحبًا بك في تسجيل توصيلة",
     "tripIsComplete": "تم اكتمال الرحلة",
     "successCancelTrip": "تم إلغاء الرحلة بنجاح",
     "start": "ابدأ",

@@ -115,7 +115,7 @@ String? validatorEmail(String? email) {
 String? validatorPhone(String? email) {
   final phoneRegex = RegExp(r'^\+?\d{7,15}$');
   if (email == null || email.isEmpty) {
-    return LocaleKeys.phoneIsRequired.localize;
+    return LocaleKeys.required.localize;
   } else if (!phoneRegex.hasMatch(email)) {
     return LocaleKeys.invalidPhoneNumber.localize;
   }
