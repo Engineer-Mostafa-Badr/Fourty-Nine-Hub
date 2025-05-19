@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_state.dart';
@@ -66,7 +67,7 @@ class ShareTheApp extends StatelessWidget {
                         ),
                         Center(
                           child: Label(
-                            text: LocaleKeys.recommendUs.localize,
+                            text:context.isArabic?'اوصي بنا':LocaleKeys.recommendUs.localize,
                             style: Styles.headerText(
                               color: context.isDarkMode
                                   ? Colors.white
@@ -75,7 +76,7 @@ class ShareTheApp extends StatelessWidget {
                           ),
                         ),
                         Label(
-                          text: LocaleKeys.shareFodeFriends.localize,
+                          text: context.isArabic?'شارك الكود مع أصدقائك واحصل على ٥٠ جنيه مصري لكل واحد':LocaleKeys.shareFodeFriends.localize,
                           style: Styles.mediumText(
                             color: context.isDarkMode
                                 ? Colors.white
@@ -132,7 +133,7 @@ class ShareTheApp extends StatelessWidget {
           height: 32,
         ),
         AppButton(
-          color: AppColors.getRedColor(context),
+          backColor:AppColors.getRedColor(context) ,
           label: LocaleKeys.shareTheApp.localize,
           style: Styles.mediumText(
             color: AppColors.getReversedTextColor(context) ,
@@ -198,7 +199,7 @@ https://example.com/download
               context,
               color: AppColors.getButtonPrimaryColor(context),
               title: LocaleKeys.userShare.localize,
-              subTitle: '$user',
+              subTitle: '${context.isArabic?numAr(user):user}',
             ),
           ),
           const Sizer(),
@@ -206,8 +207,8 @@ https://example.com/download
             child: _buildStatisticsItem(
               context,
               color: AppColors.getButtonPrimaryColor(context),
-              title: LocaleKeys.balance.localize,
-              subTitle: '$balance',
+              title: context.isArabic?'استرداد نقدي':LocaleKeys.balance.localize,
+              subTitle: '${context.isArabic?numAr(balance):balance}',
             ),
           ),
           const Sizer(),
@@ -216,7 +217,7 @@ https://example.com/download
               context,
                 color: AppColors.getButtonPrimaryColor(context),
                 title: LocaleKeys.gift.localize,
-                subTitle: '$gift'),
+                subTitle: '${context.isArabic?numAr(gift):gift}'),
           ),
         ],
       ),
@@ -246,6 +247,7 @@ https://example.com/download
               color: AppColors.getReversedTextColor(context),
               fontSize: 32,
             ),
+            maxLines: 2,
           ),
           Label(
             text: subTitle,

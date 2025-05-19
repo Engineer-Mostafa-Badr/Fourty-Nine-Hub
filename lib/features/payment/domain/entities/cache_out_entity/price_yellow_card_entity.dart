@@ -1,7 +1,8 @@
 class PriceYellowCardEntity {
-  final String currency;
+  final String currencyEn;
+  final String currencyAr;
   final num yellowCardCharge;
 
   PriceYellowCardEntity(
-      {required this.currency, required this.yellowCardCharge});
+      {required this.currencyEn,required this.currencyAr, required this.yellowCardCharge});
 }

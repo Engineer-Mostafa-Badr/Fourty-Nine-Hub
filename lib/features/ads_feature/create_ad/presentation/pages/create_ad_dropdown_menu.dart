@@ -52,11 +52,11 @@ class CreateAdDropdownMenu<T> extends StatelessWidget {
               underline: Container(),
               onChanged: onChange,
               items: items,
-              style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:null),
+              style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
               hint: Label(
                 text: hint,
                 maxLines: 1,
-                style: Styles.mediumText(fontSize: 28,color: context.isDarkMode?AppColors.whiteColor:null),
+                style: Styles.mediumText(fontSize: 28,color: AppColors.getTextColor(context)),
               ),
             ),
           ),

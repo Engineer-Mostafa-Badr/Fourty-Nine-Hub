@@ -221,39 +221,56 @@ Future<void> showPermissionDialog({required String message}) async =>
 // );
 
 void showLoadingDialog(BuildContext context,
-        {String? message,
-        bool canPop = false,
-        bool barrierDismissible = false}) =>
-    showAnimatedDialog(
-      context,
-      barrierDismissible: barrierDismissible,
-      PopScope(
+    {String? message,
+      bool canPop = false,
+      bool barrierDismissible = false}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    transitionDuration: const Duration(milliseconds: 400),
+    pageBuilder: (context, _, __) {
+      return PopScope(
         canPop: canPop,
-        child: AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CircularProgressIndicator.adaptive(),
-              Sizer(height: 20.h),
-              Text(
-                message ?? Labels.loading,
-                style: Styles.headerText(),
-                textAlign: TextAlign.center,
+        child: Center(
+          child: Material(
+            type: MaterialType.transparency,
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
               ),
-            ],
-          ),
-          contentPadding: const EdgeInsets.only(
-            right: 20,
-            left: 20,
-            top: 20,
-            bottom: 40,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator.adaptive(),
+                  const SizedBox(height: 20),
+                  Text(
+                    message ?? 'Loading...',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              contentPadding: const EdgeInsets.only(
+                right: 20,
+                left: 20,
+                top: 20,
+                bottom: 40,
+              ),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    },
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      return ScaleTransition(
+        scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+        ),
+        child: child,
+      );
+    },
+  );
+}
 // showDialog(
 //   context: context,
 //   barrierDismissible: barrierDismissible,

@@ -48,6 +48,8 @@ class CompanyAddServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
-            )..loadData());
+              serviceLocator(),
+              serviceLocator(),
+            ));
   }
 }

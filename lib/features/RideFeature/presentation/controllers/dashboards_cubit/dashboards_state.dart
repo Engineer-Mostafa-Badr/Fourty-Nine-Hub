@@ -58,7 +58,10 @@ class DashboardsState
   final bool? isClientNotShownReason;
   final List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips;
   final List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips;
-  final List<HistoryTripEntity >? pastRideNonSocketTrips;
+  final List<HistoryTripEntity>? pastRideNonSocketTrips;
+  final List<EmergencyContactEntity>? emergencyContacts;
+  final SupportDetailsEntity? supportDetails;
+      final String? supportStatus;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -73,6 +76,9 @@ class DashboardsState
       this.tripStatus,
       this.lastStatus,
       this.activeTrip,
+      this.supportDetails,
+      this.supportStatus,
+      this.emergencyContacts,
       this.isChangedMindReason=false,
       this.isOtherReason=false,
       this.isClientNotShownReason=false,
@@ -91,6 +97,9 @@ class DashboardsState
         bool? isChangedMindReason,
         bool? isOtherReason,
         bool? isClientNotShownReason,
+        SupportDetailsEntity? supportDetails,
+        List<EmergencyContactEntity>? emergencyContacts,
+        String? supportStatus,
 
         List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
         List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
@@ -113,6 +122,9 @@ class DashboardsState
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
       isOtherReason: isOtherReason ?? this.isOtherReason,
       isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,
+      supportStatus: supportStatus ?? this.supportStatus,
+      supportDetails: supportDetails ?? this.supportDetails,
+      emergencyContacts: emergencyContacts ?? this.emergencyContacts,
     );
   }
 

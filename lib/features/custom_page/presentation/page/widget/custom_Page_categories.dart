@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
@@ -110,11 +111,14 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
 
   void changeNextVisibleState() {
     if (controller.position.userScrollDirection == ScrollDirection.reverse) {
-      isNextShow = false;
-    } else {
-      isNextShow = true;
+      if (isNextShow) {
+        setState(() => isNextShow = false);
+      }
+    } else if (controller.position.userScrollDirection == ScrollDirection.forward) {
+      if (!isNextShow) {
+        setState(() => isNextShow = true);
+      }
     }
-    setState(() {});
   }
 
   @override
@@ -130,10 +134,11 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
               return Column(
                 children: [
                   ListTile(
-                    subtitle: Text(LocaleKeys.favouriteDescription.localize),
+                    subtitle: Text(context.isArabic?convertToArabicNumbers(LocaleKeys.favouriteDescription.localize):LocaleKeys.favouriteDescription.localize),
                   ),
                   Expanded(
                     child: ListView.separated(
+                      controller: controller,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
@@ -186,7 +191,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                                       Image.asset(
                                         Assets.checkCircle,
                                         width: 24,
-                                        color: AppColors.PRIMARY_COLOR,
+                                        color: AppColors.getButtonPrimaryWhiteColor(context),
                                       ),
                                   ],
                                 ),
@@ -207,49 +212,53 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
             }
           },
         ),
-        floatingActionButton: AnimatedOpacity(
+        floatingActionButton: AnimatedSlide(
           duration: const Duration(milliseconds: 300),
-          opacity: isNextShow ? 1.0 : 0.0,
-          child: BlocConsumer<CustomPageCubit, CustomPageState>(
-            listener: (BuildContext context, state) {
-              print(
-                  "🟢 BlocConsumer Listener Triggered! New state: ${state.updateData}");
-              if (state.status == CustomPageStates.uploadSubCatSuccess) {
-                showSuccessMessage(
-                    context, LocaleKeys.updateSuccessfully.localize);
-                BlocProvider.of<EditPageCubit>(context).changePage(
-                    BlocProvider.of<EditPageCubit>(context).currentIndex + 1);
-              }
-            },
-            builder: (BuildContext context, state) {
-              print(
-                  "🔵 BlocConsumer Rebuild! Current state: ${state.updateData}");
-              return CustomFloatingActionButton(
-                onPressed: () {
-                  print("🟠 FloatingActionButton Pressed!");
-                  print(
-                      "📊 Current state.updateData before press: ${state.updateData}");
-                  print(
-                      "📊 Current state.favourite before press: ${state.favourite}");
-
-                  if (state.updateData!.length >= 3 &&
-                      state.updateData!.length <= 5) {
-                    context
-                        .read<CustomPageCubit>()
-                        .updateFavouriteCat(state.updateData!);
-                  } else {
+          offset: isNextShow ? Offset.zero : const Offset(0, 2),
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            opacity: isNextShow ? 1.0 : 0.0,
+            child: BlocConsumer<CustomPageCubit, CustomPageState>(
+              listener: (BuildContext context, state) {
+                print(
+                    "🟢 BlocConsumer Listener Triggered! New state: ${state.updateData}");
+                if (state.status == CustomPageStates.uploadSubCatSuccess) {
+                  showSuccessMessage(
+                      context, LocaleKeys.updateSuccessfully.localize);
+                  BlocProvider.of<EditPageCubit>(context).changePage(
+                      BlocProvider.of<EditPageCubit>(context).currentIndex + 1);
+                }
+              },
+              builder: (BuildContext context, state) {
+                print(
+                    "🔵 BlocConsumer Rebuild! Current state: ${state.updateData}");
+                return CustomFloatingActionButton(
+                  onPressed: () {
+                    print("🟠 FloatingActionButton Pressed!");
                     print(
-                        "⚠️ Invalid selection length: ${state.updateData!.length}");
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(LocaleKeys.atLeast3atMost5items.localize),
-                      ),
-                    );
-                  }
-                },
-                text: LocaleKeys.next.localize,
-              );
-            },
+                        "📊 Current state.updateData before press: ${state.updateData}");
+                    print(
+                        "📊 Current state.favourite before press: ${state.favourite}");
+
+                    if (state.updateData!.length >= 3 &&
+                        state.updateData!.length <= 5) {
+                      context
+                          .read<CustomPageCubit>()
+                          .updateFavouriteCat(state.updateData!);
+                    } else {
+                      print(
+                          "⚠️ Invalid selection length: ${state.updateData!.length}");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(context.isArabic?convertToArabicNumbers(LocaleKeys.atLeast3atMost5items.localize):LocaleKeys.atLeast3atMost5items.localize),
+                        ),
+                      );
+                    }
+                  },
+                  text: LocaleKeys.next.localize,
+                );
+              },
+            ),
           ),
         ),
         // floatingActionButton: AnimatedOpacity(

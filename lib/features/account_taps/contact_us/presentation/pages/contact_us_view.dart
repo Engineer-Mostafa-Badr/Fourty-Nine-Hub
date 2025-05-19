@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -34,7 +35,7 @@ class _ContactUsViewState extends State<ContactUsView> {
         preferredSize: const Size.fromHeight(46),
         child: BackAppBar(
           label: LocaleKeys.contactUs.localize,
-          subTitle: LocaleKeys.TeamHelp.localize,
+          subTitle:context.isArabic? 'فريق ٤٩ هاب جاهز للمساعدة':LocaleKeys.TeamHelp.localize,
           enableCustomAppBar: true,
           textColor: AppColors.getReversedTextColor(context),
         ),
@@ -61,74 +62,80 @@ class _ContactUsViewState extends State<ContactUsView> {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height-170.h,
+                minHeight: MediaQuery.of(context).size.height-140.h,
               ),
               child: IntrinsicHeight(
                 child: Form(
                   key: controller.formKey,
-                  child: Column(
-                    children: [
-                      const Sizer(
-                        height: 30,
-                      ),
-                      buildContainerPhoneAndEmail(
-                        size,
-                        LocaleKeys.email.localize,
-                        "49hup.app@gmail.com",
-                        Icons.email_outlined,
-                        () {},
-                      ),
-                      const Sizer(
-                        height: 50,
-                      ),
-                      DefaultTextFormField(
-                        contentPadding: EdgeInsets.zero,
-                        fillColor: Colors.transparent,
-                        borderColor: AppColors.getTextColor(context),
-                        currentController: controller.phoneController,
-                        hint: LocaleKeys.phoneOptional.localize,
-                        keyboardType: TextInputType.phone,
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                                color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Icon(
-                              Icons.phone,
-                              color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
-                              // size: 27,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      children: [
+                        const Sizer(
+                          height: 30,
+                        ),
+                        buildContainerPhoneAndEmail(
+                          size,
+                          LocaleKeys.email.localize,
+                          "49hup.app@gmail.com",
+                          Icons.email_outlined,
+                          () {},
+                        ),
+                        const Sizer(
+                          height: 50,
+                        ),
+                        DefaultTextFormField(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                          inputFormatter: [
+                            FilteringTextInputFormatter.digitsOnly, // يسمح بالأرقام فقط
+                          ],
+                          fillColor: Colors.transparent,
+                          borderColor: AppColors.getTextColor(context),
+                          currentController: controller.phoneController,
+                          hint: LocaleKeys.phoneOptional.localize,
+                          keyboardType: TextInputType.phone,
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                Icons.phone,
+                                color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
+                                // size: 27,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const Sizer(),
-                      DefaultTextFormField(
-                        contentPadding: const EdgeInsets.all(16),
-                        // contentPadding: EdgeInsets.all(32),
-                        fillColor: Colors.transparent,
-                        borderColor: AppColors.getTextColor(context),
-                        currentController: controller.messageController,
-                        hint: '${LocaleKeys.message.localize}...',
-                        hintColor:
-                            context.isDarkMode ? Colors.white : Colors.black54,
-                        maxLength: 150,
-                        maxLines: 5,
-                        hintStyle: Styles.headerText(color: context.isDarkMode ? Colors.white : Colors.black54,),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Spacer(),
-                      AppButton(
-                          radius: 25,
-                          color: AppColors.getReversedTextColor(context),
-                          label: LocaleKeys.send.localize,
-                          margin: 10,
-                          backColor: AppColors.getRedColor(context),
-                          onPressed: () => controller.createContactUs(context)),
-                    ],
+                        const Sizer(),
+                        DefaultTextFormField(
+                          contentPadding: const EdgeInsets.all(16),
+                          // contentPadding: EdgeInsets.all(32),
+                          fillColor: Colors.transparent,
+                          borderColor: AppColors.getTextColor(context),
+                          currentController: controller.messageController,
+                          hint: '${LocaleKeys.message.localize}...',
+                          hintColor:
+                              context.isDarkMode ? Colors.white : Colors.black54,
+                          maxLength: 150,
+                          maxLines: 5,
+                          hintStyle: Styles.headerText(color: context.isDarkMode ? Colors.white : Colors.black54,),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Spacer(),
+                        AppButton(
+                            radius: 25,
+                            color: AppColors.getReversedTextColor(context),
+                            label: LocaleKeys.send.localize,
+                            margin: 10,
+                            backColor: AppColors.getRedColor(context),
+                            onPressed: () => controller.createContactUs(context)),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -113,17 +113,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       ),
                                     );
                                   }),
-                              // drawerListTile(
-                              //   image: Assets.microphone,
-                              //   label:
-                              //       LocaleKeys.advertiseYourCompany.localize,
-                              //   onTap: () {
-                              //     AdInterstitialTop.loadIntersitialAd();
-                              //     AdInterstitialTop.showInterstitialAd();
-                              //     Navigator.pop(context);
-                              //     return context.push(Routes.CREATECOMPANYAD);
-                              //   },
-                              // ),
                               drawerListTile(
                                   image: Assets.quran,
                                   label: LocaleKeys.quraan.localize,

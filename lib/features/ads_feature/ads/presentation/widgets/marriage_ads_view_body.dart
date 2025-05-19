@@ -509,7 +509,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       }
 
       if (widget.state.adsRequestsLog!.isEmpty) {
-        return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
+        return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
       return MarriageRequest(
         scrollController: widget._scrollController,

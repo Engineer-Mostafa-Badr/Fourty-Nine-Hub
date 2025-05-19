@@ -300,7 +300,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               print("message $message ||| rate $rate");
                               cubit.rateTheClient(context: context, tripId: state.activeTrip?.tripId??'', comment: message, rate: rate);
                             },),
-                            if(state.tripStatus==TripState.support.name)BuildSafetySheet(params: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'notSpecial', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''),onClose: (){
+                            if(state.tripStatus==TripState.support.name)BuildSafetySheet(params: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracking', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''),onClose: (){
                               cubit.closeSafety();
                             },),
                           ],
