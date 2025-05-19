@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
@@ -27,26 +28,38 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:path/path.dart';
 
+import '../../../../../common/functions/global/upload_image.dart';
 import '../../../../../core/error/failure.dart';
 
+import '../../../../../core/utils/ride_method_helper.dart';
+import '../../../domain/entities/dashboards/create_non_track_offer_entity.dart';
+import '../../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/dashboards/trips_response_entity.dart';
+import '../../../domain/entities/dashboards/update_driver_settings_entity.dart';
 import '../../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../../domain/usecases/dashboards/get_accepted_ride_non_socket_trips_use_case.dart';
 import '../../../domain/usecases/dashboards/get_available_ride_non_socket_trips_use_case.dart';
+import '../../../domain/usecases/dashboards/get_driver_settings_usecase.dart';
 import '../../../domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../../../domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../../../domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../../../domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
+import '../../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import '../../pages/Register/Driver/upload_rider_images.dart';
 import '../../pages/dashboards/ride_mode_screen.dart';
 
 part 'dashboards_state.dart';
@@ -71,6 +84,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final GetAvailableNonSocketTripsUseCase getAvailableNonSocketTripsUseCase;
   final GetAcceptedNonSocketTripsUseCase getAcceptedNonSocketTripsUseCase;
   final GetPastNonSocketTripsUseCase getPastNonSocketTripsUseCase;
+  final CreateNonTrackOfferUseCase createNonTrackTripUseCase;
+  final UpdateDriverSettingsUseCase updateDriverSettingsUseCase;
+  final GetDriverSettingsUseCase getDriverSettingsUseCase;
+  final ListenToRemoveUntrackedTripUseCase listenToRemoveUntrackedTripUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -87,8 +104,259 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToAcceptOfferUseCase,
       this.listenToNewTripUseCase,
       this.listenToRemoveTripUseCase,
-      this.autoAcceptTripUseCase, this.getAvailableNonSocketTripsUseCase, this.getAcceptedNonSocketTripsUseCase, this.getPastNonSocketTripsUseCase,
+      this.autoAcceptTripUseCase, this.getAvailableNonSocketTripsUseCase, this.getAcceptedNonSocketTripsUseCase, this.getPastNonSocketTripsUseCase, this.createNonTrackTripUseCase, this.updateDriverSettingsUseCase, this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase,
   ) : super(const DashboardsState());
+
+
+
+  TextEditingController rideDriverExpireDateController = TextEditingController();
+
+
+  onSubmitUploadingDriverLicense(BuildContext context) async {
+
+    if (driverLicenseFormKey.currentState!.validate()) {
+      if (state.driverLicensePicture == null) {
+        showErrorMessage(context, "Please select driver license picture");
+        return;
+      }
+      if (state.backOfDriverLicensePicture == null) {
+        showErrorMessage(context, "Please select back of driver license picture");
+        return;
+      }
+      if (state.selfieDriverLicensePicture == null ) {
+        showErrorMessage(context, "Please select selfie driver license picture");
+        return;
+      }
+      showLoadingDialog(context, canPop: false);
+     await RideMethodHelper().uploadDriverLicense(
+          drivingImageInFront: state.driverLicensePicture!,
+         drivingImageBehind: state.backOfDriverLicensePicture!,
+         drivingExpiryDate: rideDriverExpireDateController.text, onSuccessUploaded: (bool isSuccess) async{
+        if (isSuccess) {
+
+          emit(state.copyWith(status: DashboardsStates.success));
+        } else {
+          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+        }
+      });
+      emit(state.copyWith(status: DashboardsStates.success));
+
+        await RideMethodHelper().confirmIdentity(verifyUserImage: state.selfieDriverLicensePicture!, onSuccessUploaded: (bool isSuccess) async{
+          if (isSuccess) {
+            showSuccessMessage(
+                context,
+                context.isArabic
+                    ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                    : "Successfully uploaded images, please wait for the approval of all data.");
+            context.pop();
+            context.pop();
+            emit(state.copyWith(status: DashboardsStates.success));
+          } else {
+            context.pop();
+            showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+          }
+        });
+
+      emit(state.copyWith(status: DashboardsStates.success));
+    }
+  }
+
+
+  onUploadDriverLicensePicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(driverLicensePicture: file));
+        });
+  }
+
+  onUploadBackOfDriverLicensePicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(backOfDriverLicensePicture: file));
+        });
+  }
+
+  onUploadSelfieDriverLicensePicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(selfieDriverLicensePicture: file));
+        });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  final formKey = GlobalKey<FormState>();
+  final idFormKey = GlobalKey<FormState>();
+  final driverLicenseFormKey = GlobalKey<FormState>();
+
+  TextEditingController ridePersonalDocExpireDateController = TextEditingController();
+
+  onSubmitUploadingId(BuildContext context,) async {
+    emit(state.copyWith(status: DashboardsStates.loading));
+    // DriverInfoEntity? driverInfo = state.driverInfo;
+    // LoadingInfoEntity? loaderInfo = state.loaderInfo;
+    if (idFormKey.currentState!.validate()) {
+      if (state.personalFrontIdPicture == null) {
+        showErrorMessage(context, "Please select front id picture");
+        return;
+      }
+      if (state.personalBackIdPicture == null) {
+        showErrorMessage(context, "Please select back id picture");
+        return;
+      }
+      showLoadingDialog(context, canPop: false);
+      emit(state.copyWith(status: DashboardsStates.loading));
+      await RideMethodHelper()
+          .uploadDriverId(idImageInBehind: state.personalBackIdPicture!, idImageInFront: state.personalFrontIdPicture!,
+          idExpiryDate: ridePersonalDocExpireDateController.text,
+          onSuccessUploaded: (bool isSuccess) async{
+        if (isSuccess) {
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تم رفع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                  : "Successfully uploaded image, please wait for the approval of all data.");
+          context.pop();
+          context.pop();
+          emit(state.copyWith(status: DashboardsStates.success));
+        } else {
+          context.pop();
+          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+        }
+      });
+      Future.delayed(const Duration(seconds: 3));
+      // driverInfo?.isUploadDriverId = true;
+    }
+  }
+
+  onUploadPersonalFrontIdPicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(personalFrontIdPicture: file));
+        });
+  }
+
+  onUploadPersonalBackIdPicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(personalBackIdPicture: file));
+        });
+  }
+
+  Future<void> getDriverSettings() async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await getDriverSettingsUseCase(NoParams());
+
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        // log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+          (data) {
+        log("Suzccess");
+        emit(state.copyWith(
+          status: DashboardsStates.successOffer,
+          driverSettingsEntity: data,
+        ));
+
+      },
+    );
+  }
+  Future<void> updateDriverSettings(
+      bool isReady) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await updateDriverSettingsUseCase(UpdateDriverSettingsParams(isReady: isReady));
+
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        // log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+          (data) {
+        log("Suzccess");
+        emit(state.copyWith(
+          status: DashboardsStates.successOffer,
+          updateDriverSettingsEntity: data,
+          offerCreatedShown: false, // freshly created
+        ));
+        getDriverSettings();
+      },
+    );
+  }
+
+  Future<void> createNonTrackOffer(
+      CreateNonTrackOfferParams params,context) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await createNonTrackTripUseCase(params);
+
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        // log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+          (data) {
+        log("Suzccess");
+        emit(state.copyWith(
+          status: DashboardsStates.successOffer,
+          createNonTrackOfferEntity: data,
+          offerCreatedShown: false, // freshly created
+        ));
+        showSuccessMessage(context, data.message);
+          },
+    );
+  }
+
+  void clearCreateOfferState() {
+    emit(state.copyWith(
+      status: DashboardsStates.initState,
+      createNonTrackOfferEntity: null,
+      offerCreatedShown: true,
+    ));
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
   List<TripEntity> availableTripsNonSocket = [];
 
   List<HistoryTripEntity > pastRideNonSocketData = [];
@@ -231,15 +499,59 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
     );
   }
-
-  void changeIndex(int index,BuildContext context,RideModeParams params){
+  void changeIndex(int index, BuildContext context, RideModeParams params) {
+    final settings = state.driverSettingsEntity; // Assuming this contains `isReady`
 
     emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
-    if(index==0 && params.isSocket == true)loadAvailableRideTrips(context);
-    /// method load
-    if(index== 0&& params.isSocket == false && params.modeType == "ride")loadInitialAvailableNonSocketTrips();
-    if(index== 4&& params.isSocket == false && params.modeType == "ride")loadInitialAcceptedNonSocketTrips();
-    if(index==2&& params.isSocket == false && params.modeType == "ride")loadInitialPastNonSocketTrips();
+
+    // Index 0: Available Trips
+    if (index == 0) {
+      if (params.isSocket == true) {
+        loadAvailableRideTrips(context);
+      } else if (params.modeType == "ride" && settings?.isReady == true) {
+        loadInitialAvailableNonSocketTrips();
+      }
+      return; // prevent loading other data if index is 0
+    }
+
+    // Index 2: Past Trips
+    if (index == 2 && params.isSocket == false && params.modeType == "ride") {
+      loadInitialPastNonSocketTrips();
+    }
+
+    // Index 3: Settings
+    if (index == 3 && params.isSocket == false && params.modeType == "ride") {
+      getDriverSettings();
+    }
+
+    // Index 4: Accepted Trips
+    if (index == 4 && params.isSocket == false && params.modeType == "ride") {
+      loadInitialAcceptedNonSocketTrips();
+    }
+  }
+
+  // void changeIndex(int index,BuildContext context,RideModeParams params){
+  //   final settings = state.driverSettingsEntity;
+  //   emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
+  //   if(index==0 && params.isSocket == true)loadAvailableRideTrips(context);
+  //   /// method load
+  //   if(index== 0&& params.isSocket == false && params.modeType == "ride")loadInitialAvailableNonSocketTrips();
+  //   if(index== 4&& params.isSocket == false && params.modeType == "ride")loadInitialAcceptedNonSocketTrips();
+  //   if(index==2&& params.isSocket == false && params.modeType == "ride")loadInitialPastNonSocketTrips();
+  //   if(index==3&& params.isSocket == false && params.modeType == "ride")getDriverSettings();
+  // }
+
+  void listenToRemoveTrip() {
+    CliLogger.info('Remove Trip');
+    // TripsResponseEntity
+    listenToRemoveTripUseCase((tripId) {
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      log("tripId.toString()${tripId.toString()}");
+      if(tripId.isNotEmpty)list.removeWhere((e)=>e.id==tripId);
+      // log(trip.toString());
+      // list.insert(0, trip);
+      emit(state.copyWith(availableRideTrips: list));
+    });
   }
 
   void listenToNewTrip() {
@@ -253,16 +565,16 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     });
   }
 
-  void listenToRemoveTrip() {
+  void listenToRemoveUntrackedTrip() {
     CliLogger.info('Remove Trip');
     // TripsResponseEntity
-    listenToRemoveTripUseCase((tripId) {
-      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+    listenToRemoveUntrackedTripUseCase((tripId) {
+      List<AvailableRideNonSocketTripEntity> list = availableRideNonSocketData ?? [];
       log("tripId.toString()${tripId.toString()}");
-      if(tripId.isNotEmpty)list.removeWhere((e)=>e.id==tripId);
+      if(tripId.isNotEmpty)list.removeWhere((e)=>e.tripDetails?.id==tripId);
       // log(trip.toString());
       // list.insert(0, trip);
-      emit(state.copyWith(availableRideTrips: list));
+      emit(state.copyWith(availableRideNonSocketTrips: list));
     });
   }
 
@@ -289,6 +601,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       emit(state.copyWith(availableRideTrips: list));
     });
   }
+
   void listenToAcceptOffer() {
     CliLogger.info('Listen To Update Trip Auto Accept');
     listenToAcceptOfferUseCase((trip) {

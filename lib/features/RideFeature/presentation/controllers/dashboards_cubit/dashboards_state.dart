@@ -51,6 +51,17 @@ class DashboardsState
   final List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips;
   final List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips;
   final List<HistoryTripEntity >? pastRideNonSocketTrips;
+  final CreateNonTrackOfferEntity? createNonTrackOfferEntity;
+  final bool? offerCreatedShown;
+  final UpdateDriverSettingsEntity? updateDriverSettingsEntity;
+  final DriverSettingsEntity? driverSettingsEntity;
+  final XFile? personalFrontIdPicture;
+  final XFile? personalBackIdPicture;
+  final XFile? personalCriminalRecordPicture;
+  final XFile? personalDrugAnalysisPicture;
+  final XFile? driverLicensePicture;
+  final XFile? backOfDriverLicensePicture;
+  final XFile? selfieDriverLicensePicture;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -62,6 +73,17 @@ class DashboardsState
       this.availableRideNonSocketTrips,
       this.acceptedRideNonSocketTrips,
       this.pastRideNonSocketTrips,
+      this.createNonTrackOfferEntity,
+        this.offerCreatedShown = false,
+        this.updateDriverSettingsEntity ,
+        this.driverSettingsEntity ,
+        this.personalFrontIdPicture,
+        this.personalBackIdPicture,
+        this.personalCriminalRecordPicture,
+        this.personalDrugAnalysisPicture,
+        this.driverLicensePicture,
+        this.backOfDriverLicensePicture,
+        this.selfieDriverLicensePicture,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -74,6 +96,17 @@ class DashboardsState
         List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
         List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
         List<HistoryTripEntity >? pastRideNonSocketTrips,
+        CreateNonTrackOfferEntity? createNonTrackOfferEntity,
+        bool? offerCreatedShown,
+        UpdateDriverSettingsEntity? updateDriverSettingsEntity,
+        DriverSettingsEntity? driverSettingsEntity,
+        XFile? personalBackIdPicture,
+        XFile? personalFrontIdPicture,
+        XFile? personalCriminalRecordPicture,
+        XFile? personalDrugAnalysisPicture,
+        XFile? driverLicensePicture,
+        XFile? backOfDriverLicensePicture,
+        XFile? selfieDriverLicensePicture,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -86,6 +119,19 @@ class DashboardsState
       availableRideNonSocketTrips: availableRideNonSocketTrips ?? this.availableRideNonSocketTrips,
       acceptedRideNonSocketTrips: acceptedRideNonSocketTrips ?? this.acceptedRideNonSocketTrips,
       pastRideNonSocketTrips: pastRideNonSocketTrips ?? this.pastRideNonSocketTrips,
+      createNonTrackOfferEntity: createNonTrackOfferEntity ?? this.createNonTrackOfferEntity,
+      offerCreatedShown: offerCreatedShown ?? this.offerCreatedShown,
+      updateDriverSettingsEntity: updateDriverSettingsEntity ?? this.updateDriverSettingsEntity,
+      driverSettingsEntity: driverSettingsEntity ?? this.driverSettingsEntity,
+      personalFrontIdPicture: personalFrontIdPicture ?? this.personalFrontIdPicture,
+      personalBackIdPicture: personalBackIdPicture ?? this.personalBackIdPicture,
+      personalCriminalRecordPicture: personalCriminalRecordPicture ?? this.personalCriminalRecordPicture,
+      personalDrugAnalysisPicture: personalDrugAnalysisPicture ?? this.personalDrugAnalysisPicture,
+      driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
+      backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
+      selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
+
+
     );
   }
 

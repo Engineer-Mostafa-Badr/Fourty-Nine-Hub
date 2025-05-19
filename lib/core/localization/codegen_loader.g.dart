@@ -1623,7 +1623,10 @@ class CodegenLoader extends AssetLoader{
   "youDontHaveAcceptedOffer": "ليس لديك أي عروض مقبولة حتى الآن",
   "youDontHavePendingOffer": "ليس لديك أي عروض قيد الانتظار حتى الآن",
   "youDontHavePastOffer": "ليس لديك أي عروض سابقة حتى الآن",
-  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن"
+  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
+  "selectFromList": "اختر من القائمة",
+  "selectFromMap": "اختر من الخريطة",
+  "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3249,7 +3252,10 @@ static const Map<String,dynamic> _en = {
   "youDontHaveAcceptedOffer": "You don't Have Accepted Offers",
   "youDontHavePendingOffer": "You don't Have Pending Offers",
   "youDontHavePastOffer": "You don't Have Past Offers",
-  "youDontHaveAvailableOffer": "You don't Have Available Offers"
+  "youDontHaveAvailableOffer": "You don't Have Available Offers",
+  "selectFromList": "Select from list",
+  "selectFromMap": "Select from map",
+  "youCantGetTripUntilYouReady": "You can't get trips until you ready"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

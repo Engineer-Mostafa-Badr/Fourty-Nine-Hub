@@ -3483,6 +3483,9 @@ class AppPages {
                 name: Routes.supportRideScreen,
                 builder: (context, state) => SupportRideScreen(),
               ),
+
+
+
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
                 name: Routes.supportClientDetailsScreen,

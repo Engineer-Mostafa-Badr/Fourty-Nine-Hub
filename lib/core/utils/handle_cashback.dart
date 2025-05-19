@@ -29,7 +29,7 @@ class HandleCashback {
         num++;
         CacheManager.setInt(key, num);
       }
-      print("$key $num");
+      print("xx1 $key $num");
     }
   }
 
