@@ -9,7 +9,7 @@ import '../labels/label.dart';
 class AppButton extends StatelessWidget {
   final double? height, margin, padding, radius, width, iconSize;
   final Color? backColor, textColor;
-  final String label;
+  final String? label;
   final Function onPressed;
   final Widget? widget;
   final TextStyle? style;
@@ -20,7 +20,7 @@ class AppButton extends StatelessWidget {
   final BoxBorder? border;
   const AppButton({
     super.key,
-    required this.label,
+     this.label,
     required this.onPressed,
     this.backColor,
     this.height,
@@ -72,7 +72,7 @@ class AppButton extends StatelessWidget {
                     ),
                   SizedBox(
                     child: Label(
-                      text: label,
+                      text: label ?? "",
                       style: style ??
                           Styles.mediumText(
                             color: color ?? Colors.white,

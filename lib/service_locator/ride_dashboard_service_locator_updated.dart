@@ -24,13 +24,17 @@ import '../features/RideFeature/data/repositories/trip_repository_impl.dart';
 import '../features/RideFeature/domain/repositories/trip_repository.dart';
 import '../features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_accepted_ride_non_socket_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_available_ride_non_socket_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_driver_settings_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
@@ -80,10 +84,18 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<EditEmergencyContactsUseCase>(() => EditEmergencyContactsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AddEmergencyContactsUseCase>(() => AddEmergencyContactsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<WatchingTripsUseCase>(() => WatchingTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateNonTrackOfferUseCase>(() => CreateNonTrackOfferUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateDriverSettingsUseCase>(() => UpdateDriverSettingsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDriverSettingsUseCase>(() => GetDriverSettingsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToRemoveUntrackedTripUseCase>(() => ListenToRemoveUntrackedTripUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
