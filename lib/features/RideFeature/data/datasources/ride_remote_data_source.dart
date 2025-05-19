@@ -52,6 +52,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_b
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
@@ -107,6 +108,7 @@ abstract class RideRemoteDataSource {
       GetRideCategoriesParams params);
   Future<Either<Failure, bool>> listenToUpdateLocation(
       UpdateSocketLocationParams params);
+  Future<Either<Failure, bool>> watchingTripsParams(WatchingTripsParams params);
   Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(
       GetRideCategoriesParams params);
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
@@ -950,6 +952,22 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     } catch (e) {
       CliLogger.error('can\'t Update Location error $e');
       return const Left(ServerFailure(message: "can't Update Location "));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> watchingTripsParams(WatchingTripsParams params) async {
+    try {
+      CliLogger.info('Listen To Watching Trips');
+      CliLogger.info('Listen To Watching Trips ${params.toJson()}');
+      SharedWebSocket.socket!.emit(SocketIOEvents.watchingTrips, params.toJson());
+      CliLogger.info(
+          "SocketIOEvents.watchingTrips${SocketIOEvents.watchingTrips}");
+
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t Watching Trips error $e');
+      return const Left(ServerFailure(message: "can't Watching Trips "));
     }
   }
 

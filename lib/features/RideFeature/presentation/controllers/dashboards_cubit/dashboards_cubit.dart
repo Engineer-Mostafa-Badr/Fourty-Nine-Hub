@@ -38,10 +38,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -88,6 +90,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final CreateDriverRatingUsecase createDriverRatingUsecase;
   final UpdateDriverRatingUsecase updateDriverRatingUsecase;
   final CreateRiderOfferUseCase createRiderOfferUseCase;
+  final WatchingTripsUseCase watchingTripsUseCase;
   final ListenToUpdateTripAutoAcceptUseCase listenToUpdateTripAutoAcceptUseCase;
   final ListenToUpdateTripPriceUseCase listenToUpdateTripPriceUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
@@ -143,6 +146,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     this.getEmergencyContactsUseCase,
     this.addEmergencyContactsUseCase,
     this.editEmergencyContactsUseCase,
+    this.watchingTripsUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
 
@@ -158,6 +162,19 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     hasMorePastNonSocketTrips = true;
     await getPastNonSocketTrips();
     emit(state.copyWith(status: DashboardsStates.success));
+  }
+
+
+  Future<void> emitWatchingTrips(List<String> tripIds) async {
+    var user = UserCubit.to.state.data;
+    final result = await watchingTripsUseCase(
+        WatchingTripsParams(tripIds: tripIds, driverImage: user?.profilePicture??'',driverId:user?.id??'')
+    );
+    result.fold(
+            (l) => emit(state.copyWith(failure: l, status: DashboardsStates.error)),
+            (r) async {
+          if(r==true)log("Location Updated Successfully");
+        });
   }
 
   Future<void> getPastNonSocketTrips() async {
@@ -383,13 +400,17 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
+  bool isLoadingAvailableRideTrips = false;
   void loadAvailableRideTrips(BuildContext context) async {
+    isLoadingAvailableRideTrips=true;
     print("loadAvailableRideTrips1");
     emit(state.copyWith(availableRideTrips: []));
     currentPage = 1;
+    availableRideTrips.clear();
     hasMoreData = true;
     await getAvailableRideTrips(context);
     print("loadAvailableRideTrips2");
+    isLoadingAvailableRideTrips=false;
   }
 
   // List<AvailableRideTripEntity> availableRideTrips = [];
@@ -397,6 +418,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
+  List<AvailableRideTripEntity> availableRideTrips = [];
 
   Future<void> getAvailableRideTrips(BuildContext context) async {
     if (!hasMoreData || isLoadingMore) return;
@@ -415,9 +437,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         emit(state.copyWith(failure: failure, status: DashboardsStates.error));
       },
       (data) {
-        print("objectavailableRideTrips");
-        List<AvailableRideTripEntity> availableRideTrips = [];
-        availableRideTrips.addAll(state.availableRideTrips ?? []);
+        List<String> tripIds = data.map((e) => e.id).toList();
+        emitWatchingTrips(tripIds);
+        // availableRideTrips.addAll(state.availableRideTrips ?? []);
         availableRideTrips.addAll(data);
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -666,17 +688,19 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) {
       return;
     }
-    emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
-
+    // emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
+    showLoadingDialog(context);
     final Either<Failure, bool> result = await createNewOfferDashboardUsecase(param);
 
     if (isClosed) return;
     result.fold(
       (failure) {
+        context.pop();
         log("Failure ${getFailureMessage(failure, context)}");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (settings) {
+        context.pop();
         log("Suzccess");
         emit(state.copyWith(status: DashboardsStates.successOffer));
       },
@@ -726,10 +750,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> createOffer({required String tripId, required num price, required BuildContext context, required String subCategoryId}) async {
-    emit(state.copyWith(status: DashboardsStates.loadingAcceptOffer));
+    // emit(state.copyWith(status: DashboardsStates.loadingAcceptOffer));
+    showLoadingDialog(context);
     Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     final response = await createRiderOfferUseCase(CreateRiderOfferParams(tripId: tripId, price: price, lat: currentPosition.latitude, lng: currentPosition.longitude));
     response.fold((l) {
+      context.pop();
       String errorName = getFailureName(l, context);
       errorName == 'DebtError'
           ? showDebtDialog(context, subCategoryId)
@@ -738,6 +764,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
               : showErrorMessage(context, getFailureMessage(l, context));
       emit(state.copyWith(failure: l, status: DashboardsStates.error));
     }, (data) {
+      context.pop();
       emit(state.copyWith(status: DashboardsStates.success));
     });
   }
@@ -1010,17 +1037,38 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
     );
   }
-  addEmergencyContacts(BuildContext context,String name , String phone) async {
-    emit(state.copyWith(status: DashboardsStates.loading));
-    final Either<Failure, EmergencyContactEntity> result = await addEmergencyContactsUseCase(EmergencyContactEntity(name: name,phoneNumber: phone,id: ''));
+  addEmergencyContacts({required BuildContext context, required String name, required String phoneNumber,required int index}) async {
+    showLoadingDialog(context);
+
+    final Either<Failure, EmergencyContactEntity> result = await addEmergencyContactsUseCase(EmergencyContactEntity(name: name,phoneNumber: phoneNumber,id: ''));
 
     result.fold(
       (failure) {
+        context.pop();
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (addedContact) async {
+        context.pop();
         List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
         contacts.add(addedContact);
+        if(contacts.length>index){
+          if(index==1) {
+            firstNameController.clear();
+            firstPhoneController.clear();
+          }else if(index == 2) {
+            secondNameController.clear();
+            secondPhoneController.clear();
+          }else if(index == 3) {
+            thirdNameController.clear();
+            thirdPhoneController.clear();
+          }else if(index == 4) {
+            fourthNameController.clear();
+            fourthPhoneController.clear();
+          }else if(index == 5) {
+            fifthNameController.clear();
+            fifthPhoneController.clear();
+          }
+        }
         if(contacts.length==1) {
           firstNameController.text=contacts[0].name;
           firstPhoneController.text=contacts[0].phoneNumber;

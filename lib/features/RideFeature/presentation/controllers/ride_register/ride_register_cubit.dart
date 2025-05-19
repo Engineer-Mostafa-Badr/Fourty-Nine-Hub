@@ -1095,31 +1095,34 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   onRegister(BuildContext context,List<String> subCategoryIds,bool isSocket,bool isShipping) async {
     DriverInfoEntity? driverInfo = state.driverInfo;
-    if (state.personalPicture == null) {
-      showErrorMessage(context, "Please select profile picture");
+    print("state.personalPicture${state.personalPicture?.path}");
+    if (state.personalPicture == null||(state.personalPicture?.path.isEmpty??false)) {
+      showErrorMessage(context, context.isArabic?"برجاء اختيار صورة الملف الشخصي":"Please select profile picture");
       return;
     }
     if (formKey.currentState!.validate()) {
       if (state.selectedBrand == null || (state.selectedBrand?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select vehicle brand");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار ماركة السيارة":"Please select vehicle brand");
         return;
       }
 
       if (state.selectedModel == null || (state.selectedModel?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select vehicle Model");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار موديل السيارة":"Please select vehicle Model");
         return;
       }
+
       if (state.selectedColors == null || (state.selectedColors?.id.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select color");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار لون السيارة":"Please select color");
         return;
       }
 
       if (state.selectedPlan == null || (state.selectedPlan?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select plan");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار نوع الرحلة":"Please select plan");
         return;
       }
+
       if (state.selectedGov == null || (state.selectedGov?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select city");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار المدينة":"Please select city");
         return;
       }
 
@@ -1144,6 +1147,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           vehicleYear: rideVehicleProductionYearController.text,
           workingType: state.selectedPlan ?? '',
           subcategoryIds: subCategoryIds);
+
       final Either<Failure, bool> result = await registerRideSpecialUseCase(params);
 
       result.fold(
@@ -1306,7 +1310,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     SubCategoryEntityUpdated intercityCategory = subCategories.firstWhere((element) => element.subCategoryId == intercity);
     if (id == captain) {
       if (!isMale) {
-        showErrorMessage(context, "You are female, try register as a lady or change your gender from setting.");
+        showErrorMessage(context, context.isArabic?"انت فتاة , يرجى التسجيل في السيدات او تغيير الجنس من الاعدادات":"You are female, try register as a lady or change your gender from setting.");
         return;
       }
       if (selectedItem.isSelected == true) {
@@ -1335,7 +1339,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       }
     } else if (id == lady) {
       if (isMale) {
-        showErrorMessage(context, "You are male, try register as a captain or change your gender from setting.");
+        showErrorMessage(context, context.isArabic?"انت رجل , يرجى التسجيل في كابتن او تغيير الجنس من الاعدادات":"You are male, try register as a captain or change your gender from setting.");
         return;
       }
       if (selectedItem.isSelected == true) {

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -79,7 +80,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+        _scrollController.position.maxScrollExtent) {
       widget.params.isSocket == true
           ? context.read<DashboardsCubit>().getAvailableRideTrips(context)
           : context.read<DashboardsCubit>().getAvailableTrips(context);
@@ -210,26 +211,29 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   child: state.isLoadingAvailable
                                       ? const Center(child: CircularProgressIndicator())
                                       : widget.params.isSocket == true
-                                          ? cubit.isLoadingMore
+                                          ? cubit.isLoadingAvailableRideTrips
                                               ? const Center(child: CircularProgressIndicator())
                                               : state.availableRideTrips != null
-                                                  ? ListView.separated(
-                                                      controller:
-                                                          _availableTripsScrollController,
-                                                      itemBuilder: (context,
-                                                              index) =>
-                                                          AvailableRideTripItem(
-                                                              tripEntity: state
-                                                                      .availableRideTrips![
-                                                                  index]),
-                                                      itemCount: state
-                                                          .availableRideTrips!
-                                                          .length,
-                                                      separatorBuilder:
-                                                          (BuildContext context,
-                                                                  int index) =>
-                                                              const SizedBox(
-                                                                  height: 15))
+                                                  ? Column(
+                                                    children: [
+                                                      Expanded(
+                                                        child: ListView.separated(
+                                                            controller:
+                                                                _availableTripsScrollController,
+                                                            itemBuilder: (context,
+                                                                    index) =>
+                                                                AvailableRideTripItem(
+                                                                    tripEntity: cubit.availableRideTrips[index]),
+                                                            itemCount: cubit.availableRideTrips.length,
+                                                            separatorBuilder:
+                                                                (BuildContext context,
+                                                                        int index) =>
+                                                                    const SizedBox(
+                                                                        height: 15)),
+                                                      ),
+
+                                                    ],
+                                                  )
                                                   : const SizedBox.shrink()
                                           : cubit.availableRideNonSocketData == null
                                               ? const SizedBox.shrink()
