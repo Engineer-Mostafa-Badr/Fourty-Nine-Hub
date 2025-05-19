@@ -62,7 +62,6 @@ class DashboardsState
   final List<EmergencyContactEntity>? emergencyContacts;
   final SupportDetailsEntity? supportDetails;
       final String? supportStatus;
-  final List<HistoryTripEntity >? pastRideNonSocketTrips;
   final CreateNonTrackOfferEntity? createNonTrackOfferEntity;
   final bool? offerCreatedShown;
   final UpdateDriverSettingsEntity? updateDriverSettingsEntity;
