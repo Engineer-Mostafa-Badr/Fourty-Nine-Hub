@@ -13,7 +13,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 
 class FacebookPeopleView extends StatefulWidget {
-  const FacebookPeopleView({super.key});
+  const FacebookPeopleView({super.key, required this.scrollController});
+  final ScrollController scrollController;
 
   @override
   State<FacebookPeopleView> createState() => _FacebookPeopleViewState();
@@ -42,6 +43,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
         backgroundColor: AppColors.getFillColor(context),
         color: AppColors.getTextColor(context),
         child: ListView(
+          controller: widget.scrollController,
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 15.h),
           children: [

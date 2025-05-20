@@ -41,58 +41,55 @@ class ShareTheApp extends StatelessWidget {
           child: BlocBuilder<ShareAppCubit, ShareAppState>(
             builder: (BuildContext context, state) {
               if (state.status == ShareAppStates.success) {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildStatisticsWidget(
-                          context: context,
-                          user: state.shareApp?.userCount ?? 0,
-                          balance: state.shareApp?.shareBalance ?? 0,
-                          gift: state.shareApp?.referralGift ?? 0,
-                        ),
-                        const Sizer(
-                          height: 64,
-                        ),
-                        Image.asset(
-                          Assets.share,
-                          width: double.infinity,
-                          height: 300,
-                        ),
-                        const Sizer(
-                          height: 48,
-                        ),
-                        Center(
-                          child: Label(
-                            text:context.isArabic?'اوصي بنا':LocaleKeys.recommendUs.localize,
-                            style: Styles.headerText(
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                        Label(
-                          text: context.isArabic?'شارك الكود مع أصدقائك واحصل على ٥٠ جنيه مصري لكل واحد':LocaleKeys.shareFodeFriends.localize,
-                          style: Styles.mediumText(
+                return Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildStatisticsWidget(
+                        context: context,
+                        user: state.shareApp?.userCount ?? 0,
+                        balance: state.shareApp?.shareBalance ?? 0,
+                        gift: state.shareApp?.referralGift ?? 0,
+                      ),
+                      const Sizer(),
+                      Image.asset(
+                        Assets.share,
+                        width: double.infinity,
+                        height: 600.h,
+                      ),
+                      const Sizer(),
+                      Center(
+                        child: Label(
+                          text: context.isArabic
+                              ? 'اوصي بنا'
+                              : LocaleKeys.recommendUs.localize,
+                          style: Styles.headerText(
                             color: context.isDarkMode
                                 ? Colors.white
                                 : Colors.black,
                           ),
-                          maxLines: 5,
                         ),
-                        const Sizer(
-                          height: 32,
+                      ),
+                      Label(
+                        text: context.isArabic
+                            ? 'شارك الكود مع أصدقائك واحصل على ٥٠ جنيه مصري لكل واحد'
+                            : LocaleKeys.shareFodeFriends.localize,
+                        style: Styles.mediumText(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
-                        _buildLinkWidget(
-                            context: context,
-                            referralGift: state.shareApp?.referralGift ?? 0),
-                        const Sizer(),
-                      ],
-                    ),
+                        maxLines: 5,
+                      ),
+                      const Sizer(
+                        height: 32,
+                      ),
+                      _buildLinkWidget(
+                          context: context,
+                          referralGift: state.shareApp?.referralGift ?? 0),
+                      const Sizer(),
+                    ],
                   ),
                 );
               }
@@ -112,11 +109,14 @@ class ShareTheApp extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          onLongPress: () {
+          onTap: () {
             Clipboard.setData(ClipboardData(text: referralId)).then((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(LocaleKeys.referralClipboard.localize)),
-              );
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(LocaleKeys.referralClipboard.localize)),
+                );
+              });
             });
           },
           child: BadgedLabel(
@@ -125,7 +125,8 @@ class ShareTheApp extends StatelessWidget {
               color: AppColors.getButtonPrimaryColor(context),
               radius: 15,
               style: Styles.mediumText(
-                color: context.isDarkMode ? AppColors.PRIMARY_COLOR :Colors.white ,
+                color:
+                    context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
               ),
               label: '${LocaleKeys.yourReferralID.localize} $referralId'),
         ),
@@ -133,10 +134,10 @@ class ShareTheApp extends StatelessWidget {
           height: 32,
         ),
         AppButton(
-          backColor:AppColors.getRedColor(context) ,
+          backColor: AppColors.getRedColor(context),
           label: LocaleKeys.shareTheApp.localize,
           style: Styles.mediumText(
-            color: AppColors.getReversedTextColor(context) ,
+            color: AppColors.getReversedTextColor(context),
           ),
           radius: 15,
           height: 52,
@@ -199,7 +200,7 @@ https://example.com/download
               context,
               color: AppColors.getButtonPrimaryColor(context),
               title: LocaleKeys.userShare.localize,
-              subTitle: '${context.isArabic?numAr(user):user}',
+              subTitle: '${context.isArabic ? numAr(user) : user}',
             ),
           ),
           const Sizer(),
@@ -207,17 +208,18 @@ https://example.com/download
             child: _buildStatisticsItem(
               context,
               color: AppColors.getButtonPrimaryColor(context),
-              title: context.isArabic?'استرداد نقدي':LocaleKeys.balance.localize,
-              subTitle: '${context.isArabic?numAr(balance):balance}',
+              title: context.isArabic
+                  ? 'استرداد نقدي'
+                  : LocaleKeys.balance.localize,
+              subTitle: '${context.isArabic ? numAr(balance) : balance}',
             ),
           ),
           const Sizer(),
           Expanded(
-            child: _buildStatisticsItem(
-              context,
+            child: _buildStatisticsItem(context,
                 color: AppColors.getButtonPrimaryColor(context),
                 title: LocaleKeys.gift.localize,
-                subTitle: '${context.isArabic?numAr(gift):gift}'),
+                subTitle: '${context.isArabic ? numAr(gift) : gift}'),
           ),
         ],
       ),
@@ -225,8 +227,7 @@ https://example.com/download
   }
 
   Widget _buildStatisticsItem(
-      BuildContext context ,
-      {
+    BuildContext context, {
     required Color color,
     required String title,
     required String subTitle,
