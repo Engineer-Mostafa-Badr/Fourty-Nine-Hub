@@ -22,8 +22,7 @@ class SocialIconBuilder extends StatelessWidget {
       return CustomNotificationWidget(
         icon: SvgPicture.asset(
           Assets.social,
-          height: 30,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitWidth,
           semanticsLabel: 'social',
           color: context.isDarkMode?AppColors.getRedColor(context):null,
         ),

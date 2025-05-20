@@ -15,7 +15,8 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/pages/f
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class FaceBookView extends StatefulWidget {
-  const FaceBookView({super.key});
+  const FaceBookView({super.key, required this.scrollController});
+  final ScrollController scrollController;
 
   @override
   State<FaceBookView> createState() => _FaceBookViewState();
@@ -23,19 +24,17 @@ class FaceBookView extends StatefulWidget {
 
 class _FaceBookViewState extends State<FaceBookView>
     with TickerProviderStateMixin {
-  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SocialPostsCubit>().getAllFeed();
-    }
-  }
+  // void _onScroll() {
+  //   if (widget.scrollController.position.pixels >=
+  //       widget.scrollController.position.maxScrollExtent - 200) {
+  //     context.read<SocialPostsCubit>().getAllFeed();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +61,7 @@ class _FaceBookViewState extends State<FaceBookView>
           controller.onRefresh();
         },
         child: ListView(
-            controller: _scrollController,
+            controller: widget.scrollController,
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             children: [
