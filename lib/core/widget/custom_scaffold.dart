@@ -435,7 +435,6 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("showNavBAr $showNavBAr");
     return BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
       builder: (context, state) {
         var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);

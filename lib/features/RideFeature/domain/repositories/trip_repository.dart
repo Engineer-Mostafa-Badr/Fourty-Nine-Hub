@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 
 import '../../../../core/error/failure.dart';
+import '../entities/dashboards/driver_settings_entity.dart';
 import '../entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
@@ -31,7 +33,11 @@ abstract class TripRepository {
    Future<Either<Failure, List<AcceptedRideNonSocketTripEntity >>> getAcceptedNonSocketTrips(ClientPendingTripParams params);
    Future<Either<Failure, List<HistoryTripEntity  >>> getPastNonSocketTrips(ClientPendingTripParams params);
    Future<Either<Failure, TripsResponseEntity>> getPastTrips(String params);
+   Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts();
+   Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params);
+   Future<Either<Failure, EmergencyContactEntity>> editEmergencyContacts(EmergencyContactEntity params);
    Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
+   Future<Either<Failure, DriverSettingsEntity >> getDriverSettings();
    Future<Either<Failure, bool>> updateSettings(UpdateSettingsDashboardUsecaseParam params);
    Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params);
    Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params);
@@ -49,6 +55,7 @@ abstract class TripRepository {
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
    void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
    void listenToRemoveTrip(Function(String tripId) params);
+   void listenToRemoveUntrackedTrip(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
 
 

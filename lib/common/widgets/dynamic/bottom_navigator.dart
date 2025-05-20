@@ -47,7 +47,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         index: 0,
         cacheKey: 'adCount',
         image: Assets.spcialAdsIcon,
-        route: Routes.ADS,
+        route: Routes.CREATECOMPANYAD,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.list,
@@ -93,8 +93,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         if (index == 4) {
           Scaffold.of(context).openDrawer();
         } else if (index == 0) {
-          soonDialog(context);
-          // context.push(pages[index].route,extra: AdsViewParams(mainCategory: , subCategory: null));
+          // soonDialog(context);
+          context.push(pages[index].route);
         } else if (index == 3) {
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);

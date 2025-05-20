@@ -77,6 +77,152 @@ class _RidePersonalMoreInfoScreenState
           r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'
           r'\+\d{10,}');
 
+
+
+  Future<String?> showLocationMethodDialog(BuildContext context) async {
+    return await showDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Choose Location Method',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+
+                _buildOptionButton(
+                  context,
+                  icon: Icons.format_list_bulleted_rounded,
+                  title: 'Choose from List',
+                  description: 'Use saved or predefined locations',
+                  value: 'list',
+                ),
+                const SizedBox(height: 16),
+                _buildOptionButton(
+                  context,
+                  icon: Icons.map_rounded,
+                  title: 'Pick on Map',
+                  description: 'Set a location manually on the map',
+                  value: 'map',
+                ),
+
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildOptionButton(
+      BuildContext context, {
+        required IconData icon,
+        required String title,
+        required String description,
+        required String value,
+      }) {
+    return InkWell(
+      onTap: () => Navigator.pop(context, value),
+      borderRadius: BorderRadius.circular(16),
+      splashColor: Colors.blue.withOpacity(0.1),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.grey.shade100,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.blue.shade50,
+              child: Icon(icon, color: Colors.blue),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      )),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.grey),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  
+  // Future<String?> showLocationMethodDialog(BuildContext context) async {
+  //   return await showDialog<String>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text("Choose Location"),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             ListTile(
+  //               leading: const Icon(Icons.list),
+  //               title: Text("List"),
+  //               onTap: () => Navigator.pop(context, 'list'),
+  //             ),
+  //             ListTile(
+  //               leading: const Icon(Icons.map),
+  //               title: Text("Map"),
+  //               onTap: () => Navigator.pop(context, 'map'),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClientTripsCubit, ClientTripsState>(
@@ -388,6 +534,7 @@ class _RidePersonalMoreInfoScreenState
                     child: Row(
                       spacing: 6,
                       children: [
+
                         Expanded(
                           flex: 2,
                           child: AppButton(
@@ -808,11 +955,15 @@ class _RidePersonalMoreInfoScreenState
   }
 
   void _showOfferFareBottomSheet(BuildContext context) {
-    TextEditingController offerPriceController = TextEditingController();
+    final TextEditingController offerPriceController = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.whiteColor,
       isScrollControlled: true,
+      isDismissible: false, // Prevent tap outside to close
+      enableDrag: false,    // Prevent swipe down to close
       builder: (context) {
         return FractionallySizedBox(
           alignment: Alignment.bottomCenter,
@@ -820,97 +971,127 @@ class _RidePersonalMoreInfoScreenState
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Centered Text
-                      Align(
-                        alignment: Alignment.center,
-                        child: Label(
-                          text: LocaleKeys.offerYourFare.localize,
-                          style: const TextStyle(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Label(
+                            text: LocaleKeys.offerYourFare.localize,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.PRIMARY_COLOR),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              color: AppColors.cEEEEEEE,
-                              shape: BoxShape.circle,
+                              color: AppColors.PRIMARY_COLOR,
                             ),
-                            child: Icon(Icons.close,
-                                color: AppColors.PRIMARY_COLOR),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    cursorColor: AppColors.PRIMARY_COLOR,
-                    controller: offerPriceController,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: "EGP",
-                      hintStyle:
-                          TextStyle(fontSize: 40, color: AppColors.c96979B),
-                      border: UnderlineInputBorder(),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1),
-                      ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              offerPriceController.clear(); // ✅ Clear input
+                              Navigator.pop(context);        // ✅ Then close
+                            },
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                color: AppColors.cEEEEEEE,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.close,
+                                color: AppColors.PRIMARY_COLOR,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    keyboardType: TextInputType.number,
-                    enableInteractiveSelection: false,
-                    contextMenuBuilder: (context, editableTextState) =>
-                        const SizedBox.shrink(),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      // Allow only digits
-                      NoPasteFormatter(),
-                      // Custom formatter to block paste
-                    ],
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    const SizedBox(height: 16),
+
+                    TextFormField(
+                      cursorColor: AppColors.PRIMARY_COLOR,
+                      controller: offerPriceController,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "EGP",
+                        hintStyle: TextStyle(
+                          fontSize: 40,
+                          color: AppColors.c96979B,
+                        ),
+                        border: UnderlineInputBorder(),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 1),
+                        ),
+                      ),
+                      keyboardType: TextInputType.number,
+                      enableInteractiveSelection: false,
+                      contextMenuBuilder: (context, editableTextState) =>
+                      const SizedBox.shrink(),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(9), // ✅ Max 9 digits
+                        NoPasteFormatter(),
+                      ],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.PRIMARY_COLOR),
-                    onChanged: (value) {
-                      offerPrice = value;
-                    },
-                  ),
-                  const SizedBox(height: 50),
-                  AppButton(
-                    radius: 15,
-                    backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        offerPrice = offerPriceController.text;
-                      });
-                    },
-                    label: LocaleKeys.done.localize,
-                    style: const TextStyle(
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return context.isArabic ? 'هذا الحقل مطلوب' : 'This field is required';
+                        }
+
+                        final numValue = int.tryParse(value);
+                        if (numValue == null) {
+                          return context.isArabic ? 'الرجاء إدخال رقم صحيح' : 'Please enter a valid number';
+                        }
+
+                        if (numValue < 100) {
+                          return context.isArabic ? 'الرقم يجب أن لا يقل عن 100' : 'The number must be at least 100';
+                        }
+
+                        return null; // Valid
+                      },
+
+                    ),
+
+                    const SizedBox(height: 50),
+
+                    AppButton(
+                      radius: 15,
+                      backColor: AppColors.PRIMARY_COLOR,
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          Navigator.pop(context);
+                          setState(() {
+                            offerPrice = offerPriceController.text;
+                          });
+                        }
+                      },
+                      label: LocaleKeys.done.localize,
+                      style: const TextStyle(
                         color: AppColors.LIGHT_COLOR,
                         fontWeight: FontWeight.w500,
-                        fontSize: 18),
-                  ),
-                ],
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -918,6 +1099,8 @@ class _RidePersonalMoreInfoScreenState
       },
     );
   }
+
+
 }
 
 class NoPasteFormatter extends TextInputFormatter {

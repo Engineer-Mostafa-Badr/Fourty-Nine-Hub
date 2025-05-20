@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomSupportTextField extends StatelessWidget {
   final String hintText;
+  final bool? enabled;
   final TextEditingController controller;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final Function(String?) validator;
 
-  const CustomSupportTextField({Key? key, required this.hintText, required this.controller}) : super(key: key);
+  const CustomSupportTextField({Key? key, required this.hintText, required this.controller, required this.validator, this.enabled, this.keyboardType, this.inputFormatters}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +22,10 @@ class CustomSupportTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       style: TextStyle(color: textColor),
+      validator: (value) => validator(value),
+      enabled: enabled,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(color: isDarkMode ? Colors.grey.shade500 : Colors.grey.shade600),

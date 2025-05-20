@@ -32,6 +32,8 @@ abstract class Routes {
   static const ADRequests = '/Subcategories/ADS/AD-Details/AD-Requests';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+  static const CREATECOMPANYPOSTAD = '/Subcategories/ADS/CreatePostCompany';
+  static const CREATECOMPANYPOSTREALAD = '/Subcategories/ADS/CreatePostRealCompany';
 
   // static const CAMERA
 
@@ -324,6 +326,8 @@ abstract class Paths {
   static const ARCHIVEDCHATS = 'ArchivedChatsView';
   static const CREATEAD = 'CreateAd';
   static const CREATECOMPANYAD = 'CreateCompanyAd';
+  static const CREATECOMPANYPOSTAD = 'CreatePostCompany';
+  static const CREATECOMPANYPOSTREALAD = 'CreatePostRealCompany';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERSCASHBACK = 'WinnersCashback';

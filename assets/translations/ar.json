@@ -1149,7 +1149,7 @@
   "airConditionAc": "مكيف الهواء",
   "Smoker": "مدخن",
   "dragAnalysis": "تحليل السحب",
-  "welcomeToRideRegister": "مرحبًا بك في تسجيل الرحلات",
+  "welcomeToRideRegister": "مرحبًا بك في تسجيل توصيلة",
   "tripIsComplete": "تم اكتمال الرحلة",
   "successCancelTrip": "تم إلغاء الرحلة بنجاح",
   "start": "ابدأ",
@@ -1611,6 +1611,9 @@
   "youDontHaveAcceptedOffer": "ليس لديك أي عروض مقبولة حتى الآن",
   "youDontHavePendingOffer": "ليس لديك أي عروض قيد الانتظار حتى الآن",
   "youDontHavePastOffer": "ليس لديك أي عروض سابقة حتى الآن",
-  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن"
+  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
+  "selectFromList": "اختر من القائمة",
+  "selectFromMap": "اختر من الخريطة",
+  "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا"
 
 }
