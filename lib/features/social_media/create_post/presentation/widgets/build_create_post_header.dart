@@ -45,8 +45,9 @@ class BuildCreatePostHeader extends StatelessWidget {
                 BoxDecoration(shape: BoxShape.circle, color: AppColors.GREYBG),
             child: Center(
               child:ImageFromInternet(
+                isCircle: true,
                 image: UserCubit.to.state.data?.profilePicture??'',
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
               )
             ),
           ),

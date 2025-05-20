@@ -27,7 +27,7 @@ class BuildCreatePost extends StatelessWidget {
               ? 300
               : 250,
           alignment: state.isBiggerThen150 == false ? AlignmentDirectional.topStart : Alignment.center,
-          color: Color(int.parse((state.selectedLifeEvent!=null?(context.isDarkMode?'#00000000':'#FFFFFFFF'):state.backColor ?? (context.isDarkMode?'#FFFFFFFF':'#FFFFFFFF')).replaceAll("#", ""), radix: 16),),
+          color: Color(int.parse((state.selectedLifeEvent!=null?(context.isDarkMode?'#00000000':'#FFFFFFFF'):state.backColor ?? (context.isDarkMode?'#00000000':'#FFFFFFFF')).replaceAll("#", ""), radix: 16),),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

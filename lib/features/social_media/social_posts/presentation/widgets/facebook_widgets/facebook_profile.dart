@@ -11,7 +11,9 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_photos.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_posts.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_videos.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -19,15 +21,26 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../domain/entities/user_profile_entity.dart';
 
-class FacebookProfile extends StatelessWidget {
+class FacebookProfile extends StatefulWidget {
   const FacebookProfile({super.key, required this.scrollController});
 
   final ScrollController scrollController;
 
   @override
+  State<FacebookProfile> createState() => _FacebookProfileState();
+}
+
+class _FacebookProfileState extends State<FacebookProfile> {
+  bool _showPosts = true;
+
+  bool _showPhotos = true;
+
+  bool _showVideos = false;
+
+  @override
   Widget build(BuildContext context) {
     return ListView(
-      controller: scrollController,
+      controller: widget.scrollController,
       children: [
         ProfileHeader(),
         Divider(
@@ -39,27 +52,57 @@ class FacebookProfile extends StatelessWidget {
           child: Row(spacing: 5, children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {},
-                child: _tabButton(context, LocaleKeys.posts.localize, true),
+                onTap: () {
+                  setState(() {
+                    _showPosts = true;
+                    if (_showPosts) {
+                      _showPhotos = false;
+                      _showVideos = false;
+                    } else if (!_showPosts) {
+                      //context.read<RestaurantsCubit>().loadInitialRestaurantsData('');
+                    }
+                  });
+                },
+                child: _tabButton(context, LocaleKeys.posts.localize, _showPosts),
               ),
             ),
             Expanded(
               child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      _showPhotos = true;
+                      if (_showPhotos) {
+                        _showPosts = false;
+                        _showVideos = false;
+                      } else if (!_showPhotos) {
+                        //context.read<RestaurantsCubit>().loadInitialRestaurantsData('');
+                      }
+                    });
+                  },
                   child: _tabButton(
-                      context, context.isArabic ? 'صور' : 'Photos', false)),
+                      context, context.isArabic ? 'صور' : 'Photos', _showPhotos)),
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {setState(() {
+                  _showVideos = true;
+                  if (_showVideos) {
+                    _showPhotos = false;
+                    _showPosts = false;
+                  } else if (!_showVideos) {
+                    //context.read<RestaurantsCubit>().loadInitialRestaurantsData('');
+                  }
+                });},
                 child: _tabButton(
-                    context, context.isArabic ? 'فيديوهات' : 'Videos', false),
+                    context, context.isArabic ? 'فيديوهات' : 'Videos', _showVideos),
               ),
             ),
           ]),
         ),
         const Sizer(),
-        ProfilePosts(),
+        if(_showPosts)ProfilePosts(),
+        if(_showPhotos)ProfilePhotos(),
+        if(_showVideos)ProfileVideos(),
       ],
     );
   }
@@ -87,39 +130,6 @@ class FacebookProfile extends StatelessWidget {
       ),
     );
   }
-
-  Widget _detailsTile(BuildContext context, String data, IconData icon,
-      {String? label}) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 24,
-          color: context.isDarkMode ? Colors.white : Colors.grey,
-        ),
-        Sizer(
-          width: 18.w,
-        ),
-        if (label != null)
-          Label(
-              text: label,
-              style: Styles.headerText(color: Colors.grey, fontSize: 30)),
-        if (label != null)
-          Sizer(
-            width: 12.h,
-          ),
-        Expanded(
-          child: Label(
-            text: data,
-            style: Styles.headerText(fontSize: 30),
-            maxLines: 1,
-          ),
-        ),
-      ],
-    );
-  }
-
-
 }
 
 class ProfileHeader extends StatelessWidget {
@@ -387,6 +397,13 @@ class ProfileHeader extends StatelessWidget {
                     value: '324',
                     //'${user.followersCount} ',
                     label: LocaleKeys.follower.localize,
+                  ),
+                  const Sizer(),
+                  _buildCounter(
+                    context,
+                    value: '435',
+                    //'${user.followersCount} ',
+                    label: LocaleKeys.views.localize,
                   ),
                 ],
               ),

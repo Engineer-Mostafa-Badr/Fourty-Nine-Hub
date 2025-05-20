@@ -16,6 +16,8 @@ import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfilePosts extends StatelessWidget {
   const ProfilePosts({super.key});
@@ -63,7 +65,7 @@ class ProfilePosts extends StatelessWidget {
                       : _highlights(context),
                   separatorBuilder: (context, index) =>
                   const Sizer(
-                    width: 8,
+                    width: 12,
                   ),
                   itemCount: 5),
             ),
@@ -100,9 +102,11 @@ class ProfilePosts extends StatelessWidget {
                     ),
                   ],
                 ),
-                Label(
-                  text: context.isArabic ? 'ابحث عن أصدقاء' : 'Find Friends',
-                  style: Styles.headerText(color: Color(0xffFF3308)),
+                ClickableWidget(
+                  child: Label(
+                    text: context.isArabic ? 'ابحث عن أصدقاء' : 'Find Friends',
+                    style: Styles.mediumText(color: Color(0xffFF3308)),
+                  ),
                 ),
               ],
             ),
@@ -116,7 +120,7 @@ class ProfilePosts extends StatelessWidget {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   mainAxisSpacing: 1.0, // spacing between rows
-                  crossAxisSpacing: 4.0, // spacing between columns
+                  crossAxisSpacing: 5.0, // spacing between columns
                   childAspectRatio: 0.65,
                 ),
                 itemBuilder: (context, index) =>
@@ -163,7 +167,7 @@ class ProfilePosts extends StatelessWidget {
                 Sizer(),
                 Expanded(
                   child: ClickableWidget(
-                    onTap: (){},
+                    onTap: (){context.push(Routes.CREATEPOST, extra: 'facebook');},
                     child: Label(text: context.isArabic?'بماذا تفكر؟': "What's on your mind?",style: Styles.headerText(
                       fontSize: 32,color: context.isDarkMode
                         ? Colors.grey[300]
@@ -253,7 +257,7 @@ class ProfilePosts extends StatelessWidget {
           child: Center(
             child: Icon(
               Icons.add,
-              color: AppColors.getFindFillColor(context),
+              color: Colors.grey,
             ),
           ),
         ),
@@ -271,9 +275,6 @@ class ProfilePosts extends StatelessWidget {
             height: 260.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Colors.grey,
-              ),
               color: Colors.transparent,
             ),
             child: ImageFromInternet(
@@ -305,9 +306,6 @@ class ProfilePosts extends StatelessWidget {
               // height: 260.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
                   color: Colors.transparent,
                 ),
                 child: ImageFromInternet(
