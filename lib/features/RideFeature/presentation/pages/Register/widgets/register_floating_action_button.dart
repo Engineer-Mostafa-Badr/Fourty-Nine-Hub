@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -89,7 +90,7 @@ class RegisterNextRow extends StatelessWidget {
                       Label(
                         text: index == 5
                             ? LocaleKeys.submit.localize
-                            : LocaleKeys.next.localize,
+                            : context.isArabic?'التالي':'Next',
                         style: Styles.headerText(
                           fontWeight: FontWeight.w400,
                           color: AppColors.AUTH_CONTAINER_COLOR,

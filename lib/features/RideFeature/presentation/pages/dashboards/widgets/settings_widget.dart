@@ -62,9 +62,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     isReady = widget.settings?.isReady ?? false;
     enableSound =  widget.settings?.enableNotificationSound ?? false;
     isCaptainShare = false;
-    isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
-    isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
-    isPremium = widget.settings?.categoryIds[2].isActive ?? false;
+    if((widget.settings?.categoryIds.length ?? 0) > 0)isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
+    if((widget.settings?.categoryIds.length ?? 0) > 1)isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
+    if((widget.settings?.categoryIds.length ?? 0) > 2)isPremium = widget.settings?.categoryIds[2].isActive ?? false;
   }
 
   @override
@@ -130,7 +130,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isIntercity = value;
                   });
                 }),
-            switchWidget(
+            if((widget.settings?.categoryIds.length ?? 0) > 2)switchWidget(
                 title: widget
                     .settings?.categoryIds[2].pictureUrl, //Assets.greyCar,
                 isText: false,

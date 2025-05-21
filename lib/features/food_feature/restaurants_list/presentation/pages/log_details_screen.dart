@@ -2,9 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:intl/intl.dart';
@@ -86,7 +89,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8,),
+              const Sizer(),
               widget.logsEntity.userRateRestaurant == null ||
                       widget.logsEntity.userRateRestaurant == 0
                   ? Row(
@@ -124,10 +127,10 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                               );
                             },
                             child: Container(
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.symmetric(horizontal:8,vertical: 6),
                               decoration: BoxDecoration(
                                   color: AppColors.cF3F3F3,
-                                  borderRadius: BorderRadius.circular(15)
+                                  borderRadius: BorderRadius.circular(10)
                               ),
                               child: Label(
                                 text: LocaleKeys.rate.localize,
@@ -186,6 +189,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                               itemSize: 13,
                               onRatingUpdate: (double value) {},
                             ),
+                            const Sizer(),
                             InkWell(
                                 onTap: () {
                                   final cubit =
@@ -208,10 +212,10 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                   );
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.all(10),
+                                  padding: EdgeInsets.symmetric(horizontal:8,vertical: 6),
                                   decoration: BoxDecoration(
                                     color: AppColors.cF3F3F3,
-                                    borderRadius: BorderRadius.circular(15)
+                                    borderRadius: BorderRadius.circular(10)
                                   ),
                                   child: Label(
                                     text: LocaleKeys.modify.localize,
@@ -226,6 +230,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                         ),
                       ],
                     ),
+              const Sizer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -302,27 +307,30 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         Stack(
           alignment: Alignment.topRight,
           children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.grey[600],
-              backgroundImage:
-                  widget.logsEntity.userId?.userProfile?.profilePictureKey !=
-                          null
-                      ? NetworkImage(widget.logsEntity.userId!.userProfile!
-                          .profilePictureKey!.mediaKey!)
-                      : null,
-              child: widget.logsEntity.userId?.userProfile?.profilePictureKey ==
-                      null
-                  ? const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.white,
-                    )
-                  : null,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.grey[600],
+                backgroundImage:
+                    widget.logsEntity.userId?.userProfile?.profilePictureKey !=
+                            null
+                        ? NetworkImage(widget.logsEntity.userId!.userProfile!
+                            .profilePictureKey!.mediaKey!)
+                        : null,
+                child: widget.logsEntity.userId?.userProfile?.profilePictureKey ==
+                        null
+                    ? const Icon(
+                        Icons.person,
+                        size: 40,
+                        color: Colors.white,
+                      )
+                    : null,
+              ),
             ),
             Container(
               width: 32,
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 color: AppColors.cF5F5F5,
                 borderRadius: BorderRadius.circular(10),
@@ -337,7 +345,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                     color: AppColors.ACCENT_COLOR,
                   ),
                   Text(
-                    "${widget.logsEntity.userId?.restaurantRate ?? 0}",
+                    context.isArabic?numAr(widget.logsEntity.userId?.restaurantRate??0):"${widget.logsEntity.userId?.restaurantRate ?? 0}",
                     style: Styles.smallText(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -361,7 +369,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         ),
         // const SizedBox(width: 8),
         Expanded(
-          flex: 1,
+          flex: 3,
           child: Center(child: _buildRestaurantDetails(context)),
         ),
       ],
@@ -376,6 +384,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         fontWeight: FontWeight.w600,
         color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
       ),
+      maxLines: 2,
     );
   }
 
@@ -440,8 +449,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
       children: [
         Expanded(
           child: Text(
-            "${LocaleKeys.total.tr()}"
-                ":${widget.logsEntity.total?.toString() ?? '0'}",
+                "${context.isArabic?numAr(widget.logsEntity.total??0):widget.logsEntity.total?.toString() ?? '0'} ${context.isArabic?widget.logsEntity.currencyAr:widget.logsEntity.currencyEn}",
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
               color: context.isDarkMode ? AppColors.whiteColor : AppColors.black,
@@ -460,8 +468,9 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
       children: [
         Text(
           widget.logsEntity.createdAt != null
-              ? DateFormat('MMM d, yyyy h:mm a')
-                  .format(DateTime.parse(widget.logsEntity.createdAt!))
+              ?(context.isArabic? DateFormat('MMM d, yyyy h:mm a','ar')
+                  .format(DateTime.parse(widget.logsEntity.createdAt!)):DateFormat('MMM d, yyyy h:mm a')
+              .format(DateTime.parse(widget.logsEntity.createdAt!)))
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
             // fontSize: 12,
@@ -520,7 +529,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       try {
         // Show loading
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(LocaleKeys.submittingRating.localize)),
+           SnackBar(content: Text(LocaleKeys.submittingRating.localize,style: Styles.mediumText(color: AppColors.getTextColor(context)),),backgroundColor: AppColors.getFindFillColor(context),),
         );
 
         // Submit rating
@@ -537,16 +546,16 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
 
         // Show success
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(LocaleKeys.ratingSubmittedSuccessfully.localize)),
+           SnackBar(content: Text(LocaleKeys.ratingSubmittedSuccessfully.localize,style: Styles.mediumText(color: AppColors.getTextColor(context))),backgroundColor: AppColors.getFindFillColor(context),),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+          SnackBar(content: Text('Error: ${e.toString()}',style: Styles.mediumText(color: AppColors.getTextColor(context))),backgroundColor: AppColors.getFindFillColor(context)),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text(LocaleKeys.pleaseProvideRate.localize)),
+         SnackBar(content: Text(LocaleKeys.pleaseProvideRate.localize,style: Styles.mediumText(color: AppColors.getTextColor(context))),backgroundColor: AppColors.getFindFillColor(context)),
       );
     }
   }
@@ -572,7 +581,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration:  BoxDecoration(
-        color: context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor,
+        color: AppColors.getFindFillColor(context),
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
       child: Column(

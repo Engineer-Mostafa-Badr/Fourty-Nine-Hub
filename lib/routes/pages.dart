@@ -38,6 +38,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/marriage_ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/create_post_reel_company.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/create_posts_company.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/governorate_filter_ads.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
@@ -759,9 +761,24 @@ class AppPages {
                           path: Paths.CREATECOMPANYAD,
                           name: Routes.CREATECOMPANYAD,
                           builder: (context, state) =>
+                              const CreateCompanyAdView(),
+                        ),
+                        GoRoute(
+                          path: Paths.CREATECOMPANYPOSTAD,
+                          name: Routes.CREATECOMPANYPOSTAD,
+                          builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
-                                  create: (_) => serviceLocator()..loadData(),
-                                  child: const CreateCompanyAdView()),
+                                  create: (_) => serviceLocator(),
+                                  child: CreatePostCompany(params: state.extra as CreatePostCompanyParams,)),
+                        ),
+
+                        GoRoute(
+                          path: Paths.CREATECOMPANYPOSTREALAD,
+                          name: Routes.CREATECOMPANYPOSTREALAD,
+                          builder: (context, state) =>
+                              BlocProvider<CreateCompanyAdCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: CreatePostReelCompany(totalPrice: state.extra as num,)),
                         ),
                       ]),
                 ],
@@ -3486,6 +3503,9 @@ class AppPages {
                     create: (context) => serviceLocator<DashboardsCubit>(),
                     child: SupportRideScreen(params: state.extra as SupportRideParams,)),
               ),
+
+
+
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
                 name: Routes.supportClientDetailsScreen,

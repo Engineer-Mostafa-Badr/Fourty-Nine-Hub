@@ -187,6 +187,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           ),
         ),
         validator: widget.validator,
+
         onChanged: (text) {
           if (widget.isAuthentcation) {
             if (CacheServiceImpl().isLogin() ?? false) {

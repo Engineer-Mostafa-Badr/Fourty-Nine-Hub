@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
@@ -43,7 +44,7 @@ class GetAllTalents extends StatelessWidget {
           if (cubit.allTalents.isEmpty) {
             return Center(
               // child: Text('Error: ${_getErrorMessage(state.failure)}'),
-              child: Text(context.isArabic?'لا يوجد نتائج': 'No results found'),
+              child: Text(context.isArabic?'لا يوجد نتائج': 'No Results Found'),
             );
           }
 
@@ -51,6 +52,8 @@ class GetAllTalents extends StatelessWidget {
             controller: scrollController,
             itemCount:
                 cubit.allTalents.length + (state.status == StarStates.loading ? 1 : 0),
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemBuilder: (context, index) {
               if (index == cubit.allTalents.length) {
                 return const Center(
@@ -169,7 +172,7 @@ class GetAllTalents extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
+                              "${context.isArabic?convertToArabicNumbers(talent.totalViews.toShortScale):talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${context.isArabic?convertToArabicNumbers(timeago.format(createdAt, locale: context.locale.languageCode)):timeago.format(createdAt, locale: context.locale.languageCode)}",
                               style: TextStyle(
                                 fontSize: 26.sp,
                                 color: context.isDarkMode?Colors.white:Colors.grey,

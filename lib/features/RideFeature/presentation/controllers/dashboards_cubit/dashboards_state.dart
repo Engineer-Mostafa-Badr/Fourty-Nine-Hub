@@ -58,7 +58,21 @@ class DashboardsState
   final bool? isClientNotShownReason;
   final List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips;
   final List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips;
-  final List<HistoryTripEntity >? pastRideNonSocketTrips;
+  final List<HistoryTripEntity>? pastRideNonSocketTrips;
+  final List<EmergencyContactEntity>? emergencyContacts;
+  final SupportDetailsEntity? supportDetails;
+      final String? supportStatus;
+  final CreateNonTrackOfferEntity? createNonTrackOfferEntity;
+  final bool? offerCreatedShown;
+  final UpdateDriverSettingsEntity? updateDriverSettingsEntity;
+  final DriverSettingsEntity? driverSettingsEntity;
+  final XFile? personalFrontIdPicture;
+  final XFile? personalBackIdPicture;
+  final XFile? personalCriminalRecordPicture;
+  final XFile? personalDrugAnalysisPicture;
+  final XFile? driverLicensePicture;
+  final XFile? backOfDriverLicensePicture;
+  final XFile? selfieDriverLicensePicture;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -73,9 +87,23 @@ class DashboardsState
       this.tripStatus,
       this.lastStatus,
       this.activeTrip,
+      this.supportDetails,
+      this.supportStatus,
+      this.emergencyContacts,
       this.isChangedMindReason=false,
       this.isOtherReason=false,
       this.isClientNotShownReason=false,
+      this.createNonTrackOfferEntity,
+        this.offerCreatedShown = false,
+        this.updateDriverSettingsEntity ,
+        this.driverSettingsEntity ,
+        this.personalFrontIdPicture,
+        this.personalBackIdPicture,
+        this.personalCriminalRecordPicture,
+        this.personalDrugAnalysisPicture,
+        this.driverLicensePicture,
+        this.backOfDriverLicensePicture,
+        this.selfieDriverLicensePicture,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -91,10 +119,24 @@ class DashboardsState
         bool? isChangedMindReason,
         bool? isOtherReason,
         bool? isClientNotShownReason,
+        SupportDetailsEntity? supportDetails,
+        List<EmergencyContactEntity>? emergencyContacts,
+        String? supportStatus,
 
         List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
         List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
         List<HistoryTripEntity >? pastRideNonSocketTrips,
+        CreateNonTrackOfferEntity? createNonTrackOfferEntity,
+        bool? offerCreatedShown,
+        UpdateDriverSettingsEntity? updateDriverSettingsEntity,
+        DriverSettingsEntity? driverSettingsEntity,
+        XFile? personalBackIdPicture,
+        XFile? personalFrontIdPicture,
+        XFile? personalCriminalRecordPicture,
+        XFile? personalDrugAnalysisPicture,
+        XFile? driverLicensePicture,
+        XFile? backOfDriverLicensePicture,
+        XFile? selfieDriverLicensePicture,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -113,6 +155,22 @@ class DashboardsState
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
       isOtherReason: isOtherReason ?? this.isOtherReason,
       isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,
+      supportStatus: supportStatus ?? this.supportStatus,
+      supportDetails: supportDetails ?? this.supportDetails,
+      emergencyContacts: emergencyContacts ?? this.emergencyContacts,
+      createNonTrackOfferEntity: createNonTrackOfferEntity ?? this.createNonTrackOfferEntity,
+      offerCreatedShown: offerCreatedShown ?? this.offerCreatedShown,
+      updateDriverSettingsEntity: updateDriverSettingsEntity ?? this.updateDriverSettingsEntity,
+      driverSettingsEntity: driverSettingsEntity ?? this.driverSettingsEntity,
+      personalFrontIdPicture: personalFrontIdPicture ?? this.personalFrontIdPicture,
+      personalBackIdPicture: personalBackIdPicture ?? this.personalBackIdPicture,
+      personalCriminalRecordPicture: personalCriminalRecordPicture ?? this.personalCriminalRecordPicture,
+      personalDrugAnalysisPicture: personalDrugAnalysisPicture ?? this.personalDrugAnalysisPicture,
+      driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
+      backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
+      selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
+
+
     );
   }
 

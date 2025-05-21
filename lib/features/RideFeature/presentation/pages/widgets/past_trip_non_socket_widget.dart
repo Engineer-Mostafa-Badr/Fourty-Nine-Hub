@@ -31,6 +31,12 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
   }
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = DateTime.parse(
+        widget.tripEntity?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
+    String formattedDate =
+        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+    String formattedTime =
+        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return GestureDetector(
       onTap: () {
 
@@ -54,7 +60,7 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
               child: PriceColumnNonSocket(
                 status: widget.tripEntity?.tripDetails?.status ?? "",
                 title: widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
-                date: "Feb 13 - 12:41 PM",
+                date: "${formattedDate} ${formattedTime}",
                 price: widget.tripEntity?.tripDetails?.price?.toStringAsFixed(0) ?? '0.0',
               ),
             ),

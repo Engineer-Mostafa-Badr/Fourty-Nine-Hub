@@ -794,6 +794,7 @@ abstract class  LocaleKeys {
   static const newOffer = 'newOffer';
   static const carModel = 'carModel';
   static const orders = 'orders';
+  static const orderCreatedSuccessfully = 'orderCreatedSuccessfully';
   static const completeTrip = 'completeTrip';
   static const decline = 'decline';
   static const subscribeToContactToTheDriver = 'subscribeToContactToTheDriver';
@@ -1603,5 +1604,8 @@ abstract class  LocaleKeys {
   static const youDontHavePendingOffer = 'youDontHavePendingOffer';
   static const youDontHavePastOffer = 'youDontHavePastOffer';
   static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
+  static const selectFromList = 'selectFromList';
+  static const selectFromMap = 'selectFromMap';
+  static const youCantGetTripUntilYouReady = 'youCantGetTripUntilYouReady';
 
 }

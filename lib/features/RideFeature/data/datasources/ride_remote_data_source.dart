@@ -52,6 +52,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_b
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
@@ -80,6 +81,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
 import '../../domain/entities/create_no_track_trip_entity.dart';
+import '../../domain/entities/dashboards/create_non_track_offer_entity.dart';
+import '../../domain/entities/dashboards/update_driver_settings_entity.dart';
 import '../../domain/entities/get_client_accepted_trips_entity.dart';
 import '../../domain/entities/get_client_offer_trips_entity.dart';
 import '../../domain/entities/get_client_past_trips_entity.dart';
@@ -88,14 +91,18 @@ import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/accept_non_track_trip_use_case.dart';
 import '../../domain/usecases/cancel_non_track_trip_use_case.dart';
 import '../../domain/usecases/create_non_track_trip_use_case.dart';
+import '../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
+import '../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../models/create_no_track_trip_model.dart';
+import '../models/dashboards/create_non_track_offer_model.dart';
 import '../models/dashboards/get_offers_response_model.dart';
 import '../../../../shared_web_socket.dart';
 import '../../../account_taps/my_adds/data/model/click_model.dart';
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
+import '../models/dashboards/update_driver_settings_model.dart';
 import '../models/get_client_accepted_trips_model.dart';
 import '../models/get_client_offer_trips_model.dart';
 import '../models/get_client_past_trips_model.dart';
@@ -107,6 +114,7 @@ abstract class RideRemoteDataSource {
       GetRideCategoriesParams params);
   Future<Either<Failure, bool>> listenToUpdateLocation(
       UpdateSocketLocationParams params);
+  Future<Either<Failure, bool>> watchingTripsParams(WatchingTripsParams params);
   Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(
       GetRideCategoriesParams params);
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
@@ -224,6 +232,8 @@ abstract class RideRemoteDataSource {
 
   Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
 
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createNonTrackOffer(CreateNonTrackOfferParams params);
+  Future<Either<Failure, UpdateDriverSettingsEntity >> updateDriverSettings(UpdateDriverSettingsParams params);
 
 }
 
@@ -954,6 +964,22 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, bool>> watchingTripsParams(WatchingTripsParams params) async {
+    try {
+      CliLogger.info('Listen To Watching Trips');
+      CliLogger.info('Listen To Watching Trips ${params.toJson()}');
+      SharedWebSocket.socket!.emit(SocketIOEvents.watchingTrips, params.toJson());
+      CliLogger.info(
+          "SocketIOEvents.watchingTrips${SocketIOEvents.watchingTrips}");
+
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t Watching Trips error $e');
+      return const Left(ServerFailure(message: "can't Watching Trips "));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> makeNonTrackingRequestTrip(
       MakeNonTrackingRequestTripUsecaseParam params) async {
     try {
@@ -1229,6 +1255,38 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
             .map((e) => ClientPastTripModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createNonTrackOffer(CreateNonTrackOfferParams params) async{
+    final url = "${EndPoints.createOfferNonTrackedTrips}${params.tripId}";
+    final response = await _apiConsumer.post(
+      url,
+      data: params.toJson()
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final createOffer = CreateNonTrackOfferModel.fromJson(data);
+        return Right(createOffer);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UpdateDriverSettingsEntity>> updateDriverSettings(UpdateDriverSettingsParams params)async {
+    final url = EndPoints.updateDriverSettingsNonTrack;
+    final response = await _apiConsumer.put(
+        url,
+        data: params.toJson()
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final updateDriver = UpdateDriverSettingsModel .fromJson(data);
+        return Right(updateDriver);
       },
     );
   }

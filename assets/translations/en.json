@@ -892,6 +892,7 @@
   "newOffer": "New Offer",
   "carModel": "car model",
   "orders": "Orders",
+  "orderCreatedSuccessfully": "order Created Successfully!",
   "completeTrip": "Complete Trip",
   "decline": "Decline",
   "subscribeToContactToTheDriver": "Subscribe to contact to the driver",
@@ -1626,7 +1627,10 @@
   "youDontHaveAcceptedOffer": "You don't Have Accepted Offers",
   "youDontHavePendingOffer": "You don't Have Pending Offers",
   "youDontHavePastOffer": "You don't Have Past Offers",
-  "youDontHaveAvailableOffer": "You don't Have Available Offers"
+  "youDontHaveAvailableOffer": "You don't Have Available Offers",
+  "selectFromList": "Select from list",
+  "selectFromMap": "Select from map",
+  "youCantGetTripUntilYouReady": "You can't get trips until you ready"
 
 
 }

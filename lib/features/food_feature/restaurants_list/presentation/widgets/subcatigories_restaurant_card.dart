@@ -119,7 +119,7 @@ class PropertyCard extends StatelessWidget {
                       ),
                     ),
                     Label(
-                      text: LocaleKeys.view.localize,
+                      text:(item.totalViews!.toInt() >= 3 && item.totalViews!.toInt() <= 9&&context.isArabic)?'مشاهدات' :LocaleKeys.view.localize,
                       style:  Styles.mediumText(
                         // fontSize: 12,
                         fontWeight: FontWeight.w400,

@@ -3,8 +3,10 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/driver_settings_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
@@ -155,6 +157,31 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, List<HistoryTripEntity>>> getPastNonSocketTrips(ClientPendingTripParams params) {
     return  remoteDataSource.getPastNonSocketTrips(params);
+  }
+
+  @override
+  Future<Either<Failure, DriverSettingsEntity>> getDriverSettings() {
+    return remoteDataSource.getDriverSettings();
+  }
+
+  @override
+  void listenToRemoveUntrackedTrip(Function(String tripId) params) {
+    remoteDataSource.listenToRemoveUntrackedTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts() {
+    return  remoteDataSource.getEmergencyContacts();
+  }
+
+  @override
+  Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params) {
+    return  remoteDataSource.addEmergencyContacts(params);
+  }
+
+  @override
+  Future<Either<Failure, EmergencyContactEntity>> editEmergencyContacts(EmergencyContactEntity params) {
+    return  remoteDataSource.editEmergencyContacts(params);
   }
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -12,7 +13,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 
 class FacebookPeopleView extends StatefulWidget {
-  const FacebookPeopleView({super.key});
+  const FacebookPeopleView({super.key, required this.scrollController});
+  final ScrollController scrollController;
 
   @override
   State<FacebookPeopleView> createState() => _FacebookPeopleViewState();
@@ -39,8 +41,9 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
   Widget build(BuildContext context) {
     return RefreshIndicator(
         backgroundColor: AppColors.getFillColor(context),
-        color:AppColors.getTextColor(context) ,
+        color: AppColors.getTextColor(context),
         child: ListView(
+          controller: widget.scrollController,
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 15.h),
           children: [
@@ -115,14 +118,14 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               GestureDetector(
                 onTap: () {
                   // if (context.read<UserCubit>().isLoggedIn) {
-                  // setState(() {
-                  //   _showSearch = !_showSearch;
-                  //   if (_showSearch) {
-                  //     _showPeople = false;
-                  //     _showBlocked = false;
-                  //     _showSuggestion = false;
-                  //   }
-                  // });
+                  setState(() {
+                    _showSearch = !_showSearch;
+                    if (_showSearch) {
+                      _showPeople = false;
+                      _showBlocked = false;
+                      _showSuggestion = false;
+                    }
+                  });
                   // } else {
                   //   return pleaseLoginDialog(context);
 
@@ -138,6 +141,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
             if (_showPeople) friendTile(),
             if (_showBlocked) blockedFriendTile(),
             if (_showSuggestion) suggestionTile(),
+            if (_showSearch) searchTile(),
           ],
         ),
         onRefresh: () async {});
@@ -303,6 +307,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
       ],
     );
   }
+
   Widget suggestionTile() {
     return Column(
       children: [
@@ -418,31 +423,99 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: SizedBox(
-            width: 160.w,
-            child: CircleAvatar(
-              radius: 180.sp,
-              child: CircleAvatar(
-                  radius: 90,
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage(Assets.personalImage)),
+              contentPadding: EdgeInsets.zero,
+              leading: SizedBox(
+                width: 160.w,
+                child: CircleAvatar(
+                  radius: 180.sp,
+                  child: CircleAvatar(
+                      radius: 90,
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage(Assets.personalImage)),
+                ),
+              ),
+              title: Label(
+                text: 'Ahmed Ali',
+                style: Styles.headerText(
+                  fontSize: 40,
+                ),
+              ),
+              trailing: ClickableWidget(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.close,
+                    color: AppColors.Facebook_Red_DARK,
+                  )),
             ),
-          ),
-          title: Label(
-            text: 'Ahmed Ali',
-            style: Styles.headerText(
-              fontSize: 40,
-            ),
-          ),
-          trailing: ClickableWidget(
-              onTap: () {},
-              child: Icon(
-                Icons.close,
-                color: AppColors.Facebook_Red_DARK,
-              )),
-        ),
         separatorBuilder: (context, index) => const Sizer(),
         itemCount: 10);
+  }
+
+  Widget searchTile() {
+    return Column(children: [
+      TextFormField(
+        maxLines: 1,
+        keyboardType: TextInputType.text,
+        style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsetsDirectional.only(start: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
+          ),
+          hintStyle: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:Colors.black),
+          hintText: LocaleKeys.search.localize,
+          prefixIcon: Icon(Icons.search,)
+        ),
+      ),
+      const Sizer(),
+      SizedBox(
+          width: double.infinity,
+          child: ListView.separated(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: SizedBox(
+                      width: 160.w,
+                      child: CircleAvatar(
+                        radius: 180.sp,
+                        child: CircleAvatar(
+                            radius: 90,
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage(Assets.personalImage)),
+                      ),
+                    ),
+                    title: Label(
+                      text: 'Ahmed Ali',
+                      style: Styles.headerText(
+                        fontSize: 40,
+                      ),
+                    ),
+                    trailing: ClickableWidget(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.close,
+                          color: AppColors.Facebook_Red_DARK,
+                        )),
+                  ),
+              separatorBuilder: (context, index) => const Sizer(),
+              itemCount: 10))
+    ]);
   }
 }
