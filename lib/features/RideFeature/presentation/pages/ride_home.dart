@@ -40,6 +40,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
@@ -297,9 +298,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               )),
                         ),
                       ActionButtonsWidget(
-                        driverImageUrl: state.requestedTrip?.driverProfilePicture,
-                        driverRating: state.requestedTrip?.driverRating??0,
-                        driverName: state.requestedTrip?.driverFirstName??'',
+                        driverImageUrl:
+                            state.requestedTrip?.driverProfilePicture,
+                        driverRating: state.requestedTrip?.driverRating ?? 0,
+                        driverName: state.requestedTrip?.driverFirstName ?? '',
                         onContactDriver: () {
                           // context.push(Routes.ratingClientScreen);
                         },
@@ -489,37 +491,48 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ? const SizedBox()
                                     : state.requestedTrip == null
                                         ? _carTruckBtn(
-                                    driverInfo: state.driverInfo,
-                                    loadingInfo: state.loaderInfo,
-                                    openDrawer: (){
-                                      print("object");
-                                      showModalBottomSheet(
-                                        backgroundColor: context.isDarkMode
-                                            ? AppColors.QUANTITY_COLOR
-                                            : Colors.white,
-                                        context: context,
-                                        builder: (context) => _buttonsWidget(driverInfo: state.driverInfo,
-                                          loadingInfo: state.loaderInfo,),
-                                      );
-                                    })
-                                    : (state.requestedTrip!.status ==
-                                    TripState.completed.name ||
-                                    state.requestedTrip!.status ==
-                                        TripState.canceled.name)
-                                    ? _carTruckBtn(
-                                    driverInfo: state.driverInfo,
-                                    loadingInfo: state.loaderInfo,
-                                    openDrawer: () {
-                                      showModalBottomSheet(
-                                        backgroundColor: context.isDarkMode
-                                            ? AppColors.QUANTITY_COLOR
-                                            : Colors.white,
-                                        context: context,
-                                        builder: (context) => _buttonsWidget(driverInfo: state.driverInfo,
-                                          loadingInfo: state.loaderInfo,),
-                                      );
-                                    })
-                                    : const SizedBox.shrink(),
+                                            driverInfo: state.driverInfo,
+                                            loadingInfo: state.loaderInfo,
+                                            openDrawer: () {
+                                              print("object");
+                                              showModalBottomSheet(
+                                                backgroundColor: context
+                                                        .isDarkMode
+                                                    ? AppColors.QUANTITY_COLOR
+                                                    : Colors.white,
+                                                context: context,
+                                                builder: (context) =>
+                                                    _buttonsWidget(
+                                                  driverInfo: state.driverInfo,
+                                                  loadingInfo: state.loaderInfo,
+                                                ),
+                                              );
+                                            })
+                                        : (state.requestedTrip!.status ==
+                                                    TripState.completed.name ||
+                                                state.requestedTrip!.status ==
+                                                    TripState.canceled.name)
+                                            ? _carTruckBtn(
+                                                driverInfo: state.driverInfo,
+                                                loadingInfo: state.loaderInfo,
+                                                openDrawer: () {
+                                                  showModalBottomSheet(
+                                                    backgroundColor:
+                                                        context.isDarkMode
+                                                            ? AppColors
+                                                                .QUANTITY_COLOR
+                                                            : Colors.white,
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        _buttonsWidget(
+                                                      driverInfo:
+                                                          state.driverInfo,
+                                                      loadingInfo:
+                                                          state.loaderInfo,
+                                                    ),
+                                                  );
+                                                })
+                                            : const SizedBox.shrink(),
                               ],
                             ),
                           ),
@@ -531,7 +544,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         });
   }
 
-  Widget _buttonsWidget({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}){
+  Widget _buttonsWidget(
+      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
     return Container(
       child: ListView(
         shrinkWrap: true,
@@ -540,13 +554,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           Align(
             alignment: AlignmentDirectional.topStart,
             child: ClickableWidget(
-                onTap: ()=>context.pop(),
-                child: Icon(Icons.close,color: AppColors.black,)),
+                onTap: () => context.pop(),
+                child: Icon(
+                  Icons.close,
+                  color: AppColors.black,
+                )),
           ),
           Sizer(),
           GestureDetector(
             onTap: () {
-              if(!context.read<UserCubit>().isLoggedIn){
+              if (!context.read<UserCubit>().isLoggedIn) {
                 return pleaseLoginDialog(context);
               }
               context.pop();
@@ -554,8 +571,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
                     fromShipping: false, context: context);
               } else {
-                if (driverInfo.status ==
-                    RegistrationStatus.pending.status) {
+                if (driverInfo.status == RegistrationStatus.pending.status) {
                   return;
                 } else if (driverInfo.status ==
                     RegistrationStatus.rejected.status) {
@@ -582,29 +598,32 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               : false));
                 }
               }
-              },
+            },
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
               width: double.infinity,
               height: 50,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors:driverInfo != null &&
-                      (driverInfo.status == RegistrationStatus.approved.status) ?[
-                    AppColors.cF33D49,
-                    AppColors.cC0303A,
-                    AppColors.cA72A32,
-                    AppColors.c9A272E,
-                    AppColors.c93252C,
-                    AppColors.c90242B,
-                    ]:[
-                    Color(0xFF0B1035),
-                    Color(0xFF161F68),
-                    Color(0xFF1B2781),
-                    Color(0xFF1E2B8E),
-                    Color(0xFF1F2D95),
-                    Color(0xFF0B1035)
-                  ],
+                  colors: driverInfo != null &&
+                          (driverInfo.status ==
+                              RegistrationStatus.approved.status)
+                      ? [
+                          AppColors.cF33D49,
+                          AppColors.cC0303A,
+                          AppColors.cA72A32,
+                          AppColors.c9A272E,
+                          AppColors.c93252C,
+                          AppColors.c90242B,
+                        ]
+                      : [
+                          Color(0xFF0B1035),
+                          Color(0xFF161F68),
+                          Color(0xFF1B2781),
+                          Color(0xFF1E2B8E),
+                          Color(0xFF1F2D95),
+                          Color(0xFF0B1035)
+                        ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
@@ -619,15 +638,28 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               ),
               child: Center(
                 child: Text(
-                  driverInfo == null ?
-                  context.isArabic?'تسجيل سائق سيارة':'Ride Register':
-                      (driverInfo.status == RegistrationStatus.approved.status)?
-                      context.isArabic?'وضع سائق سيارة':'Ride Mode':
-                      (driverInfo.status == RegistrationStatus.initial.status)?
-                  context.isArabic?'استكمال تسجيل سائق':'Complete Ride Register':
-                      (driverInfo.status == RegistrationStatus.pending.status)?
-                  context.isArabic?'انتظار موافقة تسجيل سائق':'Waiting ِApproval Ride Register':
-                      context.isArabic?'تسجيل سائق سيارة':'Ride Register',
+                  driverInfo == null
+                      ? context.isArabic
+                          ? 'تسجيل سائق سيارة'
+                          : 'Ride Register'
+                      : (driverInfo.status ==
+                              RegistrationStatus.approved.status)
+                          ? context.isArabic
+                              ? 'وضع سائق سيارة'
+                              : 'Ride Mode'
+                          : (driverInfo.status ==
+                                  RegistrationStatus.initial.status)
+                              ? context.isArabic
+                                  ? 'استكمال تسجيل سائق'
+                                  : 'Complete Ride Register'
+                              : (driverInfo.status ==
+                                      RegistrationStatus.pending.status)
+                                  ? context.isArabic
+                                      ? 'انتظار موافقة تسجيل سائق'
+                                      : 'Waiting ِApproval Ride Register'
+                                  : context.isArabic
+                                      ? 'تسجيل سائق سيارة'
+                                      : 'Ride Register',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -639,19 +671,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           Sizer(),
           GestureDetector(
             onTap: () {
-              if(!context.read<UserCubit>().isLoggedIn){
+              if (!context.read<UserCubit>().isLoggedIn) {
                 context.pop();
                 return pleaseLoginDialog(context);
               }
-                context.pop();
+              context.pop();
               if (loadingInfo == null) {
                 print("object");
                 serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
                     fromShipping: true, context: context);
               } else {
                 print("loadingInfo.toJson()${loadingInfo.toJson()}");
-                if (loadingInfo.status ==
-                    RegistrationStatus.pending.status) {
+                if (loadingInfo.status == RegistrationStatus.pending.status) {
                   return;
                 } else if (loadingInfo.status ==
                     RegistrationStatus.rejected.status) {
@@ -672,29 +703,32 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               : false));
                 }
               }
-              },
+            },
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
               width: double.infinity,
               height: 50,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors:loadingInfo != null &&
-                      (loadingInfo.status == RegistrationStatus.approved.status) ?[
-                    AppColors.cF33D49,
-                    AppColors.cC0303A,
-                    AppColors.cA72A32,
-                    AppColors.c9A272E,
-                    AppColors.c93252C,
-                    AppColors.c90242B,
-                  ]:[
-                    Color(0xFF0B1035),
-                    Color(0xFF161F68),
-                    Color(0xFF1B2781),
-                    Color(0xFF1E2B8E),
-                    Color(0xFF1F2D95),
-                    Color(0xFF0B1035)
-                  ],
+                  colors: loadingInfo != null &&
+                          (loadingInfo.status ==
+                              RegistrationStatus.approved.status)
+                      ? [
+                          AppColors.cF33D49,
+                          AppColors.cC0303A,
+                          AppColors.cA72A32,
+                          AppColors.c9A272E,
+                          AppColors.c93252C,
+                          AppColors.c90242B,
+                        ]
+                      : [
+                          Color(0xFF0B1035),
+                          Color(0xFF161F68),
+                          Color(0xFF1B2781),
+                          Color(0xFF1E2B8E),
+                          Color(0xFF1F2D95),
+                          Color(0xFF0B1035)
+                        ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
@@ -709,15 +743,28 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               ),
               child: Center(
                 child: Text(
-                  loadingInfo == null ?
-                  context.isArabic?'تسجيل سائق نقل':'Truck Register':
-                  (loadingInfo.status == RegistrationStatus.approved.status)?
-                  context.isArabic?'وضع سائق نقل':'Truck Mode':
-                  (loadingInfo.status == RegistrationStatus.initial.status)?
-                  context.isArabic?'استكمال تسجيل سائق نقل':'Complete Truck Register':
-                  (loadingInfo.status == RegistrationStatus.pending.status)?
-                  context.isArabic?'انتظار موافقة تسجيل سائق':'Waiting ِApproval Truck Register':
-                  context.isArabic?'تسجيل سائق نقل':'Truck Register',
+                  loadingInfo == null
+                      ? context.isArabic
+                          ? 'تسجيل سائق نقل'
+                          : 'Truck Register'
+                      : (loadingInfo.status ==
+                              RegistrationStatus.approved.status)
+                          ? context.isArabic
+                              ? 'وضع سائق نقل'
+                              : 'Truck Mode'
+                          : (loadingInfo.status ==
+                                  RegistrationStatus.initial.status)
+                              ? context.isArabic
+                                  ? 'استكمال تسجيل سائق نقل'
+                                  : 'Complete Truck Register'
+                              : (loadingInfo.status ==
+                                      RegistrationStatus.pending.status)
+                                  ? context.isArabic
+                                      ? 'انتظار موافقة تسجيل سائق'
+                                      : 'Waiting ِApproval Truck Register'
+                                  : context.isArabic
+                                      ? 'تسجيل سائق نقل'
+                                      : 'Truck Register',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -731,7 +778,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             onTap: () {
               if (context.isUserLoggedIn) {
                 context.pop();
-                context.push(Routes.rideOffer,extra: false);
+                context.push(Routes.rideOffer, extra: false);
               } else {
                 context.pop();
                 return pleaseLoginDialog(context);
@@ -765,7 +812,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               ),
               child: Center(
                 child: Text(
-                  context.isArabic?'وضع المستخدم':'User Mode',
+                  context.isArabic ? 'وضع المستخدم' : 'User Mode',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -814,7 +861,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               ),
               child: Center(
                 child: Text(
-                  context.isArabic?'سجل الرحلات':'Ride Log',
+                  context.isArabic ? 'سجل الرحلات' : 'Ride Log',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -872,7 +919,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
             urlTemplate: context.isDarkMode
                 ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            // Normal mode map
             subdomains: const ['a', 'b', 'c'],
             userAgentPackageName: 'com.example.app',
           ),
@@ -925,7 +973,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               polylines: [
                 Polyline(
                   points: routePoints,
-                  color: context.isDarkMode ? Colors.blue :  Colors.black87,
+                  color: context.isDarkMode ? Colors.blue : Colors.black87,
                   strokeWidth: 4.0,
                 ),
               ],
@@ -940,7 +988,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _carTruckBtn(
-      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo,required Function openDrawer}) {
+      {LoadingInfoEntity? loadingInfo,
+      DriverInfoEntity? driverInfo,
+      required Function openDrawer}) {
     if (loadingInfo == null && driverInfo == null) {
       return SizedBox(
         height: 48,
@@ -1030,7 +1080,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClickableWidget(
-              onTap: ()=>openDrawer(),
+              onTap: () => openDrawer(),
               child: Container(
                 width: 85.w,
                 height: kToolbarHeight * 1.2.h,
@@ -1040,7 +1090,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 ),
                 padding: EdgeInsets.all(4),
                 alignment: Alignment.center,
-                child: Image.asset(Assets.rideMenu,),
+                child: Image.asset(
+                  Assets.rideMenu,
+                ),
               ),
             ),
             Expanded(
@@ -1048,19 +1100,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 height: 50,
                 child: GestureDetector(
                   onTap: () {
-                    if(driverInfo == null&&loadingInfo==null){
+                    if (driverInfo == null && loadingInfo == null) {
                       openDrawer();
-                    }else if(driverInfo != null&&loadingInfo!=null){
+                    } else if (driverInfo != null && loadingInfo != null) {
                       openDrawer();
-                    }else{
-                      if(driverInfo != null&&loadingInfo==null){
+                    } else {
+                      if (driverInfo != null && loadingInfo == null) {
                         context.push(Routes.rideModeScreen,
                             extra: RideModeParams(
                                 modeType: 'ride',
                                 isSocket: driverInfo.driverType == 'socket'
                                     ? true
                                     : false));
-                      }else if(driverInfo == null&&loadingInfo!=null){
+                      } else if (driverInfo == null && loadingInfo != null) {
                         context.push(Routes.rideModeScreen,
                             extra: RideModeParams(
                                 modeType: 'truk',
@@ -1071,26 +1123,29 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     }
                   },
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                     width: double.infinity,
                     height: 50,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: (driverInfo != null||loadingInfo!=null)?[
-                          AppColors.cF33D49,
-                          AppColors.cC0303A,
-                          AppColors.cA72A32,
-                          AppColors.c9A272E,
-                          AppColors.c93252C,
-                          AppColors.c90242B,
-                        ]:[
-                          Color(0xFF0B1035),
-                          Color(0xFF161F68),
-                          Color(0xFF1B2781),
-                          Color(0xFF1E2B8E),
-                          Color(0xFF1F2D95),
-                          Color(0xFF0B1035)
-                        ],
+                        colors: (driverInfo != null || loadingInfo != null)
+                            ? [
+                                AppColors.cF33D49,
+                                AppColors.cC0303A,
+                                AppColors.cA72A32,
+                                AppColors.c9A272E,
+                                AppColors.c93252C,
+                                AppColors.c90242B,
+                              ]
+                            : [
+                                Color(0xFF0B1035),
+                                Color(0xFF161F68),
+                                Color(0xFF1B2781),
+                                Color(0xFF1E2B8E),
+                                Color(0xFF1F2D95),
+                                Color(0xFF0B1035)
+                              ],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
@@ -1105,7 +1160,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     ),
                     child: Center(
                       child: Text(
-                        (driverInfo != null||loadingInfo!=null)?context.isArabic?'وضع السائق':'Driver Mode' :LocaleKeys.carTruckRegister.tr(),
+                        (driverInfo != null || loadingInfo != null)
+                            ? context.isArabic
+                                ? 'وضع السائق'
+                                : 'Driver Mode'
+                            : LocaleKeys.carTruckRegister.tr(),
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 22,
@@ -1233,14 +1292,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                        width: 40,height: 40,
+                        width: 40,
+                        height: 40,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: AppColors.whiteColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         alignment: Alignment.center,
-                        child: Image.asset(Assets.targetLocation,),
+                        child: Image.asset(
+                          Assets.targetLocation,
+                        ),
                       ),
                       Expanded(
                         child: ClickableWidget(
@@ -1445,7 +1507,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     content: Text(
                                                       context.isArabic
                                                           ? "يرجى تحديد الموقع"
-                                                          : "Please select location", // Ensure you define this key in your localization file
+                                                          : "Please select location",
+                                                      // Ensure you define this key in your localization file
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: const TextStyle(
@@ -1513,7 +1576,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                         content: Text(
                                                           context.isArabic
                                                               ? "يرجى تحديد الموقع"
-                                                              : "Please select location", // Ensure you define this key in your localization file
+                                                              : "Please select location",
+                                                          // Ensure you define this key in your localization file
                                                           textAlign:
                                                               TextAlign.center,
                                                           style:
@@ -1650,8 +1714,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(imageUrl,
-                width: 50, height: 20, fit: BoxFit.fill),
+            Image.network(imageUrl, width: 50, height: 20, fit: BoxFit.fill),
             const SizedBox(height: 5),
             Text(title,
                 style:
@@ -1786,7 +1849,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 content: Text(
                   context.isArabic
                       ? "يرجي اختيار موقع اولا قبل تعديل سعر الرحله"
-                      : "Please select a location first before editing the fare", // Ensure you define this key in your localization file
+                      : "Please select a location first before editing the fare",
+                  // Ensure you define this key in your localization file
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
@@ -1863,7 +1927,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           content: Text(
                             context.isArabic
                                 ? "يرجي اختيار موقع اولا قبل تعديل سعر الرحله"
-                                : "Please select a location first before editing the fare", // Ensure you define this key in your localization file
+                                : "Please select a location first before editing the fare",
+                            // Ensure you define this key in your localization file
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,
