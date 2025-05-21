@@ -35,6 +35,7 @@ abstract class TripRepository {
    Future<Either<Failure, TripsResponseEntity>> getPastTrips(String params);
    Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts();
    Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params);
+   Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params);
    Future<Either<Failure, EmergencyContactEntity>> editEmergencyContacts(EmergencyContactEntity params);
    Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
    Future<Either<Failure, DriverSettingsEntity >> getDriverSettings();

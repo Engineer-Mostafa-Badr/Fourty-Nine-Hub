@@ -72,6 +72,7 @@ import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
+import '../../domain/usecases/rating_driver_by_client.dart';
 
 class RideRepositoryImplementation extends RideRepository {
   final RideRemoteDataSource rideRemoteDataSource;
@@ -244,6 +245,12 @@ class RideRepositoryImplementation extends RideRepository {
   Future<Either<Failure, bool>> cancelTripByRider(
       CancelTripByRiderUseCaseParams params) async {
     return await rideRemoteDataSource.cancelTripByRider(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizeTripByRider(
+      String params) async {
+    return await rideRemoteDataSource.finalizeTripByRider(params);
   }
 
   @override
@@ -426,5 +433,15 @@ class RideRepositoryImplementation extends RideRepository {
   Future<Either<Failure, UpdateDriverSettingsEntity>> updateDriverSettings(UpdateDriverSettingsParams params) {
     return rideRemoteDataSource.updateDriverSettings(params);
 
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendOkIamComing() {
+    return rideRemoteDataSource.sendOkIamComing();
+  }
+
+  @override
+  Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params) async {
+    return rideRemoteDataSource.ratingDriverByClient(params);
   }
 }

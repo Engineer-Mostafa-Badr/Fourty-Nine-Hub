@@ -26,6 +26,6 @@ class WatchingTripsParams {
   });
 
   Map<String, dynamic> toJson() => {
-        'viewDetails': {'tripIds': tripIds, 'driverImage': driverImage, 'driverId:': driverId}
+    'tripIds': tripIds
       };
 }

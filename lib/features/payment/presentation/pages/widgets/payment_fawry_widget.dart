@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
+// import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -380,29 +380,29 @@ class _FawryPaymentState extends State<FawryPayment> {
         ),
         if (_isAddingNewCard) ...[
           const SizedBox(height: 16),
-          CreditCardWidget(
-            padding: 0,
-            cardBgColor: Colors.black,
-            cardNumber: _cardNumberController.text,
-            textStyle: Styles.mediumText(
-              fontSize: 30,
-              color: context.isDarkMode ? Colors.black : Colors.white,
-            ),
-            // chipColor: Theme.of(context).scaffoldBackgroundColor,
-            backgroundImage: context.isDarkMode
-                ? Assets.transferMoneyBackgroundCardDark
-                : Assets.transferMoneyBackgroundCard,
-            expiryDate:
-                '${_expiryMonthController.text}/${_expiryYearController.text}',
-            cardHolderName: _cardAlias.text,
-            cvvCode: _cvvController.text,
-            showBackView: _cvvFocusNode.hasFocus,
-            obscureCardNumber: true,
-            obscureCardCvv: true,
-            isHolderNameVisible: false,
-            isChipVisible: true,
-            onCreditCardWidgetChange: (creditCardBrand) {},
-          ),
+          // CreditCardWidget(
+          //   padding: 0,
+          //   cardBgColor: Colors.black,
+          //   cardNumber: _cardNumberController.text,
+          //   textStyle: Styles.mediumText(
+          //     fontSize: 30,
+          //     color: context.isDarkMode ? Colors.black : Colors.white,
+          //   ),
+          //   // chipColor: Theme.of(context).scaffoldBackgroundColor,
+          //   backgroundImage: context.isDarkMode
+          //       ? Assets.transferMoneyBackgroundCardDark
+          //       : Assets.transferMoneyBackgroundCard,
+          //   expiryDate:
+          //       '${_expiryMonthController.text}/${_expiryYearController.text}',
+          //   cardHolderName: _cardAlias.text,
+          //   cvvCode: _cvvController.text,
+          //   showBackView: _cvvFocusNode.hasFocus,
+          //   obscureCardNumber: true,
+          //   obscureCardCvv: true,
+          //   isHolderNameVisible: false,
+          //   isChipVisible: true,
+          //   onCreditCardWidgetChange: (creditCardBrand) {},
+          // ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _cardNumberController,

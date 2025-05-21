@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -83,10 +84,13 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
+
                   return const Center(child: CircularProgressIndicator());
                 } else if (state.status == RideStates.error) {
+
                   return const SizedBox();
                 } else if (state.status == RideStates.success) {
+
                   if(state.completedTrips?.isEmpty??true) {
                     return Center(child: Text(context.isArabic ? "لا يوجد رحلات مكتملة" : "No completed trips"));
                   }

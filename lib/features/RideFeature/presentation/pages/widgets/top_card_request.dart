@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'font_manager.dart';
 
@@ -55,7 +56,6 @@ class TopCardRequest extends StatelessWidget {
                         ? NetworkImage(rideOffer.driverImage!) as ImageProvider<Object>
                         : AssetImage(Assets.maleImagePlaceholder) as ImageProvider<Object>,
                   ),
-
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -75,7 +75,7 @@ class TopCardRequest extends StatelessWidget {
                             Icon(Icons.star, color: Colors.amber.shade700, size: 16),
                             const SizedBox(width: 2),
                             (rideOffer.rating == null || rideOffer.ratingCount == null)? const SizedBox.shrink() : Text(
-                              "${rideOffer.rating} (${rideOffer.ratingCount})",
+                              "${FormatNumbers().convertNumberToLocalizedString(rideOffer.rating!.toStringAsFixed(2), isArabic: context.isArabic)} (${FormatNumbers().convertNumberToLocalizedString(rideOffer.ratingCount.toString(), isArabic: context.isArabic)})",
                               style: TextStyle(
                                 fontSize: FontSize.s14,
                                 color: textColor,
@@ -84,7 +84,7 @@ class TopCardRequest extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             (rideOffer.tripsCount == null || rideOffer.tripsCount == 0) ? const SizedBox.shrink() : Text(
-                              "(${rideOffer.tripsCount})",
+                              "(${FormatNumbers().convertNumberToLocalizedString(rideOffer.tripsCount.toString(), isArabic: context.isArabic)})",
                               style: TextStyle(
                                 fontSize: FontSize.s12,
                                 color: subTextColor,
@@ -94,7 +94,7 @@ class TopCardRequest extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          rideOffer.carModel ?? "",
+                          FormatNumbers().convertNumberToLocalizedString(rideOffer.carModel ?? "" , isArabic: context.isArabic),
                           style: TextStyle(
                             fontSize: FontSize.s12,
                             color: textColor,
@@ -108,7 +108,7 @@ class TopCardRequest extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${formatDuration(rideOffer.duration ?? 0)}, ${formatDistance(rideOffer.distance ?? 0)}",
+                        "${FormatNumbers().convertNumberToLocalizedString(formatDuration(rideOffer.duration ?? 0, context), isArabic: context.isArabic)}, ${formatDistance(rideOffer.distance ?? 0, context)}",
                         style: TextStyle(
                           fontSize: FontSize.s12,
                           color: subTextColor,
@@ -116,7 +116,7 @@ class TopCardRequest extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "${rideOffer.price} ${context.isArabic ? "ج.م" : "EGP"}",
+                        "${FormatNumbers().convertNumberToLocalizedString(rideOffer.price?.toInt().toString() ?? "0", isArabic: context.isArabic)} ${context.isArabic ? "ج.م" : "EGP"}",
                         style: TextStyle(
                           fontSize: FontSize.s18,
                           fontWeight: FontWeight.bold,
@@ -204,12 +204,29 @@ class TopCardRequest extends StatelessWidget {
     );
   }
 
-  static String formatDistance(double distance) {
-    return "${(distance / 1000).toStringAsFixed(1)} KM";
+  static String formatDistance(double distance, BuildContext context) {
+    return "${FormatNumbers().convertNumberToLocalizedString((distance / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${context.isArabic ? "كم" : "KM"}";
   }
 
-  static String formatDuration(double duration) {
-    int minutes = (duration / 60).ceil();
-    return "$minutes min";
+  // static String formatDuration(double duration, BuildContext context) {
+  //   int minutes = (duration / 60).ceil();
+  //   return "${FormatNumbers().convertNumberToLocalizedString(minutes.toString(), isArabic: context.isArabic)} ${context.isArabic ? "دقيقة" : "Mins"}";
+  // }
+  static String formatDuration(num arrivalTimestamp, BuildContext context) {
+    final now = DateTime.now();
+    final arrivalTime = DateTime.fromMillisecondsSinceEpoch(arrivalTimestamp.toInt());
+
+    final duration = arrivalTime.difference(now);
+    int minutes = duration.inMinutes;
+
+    if (minutes <= 0) {
+      minutes = 1;
+    }
+
+    final localizedMinutes = FormatNumbers()
+        .convertNumberToLocalizedString(minutes.toString(), isArabic: context.isArabic);
+
+    return "$localizedMinutes ${context.isArabic ? "دقيقة" : "mins"}";
   }
+
 }
