@@ -33,7 +33,7 @@ class RideOfferModel extends RideOfferEntity {
       price: (tripDetails['priceOffer'] as num?)?.toInt(),
       carModel: vehicleDetails['carModel'],
       distance: (tripDetails['distance'] as num?)?.toDouble(),
-      duration: (tripDetails['arrivalTimeToClient'] as num?)?.toDouble(),
+      duration: (tripDetails['arrivalTime'] as num?)?.toDouble(),
       rating: (ratingDetails['averageRating'] as num?)?.toDouble(),
       ratingCount: (ratingDetails['countRating'] as int?),
       tripsCount: (driverDetails['tripsCount'] as int?),

@@ -1387,7 +1387,7 @@
   "percentage": "نسبة",
   "subscribePackage": "رزم الاشتراك",
   "busMode": "الوضع الحافلة",
-  "trukMode": "الوضع الشاحنة",
+  "trukMode": "الوضع شاحنة",
   "busDetails": "تفاصيل الحافلة",
   "trukDetails": "تفاصيل الشاحنة",
   "busWithYou": "رحله حافلة معك",
@@ -1611,9 +1611,10 @@
   "youDontHaveAcceptedOffer": "ليس لديك أي عروض مقبولة حتى الآن",
   "youDontHavePendingOffer": "ليس لديك أي عروض قيد الانتظار حتى الآن",
   "youDontHavePastOffer": "ليس لديك أي عروض سابقة حتى الآن",
-  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
   "selectFromList": "اختر من القائمة",
   "selectFromMap": "اختر من الخريطة",
-  "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا"
+  "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا",
+  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت"
 
 }
