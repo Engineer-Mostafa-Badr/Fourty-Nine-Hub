@@ -42,24 +42,25 @@ class AvailableNonSocketWidget extends StatelessWidget {
       String errorName = getFailureName(state.failure!, context);
       final failure = state.failure;
 
-      if (failure is ServerFailure) {
-        if (failure.errors != null && failure.errors!.isNotEmpty) {
-          showErrorMessage(context, failure.errors!.first);
-          return;
-        }
-
-        if (errorName == 'DebtError') {
-          showDebtDialog(context, offers?.subCategory?.id ?? "");
-        } else if (errorName == 'SubscribeError') {
-          showSubscribeDialog(context, offers?.subCategory?.id ?? "");
-        } else {
-          showErrorMessage(
-              context, getFailureMessage(state.failure!, context));
-        }
-
-        // Optional: After showing dialog, dispatch an event to clear the error
-        // context.read<DashboardsCubit>().add(ClearErrorEvent());
-      }
+      // if (failure is ServerFailure) {
+      //   if (failure.errors != null && failure.errors!.isNotEmpty) {
+      //     showErrorMessage(context, failure.errors!.first);
+      //     return;
+      //   }
+      //
+      //   if (errorName == 'DebtError') {
+      //     showDebtDialog(context, offers?.subCategory?.id ?? "");
+      //   } else if (errorName == 'SubscribeError') {
+      //     showSubscribeDialog(context, offers?.subCategory?.id ?? "");
+      //   }
+      //   else {
+      //     showErrorMessage(
+      //         context, getFailureMessage(state.failure!, context));
+      //   }
+      //
+      //   // Optional: After showing dialog, dispatch an event to clear the error
+      //   // context.read<DashboardsCubit>().add(ClearErrorEvent());
+      // }
     }
   },
   child: Container(
@@ -198,7 +199,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                 //     width: 40, height: 40, fit: BoxFit.cover)
                                 //     :
                                 ImageFromInternet(
-                                    image: offers!.subCategory!.pictureUrl!,
+                                    image: offers!.subCategory?.pictureUrl?? "",
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),
@@ -278,12 +279,15 @@ class AvailableNonSocketWidget extends StatelessWidget {
                             onPressed: () {
                               final price = offers?.tripDetails?.price ?? 0;
                               final tripId = offers?.tripDetails?.id  ?? '';
+                              print("XXQ ${tripId}");
+                              print("XXQ ${offers?.tripDetails?.id }");
                               context.read<DashboardsCubit>().createNonTrackOffer(
                                 CreateNonTrackOfferParams(
                                   tripId: tripId,
                                   priceOffer: price,
                                 ),
-                                  context
+                                  context,
+                                  offers?.subCategory?.id ?? ""
                               );
                             },
                             backColor: context.isDarkMode
@@ -435,7 +439,8 @@ class AvailableNonSocketWidget extends StatelessWidget {
                         tripId: tripId,
                         priceOffer: enteredPrice,
                       ),
-                        context
+                        context,
+                        offers?.subCategory?.id ?? ""
                     );
                   },
                   label: LocaleKeys.done.localize,

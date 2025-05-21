@@ -89,6 +89,8 @@ abstract class TripRemoteDataSource {
   void listenToRemoveTrip(Function(String tripId) params);
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
+  void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
+
   Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>> getAvailableNonSocketTrips(ClientPendingTripParams params);
 
   Future<Either<Failure, List<AcceptedRideNonSocketTripEntity>>> getAcceptedNonSocketTrips(ClientPendingTripParams params);
@@ -96,6 +98,8 @@ abstract class TripRemoteDataSource {
 
 
   Future<Either<Failure, DriverSettingsEntity >> getDriverSettings();
+
+  void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
 
 }
 
@@ -558,5 +562,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
           (l) => Left(l),
           (data) => Right(data['status'],
     ));
+  }
+
+  @override
+  void listenToAcceptUntrackedTripOffer(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Remove Trip ");
+      log("Listen to Remove Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.acceptUntrackedTripOffer, (data) {
+        CliLogger.info("Remove Trip data :  $data");
+        log("Remove Trip data :  $data");
+        params(data['acceptedTripOffer']);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params) {
+    try {
+      CliLogger.info("Listen to  New Trip Trip ");
+      log("Listen to New Trip Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateUntrackedTrip, (data) {
+        CliLogger.info(" New Trip Trip data :  $data");
+        log(" New Trip Trip data :  $data");
+        print(" New Trip Trip data :  ${data}");
+        params(GetAvailableRideNonSocketTripModel.fromJson(data["tripsUpdated"]));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
   }
 }

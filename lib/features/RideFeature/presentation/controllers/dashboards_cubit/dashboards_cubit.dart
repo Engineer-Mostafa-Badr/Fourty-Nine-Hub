@@ -82,6 +82,8 @@ import '../../../domain/usecases/dashboards/get_driver_settings_usecase.dart';
 import '../../../domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../../../domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../../../domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../../../domain/usecases/dashboards/listen_to_accept_untracked_trip_offer_use_case.dart';
+import '../../../domain/usecases/dashboards/listen_to_available_untracked_trip_use_case.dart';
 import '../../../domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
@@ -134,6 +136,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final EditEmergencyContactsUseCase editEmergencyContactsUseCase;
   final DeleteEmergencyContactUseCase deleteEmergencyContactUseCase;
   final FinalizeTripByRiderUseCase finalizeTripByRiderUseCase;
+  final ListenToAvailableUntrackedTripUseCase listenToAvailableUntrackedTripUseCase;
+  final ListenToAcceptUntrackedTripOfferUseCase listenToAcceptUntrackedTripOfferUseCase;
 
   DashboardsCubit(this.getAvailableTripsUsecase,
       this.getPastTripsUsecase,
@@ -170,8 +174,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.watchingTripsUseCase,
       this.deleteEmergencyContactUseCase,
       this.finalizeTripByRiderUseCase,
+      this.listenToAvailableUntrackedTripUseCase,
+
       this.createNonTrackTripUseCase, this.updateDriverSettingsUseCase,
-      this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase,)
+      this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase, this.listenToAcceptUntrackedTripOfferUseCase,)
       : super(const DashboardsState());
 
 
@@ -375,7 +381,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> createNonTrackOffer(CreateNonTrackOfferParams params,
-      context) async {
+      context,String subCategoryId) async {
     if (isClosed) {
       return;
     }
@@ -388,6 +394,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           (failure) {
         // log("Failure ${getFailureMessage(failure, context)}");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+        String errorName = getFailureName(state.failure!, context);
+        if (errorName == 'SubscribeError') {
+          showSubscribeDialog(context, subCategoryId);
+        }
       },
           (data) {
         log("Suzccess");
@@ -639,6 +649,17 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
         list.insert(0, trip);
         emit(state.copyWith(availableRideTrips: list));
+        log(trip.toString());
+      });
+    }
+
+    void listenToNewTripNonSocket() {
+      CliLogger.info('Listen To New Trip');
+      // TripsResponseEntity
+      listenToAvailableUntrackedTripUseCase((trip) {
+        List<AvailableRideNonSocketTripEntity> list = availableRideNonSocketData ?? [];
+        list.insert(0, trip);
+        emit(state.copyWith(availableRideNonSocketTrips: list));
         log(trip.toString());
       });
     }
