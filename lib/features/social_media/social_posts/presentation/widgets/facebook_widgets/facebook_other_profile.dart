@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -7,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_photos.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_posts.dart';
@@ -16,16 +19,16 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../../res/style/const.dart';
 
-class FacebookProfile extends StatefulWidget {
-  const FacebookProfile({super.key, required this.scrollController});
+class FacebookOtherProfile extends StatefulWidget {
+  const FacebookOtherProfile({super.key, required this.scrollController});
 
   final ScrollController scrollController;
 
   @override
-  State<FacebookProfile> createState() => _FacebookProfileState();
+  State<FacebookOtherProfile> createState() => _FacebookOtherProfileState();
 }
 
-class _FacebookProfileState extends State<FacebookProfile> {
+class _FacebookOtherProfileState extends State<FacebookOtherProfile> {
   bool _showPosts = true;
 
   bool _showPhotos = false;
@@ -37,6 +40,7 @@ class _FacebookProfileState extends State<FacebookProfile> {
     return ListView(
       controller: widget.scrollController,
       children: [
+        Align(alignment: AlignmentDirectional.centerStart,child: IconButton(onPressed: ()=>context.read<PeopleTabCubit>().showList(), icon: Icon(Icons.arrow_back))),
         ProfileHeader(),
         Divider(
           thickness: 6,
@@ -96,7 +100,7 @@ class _FacebookProfileState extends State<FacebookProfile> {
         ),
         const Sizer(),
         if(_showPosts)ProfilePosts(),
-        if(_showPhotos)ProfilePhotos(),
+        if(_showPhotos)ProfilePhotos(name: 'Mohamed',),
         if(_showVideos)ProfileVideos(),
       ],
     );
@@ -127,10 +131,17 @@ class _FacebookProfileState extends State<FacebookProfile> {
   }
 }
 
-class ProfileHeader extends StatelessWidget {
+class ProfileHeader extends StatefulWidget {
   const ProfileHeader({super.key});
 
   @override
+  State<ProfileHeader> createState() => _ProfileHeaderState();
+}
+
+class _ProfileHeaderState extends State<ProfileHeader> {
+  bool isFriend=false;
+
+@override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -140,208 +151,68 @@ class ProfileHeader extends StatelessWidget {
             children: [
               SizedBox(
                 height: 270.h,
-                child: Stack(
-                  alignment: AlignmentDirectional.bottomEnd,
-                  children: [
-                    // state.newCover != null
-                    //     ?
-                    // InkWell(
-                    //   onTap: () {
-                    //     showDialog(
-                    //         context: context,
-                    //         builder: (context) =>
-                    //             ImageDetailsScreen(
-                    //               image:
-                    //               state.newCover?.file.path ??
-                    //                   '',
-                    //               fromPost: false,
-                    //               onRemoveImage: () {
-                    //                 // controller
-                    //                 //     .removePhoto(images![index]);
-                    //                 context.pop();
-                    //               },
-                    //             ));
-                    //   },
-                    //   child: Image.file(
-                    //     File(state.newCover!.file.path),
-                    //     fit: BoxFit.fill,
-                    //     width: double.infinity,
-                    //   ),
-                    // )
+                child: InkWell(
+                  onTap: () {
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (context) =>
+                    //         ImageDetailsScreen(
+                    //           image: user.profileCover ?? '',
+                    //           fromPost: true,
+                    //           onRemoveImage: () {
+                    //             // controller
+                    //             //     .removePhoto(images![index]);
+                    //             context.pop();
+                    //           },
+                    //         ));
+                  },
+                  child: Image.network(
+                    // user.profileCover!.isNotEmpty
+                    //     ? user.profileCover!
                     //     :
-                    InkWell(
-                      onTap: () {
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (context) =>
-                        //         ImageDetailsScreen(
-                        //           image: user.profileCover ?? '',
-                        //           fromPost: true,
-                        //           onRemoveImage: () {
-                        //             // controller
-                        //             //     .removePhoto(images![index]);
-                        //             context.pop();
-                        //           },
-                        //         ));
-                      },
-                      child: Image.network(
-                        // user.profileCover!.isNotEmpty
-                        //     ? user.profileCover!
-                        //     :
-                        UIConst.socialImagePlaceHolder,
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                      ),
-                    ),
-                    // if (loginUser?.id == user.id)
-                    InkWell(
-                      onTap: () {
-                        // selectCoverImage();
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 10.h),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: Container(
-                            padding: EdgeInsets.all(10.w),
-                            margin: EdgeInsets.all(6.w),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color:
-                              AppColors.getButtonPrimaryWhiteColor(context),
-                            ),
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              color: AppColors.getReversedTextColor(context),
-                            )),
-                      ),
-                    )
-                  ],
+                    UIConst.socialImagePlaceHolder,
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                  ),
                 ),
               ),
               PositionedDirectional(
                   bottom: 1.h,
                   start: 10,
-                  child: Stack(
-                    alignment: AlignmentDirectional.bottomEnd,
-                    children: [
-                      // state.newImage != null
-                      //     ?
-                      // InkWell(
-                      //   onTap: () {
-                      //     // showDialog(
-                      //     //     context: context,
-                      //     //     builder: (context) => ImageDetailsScreen(
-                      //     //       image:
-                      //     //       state.newImage?.file.path ?? '',
-                      //     //       fromPost: false,
-                      //     //       onRemoveImage: () {
-                      //     //         // controller
-                      //     //         //     .removePhoto(images![index]);
-                      //     //         context.pop();
-                      //     //       },
-                      //     //     ));
-                      //   },
-                      //   child: CircleAvatar(
-                      //     radius: 160.w,
-                      //     backgroundColor:
-                      //     Theme.of(context).scaffoldBackgroundColor,
-                      //     child: Container(
-                      //       height: 250.h,
-                      //       width: 300.w,
-                      //       decoration: BoxDecoration(
-                      //         shape: BoxShape.circle,
-                      //         image: DecorationImage(
-                      //           image: FileImage(File(state.newImage!.file.path)),
-                      //           fit: BoxFit.fill,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     // child: CircleAvatar(
-                      //     //   radius: 60,
-                      //     //   backgroundColor: Colors.white,
-                      //     //   backgroundImage: FileImage(
-                      //     //       File(state.newImage!.file.path)),
-                      //     // ),
-                      //   ),
-                      // )
-                      //     :
-                      GestureDetector(
-                        onTap: () {
-                          // if (context.isUserLoggedIn) {
-                          //   context.read<UserCubit>().updateProfileView(
-                          //       isProfile: false,
-                          //       userId: widget.userId);
-                          // }
-                          // showDialog(
-                          //     context: context,
-                          //     builder: (context) => ImageDetailsScreen(
-                          //       image: user.profilePicture ?? '',
-                          //       fromPost: true,
-                          //       onRemoveImage: () {
-                          //         // controller
-                          //         //     .removePhoto(images![index]);
-                          //         context.pop();
-                          //       },
-                          //     ));
-                        },
-                        child: CircleAvatar(
-                          radius: 120.w,
-                          backgroundColor:
-                          Theme
-                              .of(context)
-                              .scaffoldBackgroundColor,
-                          child: ImageFromInternet(
-                            image:
-                            //user.profilePicture ??
-                            UIConst.profilePlaceHolder,
-                            height: 250.h,
-                            width: 300.w,
-                            isCircle: true,
-                          ),
-                        ),
+                  child: GestureDetector(
+                    onTap: () {
+                      // if (context.isUserLoggedIn) {
+                      //   context.read<UserCubit>().updateProfileView(
+                      //       isProfile: false,
+                      //       userId: widget.userId);
+                      // }
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) => ImageDetailsScreen(
+                      //       image: user.profilePicture ?? '',
+                      //       fromPost: true,
+                      //       onRemoveImage: () {
+                      //         // controller
+                      //         //     .removePhoto(images![index]);
+                      //         context.pop();
+                      //       },
+                      //     ));
+                    },
+                    child: CircleAvatar(
+                      radius: 120.w,
+                      backgroundColor:
+                      Theme
+                          .of(context)
+                          .scaffoldBackgroundColor,
+                      child: ImageFromInternet(
+                        image:
+                        //user.profilePicture ??
+                        UIConst.profilePlaceHolder,
+                        height: 250.h,
+                        width: 300.w,
+                        isCircle: true,
                       ),
-                      // if (loginUser?.id == user.id)
-                      PositionedDirectional(
-                        end: 0,
-                        bottom: 10.h,
-                        child: InkWell(
-                          onTap: () {
-                            // selectImageGallary();
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              ),
-                            ),
-                            child: Container(
-                                padding: EdgeInsets.all(10.w),
-                                margin: EdgeInsets.all(6.w),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.getButtonPrimaryWhiteColor(
-                                        context)),
-                                child: Icon(
-                                  Icons.camera_alt_outlined,
-                                  color:
-                                  AppColors.getReversedTextColor(context),
-                                  size: 35.w,
-                                )),
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ))
             ],
           ),
@@ -416,25 +287,31 @@ class ProfileHeader extends StatelessWidget {
                 children: [
                   Expanded(
                     child: AppButton(
-                      label: context.isArabic ? 'اضف قصة' : 'Add to Story',
-                      onPressed: () {},
-                      backColor: AppColors.getButtonPrimaryWhiteColor(context),
-                      color: AppColors.getPrimaryTextColor(context),
-                      textColor: AppColors.getPrimaryTextColor(context),
-                      icon: Icons.add,
+                      label:
+                      isFriend?LocaleKeys.friend.localize :LocaleKeys.addFriend.localize,
+                      onPressed: () {
+                        setState(() {
+                          isFriend= !isFriend;
+                        });
+                      },
+                      backColor: AppColors.getFindFillColor(context),
+                      color: AppColors.getTextColor(context),
+                      textColor: AppColors.getTextColor(context),
+                      icon:isFriend?FontAwesomeIcons.userCheck: Icons.person_add_alt_1,
+                      iconWidget: Sizer(),
                       radius: 10,
                     ),
                   ),
                   const Sizer(),
                   Expanded(
                     child: AppButton(
-                      label:
-                      context.isArabic ? 'تعديل معلوماتك' : 'Edit Profile',
+                      label: LocaleKeys.message.localize,
                       onPressed: () {},
-                      backColor: AppColors.getFindFillColor(context),
-                      color: AppColors.getTextColor(context),
-                      textColor: AppColors.getTextColor(context),
-                      icon: Icons.mode_edit_outline_outlined,
+                      backColor: AppColors.getButtonPrimaryWhiteColor(context),
+                      color: AppColors.getPrimaryTextColor(context),
+                      textColor: AppColors.getPrimaryTextColor(context),
+                      icon: FontAwesomeIcons.facebookMessenger,
+                      iconWidget: Sizer(),
                       radius: 10,
                     ),
                   ),
@@ -643,6 +520,3 @@ class ProfileHeader extends StatelessWidget {
         ]));
   }
 }
-
-
-
