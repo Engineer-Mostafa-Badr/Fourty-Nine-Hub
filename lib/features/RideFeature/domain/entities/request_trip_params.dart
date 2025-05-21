@@ -19,6 +19,7 @@ class RequestTripUseCaseParams {
   final bool autoAccept;
   final bool isPremium;
   final List<List<double>> polyline;
+  final String phoneNumber;
 
   RequestTripUseCaseParams({
     required this.subcategoryId,
@@ -41,6 +42,7 @@ class RequestTripUseCaseParams {
     required this.autoAccept,
     required this.isPremium,
     required this.polyline,
+    required this.phoneNumber,
   });
 
   //toJson
@@ -64,6 +66,7 @@ class RequestTripUseCaseParams {
     "autoAccept" : autoAccept,
     "isPremium" : isPremium,
     "polyline" : polyline,
+    "riderPhone": phoneNumber,
   };
 
 }

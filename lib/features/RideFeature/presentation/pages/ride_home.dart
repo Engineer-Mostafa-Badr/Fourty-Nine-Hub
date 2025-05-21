@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:math';
 
@@ -18,6 +19,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_en
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/client_rate_driver_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
@@ -40,11 +42,13 @@ import 'package:latlong2/latlong.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../core/utils/format_numbers.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/get_location_from_address_entity.dart';
+import '../../domain/usecases/rating_driver_by_client.dart';
 import '../controllers/cubits/car_location_cubit.dart';
 import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
@@ -64,87 +68,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
 
-  // String? _selectedCountry;
   final MapController _mapController = MapController();
 
   @override
   void initState() {
     super.initState();
-    // _country = CountryPickerUtils.getCountryByName('Egypt');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final rideCubit = serviceLocator<RideCubit>();
       if (!rideCubit.isClosed) {
         rideCubit.initHome(context);
       }
-      // Check if there's an active trip and show the modal if needed
-      // if (rideCubit.state.requestedTrip != null) {
-      //   _showDriversOffersBottomSheet();
-      // }
     });
   }
 
-  // void _showDriversOffersBottomSheet() async {
-  //   await showModalBottomSheet(
-  //     backgroundColor: Colors.transparent,
-  //     context: context,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-  //     ),
-  //     isScrollControlled: true,
-  //     builder: (context) => BlocProvider.value(
-  //       value: serviceLocator<RideCubit>(),
-  //       child: Builder(
-  //         builder: (context) {
-  //           return BlocBuilder<RideCubit, RideState>(
-  //               builder: (context, state) {
-  //             return Column(
-  //               children: [
-  //                 Padding(
-  //                   padding: const EdgeInsets.only(top: 80),
-  //                   child: SizedBox(
-  //                     height: MediaQuery.of(context).size.height * 0.6,
-  //                     child: _buildDriversOffers(),
-  //                   ),
-  //                 ),
-  //                 const Spacer(),
-  //                 Container(
-  //                   decoration: BoxDecoration(
-  //                     borderRadius: const BorderRadius.only(
-  //                       topLeft: Radius.circular(25),
-  //                       topRight: Radius.circular(25),
-  //                     ),
-  //                     color: context.isDarkMode ? AppColors.QUANTITY_COLOR : AppColors.whiteColor,
-  //                   ),
-  //                   // padding: const EdgeInsets.only(
-  //                   //   // bottom: MediaQuery.of(context).viewInsets.bottom + 25,
-  //                   // ),
-  //                   child: BottomCardRequest(
-  //                     driversCount: 3,
-  //                     rideCubit: serviceLocator<RideCubit>(),
-  //                     onCancel: () async {
-  //                       await context
-  //                           .read<RideCubit>()
-  //                           .cancelPendingTripByClient(
-  //                             tripId: context
-  //                                     .read<RideCubit>()
-  //                                     .state
-  //                                     .requestedTrip
-  //                                     ?.id ??
-  //                                 '',
-  //                           );
-  //                       context.pop();
-  //                     },
-  //                   ),
-  //                 ),
-  //               ],
-  //             );
-  //           });
-  //         },
-  //       ),
-  //     ),
-  //   );
-  //   serviceLocator<RideCubit>().hasPendingShownBottomSheet = false;
-  // }
   Widget buildPendingSheet() {
     return Positioned(
       bottom: 0,
@@ -207,7 +143,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             maxHeight: MediaQuery.of(context).size.height * 0.6,
           ),
           child: ListView.builder(
-            shrinkWrap: true, // ✅ makes it take only the needed space
+            shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
             itemCount: state.rideOffers.length,
             itemBuilder: (context, index) {
@@ -267,14 +203,27 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             "state.requestedTrip?.status ${state.requestedTrip?.status}");
                         return DriverHeaderWidget(
                           carModel: state.requestedTrip?.vehicleModel,
-                          rideStatusWidget: DriverArrivalCountdown(
-                            key: ValueKey(
-                                "${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"
-                            ),
-                            arrivalInSeconds: state.requestedTrip?.driverIsArrivingIn ?? 0,
-                            isCountdown: state.requestedTrip?.status == TripState.goToClient.name,
-                            isInLocation: state.requestedTrip?.status == TripState.inLocation.name,
-                          ),
+                          carColor: state.requestedTrip?.vehicleColor,
+                          rideStatusWidget: state.requestedTrip?.status ==
+                                  TripState.started.name
+                              ? TripDurationCountdown(
+                                  key: ValueKey(
+                                      "${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
+                                  tripDurationSeconds:
+                                      state.requestedTrip?.duration?.toDouble(),
+                                  isArabic: context.isArabic,
+                                )
+                              : DriverArrivalCountdown(
+                                  key: ValueKey(
+                                      "${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
+                                  arrivalTimestampMs:
+                                      state.requestedTrip?.driverIsArrivingIn ??
+                                          0,
+                                  isCountdown: state.requestedTrip?.status ==
+                                      TripState.goToClient.name,
+                                  isInLocation: state.requestedTrip?.status ==
+                                      TripState.inLocation.name,
+                                ),
                           carImageUrl: state.requestedTrip?.vehiclePicture ??
                               "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
                           carName: state.requestedTrip?.vehicleBrand,
@@ -301,35 +250,41 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 padding: const EdgeInsets.all(8),
                                 child: Column(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(context.isArabic
-                                              ? "لا تتأخر، قد يؤثر على تقييمك"
-                                              : "Please don't be late, it may affect your rating"),
-                                        ),
-                                        const Text("4:55")
-                                      ],
-                                    ),
+                                    BlocBuilder<RideCubit, RideState>(
+                                        builder: (context, state) {
+                                      return CountdownTimerWidget(
+                                        isActive: state.requestedTrip?.status ==
+                                            TripState.inLocation.name,
+                                        isArabic: context.isArabic,
+                                      );
+                                    }),
                                     const SizedBox(height: 16),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.6,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.PRIMARY_COLOR,
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Text(
-                                            context.isArabic
-                                                ? "حسنا، أنا قادم"
-                                                : "Ok, I'm coming",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
+                                    GestureDetector(
+                                      onTap: () async {
+                                        await serviceLocator<RideCubit>()
+                                            .sendIamOkMessage(context);
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.PRIMARY_COLOR,
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(
+                                              context.isArabic
+                                                  ? "حسنا، أنا قادم"
+                                                  : "Ok, I'm coming",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -382,7 +337,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         onPartialPayment: () {},
                         onCallEmergency: () {},
                         onCancelRide: () {},
-                        isRecording: true,
+                        isRecording: state.requestedTrip?.status ==
+                            TripState.started.name,
                         audioDuration: '',
                         onMicTap: () {},
                         paymentMethod:
@@ -400,17 +356,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         );
       }),
     );
-  }
-
-  String getArrivalTimeString(double? seconds) {
-    if (seconds == null) return "";
-
-    final now = DateTime.now();
-    final arrivalTime = now.add(Duration(seconds: seconds.toInt()));
-    final formattedTime =
-        "${arrivalTime.minute.toString().padLeft(2, '0')}:${arrivalTime.second.toString().padLeft(2, '0')}";
-
-    return formattedTime;
   }
 
   final ScrollController _rideScrollController = ScrollController();
@@ -444,103 +389,123 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RideCubit, RideState>(listener: (context, state) {
-      // log("new state listener");
-      // var cubit = serviceLocator<RideCubit>();
-      // if (state.requestedTrip != null) {
-      //   // log("trip status 1 : ${state.requestedTrip!.status}");
-      //   WidgetsBinding.instance.addPostFrameCallback((_) {
-      //     // log("trip status 2: ${state.requestedTrip!.status}");
-      //     if (state.requestedTrip!.status == TripState.pending.name &&
-      //         !cubit.hasPendingShownBottomSheet) {
-      //       cubit.hasPendingShownBottomSheet = true;
-      //       _showDriversOffersBottomSheet();
-      //     }
-      //     if (state.requestedTrip!.status == TripState.accepted.name &&
-      //         !cubit.hasAcceptedShownBottomSheet) {
-      //       cubit.hasAcceptedShownBottomSheet = true;
-      //       _showAcceptedTripBottomSheet();
-      //     }
-      //   });
-      // }
-    }, builder: (context, state) {
-      var cubit = serviceLocator<RideCubit>();
-      return PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (c, v) => context.go(Routes.HOME),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: cubit.loadingHomeData == true
-              ? const Center(child: CircularProgressIndicator())
-              : Form(
-                  key: _formKey,
-                  child: SafeArea(
-                    child: SharedScaffold(
-                      mainCategoryId: 2,
-                      body: NestedAppbar(
-                        scrollController: _scrollController,
-                        appBars: const [],
-                        body: Stack(
-                          children: [
-                            context.read<RideCubit>().selectedCategoryIsSocket
-                                ? _buildTopImage()
-                                : const SizedBox.shrink(),
-                            !context.read<RideCubit>().selectedCategoryIsSocket
-                                ? const SizedBox()
-                                : state.requestedTrip == null
+    return BlocConsumer<RideCubit, RideState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var cubit = serviceLocator<RideCubit>();
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (c, v) => context.go(Routes.HOME),
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: cubit.loadingHomeData == true
+                  ? const Center(child: CircularProgressIndicator())
+                  : Form(
+                      key: _formKey,
+                      child: SafeArea(
+                        child: SharedScaffold(
+                          mainCategoryId: 2,
+                          body: NestedAppbar(
+                            scrollController: _scrollController,
+                            appBars: const [],
+                            body: Stack(
+                              children: [
+                                context
+                                        .read<RideCubit>()
+                                        .selectedCategoryIsSocket
+                                    ? _buildTopImage()
+                                    : const SizedBox.shrink(),
+                                !context
+                                        .read<RideCubit>()
+                                        .selectedCategoryIsSocket
                                     ? const SizedBox()
-                                    : state.requestedTrip!.status ==
-                                            TripState.pending.name
-                                        ? buildDriversOffers(context)
-                                        : const SizedBox(),
-                            !context.read<RideCubit>().selectedCategoryIsSocket
-                                ? const SizedBox()
-                                : state.requestedTrip == null
-                                    ? _buildBottomSheet()
-                                    : state.requestedTrip!.status ==
-                                                TripState.completed.name ||
-                                            state.requestedTrip!.status ==
-                                                TripState.canceled.name
-                                        ? _buildBottomSheet()
+                                    : state.requestedTrip == null
+                                        ? const SizedBox()
                                         : state.requestedTrip!.status ==
                                                 TripState.pending.name
-                                            ? buildPendingSheet()
+                                            ? buildDriversOffers(context)
+                                            : const SizedBox(),
+                                !context
+                                        .read<RideCubit>()
+                                        .selectedCategoryIsSocket
+                                    ? const SizedBox()
+                                    : state.requestedTrip == null
+                                        ? _buildBottomSheet()
+                                        : state.requestedTrip!.status ==
+                                                    TripState.completed.name ||
+                                                state.requestedTrip!.status ==
+                                                    TripState.canceled.name
+                                            ? _buildBottomSheet()
                                             : state.requestedTrip!.status ==
-                                                        TripState
-                                                            .accepted.name ||
-                                                    state.requestedTrip!
-                                                            .status ==
-                                                        TripState
-                                                            .goToClient.name ||
-                                                    state.requestedTrip!
-                                                            .status ==
-                                                        TripState
-                                                            .inLocation.name
-                                                ? acceptedTripButtonSheet()
-                                                : const SizedBox(),
-                            !context.read<RideCubit>().selectedCategoryIsSocket
-                                ? const SizedBox()
-                                : state.requestedTrip == null
-                                    ? _carTruckBtn(
-                                        driverInfo: state.driverInfo,
-                                        loadingInfo: state.loaderInfo)
-                                    : (state.requestedTrip!.status ==
-                                                TripState.completed.name ||
-                                            state.requestedTrip!.status ==
-                                                TripState.canceled.name)
+                                                    TripState.pending.name
+                                                ? buildPendingSheet()
+                                                : state.requestedTrip!.status ==
+                                                            TripState.accepted
+                                                                .name ||
+                                                        state.requestedTrip!.status ==
+                                                            TripState.goToClient
+                                                                .name ||
+                                                        state.requestedTrip!
+                                                                .status ==
+                                                            TripState.inLocation
+                                                                .name ||
+                                                        state.requestedTrip!
+                                                                .status ==
+                                                            TripState
+                                                                .started.name
+                                                    ? acceptedTripButtonSheet()
+                                                    : state.requestedTrip!
+                                                                .status ==
+                                                            TripState
+                                                                .ratingSheet
+                                                                .name
+                                                        ? BuildClientRateDriverSheet(
+                                                            onPressed: (String
+                                                                    message,
+                                                                double
+                                                                    rate) async {
+                                                              await serviceLocator<
+                                                                      RideCubit>()
+                                                                  .ratingDriverByClient(
+                                                                context,
+                                                                RatingDriverByClientUseCaseParams(
+                                                                  tripId: state
+                                                                      .requestedTrip!
+                                                                      .id!,
+                                                                  ratingValue:
+                                                                      rate.toInt(),
+                                                                  comment:
+                                                                      message,
+                                                                ),
+                                                              );
+                                                            },
+                                                          )
+                                                        : const SizedBox(),
+                                !context
+                                        .read<RideCubit>()
+                                        .selectedCategoryIsSocket
+                                    ? const SizedBox()
+                                    : state.requestedTrip == null
                                         ? _carTruckBtn(
                                             driverInfo: state.driverInfo,
                                             loadingInfo: state.loaderInfo)
-                                        : const SizedBox.shrink(),
-                          ],
+                                        : (state.requestedTrip!.status ==
+                                                    TripState.completed.name ||
+                                                state.requestedTrip!.status ==
+                                                    TripState.canceled.name)
+                                            ? _carTruckBtn(
+                                                driverInfo: state.driverInfo,
+                                                loadingInfo: state.loaderInfo)
+                                            : const SizedBox.shrink(),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-        ),
-      );
-    });
+            ),
+          );
+        });
   }
 
   Widget _buildTopMap(RideState state, BuildContext context) {
@@ -583,9 +548,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         children: [
           TileLayer(
             // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
             urlTemplate: context.isDarkMode
-                ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // Normal mode map
+                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+            subdomains: const ['a', 'b', 'c'],
+            userAgentPackageName: 'com.example.app',
           ),
           MarkerLayer(
             markers: [
@@ -624,25 +593,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   child: const Icon(Icons.location_pin,
                       color: Colors.red, size: 40),
                 ),
-              // if (currentCarLocation != null)
-              //   Marker(
-              //     point: currentCarLocation,
-              //     width: 60,
-              //     height: 60,
-              //     child: Transform.rotate(
-              //       angle: carRotation,
-              //       child: Image.asset("assets/images/car_for_tracking.png"),
-              //     ),
-              //   ),
             ],
           ),
-          const CarMarkerWidget(),
+          if (state.requestedTrip != null)
+            if (state.requestedTrip!.status == TripState.started.name)
+              BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+                return const CarMarkerWidget();
+              }),
           if (routePoints.isNotEmpty)
             PolylineLayer(
               polylines: [
                 Polyline(
                   points: routePoints,
-                  color: Colors.blue,
+                  color: context.isDarkMode ? Colors.blue :  Colors.black87,
                   strokeWidth: 4.0,
                 ),
               ],
@@ -663,7 +626,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         height: 48,
         child: GestureDetector(
           onTap: () {
-            if(!context.read<UserCubit>().isLoggedIn){
+            if (!context.read<UserCubit>().isLoggedIn) {
               return pleaseLoginDialog(context);
             }
             customBottomSheet(context, serviceLocator<RideCubit>(),
@@ -939,15 +902,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           backgroundColor: AppColors.PRIMARY_COLOR_DARK,
                           textColor: Colors.white,
                           padding: const EdgeInsets.all(2),
-                          label: const Text('1'),
+                          label: Text(FormatNumbers()
+                              .convertNumberToLocalizedString('1',
+                                  isArabic: context.isArabic)),
                           isLabelVisible: false,
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideOffer,extra: false);
+                                  context.push(Routes.rideOffer, extra: false);
                                 } else {
                                   // context.push(Routes.LOGIN);
-                                    return pleaseLoginDialog(context);
+                                  return pleaseLoginDialog(context);
                                 }
                               },
                               child: _tripsWidget(
@@ -962,12 +927,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           backgroundColor: AppColors.PRIMARY_COLOR_DARK,
                           textColor: Colors.white,
                           padding: const EdgeInsets.all(2),
-                          label: const Text('1K'),
+                          label: Text(FormatNumbers()
+                              .convertNumberToLocalizedString('1K',
+                                  isArabic: context.isArabic)),
                           isLabelVisible: false,
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideOffer,extra: true);
+                                  context.push(Routes.rideOffer, extra: true);
                                 } else {
                                   return pleaseLoginDialog(context);
                                   // context.push(Routes.LOGIN);
@@ -1597,11 +1564,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 12)),
                       state.rideExpectedPrice != null
-                          ? Text(context
-                              .read<RideCubit>()
-                              .getTotalPrice(selectedCategoryPrice)
-                              .toInt()
-                              .toString())
+                          ? Text(FormatNumbers().convertNumberToLocalizedString(
+                              context
+                                  .read<RideCubit>()
+                                  .getTotalPrice(selectedCategoryPrice)
+                                  .toInt()
+                                  .toString(),
+                              isArabic: context.isArabic))
                           : Text(LocaleKeys.offerYourFare.tr()),
                       const Spacer(),
                       Icon(
@@ -1782,6 +1751,151 @@ class _RotatingCarIconState extends State<_RotatingCarIcon> {
       },
       onEnd: () => _currentAngle = widget.targetAngle,
       child: Image.asset("assets/images/car_for_tracking.png"),
+    );
+  }
+}
+
+class CountdownTimerWidget extends StatefulWidget {
+  final bool isActive;
+  final bool isArabic;
+
+  const CountdownTimerWidget({
+    super.key,
+    required this.isActive,
+    required this.isArabic,
+  });
+
+  @override
+  State<CountdownTimerWidget> createState() => _CountdownTimerWidgetState();
+}
+
+class _CountdownTimerWidgetState extends State<CountdownTimerWidget>
+    with SingleTickerProviderStateMixin {
+  static const int totalSeconds = 300;
+  late Duration _remaining = const Duration(seconds: totalSeconds);
+  Timer? _timer;
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+      lowerBound: 0.9,
+      upperBound: 1,
+    )..repeat(reverse: true);
+
+    if (widget.isActive) {
+      _startTimer();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant CountdownTimerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.isActive && !oldWidget.isActive) {
+      _startTimer();
+    } else if (!widget.isActive && oldWidget.isActive) {
+      _stopTimer();
+    }
+  }
+
+  void _startTimer() {
+    _remaining = const Duration(seconds: totalSeconds);
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remaining.inSeconds <= 0) {
+        timer.cancel();
+      } else {
+        setState(() {
+          _remaining = _remaining - const Duration(seconds: 1);
+        });
+      }
+    });
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+    setState(() {
+      _remaining = const Duration(seconds: totalSeconds);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  String _formatTime(Duration duration) {
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds % 60;
+
+    final formattedMinutes = FormatNumbers().convertNumberToLocalizedString(
+      minutes.toString().padLeft(1, '0'),
+      isArabic: widget.isArabic,
+    );
+    final formattedSeconds = FormatNumbers().convertNumberToLocalizedString(
+      seconds.toString().padLeft(2, '0'),
+      isArabic: widget.isArabic,
+    );
+
+    return '$formattedMinutes:$formattedSeconds';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isLastMinute = _remaining.inSeconds <= 60 && widget.isActive;
+
+    final message = widget.isArabic
+        ? (isLastMinute
+            ? "كن حذرًا، يمكن أن يلغي السائق الرحلة، ولديه مبررات قوية لذلك."
+            : "لا تتأخر، قد يؤثر على تقييمك")
+        : (isLastMinute
+            ? "Be careful, the driver could cancel the ride, and he has every right to do so."
+            : "Please don't be late, it might affect your rating");
+
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        final scale = isLastMinute ? _animationController.value : 1.0;
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Transform.scale(
+                scale: scale,
+                child: Text(
+                  message,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: isLastMinute ? Colors.red : Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Transform.scale(
+              scale: scale,
+              child: SizedBox(
+                width: 50,
+                child: Text(
+                  _formatTime(_remaining),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isLastMinute ? Colors.red : Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +105,7 @@ class _OpenStreetMapSearchAndPickState
     }
     String url =
         '${widget.baseUri}/reverse?format=json&lat=$latitude&lon=$longitude&zoom=18&addressdetails=1';
+    log(url);
 
     var response = await client.get(Uri.parse(url));
     // var response = await client.post(Uri.parse(url));
@@ -125,7 +127,7 @@ class _OpenStreetMapSearchAndPickState
 
     String url =
         '${widget.baseUri}/reverse?format=json&lat=$latitude&lon=$longitude&zoom=18&addressdetails=1';
-
+    log(url);
     var response = await client.get(Uri.parse(url));
     // var response = await client.post(Uri.parse(url));
     var decodedResponse =
@@ -145,7 +147,7 @@ class _OpenStreetMapSearchAndPickState
           var client = http.Client();
           String url =
               '${widget.baseUri}/reverse?format=json&lat=${event.camera.center.latitude}&lon=${event.camera.center.longitude}&zoom=18&addressdetails=1';
-
+log(url);
           var response = await client.get(Uri.parse(url));
           // var response = await client.post(Uri.parse(url));
           var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes))
@@ -210,9 +212,12 @@ class _OpenStreetMapSearchAndPickState
                     children: [
                       TileLayer(
                         urlTemplate:
+                            // "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                             // "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        context.isDarkMode ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                            : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // Normal mode
+                            // "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                        context.isDarkMode
+                            ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+                            : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
                         subdomains: const ['a', 'b', 'c'],
                         // attributionBuilder: (_) {
                         //   return Text("© OpenStreetMap contributors");
@@ -479,6 +484,7 @@ class _OpenStreetMapSearchAndPickState
 
       final url =
           '${widget.baseUri}/reverse?format=json&lat=$lat&lon=$lon&zoom=10&addressdetails=1';
+      log(url);
       final response = await http.get(Uri.parse(url));
       final decoded = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -499,6 +505,7 @@ class _OpenStreetMapSearchAndPickState
     var client = http.Client();
     String url =
         '${widget.baseUri}/reverse?format=json&lat=${_mapController.center.latitude}&lon=${_mapController.center.longitude}&zoom=18&addressdetails=1';
+    log(url);
 
     var response = await client.get(Uri.parse(url));
     // var response = await client.post(Uri.parse(url));

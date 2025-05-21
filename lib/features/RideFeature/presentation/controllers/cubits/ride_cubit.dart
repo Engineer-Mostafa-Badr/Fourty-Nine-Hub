@@ -84,6 +84,9 @@ import '../../../domain/entities/ride_category_entity.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
 
+import '../../../domain/usecases/rating_driver_by_client.dart';
+import '../../../domain/usecases/send_ok_iam_coming_message_usecase.dart';
+
 
 class RideCubit extends Cubit<RideState> {
   bool isComfort = false;
@@ -155,6 +158,8 @@ class RideCubit extends Cubit<RideState> {
   final UpdateTripAutoAcceptByClientUseCase updateTripAutoAcceptByClientUseCase;
   final UpdateTripPriceUseCase updateTripPriceUseCase;
   final ClickUseCase clickUseCase;
+  final SendOkIamComingMessageUseCase  sendOkIamComingMessageUseCase;
+  final RatingDriverByClientUseCase ratingDriverByClientUseCase;
 
   final GetCostPerKmUseCase getCostPerKmUseCase;
   final LoadingRegisterUseCase loadingRegisterUseCase;
@@ -194,6 +199,8 @@ class RideCubit extends Cubit<RideState> {
       this.updateSocketLocationUseCase,
       this.updateTripPriceUseCase,
       this.clickUseCase,
+      this.sendOkIamComingMessageUseCase,
+      this.ratingDriverByClientUseCase,
   ) : super( RideState(
     rideOffers: [],
   )){
@@ -213,6 +220,7 @@ class RideCubit extends Cubit<RideState> {
         }
         emit(state.copyWith(status: RideStates.success));
       });
+
       //action: the driver has arrived
       SharedWebSocket.socket!.on("RIDE:DRIVER_HAS_ARRIVED_AT_CLIENT", (data) {
         CliLogger.info("RIDE:DRIVER_HAS_ARRIVED_AT_CLIENT:  $data");
@@ -225,17 +233,44 @@ class RideCubit extends Cubit<RideState> {
         }
         emit(state.copyWith(status: RideStates.success));
       });
+
       // near by driver
-      SharedWebSocket.socket!.on("nearbyDriversAvailable", (data) {
+      SharedWebSocket.socket!.on("subcategory:driver", (data) {
         CliLogger.info("nearbyDriversAvailable:  $data");
+        emit(state.copyWith(status: RideStates.success));
       });
+
       // trip started socket event
       SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
         CliLogger.info("RIDE:DRIVER_STARTED_TRIP:  $data");
+        if(state.requestedTrip != null){
+          state.requestedTrip!.status = TripState.started.name;
+          print("RIDE:RIDE:DRIVER_STARTED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+        }else{
+          print("RIDE:RIDE:DRIVER_STARTED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+        }
+        emit(state.copyWith(status: RideStates.success));
+        // RIDE:DRIVER_STARTED_TRIP:  {driverStartedTrip: true}
       });
+
       // trip ended socket event
       SharedWebSocket.socket!.on("RIDE:DRIVER_COMPLETED_TRIP", (data) {
         CliLogger.info("RIDE:DRIVER_COMPLETED_TRIP:  $data");
+        if(state.requestedTrip != null){
+          state.requestedTrip!.status = TripState.ratingSheet.name;
+          print("RIDE:RIDE:DRIVER_COMPLETED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+        }else{
+          print("RIDE:RIDE:DRIVER_COMPLETED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+        }
+        emit(state.copyWith(status: RideStates.success));
+        // RIDE:DRIVER_COMPLETED_TRIP:  {driverCompletedTrip: true}
+      });
+
+      // tracking
+      SharedWebSocket.socket!.on("RIDE:TRIP_LOCATION_UPDATED", (data) {
+        CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking:  $data");
+        emit(state.copyWith(status: RideStates.success));
+        //  RIDE:TRIP_LOCATION_UPDATED tracking:  {updateLocation: {tripId: 682a0ef3fe6c419d46b21cd0, driverId: 681fa7a42ad43c198641e0eb, location: {latitude: 31.2802515, longitude: 31.6776039, timestamp: null}}}
       });
     }
   }
@@ -309,6 +344,72 @@ class RideCubit extends Cubit<RideState> {
     loadingHomeData = false;
     emit(state.copyWith(status: RideStates.success));
   }
+
+  Future<void> sendIamOkMessage(BuildContext context) async {
+  emit(state.copyWith(status: RideStates.loading));
+    final result = await sendOkIamComingMessageUseCase();
+
+    result.fold(
+      (failure) {
+        showErrorMessage(context,
+            context.isArabic? "لم يتم ارسال الرسالة" : "Message not sent");
+
+        emit(state.copyWith(status: RideStates.error));},
+      (data) {
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? "تم ارسال الرسالة بنجاح"
+                : "Message sent successfully");
+        emit(state.copyWith(status: RideStates.success));},
+    );
+  }
+
+  Future<void> ratingDriverByClient(BuildContext context, RatingDriverByClientUseCaseParams params) async {
+    final result = await ratingDriverByClientUseCase(params);
+
+    result.fold(
+      (failure) {
+        showErrorMessage(context,
+            context.isArabic? "لم يتم تقييم السائق" : "Driver not rated");
+        emit(state.copyWith(status: RideStates.error));},
+      (data)async {
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? "تم تقييم السائق بنجاح" : "Driver rated successfully");
+
+        state.rideExpectedPrice = null;
+        state.requestedTrip = null;
+        state.currentLocation = null;
+        state.toLocation = null;
+        state.wayPointOne = null;
+        state.wayPointTwo = null;
+        await _fetchUserLocation();
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? "رحلة سعيدة" : "Happy trip");
+        emit(state.copyWith(status: RideStates.success, requestedTrip: state.requestedTrip, rideExpectedPrice: state.rideExpectedPrice));},
+    );
+  }
+
+  Future<void> finishTripWithoutRating(BuildContext context) async {
+    emit(state.copyWith(status: RideStates.loading));
+
+    state.rideExpectedPrice = null;
+    state.requestedTrip = null;
+    state.currentLocation = null;
+    state.toLocation = null;
+    state.wayPointOne = null;
+    state.wayPointTwo = null;
+    await _fetchUserLocation();
+    showSuccessMessage(
+        context,
+        context.isArabic
+            ? "رحلة سعيدة" : "Happy trip");
+    emit(state.copyWith(status: RideStates.success, requestedTrip: state.requestedTrip, rideExpectedPrice: state.rideExpectedPrice));
+}
 
   bool isTruk = false;
   // update current location
@@ -791,6 +892,7 @@ class RideCubit extends Cubit<RideState> {
         polyline: polyline,
         wayPointOneTitle: wayPointOneTitle,
         wayPointTwoTitle: wayPointTwoTitle,
+        phoneNumber: "01211972375"
       ),
     );
 
@@ -892,7 +994,7 @@ class RideCubit extends Cubit<RideState> {
         await retrieveClientLatestTripUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure, requestedTrip: null)),
           (rideRequestTrip){
             if(rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.completed.name){
               _fetchUserLocation();

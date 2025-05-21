@@ -478,14 +478,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
-  deepar_flutter:
+  deepar_flutter_plus:
     dependency: "direct main"
     description:
-      name: deepar_flutter
-      sha256: "4d136ba26f6a09c56fc6a2a18ce53a883f4f912cf43de34326c822f7f6692b33"
+      name: deepar_flutter_plus
+      sha256: "270ffdeb44a4a1be1414c2ba4a464ff95339325edcf8f0e012bafb137e5614e0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.5"
+    version: "0.2.0"
   device_frame:
     dependency: transitive
     description:
@@ -622,22 +622,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
-  ffmpeg_kit_flutter:
-    dependency: "direct main"
-    description:
-      name: ffmpeg_kit_flutter
-      sha256: "843aae41823ca94a0988d975b4b6cdc6948744b9b7e2707d81a3a9cd237b0100"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.3"
-  ffmpeg_kit_flutter_platform_interface:
-    dependency: transitive
-    description:
-      name: ffmpeg_kit_flutter_platform_interface
-      sha256: addf046ae44e190ad0101b2fde2ad909a3cd08a2a109f6106d2f7048b7abedee
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.1"
   file:
     dependency: transitive
     description:
@@ -875,14 +859,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
-  flutter_credit_card:
-    dependency: "direct main"
-    description:
-      name: flutter_credit_card
-      sha256: dffaee369b0e64fb81e63e78d6410762f73b67346692bd2ae7bdcc6d911452e3
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
   flutter_emoji:
     dependency: "direct main"
     description:
@@ -1245,6 +1221,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.0"
+  flutter_video_thumbnail_plus:
+    dependency: "direct main"
+    description:
+      name: flutter_video_thumbnail_plus
+      sha256: "0bf98547192483d0a61c57ec4ac6c5f09b9f50bc3b9982886b0181535a78cf9c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -1478,10 +1462,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_mobile_ads
-      sha256: "0d4a3744b5e8ed1b8be6a1b452d309f811688855a497c6113fc4400f922db603"
+      sha256: "4775006383a27a5d86d46f8fb452bfcb17794fc0a46c732979e49a8eb1c8963f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.1"
+    version: "5.2.0"
   google_polyline_algorithm:
     dependency: transitive
     description:
@@ -2422,50 +2406,58 @@ packages:
     dependency: "direct main"
     description:
       name: record
-      sha256: f703397f5a60d9b2b655b3acc94ba079b2d9a67dc0725bdb90ef2fee2441ebf7
+      sha256: "2e3d56d196abcd69f1046339b75e5f3855b2406fc087e5991f6703f188aa03a6"
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.4"
+    version: "5.2.1"
+  record_android:
+    dependency: transitive
+    description:
+      name: record_android
+      sha256: "36e009c3b83e034321a44a7683d95dd055162a231f95600f7da579dcc79701f9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
+  record_darwin:
+    dependency: transitive
+    description:
+      name: record_darwin
+      sha256: e487eccb19d82a9a39cd0126945cfc47b9986e0df211734e2788c95e3f63c82c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
   record_linux:
     dependency: transitive
     description:
       name: record_linux
-      sha256: "348db92c4ec1b67b1b85d791381c8c99d7c6908de141e7c9edc20dad399b15ce"
+      sha256: "74d41a9ebb1eb498a38e9a813dd524e8f0b4fdd627270bda9756f437b110a3e3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.1"
-  record_macos:
-    dependency: transitive
-    description:
-      name: record_macos
-      sha256: d1d0199d1395f05e218207e8cacd03eb9dc9e256ddfe2cfcbbb90e8edea06057
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.2"
+    version: "0.7.2"
   record_platform_interface:
     dependency: transitive
     description:
       name: record_platform_interface
-      sha256: "7a2d4ce7ac3752505157e416e4e0d666a54b1d5d8601701b7e7e5e30bec181b4"
+      sha256: "8a575828733d4c3cb5983c914696f40db8667eab3538d4c41c50cbb79e722ef4"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "1.2.0"
   record_web:
     dependency: transitive
     description:
       name: record_web
-      sha256: "219ffb4ca59b4338117857db56d3ffadbde3169bcaf1136f5f4d4656f4a2372d"
+      sha256: "654c08113961051dcb5427e63f56315ba47c0752781ba990dac9313d0ec23c70"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "1.1.6"
   record_windows:
     dependency: transitive
     description:
       name: record_windows
-      sha256: "42d545155a26b20d74f5107648dbb3382dbbc84dc3f1adc767040359e57a1345"
+      sha256: "26bfebc8899f4fa5b6b044089887dc42115820cd6a907bdf40c16e909e87de0a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.1"
+    version: "1.0.5"
   restart_app:
     dependency: "direct main"
     description:
@@ -2651,10 +2643,10 @@ packages:
     dependency: "direct main"
     description:
       name: social_media_recorder
-      sha256: "7e808b98578e82865b23554378c6ede2d6b3f6af51d07f695a2aab8be0cdf053"
+      sha256: c92f4a8ab4aef77fb501391cd9dfad2e01f73e6e3f120469dc362186db36e485
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.13"
+    version: "1.2.1"
   socket_io_client:
     dependency: "direct main"
     description:
@@ -3095,14 +3087,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.4"
-  video_thumbnail:
-    dependency: "direct main"
-    description:
-      name: video_thumbnail
-      sha256: "3455c189d3f0bb4e3fc2236475aa84fe598b9b2d0e08f43b9761f5bc44210016"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.3"
   visibility_detector:
     dependency: "direct main"
     description:
@@ -3171,18 +3155,18 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter
-      sha256: "889a0a678e7c793c308c68739996227c9661590605e70b1f6cf6b9a6634f7aec"
+      sha256: ec81f57aa1611f8ebecf1d2259da4ef052281cb5ad624131c93546c79ccc7736
       url: "https://pub.dev"
     source: hosted
-    version: "4.10.0"
+    version: "4.9.0"
   webview_flutter_android:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: webview_flutter_android
-      sha256: "5568f17a9c25c0fdd0737900fa1c2d1fee2d780bc212d9aec10c2d1f48ef0f59"
+      sha256: "47a8da40d02befda5b151a26dba71f47df471cddd91dfdb7802d0a87c5442558"
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.1"
+    version: "3.16.9"
   webview_flutter_platform_interface:
     dependency: transitive
     description:

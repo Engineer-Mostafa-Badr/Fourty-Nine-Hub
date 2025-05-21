@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../controllers/cubits/ride_states.dart';
@@ -99,8 +100,8 @@ class FareBottomSheetWidget extends StatelessWidget {
                         amount < minFare ||
                         amount > maxFare) {
                       return context.isArabic
-                          ? 'يجب أن يكون المبلغ بين ${minFare.toInt()} و ${maxFare.toInt()}'
-                          : 'Amount must be between ${minFare.toInt()} and ${maxFare.toInt()}';
+                          ? 'يجب أن يكون المبلغ بين ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} و ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}'
+                          : 'Amount must be between ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} and ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}';
                     }
 
                     return null;

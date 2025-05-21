@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/utils/format_numbers.dart';
 import '../../../../res/assets/assets.dart';
 import 'widgets/bottom_button_ride_status_widget.dart';
 import 'widgets/driver_header_widget.dart';
@@ -54,6 +55,7 @@ class RideStatusScreen extends StatelessWidget {
                           children: [
                             const DriverHeaderWidget(
                               carModel: carModel,
+                              carColor: "",
                               rideStatusWidget: SizedBox(),
                               carImageUrl: driverImage,
                               carName: driverName,
@@ -155,6 +157,7 @@ class ActionButtonsWidget extends StatelessWidget {
             driverImageUrl: driverImageUrl,
             driverName: driverName,
             driverRating: driverRating,
+            context: context,
           ),
           _buildActionCircle(
             icon: Icons.phone,
@@ -214,6 +217,7 @@ Widget buildDriverCircle({
   required String? driverImageUrl,
   required String driverName,
   required double? driverRating,
+  required BuildContext context,
 }) {
   return Column(
     mainAxisSize: MainAxisSize.min,
@@ -238,6 +242,11 @@ Widget buildDriverCircle({
                   : Image.asset(Assets.maleImagePlaceholder),
             ),
           ),
+          const Positioned(
+            bottom: 4,
+            right: 0,
+            child: Icon(Icons.verified, color: Colors.blue, size: 16),
+          ),
           if (driverRating != null)
             if (driverRating > 0)
               Positioned(
@@ -253,7 +262,7 @@ Widget buildDriverCircle({
                   child: Row(
                     children: [
                       Text(
-                        driverRating.toStringAsFixed(1),
+                    FormatNumbers().convertNumberToLocalizedString(driverRating.toStringAsFixed(1), isArabic: context.isArabic),
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,

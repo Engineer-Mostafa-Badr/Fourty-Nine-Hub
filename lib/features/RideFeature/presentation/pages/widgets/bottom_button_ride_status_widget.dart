@@ -1,15 +1,21 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/utils/format_numbers.dart';
+import '../../../../../core/widget/clickable_widget.dart';
 import 'custom_wave_painter.dart';
 import 'font_manager.dart';
 
-class BottomRideStatusWidget extends StatelessWidget {
+class BottomRideStatusWidget extends StatefulWidget {
   final int price;
   final String? fromLocation;
   final String? toLocation;
@@ -25,6 +31,7 @@ class BottomRideStatusWidget extends StatelessWidget {
   final bool isRecording;
   final String audioDuration;
   final VoidCallback onMicTap;
+
 
   const BottomRideStatusWidget({
     super.key,
@@ -44,6 +51,12 @@ class BottomRideStatusWidget extends StatelessWidget {
     required this.otp,
   });
 
+  @override
+  State<BottomRideStatusWidget> createState() => _BottomRideStatusWidgetState();
+}
+
+class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
+  bool _isRecording = false;
   @override
   Widget build(BuildContext context) {
     const Color navyColor = Color(0xFF0D1730);
@@ -80,13 +93,13 @@ class BottomRideStatusWidget extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                paymentMethod == 'cash'
+                widget.paymentMethod == 'cash'
                     ? context.isArabic
-                        ? 'الدفع $price كاش'
-                        : 'EGP $price Cash'
+                        ? '${FormatNumbers().convertNumberToLocalizedString(widget.price.toString(), isArabic: context.isArabic)}ج.م نقدا'
+                        : 'EGP ${FormatNumbers().convertNumberToLocalizedString(widget.price.toString(), isArabic: context.isArabic)} Cash'
                     : context.isArabic
-                        ? 'الدفع $price فيزا'
-                        : 'EGP $price Visa',
+                        ? '${FormatNumbers().convertNumberToLocalizedString(widget.price.toString(), isArabic: context.isArabic)} بطاقة بنكية'
+                        : 'EGP ${FormatNumbers().convertNumberToLocalizedString(widget.price.toString(), isArabic: context.isArabic)} Visa',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -95,7 +108,7 @@ class BottomRideStatusWidget extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: onPartialPayment,
+                  onPressed: widget.onPartialPayment,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
                     foregroundColor: Colors.white,
@@ -121,29 +134,29 @@ class BottomRideStatusWidget extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          if (fromLocation != null)
+          if (widget.fromLocation != null)
             _buildLocationRow(
               context: context,
               color: Colors.green,
-              location: fromLocation!,
+              location: widget.fromLocation!,
             ),
-          if (wayPointOne != null)
+          if (widget.wayPointOne != null)
             _buildLocationRow(
               context: context,
               color: Colors.red,
-              location: wayPointOne!,
+              location: widget.wayPointOne!,
             ),
-          if (wayPointTwo != null)
+          if (widget.wayPointTwo != null)
             _buildLocationRow(
               context: context,
               color: Colors.blue,
-              location: wayPointTwo!,
+              location: widget.wayPointTwo!,
             ),
-          if (toLocation != null)
+          if (widget.toLocation != null)
             _buildLocationRow(
               context: context,
               color: Colors.blue,
-              location: toLocation!,
+              location: widget.toLocation!,
             ),
           const SizedBox(height: 16),
           Row(
@@ -159,34 +172,37 @@ class BottomRideStatusWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          if(otp != null)
-            Row(
-              children: [
-                ...otp!.split("").map((e) => Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 40,
-                      height: 48,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        e,
-                        style: const TextStyle(
-                          fontSize: FontSize.s16,
-                          fontWeight: FontWeight.bold,
+          if(widget.otp != null)
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: Row(
+                children: [
+                  ...widget.otp!.split("").map((e) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 40,
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          FormatNumbers().convertNumberToLocalizedString(e, isArabic: context.isArabic),
+                          style: const TextStyle(
+                            fontSize: FontSize.s16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),),
-              ],
+                  ),),
+                ],
+              ),
             ),
           InkWell(
-            onTap: onCallEmergency,
+            onTap: widget.onCallEmergency,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -216,11 +232,42 @@ class BottomRideStatusWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+         if(widget.isRecording)
+          ClickableWidget(
+            onTap: () {
+              if (_isRecording) {
+                setState(() {
+
+                });
+              } else {
+                setState(() {
+
+                });
+              }
+            },
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(color: _isRecording ? Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
+              padding: EdgeInsets.all(20.w),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    Assets.rideRecord,
+                    color: _isRecording ? null : Colors.black,
+                  ),
+                  SizedBox(width: 30.w),
+                  if (!_isRecording)  Text(context.isArabic ? "تسجيل الصوت": 'Record', style: const TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else const Expanded(child: FakeRecordingWaveform())
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
           // Cancel Button
           SizedBox(
             width: double.infinity,
             child: TextButton(
-              onPressed: onCancelRide,
+              onPressed: widget.onCancelRide,
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 backgroundColor: context.isDarkMode ? const Color(0xff2C2C2C) : const Color(0xFFF5F5F5), // Light gray background
@@ -229,7 +276,7 @@ class BottomRideStatusWidget extends StatelessWidget {
                 ),
               ),
               child: Text(
-                LocaleKeys.cancelOrder.tr(),
+                LocaleKeys.cancelOrder.localize,
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.red, // Red text color
@@ -281,7 +328,7 @@ class BottomRideStatusWidget extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: onMicTap,
+          onTap: widget.onMicTap,
           child: Container(
             width: 40,
             height: 40,
@@ -290,7 +337,7 @@ class BottomRideStatusWidget extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              isRecording ? Icons.stop : Icons.mic,
+              widget.isRecording ? Icons.stop : Icons.mic,
               color: Colors.white,
             ),
           ),
@@ -300,7 +347,7 @@ class BottomRideStatusWidget extends StatelessWidget {
           child: SizedBox(
               height: 40,
               child: AudioWaveWidget(
-                isRecording: isRecording,
+                isRecording: widget.isRecording,
                 barCount: 40,
                 barWidth: 4,
                 spacing: 2,
@@ -309,10 +356,70 @@ class BottomRideStatusWidget extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          audioDuration,
+          widget.audioDuration,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
       ],
+    );
+  }
+}
+
+
+class FakeRecordingWaveform extends StatefulWidget {
+  const FakeRecordingWaveform({super.key});
+
+  @override
+  State<FakeRecordingWaveform> createState() => _FakeRecordingWaveformState();
+}
+
+class _FakeRecordingWaveformState extends State<FakeRecordingWaveform> {
+  final Random _random = Random();
+  final int _barCount = 30;
+  List<double> _heights = [];
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _generateFakeWave();
+    _timer = Timer.periodic(const Duration(milliseconds: 120), (_) {
+      setState(() {
+        _generateFakeWave();
+      });
+    });
+  }
+
+  void _generateFakeWave() {
+    _heights = List.generate(_barCount, (_) => _random.nextDouble() * 60 + 10);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(_barCount, (index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 1.0),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              width: 3,
+              height: _heights[index],
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          );
+        }),
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ abstract class Assets {
   static String drawerCameraIcon = 'assets/icons/drawer_camera_icon.svg';
   static String drawerCameraIconDark =
       'assets/icons/drawer_camera_icon_dark.svg';
+  static String rideRecord = 'assets/icons/ride_record.svg';
   static String cameraAddTalent = 'assets/49-New-icons/camera.png';
   static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
   static String starIcon = 'assets/images/star.svg';

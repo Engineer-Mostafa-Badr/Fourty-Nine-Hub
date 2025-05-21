@@ -51,7 +51,9 @@ import '../features/RideFeature/domain/usecases/get_loading_offers_usecase.dart'
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import '../features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/rating_driver_by_client.dart';
 import '../features/RideFeature/domain/usecases/refuse_non_track_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/send_ok_iam_coming_message_usecase.dart';
 import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 
@@ -156,11 +158,17 @@ class RideServiceLocatorUpdated {
         RefuseNonTrackTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetClientPastUntrackedTripsUseCase>(() =>
         GetClientPastUntrackedTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<SendOkIamComingMessageUseCase>(() =>
+        SendOkIamComingMessageUseCase(repository: serviceLocator()));
 
+    serviceLocator.registerLazySingleton<RatingDriverByClientUseCase>(() =>
+        RatingDriverByClientUseCase(repository: serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

@@ -56,10 +56,10 @@ class RideState {
   final RideCategoryEntityUpdated? rideCategory;
   final RideCategoryEntityUpdated? shippingCategory;
   final List<GovernorateEntity>? governorates;
-  final GetLocationFromAddressEntity? currentLocation;
-  final GetLocationFromAddressEntity? toLocation;
-  final GetLocationFromAddressEntity? wayPointOne;
-  final GetLocationFromAddressEntity? wayPointTwo;
+   GetLocationFromAddressEntity? currentLocation;
+   GetLocationFromAddressEntity? toLocation;
+   GetLocationFromAddressEntity? wayPointOne;
+   GetLocationFromAddressEntity? wayPointTwo;
   RideExpectedPriceEntity? rideExpectedPrice;
   RideRequestTripEntity? requestedTrip;
   final List<CompletedTripsEntity>? completedTrips;

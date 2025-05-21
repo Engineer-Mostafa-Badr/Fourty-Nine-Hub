@@ -91,6 +91,7 @@ import '../../domain/usecases/create_non_track_trip_use_case.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../../domain/usecases/rating_driver_by_client.dart';
 import '../models/create_no_track_trip_model.dart';
 import '../models/dashboards/get_offers_response_model.dart';
 import '../../../../shared_web_socket.dart';
@@ -224,7 +225,9 @@ abstract class RideRemoteDataSource {
 
   Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
 
+  Future<Either<Failure, bool>> sendOkIamComing();
 
+  Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -348,10 +351,8 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        log('requested trip id before : ${data['data']['trip']['_id']}');
-        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['trip']);
-        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
-        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
+        log('requested trip id before : ${data['data']['tripId']}');
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']);
         log('requested trip id after : ${rideRequestTripModel.id}');
         return Right(rideRequestTripModel);
       });
@@ -369,9 +370,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       );
 
       return response.fold((failure) => Left(failure), (data) {
+        log('latest trip id before : ${data['data']['latestTrip']['tripId']}');
         RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['latestTrip']);
-        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
-        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
+        log('latest trip id after : ${rideRequestTripModel.id}');
         return Right(rideRequestTripModel);
       });
     } catch (e) {
@@ -993,11 +994,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         EndPoints.acceptOfferByClient(offerId),
       );
       return response.fold((failure) => Left(failure), (data) {
-        log("55555555555555555555555555 before");
-        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['tripDetails']);
-        log("55555555555555555555555555 after");
-        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
-        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
+        log('accepted trip id before : ${data['data']['tripId']}');
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']);
+        log('accepted trip id after : ${rideRequestTripModel.id}');
         return Right(rideRequestTripModel);
       });
     } catch (e) {
@@ -1235,5 +1234,34 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     );
   }
 
+  @override
+  Future<Either<Failure, bool>> sendOkIamComing() async{
+    const url = EndPoints.sendOkIamComing;
+    final response = await _apiConsumer.get(
+      url,
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return const Right(true);
+      },
+    );
+  }
 
+  @override
+  Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params) async{
+    const url = EndPoints.ratingDriverByClient;
+
+    final response = await _apiConsumer.post(
+      url,
+      data: params.toJson(),
+    );
+
+    return response.fold(
+          (l) => Left(l),
+          (r) {
+        return const Right(true);
+      },
+    );
+  }
 }

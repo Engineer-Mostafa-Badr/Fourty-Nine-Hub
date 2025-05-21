@@ -1360,7 +1360,7 @@ class EndPoints {
   }
 
   static String requestTrip(String subcategoryId) {
-    return '/ride/trips/newTrip/$subcategoryId';
+    return '/ride/client/tracking/trips/$subcategoryId';
   }
 
   static String retrieveClientLatestTrip = '/ride/client/trips/latest';
@@ -1484,7 +1484,7 @@ class EndPoints {
   }
 
   static String acceptOfferByClient(String offerId) {
-    return '/ride/offers/accept/offer/$offerId';
+    return '/ride/client/tracking/offers/$offerId';
   }
 
   static String updateTripAutoAcceptByClient() {
@@ -1506,7 +1506,8 @@ class EndPoints {
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
   static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
 
-
+  static const sendOkIamComing = "/ride/client/tracking/trips/approach";
+  static const ratingDriverByClient = "/ride/trip/ratings/client";
   static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
   static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
   static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';

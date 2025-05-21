@@ -95,6 +95,7 @@ abstract class  LocaleKeys {
   static const selectCity = 'selectCity';
   static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
   static const premium = 'premium';
+  static const premium2 = 'premium2';
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
   static const restaurantDashboard = 'restaurantDashboard';
@@ -527,6 +528,8 @@ abstract class  LocaleKeys {
   static const userTrips = 'userTrips';
   static const userOwnCarsShareWithThem = 'userOwnCarsShareWithThem';
   static const noTripsAvailable = 'noTripsAvailable';
+  static const noTripsRunning = 'noTripsRunning';
+  static const noTripsPast = 'noTripsPast';
   static const tripjoinPremuimSubscription = 'tripjoinPremuimSubscription';
   static const chatSubscription = 'chatSubscription';
   static const premuimRequest = 'premuimRequest';
@@ -714,6 +717,8 @@ abstract class  LocaleKeys {
   static const currency = 'currency';
   static const friend = 'friend';
   static const view = 'view';
+  static const oneView = 'oneView';
+  static const twoViews = 'twoViews';
   static const playedSpins = 'playedSpins';
   static const noFavouriteCategory = 'noFavouriteCategory';
   static const noFavouriteSubCategory = 'noFavouriteSubCategory';
@@ -1388,6 +1393,7 @@ abstract class  LocaleKeys {
   static const showStories = 'showStories';
   static const delete_talent = 'delete_talent';
   static const views = 'views';
+  static const noViews = 'noViews';
   static const talent_upload_image = 'talent_upload_image';
   static const talent_upload_video = 'talent_upload_video';
   static const showReels = 'showReels';
@@ -1525,6 +1531,8 @@ abstract class  LocaleKeys {
   static const socialExplain = 'socialExplain';
   static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
   static const mostBooking = 'mostBooking';
+  static const editProfileDataSuccessfully = 'editProfileDataSuccessfully';
+  static const editSomethingFirst = 'editSomethingFirst';
   static const firstImpressionMessage = 'firstImpressionMessage';
   static const endToEndDescription = 'endToEndDescription';
   static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';
@@ -1560,6 +1568,38 @@ abstract class  LocaleKeys {
   static const favoritesUpdated = 'favoritesUpdated';
   static const failedUpdateFavorites = 'failedUpdateFavorites';
   static const pleaseSelectAUser = 'pleaseSelectAUser';
+  static const invalidEmailAddress = 'invalidEmailAddress';
+  static const phoneNumbersNotAllowed = 'phoneNumbersNotAllowed';
+  static const enterPositiveNumber = 'enterPositiveNumber';
+  static const yellowCardMember = 'yellowCardMember';
+  static const paymob = 'paymob';
+  static const fawry = 'fawry';
+  static const instaPay = 'instaPay';
+  static const card = 'card';
+  static const link = 'link';
+  static const payAtFawry = 'payAtFawry';
+  static const cardName = 'cardName';
+  static const expiryYear = 'expiryYear';
+  static const expiryMonth = 'expiryMonth';
+  static const ccv = 'ccv';
+  static const errorDecodingQrCode = 'errorDecodingQrCode';
+  static const unfollow = 'unfollow';
+  static const hide = 'hide';
+  static const aboutThisAccount = 'aboutThisAccount';
+  static const pleaseFillAllRequiredFields = 'pleaseFillAllRequiredFields';
+  static const youCantChoosePastTime = 'youCantChoosePastTime';
+  static const chooseTheTime = 'chooseTheTime';
+  static const chooseTheDate = 'chooseTheDate';
+  static const pleaseSelectDateFirst = 'pleaseSelectDateFirst';
+  static const errorHappen = 'errorHappen';
+  static const accepted = 'accepted';
+  static const rideOffer = 'rideOffer';
+  static const dontHaveOffer = 'dontHaveOffer';
+  static const current = 'current';
+  static const youDontHaveAcceptedOffer = 'youDontHaveAcceptedOffer';
+  static const youDontHavePendingOffer = 'youDontHavePendingOffer';
+  static const youDontHavePastOffer = 'youDontHavePastOffer';
+  static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
   static const noInternetConnection = 'noInternetConnection';
 
 }
