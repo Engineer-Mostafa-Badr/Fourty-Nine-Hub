@@ -299,7 +299,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       ActionButtonsWidget(
                         driverImageUrl: state.requestedTrip?.driverProfilePicture,
                         driverRating: state.requestedTrip?.driverRating??0,
-                        driverName: state.requestedTrip?.driverFirstName,
+                        driverName: state.requestedTrip?.driverFirstName??'',
                         onContactDriver: () {
                           // context.push(Routes.ratingClientScreen);
                         },

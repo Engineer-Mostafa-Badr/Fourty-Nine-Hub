@@ -211,6 +211,7 @@ abstract class  LocaleKeys {
   static const disableAccount = 'disableAccount';
   static const deleteAccount = 'deleteAccount';
   static const alert = 'alert';
+  static const areYouSureAboutDeletingTheAD = 'areYouSureAboutDeletingTheAD';
   static const disable = 'disable';
   static const delete = 'delete';
   static const specialAds = 'specialAds';
@@ -602,6 +603,7 @@ abstract class  LocaleKeys {
   static const booked = 'booked';
   static const inProgress = 'inProgress';
   static const muted = 'muted';
+  static const exp = 'exp';
   static const egp = 'egp';
   static const pleaseUploadVideo = 'pleaseUploadVideo';
   static const pleaseUploadImage = 'pleaseUploadImage';
@@ -792,6 +794,7 @@ abstract class  LocaleKeys {
   static const newOffer = 'newOffer';
   static const carModel = 'carModel';
   static const orders = 'orders';
+  static const orderCreatedSuccessfully = 'orderCreatedSuccessfully';
   static const completeTrip = 'completeTrip';
   static const decline = 'decline';
   static const subscribeToContactToTheDriver = 'subscribeToContactToTheDriver';
@@ -1583,6 +1586,7 @@ abstract class  LocaleKeys {
   static const expiryMonth = 'expiryMonth';
   static const ccv = 'ccv';
   static const errorDecodingQrCode = 'errorDecodingQrCode';
+  static const youHaveNoAds = 'youHaveNoAds';
   static const unfollow = 'unfollow';
   static const hide = 'hide';
   static const aboutThisAccount = 'aboutThisAccount';
@@ -1599,6 +1603,9 @@ abstract class  LocaleKeys {
   static const youDontHaveAcceptedOffer = 'youDontHaveAcceptedOffer';
   static const youDontHavePendingOffer = 'youDontHavePendingOffer';
   static const youDontHavePastOffer = 'youDontHavePastOffer';
+  static const selectFromList = 'selectFromList';
+  static const selectFromMap = 'selectFromMap';
+  static const youCantGetTripUntilYouReady = 'youCantGetTripUntilYouReady';
   static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
   static const noInternetConnection = 'noInternetConnection';
 
