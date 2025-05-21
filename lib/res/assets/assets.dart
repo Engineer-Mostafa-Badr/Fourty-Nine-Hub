@@ -15,6 +15,8 @@ abstract class Assets {
   static String logoHub = 'assets/icons/logoHub.png';
   static String logoWithoutText = 'assets/icons/logoWithoutText.png';
   static String supportIcon = 'assets/icons/support_icon.svg';
+  static String rideMenu = 'assets/icons/ride_menu.png';
+  static String targetLocation = 'assets/icons/targetLocation.png';
   static String callEmergencyIcon = 'assets/icons/call_emergency_icon.svg';
   static String beforeRide = 'assets/icons/before_ride.svg';
   static String driverIdentityIcon = 'assets/icons/driver_identity_icon.svg';
