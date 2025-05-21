@@ -184,4 +184,9 @@ class TripRepositoryImpl implements TripRepository {
     return  remoteDataSource.editEmergencyContacts(params);
   }
 
+  @override
+  Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params) {
+    return  remoteDataSource.deleteEmergencyContact(params);
+  }
+
 }

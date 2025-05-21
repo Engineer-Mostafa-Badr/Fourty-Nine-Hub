@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../controllers/cubits/ride_states.dart';
@@ -46,6 +48,18 @@ class FareBottomSheetWidget extends StatelessWidget {
                   cursorColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                   cursorHeight: 50,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    TextInputFormatter.withFunction((oldValue, newValue) {
+                      if (newValue.text.isEmpty) return newValue;
+                      if (newValue.text == '0') return newValue;
+                      if (newValue.text.startsWith('0')) {
+                        return oldValue;
+                      }
+                      return newValue;
+                    }),
+                  ],
+
                   style:  TextStyle(
                     color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w500,
@@ -86,8 +100,8 @@ class FareBottomSheetWidget extends StatelessWidget {
                         amount < minFare ||
                         amount > maxFare) {
                       return context.isArabic
-                          ? 'يجب أن يكون المبلغ بين ${minFare.toInt()} و ${maxFare.toInt()}'
-                          : 'Amount must be between ${minFare.toInt()} and ${maxFare.toInt()}';
+                          ? 'يجب أن يكون المبلغ بين ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} و ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}'
+                          : 'Amount must be between ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} and ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}';
                     }
 
                     return null;
@@ -99,17 +113,26 @@ class FareBottomSheetWidget extends StatelessWidget {
                   label: LocaleKeys.done.tr(),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      if (selectedCategoryName == "Captain") {
+                      if (selectedCategoryName.trim().toLowerCase() == "Captain".toLowerCase()) {
                         state.rideExpectedPrice?.priceForCaptain =
                             double.parse(_controller.text);
-                      } else if (selectedCategoryName == "Scooter") {
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Scooter".toLowerCase()) {
                         state.rideExpectedPrice?.priceForScooter =
                             double.parse(_controller.text);
-                      } else if (selectedCategoryName == "Taxi") {
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Taxi".toLowerCase()) {
                         state.rideExpectedPrice?.priceForTaxi =
                             double.parse(_controller.text);
-                      } else if (selectedCategoryName == "Suv") {
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Suv".toLowerCase()) {
                         state.rideExpectedPrice?.priceForSUV =
+                            double.parse(_controller.text);
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Lady".toLowerCase()) {
+                        state.rideExpectedPrice?.priceForWomen =
+                            double.parse(_controller.text);
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Premium".toLowerCase()) {
+                        state.rideExpectedPrice?.priceForPremium =
+                            double.parse(_controller.text);
+                      } else if (selectedCategoryName.trim().toLowerCase() == "Intercity".toLowerCase()) {
+                        state.rideExpectedPrice?.priceForIntercity =
                             double.parse(_controller.text);
                       }
                       rideCubit.emitRefreshState();

@@ -86,7 +86,7 @@ abstract class SocketIOEvents {
   static const String disconnectMe = 'disconnectMe';
   static const String sendPoint = 'Stream:SendPoint';
   static const String updateDriverLocation = 'ride:UPDATE_DRIVER_LOCATION';
-  static const String watchingTrips = 'nearbyDriversAvailable';
+  static const String watchingTrips = 'RIDE:UPDATE_VIEWER_TRIP';
 }
 
 //

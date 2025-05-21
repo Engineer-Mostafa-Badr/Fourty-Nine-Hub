@@ -1627,10 +1627,11 @@
   "youDontHaveAcceptedOffer": "You don't Have Accepted Offers",
   "youDontHavePendingOffer": "You don't Have Pending Offers",
   "youDontHavePastOffer": "You don't Have Past Offers",
-  "youDontHaveAvailableOffer": "You don't Have Available Offers",
   "selectFromList": "Select from list",
   "selectFromMap": "Select from map",
-  "youCantGetTripUntilYouReady": "You can't get trips until you ready"
+  "youCantGetTripUntilYouReady": "You can't get trips until you ready",
+  "youDontHaveAvailableOffer": "You don't Have Available Offers",
+  "noInternetConnection" : "No internet connection"
 
 
 }

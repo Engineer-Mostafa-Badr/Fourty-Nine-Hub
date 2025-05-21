@@ -168,11 +168,13 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                               color: _isRecording ? null : Colors.black,
                             ),
                             SizedBox(width: 30.w),
-                            if (!_isRecording) Text('Record', style: TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else Expanded(child: _buildWaveform())
+                            if (!_isRecording) Text(context.isArabic?'تسجيل صوتي':'Record', style: TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else Expanded(child: _buildWaveform()),
                           ],
                         ),
                       ),
                     ),
+                    Text(context.isArabic?'اخر تسجيل صوتي فقط سيم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
+
                     const SizedBox(height: 12),
                     ClickableWidget(
                       onTap: () {

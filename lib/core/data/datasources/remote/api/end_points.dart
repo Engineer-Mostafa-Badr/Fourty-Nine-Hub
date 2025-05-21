@@ -1368,7 +1368,7 @@ class EndPoints {
   }
 
   static String requestTrip(String subcategoryId) {
-    return '/ride/trips/newTrip/$subcategoryId';
+    return '/ride/client/tracking/trips/$subcategoryId';
   }
 
   static String retrieveClientLatestTrip = '/ride/client/trips/latest';
@@ -1396,7 +1396,7 @@ class EndPoints {
     return '/ride/trip/rating/$id/client';
   }
 
-  static String createDriverRating = '/ride/trip/rating/driver';
+  static String createDriverRating = '/ride/trip/ratings/client';
   static String emergencySupport = '/users/emergencySupport';
   static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
@@ -1474,6 +1474,10 @@ class EndPoints {
     return '/ride/trips/cancel-by-rider/$tripId';
   }
 
+  static String finalizeTripByRider(String tripId) {
+    return '/ride/driver/tracking/trips/$tripId/finalize/pre-start';
+  }
+
   static String cancelTripByClient(String tripId) {
     return '/ride/trips/cancel-by-client/$tripId';
   }
@@ -1499,7 +1503,7 @@ class EndPoints {
   }
 
   static String acceptOfferByClient(String offerId) {
-    return '/ride/offers/accept/offer/$offerId';
+    return '/ride/client/tracking/offers/$offerId';
   }
 
   static String updateTripAutoAcceptByClient() {
@@ -1523,7 +1527,8 @@ class EndPoints {
   static const createOfferNonTrackedTrips = '/ride/non-tracking/offers/trip/';
   static const updateDriverSettingsNonTrack= '/ride/driver/untracked/settings';
 
-
+  static const sendOkIamComing = "/ride/client/tracking/trips/approach";
+  static const ratingDriverByClient = "/ride/trip/ratings/client";
   static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
   static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
   static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
@@ -1531,4 +1536,5 @@ class EndPoints {
   static const addEmergencyContacts = '/users/add-emergency-contacts';
   static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
   static const getDriverSettings = '/ride/driver/untracked/settings';
+  static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
 }
