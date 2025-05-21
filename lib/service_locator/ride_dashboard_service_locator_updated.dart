@@ -32,6 +32,8 @@ import '../features/RideFeature/domain/usecases/dashboards/get_driver_settings_u
 import '../features/RideFeature/domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_accept_untracked_trip_offer_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_available_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
@@ -88,10 +90,14 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<UpdateDriverSettingsUseCase>(() => UpdateDriverSettingsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDriverSettingsUseCase>(() => GetDriverSettingsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToRemoveUntrackedTripUseCase>(() => ListenToRemoveUntrackedTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToAvailableUntrackedTripUseCase>(() => ListenToAvailableUntrackedTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToAcceptUntrackedTripOfferUseCase>(() => ListenToAcceptUntrackedTripOfferUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

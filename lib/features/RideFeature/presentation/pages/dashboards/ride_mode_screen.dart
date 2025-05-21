@@ -75,12 +75,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToUpdateTripPrice(),
               dashboardCubit.listenToAcceptOffer(context,widget.params),
               dashboardCubit.listenToNewTrip(),
-              dashboardCubit.listenToRemoveTrip()
+              dashboardCubit.listenToRemoveTrip(),
             ]
           : [
             dashboardCubit.loadInitialAvailableNonSocketTrips(),
             // dashboardCubit.getAvailableNonSocketTrips(),
-      dashboardCubit.listenToRemoveUntrackedTrip()
+      dashboardCubit.listenToRemoveUntrackedTrip(),
+        dashboardCubit.listenToNewTripNonSocket()
       ];
       //dashboardCubit.getAvailableTrips(context);
       dashboardCubit.getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
@@ -129,6 +130,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                 //           : showErrorMessage(context,
                 //               getFailureMessage(state.failure!, context));
                 // }
+
               },
               builder: (context, state) {
                 var cubit = context.read<DashboardsCubit>();

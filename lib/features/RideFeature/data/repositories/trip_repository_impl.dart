@@ -184,4 +184,14 @@ class TripRepositoryImpl implements TripRepository {
     return  remoteDataSource.editEmergencyContacts(params);
   }
 
+  @override
+  void listenToAcceptUntrackedTripOffer(Function(String tripId) params) {
+    return remoteDataSource.listenToAcceptUntrackedTripOffer(params);
+  }
+
+  @override
+  void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params) {
+  return remoteDataSource.listenToAvailableUntrackedTrip(params);
+  }
+
 }
