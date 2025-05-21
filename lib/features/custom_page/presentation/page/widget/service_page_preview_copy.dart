@@ -45,7 +45,8 @@ import '../../../../fourty_nine/presentation/widgets/grid_blocks_widget.dart';
 import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class ServicePagePreview extends StatefulWidget {
-  const ServicePagePreview({super.key});
+  const ServicePagePreview({super.key,this.noNavBar=false});
+  final bool noNavBar;
 
   @override
   State<ServicePagePreview> createState() => _ServicePagePreviewState();
@@ -206,13 +207,13 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        bottomNavigationBar: BottomNavigator(
+        bottomNavigationBar:widget.noNavBar?null: BottomNavigator(
           scrollController: scrollController,
           isScrollingDown: _isScrollingDown,
           mainCategory: 1,
           index: 2,
         ),
-        floatingActionButton: _isScrollingDown
+        floatingActionButton: _isScrollingDown||widget.noNavBar
             ? null
             : const FloatingButton(
                 changeView: 1,

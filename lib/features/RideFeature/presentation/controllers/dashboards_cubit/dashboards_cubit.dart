@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/support_status_enum.dart';
@@ -56,26 +57,37 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../common/functions/global/upload_image.dart';
 import '../../../../../core/error/failure.dart';
 
+import '../../../../../core/utils/ride_method_helper.dart';
+import '../../../domain/entities/dashboards/create_non_track_offer_entity.dart';
+import '../../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/dashboards/trips_response_entity.dart';
+import '../../../domain/entities/dashboards/update_driver_settings_entity.dart';
 import '../../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../../domain/usecases/dashboards/get_accepted_ride_non_socket_trips_use_case.dart';
 import '../../../domain/usecases/dashboards/get_available_ride_non_socket_trips_use_case.dart';
+import '../../../domain/usecases/dashboards/get_driver_settings_usecase.dart';
 import '../../../domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../../../domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../../../domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../../../domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
+import '../../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import '../../pages/Register/Driver/upload_rider_images.dart';
 import '../../pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:record/record.dart';
@@ -113,48 +125,291 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final GetAvailableNonSocketTripsUseCase getAvailableNonSocketTripsUseCase;
   final GetAcceptedNonSocketTripsUseCase getAcceptedNonSocketTripsUseCase;
   final GetPastNonSocketTripsUseCase getPastNonSocketTripsUseCase;
+  final CreateNonTrackOfferUseCase createNonTrackTripUseCase;
+  final UpdateDriverSettingsUseCase updateDriverSettingsUseCase;
+  final GetDriverSettingsUseCase getDriverSettingsUseCase;
+  final ListenToRemoveUntrackedTripUseCase listenToRemoveUntrackedTripUseCase;
   final GetEmergencyContactsUseCase getEmergencyContactsUseCase;
   final AddEmergencyContactsUseCase addEmergencyContactsUseCase;
   final EditEmergencyContactsUseCase editEmergencyContactsUseCase;
   final DeleteEmergencyContactUseCase deleteEmergencyContactUseCase;
   final FinalizeTripByRiderUseCase finalizeTripByRiderUseCase;
-  DashboardsCubit(
-    this.getAvailableTripsUsecase,
-    this.getPastTripsUsecase,
-    this.availableRideTripsUseCase,
-    this.getSettingsDashboardUsecase,
-    this.updateSettingsDashboardUsecase,
-    this.createNewOfferDashboardUsecase,
-    this.createNewOfferNonSocketUsecase,
-    this.createDriverRatingUsecase,
-    this.updateDriverRatingUsecase,
-    this.createRiderOfferUseCase,
-    this.listenToUpdateTripAutoAcceptUseCase,
-    this.listenToUpdateTripPriceUseCase,
-    this.listenToAcceptOfferUseCase,
-    this.listenToNewTripUseCase,
-    this.listenToRemoveTripUseCase,
-    this.autoAcceptTripUseCase,
-    this.getAvailableNonSocketTripsUseCase,
-    this.getAcceptedNonSocketTripsUseCase,
-    this.getPastNonSocketTripsUseCase,
-    this.getRunningTripUseCase,
-    this.goingToClientUseCase,
-    this.arrivedToClientUseCase,
-    this.startDriverTripUseCase,
-    this.completeDriverTripUseCase,
-    this.recordingTripUseCase,
-    this.cancelTripByRiderUseCase,
-    this.driverRateClientUseCase,
-    this.getSupportDetailsUseCase,
-    this.emergencySupportUseCase,
-    this.getEmergencyContactsUseCase,
-    this.addEmergencyContactsUseCase,
-    this.editEmergencyContactsUseCase,
-    this.watchingTripsUseCase,
-    this.deleteEmergencyContactUseCase,
-    this.finalizeTripByRiderUseCase,
-  ) : super(const DashboardsState());
+
+  DashboardsCubit(this.getAvailableTripsUsecase,
+      this.getPastTripsUsecase,
+      this.availableRideTripsUseCase,
+      this.getSettingsDashboardUsecase,
+      this.updateSettingsDashboardUsecase,
+      this.createNewOfferDashboardUsecase,
+      this.createNewOfferNonSocketUsecase,
+      this.createDriverRatingUsecase,
+      this.updateDriverRatingUsecase,
+      this.createRiderOfferUseCase,
+      this.listenToUpdateTripAutoAcceptUseCase,
+      this.listenToUpdateTripPriceUseCase,
+      this.listenToAcceptOfferUseCase,
+      this.listenToNewTripUseCase,
+      this.listenToRemoveTripUseCase,
+      this.autoAcceptTripUseCase,
+      this.getAvailableNonSocketTripsUseCase,
+      this.getAcceptedNonSocketTripsUseCase,
+      this.getPastNonSocketTripsUseCase,
+      this.getRunningTripUseCase,
+      this.goingToClientUseCase,
+      this.arrivedToClientUseCase,
+      this.startDriverTripUseCase,
+      this.completeDriverTripUseCase,
+      this.recordingTripUseCase,
+      this.cancelTripByRiderUseCase,
+      this.driverRateClientUseCase,
+      this.getSupportDetailsUseCase,
+      this.emergencySupportUseCase,
+      this.getEmergencyContactsUseCase,
+      this.addEmergencyContactsUseCase,
+      this.editEmergencyContactsUseCase,
+      this.watchingTripsUseCase,
+      this.deleteEmergencyContactUseCase,
+      this.finalizeTripByRiderUseCase,
+      this.createNonTrackTripUseCase, this.updateDriverSettingsUseCase,
+      this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase,)
+      : super(const DashboardsState());
+
+
+  TextEditingController rideDriverExpireDateController = TextEditingController();
+
+
+  onSubmitUploadingDriverLicense(BuildContext context) async {
+    if (driverLicenseFormKey.currentState!.validate()) {
+      if (state.driverLicensePicture == null) {
+        showErrorMessage(context, "Please select driver license picture");
+        return;
+      }
+      if (state.backOfDriverLicensePicture == null) {
+        showErrorMessage(
+            context, "Please select back of driver license picture");
+        return;
+      }
+      if (state.selfieDriverLicensePicture == null) {
+        showErrorMessage(
+            context, "Please select selfie driver license picture");
+        return;
+      }
+      showLoadingDialog(context, canPop: false);
+      await RideMethodHelper().uploadDriverLicense(
+          drivingImageInFront: state.driverLicensePicture!,
+          drivingImageBehind: state.backOfDriverLicensePicture!,
+          drivingExpiryDate: rideDriverExpireDateController.text,
+          onSuccessUploaded: (bool isSuccess) async {
+            if (isSuccess) {
+              emit(state.copyWith(status: DashboardsStates.success));
+            } else {
+              showErrorMessage(context, context.isArabic
+                  ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                  : 'An error occurred while uploading images. Please try again.');
+            }
+          });
+      emit(state.copyWith(status: DashboardsStates.success));
+
+      await RideMethodHelper().confirmIdentity(
+          verifyUserImage: state.selfieDriverLicensePicture!,
+          onSuccessUploaded: (bool isSuccess) async {
+            if (isSuccess) {
+              showSuccessMessage(
+                  context,
+                  context.isArabic
+                      ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                      : "Successfully uploaded images, please wait for the approval of all data.");
+              context.pop();
+              context.pop();
+              emit(state.copyWith(status: DashboardsStates.success));
+            } else {
+              context.pop();
+              showErrorMessage(context, context.isArabic
+                  ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                  : 'An error occurred while uploading images. Please try again.');
+            }
+          });
+
+      emit(state.copyWith(status: DashboardsStates.success));
+    }
+  }
+
+
+  onUploadDriverLicensePicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(driverLicensePicture: file));
+        });
+  }
+
+  onUploadBackOfDriverLicensePicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(backOfDriverLicensePicture: file));
+        });
+  }
+
+  onUploadSelfieDriverLicensePicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(selfieDriverLicensePicture: file));
+        });
+  }
+
+
+  final formKey = GlobalKey<FormState>();
+  final idFormKey = GlobalKey<FormState>();
+  final driverLicenseFormKey = GlobalKey<FormState>();
+
+  TextEditingController ridePersonalDocExpireDateController = TextEditingController();
+
+  onSubmitUploadingId(BuildContext context,) async {
+    emit(state.copyWith(status: DashboardsStates.loading));
+    // DriverInfoEntity? driverInfo = state.driverInfo;
+    // LoadingInfoEntity? loaderInfo = state.loaderInfo;
+    if (idFormKey.currentState!.validate()) {
+      if (state.personalFrontIdPicture == null) {
+        showErrorMessage(context, "Please select front id picture");
+        return;
+      }
+      if (state.personalBackIdPicture == null) {
+        showErrorMessage(context, "Please select back id picture");
+        return;
+      }
+      showLoadingDialog(context, canPop: false);
+      emit(state.copyWith(status: DashboardsStates.loading));
+      await RideMethodHelper()
+          .uploadDriverId(idImageInBehind: state.personalBackIdPicture!,
+          idImageInFront: state.personalFrontIdPicture!,
+          idExpiryDate: ridePersonalDocExpireDateController.text,
+          onSuccessUploaded: (bool isSuccess) async {
+            if (isSuccess) {
+              showSuccessMessage(
+                  context,
+                  context.isArabic
+                      ? 'تم رفع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                      : "Successfully uploaded image, please wait for the approval of all data.");
+              context.pop();
+              context.pop();
+              emit(state.copyWith(status: DashboardsStates.success));
+            } else {
+              context.pop();
+              showErrorMessage(context, context.isArabic
+                  ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                  : 'An error occurred while uploading images. Please try again.');
+            }
+          });
+      Future.delayed(const Duration(seconds: 3));
+      // driverInfo?.isUploadDriverId = true;
+    }
+  }
+
+  onUploadPersonalFrontIdPicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(personalFrontIdPicture: file));
+        });
+  }
+
+  onUploadPersonalBackIdPicture(BuildContext context) {
+    UploadImage().uploadImage(
+        context: context,
+        onUploaded: (file) {
+          emit(state.copyWith(personalBackIdPicture: file));
+        });
+  }
+
+  Future<void> getDriverSettings() async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await getDriverSettingsUseCase(NoParams());
+
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        // log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+          (data) {
+        log("Suzccess");
+        emit(state.copyWith(
+          status: DashboardsStates.successOffer,
+          driverSettingsEntity: data,
+        ));
+      },
+    );
+  }
+
+  Future<void> updateDriverSettings(bool isReady) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await updateDriverSettingsUseCase(
+        UpdateDriverSettingsParams(isReady: isReady));
+
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        // log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+          (data) {
+        log("Suzccess");
+        emit(state.copyWith(
+          status: DashboardsStates.successOffer,
+          updateDriverSettingsEntity: data,
+          offerCreatedShown: false, // freshly created
+        ));
+        getDriverSettings();
+      },
+    );
+  }
+
+  Future<void> createNonTrackOffer(CreateNonTrackOfferParams params,
+      context) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await createNonTrackTripUseCase(params);
+
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        // log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+          (data) {
+        log("Suzccess");
+        emit(state.copyWith(
+          status: DashboardsStates.successOffer,
+          createNonTrackOfferEntity: data,
+          offerCreatedShown: false, // freshly created
+        ));
+        showSuccessMessage(context, data.message);
+      },
+    );
+  }
+
+  void clearCreateOfferState() {
+    emit(state.copyWith(
+      status: DashboardsStates.initState,
+      createNonTrackOfferEntity: null,
+      offerCreatedShown: true,
+    ));
+  }
+
+
   List<TripEntity> availableTripsNonSocket = [];
 
   List<HistoryTripEntity> pastRideNonSocketData = [];
@@ -175,12 +430,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   Future<void> emitWatchingTrips(List<String> tripIds) async {
     var user = UserCubit.to.state.data;
     final result = await watchingTripsUseCase(
-        WatchingTripsParams(tripIds: tripIds, driverImage: user?.profilePicture??'',driverId:user?.id??'')
+        WatchingTripsParams(tripIds: tripIds,
+            driverImage: user?.profilePicture ?? '',
+            driverId: user?.id ?? '')
     );
     result.fold(
-            (l) => emit(state.copyWith(failure: l, status: DashboardsStates.error)),
+            (l) =>
+            emit(state.copyWith(failure: l, status: DashboardsStates.error)),
             (r) async {
-          if(r==true)log("Location Updated Successfully");
+          if (r == true) log("Location Updated Successfully");
         });
   }
 
@@ -188,16 +446,17 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (!hasMorePastNonSocketTrips || isLoadingMorePastNonSocketTrips) return;
     isLoadingMorePastNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
-    final response = await getPastNonSocketTripsUseCase(ClientPendingTripParams(page: currentPagePastNonSocketTrips, limit: 5));
+    final response = await getPastNonSocketTripsUseCase(
+        ClientPendingTripParams(page: currentPagePastNonSocketTrips, limit: 5));
     response.fold(
-      (failure) {
+          (failure) {
         isLoadingMorePastNonSocketTrips = false;
         emit(state.copyWith(
             failure: failure,
             // isLoadingMoreLogs: false,
             status: DashboardsStates.error));
       },
-      (data) {
+          (data) {
         pastRideNonSocketData.addAll(data);
         if ((data.length ?? 0) < 5) {
           hasMorePastNonSocketTrips = false;
@@ -230,19 +489,22 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAcceptedNonSocketTrips() async {
-    if (!hasMoreAcceptedNonSocketTrips || isLoadingMoreAcceptedNonSocketTrips) return;
+    if (!hasMoreAcceptedNonSocketTrips || isLoadingMoreAcceptedNonSocketTrips)
+      return;
     isLoadingMoreAcceptedNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
-    final response = await getAcceptedNonSocketTripsUseCase(ClientPendingTripParams(page: currentPageAcceptedNonSocketTrips, limit: 5));
+    final response = await getAcceptedNonSocketTripsUseCase(
+        ClientPendingTripParams(
+            page: currentPageAcceptedNonSocketTrips, limit: 5));
     response.fold(
-      (failure) {
+          (failure) {
         isLoadingMoreAcceptedNonSocketTrips = false;
         emit(state.copyWith(
             failure: failure,
             // isLoadingMoreLogs: false,
             status: DashboardsStates.error));
       },
-      (data) {
+          (data) {
         acceptedRideNonSocketData.addAll(data);
         if ((data.length ?? 0) < 5) {
           hasMoreAcceptedNonSocketTrips = false;
@@ -275,19 +537,22 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAvailableNonSocketTrips() async {
-    if (!hasMoreAvailableNonSocketTrips || isLoadingMoreAvailableNonSocketTrips) return;
+    if (!hasMoreAvailableNonSocketTrips || isLoadingMoreAvailableNonSocketTrips)
+      return;
     isLoadingMoreAvailableNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
-    final response = await getAvailableNonSocketTripsUseCase(ClientPendingTripParams(page: currentPageAvailableNonSocketTrips, limit: 5));
+    final response = await getAvailableNonSocketTripsUseCase(
+        ClientPendingTripParams(
+            page: currentPageAvailableNonSocketTrips, limit: 5));
     response.fold(
-      (failure) {
+          (failure) {
         isLoadingMoreAvailableNonSocketTrips = false;
         emit(state.copyWith(
             failure: failure,
             // isLoadingMoreLogs: false,
             status: DashboardsStates.error));
       },
-      (data) {
+          (data) {
         availableRideNonSocketData.addAll(data);
         if ((data.length ?? 0) < 5) {
           hasMoreAvailableNonSocketTrips = false;
@@ -307,63 +572,121 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   TextEditingController reasonController = TextEditingController();
 
+
   void changeIndex(int index, BuildContext context, RideModeParams params) {
-    emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
-    if (index == 0 && params.isSocket == true) loadAvailableRideTrips(context);
+    final settings = state
+        .driverSettingsEntity; // Assuming this contains `isReady`
+
+    emit(state.copyWith(
+        currentIndex: index, status: DashboardsStates.success));
+
+    // Index 0: Available Trips
+    if (index == 0) {
+      if (params.isSocket == true) {
+        loadAvailableRideTrips(context);
+      } else if (params.modeType == "ride" && settings?.isReady == true) {
+        loadInitialAvailableNonSocketTrips();
+      }
+      return; // prevent loading other data if index is 0
+    }
+
     if (index == 1 && params.isSocket == true) getActiveTrip(context);
 
-    /// method load
-    if (index == 0 && params.isSocket == false && params.modeType == "ride") loadInitialAvailableNonSocketTrips();
-    if (index == 4 && params.isSocket == false && params.modeType == "ride") loadInitialAcceptedNonSocketTrips();
-    if (index == 2 && params.isSocket == false && params.modeType == "ride") loadInitialPastNonSocketTrips();
+    // Index 2: Past Trips
+    if (index == 2 && params.isSocket == false && params.modeType == "ride") {
+      loadInitialPastNonSocketTrips();
+    }
+
+    // Index 3: Settings
+    if (index == 3 && params.isSocket == false && params.modeType == "ride") {
+      getDriverSettings();
+    }
+
+    // Index 4: Accepted Trips
+    if (index == 4 && params.isSocket == false && params.modeType == "ride") {
+      loadInitialAcceptedNonSocketTrips();
+    }
   }
 
-  void listenToNewTrip() {
-    CliLogger.info('Listen To New Trip');
-    // TripsResponseEntity
-    listenToNewTripUseCase((trip) {
-      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.insert(0, trip);
-      emit(state.copyWith(availableRideTrips: list));
-      log(trip.toString());
-    });
-  }
+    // void changeIndex(int index,BuildContext context,RideModeParams params){
+    //   final settings = state.driverSettingsEntity;
+    //   emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
+    //   if(index==0 && params.isSocket == true)loadAvailableRideTrips(context);
+    //   /// method load
+    //   if(index== 0&& params.isSocket == false && params.modeType == "ride")loadInitialAvailableNonSocketTrips();
+    //   if(index== 4&& params.isSocket == false && params.modeType == "ride")loadInitialAcceptedNonSocketTrips();
+    //   if(index==2&& params.isSocket == false && params.modeType == "ride")loadInitialPastNonSocketTrips();
+    //   if(index==3&& params.isSocket == false && params.modeType == "ride")getDriverSettings();
+    // }
 
-  void listenToRemoveTrip() {
-    CliLogger.info('Remove Trip');
-    // TripsResponseEntity
-    listenToRemoveTripUseCase((tripId) {
-      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      log("tripId.toString()${tripId.toString()}");
-      if (tripId.isNotEmpty) list.removeWhere((e) => e.id == tripId);
-      // log(trip.toString());
-      // list.insert(0, trip);
-      emit(state.copyWith(availableRideTrips: list));
-    });
-  }
+    void listenToRemoveTrip() {
+      CliLogger.info('Remove Trip');
+      // TripsResponseEntity
+      listenToRemoveTripUseCase((tripId) {
+        List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+        log("tripId.toString()${tripId.toString()}");
+        if (tripId.isNotEmpty) list.removeWhere((e) => e.id == tripId);
+        // log(trip.toString());
+        // list.insert(0, trip);
+        emit(state.copyWith(availableRideTrips: list));
+      });
+    }
 
-  void listenToUpdateTripAutoAccept() {
-    CliLogger.info('Listen To Update Trip Auto Accept');
-    listenToUpdateTripAutoAcceptUseCase((trip) {
-      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.firstWhere((e) => e.id == trip.id).isAutoAccept = trip.isAutoAccept;
-      log(trip.toString());
-      emit(state.copyWith(availableRideTrips: list));
-    });
-  }
+    void listenToNewTrip() {
+      CliLogger.info('Listen To New Trip');
+      // TripsResponseEntity
+      listenToNewTripUseCase((trip) {
+        List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+        list.insert(0, trip);
+        emit(state.copyWith(availableRideTrips: list));
+        log(trip.toString());
+      });
+    }
 
-  void listenToUpdateTripPrice() {
-    CliLogger.info('Listen To Update Trip Price');
-    listenToUpdateTripPriceUseCase((trip) {
-      CliLogger.info('Listen To Update TripPrice ${trip.price}');
-      CliLogger.info('Listen To Update TripId ${trip.tripId}');
+    void listenToRemoveUntrackedTrip() {
+      CliLogger.info('Remove Trip');
+      // TripsResponseEntity
+      listenToRemoveUntrackedTripUseCase((tripId) {
+        List<
+            AvailableRideNonSocketTripEntity> list = availableRideNonSocketData ??
+            [];
+        log("tripId.toString()${tripId.toString()}");
+        if (tripId.isNotEmpty) list.removeWhere((e) => e.tripDetails?.id == tripId);
+        if (tripId.isNotEmpty) list.removeWhere((e) =>
+        e.tripDetails?.id == tripId);
+        // log(trip.toString());
+        // list.insert(0, trip);
+        emit(state.copyWith(availableRideNonSocketTrips: list));
+      });
+    }
 
-      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.firstWhere((e) => e.id == trip.tripId).price = trip.price;
-      log(trip.toString());
-      emit(state.copyWith(availableRideTrips: list));
-    });
-  }
+    void listenToUpdateTripAutoAccept() {
+      CliLogger.info('Listen To Update Trip Auto Accept');
+      listenToUpdateTripAutoAcceptUseCase((trip) {
+        List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+        list
+            .firstWhere((e) => e.id == trip.id)
+            .isAutoAccept = trip.isAutoAccept;
+        log(trip.toString());
+        emit(state.copyWith(availableRideTrips: list));
+      });
+    }
+
+    void listenToUpdateTripPrice() {
+      CliLogger.info('Listen To Update Trip Price');
+      listenToUpdateTripPriceUseCase((trip) {
+        CliLogger.info('Listen To Update TripPrice ${trip.price}');
+        CliLogger.info('Listen To Update TripId ${trip.tripId}');
+
+        List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+        list
+            .firstWhere((e) => e.id == trip.tripId)
+            .price = trip.price;
+        log(trip.toString());
+        emit(state.copyWith(availableRideTrips: list));
+      });
+    }
+
 
   void listenToAcceptOffer(BuildContext context, RideModeParams params) {
     CliLogger.info('Listen To Update Trip Auto Accept');
@@ -376,70 +699,77 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     });
   }
 
+
   Future<void> getAvailableTrips(BuildContext context) async {
-    if (!hasMoreData || isLoadingMore) return;
-    emit(state.copyWith(status: DashboardsStates.loadingAvailable));
-    isLoadingMore = true;
-    final Either<Failure, TripsResponseEntity> result = await getAvailableTripsUsecase(AvailableRideTripsUseCaseParams(page: currentPage, limit: pageSize));
-    result.fold(
-      (failure) {
-        showErrorMessage(context, getFailureMessage(failure, context));
-        isLoadingMore = false;
-        log("objectavailableRideTripsEEEE");
-        log("Failure");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (availableTrips) {
-        log("Suzccess");
-        List<TripEntity> availableRideTrips = [];
-        availableRideTrips.addAll(state.availableTrips ?? []);
-        availableRideTrips.addAll(availableTrips.data.trips);
-        if (availableTrips.data.trips.length < pageSize) {
-          hasMoreData = false;
-        } else {
-          currentPage++;
-        }
-        isLoadingMore = false;
-        availableTripsNonSocket = availableRideTrips;
-        emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableRideTrips));
-        // emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableTrips.data.trips));
-      },
-    );
-  }
+        if (!hasMoreData || isLoadingMore) return;
+        emit(state.copyWith(status: DashboardsStates.loadingAvailable));
+        isLoadingMore = true;
+        final Either<Failure,
+            TripsResponseEntity> result = await getAvailableTripsUsecase(
+            AvailableRideTripsUseCaseParams(
+                page: currentPage, limit: pageSize));
+        result.fold(
+              (failure) {
+            showErrorMessage(context, getFailureMessage(failure, context));
+            isLoadingMore = false;
+            log("objectavailableRideTripsEEEE");
+            log("Failure");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (availableTrips) {
+            log("Suzccess");
+            List<TripEntity> availableRideTrips = [];
+            availableRideTrips.addAll(state.availableTrips ?? []);
+            availableRideTrips.addAll(availableTrips.data.trips);
+            if (availableTrips.data.trips.length < pageSize) {
+              hasMoreData = false;
+            } else {
+              currentPage++;
+            }
+            isLoadingMore = false;
+            availableTripsNonSocket = availableRideTrips;
+            emit(state.copyWith(status: DashboardsStates.success,
+                availableTrips: availableRideTrips));
+            // emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableTrips.data.trips));
+          },
+        );
+      }
 
-  bool isLoadingAvailableRideTrips = false;
-  void loadAvailableRideTrips(BuildContext context) async {
-    isLoadingAvailableRideTrips=true;
-    print("loadAvailableRideTrips1");
-    emit(state.copyWith(availableRideTrips: []));
-    currentPage = 1;
-    availableRideTrips.clear();
-    hasMoreData = true;
-    await getAvailableRideTrips(context);
-    print("loadAvailableRideTrips2");
-    isLoadingAvailableRideTrips=false;
-  }
+      bool isLoadingAvailableRideTrips = false;
 
-  // List<AvailableRideTripEntity> availableRideTrips = [];
-  bool isLoadingMore = false;
-  bool hasMoreData = true;
-  int currentPage = 1;
-  int pageSize = 10;
-  List<AvailableRideTripEntity> availableRideTrips = [];
+      void loadAvailableRideTrips(BuildContext context) async {
+        isLoadingAvailableRideTrips = true;
+        print("loadAvailableRideTrips1");
+        emit(state.copyWith(availableRideTrips: []));
+        currentPage = 1;
+        availableRideTrips.clear();
+        hasMoreData = true;
+        await getAvailableRideTrips(context);
+        print("loadAvailableRideTrips2");
+        isLoadingAvailableRideTrips = false;
+      }
 
-  Future<void> getAvailableRideTrips(BuildContext context) async {
-    if (!hasMoreData || isLoadingMore) return;
-    emit(state.copyWith(status: DashboardsStates.loading));
-    isLoadingMore = true;
-    final response = await availableRideTripsUseCase(
-      AvailableRideTripsUseCaseParams(page: currentPage, limit: pageSize),
-    );
-    response.fold(
-      (failure) {
-        showErrorMessage(context, getFailureMessage(failure, context));
-        isLoadingMore = false;
-        print("objectavailableRideTripsEEEE");
-        print("Failure");
+      // List<AvailableRideTripEntity> availableRideTrips = [];
+      bool isLoadingMore = false;
+      bool hasMoreData = true;
+      int currentPage = 1;
+      int pageSize = 10;
+      List<AvailableRideTripEntity> availableRideTrips = [];
+
+      Future<void> getAvailableRideTrips(BuildContext context) async {
+        if (!hasMoreData || isLoadingMore) return;
+        emit(state.copyWith(status: DashboardsStates.loading));
+        isLoadingMore = true;
+        final response = await availableRideTripsUseCase(
+          AvailableRideTripsUseCaseParams(page: currentPage, limit: pageSize),
+        );
+        response.fold(
+              (failure) {
+            showErrorMessage(context, getFailureMessage(failure, context));
+            isLoadingMore = false;
+            print("objectavailableRideTripsEEEE");
+            print("Failure");
 
         emit(state.copyWith(failure: failure, status: DashboardsStates.error));
       },
@@ -459,78 +789,89 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> getPastTrips(BuildContext context, String type) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: DashboardsStates.loadingPast));
+      Future<void> getPastTrips(BuildContext context, String type) async {
+        if (isClosed) {
+          return;
+        }
+        emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, TripsResponseEntity> result = await getPastTripsUsecase(type);
+        final Either<Failure,
+            TripsResponseEntity> result = await getPastTripsUsecase(type);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (pastTrips) {
-        log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.success, pastTrips: pastTrips.data.trips));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            log("Failure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (pastTrips) {
+            log("Suzccess");
+            emit(state.copyWith(status: DashboardsStates.success,
+                pastTrips: pastTrips.data.trips));
+          },
+        );
+      }
 
-  Future<void> getActiveTrip(BuildContext context) async {
-    showLoadingDialog(context);
-    emit(state.copyWith(status: DashboardsStates.loadingPast));
+      Future<void> getActiveTrip(BuildContext context) async {
+        showLoadingDialog(context);
+        emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, RunningTripEntity> result = await getRunningTripUseCase(const NoParams());
+        final Either<Failure,
+            RunningTripEntity> result = await getRunningTripUseCase(
+            const NoParams());
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure, tripStatus: TripState.pending.name));
-      },
-      (activeTrip) {
-        log("Suzccess");
-        context.pop();
-        emit(state.copyWith(status: DashboardsStates.success, activeTrip: activeTrip, tripStatus: activeTrip.status));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            context.pop();
+            log("Failure ${getFailureMessage(failure, context)}");
+            showErrorMessage(context, getFailureMessage(failure, context));
+            emit(state.copyWith(status: DashboardsStates.error,
+                failure: failure,
+                tripStatus: TripState.pending.name));
+          },
+              (activeTrip) {
+            log("Suzccess");
+            context.pop();
+            emit(state.copyWith(status: DashboardsStates.success,
+                activeTrip: activeTrip,
+                tripStatus: activeTrip.status));
+          },
+        );
+      }
 
-  Future<void> goingToClient(BuildContext context, String id) async {
-    showLoadingDialog(context);
-    emit(state.copyWith(status: DashboardsStates.loadingPast));
+      Future<void> goingToClient(BuildContext context, String id) async {
+        showLoadingDialog(context);
+        emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, bool> result = await goingToClientUseCase(id);
+        final Either<Failure, bool> result = await goingToClientUseCase(id);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (activeTrip) {
-        log("Suzccess");
-        context.pop();
-        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.goToClient.name));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            context.pop();
+            log("Failure ${getFailureMessage(failure, context)}");
+            showErrorMessage(context, getFailureMessage(failure, context));
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (activeTrip) {
+            log("Suzccess");
+            context.pop();
+            emit(state.copyWith(status: DashboardsStates.success,
+                tripStatus: TripState.goToClient.name));
+          },
+        );
+      }
 
-  showSafety(String lastStatus) {
-    emit(state.copyWith(tripStatus: 'support', lastStatus: lastStatus));
-  }
+      showSafety(String lastStatus) {
+        emit(state.copyWith(tripStatus: 'support', lastStatus: lastStatus));
+      }
 
-  closeSafety() {
-    emit(state.copyWith(tripStatus: state.lastStatus));
-  }
+      closeSafety() {
+        emit(state.copyWith(tripStatus: state.lastStatus));
+      }
 
   updateRemainingTime(DateTime futureTime) async {
     final prefs = await SharedPreferences.getInstance();
@@ -580,33 +921,39 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> startDriverTrip(BuildContext context, String id, String otp) async {
-    showLoadingDialog(context);
-    emit(state.copyWith(status: DashboardsStates.loadingPast));
+      Future<void> startDriverTrip(BuildContext context, String id,
+          String otp) async {
+        showLoadingDialog(context);
+        emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, bool> result = await startDriverTripUseCase(StartDriverTripParams(tripId: id, otp: otp));
+        final Either<Failure, bool> result = await startDriverTripUseCase(
+            StartDriverTripParams(tripId: id, otp: otp));
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (activeTrip) {
-        log("Suzccess");
-        context.pop();
-        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            context.pop();
+            log("Failure ${getFailureMessage(failure, context)}");
+            showErrorMessage(context, getFailureMessage(failure, context));
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (activeTrip) {
+            log("Suzccess");
+            context.pop();
+            emit(state.copyWith(status: DashboardsStates.success,
+                tripStatus: TripState.started.name));
+          },
+        );
+      }
 
-  Future<void> completeDriverTrip(BuildContext context, String id, String otp) async {
-    showLoadingDialog(context);
-    emit(state.copyWith(status: DashboardsStates.loadingPast));
+      Future<void> completeDriverTrip(BuildContext context, String id,
+          String otp) async {
+        showLoadingDialog(context);
+        emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, bool> result = await completeDriverTripUseCase(StartDriverTripParams(tripId: id, otp: otp));
+        final Either<Failure, bool> result = await completeDriverTripUseCase(
+            StartDriverTripParams(tripId: id, otp: otp));
 
     if (isClosed) return;
     result.fold(
@@ -687,361 +1034,407 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> getSettings(BuildContext context) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: DashboardsStates.loadingSettings));
+      Future<void> getSettings(BuildContext context) async {
+        if (isClosed) {
+          return;
+        }
+        emit(state.copyWith(status: DashboardsStates.loadingSettings));
 
-    final Either<Failure, SettingsDashboardEntityResponse> result = await getSettingsDashboardUsecase(const NoParams());
+        final Either<Failure,
+            SettingsDashboardEntityResponse> result = await getSettingsDashboardUsecase(
+            const NoParams());
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (settings) {
-        log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.success, settings: settings.data));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            log("Failure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (settings) {
+            log("Suzccess");
+            emit(state.copyWith(
+                status: DashboardsStates.success, settings: settings.data));
+          },
+        );
+      }
 
-  Future<void> updateSettings(BuildContext context, UpdateSettingsDashboardUsecaseParam param) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: DashboardsStates.loadingSettings));
+      Future<void> updateSettings(BuildContext context,
+          UpdateSettingsDashboardUsecaseParam param) async {
+        if (isClosed) {
+          return;
+        }
+        emit(state.copyWith(status: DashboardsStates.loadingSettings));
 
-    final Either<Failure, bool> result = await updateSettingsDashboardUsecase(param);
+        final Either<Failure,
+            bool> result = await updateSettingsDashboardUsecase(param);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (settings) {
-        log("Suzccess");
-        // emit(state.copyWith(status: DashboardsStates.success));
-        // if (settings) {
-        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        //     content: Text('Updated Successful.'),
-        //   ));
-        // } else {
-        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        //     content: Text('Some thing went error!'),
-        //   ));
-        // }
-        getSettings(context);
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            log("Failure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (settings) {
+            log("Suzccess");
+            // emit(state.copyWith(status: DashboardsStates.success));
+            // if (settings) {
+            //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //     content: Text('Updated Successful.'),
+            //   ));
+            // } else {
+            //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //     content: Text('Some thing went error!'),
+            //   ));
+            // }
+            getSettings(context);
+          },
+        );
+      }
 
-  Future<void> createNewOffer(BuildContext context, CreateNewOfferDashboardUsecaseParam param) async {
-    if (isClosed) {
-      return;
-    }
-    // emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
-    showLoadingDialog(context);
-    final Either<Failure, bool> result = await createNewOfferDashboardUsecase(param);
+      Future<void> createNewOffer(BuildContext context,
+          CreateNewOfferDashboardUsecaseParam param) async {
+        if (isClosed) {
+          return;
+        }
+        // emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
+        showLoadingDialog(context);
+        final Either<Failure,
+            bool> result = await createNewOfferDashboardUsecase(param);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (settings) {
-        context.pop();
-        log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.successOffer));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            context.pop();
+            log("Failure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (settings) {
+            context.pop();
+            log("Suzccess");
+            emit(state.copyWith(status: DashboardsStates.successOffer));
+          },
+        );
+      }
 
-  Future<void> autoAcceptTrip(BuildContext context, String id) async {
-    emit(state.copyWith(status: DashboardsStates.loadingAcceptTrip));
-    final Either<Failure, bool> result = await autoAcceptTripUseCase(id);
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (data) {
-        log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.successAcceptTrip));
-      },
-    );
-  }
+      Future<void> autoAcceptTrip(BuildContext context, String id) async {
+        emit(state.copyWith(status: DashboardsStates.loadingAcceptTrip));
+        final Either<Failure, bool> result = await autoAcceptTripUseCase(id);
+        result.fold(
+              (failure) {
+            log("Failure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (data) {
+            log("Suzccess");
+            emit(state.copyWith(status: DashboardsStates.successAcceptTrip));
+          },
+        );
+      }
 
-  Future<void> createNewOfferNonSocket(BuildContext context, CreateNewOfferDashboardUsecaseParam param, String subCategoryId) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
+      Future<void> createNewOfferNonSocket(BuildContext context,
+          CreateNewOfferDashboardUsecaseParam param,
+          String subCategoryId) async {
+        if (isClosed) {
+          return;
+        }
+        emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
 
-    final Either<Failure, bool> result = await createNewOfferNonSocketUsecase(param);
+        final Either<Failure,
+            bool> result = await createNewOfferNonSocketUsecase(param);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        String errorName = getFailureName(failure, context);
-        errorName == 'DebtError'
-            ? showDebtDialog(context, subCategoryId)
-            : errorName == 'SubscribeError'
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            String errorName = getFailureName(failure, context);
+            errorName == 'DebtError'
+                ? showDebtDialog(context, subCategoryId)
+                : errorName == 'SubscribeError'
                 ? showSubscribeDialog(context, subCategoryId)
-                : showErrorMessage(context, getFailureMessage(failure, context));
-        emit(state.copyWith(status: DashboardsStates.errorOffers, failure: failure));
-      },
-      (settings) {
-        log("Suzccess");
-        showSuccessMessage(context, 'Offer Created Successfully');
-        emit(state.copyWith(status: DashboardsStates.successOffer));
-      },
-    );
-  }
+                : showErrorMessage(
+                context, getFailureMessage(failure, context));
+            emit(state.copyWith(
+                status: DashboardsStates.errorOffers, failure: failure));
+          },
+              (settings) {
+            log("Suzccess");
+            showSuccessMessage(context, 'Offer Created Successfully');
+            emit(state.copyWith(status: DashboardsStates.successOffer));
+          },
+        );
+      }
 
-  Future<void> createOffer({required String tripId, required num price, required BuildContext context, required String subCategoryId}) async {
-    // emit(state.copyWith(status: DashboardsStates.loadingAcceptOffer));
-    showLoadingDialog(context);
-    Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    final response = await createRiderOfferUseCase(CreateRiderOfferParams(tripId: tripId, price: price, lat: currentPosition.latitude, lng: currentPosition.longitude));
-    response.fold((l) {
-      context.pop();
-      String errorName = getFailureName(l, context);
-      errorName == 'DebtError'
-          ? showDebtDialog(context, subCategoryId)
-          : errorName == 'SubscribeError'
+      Future<void> createOffer(
+          {required String tripId, required num price, required BuildContext context, required String subCategoryId}) async {
+        // emit(state.copyWith(status: DashboardsStates.loadingAcceptOffer));
+        showLoadingDialog(context);
+        Position currentPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        final response = await createRiderOfferUseCase(CreateRiderOfferParams(
+            tripId: tripId,
+            price: price,
+            lat: currentPosition.latitude,
+            lng: currentPosition.longitude));
+        response.fold((l) {
+          context.pop();
+          String errorName = getFailureName(l, context);
+          errorName == 'DebtError'
+              ? showDebtDialog(context, subCategoryId)
+              : errorName == 'SubscribeError'
               ? showSubscribeDialog(context, subCategoryId)
               : showErrorMessage(context, getFailureMessage(l, context));
-      emit(state.copyWith(failure: l, status: DashboardsStates.error));
-    }, (data) {
-      context.pop();
-      emit(state.copyWith(status: DashboardsStates.success));
-    });
-  }
+          emit(state.copyWith(failure: l, status: DashboardsStates.error));
+        }, (data) {
+          context.pop();
+          emit(state.copyWith(status: DashboardsStates.success));
+        });
+      }
 
-  Future<void> createDriverRating(BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: DashboardsStates.loadingRating));
+      Future<void> createDriverRating(BuildContext context,
+          CreateUpdateDriverRatingUsecaseParam param) async {
+        if (isClosed) {
+          return;
+        }
+        emit(state.copyWith(status: DashboardsStates.loadingRating));
 
-    final Either<Failure, bool> result = await createDriverRatingUsecase(param);
+        final Either<Failure, bool> result = await createDriverRatingUsecase(
+            param);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (settings) {
-        log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.successRating));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            log("Failure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (settings) {
+            log("Suzccess");
+            emit(state.copyWith(status: DashboardsStates.successRating));
+          },
+        );
+      }
 
-  Future<void> updateDriverRating(BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: DashboardsStates.loadingRating));
+      Future<void> updateDriverRating(BuildContext context,
+          CreateUpdateDriverRatingUsecaseParam param) async {
+        if (isClosed) {
+          return;
+        }
+        emit(state.copyWith(status: DashboardsStates.loadingRating));
 
-    final Either<Failure, bool> result = await updateDriverRatingUsecase(param);
+        final Either<Failure, bool> result = await updateDriverRatingUsecase(
+            param);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (settings) {
-        log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.successRating));
-      },
-    );
-  }
+        if (isClosed) return;
+        result.fold(
+              (failure) {
+            log("Failure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (settings) {
+            log("Suzccess");
+            emit(state.copyWith(status: DashboardsStates.successRating));
+          },
+        );
+      }
 
-  Future<void> refuseTrip(BuildContext context, String id) async {
-    emit(state.copyWith(status: DashboardsStates.loadingAvailable));
-    availableTripsNonSocket.removeWhere((element) => element.tripDetails!.id == id);
-    emit(state.copyWith(status: DashboardsStates.successOffer, availableTrips: availableTripsNonSocket));
-  }
+      Future<void> refuseTrip(BuildContext context, String id) async {
+        emit(state.copyWith(status: DashboardsStates.loadingAvailable));
+        availableTripsNonSocket.removeWhere((element) =>
+        element.tripDetails!.id == id);
+        emit(state.copyWith(status: DashboardsStates.successOffer,
+            availableTrips: availableTripsNonSocket));
+      }
 
-  showSubscribeDialog(BuildContext context, String subCategoryId) {
-    showCustomDialogTrip(
-        context,
-        Column(
-          spacing: 12,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              LocaleKeys.alert.localize,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text('Please Subscribe for more trips',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: FontSize.s16,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                )),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+      showSubscribeDialog(BuildContext context, String subCategoryId) {
+        showCustomDialogTrip(
+            context,
+            Column(
+              spacing: 12,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: 'Close',
-                    backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                const SizedBox(width: 16),
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: 'Subscribe',
-                    backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      SubscriptionMethod().subscribe(subscribeId: subCategoryId, showRegular: true, title: '');
-                    }),
+                Text(
+                  LocaleKeys.alert.localize,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text('Please Subscribe for more trips',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: FontSize.s16,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    )),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppButton(
+                        width: context.screenWidth / 3.4,
+                        label: 'Close',
+                        backColor: AppColors.SECONDARY_COLOR_DARK2,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                    const SizedBox(width: 16),
+                    AppButton(
+                        width: context.screenWidth / 3.4,
+                        label: 'Subscribe',
+                        backColor: AppColors.PRIMARY_COLOR,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          SubscriptionMethod().subscribe(
+                              subscribeId: subCategoryId,
+                              showRegular: true,
+                              title: '');
+                        }),
+                  ],
+                ),
+                const SizedBox(height: 16),
               ],
-            ),
-            const SizedBox(height: 16),
-          ],
-        ));
-  }
+            ));
+      }
 
-  showDebtDialog(BuildContext context, String subCategoryId) {
-    showCustomDialogTrip(
-        context,
-        Column(
-          spacing: 12,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              LocaleKeys.alert.localize,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text('Please pay the Debt for more trips',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: FontSize.s16,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                )),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+      showDebtDialog(BuildContext context, String subCategoryId) {
+        showCustomDialogTrip(
+            context,
+            Column(
+              spacing: 12,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: 'Close',
-                    backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                const SizedBox(width: 16),
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: 'Pay',
-                    backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.mainWallet, price: 50);
-                    }),
+                Text(
+                  LocaleKeys.alert.localize,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text('Please pay the Debt for more trips',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: FontSize.s16,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    )),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppButton(
+                        width: context.screenWidth / 3.4,
+                        label: 'Close',
+                        backColor: AppColors.SECONDARY_COLOR_DARK2,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                    const SizedBox(width: 16),
+                    AppButton(
+                        width: context.screenWidth / 3.4,
+                        label: 'Pay',
+                        backColor: AppColors.PRIMARY_COLOR,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          serviceLocator<SubscriptionController>()
+                              .showActiveSubscriptionAmounts(
+                              walletType: WalletTypes.mainWallet, price: 50);
+                        }),
+                  ],
+                ),
+                const SizedBox(height: 16),
               ],
-            ),
-            const SizedBox(height: 16),
-          ],
-        ));
-  }
+            ));
+      }
 
-  uploadRecord(BuildContext context, String tripId, String mediaId) async {
-    final Either<Failure, bool> result = await recordingTripUseCase(RecordingTripUseCaseParams(tripId, mediaId));
+      uploadRecord(BuildContext context, String tripId, String mediaId) async {
+        final Either<Failure, bool> result = await recordingTripUseCase(
+            RecordingTripUseCaseParams(tripId, mediaId));
 
-    result.fold(
-      (failure) {
-        context.pop();
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (data) async {
-        context.pop();
-        emit(state.copyWith(status: DashboardsStates.success));
-      },
-    );
-  }
+        result.fold(
+              (failure) {
+            context.pop();
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (data) async {
+            context.pop();
+            emit(state.copyWith(status: DashboardsStates.success));
+          },
+        );
+      }
 
-  bool _isRequestingPermission = false;
+      bool _isRequestingPermission = false;
 
-  Future<bool> _checkPermissions() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // You can show a dialog here asking user to enable location
-      return false;
-    }
+      Future<bool> _checkPermissions() async {
+        bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+        if (!serviceEnabled) {
+          // You can show a dialog here asking user to enable location
+          return false;
+        }
 
-    // Step 2: Request permission
-    LocationPermission permission = await Geolocator.requestPermission();
+        // Step 2: Request permission
+        LocationPermission permission = await Geolocator.requestPermission();
 
-    // Step 3: Check if permission is whileInUse
-    if (permission == LocationPermission.whileInUse) {
-      return true;
-    }
+        // Step 3: Check if permission is whileInUse
+        if (permission == LocationPermission.whileInUse) {
+          return true;
+        }
 
-    // Optional: Handle permanently denied
-    if (permission == LocationPermission.deniedForever) {
-      await Geolocator.openAppSettings();
-    }
+        // Optional: Handle permanently denied
+        if (permission == LocationPermission.deniedForever) {
+          await Geolocator.openAppSettings();
+        }
 
-    return false;
-  }
+        return false;
+      }
 
-  getEmergencyDetails(BuildContext context, SupportRideParams mainParams) async {
-    GetSupportDetailsParams params = GetSupportDetailsParams(tripId: mainParams.tripId, tripType: mainParams.tripType, userType: mainParams.userType);
-    emit(state.copyWith(status: DashboardsStates.loading));
-    final Either<Failure, SupportDetailsEntity> result = await getSupportDetailsUseCase(params);
+      getEmergencyDetails(BuildContext context,
+          SupportRideParams mainParams) async {
+        GetSupportDetailsParams params = GetSupportDetailsParams(
+            tripId: mainParams.tripId,
+            tripType: mainParams.tripType,
+            userType: mainParams.userType);
+        emit(state.copyWith(status: DashboardsStates.loading));
+        final Either<Failure,
+            SupportDetailsEntity> result = await getSupportDetailsUseCase(
+            params);
 
-    result.fold(
-      (failure) {
-        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
-      },
-      (data) async {
-        emit(state.copyWith(supportDetails: data, supportStatus: data.status, status: DashboardsStates.success));
-      },
-    );
-  }
+        result.fold(
+              (failure) {
+            emit(state.copyWith(
+                status: DashboardsStates.error, failure: failure));
+          },
+              (data) async {
+            emit(state.copyWith(supportDetails: data,
+                supportStatus: data.status,
+                status: DashboardsStates.success));
+          },
+        );
+      }
 
 
-  var firstFormKey = GlobalKey<FormState>();
-  var secondFormKey = GlobalKey<FormState>();
-  var thirdFormKey = GlobalKey<FormState>();
-  var fourthFormKey = GlobalKey<FormState>();
-  var fifthFormKey = GlobalKey<FormState>();
+      var firstFormKey = GlobalKey<FormState>();
+      var secondFormKey = GlobalKey<FormState>();
+      var thirdFormKey = GlobalKey<FormState>();
+      var fourthFormKey = GlobalKey<FormState>();
+      var fifthFormKey = GlobalKey<FormState>();
 
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController firstPhoneController = TextEditingController();
-  final TextEditingController secondNameController = TextEditingController();
-  final TextEditingController secondPhoneController = TextEditingController();
-  final TextEditingController thirdNameController = TextEditingController();
-  final TextEditingController thirdPhoneController = TextEditingController();
-  final TextEditingController fourthNameController = TextEditingController();
-  final TextEditingController fourthPhoneController = TextEditingController();
-  final TextEditingController fifthNameController = TextEditingController();
-  final TextEditingController fifthPhoneController = TextEditingController();
+      final TextEditingController firstNameController = TextEditingController();
+      final TextEditingController firstPhoneController = TextEditingController();
+      final TextEditingController secondNameController = TextEditingController();
+      final TextEditingController secondPhoneController = TextEditingController();
+      final TextEditingController thirdNameController = TextEditingController();
+      final TextEditingController thirdPhoneController = TextEditingController();
+      final TextEditingController fourthNameController = TextEditingController();
+      final TextEditingController fourthPhoneController = TextEditingController();
+      final TextEditingController fifthNameController = TextEditingController();
+      final TextEditingController fifthPhoneController = TextEditingController();
 
   getEmergencyContacts(BuildContext context) async{
   firstNameController.clear();

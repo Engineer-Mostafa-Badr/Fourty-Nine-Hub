@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,7 +135,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
               return Column(
                 children: [
                   ListTile(
-                    subtitle: Text(context.isArabic?convertToArabicNumbers(LocaleKeys.favouriteDescription.localize):LocaleKeys.favouriteDescription.localize),
+                    subtitle: Text(context.isArabic?convertToArabicNumbers('اختار الاقسام الرئيسية المفضلة لديك التي تحب أن تراها.  يمكنك اختيار بحد ادنى 3 فئات وبحد اقصى 5 فئات.'):LocaleKeys.favouriteDescription.localize),
                   ),
                   Expanded(
                     child: ListView.separated(

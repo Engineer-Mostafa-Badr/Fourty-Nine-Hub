@@ -3503,6 +3503,9 @@ class AppPages {
                     create: (context) => serviceLocator<DashboardsCubit>(),
                     child: SupportRideScreen(params: state.extra as SupportRideParams,)),
               ),
+
+
+
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
                 name: Routes.supportClientDetailsScreen,

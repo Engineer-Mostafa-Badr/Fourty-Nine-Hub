@@ -31,6 +31,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
+import '../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
@@ -40,6 +41,7 @@ import '../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart
 import '../../domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import '../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import '../models/dashboards/driver_settings_model.dart';
 import '../models/dashboards/get_accepted_ride_non_socket_trip_model.dart';
 import '../models/dashboards/get_available_ride_non_socket_trip_model.dart';
 import '../models/dashboards/get_past_ride_non_socket_trip_model.dart';
@@ -85,11 +87,16 @@ abstract class TripRemoteDataSource {
   void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
 
   void listenToRemoveTrip(Function(String tripId) params);
+  void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>> getAvailableNonSocketTrips(ClientPendingTripParams params);
 
   Future<Either<Failure, List<AcceptedRideNonSocketTripEntity>>> getAcceptedNonSocketTrips(ClientPendingTripParams params);
   Future<Either<Failure, List<HistoryTripEntity>>> getPastNonSocketTrips(ClientPendingTripParams params);
+
+
+  Future<Either<Failure, DriverSettingsEntity >> getDriverSettings();
+
 }
 
 class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
@@ -510,6 +517,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
           (l) => Left(l),
           (data) => Right(EmergencyContactModel.fromJson(data['data']),
     ));
+  }
+
+  @override
+  Future<Either<Failure, DriverSettingsEntity>> getDriverSettings()async {
+    final url = EndPoints.getDriverSettings;
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final driverSettings = DriverSettingsModel .fromJson(data['data']['driverSettings']);
+        return Right(driverSettings);
+      },
+    );
+  }
+
+  @override
+  void listenToRemoveUntrackedTrip(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Remove Trip ");
+      log("Listen to Remove Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.removeUntrackedTrip, (data) {
+        CliLogger.info("Remove Trip data :  $data");
+        log("Remove Trip data :  $data");
+        params(data['tripsCanceled']['ids'][0]);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
   }
 
   @override

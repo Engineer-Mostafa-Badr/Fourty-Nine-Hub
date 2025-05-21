@@ -176,7 +176,7 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
         if (showUserDialog) {
           selectedUserIds = await showSearchUserDialog(
             context,
-            name: widget.name!,
+            name: widget.name ?? "",
             status: newStatus,
           );
 

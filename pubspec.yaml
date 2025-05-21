@@ -159,6 +159,7 @@ dependency_overrides:
   permission_handler: ^11.0.1
   text_scroll: null
   auto_scroll_text: null
+  flutter_date_pickers:
 #  wakelock_plus: ^1.2.8
 dev_dependencies:
   build_runner: ^2.4.9

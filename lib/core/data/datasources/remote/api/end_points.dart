@@ -1523,6 +1523,8 @@ class EndPoints {
   static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
   static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const createOfferNonTrackedTrips = '/ride/non-tracking/offers/trip/';
+  static const updateDriverSettingsNonTrack= '/ride/driver/untracked/settings';
 
 
   static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
@@ -1531,5 +1533,6 @@ class EndPoints {
   static const getEmergencyContacts = '/users/emergency-contacts';
   static const addEmergencyContacts = '/users/add-emergency-contacts';
   static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
+  static const getDriverSettings = '/ride/driver/untracked/settings';
   static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
 }

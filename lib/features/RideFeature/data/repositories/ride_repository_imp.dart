@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/create_non_track_offer_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_driver_settings_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
@@ -37,6 +39,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pendin
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
@@ -417,5 +421,16 @@ class RideRepositoryImplementation extends RideRepository {
   Future<Either<Failure, bool>> emitWatchingTrips(WatchingTripsParams params) async {
     final data = await rideRemoteDataSource.watchingTripsParams(params);
     return data;
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createNonTrackOffer(CreateNonTrackOfferParams params) {
+  return rideRemoteDataSource.createNonTrackOffer(params);
+  }
+
+  @override
+  Future<Either<Failure, UpdateDriverSettingsEntity>> updateDriverSettings(UpdateDriverSettingsParams params) {
+    return rideRemoteDataSource.updateDriverSettings(params);
+
   }
 }

@@ -46,21 +46,21 @@ class GetStatusAllServicesNotificationsCubit
         },
         {
           'nameEn': 'Health Registration',
-          'nameAr': 'التسجيل صحي',
+          'nameAr': 'تسجيل صحة',
           'valueEn': r.healthRegistration,
           'valueAr': _changeStatusLang(r.healthRegistration),
           
         },
         {
           'nameEn': 'Ads',
-          'nameAr': 'تسجيل اعلان',
+          'nameAr': 'اعلان منشأ',
           'valueEn': r.adsRegistration,
           'valueAr': _changeStatusLang(r.adsRegistration),
           
         },
         {
           'nameEn': 'Company Ads',
-          'nameAr': 'إعلانات شركة',
+          'nameAr': 'إعلان شركة',
           'valueEn': r.companyAdsRegistration,
           'valueAr': _changeStatusLang(r.companyAdsRegistration),
           
@@ -95,14 +95,14 @@ class GetStatusAllServicesNotificationsCubit
         },
         {
           'nameEn': 'Cashback Withdraw',
-          'nameAr': 'سحب النقود المستردة',
+          'nameAr': 'تحويل نقود مستردة',
           'valueEn': r.cashbackWithdrawStatus,
           'valueAr': _changeStatusLang(r.cashbackWithdrawStatus),
           
         },
         {
           'nameEn': 'Wallet Withdraw',
-          'nameAr': 'سحب المحفظة',
+          'nameAr': 'سحب محفظة',
           'valueEn': r.walletWithdrawStatus,
           'valueAr': _changeStatusLang(r.walletWithdrawStatus),
           
