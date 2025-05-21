@@ -174,11 +174,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
           floatingActionButton: _isScrollingDown
               ? null
               : const FloatingButton(
-            changeView: 1,
-            icon: Icons.person,
-          ),
+                  changeView: 1,
+                  icon: Icons.person,
+                ),
           floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+              FloatingActionButtonLocation.centerDocked,
           // drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
@@ -188,28 +188,22 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const AddBanner(),
               const AnnounceWidget(),
               const Sizer(),
-              !context
-                  .read<UserCubit>()
-                  .isLoggedIn
+              !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
               ScrollableTextWithAnimation(
                 textDirection:
-                context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
               ),
 
               //wallet
 
-              context
-                  .read<UserCubit>()
-                  .isLoggedIn
+              context.read<UserCubit>().isLoggedIn
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
                 onTap: () {
-                  if (!context
-                      .read<UserCubit>()
-                      .isLoggedIn) {
+                  if (!context.read<UserCubit>().isLoggedIn) {
                     return pleaseLoginDialog(context);
                   }
                   Navigator.push(
@@ -224,9 +218,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   alignment: Alignment.center,
                   child: AutoScrollText(
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle
-                        .localize}..  ${LocaleKeys.clickHere
-                        .localize}!!                                         ",
+                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                     style: Styles.headerText(
                         fontSize: 30,
                         color: context.isDarkMode
@@ -342,10 +334,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       highlightColor: Colors.white24,
                       child: GridView.builder(
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisSpacing: 10,
-                            crossAxisCount: 2,
-                            childAspectRatio: 2 / 3),
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisSpacing: 10,
+                                crossAxisCount: 2,
+                                childAspectRatio: 2 / 3),
                         itemCount: 6,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -354,10 +346,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                             padding: const EdgeInsets.only(bottom: 10),
                             child: Container(
                               height:
-                              MediaQuery
-                                  .of(context)
-                                  .size
-                                  .height * .15.h,
+                                  MediaQuery.of(context).size.height * .15.h,
                               width: double.infinity,
                               margin: EdgeInsets.symmetric(horizontal: 10.w),
                               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -375,10 +364,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   if (state.data != null) {
                     return GridView.builder(
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisSpacing: 10,
-                          crossAxisCount: 2,
-                          childAspectRatio: .9),
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisSpacing: 10,
+                              crossAxisCount: 2,
+                              childAspectRatio: .9),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -405,7 +394,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               onFavorite: () async {
                                 var result = await controller
                                     .toggleFavoriteMedicalService(
-                                    state.data![index].id);
+                                        state.data![index].id);
                                 print("result$result");
                                 return result;
                               },
@@ -439,14 +428,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
               height: 24,
             ),
             Routes.MAINCATEGORIESTREE,
-                () => HandleCashback.setCount('threeDotsCount', context),
+            () => HandleCashback.setCount('threeDotsCount', context),
           ),
         ),
         GestureDetector(
           onTap: () {
-            if (context
-                .read<UserCubit>()
-                .isLoggedIn) {
+            if (context.read<UserCubit>().isLoggedIn) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -455,7 +442,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               return pleaseLoginDialog(context);
             }
           },
-              child: Container(
+          child: Container(
             height: 40,
             width: 40,
             decoration: const BoxDecoration(
@@ -473,7 +460,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               height: 24,
             ),
             Routes.MAINCATEGORIESCARDS,
-                () {
+            () {
               log('extra is $extra');
               AdInterstitialTop.loadIntersitialAd();
               AdInterstitialTop.showInterstitialAd();
@@ -505,7 +492,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 }
-  // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
+// BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
 /*  _pickMeAndComeWithUWidget() {
     return _buildRideSubCategoryItem(
       title: context.isArabic ? 'جاي معاك' : 'Trip Join',

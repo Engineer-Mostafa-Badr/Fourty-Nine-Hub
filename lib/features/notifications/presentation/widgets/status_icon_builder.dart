@@ -15,8 +15,7 @@ class StatusIconBuilder extends StatelessWidget {
       return CustomNotificationWidget(
         icon: Image.asset(
           context.isDarkMode?Assets.status_dark:Assets.status,
-          height: 30,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitWidth,
         ), unreadCount: 0,
       );
     });

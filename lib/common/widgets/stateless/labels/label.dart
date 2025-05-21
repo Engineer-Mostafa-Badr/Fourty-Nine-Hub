@@ -7,16 +7,17 @@ class Label extends StatelessWidget {
   final TextStyle? style;
   final TextAlign? textAlign;
   final TextOverflow? overflow;
+  final TextDirection? textDirection;
   final int? maxLines;
   final Color? color;
   const Label(
       {super.key,
       required this.text,
       this.style,
-      this.overflow,
+      this.overflow = TextOverflow.ellipsis,
       this.textAlign,
       this.maxLines,
-      this.color});
+      this.color, this.textDirection});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,8 @@ class Label extends StatelessWidget {
       style: style ?? Styles.mediumText(color: color),
       textAlign: textAlign,
       maxLines: maxLines,
-      overflow: TextOverflow.ellipsis,
+      overflow: overflow,
+      textDirection: textDirection,
       // maxLines: maxLines,
     );
   }

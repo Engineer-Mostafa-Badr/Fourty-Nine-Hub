@@ -6,6 +6,7 @@ class SubcategoriesState {
   final int? subCatIndex;
   final String? selectedSubCatId;
   final List<AdModel>? ads;
+  final List<AdModel>? searchAds;
   String? city;
   String? governorate;
   final FilterModel? filterModel;
@@ -21,6 +22,7 @@ class SubcategoriesState {
       {this.failure,
       this.subCategories,
       this.ads,
+      this.searchAds,
       this.city = '',
       this.governorate = '',
       this.customPageSubCategories,
@@ -46,6 +48,7 @@ class SubcategoriesState {
     List<SubCategoryEntity>? customPageSubCategories,
     List<SubCategoryEntity>? marriageSubCategories,
     List<AdModel>? ads,
+    List<AdModel>? searchAds,
     List<AdModel>? myAds,
     List<AdRequestEntity>? adsRequestsLog,
   }) {
@@ -53,6 +56,7 @@ class SubcategoriesState {
       failure: failure ?? this.failure,
       status: status ?? this.status,
       ads: ads ?? this.ads,
+      searchAds: searchAds ?? this.searchAds,
       subCategories: subCategories ?? this.subCategories,
       customPageSubCategories:
           customPageSubCategories ?? this.customPageSubCategories,

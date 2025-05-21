@@ -464,7 +464,7 @@ class _MostBookingCardState extends State<MostBookingCard> {
                           const Sizer(),
                           Label(
                             text:
-                                '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${widget.data.waitingTime ?? "0"}',
+                                '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}',
                             style: Styles.mediumText(
                                 color: context.isDarkMode
                                     ? AppColors.whiteColor
@@ -475,7 +475,7 @@ class _MostBookingCardState extends State<MostBookingCard> {
                       ),
                       Label(
                         text:
-                            '${widget.data.bookingCount ?? 0}/${LocaleKeys.book.localize}',
+                            '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}',
                         style: Styles.mediumText(
                             fontWeight: FontWeight.w500,
                             color: AppColors.PRIMARY_COLOR_DARK),

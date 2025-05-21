@@ -10,21 +10,27 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 class PostInstagramWidget extends StatelessWidget {
   const PostInstagramWidget({
     super.key,
+    required this.posts,
+    required this.currentIndex,
     required this.instagramPostEntity,
   });
 
+  final List<InstagramPostEntity> posts;
+  final int currentIndex;
   final InstagramPostEntity instagramPostEntity;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         InstgramImagesPostWidget(
-          // images: instagramPostEntity.medias,
           instagramPostEntity: instagramPostEntity,
         ),
         const Sizer(),
         InstagramPostReviewWidget(
-          instagramPostEntity: instagramPostEntity,
+          // instagramPostEntity: instagramPostEntity,
+          posts: posts,
+          currentPost: currentIndex,
         ),
       ],
     );

@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -45,7 +47,8 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
           final res = await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              contentPadding: EdgeInsets.all(8),
+              backgroundColor: AppColors.getFindFillColor(context),
               content: StatefulBuilder(
                 builder: (context, setState) {
                   return Column(
@@ -57,38 +60,46 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
                       //
                       // Label(text: 'Who Can See My ${widget.label}'),
                       _buildPrivacyOption(context, setState,
-                          title: 'Public',
+                          title: LocaleKeys.public.localize,
                           value: PrivacyStatus.public,
+                          icon: getPrivacyIcon(PrivacyStatus.public),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
-                          title: 'Contacts',
+                          title:LocaleKeys.contacts.localize,
                           value: PrivacyStatus.contacts,
+                          icon: getPrivacyIcon(PrivacyStatus.contacts),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
-                          title: 'Friends',
+                          title: LocaleKeys.friends.localize,
                           value: PrivacyStatus.friends,
+                          icon: getPrivacyIcon(PrivacyStatus.friends),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
-                          title: 'Followers',
+                          title: LocaleKeys.followers.localize,
                           value: PrivacyStatus.followers,
+                          icon: getPrivacyIcon(PrivacyStatus.followers),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
-                          title: 'Friends And Followers',
+                          title: LocaleKeys.friendsAndFollowers.localize,
                           value: PrivacyStatus.friendsAndFollowers,
+                          icon: getPrivacyIcon(PrivacyStatus.friendsAndFollowers),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
-                          title: 'Only Me',
+                          title: LocaleKeys.onlyMe.localize,
                           value: PrivacyStatus.onlyMe,
+                          icon: getPrivacyIcon(PrivacyStatus.onlyMe),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
-                          title: 'Only With',
+                          title: LocaleKeys.only_with.localize,
                           value: PrivacyStatus.onlyWith,
+                          icon: getPrivacyIcon(PrivacyStatus.onlyWith),
                           currentStatus: currentStatus,
                           showUserDialog: true),
                       _buildPrivacyOption(context, setState,
-                          title: 'Except From',
+                          title: context.isArabic?'ما عدا...':LocaleKeys.except_from.localize,
                           value: PrivacyStatus.exceptFrom,
                           currentStatus: currentStatus,
+                          icon: getPrivacyIcon(PrivacyStatus.exceptFrom),
                           showUserDialog: true),
                     ],
                   );
@@ -143,6 +154,7 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
     BuildContext context,
     StateSetter setState, {
     required String title,
+    required IconData icon,
     required PrivacyStatus value,
     required PrivacyStatus currentStatus,
     bool showUserDialog = false,
@@ -164,7 +176,7 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
         if (showUserDialog) {
           selectedUserIds = await showSearchUserDialog(
             context,
-            name: widget.name!,
+            name: widget.name ?? "",
             status: newStatus,
           );
 
@@ -175,7 +187,16 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
 
         Navigator.pop(context);
       },
-      title: Label(text: title),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Label(text: title),
+          Icon(icon,
+              color: Colors.grey),
+        ],
+      ),
+
+      activeColor: AppColors.getButtonPrimaryColor(context) ,
     );
   }
 

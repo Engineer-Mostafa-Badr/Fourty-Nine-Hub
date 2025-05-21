@@ -127,7 +127,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
                 child: Text(
-                  LocaleKeys.youHaveToUploadThe3PagesOfCommercialRegistration
+                  context.isArabic?'يجب عليك تحميل الصفحات الثلاث للسجل التجاري!':LocaleKeys.youHaveToUploadThe3PagesOfCommercialRegistration
                       .localize,
                   style: const TextStyle(color: Colors.red),
                 ),

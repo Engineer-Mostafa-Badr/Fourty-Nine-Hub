@@ -34,7 +34,7 @@ class SinglePostInstagramModel extends SinglePostInstagramEntity {
           : [],
       likesCounter: json['likesCounter'] ?? 0,
       commentsCounter: json['commentsCounter'] ?? 0,
-      shearsCounter: json['shearsCounter'] ?? 0,
+      shearsCounter: json['shareCounter'] ?? 0,
       favoritesCounter: json['favoritesCounter'] ?? 0,
       lastLikeEntity: LastLikeModel.fromJson(json['lastLikeUser']),
       isLiked: json['isLiked'] ?? false,

@@ -3,6 +3,7 @@ import 'sub_category_entity.dart';
 
 class SettingsDashboardEntity {
   final bool isReady;
+  final bool enableNotificationSound;
   final List<SubCategoryEntity> categoryIds;
   final String subscriptionType;
   final double pricingPerKm;
@@ -16,6 +17,7 @@ class SettingsDashboardEntity {
 
   SettingsDashboardEntity({
     required this.isReady,
+    required this.enableNotificationSound,
     required this.categoryIds,
     required this.subscriptionType,
     required this.pricingPerKm,

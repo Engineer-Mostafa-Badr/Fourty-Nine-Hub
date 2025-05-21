@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -73,7 +75,7 @@ class ProviderAdsView extends StatelessWidget {
                     ),
                     Expanded(
                       child: BadgedLabel(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.city.localize,
                           width: 170.h,
                           style: Styles.headerText(fontWeight:FontWeight.w400 ,color: AppColors.getReversedTextColor(context)),
@@ -105,18 +107,28 @@ class ProviderAdsView extends StatelessWidget {
                   ],
                 )),
             Expanded(
-                child: controller.state.hasFilter == false
-                    ? ProviderAds(
-                        params: params,
-                        userType: userType,
-                        controller: controller,
+                child: controller.state.ads?.isEmpty ?? true
+                    ? Center(
+                        child: Label(
+                          text: LocaleKeys.noAds.localize,
+                          style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? AppColors.whiteColor
+                                  : AppColors.PRIMARY_COLOR),
+                        ),
                       )
-                    : ProviderFilterAds(
-                        userType: userType,
-                        params: params,
-                        model: controller.state.filterModel!,
-                        controller: controller,
-                      ))
+                    : controller.state.hasFilter == false
+                        ? ProviderAds(
+                            params: params,
+                            userType: userType,
+                            controller: controller,
+                          )
+                        : ProviderFilterAds(
+                            userType: userType,
+                            params: params,
+                            model: controller.state.filterModel!,
+                            controller: controller,
+                          ))
           ]);
   }
 }

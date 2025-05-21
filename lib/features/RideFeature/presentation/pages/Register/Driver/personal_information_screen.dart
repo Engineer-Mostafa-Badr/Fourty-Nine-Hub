@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
@@ -7,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
+import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/core/widget/custom_switch_list_title.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/widgets/register_expansion_tile.dart';
@@ -49,9 +51,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
       var cubit = context.read<RideRegisterCubit>();
-      print("state.city${state.city}");
-      print("state.city${state.selectedGov}");
-      print("state.selectedPlan${state.selectedPlan}");
+      final DateTime now = DateTime.now();
+      final DateTime earliestDate = DateTime(now.year - 65, now.month, now.day);
+      final DateTime latestDate = DateTime(now.year - 21, now.month, now.day);
       return PopScope(
         canPop: false,
         child: CustomScaffold(
@@ -124,7 +126,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   currentController: cubit.rideNameController,
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  hint: LocaleKeys.firstName.localize,
+                                  hint: '',
                                   // label: LocaleKeys.firstName.localize,
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
@@ -142,7 +144,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   currentController: cubit.rideSurNameController,
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  hint: LocaleKeys.surname.localize,
+                                  hint: '',
                                   // label: LocaleKeys.surname.localize,
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
@@ -159,14 +161,14 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                                   DatePickerTextField(
                                     color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
-                                    initialDate: DateTime.now(),
-                                    minDate: DateTime(1900),
-                                    maxDate: DateTime(2090),
+                                    initialDate: latestDate,
+                                    minDate: earliestDate,
+                                    maxDate: latestDate,
                                     onDateSelected: (date) {
                                       cubit.rideDateOfBirthController.text = DateFormat('yyyy-MM-dd').format(date ?? DateTime.now());
                                     },
                                     controller: cubit.rideDateOfBirthController,
-                                    hintText: LocaleKeys.user_info_date_of_birth.localize,
+                                    hintText: '',
                                   ),
                                   const Sizer()
                                 ],
@@ -174,12 +176,17 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   text: LocaleKeys.phoneNumber.localize,
                                   style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
-                                NewPhoneNumberTextFormField(
+                                DefaultTextFormField(
                                   currentController: cubit.ridePhoneNumberController,
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  label: LocaleKeys.phoneNumber.localize,
-                                  isRequired: true,
+                                  hint: '',
+                                  // label: LocaleKeys.idNumber.localize,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatter: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                    validator: (v)=>validatorPhone(v)
                                 ),
                                 const Sizer(),
                                 Label(
@@ -190,12 +197,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   currentController: cubit.ridePersonalDocIdNumController,
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  hint: LocaleKeys.idNumber.localize,
+                                  hint: '',
+                                  maxLength: 14,
                                   // label: LocaleKeys.idNumber.localize,
                                   keyboardType: TextInputType.number,
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
                                       return LocaleKeys.required.localize;
+                                    }else if(v.length < 14){
+                                      return context.isArabic?'رقم الهوية غير صحيح':'Id number is not valid';
                                     }
                                     return null;
                                   },
@@ -210,12 +220,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     currentController: cubit.ridePersonalDocLicenseNumController,
                                     fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     borderColor: Colors.transparent,
-                                    hint: LocaleKeys.licenseNumber.localize,
+                                    hint: '',
+                                    maxLength: 14,
                                     // label: LocaleKeys.licenseNumber.localize,
                                     keyboardType: TextInputType.number,
                                     validator: (v) {
                                       if (v == null || v.isEmpty) {
                                         return LocaleKeys.required.localize;
+                                      }else if(v.length < 14){
+                                        return context.isArabic?'رقم الهوية غير صحيح':'Id number is not valid';
                                       }
                                       return null;
                                     },
@@ -338,7 +351,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     currentController: cubit.rideVehicleProductionYearController,
                                     fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     borderColor: Colors.transparent,
-                                    hint: LocaleKeys.yearOfProduction.localize,
+                                    hint: '',
                                     // label: LocaleKeys.yearOfProduction.localize,
                                     keyboardType: TextInputType.number,
                                     validator: (v) {
@@ -357,7 +370,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                                   DefaultTextFormField(
                                     currentController: cubit.rideCarModelController,
-                                    hint: LocaleKeys.carModel.tr(),
+                                    hint: '',
                                     // label: LocaleKeys.carModel.tr(),
                                     fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     borderColor: Colors.transparent,
@@ -376,7 +389,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 ),
                                 DefaultTextFormField(
                                   currentController: cubit.rideVehiclePlateNumberController,
-                                  hint: LocaleKeys.plateInformation.tr(),
+                                  hint: '',
                                   // label: LocaleKeys.plateInformation.tr(),
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
@@ -433,7 +446,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   const Sizer(),
                                   DefaultTextFormField(
                                     currentController: cubit.ridePricingPerKmController,
-                                    hint: LocaleKeys.pricingPerKm.localize,
+                                    hint: '',
                                     // label: LocaleKeys.pricingPerKm.localize,
                                     keyboardType: TextInputType.number,
                                     validator: (v) {

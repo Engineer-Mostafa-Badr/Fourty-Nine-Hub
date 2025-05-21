@@ -37,16 +37,16 @@ class AcceptOfferModel extends AcceptOfferEntity {
       waitingTime: locationToArrive['youArrivingIn']?.toString() ?? '0',
       locationToArriveFromTitle: locationToArrive['fromTitle'] ?? '',
       locationToArriveToTitle: locationToArrive['toTitle'],
-      locationToArriveStartLatitude: locationToArrive['start']?['latitude'] ?? '',
-      locationToArriveStartLongitude: locationToArrive['start']?['longitude'] ?? '',
-      locationToArriveTargetLatitude: locationToArrive['target']?['latitude'] ?? '',
-      locationToArriveTargetLongitude: locationToArrive['target']?['longitude'] ?? '',
+      locationToArriveStartLatitude: locationToArrive['start']?['latitude'] ??0,
+      locationToArriveStartLongitude: locationToArrive['start']?['longitude'] ??0,
+      locationToArriveTargetLatitude: locationToArrive['target']?['latitude'] ??0,
+      locationToArriveTargetLongitude: locationToArrive['target']?['longitude'] ??0,
       locationFromTitle: location['fromTitle'],
       locationToTitle: location['toTitle'],
-      locationStartLatitude: location['start']?['latitude'] ?? '',
-      locationStartLongitude: location['start']?['longitude'] ?? '',
-      locationTargetLatitude: location['target']?['latitude'] ?? '',
-      locationTargetLongitude: location['target']?['longitude'] ?? '',
+      locationStartLatitude: location['start']?['latitude'] ?? 0,
+      locationStartLongitude: location['start']?['longitude'] ?? 0,
+      locationTargetLatitude: location['target']?['latitude'] ?? 0,
+      locationTargetLongitude: location['target']?['longitude'] ?? 0,
       clientId: clientDetails['id'] ?? '',
       clientFirstName: clientDetails['firstName'] ?? '',
       clientLastName: clientDetails['lastName'] ?? '',
@@ -121,17 +121,17 @@ class AcceptOfferModel extends AcceptOfferEntity {
   }
 
   // Example of coordinates conversion utility
-  Map<String, double> getClientLocationCoordinates() {
+  Map<String, dynamic> getClientLocationCoordinates() {
     return {
-      'latitude': double.tryParse(locationStartLatitude) ?? 0.0,
-      'longitude': double.tryParse(locationStartLongitude) ?? 0.0,
+      'latitude': locationStartLatitude ?? 0.0,
+      'longitude': locationStartLongitude ?? 0.0,
     };
   }
 
-  Map<String, double> getDestinationCoordinates() {
+  Map<String, num> getDestinationCoordinates() {
     return {
-      'latitude': double.tryParse(locationTargetLatitude) ?? 0.0,
-      'longitude': double.tryParse(locationTargetLongitude) ?? 0.0,
+      'latitude': locationTargetLatitude ?? 0.0,
+      'longitude': locationTargetLongitude ?? 0.0,
     };
   }
 }

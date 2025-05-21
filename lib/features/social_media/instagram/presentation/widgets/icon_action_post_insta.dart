@@ -16,10 +16,14 @@ import '../cubit/save_post_instagram/save_post_instagram_cubit.dart';
 class IconsActionPostInsta extends StatelessWidget {
   const IconsActionPostInsta({
     super.key,
-    required this.instagramPostEntity,
+    // required this.instagramPostEntity,
+    required this.posts,
+    required this.currentPost,
   });
 
-  final InstagramPostEntity instagramPostEntity;
+  // final InstagramPostEntity instagramPostEntity;
+  final List<InstagramPostEntity> posts;
+  final int currentPost;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +32,12 @@ class IconsActionPostInsta extends StatelessWidget {
       child: Row(
         children: [
           BlocProvider(
-            create: (context) => serviceLocator<LikePostInstagramCubit>(),
+            create: (context) => serviceLocator<LikePostInstagramCubit>()..fetchLikePostInstagram(posts, currentPost),
             child: BlocBuilder<LikePostInstagramCubit, LikePostInstagramState>(
               builder: (context, state) {
                 final cubit = context.read<LikePostInstagramCubit>();
                 return IconAndValueWidget(
-                  icon: state.isLike ?? instagramPostEntity.isLiked
+                  icon: state.posts![currentPost].isLiked
                       ? const Icon(
                           Icons.favorite,
                           color: Colors.red,
@@ -43,13 +47,14 @@ class IconsActionPostInsta extends StatelessWidget {
                           color: Colors.black,
                         ),
                   value: FormatNumbers().formatNumber(
-                      state.likeCount ?? instagramPostEntity.likesCounter,
+                      state.posts![currentPost].likesCounter,
                       useArabicNumerals: context.isArabic),
                   onPressed: () {
                     cubit.likePostInstagram(
-                      instagramPostEntity.id,
-                      instagramPostEntity.likesCounter,
-                      instagramPostEntity.isLiked,
+                      state.posts![currentPost].id,
+                      state.posts![currentPost].likesCounter,
+                      state.posts![currentPost].isLiked,
+                      currentPost,
                     );
                   },
                 );
@@ -67,7 +72,7 @@ class IconsActionPostInsta extends StatelessWidget {
               width: 30,
             ),
             value: FormatNumbers().formatNumber(
-                instagramPostEntity.commentsCounter,
+                posts[currentPost].commentsCounter,
                 useArabicNumerals: context.isArabic),
             onPressed: () {
               bottomSheet(
@@ -76,9 +81,9 @@ class IconsActionPostInsta extends StatelessWidget {
                 padding: 0,
                 widget: BlocProvider(
                   create: (context) => serviceLocator<CommentsInstagramCubit>()
-                    ..getComments(instagramPostEntity.id),
+                    ..getComments(posts[currentPost].id),
                   child: CommentInstagramView(
-                    postId: instagramPostEntity.id,
+                    postId: posts[currentPost].id,
                   ),
                 ),
               );
@@ -95,7 +100,7 @@ class IconsActionPostInsta extends StatelessWidget {
               width: 30,
             ),
             value: FormatNumbers().formatNumber(
-                instagramPostEntity.shareCounter,
+                posts[currentPost].shareCounter,
                 useArabicNumerals: context.isArabic),
             onPressed: () {},
           ),
@@ -107,7 +112,7 @@ class IconsActionPostInsta extends StatelessWidget {
                 final cubit = context.read<SavePostInstagramCubit>();
                 return GestureDetector(
                   onTap: () {
-                    cubit.savePostInstagram(instagramPostEntity.id);
+                    cubit.savePostInstagram(posts[currentPost].id);
                   },
                   child: Icon(
                     Icons.bookmark_border_outlined,

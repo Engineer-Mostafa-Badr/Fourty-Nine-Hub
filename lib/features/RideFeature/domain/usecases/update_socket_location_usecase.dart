@@ -24,11 +24,10 @@ class UpdateSocketLocationParams {
     required this.longitude,
   });
 
-  //toJson
   Map<String, dynamic> toJson() => {
       "location": {
+        "latitude": latitude,
         "longitude": longitude,
-        "latitude": latitude
       }
       };
 }
