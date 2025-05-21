@@ -61,6 +61,7 @@ class DashboardsState
   final List<HistoryTripEntity>? pastRideNonSocketTrips;
   final List<EmergencyContactEntity>? emergencyContacts;
   final SupportDetailsEntity? supportDetails;
+  final DateTime? remainingTime;
       final String? supportStatus;
   const DashboardsState(
       {this.failure,
@@ -74,6 +75,7 @@ class DashboardsState
       this.acceptedRideNonSocketTrips,
       this.pastRideNonSocketTrips,
       this.tripStatus,
+      this.remainingTime,
       this.lastStatus,
       this.activeTrip,
       this.supportDetails,
@@ -92,6 +94,7 @@ class DashboardsState
       SettingsDashboardEntity? settings,
       int? currentIndex,
         String? tripStatus,
+        DateTime? remainingTime,
         String? lastStatus,
         RunningTripEntity? activeTrip,
         bool? isChangedMindReason,
@@ -125,6 +128,7 @@ class DashboardsState
       supportStatus: supportStatus ?? this.supportStatus,
       supportDetails: supportDetails ?? this.supportDetails,
       emergencyContacts: emergencyContacts ?? this.emergencyContacts,
+      remainingTime: remainingTime ?? this.remainingTime,
     );
   }
 

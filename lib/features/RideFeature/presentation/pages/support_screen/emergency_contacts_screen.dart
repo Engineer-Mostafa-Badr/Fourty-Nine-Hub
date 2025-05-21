@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -57,6 +58,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                         EmergencyContactEntity(id: state.emergencyContacts?[0].id ?? '', name: cubit.firstNameController.text, phoneNumber: cubit.firstPhoneController.text), 0);
                   }
                 },
+                onDelete: ()=>cubit.deleteEmergencyContact(context, EmergencyContactEntity(id: state.emergencyContacts?[0].id ?? '', name: cubit.firstNameController.text, phoneNumber: cubit.firstPhoneController.text), 0),
               ),
             ),
             SizedBox(height: 16.h),
@@ -77,9 +79,10 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                 onEdit: () {
                   if (cubit.secondFormKey.currentState!.validate()) {
                     cubit.editEmergencyContacts(context,
-                        EmergencyContactEntity(id: state.emergencyContacts?[0].id ?? '', name: cubit.secondNameController.text, phoneNumber: cubit.secondPhoneController.text), 1);
+                        EmergencyContactEntity(id: state.emergencyContacts?[1].id ?? '', name: cubit.secondNameController.text, phoneNumber: cubit.secondPhoneController.text), 1);
                   }
                 },
+                onDelete: ()=>cubit.deleteEmergencyContact(context, EmergencyContactEntity(id: state.emergencyContacts?[1].id ?? '', name: cubit.secondNameController.text, phoneNumber: cubit.secondPhoneController.text), 1),
               ),
             ),
             SizedBox(height: 16.h),
@@ -100,9 +103,10 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                   onEdit: () {
                     if (cubit.thirdFormKey.currentState!.validate()) {
                       cubit.editEmergencyContacts(context,
-                          EmergencyContactEntity(id: state.emergencyContacts?[0].id ?? '', name: cubit.thirdNameController.text, phoneNumber: cubit.thirdPhoneController.text), 2);
+                          EmergencyContactEntity(id: state.emergencyContacts?[2].id ?? '', name: cubit.thirdNameController.text, phoneNumber: cubit.thirdPhoneController.text), 2);
                     }
                   },
+                  onDelete: ()=>cubit.deleteEmergencyContact(context, EmergencyContactEntity(id: state.emergencyContacts?[2].id ?? '', name: cubit.thirdNameController.text, phoneNumber: cubit.thirdPhoneController.text), 2),
                 )),
             SizedBox(height: 16.h),
             if ((state.emergencyContacts?.length ?? 0) < 3)
@@ -123,10 +127,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                     if (cubit.fourthFormKey.currentState!.validate()) {
                       cubit.editEmergencyContacts(
                           context,
-                          EmergencyContactEntity(id: state.emergencyContacts?[0].id ?? '', name: cubit.fourthNameController.text, phoneNumber: cubit.fourthPhoneController.text),
+                          EmergencyContactEntity(id: state.emergencyContacts?[3].id ?? '', name: cubit.fourthNameController.text, phoneNumber: cubit.fourthPhoneController.text),
                           3);
                     }
                   },
+                  onDelete: ()=>cubit.deleteEmergencyContact(context, EmergencyContactEntity(id: state.emergencyContacts?[3].id ?? '', name: cubit.fourthNameController.text, phoneNumber: cubit.fourthPhoneController.text), 3),
                 )),
             SizedBox(height: 16.h),
             if ((state.emergencyContacts?.length ?? 0) < 4)
@@ -146,9 +151,10 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                   onEdit: () {
                     if (cubit.fifthFormKey.currentState!.validate()) {
                       cubit.editEmergencyContacts(context,
-                          EmergencyContactEntity(id: state.emergencyContacts?[0].id ?? '', name: cubit.fifthNameController.text, phoneNumber: cubit.fifthPhoneController.text), 4);
+                          EmergencyContactEntity(id: state.emergencyContacts?[4].id ?? '', name: cubit.fifthNameController.text, phoneNumber: cubit.fifthPhoneController.text), 4);
                     }
                   },
+                  onDelete: ()=>cubit.deleteEmergencyContact(context, EmergencyContactEntity(id: state.emergencyContacts?[4].id ?? '', name: cubit.fifthNameController.text, phoneNumber: cubit.fifthPhoneController.text), 4),
                 )),
             SizedBox(height: 16.h),
             if ((state.emergencyContacts?.length ?? 0) < 5)
@@ -208,7 +214,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                     SizedBox(height: 6),
                     CustomSupportTextField(
                         hintText: LocaleKeys.phone.localize,
+                        keyboardType: TextInputType.phone,
                         controller: phoneController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return LocaleKeys.enterPhoneNumber.localize;

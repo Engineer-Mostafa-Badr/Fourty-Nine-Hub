@@ -2,8 +2,10 @@
 
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/delete_emergency_contact_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/finalize_trip_by_rider.dart.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
@@ -80,10 +82,14 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<EditEmergencyContactsUseCase>(() => EditEmergencyContactsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AddEmergencyContactsUseCase>(() => AddEmergencyContactsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<WatchingTripsUseCase>(() => WatchingTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteEmergencyContactUseCase>(() => DeleteEmergencyContactUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<FinalizeTripByRiderUseCase>(() => FinalizeTripByRiderUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

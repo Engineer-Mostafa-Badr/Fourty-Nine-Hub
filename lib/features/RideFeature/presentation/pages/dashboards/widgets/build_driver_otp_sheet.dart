@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -20,12 +23,16 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BuildDriverOtpSheet extends StatefulWidget {
-  const BuildDriverOtpSheet({super.key, required this.onPressed, this.activeTrip, required this.onSafety});
+  const BuildDriverOtpSheet({super.key, required this.onPressed, this.activeTrip, this.remainingTime, required this.onSafety, required this.onFinalizeTrip, this.onTick});
   final Function(String) onPressed;
   final RunningTripEntity? activeTrip;
   final VoidCallback onSafety;
+  final Function onFinalizeTrip;
+  final Function(Duration)? onTick;
+  final DateTime? remainingTime;
 
   @override
   State<BuildDriverOtpSheet> createState() => _BuildDriverOtpSheetState();
@@ -37,11 +44,72 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
   bool _isOtherReason = false;
   bool _isChangedMindReason = false;
   bool _isClientNotShownReason = false;
-
+  bool _showButtons = true;
+  DateTime? futureTime;
   TextEditingController otherController = TextEditingController();
+
+  Future<DateTime?> getSavedDateTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedTimeString = prefs.getString('remaining_time');
+    if (savedTimeString != null) {
+      return DateTime.parse(savedTimeString);
+    }
+    return null;
+  }
+
+  Duration _remainingTime = Duration.zero;
+  Timer? _timer;
+  DateTime? _savedDateTime;
+  bool _isFinished = false;
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedDateTime();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadSavedDateTime() async {
+    _savedDateTime = await getSavedDateTime();
+    if (_savedDateTime != null) {
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      final now = DateTime.now();
+      if (_savedDateTime!.isAfter(now)) {
+        setState(() {
+          _remainingTime = _savedDateTime!.difference(now);
+          _isFinished = false;
+        });
+      } else {
+        _timer?.cancel();
+        setState(() {
+          _remainingTime = Duration.zero;
+          _isFinished = true;
+        });
+      }
+    });
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$seconds";
+  }
 
   @override
   Widget build(BuildContext context) {
+
+
     return DraggableScrollableSheet(
       initialChildSize: 0.80,
       minChildSize: 0.2,
@@ -79,6 +147,111 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                     const SizedBox(
                       height: 8,
                     ),
+                    if(!_isFinished)...[
+                      Row(
+                     children: [
+                       Expanded(
+                         child: Text(
+                           context.isArabic ? "الوقت المتبقي" : "Remaining Time",
+                           style: const TextStyle(
+                             fontSize: FontSize.s16,
+                             fontWeight: FontWeight.bold,
+                             color: AppColors.PRIMARY_COLOR,
+                           ),
+                         ),
+                       ),
+                       Text(
+                             _formatDuration(_remainingTime),
+                             style: TextStyle(
+                               fontSize: FontSize.s16,
+                               fontWeight: FontWeight.bold,
+                               color: AppColors.PRIMARY_COLOR,
+                             ),
+                           )
+                     ],
+                   ),
+                      SizedBox(
+                        height: 8,
+                      ),],
+                    if(_isFinished&&_showButtons)Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          context.isArabic ? "اختر أدناه :" : "Choose below :",
+                          style: const TextStyle(
+                            fontSize: FontSize.s16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.PRIMARY_COLOR,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ClickableWidget(
+                                onTap: (){
+                                  setState(() {
+                                    _showButtons = false;
+                                  });
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 45,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.PRIMARY_COLOR,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: AppColors.PRIMARY_COLOR)
+                                  ),
+                                  child: Text(
+                                    context.isArabic ? "الاستمرار في الانتظار" : "Still await",
+                                    style: const TextStyle(
+                                      fontSize: FontSize.s16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.whiteColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: ClickableWidget(
+                                onTap: (){
+                                  showFinalizeTripDialog(context: context,onComplete: (){
+                                    widget.onFinalizeTrip();
+                                  });
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 45,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.SECONDARY_COLOR,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: AppColors.SECONDARY_COLOR)
+                                  ),
+                                  child: Text(
+                                    context.isArabic ? "إنهاء" : "Complete",
+                                    style: const TextStyle(
+                                      fontSize: FontSize.s16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.whiteColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                      ],
+                    ),
+
                     Container(
                       width: double.infinity,
                       height: 45,
@@ -127,6 +300,14 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                         fontSize: FontSize.s16,
                         fontWeight: FontWeight.bold,
                         color: AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                    Text(
+                      context.isArabic ? "سوف تحصل على الرمز من العميل" : "You will git it from the client",
+                      style: const TextStyle(
+                        fontSize: FontSize.s12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.SECONDARY_COLOR,
                       ),
                     ),
                     const SizedBox(
@@ -472,6 +653,61 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
               ],
             );
           }),
+        ));
+  }
+
+  showFinalizeTripDialog({
+    required BuildContext context,
+    required Function onComplete,
+  }) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              context.isArabic?'سوف تكمل الرحلة':'You will complete the trip',
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.PRIMARY_COLOR,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: context.isArabic ? 'الغاء' : 'Close',
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {
+                      context.pop();
+                      // cubit
+                    }),
+                const SizedBox(width: 16),
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: context.isArabic ? 'تأكيد' : 'Confirm',
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      context.pop();
+                      onComplete();
+                    }),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
         ));
   }
 }

@@ -84,8 +84,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               }),
           if (widget.modeType == 'ride') ...[
             switchWidget(
-                title: "Enable Sound",
-                subText: enableSound ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+                title: context.isArabic?'اشعارات صوتية':'Voice notify',
+                subText: enableSound ? context.isArabic?'تفعيل':'Enabled' : context.isArabic?'تعطيل':'Disabled', //'Disable',
                 valuee: enableSound,
                 onChanged: (value) {
                   setState(() {
@@ -207,9 +207,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                             ),
                             title: LocaleKeys.acceptAnothePrice.tr());
                       },
-                      child: Text(
-                          '${widget.settings?.pricingPerKm ?? 0} ${'change'.tr()}',
-                          style: const TextStyle(fontSize: 12)))
+                      child: Row(
+                        children: [
+                          Text(
+                              '${widget.settings?.pricingPerKm ?? 0} ',
+                              style: const TextStyle(fontSize: 12,)),
+                          Text(
+                              'change'.tr(),
+                              style: const TextStyle(fontSize: 12,color: AppColors.SECONDARY_COLOR)),
+                        ],
+                      ))
                 ],
               ),
             ),

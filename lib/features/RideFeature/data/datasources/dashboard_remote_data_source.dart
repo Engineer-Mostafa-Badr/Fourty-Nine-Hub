@@ -62,6 +62,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts();
   Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params);
   Future<Either<Failure, EmergencyContactEntity>> editEmergencyContacts(EmergencyContactEntity params);
+  Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params);
   Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params);
@@ -508,6 +509,17 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     return response.fold(
           (l) => Left(l),
           (data) => Right(EmergencyContactModel.fromJson(data['data']),
+    ));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteEmergencyContact(params.id),
+      data:params.toJson(),
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) => Right(data['status'],
     ));
   }
 }

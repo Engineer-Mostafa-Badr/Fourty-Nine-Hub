@@ -1395,7 +1395,7 @@ class EndPoints {
     return '/ride/trip/rating/$id/client';
   }
 
-  static String createDriverRating = '/ride/trip/rating/driver';
+  static String createDriverRating = '/ride/trip/ratings/client';
   static String emergencySupport = '/users/emergencySupport';
   static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
@@ -1473,6 +1473,10 @@ class EndPoints {
     return '/ride/trips/cancel-by-rider/$tripId';
   }
 
+  static String finalizeTripByRider(String tripId) {
+    return '/ride/driver/tracking/trips/$tripId/finalize/pre-start';
+  }
+
   static String cancelTripByClient(String tripId) {
     return '/ride/trips/cancel-by-client/$tripId';
   }
@@ -1527,4 +1531,5 @@ class EndPoints {
   static const getEmergencyContacts = '/users/emergency-contacts';
   static const addEmergencyContacts = '/users/add-emergency-contacts';
   static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
+  static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
 }

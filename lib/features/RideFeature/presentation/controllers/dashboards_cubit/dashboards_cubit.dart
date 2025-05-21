@@ -21,8 +21,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/ru
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/delete_emergency_contact_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/finalize_trip_by_rider.dart.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
@@ -54,6 +56,7 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -113,6 +116,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final GetEmergencyContactsUseCase getEmergencyContactsUseCase;
   final AddEmergencyContactsUseCase addEmergencyContactsUseCase;
   final EditEmergencyContactsUseCase editEmergencyContactsUseCase;
+  final DeleteEmergencyContactUseCase deleteEmergencyContactUseCase;
+  final FinalizeTripByRiderUseCase finalizeTripByRiderUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -147,6 +152,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     this.addEmergencyContactsUseCase,
     this.editEmergencyContactsUseCase,
     this.watchingTripsUseCase,
+    this.deleteEmergencyContactUseCase,
+    this.finalizeTripByRiderUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
 
@@ -438,7 +445,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (data) {
         List<String> tripIds = data.map((e) => e.id).toList();
-        emitWatchingTrips(tripIds);
+        if(tripIds.isNotEmpty)emitWatchingTrips(tripIds);
         // availableRideTrips.addAll(state.availableRideTrips ?? []);
         availableRideTrips.addAll(data);
         if (data.length < pageSize) {
@@ -525,6 +532,29 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     emit(state.copyWith(tripStatus: state.lastStatus));
   }
 
+  updateRemainingTime(DateTime futureTime) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('remaining_time', futureTime.toIso8601String());
+    await checkExpiryTime();
+  }
+
+  checkExpiryTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedTimeString = prefs.getString('remaining_time');
+
+    if (savedTimeString != null) {
+      final savedTime = DateTime.parse(savedTimeString);
+      emit(state.copyWith(remainingTime: savedTime));
+      if (savedTime.isAfter(DateTime.now())) {
+       return savedTime;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   Future<void> arrivedToClient(BuildContext context, String id, String message) async {
     showLoadingDialog(context);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
@@ -539,10 +569,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         showErrorMessage(context, getFailureMessage(failure, context));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
-      (activeTrip) {
+      (activeTrip) async {
+          final prefs = await SharedPreferences.getInstance();
+          final futureTime = DateTime.now().add(Duration(minutes: 5));
+          await prefs.setString('remaining_time', futureTime.toIso8601String());
         log("Suzccess");
         context.pop();
-        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.inLocation.name));
+        emit(state.copyWith(status: DashboardsStates.success,remainingTime: futureTime, tripStatus: TripState.inLocation.name));
       },
     );
   }
@@ -586,7 +619,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (activeTrip) {
         log("Suzccess");
         context.pop();
-        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.completed.name));
       },
     );
   }
@@ -605,7 +638,29 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (activeTrip) {
         log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+      },
+    );
+  }
+
+  Future<void> finalizeTripByRider({required BuildContext context, required String tripId}) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await finalizeTripByRiderUseCase(tripId);
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        context.pop();
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
       },
     );
   }
@@ -627,7 +682,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (activeTrip) {
         log("Suzccess");
         context.pop();
-        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.started.name));
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
       },
     );
   }
@@ -988,7 +1043,18 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final TextEditingController fifthNameController = TextEditingController();
   final TextEditingController fifthPhoneController = TextEditingController();
 
-  getEmergencyContacts(BuildContext context) async {
+  getEmergencyContacts(BuildContext context) async{
+  firstNameController.clear();
+  firstPhoneController.clear();
+  secondNameController.clear();
+  secondPhoneController.clear();
+  thirdNameController.clear();
+  thirdPhoneController.clear();
+  fourthNameController.clear();
+  fourthPhoneController.clear();
+  fifthNameController.clear();
+  fifthPhoneController.clear();
+
     emit(state.copyWith(status: DashboardsStates.loading));
     final Either<Failure, List<EmergencyContactEntity>> result = await getEmergencyContactsUseCase(NoParams());
 
@@ -1049,9 +1115,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (addedContact) async {
         context.pop();
+        showSuccessMessage(context, context.isArabic?'تم اضافة جهة الاتصال بنجاح':'Emergency contact added successfully');
         List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
         contacts.add(addedContact);
-        if(contacts.length>index){
+        if(contacts.length<index){
           if(index==1) {
             firstNameController.clear();
             firstPhoneController.clear();
@@ -1109,6 +1176,93 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
     );
   }
+  deleteEmergencyContact(BuildContext context,EmergencyContactEntity contact, int index) async {
+    showLoadingDialog(context);
+
+    final Either<Failure, bool> result = await deleteEmergencyContactUseCase(contact);
+
+    result.fold(
+      (failure) {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        context.pop();
+        showSuccessMessage(context, context.isArabic?'تم حذف جهة الاتصال بنجاح':'Emergency contact deleted successfully');
+        List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
+        contacts.removeWhere((e)=>e.id==contact.id);
+        if(contacts.isEmpty){
+          firstNameController.clear();
+          firstPhoneController.clear();
+          secondNameController.clear();
+          secondPhoneController.clear();
+          thirdNameController.clear();
+          thirdPhoneController.clear();
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+
+        }else if(contacts.length==1) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.clear();
+          secondPhoneController.clear();
+          thirdNameController.clear();
+          thirdPhoneController.clear();
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==2) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.clear();
+          thirdPhoneController.clear();
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==3) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==4) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==5) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+          fifthNameController.text=contacts[4].name;
+          fifthPhoneController.text=contacts[4].phoneNumber;
+        }
+        emit(state.copyWith(emergencyContacts: contacts, status: DashboardsStates.success));
+      },
+    );
+  }
 
   editEmergencyContacts(BuildContext context,EmergencyContactEntity contact, int index) async {
     showLoadingDialog(context);
@@ -1121,6 +1275,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (data) async {
         context.pop();
+        showSuccessMessage(context, context.isArabic?'تم تعديل جهة الاتصال بنجاح':'Emergency contact edited successfully');
         List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
         contacts.removeAt(index);
         contacts.insert(index, data);
