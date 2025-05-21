@@ -28,6 +28,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/form/text_fields/email_phone_text_form_field.dart';
 import '../../../../common/widgets/form/text_fields/email_text_form_field.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -431,7 +432,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     return Column(
       children: [
-        EmailTextFormField(
+        EmailOrPhoneTextFormField(
           currentController: loginCubit.emailTextController,
           borderColor: Colors.black,
           hint:

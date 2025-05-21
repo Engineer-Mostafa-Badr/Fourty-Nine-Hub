@@ -4,7 +4,8 @@ import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 
 ThemeData get lightTheme => ThemeData(
-      primaryColor: AppColors.PRIMARY_COLOR,
+  colorScheme: ColorScheme.fromSeed(seedColor: AppColors.PRIMARY_COLOR),
+  primaryColor: AppColors.PRIMARY_COLOR,
       scaffoldBackgroundColor: AppColors.AUTH_CONTAINER_COLOR,
       //scaffoldBackgroundColor: Colors.grey[200],
       // colorScheme: ColorScheme.fromSeed(

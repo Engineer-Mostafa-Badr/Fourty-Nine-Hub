@@ -100,7 +100,7 @@ void main() async {
   );
   // ZegoGiftManager().cache.cache(giftItemList);
   isActivate = await CacheManager.getActivation() ?? false;
-  isShowOnboarding = await CacheManager.getShowOnboarding() ?? false;
+  isShowOnboarding = await CacheManager.getShowOnboarding();
   await CacheManager.getFloatingNavigator();
   //Admob.initialize();
 
