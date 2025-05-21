@@ -175,6 +175,9 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> cancelTripByRider(
       CancelTripByRiderUseCaseParams params);
 
+  Future<Either<Failure, bool>> finalizeTripByRider(
+      String params);
+
   Future<Either<Failure, bool>> cancelTripByClient(
       CancelTripByClientUseCaseParams params);
 
@@ -735,6 +738,21 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       final response = await _apiConsumer.put(
         EndPoints.cancelTripByRider(params.tripId),
         data: params.toJson(),
+      );
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizeTripByRider(
+      String params) async {
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.finalizeTripByRider(params),
       );
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);

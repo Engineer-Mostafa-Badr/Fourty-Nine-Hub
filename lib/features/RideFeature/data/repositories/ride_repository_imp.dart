@@ -247,6 +247,12 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> finalizeTripByRider(
+      String params) async {
+    return await rideRemoteDataSource.finalizeTripByRider(params);
+  }
+
+  @override
   Future<Either<Failure, bool>> cancelTripByClient(
       CancelTripByClientUseCaseParams params) async {
     return await rideRemoteDataSource.cancelTripByClient(params);

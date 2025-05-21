@@ -22,8 +22,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/ru
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/delete_emergency_contact_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/finalize_trip_by_rider.dart.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
@@ -56,6 +58,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/functions/global/upload_image.dart';
 import '../../../../../core/error/failure.dart';
@@ -129,6 +132,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final GetEmergencyContactsUseCase getEmergencyContactsUseCase;
   final AddEmergencyContactsUseCase addEmergencyContactsUseCase;
   final EditEmergencyContactsUseCase editEmergencyContactsUseCase;
+  final DeleteEmergencyContactUseCase deleteEmergencyContactUseCase;
+  final FinalizeTripByRiderUseCase finalizeTripByRiderUseCase;
 
   DashboardsCubit(this.getAvailableTripsUsecase,
       this.getPastTripsUsecase,
@@ -163,7 +168,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.addEmergencyContactsUseCase,
       this.editEmergencyContactsUseCase,
       this.watchingTripsUseCase,
-
+      this.deleteEmergencyContactUseCase,
+      this.finalizeTripByRiderUseCase,
       this.createNonTrackTripUseCase, this.updateDriverSettingsUseCase,
       this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase,)
       : super(const DashboardsState());
@@ -765,25 +771,23 @@ class DashboardsCubit extends Cubit<DashboardsState> {
             print("objectavailableRideTripsEEEE");
             print("Failure");
 
-            emit(state.copyWith(
-                failure: failure, status: DashboardsStates.error));
-          },
-              (data) {
-            List<String> tripIds = data.map((e) => e.id).toList();
-            emitWatchingTrips(tripIds);
-            // availableRideTrips.addAll(state.availableRideTrips ?? []);
-            availableRideTrips.addAll(data);
-            if (data.length < pageSize) {
-              hasMoreData = false;
-            } else {
-              currentPage++;
-            }
-            isLoadingMore = false;
-            emit(state.copyWith(status: DashboardsStates.success,
-                availableRideTrips: availableRideTrips));
-          },
-        );
-      }
+        emit(state.copyWith(failure: failure, status: DashboardsStates.error));
+      },
+      (data) {
+        List<String> tripIds = data.map((e) => e.id).toList();
+        if(tripIds.isNotEmpty)emitWatchingTrips(tripIds);
+        // availableRideTrips.addAll(state.availableRideTrips ?? []);
+        availableRideTrips.addAll(data);
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+        isLoadingMore = false;
+        emit(state.copyWith(status: DashboardsStates.success, availableRideTrips: availableRideTrips));
+      },
+    );
+  }
 
       Future<void> getPastTrips(BuildContext context, String type) async {
         if (isClosed) {
@@ -869,31 +873,53 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         emit(state.copyWith(tripStatus: state.lastStatus));
       }
 
-      Future<void> arrivedToClient(BuildContext context, String id,
-          String message) async {
-        showLoadingDialog(context);
-        emit(state.copyWith(status: DashboardsStates.loadingPast));
+  updateRemainingTime(DateTime futureTime) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('remaining_time', futureTime.toIso8601String());
+    await checkExpiryTime();
+  }
 
-        final Either<Failure, bool> result = await arrivedToClientUseCase(
-            ArrivedToClientEntity(tripId: id, message: message));
+  checkExpiryTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedTimeString = prefs.getString('remaining_time');
 
-        if (isClosed) return;
-        result.fold(
-              (failure) {
-            context.pop();
-            log("Failure ${getFailureMessage(failure, context)}");
-            showErrorMessage(context, getFailureMessage(failure, context));
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (activeTrip) {
-            log("Suzccess");
-            context.pop();
-            emit(state.copyWith(status: DashboardsStates.success,
-                tripStatus: TripState.inLocation.name));
-          },
-        );
+    if (savedTimeString != null) {
+      final savedTime = DateTime.parse(savedTimeString);
+      emit(state.copyWith(remainingTime: savedTime));
+      if (savedTime.isAfter(DateTime.now())) {
+       return savedTime;
+      } else {
+        return null;
       }
+    } else {
+      return null;
+    }
+  }
+
+  Future<void> arrivedToClient(BuildContext context, String id, String message) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await arrivedToClientUseCase(ArrivedToClientEntity(tripId: id, message: message));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) async {
+          final prefs = await SharedPreferences.getInstance();
+          final futureTime = DateTime.now().add(Duration(minutes: 5));
+          await prefs.setString('remaining_time', futureTime.toIso8601String());
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success,remainingTime: futureTime, tripStatus: TripState.inLocation.name));
+      },
+    );
+  }
 
       Future<void> startDriverTrip(BuildContext context, String id,
           String otp) async {
@@ -929,74 +955,84 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         final Either<Failure, bool> result = await completeDriverTripUseCase(
             StartDriverTripParams(tripId: id, otp: otp));
 
-        if (isClosed) return;
-        result.fold(
-              (failure) {
-            context.pop();
-            log("Failure ${getFailureMessage(failure, context)}");
-            showErrorMessage(context, getFailureMessage(failure, context));
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (activeTrip) {
-            log("Suzccess");
-            context.pop();
-            emit(state.copyWith(status: DashboardsStates.success,
-                tripStatus: TripState.started.name));
-          },
-        );
-      }
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.completed.name));
+      },
+    );
+  }
 
-      Future<void> cancelDriverTrip(
-          {required BuildContext context, required String tripId, required String note, required String reasonId}) async {
-        emit(state.copyWith(status: DashboardsStates.loadingPast));
+  Future<void> cancelDriverTrip({required BuildContext context, required String tripId, required String note, required String reasonId}) async {
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-        final Either<Failure, bool> result = await cancelTripByRiderUseCase(
-            CancelTripByRiderUseCaseParams(
-                tripId: tripId, note: note, reasonId: reasonId));
+    final Either<Failure, bool> result = await cancelTripByRiderUseCase(CancelTripByRiderUseCaseParams(tripId: tripId, note: note, reasonId: reasonId));
 
-        if (isClosed) return;
-        result.fold(
-              (failure) {
-            log("Failure ${getFailureMessage(failure, context)}");
-            showErrorMessage(context, getFailureMessage(failure, context));
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (activeTrip) {
-            log("Suzccess");
-            emit(state.copyWith(status: DashboardsStates.success,
-                tripStatus: TripState.started.name));
-          },
-        );
-      }
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+      },
+    );
+  }
 
-      Future<void> rateTheClient(
-          {required BuildContext context, required String tripId, required String comment, required double rate}) async {
-        showLoadingDialog(context);
-        emit(state.copyWith(status: DashboardsStates.loadingPast));
+  Future<void> finalizeTripByRider({required BuildContext context, required String tripId}) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-        final Either<Failure, bool> result = await driverRateClientUseCase(
-            DriverRateClientParams(
-                tripId: tripId, comment: comment, rate: rate));
+    final Either<Failure, bool> result = await finalizeTripByRiderUseCase(tripId);
 
-        if (isClosed) return;
-        result.fold(
-              (failure) {
-            context.pop();
-            log("Failure ${getFailureMessage(failure, context)}");
-            showErrorMessage(context, getFailureMessage(failure, context));
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (activeTrip) {
-            log("Suzccess");
-            context.pop();
-            emit(state.copyWith(status: DashboardsStates.success,
-                tripStatus: TripState.started.name));
-          },
-        );
-      }
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        context.pop();
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+      },
+    );
+  }
+
+  Future<void> rateTheClient({required BuildContext context, required String tripId, required String comment, required double rate}) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await driverRateClientUseCase(DriverRateClientParams(tripId: tripId, comment: comment, rate: rate));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+      },
+    );
+  }
 
       Future<void> getSettings(BuildContext context) async {
         if (isClosed) {
@@ -1400,296 +1436,362 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       final TextEditingController fifthNameController = TextEditingController();
       final TextEditingController fifthPhoneController = TextEditingController();
 
-      getEmergencyContacts(BuildContext context) async {
-        emit(state.copyWith(status: DashboardsStates.loading));
-        final Either<Failure,
-            List<
-                EmergencyContactEntity>> result = await getEmergencyContactsUseCase(
-            NoParams());
+  getEmergencyContacts(BuildContext context) async{
+  firstNameController.clear();
+  firstPhoneController.clear();
+  secondNameController.clear();
+  secondPhoneController.clear();
+  thirdNameController.clear();
+  thirdPhoneController.clear();
+  fourthNameController.clear();
+  fourthPhoneController.clear();
+  fifthNameController.clear();
+  fifthPhoneController.clear();
 
-        result.fold(
-              (failure) {
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (data) async {
-            if (data.length == 1) {
-              firstNameController.text = data[0].name;
-              firstPhoneController.text = data[0].phoneNumber;
-            } else if (data.length == 2) {
-              firstNameController.text = data[0].name;
-              firstPhoneController.text = data[0].phoneNumber;
-              secondNameController.text = data[1].name;
-              secondPhoneController.text = data[1].phoneNumber;
-            } else if (data.length == 3) {
-              firstNameController.text = data[0].name;
-              firstPhoneController.text = data[0].phoneNumber;
-              secondNameController.text = data[1].name;
-              secondPhoneController.text = data[1].phoneNumber;
-              thirdNameController.text = data[2].name;
-              thirdPhoneController.text = data[2].phoneNumber;
-            } else if (data.length == 4) {
-              firstNameController.text = data[0].name;
-              firstPhoneController.text = data[0].phoneNumber;
-              secondNameController.text = data[1].name;
-              secondPhoneController.text = data[1].phoneNumber;
-              thirdNameController.text = data[2].name;
-              thirdPhoneController.text = data[2].phoneNumber;
-              fourthNameController.text = data[3].name;
-              fourthPhoneController.text = data[3].phoneNumber;
-            } else if (data.length > 4) {
-              firstNameController.text = data[0].name;
-              firstPhoneController.text = data[0].phoneNumber;
-              secondNameController.text = data[1].name;
-              secondPhoneController.text = data[1].phoneNumber;
-              thirdNameController.text = data[2].name;
-              thirdPhoneController.text = data[2].phoneNumber;
-              fourthNameController.text = data[3].name;
-              fourthPhoneController.text = data[3].phoneNumber;
-              fifthNameController.text = data[4].name;
-              fifthPhoneController.text = data[4].phoneNumber;
-            }
-            emit(state.copyWith(
-                emergencyContacts: data, status: DashboardsStates.success));
-          },
-        );
-      }
-      addEmergencyContacts(
-          {required BuildContext context, required String name, required String phoneNumber, required int index}) async {
-        showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loading));
+    final Either<Failure, List<EmergencyContactEntity>> result = await getEmergencyContactsUseCase(NoParams());
 
-        final Either<Failure,
-            EmergencyContactEntity> result = await addEmergencyContactsUseCase(
-            EmergencyContactEntity(
-                name: name, phoneNumber: phoneNumber, id: ''));
-
-        result.fold(
-              (failure) {
-            context.pop();
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (addedContact) async {
-            context.pop();
-            List<EmergencyContactEntity> contacts = state.emergencyContacts ??
-                [];
-            contacts.add(addedContact);
-            if (contacts.length > index) {
-              if (index == 1) {
-                firstNameController.clear();
-                firstPhoneController.clear();
-              } else if (index == 2) {
-                secondNameController.clear();
-                secondPhoneController.clear();
-              } else if (index == 3) {
-                thirdNameController.clear();
-                thirdPhoneController.clear();
-              } else if (index == 4) {
-                fourthNameController.clear();
-                fourthPhoneController.clear();
-              } else if (index == 5) {
-                fifthNameController.clear();
-                fifthPhoneController.clear();
-              }
-            }
-            if (contacts.length == 1) {
-              firstNameController.text = contacts[0].name;
-              firstPhoneController.text = contacts[0].phoneNumber;
-            } else if (contacts.length == 2) {
-              firstNameController.text = contacts[0].name;
-              firstPhoneController.text = contacts[0].phoneNumber;
-              secondNameController.text = contacts[1].name;
-              secondPhoneController.text = contacts[1].phoneNumber;
-            } else if (contacts.length == 3) {
-              firstNameController.text = contacts[0].name;
-              firstPhoneController.text = contacts[0].phoneNumber;
-              secondNameController.text = contacts[1].name;
-              secondPhoneController.text = contacts[1].phoneNumber;
-              thirdNameController.text = contacts[2].name;
-              thirdPhoneController.text = contacts[2].phoneNumber;
-            } else if (contacts.length == 4) {
-              firstNameController.text = contacts[0].name;
-              firstPhoneController.text = contacts[0].phoneNumber;
-              secondNameController.text = contacts[1].name;
-              secondPhoneController.text = contacts[1].phoneNumber;
-              thirdNameController.text = contacts[2].name;
-              thirdPhoneController.text = contacts[2].phoneNumber;
-              fourthNameController.text = contacts[3].name;
-              fourthPhoneController.text = contacts[3].phoneNumber;
-            } else if (contacts.length == 5) {
-              firstNameController.text = contacts[0].name;
-              firstPhoneController.text = contacts[0].phoneNumber;
-              secondNameController.text = contacts[1].name;
-              secondPhoneController.text = contacts[1].phoneNumber;
-              thirdNameController.text = contacts[2].name;
-              thirdPhoneController.text = contacts[2].phoneNumber;
-              fourthNameController.text = contacts[3].name;
-              fourthPhoneController.text = contacts[3].phoneNumber;
-              fifthNameController.text = contacts[4].name;
-              fifthPhoneController.text = contacts[4].phoneNumber;
-            }
-            emit(state.copyWith(
-                emergencyContacts: contacts, status: DashboardsStates.success));
-          },
-        );
-      }
-
-      editEmergencyContacts(BuildContext context,
-          EmergencyContactEntity contact, int index) async {
-        showLoadingDialog(context);
-        final Either<Failure,
-            EmergencyContactEntity> result = await editEmergencyContactsUseCase(
-            contact);
-
-        result.fold(
-              (failure) {
-            context.pop();
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (data) async {
-            context.pop();
-            List<EmergencyContactEntity> contacts = state.emergencyContacts ??
-                [];
-            contacts.removeAt(index);
-            contacts.insert(index, data);
-            if (index == 0) {
-              firstNameController.text = data.name;
-              firstPhoneController.text = data.phoneNumber;
-            } else if (index == 1) {
-              secondNameController.text = data.name;
-              secondPhoneController.text = data.phoneNumber;
-            } else if (index == 2) {
-              thirdNameController.text = data.name;
-              thirdPhoneController.text = data.phoneNumber;
-            } else if (index == 3) {
-              fourthNameController.text = data.name;
-              fourthPhoneController.text = data.phoneNumber;
-            } else if (index == 4) {
-              fifthNameController.text = data.name;
-              fifthPhoneController.text = data.phoneNumber;
-            }
-            emit(state.copyWith(
-                emergencyContacts: contacts, status: DashboardsStates.success));
-          },
-        );
-      }
-
-      TextEditingController supportDescriptionController = TextEditingController();
-      TextEditingController supportPhoneController = TextEditingController();
-      requestEmergencySupport({
-        required BuildContext context,
-        required String driverId,
-        required String tripId,
-        required String clientId,
-      }) async {
-        FocusScope.of(context).requestFocus(FocusNode());
-        emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
-        bool hasPermission = await _checkPermissions();
-        print("hasPermission $hasPermission");
-        Position? currentPosition;
-        if (hasPermission) {
-          currentPosition = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high,
-          );
-          print("currentPosition.latitude ${currentPosition.latitude}");
-          print("currentPosition.latitude ${currentPosition.longitude}");
+    result.fold(
+      (failure) {
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        if(data.length==1) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+        }else if(data.length==2) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+        }else if(data.length==3) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+          thirdNameController.text=data[2].name;
+          thirdPhoneController.text=data[2].phoneNumber;
+        }else if(data.length==4) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+          thirdNameController.text=data[2].name;
+          thirdPhoneController.text=data[2].phoneNumber;
+          fourthNameController.text=data[3].name;
+          fourthPhoneController.text=data[3].phoneNumber;
+        }else if(data.length>4) {
+          firstNameController.text=data[0].name;
+          firstPhoneController.text=data[0].phoneNumber;
+          secondNameController.text=data[1].name;
+          secondPhoneController.text=data[1].phoneNumber;
+          thirdNameController.text=data[2].name;
+          thirdPhoneController.text=data[2].phoneNumber;
+          fourthNameController.text=data[3].name;
+          fourthPhoneController.text=data[3].phoneNumber;
+          fifthNameController.text=data[4].name;
+          fifthPhoneController.text=data[4].phoneNumber;
         }
-        final Either<Failure, bool> result = await emergencySupportUseCase(
-            EmergencySupportParams(
-                driverId: driverId,
-                description: supportDescriptionController.text,
-                phone: supportPhoneController.text,
-                type: 'driver',
-                clientId: clientId,
-                latitude: currentPosition?.latitude,
-                tripId: tripId,
-                longitude: currentPosition?.longitude));
+        emit(state.copyWith(emergencyContacts: data, status: DashboardsStates.success));
+      },
+    );
+  }
+  addEmergencyContacts({required BuildContext context, required String name, required String phoneNumber,required int index}) async {
+    showLoadingDialog(context);
 
-        result.fold(
-              (failure) {
-            emit(state.copyWith(
-                status: DashboardsStates.error, failure: failure));
-          },
-              (data) async {
-            supportDescriptionController.clear();
-            supportPhoneController.clear();
-            FocusScope.of(context).requestFocus(FocusNode());
-            emit(state.copyWith(status: DashboardsStates.success,
-                supportStatus: RequestEmergencyStatus.pending.status));
-          },
-        );
-      }
+    final Either<Failure, EmergencyContactEntity> result = await addEmergencyContactsUseCase(EmergencyContactEntity(name: name,phoneNumber: phoneNumber,id: ''));
 
-      ///record trip
-      final record = AudioRecorder();
-
-      // Start recording
-      Future<void> startRecord() async {
-        log('startRecorddd${await record.hasPermission()}');
-        try {
-          if (await record.hasPermission()) {
-            log('record.hasPermission');
-            Directory tempDir = await getTemporaryDirectory();
-            String tempPath = '${tempDir.path}/audio_${DateTime
-                .now()
-                .millisecondsSinceEpoch}.wav';
-            await record.start(
-              const RecordConfig(),
-              path: tempPath,
-            );
-            print("object");
-          } else {
-            throw Exception('Microphone permission not granted');
+    result.fold(
+      (failure) {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (addedContact) async {
+        context.pop();
+        showSuccessMessage(context, context.isArabic?'تم اضافة جهة الاتصال بنجاح':'Emergency contact added successfully');
+        List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
+        contacts.add(addedContact);
+        if(contacts.length<index){
+          if(index==1) {
+            firstNameController.clear();
+            firstPhoneController.clear();
+          }else if(index == 2) {
+            secondNameController.clear();
+            secondPhoneController.clear();
+          }else if(index == 3) {
+            thirdNameController.clear();
+            thirdPhoneController.clear();
+          }else if(index == 4) {
+            fourthNameController.clear();
+            fourthPhoneController.clear();
+          }else if(index == 5) {
+            fifthNameController.clear();
+            fifthPhoneController.clear();
           }
-        } catch (e) {
-          log('Error starting record: $e');
         }
-      }
+        if(contacts.length==1) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+        }else if(contacts.length==2) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+        }else if(contacts.length==3) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+        }else if(contacts.length==4) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+        }else if(contacts.length==5) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+          fifthNameController.text=contacts[4].name;
+          fifthPhoneController.text=contacts[4].phoneNumber;
+        }
+        emit(state.copyWith(emergencyContacts: contacts, status: DashboardsStates.success));
+      },
+    );
+  }
+  deleteEmergencyContact(BuildContext context,EmergencyContactEntity contact, int index) async {
+    showLoadingDialog(context);
 
-      Future<String?> stopRecord(
-          {required BuildContext context, required String subcategoryId, required String tripId}) async {
-        try {
-          showLoadingDialog(context);
-          log('stopRecord');
-          String? path = await record.stop();
-          await UploadRecord().mediaUrl(
-            tripId: tripId,
-            path: path ?? "",
-            subcategoryId: subcategoryId,
-            onSuccess: (String mediaId, String tripId) async {
-              log("tripId$tripId");
-              log("mediaId$mediaId");
-              await uploadRecord(context, tripId, mediaId);
-            },
-          );
-          // await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  'mediaId'));
-          return path;
-        } catch (e) {
-          log('Error stopping record: $e');
-          return null;
-        }
-      }
+    final Either<Failure, bool> result = await deleteEmergencyContactUseCase(contact);
 
-      changeReasonSelection(
-          {bool? isOther, bool? isChangedMind, bool? isClientNotShown}) {
-        if (isOther == true) {
-          emit(state.copyWith(isOtherReason: true,
-              isChangedMindReason: false,
-              isClientNotShownReason: false,
-              status: DashboardsStates.success));
+    result.fold(
+      (failure) {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        context.pop();
+        showSuccessMessage(context, context.isArabic?'تم حذف جهة الاتصال بنجاح':'Emergency contact deleted successfully');
+        List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
+        contacts.removeWhere((e)=>e.id==contact.id);
+        if(contacts.isEmpty){
+          firstNameController.clear();
+          firstPhoneController.clear();
+          secondNameController.clear();
+          secondPhoneController.clear();
+          thirdNameController.clear();
+          thirdPhoneController.clear();
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+
+        }else if(contacts.length==1) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.clear();
+          secondPhoneController.clear();
+          thirdNameController.clear();
+          thirdPhoneController.clear();
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==2) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.clear();
+          thirdPhoneController.clear();
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==3) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.clear();
+          fourthPhoneController.clear();
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==4) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+          fifthNameController.clear();
+          fifthPhoneController.clear();
+        }else if(contacts.length==5) {
+          firstNameController.text=contacts[0].name;
+          firstPhoneController.text=contacts[0].phoneNumber;
+          secondNameController.text=contacts[1].name;
+          secondPhoneController.text=contacts[1].phoneNumber;
+          thirdNameController.text=contacts[2].name;
+          thirdPhoneController.text=contacts[2].phoneNumber;
+          fourthNameController.text=contacts[3].name;
+          fourthPhoneController.text=contacts[3].phoneNumber;
+          fifthNameController.text=contacts[4].name;
+          fifthPhoneController.text=contacts[4].phoneNumber;
         }
-        if (isChangedMind == true) {
-          emit(state.copyWith(isOtherReason: false,
-              isChangedMindReason: true,
-              isClientNotShownReason: false,
-              status: DashboardsStates.success));
+        emit(state.copyWith(emergencyContacts: contacts, status: DashboardsStates.success));
+      },
+    );
+  }
+
+  editEmergencyContacts(BuildContext context,EmergencyContactEntity contact, int index) async {
+    showLoadingDialog(context);
+    final Either<Failure, EmergencyContactEntity> result = await editEmergencyContactsUseCase(contact);
+
+    result.fold(
+      (failure) {
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        context.pop();
+        showSuccessMessage(context, context.isArabic?'تم تعديل جهة الاتصال بنجاح':'Emergency contact edited successfully');
+        List<EmergencyContactEntity> contacts = state.emergencyContacts??[];
+        contacts.removeAt(index);
+        contacts.insert(index, data);
+        if(index==0) {
+          firstNameController.text=data.name;
+          firstPhoneController.text=data.phoneNumber;
+        }else if(index==1) {
+          secondNameController.text=data.name;
+          secondPhoneController.text=data.phoneNumber;
+        }else if(index==2) {
+          thirdNameController.text=data.name;
+          thirdPhoneController.text=data.phoneNumber;
+        }else if(index==3) {
+          fourthNameController.text=data.name;
+          fourthPhoneController.text=data.phoneNumber;
+        }else if(index==4) {
+          fifthNameController.text=data.name;
+          fifthPhoneController.text=data.phoneNumber;
         }
-        if (isClientNotShown == true) {
-          emit(state.copyWith(isOtherReason: false,
-              isChangedMindReason: false,
-              isClientNotShownReason: true,
-              status: DashboardsStates.success));
-        }
-      }
+        emit(state.copyWith(emergencyContacts: contacts, status: DashboardsStates.success));
+      },
+    );
+  }
+
+  TextEditingController supportDescriptionController = TextEditingController();
+  TextEditingController supportPhoneController = TextEditingController();
+  requestEmergencySupport({
+    required BuildContext context,
+    required String driverId,
+    required String tripId,
+    required String clientId,
+  }) async {
+    FocusScope.of(context).requestFocus( FocusNode());
+    emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
+    bool hasPermission = await _checkPermissions();
+    print("hasPermission $hasPermission");
+    Position? currentPosition;
+    if (hasPermission) {
+      currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      print("currentPosition.latitude ${currentPosition.latitude}");
+      print("currentPosition.latitude ${currentPosition.longitude}");
     }
+    final Either<Failure, bool> result = await emergencySupportUseCase(EmergencySupportParams(
+        driverId: driverId,
+        description: supportDescriptionController.text,
+        phone: supportPhoneController.text,
+        type: 'driver',
+        clientId: clientId,
+        latitude: currentPosition?.latitude,
+        tripId: tripId,
+        longitude: currentPosition?.longitude));
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) async {
+        supportDescriptionController.clear();
+        supportPhoneController.clear();
+        FocusScope.of(context).requestFocus( FocusNode());
+        emit(state.copyWith(status: DashboardsStates.success,supportStatus: RequestEmergencyStatus.pending.status));
+      },
+    );
+  }
+
+  ///record trip
+  final record = AudioRecorder();
+
+  // Start recording
+  Future<void> startRecord() async {
+    log('startRecorddd${await record.hasPermission()}');
+    try {
+      if (await record.hasPermission()) {
+        log('record.hasPermission');
+        Directory tempDir = await getTemporaryDirectory();
+        String tempPath = '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.wav';
+        await record.start(
+          const RecordConfig(),
+          path: tempPath,
+        );
+        print("object");
+      } else {
+        throw Exception('Microphone permission not granted');
+      }
+    } catch (e) {
+      log('Error starting record: $e');
+    }
+  }
+
+  Future<String?> stopRecord({required BuildContext context, required String subcategoryId, required String tripId}) async {
+    try {
+      showLoadingDialog(context);
+      log('stopRecord');
+      String? path = await record.stop();
+      await UploadRecord().mediaUrl(
+        tripId: tripId,
+        path: path ?? "",
+        subcategoryId: subcategoryId,
+        onSuccess: (String mediaId, String tripId) async {
+          log("tripId$tripId");
+          log("mediaId$mediaId");
+          await uploadRecord(context, tripId, mediaId);
+        },
+      );
+      // await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  'mediaId'));
+      return path;
+    } catch (e) {
+      log('Error stopping record: $e');
+      return null;
+    }
+  }
+
+  changeReasonSelection({bool? isOther, bool? isChangedMind, bool? isClientNotShown}) {
+    if (isOther == true) {
+      emit(state.copyWith(isOtherReason: true, isChangedMindReason: false, isClientNotShownReason: false, status: DashboardsStates.success));
+    }
+    if (isChangedMind == true) {
+      emit(state.copyWith(isOtherReason: false, isChangedMindReason: true, isClientNotShownReason: false, status: DashboardsStates.success));
+    }
+    if (isClientNotShown == true) {
+      emit(state.copyWith(isOtherReason: false, isChangedMindReason: false, isClientNotShownReason: true, status: DashboardsStates.success));
+    }
+  }
+}

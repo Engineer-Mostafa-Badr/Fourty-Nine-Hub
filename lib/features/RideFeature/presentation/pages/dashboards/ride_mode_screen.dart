@@ -178,7 +178,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               _buildTabItem(
                                 cubit.state.currentIndex ?? 0,
                                 1,
-                                LocaleKeys.runningTrips.tr(),
+                                LocaleKeys.running.tr(),
                                 () {
                                   cubit.changeIndex(1, context, widget.params);
                                   // setState(() {
@@ -315,6 +315,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               }, onSafety: () {
                               cubit.showSafety(state.tripStatus??'');
                             },
+                              onTick : (Duration time){
+                                DateTime future = DateTime.now().add(time);
+                                cubit.updateRemainingTime(future);
+                              },
+                              onFinalizeTrip : (){
+                                cubit.finalizeTripByRider(context: context, tripId: state.activeTrip?.tripId??'');
+                              },
+                              remainingTime:state.remainingTime,
                               activeTrip: state.activeTrip,
                             ),
                             if(state.tripStatus==TripState.started.name)BuildDriverCompleteTripSheet(

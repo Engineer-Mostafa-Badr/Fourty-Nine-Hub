@@ -24,7 +24,7 @@ dependencies:
   country_pickers: ^3.0.1
   cupertino_icons: ^1.0.6
   dartz: ^0.10.1
-  device_info_plus: ^10.1.2
+  device_info_plus: ^10.0.1
   device_preview: null
   dio: 5.4.3+1
   easy_localization: null
