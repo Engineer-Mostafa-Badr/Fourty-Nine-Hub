@@ -544,334 +544,298 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         });
   }
 
-  Widget _buttonsWidget(
-      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
-    return Container(
-      child: ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.all(10),
-        children: [
-          Align(
-            alignment: AlignmentDirectional.topStart,
-            child: ClickableWidget(
-                onTap: () => context.pop(),
-                child: Icon(
-                  Icons.close,
-                  color: AppColors.black,
-                )),
-          ),
-          Sizer(),
-          GestureDetector(
-            onTap: () {
-              if (!context.read<UserCubit>().isLoggedIn) {
-                return pleaseLoginDialog(context);
+  Widget _buttonsWidget({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}){
+    return ListView(
+      shrinkWrap: true,
+      padding: EdgeInsets.all(10),
+      children: [
+        Align(
+          alignment: AlignmentDirectional.topStart,
+          child: ClickableWidget(
+              onTap: ()=>context.pop(),
+              child: Icon(Icons.close,color: AppColors.black,)),
+        ),
+        Sizer(),
+        GestureDetector(
+          onTap: () {
+            if(!context.read<UserCubit>().isLoggedIn){
+              return pleaseLoginDialog(context);
+            }
+            context.pop();
+            if (driverInfo == null) {
+              serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
+                  fromShipping: false, context: context);
+            } else {
+              if (driverInfo.status ==
+                  RegistrationStatus.pending.status) {
+                return;
+              } else if (driverInfo.status ==
+                  RegistrationStatus.rejected.status) {
+                context.push(Routes.UploadRiderImages,
+                    extra: UploadRiderImagesParams(
+                        isShipping: false,
+                        isSocket: driverInfo.driverType == 'socket'
+                            ? true
+                            : false));
+              } else if (driverInfo.status ==
+                  RegistrationStatus.initial.status) {
+                context.push(Routes.UploadRiderImages,
+                    extra: UploadRiderImagesParams(
+                        isShipping: false,
+                        isSocket: driverInfo.driverType == 'socket'
+                            ? true
+                            : false));
+              } else {
+                context.push(Routes.rideModeScreen,
+                    extra: RideModeParams(
+                        modeType: 'ride',
+                        isSocket: driverInfo.driverType == 'socket'
+                            ? true
+                            : false));
               }
+            }
+            },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors:driverInfo != null &&
+                    (driverInfo.status == RegistrationStatus.approved.status) ?[
+                  AppColors.cF33D49,
+                  AppColors.cC0303A,
+                  AppColors.cA72A32,
+                  AppColors.c9A272E,
+                  AppColors.c93252C,
+                  AppColors.c90242B,
+                  ]:[
+                  Color(0xFF0B1035),
+                  Color(0xFF161F68),
+                  Color(0xFF1B2781),
+                  Color(0xFF1E2B8E),
+                  Color(0xFF1F2D95),
+                  Color(0xFF0B1035)
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3)),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                driverInfo == null ?
+                context.isArabic?'تسجيل سائق سيارة':'Ride Register':
+                    (driverInfo.status == RegistrationStatus.approved.status)?
+                    context.isArabic?'وضع سائق سيارة':'Ride Mode':
+                    (driverInfo.status == RegistrationStatus.initial.status)?
+                context.isArabic?'استكمال تسجيل سائق':'Complete Ride Register':
+                    (driverInfo.status == RegistrationStatus.pending.status)?
+                context.isArabic?'انتظار موافقة تسجيل سائق':'Waiting ِApproval Ride Register':
+                    context.isArabic?'تسجيل سائق سيارة':'Ride Register',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+        Sizer(),
+        GestureDetector(
+          onTap: () {
+            if(!context.read<UserCubit>().isLoggedIn){
               context.pop();
-              if (driverInfo == null) {
-                serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
-                    fromShipping: false, context: context);
-              } else {
-                if (driverInfo.status == RegistrationStatus.pending.status) {
-                  return;
-                } else if (driverInfo.status ==
-                    RegistrationStatus.rejected.status) {
-                  context.push(Routes.UploadRiderImages,
-                      extra: UploadRiderImagesParams(
-                          isShipping: false,
-                          isSocket: driverInfo.driverType == 'socket'
-                              ? true
-                              : false));
-                } else if (driverInfo.status ==
-                    RegistrationStatus.initial.status) {
-                  context.push(Routes.UploadRiderImages,
-                      extra: UploadRiderImagesParams(
-                          isShipping: false,
-                          isSocket: driverInfo.driverType == 'socket'
-                              ? true
-                              : false));
-                } else {
-                  context.push(Routes.rideModeScreen,
-                      extra: RideModeParams(
-                          modeType: 'ride',
-                          isSocket: driverInfo.driverType == 'socket'
-                              ? true
-                              : false));
-                }
-              }
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: driverInfo != null &&
-                          (driverInfo.status ==
-                              RegistrationStatus.approved.status)
-                      ? [
-                          AppColors.cF33D49,
-                          AppColors.cC0303A,
-                          AppColors.cA72A32,
-                          AppColors.c9A272E,
-                          AppColors.c93252C,
-                          AppColors.c90242B,
-                        ]
-                      : [
-                          Color(0xFF0B1035),
-                          Color(0xFF161F68),
-                          Color(0xFF1B2781),
-                          Color(0xFF1E2B8E),
-                          Color(0xFF1F2D95),
-                          Color(0xFF0B1035)
-                        ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3)),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  driverInfo == null
-                      ? context.isArabic
-                          ? 'تسجيل سائق سيارة'
-                          : 'Ride Register'
-                      : (driverInfo.status ==
-                              RegistrationStatus.approved.status)
-                          ? context.isArabic
-                              ? 'وضع سائق سيارة'
-                              : 'Ride Mode'
-                          : (driverInfo.status ==
-                                  RegistrationStatus.initial.status)
-                              ? context.isArabic
-                                  ? 'استكمال تسجيل سائق'
-                                  : 'Complete Ride Register'
-                              : (driverInfo.status ==
-                                      RegistrationStatus.pending.status)
-                                  ? context.isArabic
-                                      ? 'انتظار موافقة تسجيل سائق'
-                                      : 'Waiting ِApproval Ride Register'
-                                  : context.isArabic
-                                      ? 'تسجيل سائق سيارة'
-                                      : 'Ride Register',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ),
-          Sizer(),
-          GestureDetector(
-            onTap: () {
-              if (!context.read<UserCubit>().isLoggedIn) {
-                context.pop();
-                return pleaseLoginDialog(context);
-              }
+              return pleaseLoginDialog(context);
+            }
               context.pop();
-              if (loadingInfo == null) {
-                print("object");
-                serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
-                    fromShipping: true, context: context);
+            if (loadingInfo == null) {
+              print("object");
+              serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
+                  fromShipping: true, context: context);
+            } else {
+              print("loadingInfo.toJson()${loadingInfo.toJson()}");
+              if (loadingInfo.status ==
+                  RegistrationStatus.pending.status) {
+                return;
+              } else if (loadingInfo.status ==
+                  RegistrationStatus.rejected.status) {
+                context.push(Routes.UploadRiderImages,
+                    extra: UploadRiderImagesParams(
+                        isShipping: true, isSocket: false));
+              } else if (loadingInfo.status ==
+                  RegistrationStatus.initial.status) {
+                context.push(Routes.UploadRiderImages,
+                    extra: UploadRiderImagesParams(
+                        isShipping: true, isSocket: false));
               } else {
-                print("loadingInfo.toJson()${loadingInfo.toJson()}");
-                if (loadingInfo.status == RegistrationStatus.pending.status) {
-                  return;
-                } else if (loadingInfo.status ==
-                    RegistrationStatus.rejected.status) {
-                  context.push(Routes.UploadRiderImages,
-                      extra: UploadRiderImagesParams(
-                          isShipping: true, isSocket: false));
-                } else if (loadingInfo.status ==
-                    RegistrationStatus.initial.status) {
-                  context.push(Routes.UploadRiderImages,
-                      extra: UploadRiderImagesParams(
-                          isShipping: true, isSocket: false));
-                } else {
-                  context.push(Routes.rideModeScreen,
-                      extra: RideModeParams(
-                          modeType: 'truk',
-                          isSocket: driverInfo?.driverType == 'socket'
-                              ? true
-                              : false));
-                }
+                context.push(Routes.rideModeScreen,
+                    extra: RideModeParams(
+                        modeType: 'truk',
+                        isSocket: driverInfo?.driverType == 'socket'
+                            ? true
+                            : false));
               }
+            }
             },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: loadingInfo != null &&
-                          (loadingInfo.status ==
-                              RegistrationStatus.approved.status)
-                      ? [
-                          AppColors.cF33D49,
-                          AppColors.cC0303A,
-                          AppColors.cA72A32,
-                          AppColors.c9A272E,
-                          AppColors.c93252C,
-                          AppColors.c90242B,
-                        ]
-                      : [
-                          Color(0xFF0B1035),
-                          Color(0xFF161F68),
-                          Color(0xFF1B2781),
-                          Color(0xFF1E2B8E),
-                          Color(0xFF1F2D95),
-                          Color(0xFF0B1035)
-                        ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3)),
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors:loadingInfo != null &&
+                    (loadingInfo.status == RegistrationStatus.approved.status) ?[
+                  AppColors.cF33D49,
+                  AppColors.cC0303A,
+                  AppColors.cA72A32,
+                  AppColors.c9A272E,
+                  AppColors.c93252C,
+                  AppColors.c90242B,
+                ]:[
+                  Color(0xFF0B1035),
+                  Color(0xFF161F68),
+                  Color(0xFF1B2781),
+                  Color(0xFF1E2B8E),
+                  Color(0xFF1F2D95),
+                  Color(0xFF0B1035)
                 ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
-              child: Center(
-                child: Text(
-                  loadingInfo == null
-                      ? context.isArabic
-                          ? 'تسجيل سائق نقل'
-                          : 'Truck Register'
-                      : (loadingInfo.status ==
-                              RegistrationStatus.approved.status)
-                          ? context.isArabic
-                              ? 'وضع سائق نقل'
-                              : 'Truck Mode'
-                          : (loadingInfo.status ==
-                                  RegistrationStatus.initial.status)
-                              ? context.isArabic
-                                  ? 'استكمال تسجيل سائق نقل'
-                                  : 'Complete Truck Register'
-                              : (loadingInfo.status ==
-                                      RegistrationStatus.pending.status)
-                                  ? context.isArabic
-                                      ? 'انتظار موافقة تسجيل سائق'
-                                      : 'Waiting ِApproval Truck Register'
-                                  : context.isArabic
-                                      ? 'تسجيل سائق نقل'
-                                      : 'Truck Register',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3)),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                loadingInfo == null ?
+                context.isArabic?'تسجيل سائق نقل':'Truck Register':
+                (loadingInfo.status == RegistrationStatus.approved.status)?
+                context.isArabic?'وضع سائق نقل':'Truck Mode':
+                (loadingInfo.status == RegistrationStatus.initial.status)?
+                context.isArabic?'استكمال تسجيل سائق نقل':'Complete Truck Register':
+                (loadingInfo.status == RegistrationStatus.pending.status)?
+                context.isArabic?'انتظار موافقة تسجيل سائق':'Waiting ِApproval Truck Register':
+                context.isArabic?'تسجيل سائق نقل':'Truck Register',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          Sizer(),
-          GestureDetector(
-            onTap: () {
-              if (context.isUserLoggedIn) {
-                context.pop();
-                context.push(Routes.rideOffer, extra: false);
-              } else {
-                context.pop();
-                return pleaseLoginDialog(context);
-              }
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF0B1035),
-                    Color(0xFF161F68),
-                    Color(0xFF1B2781),
-                    Color(0xFF1E2B8E),
-                    Color(0xFF1F2D95),
-                    Color(0xFF0B1035)
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3)),
+        ),
+        Sizer(),
+        GestureDetector(
+          onTap: () {
+            if (context.isUserLoggedIn) {
+              context.pop();
+              context.push(Routes.rideOffer,extra: false);
+            } else {
+              context.pop();
+              return pleaseLoginDialog(context);
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF0B1035),
+                  Color(0xFF161F68),
+                  Color(0xFF1B2781),
+                  Color(0xFF1E2B8E),
+                  Color(0xFF1F2D95),
+                  Color(0xFF0B1035)
                 ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
-              child: Center(
-                child: Text(
-                  context.isArabic ? 'وضع المستخدم' : 'User Mode',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3)),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                context.isArabic?'وضع المستخدم':'User Mode',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          Sizer(),
-          GestureDetector(
-            onTap: () {
-              if (context.isUserLoggedIn) {
-                context.pop();
-                context.push(Routes.RIDEACTIVITY);
-              } else {
-                context.pop();
-                pleaseLoginDialog(context);
-                // context.push(Routes.LOGIN);
-              }
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF0B1035),
-                    Color(0xFF161F68),
-                    Color(0xFF1B2781),
-                    Color(0xFF1E2B8E),
-                    Color(0xFF1F2D95),
-                    Color(0xFF0B1035)
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3)),
+        ),
+        Sizer(),
+        GestureDetector(
+          onTap: () {
+            if (context.isUserLoggedIn) {
+              context.pop();
+              context.push(Routes.RIDEACTIVITY);
+            } else {
+              context.pop();
+              pleaseLoginDialog(context);
+              // context.push(Routes.LOGIN);
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF0B1035),
+                  Color(0xFF161F68),
+                  Color(0xFF1B2781),
+                  Color(0xFF1E2B8E),
+                  Color(0xFF1F2D95),
+                  Color(0xFF0B1035)
                 ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
-              child: Center(
-                child: Text(
-                  context.isArabic ? 'سجل الرحلات' : 'Ride Log',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3)),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                context.isArabic?'سجل الرحلات':'Ride Log',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -988,90 +952,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _carTruckBtn(
-      {LoadingInfoEntity? loadingInfo,
-      DriverInfoEntity? driverInfo,
-      required Function openDrawer}) {
-    if (loadingInfo == null && driverInfo == null) {
-      return SizedBox(
-        height: 48,
-        child: GestureDetector(
-          onTap: () {
-            if (!context.read<UserCubit>().isLoggedIn) {
-              return pleaseLoginDialog(context);
-            }
-            customBottomSheet(context, serviceLocator<RideCubit>(),
-                isDarkMode: context.isDarkMode,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    spacing: 10,
-                    children: [
-                      AppButton(
-                          radius: 15,
-                          label: LocaleKeys.ride.tr(),
-                          onPressed: () {
-                            context.pop();
-                            serviceLocator<RideCubit>()
-                                .onNavigateToWelcomeScreen(
-                                    fromShipping: false, context: context);
-                          },
-                          backColor: AppColors.PRIMARY_COLOR,
-                          width: double.infinity),
-                      AppButton(
-                          radius: 15,
-                          label: LocaleKeys.shipping.tr(),
-                          onPressed: () {
-                            context.pop();
-                            serviceLocator<RideCubit>()
-                                .onNavigateToWelcomeScreen(
-                                    fromShipping: true, context: context);
-                          },
-                          backColor: AppColors.PRIMARY_COLOR,
-                          width: double.infinity),
-                    ],
-                  ),
-                ),
-                title: '');
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF0B1035),
-                  Color(0xFF161F68),
-                  Color(0xFF1B2781),
-                  Color(0xFF1E2B8E),
-                  Color(0xFF1F2D95),
-                  Color(0xFF0B1035)
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3)),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                LocaleKeys.carTruckRegister.tr(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
+      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo,required Function openDrawer}) {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         width: double.infinity,
@@ -1259,7 +1140,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           ],
         ),
       );
-    }
   }
 
   Widget _buildTopImage() {
