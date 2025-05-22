@@ -285,7 +285,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                           adId: state.ad?.id ?? '',
                           subCategoryId: state.ad?.subCategoryId ?? '',
                           subscriptionStatus:
-                              state.ad?.subscriptionStatus ?? '',
+                              state.ad?.userSubscriptionStatus ?? '',
                           dontPop: true,
                         ),
                       ),
@@ -296,7 +296,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         child: RequestButton(
                           adId: state.ad?.id ?? '',
                           subscriptionStatus:
-                              state.ad?.subscriptionStatus ?? '',
+                              state.ad?.userSubscriptionStatus ?? '',
                           dontPop: true,
                         ),
                       ),
