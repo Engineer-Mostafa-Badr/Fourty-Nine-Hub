@@ -9,8 +9,8 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class ProfilePhotos extends StatelessWidget {
-  const ProfilePhotos({super.key});
-
+  const ProfilePhotos({super.key, this.name});
+final String? name;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,7 +22,7 @@ class ProfilePhotos extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Label(
               text:
-                  context.isArabic ? 'صورك و فيديوهاتك' : 'Your Photos and Videos',
+                  context.isArabic ? name==null?'صورك و فيديوهاتك':'صور و فيديوهات $name' : '${name??'Your'} Photos and Videos',
               style: Styles.headerText(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

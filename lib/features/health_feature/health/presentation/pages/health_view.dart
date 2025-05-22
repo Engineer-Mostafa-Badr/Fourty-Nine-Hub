@@ -87,28 +87,27 @@ class _HealthViewState extends State<HealthView> {
               const Sizer(),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      Icons.search,
-                      size: 50.sp,
-                    ),
-                    const Sizer(),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.search,
+                        size: 50.sp,
+                      ),
+                      const Sizer(),
 
-                    /// Favourite Ads
-                    Expanded(
-                      child: CurrentHistoryBooking(
+                      /// Favourite Ads
+                      CurrentHistoryBooking(
                         title: LocaleKeys.mostBooking.localize,
                         isSelected: _showMost,
                         onTap: () => _toggleView('most'),
                       ),
-                    ),
-                    const Sizer(),
+                      const Sizer(),
 
-                    /// History
-                    Expanded(
-                      child: CurrentHistoryBooking(
+                      /// History
+                      CurrentHistoryBooking(
                         title: context.isArabic
                             ? 'سجل الحجوزات'
                             : 'Booking History',
@@ -121,12 +120,10 @@ class _HealthViewState extends State<HealthView> {
                           }
                         },
                       ),
-                    ),
-                    const Sizer(),
+                      const Sizer(),
 
-                    /// Current Booking
-                    Expanded(
-                      child: CurrentHistoryBooking(
+                      /// Current Booking
+                      CurrentHistoryBooking(
                         title: context.isArabic
                             ? 'الحجوزات الحالية'
                             : 'Current Booking',
@@ -139,8 +136,8 @@ class _HealthViewState extends State<HealthView> {
                           }
                         },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const Sizer(height: 20),
