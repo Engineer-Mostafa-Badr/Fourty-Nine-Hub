@@ -407,6 +407,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                             Text(
                               "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
                               style: Styles.mediumText(
+                                  fontSize: 32,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.getTextColor(context)
                                   // fontSize: 16,
@@ -422,6 +423,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                                   : widget.data.subCategory?.first.nameEn ??
                                       "N/A",
                               style: Styles.mediumText(
+                                  fontSize: 32,
                                   fontWeight: FontWeight.w400,
                                   color:AppColors.getTextColor(context)
                                   // fontSize: 14,
@@ -444,6 +446,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Expanded(
                         child: Label(
                           style: Styles.mediumText(
+                              fontSize: 32,
                               color: AppColors.getTextColor(context)),
                           text: context.isArabic
                               ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
@@ -465,15 +468,16 @@ class _DoctorListCardState extends State<DoctorListCard> {
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
                           style: Styles.mediumText(
+                              fontSize: 32,
                               color: AppColors.getTextColor(context),
                               fontWeight: FontWeight.w500),
                         ),
                       ),
                       Label(
-                        text: FormatNumbers().formatNumberByComma(
-                            widget.data.price.toString().toArabicNumbers(context),
-                            isArabic: context.isArabic),
+                        text:
+                        '${FormatNumbers().formatNumberByComma(widget.data.price.toString()).toArabicNumbers(context)} ${context.isArabic ? widget.data.currencyAr??'' : widget.data.currencyEn??''}',
                         style: Styles.mediumText(
+                            fontSize: 32,
                             color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.w500),
                       )
@@ -493,6 +497,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                             text:
                                 '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}'.toArabicNumbers(context),
                             style: Styles.mediumText(
+                                fontSize: 32,
                                 color: AppColors.getTextColor(context),
                                 fontWeight: FontWeight.w500),
                           )
@@ -502,6 +507,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                         text:
                             '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}'.toArabicNumbers(context),
                         style: Styles.mediumText(
+                            fontSize: 32,
                             fontWeight: FontWeight.w500,
                             color: AppColors.getRedColor(context)),
                       )
@@ -557,11 +563,11 @@ class PremiumAndRequestButtons extends StatelessWidget {
   }
 
   Widget _buildButton(
-      BuildContext context ,{
-    required String label,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
+      BuildContext context, {
+        required String label,
+        required Color color,
+        required VoidCallback onPressed,
+      }) {
     return Flexible(
       child: AppButton(
         radius: 15,
@@ -570,7 +576,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
         margin: 0,
         label: label,
         backColor: color,
-        style: Styles.mediumText(color: AppColors.getReversedTextColor(context)),
+        style:
+        Styles.mediumText(color: AppColors.getReversedTextColor(context),fontSize: 32,),
         onPressed: onPressed,
       ),
     );
@@ -592,8 +599,8 @@ class CallMessageReportButtons extends StatelessWidget {
           IconButton(
             icon: SvgPicture.asset(
               Assets.phoneIconRed,
-              width: 18,
-              height: 18,
+              width: 22,
+              height: 22,
               color: isChatEnabled == true
                   ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
@@ -618,7 +625,8 @@ class CallMessageReportButtons extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         AppButton(
-                          backColor: AppColors.getButtonPrimaryColor(context),
+                          backColor:
+                          AppColors.getButtonPrimaryColor(context),
                           color: AppColors.getReversedTextColor(context),
                           onPressed: () {
                             Navigator.pop(context); // Close first sheet
@@ -634,7 +642,7 @@ class CallMessageReportButtons extends StatelessWidget {
                             _showRegularCallBottomSheet(
                                 context, item); // Open second
                           },
-                          label:LocaleKeys.regularCall.localize,
+                          label: LocaleKeys.regularCall.localize,
                         ),
                       ],
                     ),
@@ -654,6 +662,8 @@ class CallMessageReportButtons extends StatelessWidget {
           IconButton(
             icon: SvgPicture.asset(
               Assets.mailIconRed,
+              width: 18,
+              height: 18,
               color: isChatEnabled == true
                   ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
@@ -675,7 +685,7 @@ class CallMessageReportButtons extends StatelessWidget {
           ),
           // const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.report),
+            icon: const Icon(Icons.report,size: 26,),
             color: AppColors.getRedColor(context),
             onPressed: () async {
               await showModalBottomSheet(
@@ -794,8 +804,7 @@ class CallMessageReportButtons extends StatelessWidget {
                       fillColor: AppColors.getFillColor(context),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none
-                      ),
+                          borderSide: BorderSide.none),
                     ),
                   ),
                   const SizedBox(height: 20),

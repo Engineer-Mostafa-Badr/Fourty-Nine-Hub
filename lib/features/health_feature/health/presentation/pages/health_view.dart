@@ -86,7 +86,7 @@ class _HealthViewState extends State<HealthView> {
               if (isWaitingApproval) WaitingAprovalText(),
               const Sizer(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+                padding: EdgeInsets.symmetric(horizontal: 8.0.w),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -109,7 +109,7 @@ class _HealthViewState extends State<HealthView> {
                       /// History
                       CurrentHistoryBooking(
                         title: context.isArabic
-                            ? 'سجل الحجوزات'
+                            ? 'سجل حجوزات'
                             : 'Booking History',
                         isSelected: _showHistory,
                         onTap: () {
@@ -125,7 +125,7 @@ class _HealthViewState extends State<HealthView> {
                       /// Current Booking
                       CurrentHistoryBooking(
                         title: context.isArabic
-                            ? 'الحجوزات الحالية'
+                            ? 'حجوزات حالية'
                             : 'Current Booking',
                         isSelected: _showCurrent,
                         onTap: () {

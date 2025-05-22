@@ -105,6 +105,16 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToEndTrip(Function(String tripId) params) {
+    remoteDataSource.listenToEndTrip(params);
+  }
+
+  @override
+  void listenToClientComing(Function(String tripId) params) {
+    remoteDataSource.listenToClientComing(params);
+  }
+
+  @override
   Future<Either<Failure, RunningTripEntity>> getRunningTrip() async{
     return await remoteDataSource.getRunningTrip();
   }

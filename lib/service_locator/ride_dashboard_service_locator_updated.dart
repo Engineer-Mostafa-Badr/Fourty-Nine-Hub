@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
@@ -96,10 +97,12 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<FinalizeTripByRiderUseCase>(() => FinalizeTripByRiderUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToAvailableUntrackedTripUseCase>(() => ListenToAvailableUntrackedTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToAcceptUntrackedTripOfferUseCase>(() => ListenToAcceptUntrackedTripOfferUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToEndTripUseCase>(() => ListenToEndTripUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
