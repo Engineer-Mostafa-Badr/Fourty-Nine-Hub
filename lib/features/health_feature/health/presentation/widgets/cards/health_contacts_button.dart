@@ -67,13 +67,16 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                     const VisualDensity(horizontal: -4, vertical: -4),
                 color:
                     (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                        ? AppColors.PRIMARY_COLOR
-                        : AppColors.DARK_GRAY_COLOR,
+                        ? AppColors.getRedColor(context)
+                        : AppColors.GREY_DARK_COLOR,
                 icon: SvgPicture.asset(
                   Assets.phoneIcon,
                   width: 36.h,
                   height: 36.h,
                   fit: BoxFit.cover,
+                  color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.getRedColor(context)
+                      : AppColors.GREY_DARK_COLOR,
                 ),
                 onPressed: () => JoinTripBottomSheet(
                   context,
@@ -245,10 +248,13 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                     const VisualDensity(horizontal: -4, vertical: -4),
                 color:
                     (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                        ? AppColors.PRIMARY_COLOR
-                        : AppColors.DARK_GRAY_COLOR,
+                        ? AppColors.getRedColor(context)
+                        : AppColors.GREY_DARK_COLOR,
                 icon: SvgPicture.asset(
                   Assets.mailIcon,
+                  color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.getRedColor(context)
+                      : AppColors.GREY_DARK_COLOR,
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
                     ? () {
@@ -282,7 +288,7 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                 visualDensity:
                     const VisualDensity(horizontal: -4, vertical: -4),
                 padding: EdgeInsets.zero,
-                color: AppColors.SECONDARY_COLOR,
+                color: AppColors.getRedColor(context),
                 icon: const Icon(
                   Icons.report,
                 ),
