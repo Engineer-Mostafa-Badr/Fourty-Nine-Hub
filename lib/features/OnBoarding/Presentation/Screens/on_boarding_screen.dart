@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -23,14 +23,49 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  PageController controller = PageController();
+  late PageController controller;
+  Timer? _autoScrollTimer;
+  final Duration _autoScrollDuration = const Duration(seconds: 3);
+
   @override
   void initState() {
     super.initState();
+    controller = PageController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cubit = context.read<OnBoardingCubit>();
-      debugPrint('isClosed: ${cubit.isClosed} initState');
       cubit.changeOnboardingData(0);
+      _startAutoScroll();
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer?.cancel();
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _startAutoScroll() {
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = Timer.periodic(_autoScrollDuration, (Timer timer) {
+      if (!mounted || !controller.hasClients) return;
+
+      final cubit = context.read<OnBoardingCubit>();
+      final nextPage = controller.page!.toInt() + 1;
+
+      if (nextPage < cubit.images.length) {
+        controller.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        controller.animateToPage(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
     });
   }
 
@@ -47,163 +82,163 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: MediaQuery.paddingOf(context).top,
-                ),
-                const Sizer(
-                  height: 64,
-                ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    InkWell(
-                      onTap: () {
-                        CacheManager.isShowOnboarding(true);
-                        context.go(Routes.HOME);
-                      },
-                      child: Label(
-                        text: LocaleKeys.skip.localize,
-                        style: Styles.headerText(
-                          color: context.isDarkMode
-                              ? AppColors.AUTH_CONTAINER_COLOR
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const Sizer(
-                  height: 64,
-                ),
-                Expanded(
-                  child: Directionality(
-                    textDirection: context.textDirection,
-                    child: PageView.builder(
-                      // allowImplicitScrolling: true,
-                      // physics: NeverScrollableScrollPhysics(),
-                      itemCount: cubit.images.length,
-                      itemBuilder: (context, index) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: double.infinity,
-                            height: 300,
-                            child: SvgPicture.asset(
-                              state.image.isNotEmpty
-                                  ? state.image
-                                  : 'assets/default_image.svg',
+                SizedBox(height: MediaQuery.paddingOf(context).top),
+                _buildSkipButton(context),
+                const Spacer(flex: 2,),
+                _buildPageView(cubit,state, context),
+                const Spacer(),
+                _buildPageIndicator(cubit, state),
+                const Spacer(),
+                _buildNavigationButton(cubit, state),
+                const Spacer(),
 
-                              // state.image,
-                              // cubit.images[state.currentIndex],
-                              width: double.infinity,
-                            ),
-                          ),
-                          const SizedBox(height: 32),
-                          Text(
-                            context.isArabic ? state.titleAr : state.titleEn,
-                            style: Styles.headerText(
-                                color: context.isDarkMode
-                                    ? AppColors.AUTH_CONTAINER_COLOR
-                                    : AppColors.PRIMARY_COLOR),
-                          ),
-                        ],
-                      ),
-                      onPageChanged: (index) {
-                        if (!context.read<OnBoardingCubit>().isClosed) {
-                          context
-                              .read<OnBoardingCubit>()
-                              .changeOnboardingData(controller.page!.toInt());
-                        }
-                        debugPrint('index $index');
-                        debugPrint(
-                            'state.currentIndex ${state.currentIndex}');
-                        if (index < cubit.images.length) {
-                          debugPrint(
-                              'index <= ${cubit.images.length - 1} $index');
-                          cubit.changeOnboardingData(index);
-                        } else {
-                          debugPrint('else $index');
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Scaffold()),
-                              (route) => false);
-                        }
-                      },
-                      controller: controller,
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: List.generate(
-                      cubit.images.length,
-                      (itemIndex) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: itemIndex == state.currentIndex
-                                ? const LinearGradient(
-                                    colors: [
-                                      Color(0xFF0B1035),
-                                      Color(0xFFFF3308),
-                                    ],
-                                    begin: Alignment.topCenter,
-                                  )
-                                : null,
-                            color: itemIndex == state.currentIndex
-                                ? null
-                                : AppColors.GREYBG,
-                          ),
-                          height: 10,
-                          width: 10,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const Sizer(
-                  height: 96,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: AppButton(
-                    backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      int index = state.currentIndex;
-                      debugPrint(index.toString());
-                      debugPrint(controller.page.toString());
-                      if (index < cubit.images.length - 1) {
-                        controller.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.linear);
-                        cubit.changeOnboardingData(index);
-                      } else {
-                        CacheManager.isShowOnboarding(true);
-                        context.go(Routes.HOME);
-                        // CacheHelper.put(key: 'showOnboarding', value: true);
-                      }
-                    },
-                    label: (state.currentIndex < cubit.images.length - 1)
-                        ? LocaleKeys.next.localize
-                        : LocaleKeys.start.localize,
-                    style: Styles.headerText(
-                        color: AppColors.AUTH_CONTAINER_COLOR),
-                  ),
-                ),
-                const Sizer(
-                  height: 96,
-                ),
-
-                // SizedBox(height: heightRation(context, 40),),
               ],
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget _buildSkipButton(BuildContext context) {
+    return Row(
+      children: [
+        const Spacer(),
+        InkWell(
+          onTap: () {
+            CacheManager.isShowOnboarding(true);
+            context.go(Routes.HOME);
+          },
+          child: Label(
+            text: LocaleKeys.skip.localize,
+            style: Styles.headerText(
+              color: context.isDarkMode
+                  ? AppColors.AUTH_CONTAINER_COLOR
+                  : AppColors.PRIMARY_COLOR,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPageView(OnBoardingCubit cubit,OnBoardingState state, BuildContext context) {
+    return Expanded(
+      flex: 6,
+      child: Directionality(
+        textDirection: context.textDirection,
+        child: PageView.builder(
+          itemCount: cubit.images.length,
+          itemBuilder: (context, index) => _buildPageItem(
+            index: index,
+            images: cubit.images,
+            titleAr: cubit.titlesAr,
+            titleEn: cubit.titlesEn,
+          ),
+          onPageChanged: (index) {
+            _startAutoScroll(); // Reset timer on manual scroll
+            if (!cubit.isClosed) {
+              print('controller.page!: ${controller.page!.toInt()}');
+              cubit.changeOnboardingData(controller.page!.toInt()+1);
+              // cubit.changeOnboardingData(state.currentIndex+1);
+            }
+            if (index >= cubit.images.length) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Scaffold()),
+                    (route) => false,
+              );
+            }
+          },
+          controller: controller,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPageIndicator(OnBoardingCubit cubit, OnBoardingState state) {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          cubit.images.length,
+              (itemIndex) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: itemIndex == state.currentIndex
+                    ? const LinearGradient(
+                  colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
+                  begin: Alignment.topCenter,
+                )
+                    : null,
+                color: itemIndex == state.currentIndex
+                    ? null
+                    : AppColors.GREYBG,
+              ),
+              height: 10,
+              width: 10,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavigationButton(OnBoardingCubit cubit, OnBoardingState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: AppButton(
+        backColor: AppColors.PRIMARY_COLOR,
+        onPressed: () {
+          _startAutoScroll(); // Reset timer on button press
+          final index = state.currentIndex;
+          if (index < cubit.images.length - 1) {
+            controller.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.linear,
+            );
+            cubit.changeOnboardingData(index + 1);
+          } else {
+            CacheManager.isShowOnboarding(true);
+            context.go(Routes.HOME);
+          }
+        },
+        label: (state.currentIndex < cubit.images.length - 1)
+            ? LocaleKeys.next.localize
+            : LocaleKeys.start.localize,
+        style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
+      ),
+    );
+  }
+
+  Widget _buildPageItem({
+    required int index,
+    required List<String> images,
+    required List<String> titleAr,
+    required List<String> titleEn,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 200,
+          child: SvgPicture.asset(
+            images.isNotEmpty ? images[index] : 'assets/default_image.svg',
+            width: double.infinity,
+          ),
+        ),
+        const Spacer(),
+        Text(
+          context.isArabic ? titleAr[index] : titleEn[index],
+          style: Styles.headerText(
+            color: context.isDarkMode
+                ? AppColors.AUTH_CONTAINER_COLOR
+                : AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ],
     );
   }
 }
