@@ -81,7 +81,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
             dashboardCubit.loadInitialAvailableNonSocketTrips(),
             // dashboardCubit.getAvailableNonSocketTrips(),
       dashboardCubit.listenToRemoveUntrackedTrip(),
-        dashboardCubit.listenToNewTripNonSocket()
+        dashboardCubit.listenToNewTripNonSocket(),
+        dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params)
       ];
       //dashboardCubit.getAvailableTrips(context);
       dashboardCubit.getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
@@ -130,6 +131,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                 //           : showErrorMessage(context,
                 //               getFailureMessage(state.failure!, context));
                 // }
+
+
 
               },
               builder: (context, state) {

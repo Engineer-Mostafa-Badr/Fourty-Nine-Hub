@@ -183,6 +183,25 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   TextEditingController rideDriverExpireDateController = TextEditingController();
 
+  void listenToAcceptTripOfferTrip(int index, BuildContext context, RideModeParams params) {
+    CliLogger.info('Remove Trip');
+    // TripsResponseEntity
+    listenToAcceptUntrackedTripOfferUseCase((tripId) {
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      if (tripId.isNotEmpty) {
+        list.removeWhere((e) => e.id == tripId);
+
+        // Switch to index 4 (Accepted Trips) whenever a trip is accepted
+        emit(state.copyWith(
+          availableRideTrips: list,
+          // currentIndex: 4,
+          status: DashboardsStates.success,
+        ));
+        changeIndex(4,context,params);
+        // loadInitialAcceptedNonSocketTrips();
+      }
+    });
+  }
 
   onSubmitUploadingDriverLicense(BuildContext context) async {
     if (driverLicenseFormKey.currentState!.validate()) {
@@ -396,7 +415,11 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
         String errorName = getFailureName(state.failure!, context);
         if (errorName == 'SubscribeError') {
-          showSubscribeDialog(context, subCategoryId);
+          // showSubscribeDialog(context, subCategoryId);
+          SubscriptionMethod().subscribe(
+            subscribeId: subCategoryId,
+            title:  'Ride',
+          );
         }
       },
           (data) {

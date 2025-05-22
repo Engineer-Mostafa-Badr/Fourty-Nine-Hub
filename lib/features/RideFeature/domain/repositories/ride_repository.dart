@@ -126,6 +126,7 @@ abstract class RideRepository {
   Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
   void listenToRideOffers(Function(RideOfferEntity offer) params);
+  void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params);
   Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params);
   Future<Either<Failure, bool>> emitWatchingTrips(WatchingTripsParams params);
   Future<Either<Failure, ClickEntity>> click(ClickParams params);
