@@ -5,9 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -59,7 +61,7 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
         }
 
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height * 0.67,
           child: Column(
             children: [
               // if (widget.onClose != null)
@@ -73,13 +75,8 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
               Expanded(
                 child: cubit.currentBookings.isEmpty
                     ? Center(
-                  child: Text(
-                    context.isArabic ? 'لا توجد حجوزات حالية' : 'No current bookings',
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.grey,
-                    ),
-                  ),
+                  child:CustomEmptyWidget(label: context.isArabic ? 'لا توجد حجوزات حالية' : 'No current bookings',
+                  )
                 )
                     : ListView.separated(
                   controller: _scrollController,
@@ -155,12 +152,12 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                     children: [
                       Icon(
                         Icons.location_on_sharp,
-                        color: AppColors.PRIMARY_COLOR,
+                        color: AppColors.getButtonPrimaryWhiteColor(context),
                         size: 48.h,
                       ),
                       const Sizer(),
                       Label(
-                        text: address?.address ?? 'Address not available',
+                        text: address?.address ??(context.isArabic?'عنوان غير معروف':'Address not available'),
                         style: Styles.mediumText(fontWeight: FontWeight.w500),
                       )
                     ],
@@ -178,12 +175,13 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                       Expanded(
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
-                          style: Styles.mediumText(fontWeight: FontWeight.w500),
+                          style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
                         ),
                       ),
                       Label(
-                        text: doctor?.callsPrice ?? 'Price not available',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                        text: doctor?.callsPrice?.toArabicNumbers(context) ?? '120'.toArabicNumbers(context)+ (context.isArabic?' ج.م':' EGP'),
+                            //(context.isArabic?'سعر غير متوفر':'Price not available'),
+                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
                       )
                     ],
                   ),
@@ -192,13 +190,13 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                     children: [
                       Icon(
                           Icons.watch_later_outlined,
-                          color: AppColors.black,
+                          color: AppColors.getButtonPrimaryWhiteColor(context),
                           size: 48.h
                       ),
                       const Sizer(),
                       Label(
-                        text: '${context.isArabic?'وقت الانتظار':'Waiting time'}: ${doctor?.waitingTime ?? 'N/A'} ${context.isArabic?'دقيقة':'min'}',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                        text: '${context.isArabic?'وقت الانتظار':'Waiting time'}: ${doctor?.waitingTime ?? (context.isArabic?'':'N/A')} ${context.isArabic?'دقيقة':'min'}'.toArabicNumbers(context),
+                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
                       )
                     ],
                   ),
@@ -269,7 +267,7 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                       children: [
                         SvgPicture.asset(Assets.star2, width: 8, height: 8),
                         const Sizer(width: 4),
-                        Label(text: rating, style: Styles.smallText())
+                        Label(text: rating.toArabicNumbers(context), style: Styles.smallText(color: Colors.black))
                       ]
                   ),
                 ),
@@ -300,7 +298,7 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
               style: Styles.mediumText(),
             ),
             Label(
-              text: time,
+              text: time.toArabicNumbers(context),
               style: Styles.mediumText(),
             )
           ],
@@ -309,8 +307,3 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
     );
   }
 }
-
-
-
-
-
