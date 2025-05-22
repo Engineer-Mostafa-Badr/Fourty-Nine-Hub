@@ -156,11 +156,12 @@ class AvailableRideTripItem extends StatelessWidget {
                             Expanded(
                                 child: ClickableWidget(
                               onTap: () {
-                                if(tripEntity.isPremium==false||tripEntity.isButtonEnabled){
+                                print("tripEntity.isPremium ${tripEntity.isPremium}");
+                                print("tripEntity.isButtonEnabled ${tripEntity.isButtonEnabled}");
+                                if(tripEntity.isPremium==true||tripEntity.isButtonEnabled==true){
                                   if (tripEntity.isAutoAccept == false) {
                                     cubit.createOffer(tripId: tripEntity.id, price: tripEntity.price ?? 0, context: context, subCategoryId: tripEntity.subcategoryId);
                                   } else {
-                                    // autoAcceptTrip
                                     cubit.autoAcceptTrip(context, tripEntity.id);
                                   }
                                 }else{

@@ -56,6 +56,8 @@ abstract class TripRepository {
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
    void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
    void listenToRemoveTrip(Function(String tripId) params);
+   void listenToClientComing(Function(String tripId) params);
+   void listenToEndTrip(Function(String tripId) params);
    void listenToRemoveUntrackedTrip(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
    void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
