@@ -45,6 +45,6 @@ class DefaultTextFormField extends MainTextFormField {
           hintText: hint + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
           inputFormatters: inputFormatter,
-          maxLength: maxLength,
+          // maxLength: maxLength,
         );
 }
