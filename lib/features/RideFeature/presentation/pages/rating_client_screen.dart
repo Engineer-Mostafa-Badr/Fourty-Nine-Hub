@@ -130,7 +130,7 @@ class RatingCard extends StatelessWidget {
             initialRating: rating,
             minRating: 1,
             direction: Axis.horizontal,
-            allowHalfRating: true,
+            allowHalfRating: false,
             itemCount: 5,
             itemSize: 26,
             itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -206,9 +206,10 @@ class RatingCard extends StatelessWidget {
   }
 }
 String getRatingText(double rating) {
-  if (rating >= 4.5) return LocaleKeys.excellent.localize;
-  if (rating >= 3.5) return LocaleKeys.veryGood.localize;
-  if (rating >= 2.5) return LocaleKeys.good.localize;
-  if (rating >= 1.0) return LocaleKeys.poor2.localize;
+  if (rating >= 5.0) return LocaleKeys.excellent.localize;
+  if (rating >= 4.0) return LocaleKeys.veryGood.localize;
+  if (rating >= 3.0) return LocaleKeys.good.localize;
+  if (rating >= 2.0) return LocaleKeys.poor2.localize;
+  if (rating >= 1.0) return LocaleKeys.bad.localize;
   return LocaleKeys.noRating.localize;
 }

@@ -14,6 +14,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import 'instagram_user_follow_widget.dart';
+
 class FollowingView extends StatefulWidget {
   const FollowingView({super.key, required this.otherId});
   final String otherId;
@@ -107,9 +109,17 @@ class _FollowingViewState extends State<FollowingView> {
                   return GestureDetector(
                     onTap: () {
                       context.push(Routes.INSTAGRAMPROFILE,
-                          extra: following.followingId);
+                          extra: following.userId);
                     },
-                    child: Row(
+                    child: InstagramUserFollowWidget(
+                      inFollowers: true,
+                      image: following.profilePictureUrl,
+                      userName: following.username,
+                      fullName: '${following.firstName} ${following.lastname}',
+                      userId: following.userId,
+                    ),
+
+                    /*child: Row(
                       children: [
                         ImageFromInternet(
                           image: following.image,
@@ -137,7 +147,7 @@ class _FollowingViewState extends State<FollowingView> {
                           ],
                         ),
                       ],
-                    ),
+                    ),*/
                   );
                 },
               ),

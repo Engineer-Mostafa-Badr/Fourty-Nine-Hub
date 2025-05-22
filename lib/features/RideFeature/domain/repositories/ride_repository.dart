@@ -29,6 +29,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_b
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
@@ -52,6 +53,8 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
 import '../entities/create_no_track_trip_entity.dart';
+import '../entities/dashboards/create_non_track_offer_entity.dart';
+import '../entities/dashboards/update_driver_settings_entity.dart';
 import '../entities/get_client_accepted_trips_entity.dart';
 import '../entities/get_client_offer_trips_entity.dart';
 import '../entities/get_client_past_trips_entity.dart';
@@ -60,11 +63,14 @@ import '../entities/get_offers_entity.dart';
 import '../usecases/accept_non_track_trip_use_case.dart';
 import '../usecases/cancel_non_track_trip_use_case.dart';
 import '../usecases/create_non_track_trip_use_case.dart';
+import '../usecases/dashboards/create_non_track_offer_use_case.dart';
+import '../usecases/dashboards/update_driver_settings_use_case.dart';
 import '../usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../usecases/make_loading_request_trip_usecase.dart';
 import '../usecases/make_non_tracking_request_trip_usecase.dart';
 
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
+import '../usecases/rating_driver_by_client.dart';
 
 abstract class RideRepository {
 
@@ -101,6 +107,7 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> partialPaymentInTrip(PartialPaymentInTripUseCaseParams params);
   Future<Either<Failure, bool>> completeTrip(CompleteTripUseCaseParams params);
   Future<Either<Failure, bool>> cancelTripByRider(CancelTripByRiderUseCaseParams params);
+  Future<Either<Failure, bool>> finalizeTripByRider(String params);
   Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> cancelPendingTripByClient(CancelPendingTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
@@ -120,14 +127,18 @@ abstract class RideRepository {
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
   void listenToRideOffers(Function(RideOfferEntity offer) params);
   Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params);
+  Future<Either<Failure, bool>> emitWatchingTrips(WatchingTripsParams params);
   Future<Either<Failure, ClickEntity>> click(ClickParams params);
   Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params);
   Future<Either<Failure, CreateNonTrackTripEntity>> cancelNonTrackTrip(CancelNonTrackTripParams params);
   Future<Either<Failure, CreateNonTrackTripEntity>> acceptNonTrackTrip(AcceptNonTrackTripParams params);
   Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params);
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createNonTrackOffer(CreateNonTrackOfferParams params);
+  Future<Either<Failure, UpdateDriverSettingsEntity >> updateDriverSettings(UpdateDriverSettingsParams params);
   Future<Either<Failure, List<ClientPendingTripEntity>>> getClientPendingUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, List<ClientAcceptedTripEntity>>> getClientAcceptedUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
-
+  Future<Either<Failure, bool>> sendOkIamComing();
+  Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
 }

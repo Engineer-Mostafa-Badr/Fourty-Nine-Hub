@@ -29,6 +29,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/sa
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../domain/repositories/social_posts_repo.dart';
+import '../../domain/usecases/get_all_followers_use_case.dart';
 import '../datasources/instagram_remote_datasource.dart';
 
 class InstagramRepoImpl implements InstagramRepo {
@@ -74,13 +75,13 @@ class InstagramRepoImpl implements InstagramRepo {
 
   @override
   Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
-      TwitterFeedParams params) {
+      GetAllFollowersParams params) {
     return _remoteDataSource.getAllFollowers(params);
   }
 
   @override
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
-      TwitterFeedParams params) {
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowing(
+      GetAllFollowersParams params) {
     return _remoteDataSource.getAllFollowing(params);
   }
 

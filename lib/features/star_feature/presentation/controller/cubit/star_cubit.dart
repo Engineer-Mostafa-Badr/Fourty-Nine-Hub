@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -288,7 +289,7 @@ class StarCubit extends Cubit<StarState> {
 
   List<String>? selectedVideo;
 
-  uploadVideo({bool isGallery = true}) async {
+  uploadVideo({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadVideo(
@@ -308,7 +309,7 @@ class StarCubit extends Cubit<StarState> {
               video: video,
               // backColor: '#FFFFFFFF',
               status: StarStates.success));
-        });
+        }, context: context);
     print("length${state.video?.length}");
   }
 

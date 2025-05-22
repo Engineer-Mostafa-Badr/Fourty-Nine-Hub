@@ -44,8 +44,6 @@ class _ShowAllImagesState extends State<ShowAllImages> {
           itemBuilder: (context, index) => InkWell(
             onTap: () {
               print("object");
-              // context.push(Routes.TWITTER);
-              // print("images$images");
               List<XFile> images = widget.images.map((e) => e.file).toList();
 
               Navigator.push(
@@ -91,13 +89,14 @@ class _ShowAllImagesState extends State<ShowAllImages> {
                   child: InkWell(
                     onTap: () async {
                       await widget.onRemoveImage(widget.images[index]);
+                      widget.images.remove(widget.images[index]);
                       setState(() {});
                     },
                     child: Container(
-                        height: 30.h,
-                        width: 30,
+                        height: 50.h,
+                        width: 50,
                         alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
+                        // padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
                             color: Colors.white, shape: BoxShape.circle),
                         child: const Icon(

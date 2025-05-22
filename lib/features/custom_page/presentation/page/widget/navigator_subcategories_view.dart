@@ -41,7 +41,6 @@ class _NavigatorSubCategoriesViewState
       builder: (context, state) {
         return CustomScaffold(
           enableCustomAppBar: true,
-
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(30),
             child: BackAppBar(

@@ -16,7 +16,7 @@ class CancelTripByRiderUseCaseParams {
   final String reasonId;
   final String note;
 
-  CancelTripByRiderUseCaseParams(this.tripId, this.reasonId, this.note);
+  CancelTripByRiderUseCaseParams({required this.tripId, required this.reasonId, required this.note});
 
   toJson() => {'reasonId': reasonId, 'note': note};
 }

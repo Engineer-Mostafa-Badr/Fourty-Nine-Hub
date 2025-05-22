@@ -48,6 +48,7 @@ import '../../../../../features/ads_feature/ad_requests/domain/usecases/get_ad_r
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import '../../../../../features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
 import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
@@ -853,6 +854,10 @@ class EndPoints {
   static String postFollowUserInstagram({required String userId}) =>
       '/user-follow/follow/$userId';
 
+  static String getFriends = '/friendship/friends';
+  static String getSocialFollowers({required GetAllFollowersParams params}) => '/user-follow/followers?limit=${params.limit}&page=${params.page}';
+  static String getSocialFollowing({required GetAllFollowersParams params}) => '/user-follow/following?limit=${params.limit}&page=${params.page}';
+
   static String unFollowUserInstagram({required String userId}) =>
       '/user-follow/unfollow/$userId';
 
@@ -1367,7 +1372,7 @@ class EndPoints {
   }
 
   static String requestTrip(String subcategoryId) {
-    return '/ride/trips/newTrip/$subcategoryId';
+    return '/ride/client/tracking/trips/$subcategoryId';
   }
 
   static String retrieveClientLatestTrip = '/ride/client/trips/latest';
@@ -1395,7 +1400,9 @@ class EndPoints {
     return '/ride/trip/rating/$id/client';
   }
 
-  static String createDriverRating = '/ride/trip/rating/driver';
+  static String createDriverRating = '/ride/trip/ratings/client';
+  static String emergencySupport = '/users/emergencySupport';
+  static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
@@ -1413,6 +1420,11 @@ class EndPoints {
   static String makeLoadingTripRequest = '/loading/trip/createLoadingTrip';
   static String getClientOffers = '/ride/non-tracking/offers';
   static String getLoadingOffers = '/loading/trip/offers';
+  static String getActiveTrip = '/ride/driver/trips/active';
+  static String goingToClient(String id) => '/ride/driver/trips/$id/going';
+  static String arrivedToClient(String id) => '/ride/driver/trips/$id/arrived';
+  static String startDriverTrip(String id) => '/ride/driver/trips/$id/start';
+  static String completeDriverTrip(String id) => '/ride/driver/trips/$id/completed';
 
   static String updateDriverLocation() {
     return '/ride/update-driver-location';
@@ -1466,6 +1478,10 @@ class EndPoints {
     return '/ride/trips/cancel-by-rider/$tripId';
   }
 
+  static String finalizeTripByRider(String tripId) {
+    return '/ride/driver/tracking/trips/$tripId/finalize/pre-start';
+  }
+
   static String cancelTripByClient(String tripId) {
     return '/ride/trips/cancel-by-client/$tripId';
   }
@@ -1491,7 +1507,7 @@ class EndPoints {
   }
 
   static String acceptOfferByClient(String offerId) {
-    return '/ride/offers/accept/offer/$offerId';
+    return '/ride/client/tracking/offers/$offerId';
   }
 
   static String updateTripAutoAcceptByClient() {
@@ -1515,10 +1531,17 @@ class EndPoints {
   static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
   static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const createOfferNonTrackedTrips = '/ride/non-tracking/offers/trip/';
+  static const updateDriverSettingsNonTrack= '/ride/driver/untracked/settings';
 
-  static const getAvailableRideNonSocketTrip =
-      '/ride/driver/trips/available/not-tracking';
+  static const sendOkIamComing = "/ride/client/tracking/trips/approach";
+  static const ratingDriverByClient = "/ride/trip/ratings/client";
+  static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
   static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
-  static const getPastRideNonSocketTrip =
-      '/ride/driver/untracked/trips/history';
+  static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
+  static const getEmergencyContacts = '/users/emergency-contacts';
+  static const addEmergencyContacts = '/users/add-emergency-contacts';
+  static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
+  static const getDriverSettings = '/ride/driver/untracked/settings';
+  static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
 }

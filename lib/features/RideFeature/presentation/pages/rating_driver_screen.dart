@@ -149,7 +149,7 @@ class RatingCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
 
-                    Expanded(child: CustomSupportTextField(hintText: LocaleKeys.writeThankYouMessage.localize, controller: problemController)),
+                    Expanded(child: CustomSupportTextField(hintText: LocaleKeys.writeThankYouMessage.localize, controller: problemController,validator: (String? value) {  })),
 
                     const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
                   ],

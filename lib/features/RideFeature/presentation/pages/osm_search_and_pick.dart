@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
+// import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
+import '../../../../common/widgets/OpenStreetMapSearchAndPick/open_street_map_search_and_pick.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 class RideOpenStreetMapSearchAndPickParams{
@@ -42,7 +43,7 @@ class _RideOpenStreetMapSearchAndPickState extends State<RideOpenStreetMapSearch
               locationPinIconColor: Colors.red,
               locationPinText: context.isArabic? 'الموقع المحدد' : 'Selected Location',
               locationPinTextStyle:
-              const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+               const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.PRIMARY_COLOR),
               zoomInIcon: Icons.zoom_in,
               zoomOutIcon: Icons.zoom_out,
             ),

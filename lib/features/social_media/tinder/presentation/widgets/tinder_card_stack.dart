@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -33,16 +32,17 @@ class TinderCardStack extends StatefulWidget {
 }
 
 class _TinderCardStackState extends State<TinderCardStack> {
+  CardSwiperDirection? _swipeDirection;
+  int _currentIndex = 0;
+  int _dragProgress = 0;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 0.88.sh,
+      height: 0.90.sh,
       child: Stack(
         children: [
           _buildCardSwiper(
-            context,
-          ),
-          _buildActions(
             context,
           ),
         ],
@@ -55,24 +55,91 @@ class _TinderCardStackState extends State<TinderCardStack> {
   ) {
     return CardSwiper(
       backCardOffset: const Offset(0, 0),
+      initialIndex: _currentIndex,
       cardsCount: 5,
+      threshold: 30,
+      allowedSwipeDirection: AllowedSwipeDirection.only(left: true,right: true),
       numberOfCardsDisplayed: 3,
       isLoop: true,
       padding: const EdgeInsets.only(bottom: 24),
       maxAngle: 50,
       onSwipe: (previousIndex, currentIndex, direction) {
         setState(() {
+
+          _currentIndex = currentIndex??0;
+          _dragProgress = 0;
           // Update the UI based on new card index
-          _buildCardWidget(
-            context,
-          );
+          // _buildCardWidget(
+          //   context,
+          //   _swipeDirection
+          // );
         });
         return true;
       },
+      onSwipeDirectionChange:  (horizontal, vertical){
+        setState(() {
+          _swipeDirection=horizontal;
+        });
+      },
       cardBuilder: (context, index, horizontalOffsetPercentage,
           verticalOffsetPercentage) {
-        return _buildCardWidget(
-          context,
+        // احسب نسبة السحب الحالية
+        final int drag = horizontalOffsetPercentage.abs() + verticalOffsetPercentage.abs();
+
+        // لو الكارد هو اللي فوق، خزّن نسبة السحب
+        if (index == _currentIndex && drag != _dragProgress) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              _dragProgress = drag;
+            });
+          });
+        }
+        String? swipeLabel;
+        Color? labelColor;
+        // نحدد الاتجاه من قيمة السحب
+        if ( _swipeDirection != null&&index == _currentIndex ) {
+          if (_swipeDirection == CardSwiperDirection.right) {
+            swipeLabel = context.isArabic?"مش مناسب":'NOPE';
+            labelColor=Color(0xffEB545D);
+          } else if (_swipeDirection == CardSwiperDirection.left) {
+            swipeLabel = context.isArabic?"أعجبني":'Like';
+            labelColor=Colors.green;
+          }
+        }
+        return Stack(
+          children: [
+            _buildCardWidget(
+              context,
+            ),
+            _buildActions(
+              context,
+            ),
+            if (swipeLabel != null)
+              Positioned(
+                top: 60,
+                    left: _swipeDirection==CardSwiperDirection.left ? null : 30,
+                    right:_swipeDirection==CardSwiperDirection.left? 30 : null,
+                child: Transform.rotate(
+                  angle: _swipeDirection == CardSwiperDirection.right
+                      ? -0.6 // ميل لليمين
+                      : 0.6, // ميل لليسار
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      border: Border.all(color:labelColor??Colors.white,width: 5 )
+                    ),
+                    child: Text(
+                      swipeLabel,
+                      style: TextStyle(
+                        color:labelColor,
+                        fontSize: 90.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
         );
       },
       duration: const Duration(milliseconds: 100),
@@ -80,30 +147,26 @@ class _TinderCardStackState extends State<TinderCardStack> {
   }
 
   Widget _buildCardWidget(
-    BuildContext context,
-  {bool? isSwapping}
-  ) {
+    BuildContext context,) {
     return SizedBox(
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 16.0.h),
+      child: Container(
+        padding: EdgeInsets.only(bottom: 20.0.h),
         child:  Card(
           clipBehavior: Clip.antiAlias,
           shape:const  RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topRight: Radius.circular(20), topLeft: Radius.circular(20))),
           elevation: 0,
-          margin: EdgeInsets.zero,
+          margin: EdgeInsets.only(bottom: 40.h,right: 16.w,left: 16.w),
           child: Stack(
             children: [
               const SwipeCardDemo2(),
-              if(isSwapping!=null)
-                Positioned(
-                  left: 20,
-                  top: 20,
-                  child: Container(
-                  child: Text('noooooooooooo'),
-                                ),
-                )
+              // if (direction != null)
+              //   Positioned(
+              //     top: 40,
+              //     left: direction == CardSwiperDirection.left ? null : 20,
+              //     right: direction == CardSwiperDirection.left ? 20 : null,
+
             ],
           ),
         ),
@@ -216,7 +279,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     BuildContext context,
   ) {
     return Positioned(
-      bottom: 2,
+      bottom: 0,
       right: 8,
       left: 8,
       child: Padding(
@@ -280,7 +343,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
       BuildContext context, Widget child, VoidCallback onPressed,
       {Color? color, bool? isMini}) {
     return FloatingActionButton(
-      heroTag: UniqueKey(),
+      heroTag: UniqueKey(),elevation: .9,
       onPressed: onPressed,
       mini: isMini ?? false,
       backgroundColor: Colors.white,

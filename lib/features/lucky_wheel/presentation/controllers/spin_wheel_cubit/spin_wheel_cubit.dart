@@ -3,12 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_entity.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_item_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -67,22 +70,23 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
     showAnimatedDialog(context,Center(
       child: AlertDialog(
         scrollable: false,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: AppColors.getFindFillColor(context),
         title: Center(child: Text(LocaleKeys.youWin.localize)),
         content: SingleChildScrollView(
           child: Column(
             children: [
               Text(
                 prize.type == WheelItemTypes.point
-                    ? '${prize.value} ${LocaleKeys.points.localize}'
-                    : '${prize.value}',
+                    ? '${FormatNumbers().formatNumber(prize.value.round(), useArabicNumerals: context.isArabic)} ${LocaleKeys.points.localize}'
+                    : '${FormatNumbers().formatNumber(prize.value.round(), useArabicNumerals: context.isArabic)} ${LocaleKeys.cash.localize}',
                 style: TextStyle(fontSize: 30.sp),
               ),
+              const Sizer(),
               ElevatedAppButton(
-                label: LocaleKeys.back.localize,
+                label: context.isArabic?'رجوع':LocaleKeys.back.localize,
                 textStyle: Styles.mediumText(
-                    color: AppColors.AUTH_CONTAINER_COLOR),
-                backColor: AppColors.SECONDARY_COLOR,
+                    color: AppColors.getReversedTextColor(context)),
+                backColor: AppColors.getRedColor(context),
                 onPressed: () {
                   Navigator.pop(context);
                 },
