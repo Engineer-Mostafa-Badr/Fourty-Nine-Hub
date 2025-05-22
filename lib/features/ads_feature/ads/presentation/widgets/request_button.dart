@@ -32,7 +32,20 @@ class RequestButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
+    return BlocConsumer<AdvertisementCubit, AdsState>(
+        listener: (context, state) {
+      if (state.status == AdsStates.requestSuccess) {
+        context.pop();
+        showSuccessMessage(context, 'Request Sent Successfully');
+        context.read<AdvertisementCubit>().resetRequest();
+      }
+      if (state.status == AdsStates.error) {
+        showErrorMessage(context,
+            getFailureMessage(state.failure ?? UnknownFailure(''), context));
+        context.pop();
+        context.pop();
+      }
+    }, builder: (context, state) {
       final controller = context.read<AdvertisementCubit>();
 
       return InkWell(
@@ -43,61 +56,62 @@ class RequestButton extends StatelessWidget {
 
                 // context.push(Routes.LOGIN);
               }
-            : subscriptionStatus == 'premium'
-                ? null
-                : () {
-                    if (!dontPop) context.pop();
-                    showModalBottomSheet(
-                      backgroundColor: context.isDarkMode
-                          ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
-                          : AppColors.LIGHT_COLOR,
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32.0),
-                          topRight: Radius.circular(32.0),
-                        ),
-                      ),
-                      isDismissible: true,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return RequestNumberBottomSheet(
-                          // controller: controller,
-                          // adId: adId,
-                          formKey: controller.formKey,
-                          onChanged: (c) => controller.changePhone(v: c),
-                          onTap: () async {
-                            if (controller.formKey.currentState!.validate()) {
-                              await controller
-                                  .makeAdRequest(id: adId)
-                                  .then((value) {
-                                if (value == true) {
-                                  context.pop();
-                                  showSuccessMessage(
-                                      context, 'Request Sent Successfully');
-                                  controller.resetRequest();
-                                } else {
-                                  context.pop();
-                                  if (state.failure != null) {
-                                    showErrorMessage(
-                                        context,
-                                        getFailureMessage(
-                                            state.failure!, context));
-                                  } else {
-                                    showErrorMessage(
-                                        context, 'Please Try Again!');
-                                  }
-                                }
-                              });
-                            } else {
-                              return pleaseLoginDialog(context);
-                              // context.go(Routes.LOGIN);
-                            }
-                          },
-                        );
+            // : subscriptionStatus == 'not subscribed'
+            //     ? null
+            : () {
+                if (!dontPop) context.pop();
+                showModalBottomSheet(
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
+                      : AppColors.LIGHT_COLOR,
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0),
+                    ),
+                  ),
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return RequestNumberBottomSheet(
+                      // controller: controller,
+                      // adId: adId,
+                      formKey: controller.formKey,
+                      textController: controller.phoneController,
+                      onChanged: (c) => controller.changePhone(v: c),
+                      onTap: () async {
+                        if (controller.formKey.currentState!.validate()) {
+                          await controller.makeAdRequest(id: adId);
+                          //     .then((value) {
+                          //   if (value == true) {
+                          //     context.pop();
+                          //     showSuccessMessage(
+                          //         context, 'Request Sent Successfully');
+                          //     controller.resetRequest();
+                          //   } else {
+                          //     context.pop();
+                          //     if (state.failure != null) {
+                          //       showErrorMessage(
+                          //           context,
+                          //           getFailureMessage(
+                          //               state.failure!, context));
+                          //     } else {
+                          //       showErrorMessage(
+                          //           context, 'Please Try Again!');
+                          //     }
+                          //   }
+                          // }
+                          // );
+                        } else {
+                          return pleaseLoginDialog(context);
+                          // context.go(Routes.LOGIN);
+                        }
                       },
                     );
                   },
+                );
+              },
         child: Container(
           height: 38,
           decoration: ShapeDecoration(
@@ -281,6 +295,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
     required this.formKey,
     required this.onTap,
     required this.onChanged,
+    required this.textController,
   });
 
   // final AdvertisementCubit controller;
@@ -288,6 +303,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final void Function()? onTap;
   final void Function(String)? onChanged;
+  final TextEditingController textController;
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +312,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
       duration: const Duration(milliseconds: 50),
       child: Container(
         // height: 400.h,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 16,
           horizontal: 10,
         ),
@@ -319,9 +335,9 @@ class RequestNumberBottomSheet extends StatelessWidget {
               child: Container(
                 height: 24,
                 width: 24,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFD9D9D9),
+                  color: Color(0xFFD9D9D9),
                 ),
                 child: const Icon(
                   Icons.close,
@@ -330,7 +346,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Container(
@@ -341,9 +357,8 @@ class RequestNumberBottomSheet extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.getTextColor(context),
                   ),
-                  currentController: TextEditingController(),
+                  currentController: textController,
                   isRequired: true,
-                  maxLines: null,
                   maxLength: 11,
                   hintColor: AppColors.getTextColor(context),
                   onChanged: onChanged,
@@ -351,7 +366,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             InkWell(

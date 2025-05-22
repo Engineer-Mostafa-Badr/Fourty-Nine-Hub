@@ -33,17 +33,19 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final MakeAdPremiumRequestUsecase _makeAdPremiumRequestUsecase;
   final GetMyAdByIdUseCase _getMyAdByIdUseCase;
 
-  AdvertisementCubit(this._getAdsUseCase,
-      this._getAllComeWithMeUseCase,
-      this._getAllPickMeUseCase,
-      this._requestComeWithMeUseCase,
-      this._requestPickMeUseCase,
-      this._removeFavouriteAdUseCase,
-      this._favouriteAdUseCase,
-      this._filterAdUseCase,
-      this._makeAdRequestUsecase,
-      this._makeAdPremiumRequestUsecase, this._getMyAdByIdUseCase,)
-      : super(AdsState());
+  AdvertisementCubit(
+    this._getAdsUseCase,
+    this._getAllComeWithMeUseCase,
+    this._getAllPickMeUseCase,
+    this._requestComeWithMeUseCase,
+    this._requestPickMeUseCase,
+    this._removeFavouriteAdUseCase,
+    this._favouriteAdUseCase,
+    this._filterAdUseCase,
+    this._makeAdRequestUsecase,
+    this._makeAdPremiumRequestUsecase,
+    this._getMyAdByIdUseCase,
+  ) : super(AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
   //   // emit(state.copyWith(status: AdsStates.loading));
@@ -106,21 +108,24 @@ class AdvertisementCubit extends Cubit<AdsState> {
     emit(state.copyWith(filterModel: model, hasFilter: hasFilter));
   }
 
-  Future loadFilterAdsData({required FilterModel model,
-    required String filter,}) async {
-    loadAds=true;
+  Future loadFilterAdsData({
+    required FilterModel model,
+    required String filter,
+  }) async {
+    loadAds = true;
     ads.clear();
     adsPage = 1;
     hasMoreAdsData = true;
     emit(state.copyWith(status: AdsStates.loading));
-    await filterAds(model:model,filter:filter);
-    loadAds=false;
+    await filterAds(model: model, filter: filter);
+    loadAds = false;
     emit(state.copyWith(status: AdsStates.success));
   }
-  Future<void> filterAds(
-      {required FilterModel model,
-        required String filter,}
-      ) async {
+
+  Future<void> filterAds({
+    required FilterModel model,
+    required String filter,
+  }) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
     print(hasMoreAdsData);
     print(isLoadingAdsMore);
@@ -137,18 +142,18 @@ class AdvertisementCubit extends Cubit<AdsState> {
         subCategoryId: model.subCategoryId,
         filter: filter);
     final response = await _filterAdUseCase(filterModel);
-    response.fold(
-            (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
-          ads.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreAdsData = false;
-          } else {
-            adsPage++;
-          }
-          isLoadingAdsMore = false;
-          emit(state.copyWith(status: AdsStates.success));
-        });
+      ads.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreAdsData = false;
+      } else {
+        adsPage++;
+      }
+      isLoadingAdsMore = false;
+      emit(state.copyWith(status: AdsStates.success));
+    });
   }
   // filterAds({
   //   required FilterModel model,
@@ -199,25 +204,24 @@ class AdvertisementCubit extends Cubit<AdsState> {
 
   List<AdModel> ads = [];
   bool loadAds = false;
-  Future loadAdsData({required String subCategoryId,
-    required String filter}) async {
-    loadAds=true;
+  Future loadAdsData(
+      {required String subCategoryId, required String filter}) async {
+    loadAds = true;
     ads.clear();
     adsPage = 1;
     hasMoreAdsData = true;
     emit(state.copyWith(status: AdsStates.loading));
-    await getAds(subCategoryId:subCategoryId,filter:filter);
-    loadAds=false;
+    await getAds(subCategoryId: subCategoryId, filter: filter);
+    loadAds = false;
     emit(state.copyWith(status: AdsStates.success));
   }
+
   bool isLoadingAdsMore = false;
   bool hasMoreAdsData = true;
   int adsPage = 1;
   int pageSize = 10;
   Future<void> getAds(
-  {required String subCategoryId,
-  required String filter}
-  ) async {
+      {required String subCategoryId, required String filter}) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
     print(hasMoreAdsData);
     print(isLoadingAdsMore);
@@ -230,18 +234,18 @@ class AdvertisementCubit extends Cubit<AdsState> {
         page: adsPage,
         limit: 10,
         userId: userId));
-    response.fold(
-            (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
-          ads.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreAdsData = false;
-          } else {
-            adsPage++;
-          }
-          isLoadingAdsMore = false;
-          emit(state.copyWith(status: AdsStates.success));
-        });
+      ads.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreAdsData = false;
+      } else {
+        adsPage++;
+      }
+      isLoadingAdsMore = false;
+      emit(state.copyWith(status: AdsStates.success));
+    });
   }
   // getAds({required String subCategoryId,
   //   required String filter,
@@ -310,9 +314,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
   Future<void> getPickMeAds() async {
     final response = await _getAllPickMeUseCase(const NoParams());
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-            (data) =>
+        (data) =>
             emit(state.copyWith(pickMeAds: data, status: AdsStates.initState)));
   }
 
@@ -320,12 +324,12 @@ class AdvertisementCubit extends Cubit<AdsState> {
     final response = await _favouriteAdUseCase(id);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-            (data) {
-          result = data;
-          emit(state.copyWith(status: AdsStates.success));
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: AdsStates.success));
+    });
     return result;
   }
 
@@ -333,43 +337,42 @@ class AdvertisementCubit extends Cubit<AdsState> {
     final response = await _removeFavouriteAdUseCase(id);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-            (data) {
-          result = data;
-          emit(state.copyWith(status: AdsStates.success));
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: AdsStates.success));
+    });
     return result;
   }
 
   Future<void> getComeWithMeAds() async {
     final response = await _getAllComeWithMeUseCase(const NoParams());
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-            (data) =>
-            emit(
-                state.copyWith(
-                    comeWithMeAds: data, status: AdsStates.initState)));
+        (data) => emit(
+            state.copyWith(comeWithMeAds: data, status: AdsStates.initState)));
   }
 
   Future<void> requestPickMeAd({required RequestParams params}) async {
     final response = await _requestPickMeUseCase(params);
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-            (data) => emit(state.copyWith(status: AdsStates.success)));
+        (data) => emit(state.copyWith(status: AdsStates.success)));
   }
 
   Future<void> requestComeWithMeAd({required RequestParams params}) async {
     final response = await _requestComeWithMeUseCase(params);
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-            (data) => emit(state.copyWith(status: AdsStates.success)));
+        (data) => emit(state.copyWith(status: AdsStates.success)));
   }
 
   String? phone;
+  final TextEditingController phoneController = TextEditingController();
 
   void changePhone({
     required String v,
