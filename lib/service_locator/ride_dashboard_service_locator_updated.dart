@@ -2,8 +2,10 @@
 
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/delete_emergency_contact_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/finalize_trip_by_rider.dart.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
@@ -32,6 +34,8 @@ import '../features/RideFeature/domain/usecases/dashboards/get_driver_settings_u
 import '../features/RideFeature/domain/usecases/dashboards/get_past_ride_non_socket_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_accept_untracked_trip_offer_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_available_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
@@ -88,6 +92,10 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<UpdateDriverSettingsUseCase>(() => UpdateDriverSettingsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDriverSettingsUseCase>(() => GetDriverSettingsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToRemoveUntrackedTripUseCase>(() => ListenToRemoveUntrackedTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteEmergencyContactUseCase>(() => DeleteEmergencyContactUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<FinalizeTripByRiderUseCase>(() => FinalizeTripByRiderUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToAvailableUntrackedTripUseCase>(() => ListenToAvailableUntrackedTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToAcceptUntrackedTripOfferUseCase>(() => ListenToAcceptUntrackedTripOfferUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
@@ -129,6 +137,11 @@ class RideDashboardServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+
         ));
   }
 }

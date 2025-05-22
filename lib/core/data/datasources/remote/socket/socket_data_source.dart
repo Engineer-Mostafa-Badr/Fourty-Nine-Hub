@@ -69,6 +69,8 @@ abstract class SocketIOListeners {
   static const String newAvailableTrip = 'REID:NEW_AVAILABLE_TRIP';
   static const String removeTrip = 'REMOVE_TRIP_FROM_LIST';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
+  static const String acceptUntrackedTripOffer = 'RIDE:ACCEPT_UNTRACKED_TRIP_OFFER_BY_CLIENT';
+  static const String rideUpdateUntrackedTrip = 'RIDE:NON_TRACKING_TRIPS_UPDATED';
 }
 
 abstract class SocketIOEvents {
@@ -86,7 +88,7 @@ abstract class SocketIOEvents {
   static const String disconnectMe = 'disconnectMe';
   static const String sendPoint = 'Stream:SendPoint';
   static const String updateDriverLocation = 'ride:UPDATE_DRIVER_LOCATION';
-  static const String watchingTrips = 'nearbyDriversAvailable';
+  static const String watchingTrips = 'RIDE:UPDATE_VIEWER_TRIP';
 }
 
 //

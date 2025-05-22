@@ -61,6 +61,7 @@ class DashboardsState
   final List<HistoryTripEntity>? pastRideNonSocketTrips;
   final List<EmergencyContactEntity>? emergencyContacts;
   final SupportDetailsEntity? supportDetails;
+  final DateTime? remainingTime;
       final String? supportStatus;
   final CreateNonTrackOfferEntity? createNonTrackOfferEntity;
   final bool? offerCreatedShown;
@@ -85,6 +86,7 @@ class DashboardsState
       this.acceptedRideNonSocketTrips,
       this.pastRideNonSocketTrips,
       this.tripStatus,
+      this.remainingTime,
       this.lastStatus,
       this.activeTrip,
       this.supportDetails,
@@ -114,6 +116,7 @@ class DashboardsState
       SettingsDashboardEntity? settings,
       int? currentIndex,
         String? tripStatus,
+        DateTime? remainingTime,
         String? lastStatus,
         RunningTripEntity? activeTrip,
         bool? isChangedMindReason,
@@ -169,8 +172,7 @@ class DashboardsState
       driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
       backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
       selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
-
-
+      remainingTime: remainingTime ?? this.remainingTime,
     );
   }
 

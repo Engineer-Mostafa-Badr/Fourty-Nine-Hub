@@ -75,12 +75,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToUpdateTripPrice(),
               dashboardCubit.listenToAcceptOffer(context,widget.params),
               dashboardCubit.listenToNewTrip(),
-              dashboardCubit.listenToRemoveTrip()
+              dashboardCubit.listenToRemoveTrip(),
             ]
           : [
             dashboardCubit.loadInitialAvailableNonSocketTrips(),
             // dashboardCubit.getAvailableNonSocketTrips(),
-      dashboardCubit.listenToRemoveUntrackedTrip()
+      dashboardCubit.listenToRemoveUntrackedTrip(),
+        dashboardCubit.listenToNewTripNonSocket()
       ];
       //dashboardCubit.getAvailableTrips(context);
       dashboardCubit.getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
@@ -129,6 +130,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                 //           : showErrorMessage(context,
                 //               getFailureMessage(state.failure!, context));
                 // }
+
               },
               builder: (context, state) {
                 var cubit = context.read<DashboardsCubit>();
@@ -178,7 +180,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               _buildTabItem(
                                 cubit.state.currentIndex ?? 0,
                                 1,
-                                LocaleKeys.runningTrips.tr(),
+                                LocaleKeys.running.tr(),
                                 () {
                                   cubit.changeIndex(1, context, widget.params);
                                   // setState(() {
@@ -315,6 +317,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               }, onSafety: () {
                               cubit.showSafety(state.tripStatus??'');
                             },
+                              onTick : (Duration time){
+                                DateTime future = DateTime.now().add(time);
+                                cubit.updateRemainingTime(future);
+                              },
+                              onFinalizeTrip : (){
+                                cubit.finalizeTripByRider(context: context, tripId: state.activeTrip?.tripId??'');
+                              },
+                              remainingTime:state.remainingTime,
                               activeTrip: state.activeTrip,
                             ),
                             if(state.tripStatus==TripState.started.name)BuildDriverCompleteTripSheet(

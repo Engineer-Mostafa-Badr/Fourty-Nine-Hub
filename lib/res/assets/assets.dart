@@ -7,6 +7,7 @@ abstract class Assets {
   static String drawerCameraIcon = 'assets/icons/drawer_camera_icon.svg';
   static String drawerCameraIconDark =
       'assets/icons/drawer_camera_icon_dark.svg';
+  static String rideRecord = 'assets/icons/ride_record.svg';
   static String cameraAddTalent = 'assets/49-New-icons/camera.png';
   static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
   static String starIcon = 'assets/images/star.svg';
@@ -15,6 +16,8 @@ abstract class Assets {
   static String logoHub = 'assets/icons/logoHub.png';
   static String logoWithoutText = 'assets/icons/logoWithoutText.png';
   static String supportIcon = 'assets/icons/support_icon.svg';
+  static String rideMenu = 'assets/icons/ride_menu.png';
+  static String targetLocation = 'assets/icons/targetLocation.png';
   static String callEmergencyIcon = 'assets/icons/call_emergency_icon.svg';
   static String beforeRide = 'assets/icons/before_ride.svg';
   static String driverIdentityIcon = 'assets/icons/driver_identity_icon.svg';
@@ -59,7 +62,6 @@ abstract class Assets {
   static String saveIcon = 'assets/icons/save_icon.svg';
   static String speakerIcon = 'assets/icons/speader_icon.svg';
   static String starYellowIcon = 'assets/icons/star_yellow_icon.svg';
-  static String rideRecord = 'assets/icons/ride_record.svg';
   static String starRedIcon = 'assets/icons/star_red_icon.svg';
   static String mapPinIcon = 'assets/icons/map_pin_icon.svg';
   static String phoneIcon = 'assets/icons/phone_icon.svg';

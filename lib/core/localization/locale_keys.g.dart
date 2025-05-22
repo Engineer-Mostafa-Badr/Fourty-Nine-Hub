@@ -1603,9 +1603,10 @@ abstract class  LocaleKeys {
   static const youDontHaveAcceptedOffer = 'youDontHaveAcceptedOffer';
   static const youDontHavePendingOffer = 'youDontHavePendingOffer';
   static const youDontHavePastOffer = 'youDontHavePastOffer';
-  static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
   static const selectFromList = 'selectFromList';
   static const selectFromMap = 'selectFromMap';
   static const youCantGetTripUntilYouReady = 'youCantGetTripUntilYouReady';
+  static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
+  static const noInternetConnection = 'noInternetConnection';
 
 }

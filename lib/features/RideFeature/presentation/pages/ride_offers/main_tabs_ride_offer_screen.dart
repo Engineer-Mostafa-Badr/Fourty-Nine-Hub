@@ -1,6 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
@@ -8,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_loadi
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/past_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../res/style/styles.dart';
 import 'accept_ride_offer_screen.dart';
@@ -29,6 +34,8 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
     LocaleKeys.pending.localize,
     LocaleKeys.past.localize
   ];
+
+  String selectedTap = 'ride';
 
   @override
   void initState() {
@@ -63,10 +70,9 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Add this line
       appBar: AppBar(
         title: Text(
-          LocaleKeys.rideOffer.localize,
+          context.isArabic?'وضع المستخدم':'User Mode',
           style: Styles.headerText(),
         ),
         elevation: 0,
@@ -75,20 +81,60 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
         shape: const Border(
           bottom: BorderSide(color: Colors.transparent, width: 0),
         ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
-          child: _buildTabBar(),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: const Size.fromHeight(40),
+        //   child: ,
+        // ),
       ),
 
-      body: TabBarView(
-        controller: _tabController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          OfferRideOfferScreen(),
-          AcceptRideOfferScreen(),
-          PendingRideOfferScreen(),
-          PastRideOfferScreen(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    radius: 15,
+                    label: LocaleKeys.ride.tr(),
+                    onPressed: () {
+                      setState(() {
+                        selectedTap='ride';
+                      });
+                    },
+                    backColor: selectedTap=='ride'?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
+                  ),
+                ),
+                Sizer(),
+                Expanded(
+                  child: AppButton(
+                    radius: 15,
+                    label: context.isArabic?'تحميله':'Shipping',
+                    onPressed: () {
+                      setState(() {
+                        selectedTap='shipping';
+                      });
+                    },
+                    backColor: selectedTap=='shipping'?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Sizer(),
+          _buildTabBar(),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: const [
+                OfferRideOfferScreen(),
+                AcceptRideOfferScreen(),
+                PendingRideOfferScreen(),
+                PastRideOfferScreen(),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -96,7 +142,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
 
   Widget _buildTabBar() {
     return Container(
-      margin: EdgeInsetsDirectional.only(start: 16.w),
+      margin: EdgeInsetsDirectional.only(start: 16),
       height: 40,
       child: TabBar(
         tabAlignment: TabAlignment.start,
@@ -124,13 +170,14 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
         tabs: List.generate(_tabTitles.length, (index) {
           final isSelected = _tabController.index == index;
           return Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsetsDirectional.only(end: 16),
             child: Tab(
               child: Container(
+                width: 200.w,
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? const Color(0xFF0D0C3F)
+                      ? AppColors.PRIMARY_COLOR
                       : const Color(0xFFE0E0E0),
                   borderRadius: BorderRadius.circular(12),
                 ),
