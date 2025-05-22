@@ -38,7 +38,9 @@ class TenPercentViewBody extends StatelessWidget {
                       style: Styles.headerText(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0x993C3C43)),
+                          color: context.isDarkMode
+                              ? Color(0x99FFFFFF)
+                              : const Color(0x993C3C43)),
                       maxLines: 3,
                     ),
                     const SizedBox(

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -16,11 +17,13 @@ class WinnersGridView extends StatefulWidget {
     required this.winners,
     required this.hasReachedMax,
     required this.paginationOnpressed,
+    this.mainAxisExtent,
   });
 
   final List<WinnersGridViewModel> winners;
   final bool hasReachedMax;
   final void Function() paginationOnpressed;
+  final double? mainAxisExtent;
 
   @override
   State<WinnersGridView> createState() => _WinnersGridViewState();
@@ -66,12 +69,12 @@ class _WinnersGridViewState extends State<WinnersGridView> {
             itemCount: widget.hasReachedMax
                 ? widget.winners.length
                 : widget.winners.length + 1,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisSpacing: 7,
               mainAxisSpacing: 8,
-              childAspectRatio: 110 / 173,
+              childAspectRatio: 195.w / 260.h,
               crossAxisCount: 3,
-              // mainAxisExtent: 180,
+              mainAxisExtent: widget.mainAxisExtent,
             ),
             itemBuilder: (context, index) {
               if (index < widget.winners.length) {
@@ -119,95 +122,92 @@ class WinnersGridViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
+      // height: ,
       // width: 110,
-      // padding: EdgeInsets.symmetric(horizontal: 7),
+      padding: EdgeInsets.only(bottom: 4),
       decoration: BoxDecoration(
         color: context.isDarkMode
             ? const Color(0xB3FFFFFF)
             : const Color(0xB3000000),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
         children: [
-          Column(
+          const SizedBox(
+            height: 24,
+          ),
+          Stack(
+            clipBehavior: Clip.none,
             children: [
-              const SizedBox(
-                height: 24,
-              ),
               ImageFromInternet(
                 width: 80.25,
                 height: 80.25,
                 image: winner.image,
                 isCircle: true,
               ),
-              // Container(
-              //   width: 80.25,
-              //   height: 80.25,
-              //   decoration: ShapeDecoration(
-              //     color: Colors.grey,
-              //     image: DecorationImage(
-              //       image: NetworkImage(
-              //         winner.image,
-              //       ),
-              //       fit: BoxFit.cover,
-              //     ),
-              //     shape: const OvalBorder(),
-              //   ),
-              // ),
-              const SizedBox(
-                height: 4,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Label(
-                  text: winner.name,
-                  style: Styles.headerText(
-                    fontSize: 24,
-                    color: context.isDarkMode
-                        ? const Color(0xff0D0D0D)
-                        : Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 3),
-              if (winner.title != null)
-                Label(
-                  text: winner.title!,
-                  style: Styles.mediumText(
-                    fontSize: 20,
-                    color: context.isDarkMode
-                        ? const Color(0xff0D0D0D)
-                        : Colors.white,
-                  ),
-                ),
-              Label(
-                text: formatDateInWinners(winner.date, context),
-                style: Styles.mediumText(
-                  fontSize: 20,
-                  color: context.isDarkMode
-                      ? const Color(0xff0D0D0D)
-                      : Colors.white,
-                ),
-              ),
-              Label(
-                text:
-                    '${FormatNumbers().formatNumberByComma(winner.price, isArabic: context.isArabic)} ${context.isArabic ? winner.currencyAr : winner.currencyEn}',
-                style: Styles.mediumText(
-                  fontSize: 20,
-                  color: context.isDarkMode
-                      ? const Color(0xff0D0D0D)
-                      : Colors.white,
+              Positioned(
+                top: -25,
+                right: -2,
+                child: SvgPicture.asset(
+                  context.isDarkMode ? Assets.crownIconDark : Assets.crownIcon,
                 ),
               ),
             ],
           ),
-          Positioned(
-            top: -2,
-            right: 14,
-            child: SvgPicture.asset(
-                context.isDarkMode ? Assets.crownIconDark : Assets.crownIcon),
+          // Container(
+          //   width: 80.25,
+          //   height: 80.25,
+          //   decoration: ShapeDecoration(
+          //     color: Colors.grey,
+          //     image: DecorationImage(
+          //       image: NetworkImage(
+          //         winner.image,
+          //       ),
+          //       fit: BoxFit.cover,
+          //     ),
+          //     shape: const OvalBorder(),
+          //   ),
+          // ),
+          const SizedBox(
+            height: 4,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Label(
+              text: winner.name,
+              style: Styles.headerText(
+                fontSize: 24,
+                color:
+                    context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(height: 3),
+          if (winner.title != null)
+            Label(
+              text: winner.title!,
+              style: Styles.mediumText(
+                fontSize: 20,
+                color:
+                    context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+              ),
+            ),
+          Label(
+            text: formatDateInWinners(winner.date, context),
+            style: Styles.mediumText(
+              fontSize: 20,
+              color:
+                  context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+            ),
+          ),
+          Label(
+            text:
+                '${FormatNumbers().formatNumberByComma(winner.price, isArabic: context.isArabic)} ${context.isArabic ? winner.currencyAr : winner.currencyEn}',
+            style: Styles.mediumText(
+              fontSize: 20,
+              color:
+                  context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+            ),
           ),
         ],
       ),

@@ -40,7 +40,7 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
 
   final int limit = 30;
   bool hasReachedMax = false;
-  int page = 1;
+  // int page = 1;
   List<WalletHistoryEntity> histories = [];
   bool isLoading = false;
 
@@ -96,24 +96,37 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
   }
 
   Future<void> getHistories() async {
-    isLoading = true;
+    // isLoading = true;
     final walletHistoryResponse = await _walletHistoryUseCase.call(
       WalletHistoryParams(
-        page: 1,
-        limit: 10,
+        page: state.page,
+        limit: limit,
       ),
     );
     walletHistoryResponse.fold(
       (l) {
-        isLoading = false;
+        // isLoading = false;
+        emit(
+          state.copyWith(
+            failureHistory: l,
+          ),
+        );
       },
       (h) {
-        histories.addAll(h);
-        page = page + 1;
-        if (h.length != limit) {
-          hasReachedMax = true;
-        }
-        isLoading = false;
+        // histories.addAll(h);
+        // int page = state.page + 1;
+        // if (h.length != limit) {
+        //   hasReachedMax = true;
+        // }
+        // isLoading = false;
+        emit(
+          state.copyWith(
+              historyStatus: WalletTwoStates.success,
+              walletHistory:
+                  state.walletHistory == null ? h : state.walletHistory! + h,
+              page: state.page + 1,
+              hasReachedMax: h.length != limit),
+        );
       },
     );
   }
@@ -132,7 +145,7 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
       final walletHistoryResponse = await _walletHistoryUseCase.call(
         WalletHistoryParams(
           page: 1,
-          limit: 0,
+          limit: limit,
         ),
       );
       final walletHistory = walletHistoryResponse.fold(

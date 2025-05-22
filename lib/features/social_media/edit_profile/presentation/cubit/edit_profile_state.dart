@@ -6,7 +6,7 @@ class EditProfileState {
   final EditProfileStates status;
   final EditProfileStates getGovernmentStatus;
   final List<GovernorateEntity>? governorates;
-  String? selectedCountry;
+  String? selectedCity;
   final Failure? failure;
   bool? isMale;
   String? selectedCityPrivacy;
@@ -30,7 +30,7 @@ class EditProfileState {
     this.selectedStatusPrivacy,
     this.selectedCountryPrivacy,
     this.governorates,
-    this.selectedCountry,
+    this.selectedCity,
   });
 
   EditProfileState copyWith({
@@ -45,7 +45,7 @@ class EditProfileState {
     String? selectedStatus,
     String? selectedStatusPrivacy,
     String? selectedCountryPrivacy,
-    String? selectedCountry,
+    String? selectedCity,
     List<GovernorateEntity>? governorates,
   }) {
     return EditProfileState(
@@ -62,7 +62,7 @@ class EditProfileState {
           selectedStatusPrivacy ?? this.selectedStatusPrivacy,
       selectedCountryPrivacy:
           selectedCountryPrivacy ?? this.selectedCountryPrivacy,
-      selectedCountry: selectedCountry ?? this.selectedCountry,
+      selectedCity: selectedCity ?? this.selectedCity,
       governorates: governorates ?? this.governorates,
     );
   }

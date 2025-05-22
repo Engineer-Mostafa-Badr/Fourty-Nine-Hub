@@ -61,120 +61,39 @@ class RequestButton extends StatelessWidget {
                       isDismissible: true,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return AnimatedPadding(
-                          padding: MediaQuery.of(context).viewInsets,
-                          duration: const Duration(milliseconds: 50),
-                          child: Container(
-                            height: 400.h,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10.h,
-                              horizontal: 10,
-                            ),
-                            child: Column(
-                              children: [
-                                Label(
-                                  text: LocaleKeys.enterPhoneNumber.localize,
-                                  style: Styles.headerText(),
-                                ),
-                                Sizer(
-                                  height: 30.h,
-                                ),
-                                Container(
-                                  constraints: BoxConstraints(maxHeight: 180.h),
-                                  child: Form(
-                                    key: controller.formKey,
-                                    child: NewPhoneNumberTextFormField(
-                                      style: TextStyle(
-                                        color: AppColors.getTextColor(context),
-                                      ),
-                                      currentController:
-                                          TextEditingController(),
-                                      isRequired: true,
-                                      maxLines: null,
-                                      maxLength: 150,
-                                      hintColor:
-                                          AppColors.getTextColor(context),
-                                      onChanged: (c) =>
-                                          controller.changePhone(v: c),
-                                      // controller: controller,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () async {
-                                            if (context.isUserLoggedIn &&
-                                                controller.formKey.currentState!
-                                                    .validate()) {
-                                              await controller
-                                                  .makeAdRequest(id: adId)
-                                                  .then((value) {
-                                                if (value == true) {
-                                                  context.pop();
-                                                  showSuccessMessage(context,
-                                                      'Request Sent Successfully');
-                                                  controller.resetRequest();
-                                                } else {
-                                                  context.pop();
-                                                  if (state.failure != null) {
-                                                    showErrorMessage(
-                                                        context,
-                                                        getFailureMessage(
-                                                            state.failure!,
-                                                            context));
-                                                  } else {
-                                                    showErrorMessage(context,
-                                                        'Please Try Again!');
-                                                  }
-                                                }
-                                              });
-                                            } else {
-                                              return pleaseLoginDialog(context);
-                                              // context.go(Routes.LOGIN);
-                                            }
-                                          },
-                                          child: Container(
-                                            width: 100,
-                                            height: 80.h,
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                                color: AppColors
-                                                    .getButtonPrimaryColor(
-                                                        context),
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            alignment: Alignment.center,
-                                            child: Label(
-                                              text: LocaleKeys.send.localize,
-                                              style: Styles.headerText(
-                                                  color: AppColors
-                                                      .getReversedTextColor(
-                                                          context)),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Close the dialog
-                                          },
-                                          child: Label(
-                                            text: LocaleKeys.cancel.localize,
-                                            style: Styles.headerText(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        return RequestNumberBottomSheet(
+                          // controller: controller,
+                          // adId: adId,
+                          formKey: controller.formKey,
+                          onChanged: (c) => controller.changePhone(v: c),
+                          onTap: () async {
+                            if (controller.formKey.currentState!.validate()) {
+                              await controller
+                                  .makeAdRequest(id: adId)
+                                  .then((value) {
+                                if (value == true) {
+                                  context.pop();
+                                  showSuccessMessage(
+                                      context, 'Request Sent Successfully');
+                                  controller.resetRequest();
+                                } else {
+                                  context.pop();
+                                  if (state.failure != null) {
+                                    showErrorMessage(
+                                        context,
+                                        getFailureMessage(
+                                            state.failure!, context));
+                                  } else {
+                                    showErrorMessage(
+                                        context, 'Please Try Again!');
+                                  }
+                                }
+                              });
+                            } else {
+                              return pleaseLoginDialog(context);
+                              // context.go(Routes.LOGIN);
+                            }
+                          },
                         );
                       },
                     );
@@ -351,5 +270,146 @@ class RequestButton extends StatelessWidget {
       //             },
       // );
     });
+  }
+}
+
+class RequestNumberBottomSheet extends StatelessWidget {
+  const RequestNumberBottomSheet({
+    super.key,
+    // required this.controller,
+    // required this.adId,
+    required this.formKey,
+    required this.onTap,
+    required this.onChanged,
+  });
+
+  // final AdvertisementCubit controller;
+  // final String adId;
+  final GlobalKey<FormState> formKey;
+  final void Function()? onTap;
+  final void Function(String)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedPadding(
+      padding: MediaQuery.of(context).viewInsets,
+      duration: const Duration(milliseconds: 50),
+      child: Container(
+        // height: 400.h,
+        padding: EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Label(
+            //   text: LocaleKeys.enterPhoneNumber.localize,
+            //   style: Styles.headerText(),
+            // ),
+            // Sizer(
+            //   height: 30.h,
+            // ),
+
+            InkWell(
+              onTap: () {
+                context.pop();
+              },
+              child: Container(
+                height: 24,
+                width: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFD9D9D9),
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                  size: 20,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              constraints: BoxConstraints(maxHeight: 180.h),
+              child: Form(
+                key: formKey,
+                child: NewPhoneNumberTextFormField(
+                  style: TextStyle(
+                    color: AppColors.getTextColor(context),
+                  ),
+                  currentController: TextEditingController(),
+                  isRequired: true,
+                  maxLines: null,
+                  maxLength: 11,
+                  hintColor: AppColors.getTextColor(context),
+                  onChanged: onChanged,
+                  // controller: controller,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            InkWell(
+              onTap: onTap,
+              child: Container(
+                // width: 100,
+                // height: 40,
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: AppColors.getButtonPrimaryColor(context),
+                    borderRadius: BorderRadius.circular(15)),
+                alignment: Alignment.center,
+                child: Label(
+                  text: LocaleKeys.send.localize,
+                  style: Styles.headerText(
+                      color: AppColors.getReversedTextColor(context)),
+                ),
+              ),
+            ),
+            // Expanded(
+            //   child: Row(
+            //     children: [
+            //       Expanded(
+            //         child: InkWell(
+            //           onTap: onTap,
+            //           child: Container(
+            //             width: 100,
+            //             height: 80.h,
+            //             padding: const EdgeInsets.all(5),
+            //             decoration: BoxDecoration(
+            //                 color: AppColors.getButtonPrimaryColor(context),
+            //                 borderRadius: BorderRadius.circular(15)),
+            //             alignment: Alignment.center,
+            //             child: Label(
+            //               text: LocaleKeys.send.localize,
+            //               style: Styles.headerText(
+            //                   color: AppColors.getReversedTextColor(context)),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       Expanded(
+            //         child: TextButton(
+            //           onPressed: () {
+            //             Navigator.of(context).pop(); // Close the dialog
+            //           },
+            //           child: Label(
+            //             text: LocaleKeys.cancel.localize,
+            //             style: Styles.headerText(),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -411,7 +412,13 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
           (r) {
-        context.pushReplacement(Routes.MYADDS);
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم انشاء اعلانك بنجاح وفي انتظار الموافقة'
+                : 'Your ad has been created successfully and is waiting for approval');
+        context.pop();
+        // context.pushReplacement(Routes.MYADDS);
       });
     } else if (state.images == [] || state.images == null) {
       showErrorMessage(context, LocaleKeys.uploadOneImage.localize);
