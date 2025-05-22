@@ -49,11 +49,10 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
         height: 280.h,
         decoration: BoxDecoration(
             border: Border.all(
-              color: AppColors.PRIMARY_COLOR,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(15),
-            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.GREYBG
+            color:AppColors.getFindFillColor(context)
 
       ),
         child: Column(
@@ -92,7 +91,7 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
               child: Text(
                 context.isArabic?widget.subCategory.nameAr:widget.subCategory.nameEn,
                 style: Styles.mediumText(
-                    color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                    color: AppColors.getTextColor(context)
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
