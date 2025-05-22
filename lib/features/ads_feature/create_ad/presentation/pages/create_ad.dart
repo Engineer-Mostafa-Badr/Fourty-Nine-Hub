@@ -12,6 +12,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
@@ -87,9 +88,7 @@ class _CreateAdViewState extends State<CreateAdView> {
           // buildWhen: (previous, current) => previous.status == current.status,
           builder: (context, state) {
             if (state.status == CreateAdStates.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const CustomLoading();
             } else {
               return Padding(
                 padding: const EdgeInsets.only(

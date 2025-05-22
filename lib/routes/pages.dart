@@ -26,6 +26,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/walle
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/winners_cashback_cubit/winners_cashback_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/winners_gift_cubit/winners_gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
@@ -262,7 +264,9 @@ import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_v
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/ten_percent_view.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/pages/winners_ten_percent_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/views/add_new_pick_me_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
@@ -983,12 +987,20 @@ class AppPages {
               GoRoute(
                 path: Paths.WINNERSCASHBACK,
                 name: Routes.WINNERSCASHBACK,
-                builder: (context, state) => const WinnersCashbackView(),
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<WinnersCashbackCubit>()
+                    ..getWinners(context),
+                  child: const WinnersCashbackView(),
+                ),
               ),
               GoRoute(
                 path: Paths.WINNERSGift,
                 name: Routes.WINNERSGift,
-                builder: (context, state) => const WinnersGiftView(),
+                builder: (context, state) => BlocProvider(
+                  create: (context) =>
+                      serviceLocator<WinnersGiftCubit>()..getWinners(context),
+                  child: const WinnersGiftView(),
+                ),
               ),
               GoRoute(
                 path: Paths.QURAAN,
@@ -1178,7 +1190,8 @@ class AppPages {
                         //
                         builder: (context, state) =>
                             BlocProvider<ShareAppCubit>(
-                              create: (_) => serviceLocator(),
+                              create: (_) =>
+                                  serviceLocator<ShareAppCubit>()..shareApp(),
                               child: const ShareTheApp(),
                             )),
                     GoRoute(
@@ -1597,7 +1610,8 @@ class AppPages {
                     GoRoute(
                         path: Paths.FindMyProfileScreen,
                         name: Routes.FindMyProfileScreen,
-                        builder: (context, state) => const FindMyProfileScreen()),
+                        builder: (context, state) =>
+                            const FindMyProfileScreen()),
                     GoRoute(
                         path: Paths.EditProfileTinder,
                         name: Routes.EditProfileTinder,
@@ -2761,6 +2775,17 @@ class AppPages {
                       child: const TenPercentView());
                 },
               ),
+              GoRoute(
+                path: Paths.WinnersTenPercent,
+                name: Routes.WinnersTenPercent,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (context) =>
+                        serviceLocator<WinnersTenPercentCubit>()..getWinners(),
+                    child: const WinnersTenPercentView(),
+                  );
+                },
+              ),
 
               // ___________________ trip join ______________
               GoRoute(
@@ -3466,17 +3491,16 @@ class AppPages {
                   builder: (context, state) => BlocProvider(
                         create: (context) => serviceLocator<ClientTripsCubit>()
                           ..loadInitialClientPendingTrips(),
-                        child: PendingRideOfferScreen(
-                            ),
+                        child: PendingRideOfferScreen(),
                       )),
               GoRoute(
                   path: Paths.rideOffer,
                   name: Routes.rideOffer,
                   builder: (context, state) => BlocProvider(
                         create: (context) => serviceLocator<ClientTripsCubit>()
-                          ..loadInitialClientPendingTrips()..loadInitialClientOfferTrips(),
-                        child: MainTabsRideOffer(
-                            ),
+                          ..loadInitialClientPendingTrips()
+                          ..loadInitialClientOfferTrips(),
+                        child: MainTabsRideOffer(),
                       )),
               GoRoute(
                 path: Paths.supportRideScreen,

@@ -87,7 +87,8 @@ class AdModel extends AdEntity {
         // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
-        if (price != null) "price": price,
+        // TODO: add the user model
+        // if (price != null) "price": price,
         // "userId": userId,
         "searchText": "testPropsAndAds",
         "images": images,
@@ -99,6 +100,11 @@ class AdModel extends AdEntity {
             };
           }
         }).toList(),
-        "address": {"government": governorate, "city": city}
+        // TODO: add the address model
+        // "address": {"government": governorate, "city": city}
+        "address": {
+          "type": "Point",
+          "coordinates": [30.030030, 30.5262]
+        }
       };
 }

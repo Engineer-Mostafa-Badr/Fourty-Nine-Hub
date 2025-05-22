@@ -94,7 +94,11 @@ class _WalletWidgetState extends State<WalletWidget> {
                         context.push(Routes.CASHBACK);
                       },
                           LocaleKeys.balance.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0, useArabicNumerals: context.isArabic)} ',
+                          '${FormatNumbers().formatNumber(
+                            state.wallet?.balance ?? 0,
+                            useArabicNumerals: context.isArabic,
+                            roundDown: true,
+                          )} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -115,7 +119,11 @@ class _WalletWidgetState extends State<WalletWidget> {
                         context.push(Routes.GIFT);
                       },
                           LocaleKeys.gift.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0, useArabicNumerals: context.isArabic)} ',
+                          '${FormatNumbers().formatNumber(
+                            state.wallet?.giftWallet ?? 0,
+                            useArabicNumerals: context.isArabic,
+                            roundDown: true,
+                          )} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -137,7 +145,11 @@ class _WalletWidgetState extends State<WalletWidget> {
                         //showing
                       },
                           LocaleKeys.wallet.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0, useArabicNumerals: context.isArabic)} ',
+                          '${FormatNumbers().formatNumber(
+                            state.wallet?.realAmount ?? 0,
+                            useArabicNumerals: context.isArabic,
+                            roundDown: true,
+                          )} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -496,7 +508,9 @@ class _WalletWidgetState extends State<WalletWidget> {
                       text: currency,
                       style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
-                        color:context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.SECONDARY_COLOR,
                       ),
                     ),
                   ),

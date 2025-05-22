@@ -82,11 +82,15 @@ class GiftViewBody extends StatelessWidget {
               ),
             );
           } else {
-            return CustomFailureWidget(
-              title: state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
-              onPressed: () {
-                context.read<GiftTwoCubit>().getAllData(context);
-              },
+            return SizedBox(
+              width: double.infinity,
+              child: CustomFailureWidget(
+                title:
+                    state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
+                onPressed: () {
+                  context.read<GiftTwoCubit>().getAllData(context);
+                },
+              ),
             );
           }
         },

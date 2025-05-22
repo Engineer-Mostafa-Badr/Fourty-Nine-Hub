@@ -22,6 +22,8 @@ class AdDetailsEntity {
   final List<String> images;
   bool? isPrimary;
   final num? price;
+  final String? currencyEn;
+  final String? currencyAr;
   final String? status;
   final String? phone;
   final num? views;
@@ -47,6 +49,8 @@ class AdDetailsEntity {
       required this.description,
       required this.images,
       this.price,
+      this.currencyEn,
+      this.currencyAr,
       this.type,
       this.cityAr,
       this.cityEn,

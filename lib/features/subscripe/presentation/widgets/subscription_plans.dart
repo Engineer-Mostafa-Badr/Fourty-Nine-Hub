@@ -333,8 +333,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           print(_groupValue);
 
                           if (selectedPlanPrice < walletPrice) {
-                            // print('selectedWallet${selectedWallet!.name}');
-                            print('selectedWallet mainWallet');
+                            print('selectedWallet${selectedWallet!.name}');
+                            // print('selectedWallet mainWallet');
                             showLoadingDialog(context);
                             await context.read<WalletCubit>().addSubscription(
                                   params: AddSubscriptionParams(

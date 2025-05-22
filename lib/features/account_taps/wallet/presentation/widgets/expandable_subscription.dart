@@ -30,11 +30,16 @@ class ExpandableSubscription extends StatelessWidget {
     final String name = context.isArabic
         ? subscription.nameAr ?? '----'
         : subscription.nameEn ?? '----';
+    // final String type = subscription.isActive!
+    //     ? (subscription.isPremium!
+    //         ? LocaleKeys.premium.localize
+    //         : LocaleKeys.regular.localize)
+    //     : LocaleKeys.notSubscription.localize;
     final String type = subscription.isActive!
-        ? (subscription.isPremium!
+        ? LocaleKeys.regular.localize
+        : subscription.isPremium!
             ? LocaleKeys.premium.localize
-            : LocaleKeys.regular.localize)
-        : LocaleKeys.notSubscription.localize;
+            : LocaleKeys.notSubscription.localize;
     return '$name ($type)';
   }
 
@@ -61,7 +66,7 @@ class ExpandableSubscription extends StatelessWidget {
               style: Styles.mediumText(
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
-                color: subscription.isActive!
+                color: subscription.isActive! || subscription.isPremium!
                     ? context.isDarkMode
                         ? const Color(0xFF83C296)
                         : const Color(0xff72BA88)

@@ -67,7 +67,8 @@ class CompetitionsSection extends StatelessWidget {
                 return Expanded(
                   child: CompetitionHeaderItem(
                     title: context.isArabic ? c.nameAr! : c.nameEn!,
-                    value: FormatNumbers().formatNumber(c.amount ?? 0,
+                    value: FormatNumbers().formatNumber(
+                        num.tryParse(c.amount ?? '0') ?? 0,
                         useArabicNumerals: context.isArabic),
                     svgPath: context.isDarkMode
                         ? competitionIconsDark[c.id] ?? ''
@@ -92,7 +93,7 @@ class CompetitionsSection extends StatelessWidget {
                   value: FormatNumbers().formatNumber(
                       competitions
                               .map((c) {
-                                return c.amount ?? 0;
+                                return num.tryParse(c.amount ?? '0') ?? 0;
                               })
                               .toList()
                               .reduce((value, element) => value + element) +
@@ -139,7 +140,9 @@ class CompetitionsSection extends StatelessWidget {
                       context,
                       competitionId: competitions[competitionIndex].id ?? '',
                     );
-                Navigator.pop(context);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
               },
             );
           },

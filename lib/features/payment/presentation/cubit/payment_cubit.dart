@@ -110,7 +110,7 @@ class PaymentCubit extends Cubit<PaymentState> {
     required String paymentProviderId,
     required String phoneNumber,
   }) async {
-    emit(state.copyWith(status: StateStatus.loading));
+    emit(state.copyWith(instaPayStatus: StateStatus.loading));
 
     showLoadingDialog(context);
 
@@ -126,13 +126,16 @@ class PaymentCubit extends Cubit<PaymentState> {
     response.fold(
       (failure) {
         Navigator.pop(context);
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
+        emit(state.copyWith(
+          failure: failure,
+          instaPayStatus: StateStatus.error,
+        ));
       },
       (data) {
         Navigator.pop(context);
         emit(state.copyWith(
           instaPayResponseData: data,
-          status: StateStatus.success,
+          instaPayStatus: StateStatus.success,
         ));
         showSuccessMessage(context, LocaleKeys.paymentSuccessful.localize);
         context.go(Routes.HOME);
