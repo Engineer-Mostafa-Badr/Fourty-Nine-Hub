@@ -500,425 +500,515 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             // }
           },
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     ad.price == 0
-            //         ? const Spacer()
-            //         : Label(
-            //             text:
-            //                 '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
-            //             style: Styles.headerText(
-            //               fontWeight: FontWeight.bold,
-            //               color: AppColors.SECONDARY_COLOR_DARK2,
-            //             ),
-            //             maxLines: 1,
-            //           ),
-            //     Label(
-            //       text: ad.formatedDate,
-            //       style: Styles.headerText(
-            //         fontSize: 32,
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            Label(
-              text: FormatDate().formatDate(
-                ad.createdAt.toString(),
-                isArabic: context.isArabic,
-              ),
-              style: Styles.mediumText(
-                fontWeight: FontWeight.w600,
-                height: 1.60,
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: ShapeDecoration(
-                color: const Color(0x66D9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+        if (ad.mainCategoryId != '62c8b5b09332225799fe335e')
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     ad.price == 0
+              //         ? const Spacer()
+              //         : Label(
+              //             text:
+              //                 '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
+              //             style: Styles.headerText(
+              //               fontWeight: FontWeight.bold,
+              //               color: AppColors.SECONDARY_COLOR_DARK2,
+              //             ),
+              //             maxLines: 1,
+              //           ),
+              //     Label(
+              //       text: ad.formatedDate,
+              //       style: Styles.headerText(
+              //         fontSize: 32,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              Label(
+                text: FormatDate().formatDate(
+                  ad.createdAt.toString(),
+                  isArabic: context.isArabic,
+                ),
+                style: Styles.mediumText(
+                  fontWeight: FontWeight.w600,
+                  height: 1.60,
                 ),
               ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    Assets.adsCashIcon,
-                    height: 24,
-                    width: 24,
+              const SizedBox(
+                height: 8,
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: ShapeDecoration(
+                  color: const Color(0x66D9D9D9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Label(
-                    text:
-                        '${FormatNumbers().formatNumberByComma(ad.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? ad.currencyAr : ad.currencyEn}',
-                    style: Styles.mediumText(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      height: 1.60,
-                      color: const Color(0xFFF33D49),
+                ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      Assets.adsCashIcon,
+                      height: 24,
+                      width: 24,
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: ShapeDecoration(
-                color: const Color(0xCCD9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Label(
+                      text:
+                          '${FormatNumbers().formatNumberByComma(ad.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? ad.currencyAr : ad.currencyEn}',
+                      style: Styles.mediumText(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        height: 1.60,
+                        color: const Color(0xFFF33D49),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Row(
+              const SizedBox(
+                height: 8,
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: ShapeDecoration(
+                  color: const Color(0xCCD9D9D9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Label(
+                      text: '${LocaleKeys.title.localize}: ',
+                      style: Styles.mediumText(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                        height: 1.60,
+                        color: const Color(0xFFF33D49),
+                      ),
+                    ),
+                    Label(
+                      text: ad.title,
+                      style: Styles.mediumText(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600,
+                        height: 1.60,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              // Container(
+              //   width: double.infinity,
+              //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              //   decoration: ShapeDecoration(
+              //     color: const Color(0x66D9D9D9),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       SvgPicture.asset(
+              //         Assets.adsTimeIcon,
+              //         height: 24,
+              //         width: 24,
+              //         colorFilter: ColorFilter.mode(
+              //           AppColors.SECONDARY_COLOR_DARK2,
+              //           BlendMode.srcIn,
+              //         ),
+              //       ),
+              //       SizedBox(
+              //         width: 8,
+              //       ),
+              //       Label(
+              //         text: 'Part Time/on site',
+              //         style: Styles.mediumText(
+              //           fontSize: 32,
+              //           fontWeight: FontWeight.w700,
+              //           height: 1.60,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 8,
+              // ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: ShapeDecoration(
+                  color: const Color(0x66D9D9D9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      Assets.adsLocationIcon,
+                      height: 24,
+                      width: 24,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.SECONDARY_COLOR_DARK2,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Label(
+                      text:
+                          '${context.isArabic ? ad.governorateAr : ad.governorateEn}, ${context.isArabic ? ad.cityAr : ad.cityEn}',
+                      style: Styles.mediumText(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        height: 1.60,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: ShapeDecoration(
+                  color: const Color(0xCCD9D9D9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                      text: '${LocaleKeys.desc.localize}:',
+                      style: Styles.mediumText(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        height: 1.60,
+                        color: const Color(0xFFF33D49),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Label(
+                      text: ad.description,
+                      style: Styles.mediumText(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600,
+                        height: 1.60,
+                      ),
+                      overflow: null,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              // اذا كان الاعلان ليس من نوع الزواج
+              if (ad.mainCategoryId != '62c8b5b09332225799fe335e')
+                Column(
+                  children: ad.details.map(
+                    (e) {
+                      return Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: ShapeDecoration(
+                          color: ad.details.indexOf(e) % 2 == 0
+                              ? const Color(0x66D9D9D9)
+                              : const Color(0xCCD9D9D9),
+                          //  const Color(0xCCD9D9D9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            ImageFromInternet(
+                                image: e.imageUrl, width: 24, height: 24),
+                            // SvgPicture.asset(
+                            //   Assets.adsBagIcon,
+                            //   height: 24,
+                            //   width: 24,
+                            //   colorFilter: ColorFilter.mode(
+                            //     AppColors.SECONDARY_COLOR_DARK2,
+                            //     BlendMode.srcIn,
+                            //   ),
+                            // ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Row(
+                              children: [
+                                Label(
+                                  text:
+                                      '${context.isArabic ? e.nameAr : e.nameEn}: ',
+                                  style: Styles.mediumText(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.60,
+                                    color: AppColors.SECONDARY_COLOR_DARK2,
+                                  ),
+                                ),
+                                Label(
+                                  text:
+                                      context.isArabic ? e.valueAr : e.valueEn,
+                                  style: Styles.mediumText(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.60,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
+
+              // Container(
+              //   width: double.infinity,
+              //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              //   decoration: ShapeDecoration(
+              //     color: const Color(0xCCD9D9D9),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       SvgPicture.asset(
+              //         Assets.adsBagIcon,
+              //         height: 24,
+              //         width: 24,
+              //         colorFilter: ColorFilter.mode(
+              //           AppColors.SECONDARY_COLOR_DARK2,
+              //           BlendMode.srcIn,
+              //         ),
+              //       ),
+              //       SizedBox(
+              //         width: 8,
+              //       ),
+              //       Row(
+              //         children: [
+              //           Label(
+              //             text: 'Exp level: ',
+              //             style: Styles.mediumText(
+              //               fontSize: 32,
+              //               fontWeight: FontWeight.w500,
+              //               height: 1.60,
+              //               color: AppColors.SECONDARY_COLOR_DARK2,
+              //             ),
+              //           ),
+              //           Label(
+              //             text: '1 Year',
+              //             style: Styles.mediumText(
+              //               fontSize: 32,
+              //               fontWeight: FontWeight.w600,
+              //               height: 1.60,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 8,
+              // ),
+              // Container(
+              //   width: double.infinity,
+              //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              //   decoration: ShapeDecoration(
+              //     color: const Color(0x66D9D9D9),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       SvgPicture.asset(
+              //         Assets.adsEducationIcon,
+              //         height: 24,
+              //         width: 24,
+              //         colorFilter: ColorFilter.mode(
+              //           AppColors.SECONDARY_COLOR_DARK2,
+              //           BlendMode.srcIn,
+              //         ),
+              //       ),
+              //       SizedBox(
+              //         width: 8,
+              //       ),
+              //       Row(
+              //         children: [
+              //           Label(
+              //             text: 'Edu level: ',
+              //             style: Styles.mediumText(
+              //               fontSize: 32,
+              //               fontWeight: FontWeight.w500,
+              //               height: 1.60,
+              //               color: AppColors.SECONDARY_COLOR_DARK2,
+              //             ),
+              //           ),
+              //           Label(
+              //             text: 'Diploma',
+              //             style: Styles.mediumText(
+              //               fontSize: 32,
+              //               fontWeight: FontWeight.w600,
+              //               height: 1.60,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // // LableAndTextMarriageDetails(
+              //   lable: LocaleKeys.title.localize,
+              //   text: ad.title,
+              // ),
+              // const SizedBox(
+              //   height: 4,
+              // ),
+              // LableAndTextMarriageDetails(
+              //   lable: LocaleKeys.governorate.localize,
+              //   text: context.isArabic
+              //       ? ad.governorateAr ?? ''
+              //       : ad.governorateEn ?? '',
+              // ),
+              // const SizedBox(
+              //   height: 4,
+              // ),
+              // LableAndTextMarriageDetails(
+              //   lable: LocaleKeys.city.localize,
+              //   text: context.isArabic ? ad.cityAr ?? '' : ad.cityEn ?? '',
+              // ),
+              // const SizedBox(
+              //   height: 4,
+              // ),
+              // LableAndTextMarriageDetails(
+              //   lable: LocaleKeys.desc.localize,
+              //   text: ad.description,
+              // ),
+              // Label(
+              //   text: "${LocaleKeys.desc.localize}: ",
+              //   style: Styles.mediumText(
+              //       fontWeight: FontWeight.bold,
+              //       color: AppColors.SECONDARY_COLOR),
+              // ),
+              // Label(text: ad.description),
+            ],
+          )
+        else
+          Column(
+            spacing: 4,
+            children: [
+              Row(
                 children: [
                   Label(
-                    text: '${LocaleKeys.title.localize}: ',
-                    style: Styles.mediumText(
+                    text: '${LocaleKeys.name.localize}: ',
+                    style: Styles.headerText(
+                      color: const Color(0xFFF33D49),
                       fontSize: 32,
                       fontWeight: FontWeight.w500,
                       height: 1.60,
-                      color: const Color(0xFFF33D49),
                     ),
                   ),
                   Label(
                     text: ad.title,
-                    style: Styles.mediumText(
+                    style: Styles.headerText(
                       fontSize: 32,
-                      fontWeight: FontWeight.w600,
                       height: 1.60,
                     ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            // Container(
-            //   width: double.infinity,
-            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //   decoration: ShapeDecoration(
-            //     color: const Color(0x66D9D9D9),
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       SvgPicture.asset(
-            //         Assets.adsTimeIcon,
-            //         height: 24,
-            //         width: 24,
-            //         colorFilter: ColorFilter.mode(
-            //           AppColors.SECONDARY_COLOR_DARK2,
-            //           BlendMode.srcIn,
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         width: 8,
-            //       ),
-            //       Label(
-            //         text: 'Part Time/on site',
-            //         style: Styles.mediumText(
-            //           fontSize: 32,
-            //           fontWeight: FontWeight.w700,
-            //           height: 1.60,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 8,
-            // ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: ShapeDecoration(
-                color: const Color(0x66D9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    Assets.adsLocationIcon,
-                    height: 24,
-                    width: 24,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.SECONDARY_COLOR_DARK2,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Label(
-                    text:
-                        '${context.isArabic ? ad.governorateAr : ad.governorateEn}, ${context.isArabic ? ad.cityAr : ad.cityEn}',
-                    style: Styles.mediumText(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      height: 1.60,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: ShapeDecoration(
-                color: const Color(0xCCD9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
                   Label(
-                    text: '${LocaleKeys.desc.localize}:',
-                    style: Styles.mediumText(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      height: 1.60,
+                    text: '${LocaleKeys.governorate.localize}: ',
+                    style: Styles.headerText(
                       color: const Color(0xFFF33D49),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Label(
-                    text: ad.description,
-                    style: Styles.mediumText(
                       fontSize: 32,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       height: 1.60,
                     ),
-                    overflow: null,
+                  ),
+                  Label(
+                    text: context.isArabic
+                        ? ad.governorateAr ?? ''
+                        : ad.governorateEn ?? '',
+                    style: Styles.headerText(
+                      fontSize: 32,
+                      height: 1.60,
+                    ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            // اذا كان الاعلان ليس من نوع الزواج
-            if (ad.mainCategoryId != '62c8b5b09332225799fe335e')
-              Column(
-                children: ad.details.map(
-                  (e) {
-                    return Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      margin: const EdgeInsets.only(bottom: 8),
-                      decoration: ShapeDecoration(
-                        color: ad.details.indexOf(e) % 2 == 0
-                            ? const Color(0x66D9D9D9)
-                            : const Color(0xCCD9D9D9),
-                        //  const Color(0xCCD9D9D9),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          ImageFromInternet(
-                              image: e.imageUrl, width: 24, height: 24),
-                          // SvgPicture.asset(
-                          //   Assets.adsBagIcon,
-                          //   height: 24,
-                          //   width: 24,
-                          //   colorFilter: ColorFilter.mode(
-                          //     AppColors.SECONDARY_COLOR_DARK2,
-                          //     BlendMode.srcIn,
-                          //   ),
-                          // ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Row(
-                            children: [
-                              Label(
-                                text:
-                                    '${context.isArabic ? e.nameAr : e.nameEn}: ',
-                                style: Styles.mediumText(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.60,
-                                  color: AppColors.SECONDARY_COLOR_DARK2,
-                                ),
-                              ),
-                              Label(
-                                text: context.isArabic ? e.valueAr : e.valueEn,
-                                style: Styles.mediumText(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.60,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ).toList(),
+              Row(
+                children: [
+                  Label(
+                    text: '${LocaleKeys.city.localize}: ',
+                    style: Styles.headerText(
+                      color: const Color(0xFFF33D49),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                      height: 1.60,
+                    ),
+                  ),
+                  Label(
+                    text: context.isArabic ? ad.cityAr ?? '' : ad.cityEn ?? '',
+                    style: Styles.headerText(
+                      fontSize: 32,
+                      height: 1.60,
+                    ),
+                  ),
+                ],
               ),
-
-            // Container(
-            //   width: double.infinity,
-            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //   decoration: ShapeDecoration(
-            //     color: const Color(0xCCD9D9D9),
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       SvgPicture.asset(
-            //         Assets.adsBagIcon,
-            //         height: 24,
-            //         width: 24,
-            //         colorFilter: ColorFilter.mode(
-            //           AppColors.SECONDARY_COLOR_DARK2,
-            //           BlendMode.srcIn,
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         width: 8,
-            //       ),
-            //       Row(
-            //         children: [
-            //           Label(
-            //             text: 'Exp level: ',
-            //             style: Styles.mediumText(
-            //               fontSize: 32,
-            //               fontWeight: FontWeight.w500,
-            //               height: 1.60,
-            //               color: AppColors.SECONDARY_COLOR_DARK2,
-            //             ),
-            //           ),
-            //           Label(
-            //             text: '1 Year',
-            //             style: Styles.mediumText(
-            //               fontSize: 32,
-            //               fontWeight: FontWeight.w600,
-            //               height: 1.60,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 8,
-            // ),
-            // Container(
-            //   width: double.infinity,
-            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //   decoration: ShapeDecoration(
-            //     color: const Color(0x66D9D9D9),
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       SvgPicture.asset(
-            //         Assets.adsEducationIcon,
-            //         height: 24,
-            //         width: 24,
-            //         colorFilter: ColorFilter.mode(
-            //           AppColors.SECONDARY_COLOR_DARK2,
-            //           BlendMode.srcIn,
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         width: 8,
-            //       ),
-            //       Row(
-            //         children: [
-            //           Label(
-            //             text: 'Edu level: ',
-            //             style: Styles.mediumText(
-            //               fontSize: 32,
-            //               fontWeight: FontWeight.w500,
-            //               height: 1.60,
-            //               color: AppColors.SECONDARY_COLOR_DARK2,
-            //             ),
-            //           ),
-            //           Label(
-            //             text: 'Diploma',
-            //             style: Styles.mediumText(
-            //               fontSize: 32,
-            //               fontWeight: FontWeight.w600,
-            //               height: 1.60,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // // LableAndTextMarriageDetails(
-            //   lable: LocaleKeys.title.localize,
-            //   text: ad.title,
-            // ),
-            // const SizedBox(
-            //   height: 4,
-            // ),
-            // LableAndTextMarriageDetails(
-            //   lable: LocaleKeys.governorate.localize,
-            //   text: context.isArabic
-            //       ? ad.governorateAr ?? ''
-            //       : ad.governorateEn ?? '',
-            // ),
-            // const SizedBox(
-            //   height: 4,
-            // ),
-            // LableAndTextMarriageDetails(
-            //   lable: LocaleKeys.city.localize,
-            //   text: context.isArabic ? ad.cityAr ?? '' : ad.cityEn ?? '',
-            // ),
-            // const SizedBox(
-            //   height: 4,
-            // ),
-            // LableAndTextMarriageDetails(
-            //   lable: LocaleKeys.desc.localize,
-            //   text: ad.description,
-            // ),
-            // Label(
-            //   text: "${LocaleKeys.desc.localize}: ",
-            //   style: Styles.mediumText(
-            //       fontWeight: FontWeight.bold,
-            //       color: AppColors.SECONDARY_COLOR),
-            // ),
-            // Label(text: ad.description),
-          ],
-        ),
+              Row(
+                children: [
+                  Label(
+                    text: '${LocaleKeys.desc.localize}: ',
+                    style: Styles.headerText(
+                      color: const Color(0xFFF33D49),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                      height: 1.60,
+                    ),
+                  ),
+                  Label(
+                    text: context.isArabic ? ad.description : ad.description,
+                    style: Styles.headerText(
+                      fontSize: 32,
+                      height: 1.60,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
       ],
     );
   }
