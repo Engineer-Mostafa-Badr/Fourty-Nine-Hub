@@ -916,6 +916,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   child: const Icon(Icons.location_pin,
                       color: Colors.red, size: 40),
                 ),
+
               if (state.wayPointTwo != null)
                 Marker(
                   point:
