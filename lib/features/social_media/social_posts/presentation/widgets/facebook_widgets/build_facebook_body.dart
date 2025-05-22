@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_other_profile.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_people_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_profile.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -34,7 +35,7 @@ class _FacebookBodyState extends State<FacebookBody>
   void initState() {
     tabController = TabController(length: 3, vsync: this);
     tabController.addListener(() {
-      setState(() {}); // يعمل rebuild علشان نقدر نغير اللون بناءً على الـ index
+      setState(() {});
     });
     super.initState();
   }
@@ -51,6 +52,9 @@ class _FacebookBodyState extends State<FacebookBody>
             ..fetchStories()
             ..getMutedStories(),
           // create: (context) => serviceLocator<StoryCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => PeopleTabCubit(),
         ),
       ],
       child: Column(
@@ -122,8 +126,18 @@ class _FacebookBodyState extends State<FacebookBody>
           Expanded(
               child: TabBarView(controller: tabController, children: [
              FaceBookView(scrollController: widget.scrollController),
-             FacebookPeopleView(scrollController:widget.scrollController),
-                FacebookProfile(scrollController: widget.scrollController,),
+              FacebookPeopleView(scrollController: widget.scrollController),
+                BlocBuilder<PeopleTabCubit, ProfileTabState>(
+                  builder: (context, state) {
+                    if (state is OtherProfileState) {
+                      return FacebookOtherProfile(scrollController: widget.scrollController);
+                    }
+                    else {
+                      return FacebookProfile(scrollController: widget.scrollController,);
+                    }
+                  },
+                ),
+
          ]))
         ],
       ),

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
@@ -52,7 +53,8 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
         final cubit = context.read<HealthCubit>();
 
         if (state.status == HealthStates.loading && cubit.historyBookings.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return SizedBox(
+              height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
         }
 
         return SizedBox(

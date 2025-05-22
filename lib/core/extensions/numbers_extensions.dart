@@ -51,6 +51,7 @@ extension StringExtensions on String {
       '7': '٧',
       '8': '٨',
       '9': '٩',
+      '.':','
     };
 
     return split('').map((char) => englishToArabic[char] ?? char).join();

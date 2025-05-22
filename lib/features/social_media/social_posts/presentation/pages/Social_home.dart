@@ -188,7 +188,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                     ],
                                   ),
                                   Label(
-                                    text:context.isArabic?'فيس بوك': LocaleKeys.Face.localize,
+                                    text:context.isArabic?'فيس': LocaleKeys.Face.localize,
                                     style: Styles.headerText(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
