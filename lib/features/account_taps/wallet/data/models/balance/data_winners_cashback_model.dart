@@ -4,13 +4,25 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/data_
 import '../pagination_model.dart';
 
 class DataWinnersCashbackModel extends DataWinnersCashbackEntity {
-  DataWinnersCashbackModel(
-      {required super.winnersCashback, required super.pagination});
+  DataWinnersCashbackModel({
+    required super.winnersCashback,
+    required super.pagination,
+    required super.totalAmount,
+    required super.totalWinners,
+    required super.currencyEn,
+    required super.currencyAr,
+  });
 
   factory DataWinnersCashbackModel.fromJson(Map<String, dynamic> json) {
     return DataWinnersCashbackModel(
-      winnersCashback: (json['winners'] as List)
-              .map((e) => WinnersCashbackModel.fromJson(e)).toList(),
+      winnersCashback: (json['winners'] as List?)
+              ?.map((e) => WinnersCashbackModel.fromJson(e))
+              .toList() ??
+          [],
+      totalAmount: json['totalAmount'] ?? 0,
+      totalWinners: json['totalWinners'] ?? 0,
+      currencyEn: json['currencyEn'] ?? '',
+      currencyAr: json['currencyAr'] ?? '',
       pagination: PaginationModel.fromJson(json["pagination"]),
     );
   }

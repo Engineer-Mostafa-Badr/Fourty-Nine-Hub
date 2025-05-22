@@ -16,10 +16,12 @@ class SearchAdsUseCase extends UseCase<List<AdModel>, SearchAdsParams> {
 }
 
 class SearchAdsParams {
-  String searchText;
+  final String searchText;
+  final String mainCategoryId;
 
   SearchAdsParams({
     required this.searchText,
+    required this.mainCategoryId,
   });
 
   Map<String, dynamic> toJson() => {

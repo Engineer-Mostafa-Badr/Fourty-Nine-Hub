@@ -70,6 +70,7 @@ import '../usecases/make_loading_request_trip_usecase.dart';
 import '../usecases/make_non_tracking_request_trip_usecase.dart';
 
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
+import '../usecases/rating_driver_by_client.dart';
 
 abstract class RideRepository {
 
@@ -138,5 +139,6 @@ abstract class RideRepository {
   Future<Either<Failure, List<ClientAcceptedTripEntity>>> getClientAcceptedUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
-
+  Future<Either<Failure, bool>> sendOkIamComing();
+  Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
 }

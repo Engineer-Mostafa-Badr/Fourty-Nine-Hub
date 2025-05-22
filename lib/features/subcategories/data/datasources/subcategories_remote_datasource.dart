@@ -94,7 +94,7 @@ class SubcategoriesRemoteDataSourceImpl
       SearchAdsParams params) async {
     try {
       final response = await _apiConsumer.get(
-        EndPoints.searchAds,
+        EndPoints.searchAds(mainCategoryId: params.mainCategoryId),
         data: params.toJson(),
       );
       return response.fold((failure) => Left(failure), (data) {

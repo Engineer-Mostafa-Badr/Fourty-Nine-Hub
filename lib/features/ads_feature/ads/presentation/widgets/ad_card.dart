@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/requ
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -52,6 +53,11 @@ class _AdCardState extends State<AdCard> {
         .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
         .toList();
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
+      return MyAdCard(
+        item: widget.item,
+        onFav: (id) {},
+        onRemoveFav: (id) {},
+      );
       return InkWell(
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
@@ -234,14 +240,28 @@ class _AdCardState extends State<AdCard> {
                                   style: Styles.mediumText(
                                       color: AppColors.SECONDARY_COLOR),
                                 ),
-                                WidgetSpan(child: Sizer(width: 5.w,)),
-                                WidgetSpan(child: ImageFromInternet(image: e.image??'',width: 25.w,height: 25.h,defaultLogo: true,)),
-                                WidgetSpan(child: Sizer(width: 5.w,)),
+                                WidgetSpan(
+                                    child: Sizer(
+                                  width: 5.w,
+                                )),
+                                WidgetSpan(
+                                    child: ImageFromInternet(
+                                  image: e.image ?? '',
+                                  width: 25.w,
+                                  height: 25.h,
+                                  defaultLogo: true,
+                                )),
+                                WidgetSpan(
+                                    child: Sizer(
+                                  width: 5.w,
+                                )),
                                 TextSpan(
                                   text:
                                       "${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn}    ",
                                   style: Styles.mediumText(
-                                      color: context.isDarkMode? AppColors.LIGHT_COLOR : AppColors.GREY_DARK_COLOR),
+                                      color: context.isDarkMode
+                                          ? AppColors.LIGHT_COLOR
+                                          : AppColors.GREY_DARK_COLOR),
                                 ),
                               ],
                             );
@@ -266,76 +286,95 @@ class _AdCardState extends State<AdCard> {
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               Row(
                                 children: [
                                   AvaialbleTripsButton(
                                     title: LocaleKeys.request.localize,
-                                    color:AppColors.SECONDARY_COLOR,
-                                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-                                    onTap: (){
-                                    showModalBottomSheet(
-                                      backgroundColor: context.isDarkMode
-                                          ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
-                                          : AppColors.LIGHT_COLOR,
-                                      context: context,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(32.0),
-                                          topRight: Radius.circular(32.0),
+                                    color: AppColors.SECONDARY_COLOR,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 5),
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        backgroundColor: context.isDarkMode
+                                            ? AppColors.DARK_BLUE_COLOR
+                                                .withOpacity(0.95)
+                                            : AppColors.LIGHT_COLOR,
+                                        context: context,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(32.0),
+                                            topRight: Radius.circular(32.0),
+                                          ),
                                         ),
-                                      ),
-                                      isDismissible: true,
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) {
-                                        return BlocProvider.value(
-                                          value: serviceLocator<AdvertisementCubit>(),
-                                          child: AnimatedPadding(
-                                            padding: MediaQuery.of(context).viewInsets,
-                                            duration: const Duration(milliseconds: 50),
-                                            child: Container(
-                                              height: 150.h,
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 10.h,
-                                                horizontal: 10,
-                                              ),
-                                              child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 3,
-                                                    child: PremiumRequestButton(
-                                                      adId: widget.item.id,
-                                                      subCategoryId:
-                                                      widget.item.subCategoryId ?? '',
-                                                      subscriptionStatus:
-                                                      widget.item.subscriptionStatus ?? '',
+                                        isDismissible: true,
+                                        isScrollControlled: true,
+                                        builder: (BuildContext context) {
+                                          return BlocProvider.value(
+                                            value: serviceLocator<
+                                                AdvertisementCubit>(),
+                                            child: AnimatedPadding(
+                                              padding: MediaQuery.of(context)
+                                                  .viewInsets,
+                                              duration: const Duration(
+                                                  milliseconds: 50),
+                                              child: Container(
+                                                height: 150.h,
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 10.h,
+                                                  horizontal: 10,
+                                                ),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 3,
+                                                      child:
+                                                          PremiumRequestButton(
+                                                        adId: widget.item.id,
+                                                        subCategoryId: widget
+                                                                .item
+                                                                .subCategoryId ??
+                                                            '',
+                                                        subscriptionStatus: widget
+                                                                .item
+                                                                .subscriptionStatus ??
+                                                            '',
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const Sizer(width: 5),
-                                                  Expanded(
-                                                    flex: 3,
-                                                    child: RequestButton(
-                                                      adId: widget.item.id,
-                                                      subscriptionStatus:
-                                                      widget.item.subscriptionStatus ?? '',
-                                                    ),
-                                                  )
-                                                ],
+                                                    const Sizer(width: 5),
+                                                    Expanded(
+                                                      flex: 3,
+                                                      child: RequestButton(
+                                                        adId: widget.item.id,
+                                                        subscriptionStatus: widget
+                                                                .item
+                                                                .subscriptionStatus ??
+                                                            '',
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                                   Expanded(
                                     child: CallMessageButtons(
                                       otherUserId: widget.item.userId ?? '',
-                                      subcategoryId: widget.item.subCategoryId ?? '',
+                                      subcategoryId:
+                                          widget.item.subCategoryId ?? '',
                                       phone: widget.item.phone ?? '',
                                       id: widget.item.id,
-                                      hasReport: true, senderName: widget.item.user?.fullName??'',senderImage: widget.item.user?.profilePicture??'',
+                                      hasReport: true,
+                                      senderName:
+                                          widget.item.user?.fullName ?? '',
+                                      senderImage:
+                                          widget.item.user?.profilePicture ??
+                                              '',
                                     ),
                                   ),
                                 ],
@@ -389,11 +428,11 @@ class _AdCardState extends State<AdCard> {
       padding: EdgeInsets.all(10.w),
       color: status == SubscriptionStatus.premium.status
           ? Colors.amber
-          :Colors.grey,
+          : Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (status !=SubscriptionStatus.notSubscribed.status) ...[
+          if (status != SubscriptionStatus.notSubscribed.status) ...[
             Icon(
               Icons.workspace_premium_outlined,
               size: 55.w,

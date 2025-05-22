@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -107,16 +109,10 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                 Expanded(
                   child: cubit.doctorsList.isEmpty
                       ? Center(
-                          child: Text(
-                            context.isArabic
-                                ? 'لا يوجد حجوزات سابقة'
-                                : 'No booking history',
-                            style: Styles.headerText(
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.grey,
-                            ),
-                          ),
-                        )
+                          child: CustomEmptyWidget(
+                              label: context.isArabic
+                                  ? 'لا يوجد حجوزات سابقة'
+                                  : 'No booking history'))
                       : ListView.separated(
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.sizeOf(context).height * 0.35),
@@ -179,7 +175,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
     // 'No subscription': 0
     switch (subscriptionRank) {
       case 0:
-        return LocaleKeys.noSubscription.localize;
+        return LocaleKeys.notSubscribed.localize;
       case 1:
         return LocaleKeys.regularSubscription.localize;
       case 2:
@@ -224,6 +220,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                             ? AppColors.whiteColor
                             : Colors.grey,
                       ),
+                      const Sizer(width: 8,),
                       if ((widget.data.viewCount ?? 0) == 0) ...[
                         Label(
                           text: LocaleKeys.noViews.localize,
@@ -276,7 +273,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                           widget.data.viewCount! <= 10) ...[
                         Label(
                             text:
-                                ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} ',
+                                ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} '.toArabicNumbers(context),
                             // ' ${formatViews(widget.data.viewCount ?? 0)} ',
                             style: Styles.mediumText(
                               color: context.isDarkMode
@@ -296,7 +293,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       ] else ...[
                         Label(
                             text:
-                                ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} ',
+                                ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} '.toArabicNumbers(context),
                             // ' ${formatViews(widget.data.viewCount?.toInt() ?? 0)} ',
                             style: Styles.mediumText(
                               color: context.isDarkMode
@@ -338,7 +335,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                         getSubscriptionType(widget.data.subscriptionRank ?? 0),
                     textAlign: TextAlign.right,
                     style: Styles.mediumText(
-                      color: AppColors.PRIMARY_COLOR_DARK,
+                      color: AppColors.getRedColor(context),
                       fontWeight: FontWeight.w700,
                       // fontSize: 16
                     ),
@@ -388,7 +385,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                                       color: Colors.amber, size: 12),
                                   const SizedBox(width: 2),
                                   Text(
-                                    "${widget.data.averageRating ?? 0}",
+                                    "${widget.data.averageRating ?? 0}".toArabicNumbers(context),
                                     style: Styles.smallText(
                                       color: Colors.black,
                                       // fontSize: 10,
@@ -411,9 +408,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                               "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
                               style: Styles.mediumText(
                                   fontWeight: FontWeight.w600,
-                                  color: context.isDarkMode
-                                      ? AppColors.whiteColor
-                                      : AppColors.PRIMARY_COLOR
+                                  color: AppColors.getTextColor(context)
                                   // fontSize: 16,
                                   ),
                               overflow: TextOverflow.ellipsis,
@@ -428,9 +423,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                                       "N/A",
                               style: Styles.mediumText(
                                   fontWeight: FontWeight.w400,
-                                  color: context.isDarkMode
-                                      ? AppColors.whiteColor
-                                      : AppColors.PRIMARY_COLOR
+                                  color:AppColors.getTextColor(context)
                                   // fontSize: 14,
                                   ),
                               overflow: TextOverflow.ellipsis,
@@ -446,16 +439,12 @@ class _DoctorListCardState extends State<DoctorListCard> {
                     children: [
                       Icon(
                         Icons.location_on_rounded,
-                        color: context.isDarkMode
-                            ? AppColors.PRIMARY_COLOR_DARK
-                            : AppColors.PRIMARY_COLOR,
+                        color: AppColors.getButtonPrimaryWhiteColor(context),
                       ),
                       Expanded(
                         child: Label(
                           style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.PRIMARY_COLOR),
+                              color: AppColors.getTextColor(context)),
                           text: context.isArabic
                               ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
                               : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
@@ -476,20 +465,16 @@ class _DoctorListCardState extends State<DoctorListCard> {
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
                           style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.PRIMARY_COLOR,
+                              color: AppColors.getTextColor(context),
                               fontWeight: FontWeight.w500),
                         ),
                       ),
                       Label(
                         text: FormatNumbers().formatNumberByComma(
-                            widget.data.price.toString(),
+                            widget.data.price.toString().toArabicNumbers(context),
                             isArabic: context.isArabic),
                         style: Styles.mediumText(
-                            color: context.isDarkMode
-                                ? AppColors.whiteColor
-                                : AppColors.PRIMARY_COLOR,
+                            color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.w500),
                       )
                     ],
@@ -501,28 +486,24 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Row(
                         children: [
                           Icon(Icons.watch_later_outlined,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.PRIMARY_COLOR,
+                              color: AppColors.getTextColor(context),
                               size: 48.h),
                           const Sizer(),
                           Label(
                             text:
-                                '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}',
+                                '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}'.toArabicNumbers(context),
                             style: Styles.mediumText(
-                                color: context.isDarkMode
-                                    ? AppColors.whiteColor
-                                    : AppColors.PRIMARY_COLOR,
+                                color: AppColors.getTextColor(context),
                                 fontWeight: FontWeight.w500),
                           )
                         ],
                       ),
                       Label(
                         text:
-                            '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}',
+                            '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}'.toArabicNumbers(context),
                         style: Styles.mediumText(
                             fontWeight: FontWeight.w500,
-                            color: AppColors.PRIMARY_COLOR_DARK),
+                            color: AppColors.getRedColor(context)),
                       )
                     ],
                   ),
@@ -563,8 +544,9 @@ class PremiumAndRequestButtons extends StatelessWidget {
       child: Row(
         children: [
           _buildButton(
+            context,
             label: LocaleKeys.book.localize,
-            color: AppColors.PRIMARY_COLOR_DARK,
+            color: AppColors.getRedColor(context),
             onPressed: () {
               // context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
@@ -574,7 +556,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
     );
   }
 
-  Widget _buildButton({
+  Widget _buildButton(
+      BuildContext context ,{
     required String label,
     required Color color,
     required VoidCallback onPressed,
@@ -587,7 +570,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
         margin: 0,
         label: label,
         backColor: color,
-        style: Styles.mediumText(color: Colors.white),
+        style: Styles.mediumText(color: AppColors.getReversedTextColor(context)),
         onPressed: onPressed,
       ),
     );
@@ -612,7 +595,7 @@ class CallMessageReportButtons extends StatelessWidget {
               width: 18,
               height: 18,
               color: isChatEnabled == true
-                  ? AppColors.PRIMARY_COLOR_DARK
+                  ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
             ),
             color: isChatEnabled == true
@@ -620,51 +603,51 @@ class CallMessageReportButtons extends StatelessWidget {
                 : AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled == true
                 ? () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: cardDarkColor(context),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(16)),
-                      ),
-                      builder: (_) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            spacing: 16,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AppButton(
-                                backColor: AppColors.PRIMARY_COLOR,
-                                color: AppColors.whiteColor,
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  // _showFreeCallBottomSheet(context, item);
-                                },
-                                label: "Free Call",
-                              ),
-                              AppButton(
-                                backColor: AppColors.cD9D9D9,
-                                color: AppColors.black,
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  _showRegularCallBottomSheet(
-                                      context, item); // Open second
-                                },
-                                label: "Regular Call",
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: AppColors.getFindFillColor(context),
+                shape: const RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      spacing: 16,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppButton(
+                          backColor: AppColors.getButtonPrimaryColor(context),
+                          color: AppColors.getReversedTextColor(context),
+                          onPressed: () {
+                            Navigator.pop(context); // Close first sheet
+                            // _showFreeCallBottomSheet(context, item);
+                          },
+                          label: LocaleKeys.freeCall.localize,
+                        ),
+                        AppButton(
+                          backColor: AppColors.cD9D9D9,
+                          color: AppColors.black,
+                          onPressed: () {
+                            Navigator.pop(context); // Close first sheet
+                            _showRegularCallBottomSheet(
+                                context, item); // Open second
+                          },
+                          label:LocaleKeys.regularCall.localize,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }
                 : () {
-                    SubscriptionMethod().subscribe(
-                      subscribeId: item.subCategory?.first.id ?? '',
-                      title: item.firstName ?? '',
-                    );
-                  },
+              SubscriptionMethod().subscribe(
+                subscribeId: item.subCategory?.first.id ?? '',
+                title: item.firstName ?? '',
+              );
+            },
           ),
 
           // const SizedBox(width: 4),
@@ -672,33 +655,33 @@ class CallMessageReportButtons extends StatelessWidget {
             icon: SvgPicture.asset(
               Assets.mailIconRed,
               color: isChatEnabled == true
-                  ? AppColors.PRIMARY_COLOR_DARK
+                  ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
             ),
             color: isChatEnabled == true
-                ? AppColors.PRIMARY_COLOR
+                ? AppColors.getRedColor(context)
                 : AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled == true
                 ? () {
-                    // BlocProvider.of<RestaurantsCubit>(context)
-                    //     .getExpiredOrders();
-                    // Implement message functionality here
-                  }
+              // BlocProvider.of<RestaurantsCubit>(context)
+              //     .getExpiredOrders();
+              // Implement message functionality here
+            }
                 : () {
-                    SubscriptionMethod().subscribe(
-                        subscribeId: item.subCategory?.first.id ?? '',
-                        title: item.firstName ?? '');
-                  },
+              SubscriptionMethod().subscribe(
+                  subscribeId: item.subCategory?.first.id ?? '',
+                  title: item.firstName ?? '');
+            },
           ),
           // const SizedBox(width: 4),
           IconButton(
             icon: const Icon(Icons.report),
-            color: AppColors.PRIMARY_COLOR_DARK,
+            color: AppColors.getRedColor(context),
             onPressed: () async {
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                backgroundColor: cardDarkColor(context),
+                backgroundColor: AppColors.getFindFillColor(context),
                 builder: (context) {
                   return SizedBox(
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
@@ -723,12 +706,12 @@ class CallMessageReportButtons extends StatelessWidget {
     bool isBookingForAnotherClient = false;
     bool hasPhoneError = false;
     final TextEditingController phoneController =
-        TextEditingController(text: "phone" ?? '');
+    TextEditingController(text: "phone" ?? '');
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: cardDarkColor(context),
+      backgroundColor: AppColors.getFindFillColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -754,8 +737,9 @@ class CallMessageReportButtons extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CheckboxListTile(
-                    activeColor: AppColors.PRIMARY_COLOR,
+                    activeColor: AppColors.getButtonPrimaryWhiteColor(context),
                     contentPadding: EdgeInsets.zero,
+                    checkColor: AppColors.getPrimaryTextColor(context),
                     value: isBookingForAnotherClient,
                     onChanged: (value) {
                       setState(() {
@@ -781,21 +765,21 @@ class CallMessageReportButtons extends StatelessWidget {
                     controlAffinity: ListTileControlAffinity.leading,
                     dense: true,
                     visualDensity:
-                        const VisualDensity(horizontal: -4, vertical: -4),
+                    const VisualDensity(horizontal: -4, vertical: -4),
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    enabled: isBookingForAnotherClient,
+                    // enabled: isBookingForAnotherClient,
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
                     style: TextStyle(
-                      color: Colors.black.withOpacity(0.8),
+                      color: AppColors.getTextColor(context),
                     ),
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: SvgPicture.asset(
-                          color: AppColors.PRIMARY_COLOR,
+                          color: AppColors.getButtonPrimaryWhiteColor(context),
                           Assets.phoneIconRed,
                           width: 18,
                           height: 18,
@@ -807,10 +791,10 @@ class CallMessageReportButtons extends StatelessWidget {
                           ? LocaleKeys.enterPhoneNumber.localize
                           : null,
                       filled: true,
-                      fillColor: Colors.grey.shade200,
+                      fillColor: AppColors.getFillColor(context),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none
                       ),
                     ),
                   ),
@@ -818,8 +802,8 @@ class CallMessageReportButtons extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: AppButton(
-                      backColor: AppColors.PRIMARY_COLOR,
-                      color: AppColors.whiteColor,
+                      backColor: AppColors.getButtonPrimaryColor(context),
+                      color: AppColors.getReversedTextColor(context),
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
                         final enteredNumber = phoneController.text.trim();
@@ -845,6 +829,27 @@ class CallMessageReportButtons extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  Widget _buildButtonWithIcon({
+    required String label,
+    required IconData icon,
+    required Color color,
+    required Function onPressed,
+  }) {
+    return Expanded(
+      child: AppButton(
+        padding: 0,
+        margin: 0,
+        height: 60.h,
+        label: label,
+        icon: icon,
+        iconSize: 70.h,
+        backColor: color,
+        style: Styles.mediumText(color: Colors.white),
+        onPressed: onPressed,
+      ),
     );
   }
 }

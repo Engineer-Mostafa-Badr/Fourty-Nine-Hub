@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 
 import '../cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'history_wallet_list_view_item.dart';
 
-class HistoryWalletSliverList extends StatefulWidget {
+class HistoryWalletSliverList extends StatelessWidget {
   const HistoryWalletSliverList({
     super.key,
     required this.walletHistories,
@@ -16,48 +17,22 @@ class HistoryWalletSliverList extends StatefulWidget {
   final List<WalletHistoryEntity> walletHistories;
 
   @override
-  State<HistoryWalletSliverList> createState() =>
-      _HistoryWalletSliverListState();
-}
-
-class _HistoryWalletSliverListState extends State<HistoryWalletSliverList> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(
-      () {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          if (!context.read<WalletTwoCubit>().hasReachedMax) {
-            context.read<WalletTwoCubit>().getHistories();
-          }
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(() {});
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SliverList.builder(
-      itemCount: widget.walletHistories.length,
+      itemCount: context.read<WalletTwoCubit>().state.hasReachedMax
+          ? walletHistories.length
+          : walletHistories.length + 1,
       itemBuilder: (context, index) {
-        final history = widget.walletHistories[index];
-        return HistoryWalletListViewItem(
-          isReceived: history.received == true,
-          amount: FormatNumbers().formatNumberByComma(
-              history.transactionAmount.toString(),
-              isArabic: context.isArabic),
-          date: history.createdAt,
-        );
+        if (index < walletHistories.length) {
+          final history = walletHistories[index];
+          return HistoryWalletListViewItem(
+            isReceived: history.received == true,
+            amount: history.transactionAmount.toString(),
+            date: history.createdAt,
+          );
+        } else {
+          return const CustomLoading();
+        }
       },
     );
   }

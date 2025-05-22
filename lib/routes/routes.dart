@@ -190,6 +190,7 @@ abstract class Routes {
   static const TRIP_JOIN = '/TripJoin';
   static const BE_STAR = '/BeAStar';
   static const TenPercent = '/TenPercent';
+  static const WinnersTenPercent = '/WinnersTenPercent';
   static const Married = '/Married';
   static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
@@ -290,7 +291,6 @@ abstract class Routes {
   static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
   static const followersScreen = '/FollowersScreen';
   static const rideOffer = '/RiderOffer';
-
 }
 
 abstract class Paths {
@@ -462,6 +462,7 @@ abstract class Paths {
   static const TRIP_JOIN = 'TripJoin';
   static const BE_STAR = 'BeAStar';
   static const TenPercent = 'TenPercent';
+  static const WinnersTenPercent = 'WinnersTenPercent';
   static const Married = 'Married';
   static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';

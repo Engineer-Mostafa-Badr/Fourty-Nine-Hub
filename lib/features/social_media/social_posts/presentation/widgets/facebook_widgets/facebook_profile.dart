@@ -7,19 +7,14 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_photos.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_posts.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_videos.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/style/const.dart';
-import '../../../domain/entities/user_profile_entity.dart';
 
 class FacebookProfile extends StatefulWidget {
   const FacebookProfile({super.key, required this.scrollController});
@@ -33,7 +28,7 @@ class FacebookProfile extends StatefulWidget {
 class _FacebookProfileState extends State<FacebookProfile> {
   bool _showPosts = true;
 
-  bool _showPhotos = true;
+  bool _showPhotos = false;
 
   bool _showVideos = false;
 

@@ -31,7 +31,7 @@ class CompletedTripsModel extends CompletedTripsEntity {
       categoryPicture: json['categoryPicture'] ?? '',
       categoryNameEn: json['categoryNameEn'] ?? '',
       categoryNameAr: json['categoryNameAr'] ?? '',
-      carPicture: json['carPicture'] ?? '',
+      carPicture: (json['carPicture'] as List<dynamic>?)?[0] ?? '',
       address: json['address'] ?? '',
       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
       price: json['price'] ?? 0,

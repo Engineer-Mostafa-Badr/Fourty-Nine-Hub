@@ -86,7 +86,7 @@ class CallCard extends StatelessWidget {
                 ),
               ),
 
-              buildDriverCircle(driverImageUrl: driverImage,driverName: driverName, driverRating: driverRating,),
+              buildDriverCircle(driverImageUrl: driverImage,driverName: driverName, driverRating: driverRating, context: context,),
 
             ],
           ),

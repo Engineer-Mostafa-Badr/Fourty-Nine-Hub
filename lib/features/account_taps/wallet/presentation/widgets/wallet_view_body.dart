@@ -28,28 +28,39 @@ import '../../../../../core/widget/custom_failure_widget.dart';
 import '../cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
 import 'history_wallet_sliver_list.dart';
 
-class WalletViewBody extends StatelessWidget {
+class WalletViewBody extends StatefulWidget {
   const WalletViewBody({super.key});
 
-// Future<void> showActiveSubscriptionAmounts(
-//       {required WalletTypes walletType}) async {
-//     final response =
-//     await _getActiveSubscriptionAmountsUseCase(const NoParams());
-//     response.fold(
-//           (l) => showErrorMessage(
-//         context,
-//         Labels.errorHappened,
-//       ),
-//           (data) => bottomSheet(
-//         context: context,
-//         widget: SubscriptoinAmountsWidget(
-//           amounts: data,
-//           walletType: walletType,
-//         ),
-//       ),
-//     );
-//   }
+  @override
+  State<WalletViewBody> createState() => _WalletViewBodyState();
+}
 
+class _WalletViewBodyState extends State<WalletViewBody> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(
+      () {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (!context.read<WalletTwoCubit>().state.hasReachedMax) {
+            context.read<WalletTwoCubit>().getHistories();
+          }
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+// Future<void> showActiveSubscriptionAmounts(
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -69,9 +80,7 @@ class WalletViewBody extends StatelessWidget {
         },
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const CustomLoading();
           } else if (state.status.isSuccess) {
             return RefreshIndicator(
               onRefresh: () => context
@@ -81,6 +90,7 @@ class WalletViewBody extends StatelessWidget {
                 children: [
                   Expanded(
                     child: CustomScrollView(
+                      controller: _scrollController,
                       slivers: [
                         const SliverToBoxAdapter(
                           child: SizedBox(

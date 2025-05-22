@@ -29,13 +29,8 @@ import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'widgets/pickup_target_location_widget.dart';
 
-
-
-
 import 'package:flutter/material.dart';
 import 'ride_personal_more_info_screen.dart';
-
-
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
   final bool isTruk;
@@ -77,8 +72,6 @@ class _RidePersonalMoreInfoScreenState
           r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'
           r'\+\d{10,}');
 
-
-
   Future<String?> showLocationMethodDialog(BuildContext context) async {
     return await showDialog<String>(
       context: context,
@@ -104,7 +97,6 @@ class _RidePersonalMoreInfoScreenState
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-
                 _buildOptionButton(
                   context,
                   icon: Icons.format_list_bulleted_rounded,
@@ -120,7 +112,6 @@ class _RidePersonalMoreInfoScreenState
                   description: 'Set a location manually on the map',
                   value: 'map',
                 ),
-
                 const SizedBox(height: 12),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
@@ -138,12 +129,12 @@ class _RidePersonalMoreInfoScreenState
   }
 
   Widget _buildOptionButton(
-      BuildContext context, {
-        required IconData icon,
-        required String title,
-        required String description,
-        required String value,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String description,
+    required String value,
+  }) {
     return InkWell(
       onTap: () => Navigator.pop(context, value),
       borderRadius: BorderRadius.circular(16),
@@ -195,8 +186,6 @@ class _RidePersonalMoreInfoScreenState
     );
   }
 
-
-  
   // Future<String?> showLocationMethodDialog(BuildContext context) async {
   //   return await showDialog<String>(
   //     context: context,
@@ -243,15 +232,14 @@ class _RidePersonalMoreInfoScreenState
             // Try to get errors from the errors list first
             if (failure.errors != null && failure.errors!.isNotEmpty) {
               showErrorMessage(context, failure.errors!.first);
-                          return;
+              return;
             }
             errorName == 'DebtError'
-                ? showDebtDialog(context,widget.subCategoryId)
+                ? showDebtDialog(context, widget.subCategoryId)
                 : errorName == 'SubscribeError'
-                ? showSubscribeDialog(context, widget.subCategoryId)
-                : showErrorMessage(
-                context, getFailureMessage(state.failure!, context));
-
+                    ? showSubscribeDialog(context, widget.subCategoryId)
+                    : showErrorMessage(
+                        context, getFailureMessage(state.failure!, context));
           }
         }
         if (state.isSuccessCreateTrip) {
@@ -282,62 +270,6 @@ class _RidePersonalMoreInfoScreenState
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async {
-                      // First check if date is selected
-                      if (_selectedDate.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(LocaleKeys.pleaseSelectDateFirst
-                                  .localize)), // Please select date first
-                        );
-                        return;
-                      }
-                      final TimeOfDay? selectedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-
-                      if (selectedTime != null) {
-                        final now = DateTime.now();
-                        final selectedDateParsed =
-                        DateFormat('dd/MM/yyyy').parse(_selectedDate);
-                        final selectedDateTime = DateTime(
-                            selectedDateParsed.year,
-                            selectedDateParsed.month,
-                            selectedDateParsed.day,
-                            selectedTime.hour,
-                            selectedTime.minute);
-
-                        // Check if selected date is today
-                        final isToday = selectedDateParsed.year == now.year &&
-                            selectedDateParsed.month == now.month &&
-                            selectedDateParsed.day == now.day;
-
-                        // If today is selected, validate that time is not in the past
-                        final minTime = now.add(Duration(minutes: 15));
-                        if (isToday && selectedDateTime.isBefore(minTime)) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(LocaleKeys.youCantChoosePastTime.tr()),
-                            ),
-                          );
-                          return;
-                        }
-
-                        // Valid time selected - update state
-                        setState(() {
-                          _selectedTime = selectedTime.format(context);
-
-                          if (widget.isTruk) {
-                            cubit.makeLoadingTripParam.date = selectedDateTime;
-                          } else {
-                            cubit.makeNonTrackingTripParam.date =
-                                selectedDateTime;
-                          }
-                        });
-                      }
-                    },
-
                     // onTap: () async {
                     //   // First check if date is selected
                     //   if (_selectedDate.isEmpty) {
@@ -356,7 +288,7 @@ class _RidePersonalMoreInfoScreenState
                     //   if (selectedTime != null) {
                     //     final now = DateTime.now();
                     //     final selectedDateParsed =
-                    //         DateFormat('dd/MM/yyyy').parse(_selectedDate);
+                    //     DateFormat('dd/MM/yyyy').parse(_selectedDate);
                     //     final selectedDateTime = DateTime(
                     //         selectedDateParsed.year,
                     //         selectedDateParsed.month,
@@ -370,11 +302,12 @@ class _RidePersonalMoreInfoScreenState
                     //         selectedDateParsed.day == now.day;
                     //
                     //     // If today is selected, validate that time is not in the past
-                    //     if (isToday && selectedDateTime.isBefore(now)) {
+                    //     final minTime = now.add(Duration(minutes: 15));
+                    //     if (isToday && selectedDateTime.isBefore(minTime)) {
                     //       ScaffoldMessenger.of(context).showSnackBar(
                     //         SnackBar(
-                    //             content: Text(
-                    //                 LocaleKeys.youCantChoosePastTime.tr())),
+                    //           content: Text(LocaleKeys.youCantChoosePastTime.tr()),
+                    //         ),
                     //       );
                     //       return;
                     //     }
@@ -392,6 +325,74 @@ class _RidePersonalMoreInfoScreenState
                     //     });
                     //   }
                     // },
+                    onTap: () async {
+                      if (_selectedDate.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  LocaleKeys.pleaseSelectDateFirst.localize)),
+                        );
+                        return;
+                      }
+
+                      final TimeOfDay? selectedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (selectedTime != null) {
+                        final now = DateTime.now();
+
+                        // Robust date parsing
+                        final parts = _selectedDate.split(RegExp(r'[/-]'));
+                        if (parts.length != 3) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Invalid date format')),
+                          );
+                          return;
+                        }
+
+                        final selectedDateParsed = DateTime(
+                          int.parse(parts[2]), // year
+                          int.parse(parts[1]), // month
+                          int.parse(parts[0]), // day
+                        );
+
+                        final selectedDateTime = DateTime(
+                          selectedDateParsed.year,
+                          selectedDateParsed.month,
+                          selectedDateParsed.day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+
+                        // Rest of your existing code...
+                        final isToday = selectedDateParsed.year == now.year &&
+                            selectedDateParsed.month == now.month &&
+                            selectedDateParsed.day == now.day;
+
+                        final minTime = now.add(Duration(minutes: 15));
+                        if (isToday && selectedDateTime.isBefore(minTime)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    LocaleKeys.youCantChoosePastTime.tr())),
+                          );
+                          return;
+                        }
+
+                        setState(() {
+                          _selectedTime = selectedTime.format(context);
+                          if (widget.isTruk) {
+                            cubit.makeLoadingTripParam.date = selectedDateTime;
+                          } else {
+                            cubit.makeNonTrackingTripParam.date =
+                                selectedDateTime;
+                          }
+                        });
+                      }
+                    },
+
                     child: PickUpContainer(
                       fontWeight: FontWeight.w400,
                       title: _selectedTime.isEmpty
@@ -411,8 +412,38 @@ class _RidePersonalMoreInfoScreenState
                         _selectedDate = newDate;
                         _selectedTime = ""; // Reset time when date changes
 
-                        final parsedDate =
-                            DateFormat('dd/MM/yyyy').parse(newDate);
+                        // Parse the date safely using multiple formats
+                        DateTime parsedDate;
+                        try {
+                          // Format input string to ensure consistent format
+                          final parts = newDate.split('/');
+                          if (parts.length == 3) {
+                            // Make sure month has leading zero if needed
+                            final day = parts[0];
+                            final month = parts[1].length == 1
+                                ? '0${parts[1]}'
+                                : parts[1];
+                            final year = parts[2];
+
+                            // Now parse with consistent format
+                            parsedDate = DateFormat('dd/MM/yyyy')
+                                .parse('$day/$month/$year');
+                          } else {
+                            // Fallback for unexpected format
+                            throw FormatException('Invalid date format');
+                          }
+                        } catch (e) {
+                          // Try alternative parsing methods
+                          try {
+                            parsedDate = DateTime.parse(newDate);
+                          } catch (_) {
+                            // Last resort: use current date
+                            print(
+                                'Failed to parse date: $newDate, using current date');
+                            parsedDate = DateTime.now();
+                          }
+                        }
+
                         final now = DateTime.now();
 
                         // Set initial time to current time or start of day for future dates
@@ -440,7 +471,6 @@ class _RidePersonalMoreInfoScreenState
               ],
             ),
             const SizedBox(height: 8),
-
             PickUpTextFormField(
               fieldType: FieldType.phone,
               controller: passengerController,
@@ -475,7 +505,8 @@ class _RidePersonalMoreInfoScreenState
                 }
 
                 return null;
-              }, hintText: LocaleKeys.numberOfPassenger.localize,
+              },
+              hintText: LocaleKeys.numberOfPassenger.localize,
             ),
             const SizedBox(height: 8),
             PickUpTextFormField(
@@ -534,7 +565,6 @@ class _RidePersonalMoreInfoScreenState
                     child: Row(
                       spacing: 6,
                       children: [
-
                         Expanded(
                           flex: 2,
                           child: AppButton(
@@ -547,7 +577,8 @@ class _RidePersonalMoreInfoScreenState
                               }
                               final price = double.tryParse(offerPrice) ?? 0.0;
                               final passengerText = passengerController.text;
-                              final passengerCount = int.tryParse(passengerText) ?? 0;
+                              final passengerCount =
+                                  int.tryParse(passengerText) ?? 0;
 
                               if (passengerCount > 1000) {
                                 showErrorMessage(
@@ -559,12 +590,14 @@ class _RidePersonalMoreInfoScreenState
                                 return;
                               }
 
-                              final p = cubit.makeNonTrackingTripParam..passengers = passengerCount;
+                              final p = cubit.makeNonTrackingTripParam
+                                ..passengers = passengerCount;
 
                               if (!_validateRequiredFields(p, price)) {
                                 showErrorMessage(
                                   context,
-                                  LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  LocaleKeys
+                                      .pleaseFillAllRequiredFields.localize,
                                 );
                                 return;
                               }
@@ -581,7 +614,8 @@ class _RidePersonalMoreInfoScreenState
                                 description: p.description ?? '',
                               );
 
-                              cubit.createNonTrackTrip(params: tripParams, context: context);
+                              cubit.createNonTrackTrip(
+                                  params: tripParams, context: context);
                             },
                             backColor: AppColors.SECONDARY_COLOR_DARK2,
                             width: MediaQuery.of(context).size.width,
@@ -600,7 +634,8 @@ class _RidePersonalMoreInfoScreenState
 
                               final price = double.tryParse(offerPrice) ?? 0.0;
                               final passengerText = passengerController.text;
-                              final passengerCount = int.tryParse(passengerText) ?? 0;
+                              final passengerCount =
+                                  int.tryParse(passengerText) ?? 0;
 
                               if (passengerCount > 1000) {
                                 showErrorMessage(
@@ -617,22 +652,26 @@ class _RidePersonalMoreInfoScreenState
                                   ..isPremium = false
                                   ..price = price;
 
-                                if (!_validateLoadingTripParams(cubit.makeLoadingTripParam)) {
+                                if (!_validateLoadingTripParams(
+                                    cubit.makeLoadingTripParam)) {
                                   showErrorMessage(
                                     context,
-                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                    LocaleKeys
+                                        .pleaseFillAllRequiredFields.localize,
                                   );
                                   return;
                                 }
 
                                 // cubit.makeLoadingRequestTrip(context);
                               } else {
-                                final p = cubit.makeNonTrackingTripParam..passengers = passengerCount;
+                                final p = cubit.makeNonTrackingTripParam
+                                  ..passengers = passengerCount;
 
                                 if (!_validateRequiredFields(p, price)) {
                                   showErrorMessage(
                                     context,
-                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                    LocaleKeys
+                                        .pleaseFillAllRequiredFields.localize,
                                   );
                                   return;
                                 }
@@ -649,14 +688,14 @@ class _RidePersonalMoreInfoScreenState
                                   description: p.description ?? '',
                                 );
 
-                                cubit.createNonTrackTrip(params: tripParams, context: context);
+                                cubit.createNonTrackTrip(
+                                    params: tripParams, context: context);
                               }
                             },
                             backColor: AppColors.PRIMARY_COLOR,
                             width: MediaQuery.of(context).size.width,
                           ),
                         ),
-
 
                         /*
                         Expanded(
@@ -962,8 +1001,10 @@ class _RidePersonalMoreInfoScreenState
       context: context,
       backgroundColor: AppColors.whiteColor,
       isScrollControlled: true,
-      isDismissible: false, // Prevent tap outside to close
-      enableDrag: false,    // Prevent swipe down to close
+      isDismissible: false,
+      // Prevent tap outside to close
+      enableDrag: false,
+      // Prevent swipe down to close
       builder: (context) {
         return FractionallySizedBox(
           alignment: Alignment.bottomCenter,
@@ -997,7 +1038,7 @@ class _RidePersonalMoreInfoScreenState
                           child: GestureDetector(
                             onTap: () {
                               offerPriceController.clear(); // ✅ Clear input
-                              Navigator.pop(context);        // ✅ Then close
+                              Navigator.pop(context); // ✅ Then close
                             },
                             child: Container(
                               width: 40,
@@ -1016,7 +1057,6 @@ class _RidePersonalMoreInfoScreenState
                       ],
                     ),
                     const SizedBox(height: 16),
-
                     TextFormField(
                       cursorColor: AppColors.PRIMARY_COLOR,
                       controller: offerPriceController,
@@ -1039,7 +1079,7 @@ class _RidePersonalMoreInfoScreenState
                       keyboardType: TextInputType.number,
                       enableInteractiveSelection: false,
                       contextMenuBuilder: (context, editableTextState) =>
-                      const SizedBox.shrink(),
+                          const SizedBox.shrink(),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(9), // ✅ Max 9 digits
@@ -1053,25 +1093,28 @@ class _RidePersonalMoreInfoScreenState
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return context.isArabic ? 'هذا الحقل مطلوب' : 'This field is required';
+                          return context.isArabic
+                              ? 'هذا الحقل مطلوب'
+                              : 'This field is required';
                         }
 
                         final numValue = int.tryParse(value);
                         if (numValue == null) {
-                          return context.isArabic ? 'الرجاء إدخال رقم صحيح' : 'Please enter a valid number';
+                          return context.isArabic
+                              ? 'الرجاء إدخال رقم صحيح'
+                              : 'Please enter a valid number';
                         }
 
                         if (numValue < 100) {
-                          return context.isArabic ? 'الرقم يجب أن لا يقل عن 100' : 'The number must be at least 100';
+                          return context.isArabic
+                              ? 'الرقم يجب أن لا يقل عن 100'
+                              : 'The number must be at least 100';
                         }
 
                         return null; // Valid
                       },
-
                     ),
-
                     const SizedBox(height: 50),
-
                     AppButton(
                       radius: 15,
                       backColor: AppColors.PRIMARY_COLOR,
@@ -1099,8 +1142,6 @@ class _RidePersonalMoreInfoScreenState
       },
     );
   }
-
-
 }
 
 class NoPasteFormatter extends TextInputFormatter {

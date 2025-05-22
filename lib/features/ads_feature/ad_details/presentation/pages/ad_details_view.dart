@@ -125,7 +125,10 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                           const SizedBox(
                             height: 16,
                           ),
-                          if (details!.isNotEmpty)
+                          // اذا كانت الاعلان من نوع زواج
+                          if (details!.isNotEmpty &&
+                              state.ad?.mainCategoryId ==
+                                  '62c8b5b09332225799fe335e')
                             _buildDetailsWidget(ad: state.ad!),
                           const SizedBox(
                             height: 16,
@@ -359,6 +362,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 //     );
                 //   },
                 // ),
+                const SizedBox(
+                  height: 8,
+                ),
                 if (state.ad?.userSubscriptionStatus ==
                     SubscriptionStatus.notSubscribed.status)
                   const SizedBox(
@@ -553,7 +559,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     width: 8,
                   ),
                   Label(
-                    text: '${ad.price} ***',
+                    text:
+                        '${FormatNumbers().formatNumberByComma(ad.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? ad.currencyAr : ad.currencyEn}',
                     style: Styles.mediumText(
                       fontSize: 32,
                       fontWeight: FontWeight.w700,
@@ -601,48 +608,48 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             SizedBox(
               height: 8,
             ),
+            // Container(
+            //   width: double.infinity,
+            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //   decoration: ShapeDecoration(
+            //     color: const Color(0x66D9D9D9),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       SvgPicture.asset(
+            //         Assets.adsTimeIcon,
+            //         height: 24,
+            //         width: 24,
+            //         colorFilter: ColorFilter.mode(
+            //           AppColors.SECONDARY_COLOR_DARK2,
+            //           BlendMode.srcIn,
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         width: 8,
+            //       ),
+            //       Label(
+            //         text: 'Part Time/on site',
+            //         style: Styles.mediumText(
+            //           fontSize: 32,
+            //           fontWeight: FontWeight.w700,
+            //           height: 1.60,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 8,
+            // ),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: ShapeDecoration(
                 color: const Color(0x66D9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    Assets.adsTimeIcon,
-                    height: 24,
-                    width: 24,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.SECONDARY_COLOR_DARK2,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Label(
-                    text: 'Part Time/on site',
-                    style: Styles.mediumText(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      height: 1.60,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: ShapeDecoration(
-                color: const Color(0xCCD9D9D9),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -680,7 +687,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: ShapeDecoration(
-                color: const Color(0x66D9D9D9),
+                color: const Color(0xCCD9D9D9),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -715,104 +722,168 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             SizedBox(
               height: 8,
             ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: ShapeDecoration(
-                color: const Color(0xCCD9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    Assets.adsBagIcon,
-                    height: 24,
-                    width: 24,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.SECONDARY_COLOR_DARK2,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Row(
-                    children: [
-                      Label(
-                        text: 'Exp level: ',
-                        style: Styles.mediumText(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w500,
-                          height: 1.60,
-                          color: AppColors.SECONDARY_COLOR_DARK2,
+            // اذا كان الاعلان ليس من نوع الزواج
+            if (ad.mainCategoryId != '62c8b5b09332225799fe335e')
+              Column(
+                children: ad.details.map(
+                  (e) {
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: ShapeDecoration(
+                        color: ad.details.indexOf(e) % 2 == 0
+                            ? const Color(0x66D9D9D9)
+                            : const Color(0xCCD9D9D9),
+                        //  const Color(0xCCD9D9D9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      Label(
-                        text: '1 Year',
-                        style: Styles.mediumText(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          height: 1.60,
-                        ),
+                      child: Row(
+                        children: [
+                          ImageFromInternet(
+                              image: e.imageUrl, width: 24, height: 24),
+                          // SvgPicture.asset(
+                          //   Assets.adsBagIcon,
+                          //   height: 24,
+                          //   width: 24,
+                          //   colorFilter: ColorFilter.mode(
+                          //     AppColors.SECONDARY_COLOR_DARK2,
+                          //     BlendMode.srcIn,
+                          //   ),
+                          // ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Row(
+                            children: [
+                              Label(
+                                text:
+                                    '${context.isArabic ? e.nameAr : e.nameEn}: ',
+                                style: Styles.mediumText(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.60,
+                                  color: AppColors.SECONDARY_COLOR_DARK2,
+                                ),
+                              ),
+                              Label(
+                                text: context.isArabic ? e.valueAr : e.valueEn,
+                                style: Styles.mediumText(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.60,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
+                    );
+                  },
+                ).toList(),
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: ShapeDecoration(
-                color: const Color(0x66D9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    Assets.adsEducationIcon,
-                    height: 24,
-                    width: 24,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.SECONDARY_COLOR_DARK2,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Row(
-                    children: [
-                      Label(
-                        text: 'Edu level: ',
-                        style: Styles.mediumText(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w500,
-                          height: 1.60,
-                          color: AppColors.SECONDARY_COLOR_DARK2,
-                        ),
-                      ),
-                      Label(
-                        text: 'Diploma',
-                        style: Styles.mediumText(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          height: 1.60,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            // LableAndTextMarriageDetails(
+
+            // Container(
+            //   width: double.infinity,
+            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //   decoration: ShapeDecoration(
+            //     color: const Color(0xCCD9D9D9),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       SvgPicture.asset(
+            //         Assets.adsBagIcon,
+            //         height: 24,
+            //         width: 24,
+            //         colorFilter: ColorFilter.mode(
+            //           AppColors.SECONDARY_COLOR_DARK2,
+            //           BlendMode.srcIn,
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         width: 8,
+            //       ),
+            //       Row(
+            //         children: [
+            //           Label(
+            //             text: 'Exp level: ',
+            //             style: Styles.mediumText(
+            //               fontSize: 32,
+            //               fontWeight: FontWeight.w500,
+            //               height: 1.60,
+            //               color: AppColors.SECONDARY_COLOR_DARK2,
+            //             ),
+            //           ),
+            //           Label(
+            //             text: '1 Year',
+            //             style: Styles.mediumText(
+            //               fontSize: 32,
+            //               fontWeight: FontWeight.w600,
+            //               height: 1.60,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 8,
+            // ),
+            // Container(
+            //   width: double.infinity,
+            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //   decoration: ShapeDecoration(
+            //     color: const Color(0x66D9D9D9),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       SvgPicture.asset(
+            //         Assets.adsEducationIcon,
+            //         height: 24,
+            //         width: 24,
+            //         colorFilter: ColorFilter.mode(
+            //           AppColors.SECONDARY_COLOR_DARK2,
+            //           BlendMode.srcIn,
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         width: 8,
+            //       ),
+            //       Row(
+            //         children: [
+            //           Label(
+            //             text: 'Edu level: ',
+            //             style: Styles.mediumText(
+            //               fontSize: 32,
+            //               fontWeight: FontWeight.w500,
+            //               height: 1.60,
+            //               color: AppColors.SECONDARY_COLOR_DARK2,
+            //             ),
+            //           ),
+            //           Label(
+            //             text: 'Diploma',
+            //             style: Styles.mediumText(
+            //               fontSize: 32,
+            //               fontWeight: FontWeight.w600,
+            //               height: 1.60,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // // LableAndTextMarriageDetails(
             //   lable: LocaleKeys.title.localize,
             //   text: ad.title,
             // ),

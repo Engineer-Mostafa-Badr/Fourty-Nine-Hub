@@ -131,7 +131,7 @@
   "ads": "اعلانات",
   "wallet": "محفظه",
   "gift": "هدايا",
-  "balance": "كاش باك",
+  "balance": "استرجاع نقدي",
   "pickMe": "وصلني معاك",
   "tripJoin": "جاي معاك",
   "auction": "مزاد",
@@ -1105,7 +1105,7 @@
   "shareTheApp": "شارك التطبيق",
   "yourReferralID": "معرف الإحالة الخاص بك:",
   "referralClipboard": "تم نسخ معرف الإحالة إلى الحافظة!",
-  "recommendUs": "أوصي بن",
+  "recommendUs": "أوصي بنا",
   "shareFodeFriends": "شارك الكود مع أصدقائك واحصل على ٥٠ جنيه مصري لكل واحد",
   "referralSuccessful": "تمت الإحالة بنجاح! تم تحديث الإحصائيات.",
   "Spotlight": "اضواء كاشفه",
@@ -1387,7 +1387,7 @@
   "percentage": "نسبة",
   "subscribePackage": "رزم الاشتراك",
   "busMode": "الوضع الحافلة",
-  "trukMode": "الوضع الشاحنة",
+  "trukMode": "الوضع شاحنة",
   "busDetails": "تفاصيل الحافلة",
   "trukDetails": "تفاصيل الشاحنة",
   "busWithYou": "رحله حافلة معك",
@@ -1434,7 +1434,7 @@
   "enterYourEmail": "ادخل الايميل",
   "deviceID": "معرف الجهاز",
   "enterYourDeviceID": "ادخل معرف الجهاز",
-  "billGift": "فاتورة الهدية",
+  "billGift": "هدية الفاتورة",
   "skip": "تخطى",
   "move": "حرك",
   "pleaseSubscribeToContactTheClient": "يرجى الاشتراك للتواصل مع العميل!",
@@ -1611,9 +1611,10 @@
   "youDontHaveAcceptedOffer": "ليس لديك أي عروض مقبولة حتى الآن",
   "youDontHavePendingOffer": "ليس لديك أي عروض قيد الانتظار حتى الآن",
   "youDontHavePastOffer": "ليس لديك أي عروض سابقة حتى الآن",
-  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
   "selectFromList": "اختر من القائمة",
   "selectFromMap": "اختر من الخريطة",
-  "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا"
+  "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا",
+  "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت"
 
 }
