@@ -17,6 +17,8 @@ class AddDetailsModel extends AdDetailsEntity {
     super.isPrimary,
     super.isDeleted,
     super.price,
+    super.currencyEn,
+    super.currencyAr,
     super.type,
     super.cityAr,
     super.cityEn,
@@ -56,16 +58,16 @@ class AddDetailsModel extends AdDetailsEntity {
         userId: json['userId'] ?? '',
         cityAr: json['cityData'] != null
             ? (json['cityData']['city_name_ar'] ?? '')
-            : '',
+            : json['address']['city']['city_name_ar'] ?? '',
         cityEn: json['cityData'] != null
             ? (json['cityData']['city_name_en'] ?? '')
-            : '',
+            : json['address']['city']['city_name_en'] ?? '',
         governorateAr: json['governmentData'] != null
             ? (json['governmentData']['governorate_name_ar'] ?? '')
-            : '',
+            : json['address']?['government']?['governorate_name_ar'] ?? '',
         governorateEn: json['governmentData'] != null
             ? (json['governmentData']['governorate_name_en'] ?? '')
-            : '',
+            : json['address']?['government']?['governorate_name_en'] ?? '',
         subCategoryId: json['subCategoryId'] ?? '',
         mainCategoryId: json['mainCategoryId'] ?? '',
         title: json['title'] ?? '',
@@ -79,6 +81,8 @@ class AddDetailsModel extends AdDetailsEntity {
         type: json['type'] ?? '',
         views: json['views'] ?? 0,
         price: json['price'] ?? 0,
+        currencyEn: json['currencyEn'] ?? '**',
+        currencyAr: json['currencyAr'] ?? '**',
         active: json['active'] ?? true,
         isFavourite: json['isFavorite'] ?? false,
         // phone: json['phone'] ?? '',

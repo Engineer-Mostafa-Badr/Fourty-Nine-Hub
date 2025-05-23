@@ -36,7 +36,8 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
     return GestureDetector(
       onTap: () {
         print('subCategory: ${widget.subCategory.id}');
-        print('mainCategory: ${context.read<HealthCubit>().state.mainCategory!.id}');
+        print(
+            'mainCategory: ${context.read<HealthCubit>().state.mainCategory!.id}');
         if (context.read<HealthCubit>().state.mainCategory != null) {
           context.push(
             Routes.ADS,
@@ -51,13 +52,10 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
         // height: 280.h,
         decoration: BoxDecoration(
             border: Border.all(
-              color: AppColors.PRIMARY_COLOR,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(15),
-            color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.GREYBG
-
-        ),
+            color: AppColors.getFindFillColor(context)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -67,13 +65,13 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                   height: 200.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          widget.subCategory.image,
-                        ),
-                        fit: BoxFit.fill,
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        widget.subCategory.image,
                       ),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -96,7 +94,9 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                 ),
               ],
             ),
-            const Sizer(height: 8,),
+            const Sizer(
+              height: 8,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0.h),
               child: Row(
@@ -108,10 +108,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                           ? widget.subCategory.nameAr
                           : widget.subCategory.nameEn,
                       style: Styles.mediumText(
-                          color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
-
-
-                      ),
+                          color: AppColors.getTextColor(context)),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -120,8 +117,10 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                     size: 30.h,
                     icon: Icons.add,
                     isCircle: true,
-                    color: Colors.white,
-                    backColor: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode
+                        ? AppColors.PRIMARY_COLOR
+                        : Colors.white,
+                    backColor: AppColors.getButtonPrimaryWhiteColor(context),
                     onPressed: () {
                       if (context.read<HealthCubit>().state.mainCategory !=
                               null &&
@@ -135,9 +134,10 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                                   .mainCategory!,
                               subCategory: widget.subCategory),
                         );
-                      } else {                                  return pleaseLoginDialog(context);
+                      } else {
+                        return pleaseLoginDialog(context);
 
-                      // context.push(Routes.LOGIN);
+                        // context.push(Routes.LOGIN);
                       }
                     },
                   )
@@ -150,4 +150,3 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
     );
   }
 }
-

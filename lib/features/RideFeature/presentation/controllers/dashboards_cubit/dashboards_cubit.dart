@@ -36,6 +36,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
@@ -138,6 +139,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final FinalizeTripByRiderUseCase finalizeTripByRiderUseCase;
   final ListenToAvailableUntrackedTripUseCase listenToAvailableUntrackedTripUseCase;
   final ListenToAcceptUntrackedTripOfferUseCase listenToAcceptUntrackedTripOfferUseCase;
+  final ListenToEndTripUseCase listenToEndTripUseCase;
 
   DashboardsCubit(this.getAvailableTripsUsecase,
       this.getPastTripsUsecase,
@@ -175,6 +177,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.deleteEmergencyContactUseCase,
       this.finalizeTripByRiderUseCase,
       this.listenToAvailableUntrackedTripUseCase,
+      this.listenToEndTripUseCase,
 
       this.createNonTrackTripUseCase, this.updateDriverSettingsUseCase,
       this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase, this.listenToAcceptUntrackedTripOfferUseCase,)
@@ -662,6 +665,17 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         // log(trip.toString());
         // list.insert(0, trip);
         emit(state.copyWith(availableRideTrips: list));
+      });
+    }
+
+    void listenToEndTrip(BuildContext context) {
+      CliLogger.info('End Trip');
+      // TripsResponseEntity
+      listenToEndTripUseCase((tripId) {
+        log("messageTripId $tripId");
+        showErrorMessage(context, context.isArabic?'تم إلغاء الرحلة من قبل العميل':'Trip has been canceled by the customer');
+        emit(state.copyWith(status: DashboardsStates.success,
+            tripStatus: ''));
       });
     }
 

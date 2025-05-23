@@ -23,7 +23,7 @@ class GiftWalletModel extends GiftWalletEntity {
     return GiftWalletModel(
       id: json['_id'] ?? '',
       userId: json['user_id'] ?? '',
-      amount: json['amount'] ?? 0,
+      amount: json['amount'] ?? '',
       fiveYears: json['five_years'] ?? 0,
       tenYears: json['ten_years'] ?? 0,
       isActive: json['isActive'] ?? false,

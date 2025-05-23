@@ -166,6 +166,9 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                             ? const Color(0xffCACFF4)
                             : AppColors.QUANTITY_COLOR,
                         onChanged: (value) {
+                          if(value.isEmpty){
+                            return ;
+                          }
                           setState(() {
                             // Show the list when the search text is not empty
                             // showUserList = value.isNotEmpty;

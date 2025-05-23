@@ -22,8 +22,9 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
   @override
   Future<Either<Failure, List<AdPropertiesEntity>>> getAdProperties(
       {required GetAdPropertiesParams params}) async {
-    final response =
-        await _apiConsumer.get(params.fromMarriage==false?EndPoints.getMainCategoryAdProps(params.id):EndPoints.getSubcategoryAdProps(params.id));
+    final response = await _apiConsumer.get(params.fromMarriage == false
+        ? EndPoints.getMainCategoryAdProps(params.id)
+        : EndPoints.getSubcategoryAdProps(params.id));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data'] as List)
@@ -49,10 +50,15 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
     //     "678c8abd8bca9086d27b0b5f":{"type":"string", "value": "High School"}
     //   }
     // });
-    return response.fold(
-        (failure) => Left(failure),
-        (response) => Right((response['data']['allAds']['ads'] as List)
-            .map((e) => AdModel.fromJson(e))
-            .toList()));
+    try {
+      return response.fold(
+          (failure) => Left(failure),
+          (response) => Right((response['data']['allAds']['ads'] as List)
+              .map((e) => AdModel.fromJson(e))
+              .toList()));
+    } catch (e) {
+      print(e);
+      return Left(UnknownFailure(e.toString()));
+    }
   }
 }

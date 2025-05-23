@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/domain/entities/filter_entity.dart';
 
 class FilterModel extends FilterEntity {
@@ -13,7 +14,7 @@ class FilterModel extends FilterEntity {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> filterCriteria = {};
-    for (var e in props ?? []) {
+    for (CreateAdEntity e in props ?? []) {
       if (e.value.nameEn.isNotEmpty) {
         if (e.value.type == 'number') {
           filterCriteria[e.propId] = {
@@ -32,8 +33,8 @@ class FilterModel extends FilterEntity {
       if (filterCriteria.isNotEmpty) "filterCriteria": filterCriteria,
       if (price != null)
         "price": {
-          "min": int.parse(price?.value.nameAr ?? '0'),
-          "max": int.parse(price?.value.nameEn ?? '0')
+          "min": int.tryParse(price?.value.nameAr ?? '0'),
+          "max": int.tryParse(price?.value.nameEn ?? '0')
         },
     };
   }

@@ -76,6 +76,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToAcceptOffer(context,widget.params),
               dashboardCubit.listenToNewTrip(),
               dashboardCubit.listenToRemoveTrip(),
+              dashboardCubit.listenToEndTrip(context),
             ]
           : [
             dashboardCubit.loadInitialAvailableNonSocketTrips(),

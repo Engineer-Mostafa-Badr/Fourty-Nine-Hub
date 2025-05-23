@@ -96,9 +96,9 @@ class BuildTagAdsWidget extends StatelessWidget {
           Spacer(),
           Label(
             text: status == SubscriptionStatus.premium.status
-                ? LocaleKeys.premiumSubscription.localize
+                ? LocaleKeys.premium2.localize
                 : status == SubscriptionStatus.regular.status
-                    ? LocaleKeys.regularRequest.localize
+                    ? LocaleKeys.regular.localize
                     : LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(
               color: Colors.black,

@@ -36,6 +36,7 @@ class WinnersCashbackViewBody extends StatelessWidget {
             paginationOnpressed: () {
               context.read<WinnersCashbackCubit>().getWinners(context);
             },
+            mainAxisExtent: 170,
           );
         } else {
           return CustomFailureWidget(

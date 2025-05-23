@@ -37,6 +37,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
+import 'package:fourtyninehub/features/ten_percent/domain/usecases/get_winners_ten_percent_use_case.dart';
 
 import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
@@ -593,7 +594,8 @@ class EndPoints {
     return '/navigators/navigateCategories-enable/${params.mainCategoryId ?? '62c8b5779332225799fe3304'}';
   }
 
-  static const searchAds = '/ads/searchAds';
+  static searchAds({required String mainCategoryId}) =>
+      '/ads/searchAds?mainCategoryId=$mainCategoryId';
 
   static const riderInfoRegister = '/ride/riders/register';
   static const sendComeWithYou = '/ride/come-with-you';
@@ -1112,6 +1114,9 @@ class EndPoints {
 
   static String addToCart = '/food/addToCart';
   static String tenPercent = '/tenPercent/send';
+  static String getWinnersTenPercent(
+          {required GetWinnersTenPercentParams params}) =>
+      '/ten-percent/winners?page=${params.page}&limit=${params.limit}';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
@@ -1516,9 +1521,12 @@ class EndPoints {
 
   static const getDoctorList = '/health/doctors';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
-  static const getClientPendingUntrackedTrips = '/ride/non-tracking/trips/client/pending';
-  static const getClientAcceptedUntrackedTrips = '/ride/non-tracking/trips/client';
-  static const getClientPastUntrackedTrips = '/ride/non-tracking/trips/client/history';
+  static const getClientPendingUntrackedTrips =
+      '/ride/non-tracking/trips/client/pending';
+  static const getClientAcceptedUntrackedTrips =
+      '/ride/non-tracking/trips/client';
+  static const getClientPastUntrackedTrips =
+      '/ride/non-tracking/trips/client/history';
   static const getClientOfferUntrackedTrips = '/ride/non-tracking/offers';
   static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';

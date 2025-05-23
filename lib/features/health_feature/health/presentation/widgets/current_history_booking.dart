@@ -15,22 +15,22 @@ class CurrentHistoryBooking extends StatelessWidget {
       onTap:onTap ,
       child: Container(
         margin: EdgeInsets.only(top:10.h),
-        width: double.maxFinite,
+        width: 230.w,
         padding: EdgeInsets.symmetric(
           vertical: 12.h,
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40.h),
-            color: isSelected?AppColors.PRIMARY_COLOR:AppColors.GREYBG,
+            color: isSelected?AppColors.getButtonPrimaryWhiteColor(context):AppColors.getFindFillColor(context),
             border: Border.all(
-                color:isSelected?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
+                color:isSelected?AppColors.SECONDARY_COLOR:AppColors.getButtonPrimaryWhiteColor(context),
                 width: 1)),
         child: Center(
           child: Text(
             title.localize,
             style: Styles.headerText(
                 fontSize: 24,
-                color:isSelected?AppColors.whiteColor:AppColors.black),
+                color:isSelected?AppColors.getReversedTextColor(context):AppColors.getTextColor(context)),
           ),
         ),
       ),

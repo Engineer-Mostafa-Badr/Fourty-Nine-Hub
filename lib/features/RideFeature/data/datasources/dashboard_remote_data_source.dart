@@ -87,6 +87,8 @@ abstract class TripRemoteDataSource {
   void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
 
   void listenToRemoveTrip(Function(String tripId) params);
+  void listenToEndTrip(Function(String tripId) params);
+  void listenToClientComing(Function(String tripId) params);
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
@@ -333,6 +335,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info("Remove Trip data :  $data");
         log("Remove Trip data :  $data");
         params(data['removedTrip']['id']);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToEndTrip(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to End Trip ");
+      log("Listen to End Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.endTrip, (data) {
+        CliLogger.info("End Trip data :  $data");
+        log("End Trip data :  $data");
+        params('');
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToClientComing(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to End Trip ");
+      log("Listen to End Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToClientComing, (data) {
+        CliLogger.info("End Trip data :  $data");
+        log("End Trip data :  $data");
+        params(data['trip']['_id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
