@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../authentication/presentation/pages/first_login_screen.dart';
 import '../Controllers/on_boarding_cubit.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -107,7 +108,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         InkWell(
           onTap: () {
             CacheManager.isShowOnboarding(true);
-            context.go(Routes.HOME);
+            // context.go(Routes.HOME);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstLoginScreen()));
           },
           child: Label(
             text: LocaleKeys.skip.localize,
@@ -202,7 +204,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             cubit.changeOnboardingData(index + 1);
           } else {
             CacheManager.isShowOnboarding(true);
-            context.go(Routes.HOME);
+            // context.go(Routes.HOME);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstLoginScreen()));
+
           }
         },
         label: (state.currentIndex < cubit.images.length - 1)

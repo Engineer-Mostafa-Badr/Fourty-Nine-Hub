@@ -348,6 +348,7 @@ abstract class Assets {
   static String checkCircle = 'assets/icons/check-circle.png';
   static String walletImage = 'assets/images/wallet_image.svg';
   static String walletImageDark = 'assets/images/wallet_image_dark.svg';
+  static String welcomeLogin = 'assets/images/welcomeLogin.svg';
 
 // .png
   //drawer

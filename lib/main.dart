@@ -117,11 +117,12 @@ void main() async {
   // final isActivated =  false;
   // Routes.onBoardingScreen
   print('will go onBoardingScreen ${!isShowOnboarding}');
-  final initialRoute = !isShowOnboarding
-      ? Routes.onBoardingScreen
-      : isActivate
-          ? Routes.PAGEPREVIEW
-          : Routes.HOME;
+  final initialRoute = Routes.onBoardingScreen;
+  // final initialRoute = !isShowOnboarding
+  //     ? Routes.onBoardingScreen
+  //     : isActivate
+  //         ? Routes.PAGEPREVIEW
+  //         : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
   runApp(
