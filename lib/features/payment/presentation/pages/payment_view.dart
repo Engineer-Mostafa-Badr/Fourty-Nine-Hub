@@ -49,9 +49,11 @@ class _PaymentViewState extends State<PaymentView> {
   String _selectedPaymentMethod = '';
   String? _selectedProviderId;
   String phoneNumber = '';
+  late final TextEditingController bankNameController;
 
   @override
   void initState() {
+    bankNameController = TextEditingController();
     super.initState();
   }
 
@@ -164,7 +166,7 @@ class _PaymentViewState extends State<PaymentView> {
         _selectedProviderId = cubit.paymentProviderMap[titleId];
 
         if (_selectedProviderId != null) {
-          print('Provider ID for $titleId: $_selectedProviderId');
+          print('Provider ID  for $titleId:  $_selectedProviderId');
 
           cubit.getPaymobData(
               amountId: widget.amountId, providerId: _selectedProviderId!);
@@ -259,8 +261,6 @@ class _PaymentViewState extends State<PaymentView> {
   }
 
   Widget _bankTransferPayment() {
-    final TextEditingController bankNameController = TextEditingController();
-
     final cubit = context.read<PaymentCubit>();
     final banks = cubit.state.data ?? [];
     final phoneNumbers = <String>[];
@@ -325,10 +325,10 @@ class _PaymentViewState extends State<PaymentView> {
           items: phoneNumbers,
           displayStringForItem: (item) => item,
           onItemSelected: (value) {
-            if (value != null) {
-              bankNameController.text = value;
-              phoneNumber = value;
-            }
+            // if (value != null) {
+            bankNameController.text = value;
+            phoneNumber = value;
+            // }
           },
           selectedItem: null,
           // selectedItem: ,
@@ -490,7 +490,15 @@ class _PaymentViewState extends State<PaymentView> {
                 //   );
                 //   // context.go(Routes.HOME);
                 // }
-                if (state.status == StateStatus.error) {
+                if (state.instaPayStatus == StateStatus.success) {
+                  showSuccessMessage(
+                    context,
+                    state.instaPayResponseData?.message ??
+                        LocaleKeys.paymentSuccessful.localize,
+                  );
+                  context.go(Routes.HOME);
+                }
+                if (state.instaPayStatus == StateStatus.error) {
                   showErrorMessage(
                     context,
                     getFailureMessage(

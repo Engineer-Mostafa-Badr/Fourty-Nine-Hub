@@ -5,11 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -18,7 +19,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
-import '../../../../../food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import '../../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../social_media/twitter/presentation/widgets/report_view.dart';
@@ -27,6 +27,7 @@ import '../../controllers/health_cubit/health_cubit.dart';
 
 class MostBookingScreen extends StatefulWidget {
   const MostBookingScreen({super.key, this.onClose});
+
   final VoidCallback? onClose;
 
   @override
@@ -63,7 +64,9 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
         final cubit = context.read<HealthCubit>();
 
         if (state.status == HealthStates.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return SizedBox(
+              height: MediaQuery.of(context).size.height * .6,
+              child: Center(child: CustomLoading()));
         }
         // if (cubit.mostBooking.isEmpty) {
         //   return Center(
@@ -83,15 +86,10 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
               Expanded(
                 child: cubit.mostBooking.isEmpty
                     ? Center(
-                        child: Text(
-                          context.isArabic
-                              ? 'لا يوجد حجوزات سابقة'
-                              : 'No booking history',
-                          style: Styles.headerText(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.grey,
-                          ),
-                        ),
+                        child: CustomEmptyWidget(
+                            label: context.isArabic
+                                ? 'لا يوجد حجوزات سابقة'
+                                : 'No Booking History'),
                       )
                     : ListView.separated(
                         padding: EdgeInsets.only(
@@ -155,7 +153,7 @@ class _MostBookingCardState extends State<MostBookingCard> {
     // 'No subscription': 0
     switch (subscriptionRank) {
       case 0:
-        return LocaleKeys.noSubscription.localize;
+        return LocaleKeys.notSubscribed.localize;
       case 1:
         return LocaleKeys.regularSubscription.localize;
       case 2:
@@ -198,6 +196,9 @@ class _MostBookingCardState extends State<MostBookingCard> {
                         color: context.isDarkMode
                             ? AppColors.whiteColor
                             : Colors.grey,
+                      ),
+                      const Sizer(
+                        width: 8,
                       ),
                       if ((widget.data.viewCount ?? 0) == 0) ...[
                         Label(
@@ -366,6 +367,7 @@ class _MostBookingCardState extends State<MostBookingCard> {
                             Text(
                               "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
                               style: Styles.mediumText(
+                                  fontSize: 32,
                                   fontWeight: FontWeight.w600,
                                   color: context.isDarkMode
                                       ? AppColors.whiteColor
@@ -383,6 +385,7 @@ class _MostBookingCardState extends State<MostBookingCard> {
                                   : widget.data.subCategory?.first.nameEn ??
                                       "N/A",
                               style: Styles.mediumText(
+                                  fontSize: 32,
                                   fontWeight: FontWeight.w400,
                                   color: context.isDarkMode
                                       ? AppColors.whiteColor
@@ -402,17 +405,13 @@ class _MostBookingCardState extends State<MostBookingCard> {
                     children: [
                       Icon(
                         Icons.location_on_rounded,
-                        color: context.isDarkMode
-                            ? AppColors.PRIMARY_COLOR_DARK
-                            : AppColors.PRIMARY_COLOR,
+                        color: AppColors.getButtonPrimaryWhiteColor(context),
                       ),
                       Expanded(
                         child: Label(
                           style: Styles.headerText(
-                              fontSize: 24,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.PRIMARY_COLOR),
+                              fontSize: 32,
+                              color: AppColors.getTextColor(context)),
                           text: context.isArabic
                               ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
                               : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
@@ -433,6 +432,7 @@ class _MostBookingCardState extends State<MostBookingCard> {
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
                           style: Styles.mediumText(
+                              fontSize: 32,
                               color: context.isDarkMode
                                   ? AppColors.whiteColor
                                   : AppColors.PRIMARY_COLOR,
@@ -440,12 +440,11 @@ class _MostBookingCardState extends State<MostBookingCard> {
                         ),
                       ),
                       Label(
-                        text: FormatNumbers()
-                            .formatNumberByComma(widget.data.price.toString()),
+                        text:
+                            '${FormatNumbers().formatNumberByComma(widget.data.price.toString()).toArabicNumbers(context)} ${context.isArabic ? widget.data.currencyAr??'' : widget.data.currencyEn??''}',
                         style: Styles.mediumText(
-                            color: context.isDarkMode
-                                ? AppColors.whiteColor
-                                : AppColors.PRIMARY_COLOR,
+                          fontSize: 32,
+                            color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.w500),
                       )
                     ],
@@ -457,28 +456,28 @@ class _MostBookingCardState extends State<MostBookingCard> {
                       Row(
                         children: [
                           Icon(Icons.watch_later_outlined,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.PRIMARY_COLOR,
+                              color: AppColors.getTextColor(context),
                               size: 48.h),
                           const Sizer(),
                           Label(
                             text:
-                                '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}',
+                                '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}'
+                                    .toArabicNumbers(context),
                             style: Styles.mediumText(
-                                color: context.isDarkMode
-                                    ? AppColors.whiteColor
-                                    : AppColors.PRIMARY_COLOR,
+                                fontSize: 32,
+                                color: AppColors.getTextColor(context),
                                 fontWeight: FontWeight.w500),
                           )
                         ],
                       ),
                       Label(
                         text:
-                            '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}',
+                            '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}'
+                                .toArabicNumbers(context),
                         style: Styles.mediumText(
+                            fontSize: 32,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.PRIMARY_COLOR_DARK),
+                            color: AppColors.getRedColor(context)),
                       )
                     ],
                   ),
@@ -519,8 +518,9 @@ class PremiumAndRequestButtons extends StatelessWidget {
       child: Row(
         children: [
           _buildButton(
+            context,
             label: LocaleKeys.book.localize,
-            color: AppColors.PRIMARY_COLOR_DARK,
+            color: AppColors.getRedColor(context),
             onPressed: () {
               // context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
@@ -530,7 +530,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
     );
   }
 
-  Widget _buildButton({
+  Widget _buildButton(
+    BuildContext context, {
     required String label,
     required Color color,
     required VoidCallback onPressed,
@@ -543,7 +544,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
         margin: 0,
         label: label,
         backColor: color,
-        style: Styles.mediumText(color: Colors.white),
+        style:
+            Styles.mediumText(color: AppColors.getReversedTextColor(context),fontSize: 32,),
         onPressed: onPressed,
       ),
     );
@@ -565,10 +567,10 @@ class CallMessageReportButtons extends StatelessWidget {
           IconButton(
             icon: SvgPicture.asset(
               Assets.phoneIconRed,
-              width: 18,
-              height: 18,
+              width: 22,
+              height: 22,
               color: isChatEnabled == true
-                  ? AppColors.PRIMARY_COLOR_DARK
+                  ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
             ),
             color: isChatEnabled == true
@@ -578,7 +580,7 @@ class CallMessageReportButtons extends StatelessWidget {
                 ? () {
                     showModalBottomSheet(
                       context: context,
-                      backgroundColor: cardDarkColor(context),
+                      backgroundColor: AppColors.getFindFillColor(context),
                       shape: const RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(16)),
@@ -591,13 +593,14 @@ class CallMessageReportButtons extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               AppButton(
-                                backColor: AppColors.PRIMARY_COLOR,
-                                color: AppColors.whiteColor,
+                                backColor:
+                                    AppColors.getButtonPrimaryColor(context),
+                                color: AppColors.getReversedTextColor(context),
                                 onPressed: () {
                                   Navigator.pop(context); // Close first sheet
                                   // _showFreeCallBottomSheet(context, item);
                                 },
-                                label: "Free Call",
+                                label: LocaleKeys.freeCall.localize,
                               ),
                               AppButton(
                                 backColor: AppColors.cD9D9D9,
@@ -607,7 +610,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                   _showRegularCallBottomSheet(
                                       context, item); // Open second
                                 },
-                                label: "Regular Call",
+                                label: LocaleKeys.regularCall.localize,
                               ),
                             ],
                           ),
@@ -627,12 +630,14 @@ class CallMessageReportButtons extends StatelessWidget {
           IconButton(
             icon: SvgPicture.asset(
               Assets.mailIconRed,
+              width: 18,
+              height: 18,
               color: isChatEnabled == true
-                  ? AppColors.PRIMARY_COLOR_DARK
+                  ? AppColors.getRedColor(context)
                   : AppColors.GREY_DARK_COLOR,
             ),
             color: isChatEnabled == true
-                ? AppColors.PRIMARY_COLOR
+                ? AppColors.getRedColor(context)
                 : AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled == true
                 ? () {
@@ -648,13 +653,13 @@ class CallMessageReportButtons extends StatelessWidget {
           ),
           // const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.report),
-            color: AppColors.PRIMARY_COLOR_DARK,
+            icon: const Icon(Icons.report,size: 26,),
+            color: AppColors.getRedColor(context),
             onPressed: () async {
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                backgroundColor: cardDarkColor(context),
+                backgroundColor: AppColors.getFindFillColor(context),
                 builder: (context) {
                   return SizedBox(
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
@@ -684,7 +689,7 @@ class CallMessageReportButtons extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: cardDarkColor(context),
+      backgroundColor: AppColors.getFindFillColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -710,8 +715,9 @@ class CallMessageReportButtons extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CheckboxListTile(
-                    activeColor: AppColors.PRIMARY_COLOR,
+                    activeColor: AppColors.getButtonPrimaryWhiteColor(context),
                     contentPadding: EdgeInsets.zero,
+                    checkColor: AppColors.getPrimaryTextColor(context),
                     value: isBookingForAnotherClient,
                     onChanged: (value) {
                       setState(() {
@@ -741,17 +747,17 @@ class CallMessageReportButtons extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    enabled: isBookingForAnotherClient,
+                    // enabled: isBookingForAnotherClient,
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
                     style: TextStyle(
-                      color: Colors.black.withOpacity(0.8),
+                      color: AppColors.getTextColor(context),
                     ),
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: SvgPicture.asset(
-                          color: AppColors.PRIMARY_COLOR,
+                          color: AppColors.getButtonPrimaryWhiteColor(context),
                           Assets.phoneIconRed,
                           width: 18,
                           height: 18,
@@ -763,19 +769,18 @@ class CallMessageReportButtons extends StatelessWidget {
                           ? LocaleKeys.enterPhoneNumber.localize
                           : null,
                       filled: true,
-                      fillColor: Colors.grey.shade200,
+                      fillColor: AppColors.getFillColor(context),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none),
                     ),
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     child: AppButton(
-                      backColor: AppColors.PRIMARY_COLOR,
-                      color: AppColors.whiteColor,
+                      backColor: AppColors.getButtonPrimaryColor(context),
+                      color: AppColors.getReversedTextColor(context),
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
                         final enteredNumber = phoneController.text.trim();

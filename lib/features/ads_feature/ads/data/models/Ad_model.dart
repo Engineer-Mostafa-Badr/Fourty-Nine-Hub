@@ -30,6 +30,8 @@ class AdModel extends AdEntity {
     required super.createdAt,
     required super.details,
     super.subCategoryId,
+    super.subCategoryNameEn,
+    super.subCategoryNameAr,
     super.phone,
     super.currencyEn,
     super.currencyAr,
@@ -55,6 +57,8 @@ class AdModel extends AdEntity {
       images: images,
       price: json['price'] ?? 0,
       subCategoryId: json['subCategoryId'],
+      subCategoryNameEn: json['subCategory']?['nameEn'] ?? '',
+      subCategoryNameAr: json['subCategory']?['nameAr'] ?? '',
       active: json['isActive'] ?? true,
       approved: json['isApproved'] ?? true,
       isFavourite: json['isFavorite'] ?? false,
@@ -87,7 +91,8 @@ class AdModel extends AdEntity {
         // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
-        if (price != null) "price": price,
+        // TODO: add the user model
+        // if (price != null) "price": price,
         // "userId": userId,
         "searchText": "testPropsAndAds",
         "images": images,
@@ -99,6 +104,11 @@ class AdModel extends AdEntity {
             };
           }
         }).toList(),
-        "address": {"government": governorate, "city": city}
+        // TODO: add the address model
+        // "address": {"government": governorate, "city": city}
+        "address": {
+          "type": "Point",
+          "coordinates": [30.030030, 30.5262]
+        }
       };
 }

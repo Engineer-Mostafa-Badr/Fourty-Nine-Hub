@@ -68,7 +68,8 @@ class _FilterAdDynamicInputWidgetState
               maxLines: null,
               onChanged: (v) =>
                   widget.onTextChanged(v, true, widget.property.type),
-              style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+              style: Styles.mediumText(
+                  fontSize: 32, color: AppColors.getTextColor(context)),
               decoration: InputDecoration(
                 fillColor: AppColors.getFillColor(context),
                 filled: true,
@@ -93,7 +94,8 @@ class _FilterAdDynamicInputWidgetState
                   borderRadius: BorderRadius.circular(15.0),
                   borderSide: BorderSide.none,
                 ),
-                hintStyle: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+                hintStyle: Styles.mediumText(
+                    fontSize: 32, color: AppColors.getTextColor(context)),
                 hintText: getLang() == 'ar'
                     ? widget.property.nameAr
                     : widget.property.nameEn,
@@ -181,7 +183,9 @@ class _FilterAdDynamicInputWidgetState
                         text: getLang() == 'ar'
                             ? value?.nameAr ?? ''
                             : value?.nameEn ?? '',
-                        style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+                        style: Styles.mediumText(
+                            fontSize: 32,
+                            color: AppColors.getTextColor(context)),
                       ),
                     ),
                   ),
@@ -294,7 +298,8 @@ class _FilterAdDynamicInputWidgetState
                     onChanged: (v) =>
                         widget.onTextChanged(v, true, widget.property.type),
                     keyboardType: TextInputType.number,
-                    style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+                    style: Styles.mediumText(
+                        fontSize: 32, color: AppColors.getTextColor(context)),
                     decoration: InputDecoration(
                       fillColor: AppColors.getFillColor(context),
                       filled: true,
@@ -320,7 +325,8 @@ class _FilterAdDynamicInputWidgetState
                         borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
-                      hintStyle: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+                      hintStyle: Styles.mediumText(
+                          fontSize: 32, color: AppColors.getTextColor(context)),
                       hintText: LocaleKeys.from.localize,
                       // prefix: Sizer(
                       //   width: 20.w,
@@ -347,7 +353,8 @@ class _FilterAdDynamicInputWidgetState
                     onChanged: (v) =>
                         widget.onTextChanged(v, false, widget.property.type),
                     keyboardType: TextInputType.number,
-                    style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+                    style: Styles.mediumText(
+                        fontSize: 32, color: AppColors.getTextColor(context)),
                     decoration: InputDecoration(
                       fillColor: AppColors.getFillColor(context),
                       filled: true,
@@ -375,7 +382,8 @@ class _FilterAdDynamicInputWidgetState
                       ),
 
                       hintText: LocaleKeys.to.localize,
-                      hintStyle: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+                      hintStyle: Styles.mediumText(
+                          fontSize: 32, color: AppColors.getTextColor(context)),
                       // prefix: Sizer(
                       //   width: 20.w,
                       // ),
@@ -412,24 +420,31 @@ class _FilterAdDynamicInputWidgetState
           const SizedBox(
             height: 4,
           ),
-          Row(
-            spacing: 8,
-            children: widget.property.values.map((e) {
-              return Expanded(
-                child: InkWell(
-                  onTap: () {
-                    widget.onChanged(e);
-                    value = e;
-                    setState(() {});
-                  },
-                  child: Container(
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 3.4,
+            ),
+            itemCount: widget.property.values.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  widget.onChanged(widget.property.values[index]);
+                  value = widget.property.values[index];
+                  setState(() {});
+                },
+                child: Container(
                     height: 42,
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(5),
                     // margin: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color:AppColors.getFillColor(context),
-                      border: value == e
+                      color: AppColors.getFillColor(context),
+                      border: value == widget.property.values[index]
                           ? Border.all(
                               color: AppColors.SECONDARY_COLOR_DARK2,
                             )
@@ -437,14 +452,49 @@ class _FilterAdDynamicInputWidgetState
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Label(
-                      text: getLang() == 'ar' ? e.nameAr : e.nameEn,
-                      style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
-                    ),
-                  ),
-                ),
+                      text: getLang() == 'ar'
+                          ? widget.property.values[index].nameAr
+                          : widget.property.values[index].nameEn,
+                      style: Styles.mediumText(
+                          fontSize: 32, color: AppColors.getTextColor(context)),
+                    )),
               );
-            }).toList(),
+            },
           ),
+          // Row(
+          //   spacing: 8,
+          //   children: widget.property.values.map((e) {
+          //     return Expanded(
+          //       child: InkWell(
+          //         onTap: () {
+          //           widget.onChanged(e);
+          //           value = e;
+          //           setState(() {});
+          //         },
+          //         child: Container(
+          //           height: 42,
+          //           alignment: Alignment.center,
+          //           padding: const EdgeInsets.all(5),
+          //           // margin: const EdgeInsets.all(5),
+          //           decoration: BoxDecoration(
+          //             color: AppColors.getFillColor(context),
+          //             border: value == e
+          //                 ? Border.all(
+          //                     color: AppColors.SECONDARY_COLOR_DARK2,
+          //                   )
+          //                 : null,
+          //             borderRadius: BorderRadius.circular(15),
+          //           ),
+          //           child: Label(
+          //             text: getLang() == 'ar' ? e.nameAr : e.nameEn,
+          //             style: Styles.mediumText(
+          //                 fontSize: 32, color: AppColors.getTextColor(context)),
+          //           ),
+          //         ),
+          //       ),
+          //     );
+          //   }).toList(),
+          // ),
 
           // RichText(
           //     text: TextSpan(

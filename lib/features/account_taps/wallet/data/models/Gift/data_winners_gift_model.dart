@@ -5,6 +5,10 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/data_
 class DataWinnersGiftModel extends DataWinnersGiftEntity {
   DataWinnersGiftModel({
     required super.winnersGift,
+    required super.totalAmount,
+    required super.totalWinners,
+    required super.currencyEn,
+    required super.currencyAr,
     required super.pagination,
   });
 
@@ -13,6 +17,10 @@ class DataWinnersGiftModel extends DataWinnersGiftEntity {
       winnersGift: (json['winners'] as List)
           .map((e) => WinnersGiftModel.fromJson(e))
           .toList(),
+      totalAmount: json['totalAmount'],
+      totalWinners: json['totalWinners'],
+      currencyEn: json['currencyEn'],
+      currencyAr: json['currencyAr'],
       pagination: PaginationModel.fromJson(json["pagination"]),
     );
   }

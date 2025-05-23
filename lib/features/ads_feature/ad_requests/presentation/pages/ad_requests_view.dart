@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -113,7 +114,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                   itemBuilder: (context, index) {
                     if (index ==
                         context.read<AdRequestsCubit>().adRequests.length) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const CustomLoading();
                     }
 
                     final adRequest =

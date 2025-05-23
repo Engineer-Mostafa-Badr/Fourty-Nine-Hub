@@ -141,43 +141,33 @@ class _MyAdCardState extends State<MyAdCard> {
                     SizedBox(
                       height: 4,
                     ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(Assets.adsTimeIcon),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Label(
-                          text: '***** / years',
-                          style: Styles.headerText(
-                            fontSize: 24,
-                            height: 1.60,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(Assets.adsBagIcon),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Label(
-                          text: '${LocaleKeys.exp.localize}: *****',
-                          style: Styles.headerText(
-                            fontSize: 24,
-                            height: 1.60,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
+                    Column(
+                      children: widget.item.details
+                          .where((e) => e.nameEn == 'experience level')
+                          .map((e) {
+                        return Row(
+                          children: [
+                            ImageFromInternet(
+                              image: e.image ?? '',
+                              width: 30.w,
+                              height: 30.h,
+                              defaultLogo: true,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Label(
+                              text: context.isArabic
+                                  ? e.value.nameAr
+                                  : e.value.nameEn,
+                              style: Styles.headerText(
+                                fontSize: 24,
+                                height: 1.60,
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
                     ),
                     Row(
                       children: [
@@ -230,7 +220,7 @@ class _MyAdCardState extends State<MyAdCard> {
                             subcategoryId: widget.item.subCategoryId ?? '',
                             phone: widget.item.user?.phone ?? '',
                             subscriptionStatus:
-                                widget.item.subscriptionStatus ?? '',
+                                widget.item.userSubscriptionStatus ?? '',
                           )
                   ],
                 ),
@@ -426,7 +416,27 @@ class _MyAdCardState extends State<MyAdCard> {
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: IconButton(
+                              iconSize: 20,
+                              padding: EdgeInsets.zero,
+                              style: IconButton.styleFrom(
+                                backgroundColor: Color(0xffD9D9D9),
+                              ),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.black,
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
                           PremiumRequestButton(
                             adId: adId,
                             subCategoryId: subcategoryId,

@@ -2,6 +2,7 @@ part of 'payment_cubit.dart';
 
 class PaymentState {
   final StateStatus? status;
+  final StateStatus instaPayStatus;
   final Failure? failure;
   final List<PaymentProviderEntity>? data;
   final PaymobEntity? paymobData;
@@ -19,6 +20,7 @@ class PaymentState {
 
   PaymentState({
     this.status,
+    this.instaPayStatus = StateStatus.initial,
     this.failure,
     this.data,
     this.paymobData,
@@ -37,6 +39,7 @@ class PaymentState {
 
   PaymentState copyWith({
     StateStatus? status,
+    StateStatus? instaPayStatus,
     Failure? failure,
     List<PaymentProviderEntity>? data,
     PaymobEntity? paymobData,

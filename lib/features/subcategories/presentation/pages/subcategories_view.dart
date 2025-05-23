@@ -336,7 +336,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 SearchBarWidget(
                   onChanged: (value) {
                     _debounce.run(() {
-                      context.read<SubcategoriesCubit>().searchAds(value);
+                      context.read<SubcategoriesCubit>().searchAds(
+                            value: value,
+                            mainCategoryId: widget.mainCategory.id,
+                          );
                     });
                   },
                 ),

@@ -49,10 +49,13 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
         return Center(
           child: Label(
             text: LocaleKeys.noRequests.localize,
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? AppColors.whiteColor
-                    : AppColors.PRIMARY_COLOR),
+            style: Styles.headerText(
+              fontSize: 40,
+              color: context.isDarkMode
+                  ? Colors.white.withValues(alpha: 178)
+                  : Colors.black.withValues(alpha: 178),
+              height: 1.60,
+            ),
           ),
         );
       }

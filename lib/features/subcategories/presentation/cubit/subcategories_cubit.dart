@@ -631,10 +631,13 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   int currentPageSearchAds = 1;
   List<AdModel> searchAdsList = [];
 
-  Future<void> searchAds(String value) async {
+  Future<void> searchAds(
+      {required String value, required String mainCategoryId}) async {
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
-    final response =
-        await _searchAdsUseCase(SearchAdsParams(searchText: value));
+    final response = await _searchAdsUseCase(SearchAdsParams(
+      searchText: value,
+      mainCategoryId: mainCategoryId,
+    ));
     response.fold(
       (failure) => emit(state.copyWith(
         failure: failure,

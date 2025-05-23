@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/ten_percent/domain/entities/winners_ten_percent_entity.dart';
+import 'package:fourtyninehub/features/ten_percent/domain/usecases/get_winners_ten_percent_use_case.dart';
 
 import 'package:fourtyninehub/features/ten_percent/domain/usecases/send_bill_request_use_case.dart';
 
@@ -15,5 +17,11 @@ class TenPercentRepoImpl implements TenPercentRepo {
   Future<Either<Failure, bool>> sendBillRequest(
       {required SentBillRequestParams params}) async {
     return await _remoteDataSource.sendBillRequest(params: params);
+  }
+
+  @override
+  Future<Either<Failure, WinnersTenPercentEntity>> getWinnersTenPercent(
+      {required GetWinnersTenPercentParams params}) {
+    return _remoteDataSource.getWinnersTenPercent(params: params);
   }
 }
