@@ -347,7 +347,7 @@ class _LoginViewState extends State<LoginView> {
                               labelStyle: TextStyle(
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              label: LocaleKeys.register.localize,
+                              label: LocaleKeys.confirm.localize,
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
@@ -368,7 +368,7 @@ class _LoginViewState extends State<LoginView> {
                             )
                           : DefaultButton(
                               width: double.infinity,
-                              label: LocaleKeys.login.localize,
+                              label: LocaleKeys.confirm.localize,
                               labelStyle: TextStyle(
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),

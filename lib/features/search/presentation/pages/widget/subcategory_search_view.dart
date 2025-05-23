@@ -23,6 +23,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../domain/use_case/fetch_search_use_case.dart';
 
 class SubCategorySearchView extends StatefulWidget {
@@ -96,7 +97,11 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
       prev.searchSubCategory != curr.searchSubCategory || prev.status != curr.status,
       builder: (context, state) {
         final subCategories = _cubit.subCategoriesSearch;
-
+        if (_cubit.searchController.text.trim().isEmpty) {
+          return CustomEmptyWidget(
+            label: LocaleKeys.noData.localize,
+          );
+        }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
           return const Center(child: CircularProgressIndicator());
@@ -104,7 +109,9 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
 
         // No results
         if (subCategories.isEmpty) {
-          return const Center(child: Text('No subcategories found.'));
+          return CustomEmptyWidget(
+            label: LocaleKeys.noResultsFound.localize,
+          );
         }
 
         // List view with loader at bottom

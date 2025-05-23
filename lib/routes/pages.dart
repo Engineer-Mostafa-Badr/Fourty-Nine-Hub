@@ -303,6 +303,7 @@ import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
+import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
@@ -364,6 +365,7 @@ import '../features/authentication/presentation/controllers/create_new_forgot_pa
 import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
+import '../features/authentication/presentation/pages/first_login_screen.dart';
 import '../features/authentication/presentation/pages/forgot_password/create_new_forget_password_view.dart';
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
 import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
@@ -516,6 +518,16 @@ class AppPages {
                 path: Routes.onBoardingScreen,
                 name: Routes.onBoardingScreen,
                 builder: (context, state) => const OnBoardingScreen(),
+              ),
+              GoRoute(
+                path: Routes.ChooseLangScreen,
+                name: Routes.ChooseLangScreen,
+                builder: (context, state) => const ChooseLangScreen(),
+              ),
+              GoRoute(
+                path: Routes.FirstLoginScreen,
+                name: Routes.FirstLoginScreen,
+                builder: (context, state) => const FirstLoginScreen(),
               ),
               GoRoute(
                 path: Paths.RestaurantDashboard,

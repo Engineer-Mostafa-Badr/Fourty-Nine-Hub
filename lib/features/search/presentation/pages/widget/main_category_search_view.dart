@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'build_Item_search_main_category.dart';
 
 //MainCategorySearchView
@@ -74,7 +75,11 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
       prev.search != curr.search || prev.status != curr.status,
       builder: (context, state) {
         final subCategories = _cubit.paginatedSearch;
-
+        if (_cubit.searchController.text.trim().isEmpty) {
+          return CustomEmptyWidget(
+            label: LocaleKeys.noData.localize,
+          );
+        }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
           return const Center(child: CircularProgressIndicator());
@@ -82,7 +87,9 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
 
         // No results
         if (subCategories.isEmpty) {
-          return const Center(child: Text('No subcategories found.'));
+          return CustomEmptyWidget(
+            label: LocaleKeys.noResultsFound.localize,
+          );
         }
 
         // List view with loader at bottom

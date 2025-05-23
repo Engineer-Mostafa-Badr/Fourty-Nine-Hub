@@ -380,8 +380,11 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                       },
                       child: Icon(
                         isSelected ? Icons.check_circle : Icons.circle_outlined,
-                        color:
-                            isSelected ? AppColors.PRIMARY_COLOR : Colors.grey,
+                        color: isSelected
+                            ? context.isDarkMode
+                                ? AppColors.whiteColor
+                                : AppColors.PRIMARY_COLOR
+                            : Colors.grey,
                       ),
                     ),
                   ],

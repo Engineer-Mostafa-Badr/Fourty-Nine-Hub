@@ -14,12 +14,14 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../../common/theme/cubit/cubit.dart';
-import '../../../../common/theme/cubit/states.dart';
+import '../../../../ads/interstitial_ad_model.dart';
+import '../../../../common/functions/helper/auth_helper.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../core/widget/custom_scaffold.dart';
-import '../../../../core/widget/custom_switch_list_title.dart';
 import '../../../../res/assets/assets.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
@@ -98,76 +100,47 @@ class SettingsView extends StatelessWidget {
                 //             // }
                 //           },
                 //           context: context)),
+
                 if (context.read<UserCubit>().isLoggedIn)
-                  listTileWidget(context,
-                      image: Assets.deleteAccount,
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        size: 40.h,
-                      ),
-                      label: LocaleKeys.deleteAccount.localize,
-                      onTap: () => showAreYouSure(
-                          title: LocaleKeys.alert.localize,
-                          subTitle: LocaleKeys.delete.localize,
-                          action: () async {
-                            context.read<SettingCubit>().deleteAccount();
-                            final prefs = await SharedPreferences.getInstance();
-                            await prefs.setBool("ISLOGIN", false);
-                            context.go(Routes.HOME);
-                          },
-                          context: context)),
-                BlocBuilder<ThemeCubit, ThemeStates>(
-                  builder: (BuildContext context, theme) {
-                    var themeCubit =
-                    context.read<ThemeCubit>();
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: CustomSwitchListTile(
-                        secondary: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 44.w,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              Assets.themeMode,
-                              width: 50.h,
-                              height: 50.h,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        title: themeCubit.isDarkTheme
-                            ? Label(
-                                text: LocaleKeys.lightMode.localize,
-                                style: Styles.mediumText(
-                                    fontSize: 65.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,),
-                              )
-                            : Label(
-                                text: LocaleKeys.darkMode.localize,
-                                style: Styles.mediumText(
-                                    fontSize: 65.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,),
-                              ),
-                        value: themeCubit.isDarkTheme,
-                        onChanged: (value) {
-                          if (theme is LightThemeModeStates) {
-                            ThemeCubit.get(context).darkThemeMode();
-                          }
-                          if (theme is DarkThemeModeStates) {
-                            ThemeCubit.get(context).lightThemeMode();
-                          }
-                        },
-                      ),
-                    );
-                  },
-                ),
+                  listTileWidget(
+                    context,
+                    image: Assets.privacy_icon,
+                    trailing:
+                        Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                    label: LocaleKeys.privacy.localize,
+                      onTap: () {
+                        if (!context.read<UserCubit>().isLoggedIn) {
+                          return pleaseLoginDialog(context);
+                        } else {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+
+                          context.pop();
+                          context.push(Routes.PRIVACY);
+                        }
+                      },
+                  ),
+                if (context.read<UserCubit>().isLoggedIn)
+                  listTileWidget(
+                    context,
+                    image: Assets.deleteAccount,
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_outlined,
+                      size: 40.h,
+                    ),
+                    label: LocaleKeys.deleteAccount.localize,
+                    onTap: () => showAreYouSure(
+                      title: LocaleKeys.alert.localize,
+                      subTitle: LocaleKeys.delete.localize,
+                      action: () async {
+                        context.read<SettingCubit>().deleteAccount();
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool("ISLOGIN", false);
+                        context.go(Routes.HOME);
+                      },
+                      context: context,
+                    ),
+                  ),
                 /* BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
                     builder: (context, state) {
                       var choiceRulerCubit = ChoiceRulerCubit.get(context);

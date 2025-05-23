@@ -25,6 +25,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
 
 
@@ -78,6 +79,13 @@ class _PostsSearchViewState extends State<PostsSearchView> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
+
+        final posts = _cubit.postsSearch;
+        if (_cubit.searchController.text.trim().isEmpty) {
+          return CustomEmptyWidget(
+            label: LocaleKeys.noData.localize,
+          );
+        }
         // Handle loading state
         if (state.status == SearchStates.loading) {
           return const Center(child: CircularProgressIndicator());
@@ -87,7 +95,9 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         if (state.status == SearchStates.success) {
           final posts = state.posts;
           if (posts == null || posts.isEmpty) {
-            return Center(child: Text('No posts found.'));
+            return CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
+            );
           }
           return ListView.builder(
             controller: _scrollController, // Add this line
@@ -103,7 +113,9 @@ class _PostsSearchViewState extends State<PostsSearchView> {
 
         // Handle error state
         if (state.status == SearchStates.error) {
-          return Center(child: Text('Error: Something went wrong.'));
+          return CustomEmptyWidget(
+            label: LocaleKeys.noResultsFound.localize,
+          );
         }
 
         // Fallback if no state matches

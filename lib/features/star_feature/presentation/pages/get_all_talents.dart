@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/t
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'talent_video_player.dart';
 
 class GetAllTalents extends StatelessWidget {
@@ -42,9 +43,8 @@ class GetAllTalents extends StatelessWidget {
           }
 
           if (cubit.allTalents.isEmpty) {
-            return Center(
-              // child: Text('Error: ${_getErrorMessage(state.failure)}'),
-              child: Text(context.isArabic?'لا يوجد نتائج': 'No Results Found'),
+            return CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
             );
           }
 

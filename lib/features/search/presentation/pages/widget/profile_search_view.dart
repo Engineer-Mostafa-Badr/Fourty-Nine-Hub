@@ -17,6 +17,7 @@ import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 
@@ -74,11 +75,8 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
         builder: (context, state) {
           // If no search has been initiated, show "No Data"
           if (_cubit.searchController.text.trim().isEmpty) {
-            return Center(
-              child: Text(
-                LocaleKeys.noData.localize,
-                style: Styles.mediumText(),
-              ),
+            return CustomEmptyWidget(
+              label: LocaleKeys.noData.localize,
             );
           }
 

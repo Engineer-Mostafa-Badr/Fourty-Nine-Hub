@@ -32,7 +32,6 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     'Enjoy endless content! Flip through Reels and discover fun clips at every moment.',
     'Share your moments! Add stories and share your diary with your friends easily.',
     'Communicate without limits! Start chatting with your friends anytime and easily.',
-    // 'Communicate freely! Enter voice rooms and talk to others easily and clearly.',
     'Go live! Share your moments with the world in a live broadcast without borders.',
   ];
   List<String> titlesAr = [
@@ -46,21 +45,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     'استمتع بمحتوى لا ينتهي! تصفح الريلز واكتشف مقاطع ممتعة في كل لحظة.',
     'شارك لحظاتك! أضف القصص وشارك يومياتك مع أصدقائك بسهولة.',
     'تواصل بلا حدود! ابدأ الدردشة مع أصدقائك في أي وقت وبسهولة.',
-    // 'تواصل بحرية! ادخل غرف الصوت وتحدث مع الآخرين بسهولة ووضوح.',
     'انطلق بالبث المباشر! شارك لحظاتك مع العالم في بث مباشر بلا حدود.',
   ];
-
-  // Future<void> getOnboardingData() async {
-  //   // CacheManager.getShowOnboarding();
-  //   emit(
-  //     state.copyWith(
-  //       currentIndex: 0,
-  //       image: images[0],
-  //       titleAr: titlesAr[0],
-  //       titleEn: titlesEn[0],
-  //     ),
-  //   );
-  // }
 
   @override
   Future<void> close() {

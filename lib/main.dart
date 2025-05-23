@@ -103,6 +103,7 @@ void main() async {
   // ZegoGiftManager().cache.cache(giftItemList);
   isActivate = await CacheManager.getActivation() ?? false;
   isShowOnboarding = await CacheManager.getShowOnboarding();
+  // isShowOnboarding = false;
   await CacheManager.getFloatingNavigator();
   //Admob.initialize();
 
@@ -117,9 +118,9 @@ void main() async {
   // final isActivated =  false;
   // Routes.onBoardingScreen
   print('will go onBoardingScreen ${!isShowOnboarding}');
-  // final initialRoute = Routes.onBoardingScreen;
+  // final initialRoute = Routes.ChooseLangScreen;
   final initialRoute = !isShowOnboarding
-      ? Routes.onBoardingScreen
+      ? Routes.ChooseLangScreen
       : isActivate
           ? Routes.PAGEPREVIEW
           : Routes.HOME;

@@ -193,6 +193,7 @@ flutter:
     # - assets/images/butterfly.png
     # - assets/images/salary.png
     - assets/icons/
+    - assets/gifs/
     - assets/icons/tinder/
     - assets/lottie/
     - assets/filters/
@@ -216,6 +217,10 @@ flutter:
     - family: Amiri
       fonts:
         - asset: assets/fonts/Amiri.ttf
+
+    - family: Tangerine
+      fonts:
+        - asset: assets/fonts/Tangerine-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

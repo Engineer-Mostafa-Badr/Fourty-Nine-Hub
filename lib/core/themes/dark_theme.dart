@@ -5,11 +5,11 @@ import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 
 ThemeData get darkTheme => ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.PRIMARY_COLOR),
-      // colorScheme: const ColorScheme.dark(
-      //   primary: AppColors.AUTH_CONTAINER_COLOR,
-      //   secondary: AppColors.AUTH_CONTAINER_COLOR,
-      // ),
+      // colorScheme: ColorScheme.fromSeed(seedColor: AppColors.PRIMARY_COLOR),
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.AUTH_CONTAINER_COLOR,
+        secondary: AppColors.AUTH_CONTAINER_COLOR,
+      ),
       useMaterial3: true,
       // brightness: Brightness.dark,
       primaryColor: AppColors.AUTH_CONTAINER_COLOR,
