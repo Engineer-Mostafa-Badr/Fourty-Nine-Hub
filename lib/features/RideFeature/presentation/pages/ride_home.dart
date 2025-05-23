@@ -408,9 +408,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                           )
                                                         : const SizedBox(),
                                 context.read<RideCubit>().selectedCategoryIsSocket
-                                    || state.requestedTrip == null
+                                    && (state.requestedTrip == null
                                 ||state.requestedTrip?.status == TripState.completed.name
-                                ||state.requestedTrip?.status == TripState.canceled.name
+                                ||state.requestedTrip?.status == TripState.canceled.name)
                                     ? _carTruckBtn(
                                         driverInfo: state.driverInfo,
                                         loadingInfo: state.loaderInfo,
