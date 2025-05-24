@@ -4,8 +4,8 @@ import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 
 ThemeData get lightTheme => ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: AppColors.PRIMARY_COLOR),
-  primaryColor: AppColors.PRIMARY_COLOR,
+      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.PRIMARY_COLOR),
+      primaryColor: AppColors.PRIMARY_COLOR,
       scaffoldBackgroundColor: AppColors.AUTH_CONTAINER_COLOR,
       //scaffoldBackgroundColor: Colors.grey[200],
       // colorScheme: ColorScheme.fromSeed(
@@ -92,21 +92,16 @@ ThemeData get lightTheme => ThemeData(
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.GREY_LIGHT_COLOR,
-        hintStyle: 
-        Styles.headerText(
+        hintStyle: Styles.headerText(
             fontSize: 25,
             decoration: TextDecoration.none,
-            decorationThickness: 0
-            ),
+            decorationThickness: 0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(
             color: AppColors.DIVIDER_GRAY_COLOR2,
           ),
         ),
-
-
-        
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
         ),
