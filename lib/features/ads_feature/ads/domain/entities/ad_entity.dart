@@ -60,6 +60,8 @@ class AdEntity {
   final String? phone;
   final String? subCategoryId;
   final String? mainCategoryId;
+  final String? subCategoryNameEn;
+  final String? subCategoryNameAr;
   final String? userId;
   final String? subscriptionStatus;
   final num? views;
@@ -89,6 +91,8 @@ class AdEntity {
     required this.user,
     this.subCategoryId,
     this.mainCategoryId,
+    this.subCategoryNameEn,
+    this.subCategoryNameAr,
     this.userId,
     this.subscriptionStatus,
     this.userSubscriptionStatus,

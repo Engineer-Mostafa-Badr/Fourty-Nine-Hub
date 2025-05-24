@@ -68,9 +68,12 @@ abstract class SocketIOListeners {
   static const String acceptDriverOffer = 'RIDE:ACCEPTED_OFFER_FROM_CLIENT';
   static const String newAvailableTrip = 'REID:NEW_AVAILABLE_TRIP';
   static const String removeTrip = 'REMOVE_TRIP_FROM_LIST';
+  static const String endTrip = 'Ride:endTrip';
+  static const String listenToClientComing = 'RIDE:CLIENT_ABROACH_DRIVER';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
   static const String acceptUntrackedTripOffer = 'RIDE:ACCEPT_UNTRACKED_TRIP_OFFER_BY_CLIENT';
   static const String rideUpdateUntrackedTrip = 'RIDE:NON_TRACKING_TRIPS_UPDATED';
+  static const String rideUpdateOfferUntrackedClientTrip = 'RIDE:NON_TRACKING_OFFERS_UPDATE';
 }
 
 abstract class SocketIOEvents {
