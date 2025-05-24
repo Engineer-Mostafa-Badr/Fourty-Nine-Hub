@@ -59,254 +59,257 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
             subcategoryId: widget.subcategoryId),
         builder: (context, snap) {
           print(snap.data);
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
-                color:
-                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  visualDensity:
+                      const VisualDensity(horizontal: -4, vertical: -4),
+                  color:
+                      (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                          ? AppColors.getRedColor(context)
+                          : AppColors.GREY_DARK_COLOR,
+                  icon: SvgPicture.asset(
+                    Assets.phoneIcon,
+                    width: 36.h,
+                    height: 36.h,
+                    fit: BoxFit.cover,
+                    color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
                         ? AppColors.getRedColor(context)
                         : AppColors.GREY_DARK_COLOR,
-                icon: SvgPicture.asset(
-                  Assets.phoneIcon,
-                  width: 36.h,
-                  height: 36.h,
-                  fit: BoxFit.cover,
-                  color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                      ? AppColors.getRedColor(context)
-                      : AppColors.GREY_DARK_COLOR,
+                  ),
+                  onPressed: () => JoinTripBottomSheet(
+                    context,
+                    topButtonColor: AppColors.getButtonPrimaryColor(context),
+                    topButtonTitle: LocaleKeys.freeCall.localize,
+                    bottomButtonColor: context.isDarkMode?AppColors.fill_Color_DARK:const Color(0xFFD9D9D9),
+                    bottomButtonTitle: LocaleKeys.regularCall.localize,
+                    onTap: () => showDialogTripJoin(
+                        context,
+                        DialogContent(
+                          subTitle: context.isArabic
+                              ? 'برجاء الاشتراك حتي تستطيع التواصل مع الطبيب'
+                              : 'Please Subscribe to contact Doctor',
+                          leftButtonTitle: LocaleKeys.close.localize,
+                          rightButtonTitle: LocaleKeys.subscribe.localize,
+                        )),
+                    topTextColor:
+                        context.isDarkMode ? Colors.black : Colors.white,
+                    bottomTextColor:
+                    AppColors.getTextColor(context),
+                  ),
+                  // !context.read<UserCubit>().isLoggedIn
+                  //     ? () => context.push(Routes.LOGIN)
+                  //     :
+                  // snap.data == true
+                  //         ?
+                  //     () {
+                  //             showModalBottomSheet(
+                  //               backgroundColor: context.isDarkMode
+                  //                   ? AppColors.DARK_BLUE_COLOR
+                  //                       .withOpacity(0.95)
+                  //                   : AppColors.LIGHT_COLOR,
+                  //               context: context,
+                  //               shape: const RoundedRectangleBorder(
+                  //                 borderRadius: BorderRadius.only(
+                  //                   topLeft: Radius.circular(32.0),
+                  //                   topRight: Radius.circular(32.0),
+                  //                 ),
+                  //               ),
+                  //               isDismissible: true,
+                  //               isScrollControlled: true,
+                  //               builder: (BuildContext context) {
+                  //                 return BlocProvider.value(
+                  //                   value: serviceLocator<AdvertisementCubit>(),
+                  //                   child: AnimatedPadding(
+                  //                     padding:
+                  //                         MediaQuery.of(context).viewInsets,
+                  //                     duration:
+                  //                         const Duration(milliseconds: 50),
+                  //                     child: Container(
+                  //                       height: 150.h,
+                  //                       padding: EdgeInsets.symmetric(
+                  //                         vertical: 10.h,
+                  //                         horizontal: 10,
+                  //                       ),
+                  //                       child: Row(
+                  //                         crossAxisAlignment:
+                  //                             CrossAxisAlignment.center,
+                  //                         children: [
+                  //                           Expanded(
+                  //                             flex: 3,
+                  //                             child: AvaialbleTripsButton(
+                  //                               title: context.isArabic
+                  //                                   ? "خدمة الاتصال"
+                  //                                   : "Service Call",
+                  //                               color:
+                  //                                   AppColors.SECONDARY_COLOR,
+                  //                               padding:
+                  //                                   const EdgeInsets.symmetric(
+                  //                                       horizontal: 15,
+                  //                                       vertical: 5),
+                  //                               onTap: () {
+                  //                                 context.pop();
+                  //                                 LaunchURLHelper().call(
+                  //                                     phone: widget.phone);
+                  //                               },
+                  //                             ),
+                  //                           ),
+                  //                           const Sizer(width: 5),
+                  //                           Expanded(
+                  //                             flex: 3,
+                  //                             child: AvaialbleTripsButton(
+                  //                               title: context.isArabic
+                  //                                   ? "اتصال مميز"
+                  //                                   : "Premium Call",
+                  //                               color:
+                  //                                   AppColors.SECONDARY_COLOR,
+                  //                               padding:
+                  //                                   const EdgeInsets.symmetric(
+                  //                                       horizontal: 15,
+                  //                                       vertical: 5),
+                  //                               onTap: () async {
+                  //                                 context.pop();
+                  //                                 if (await Permission
+                  //                                             .microphone
+                  //                                             .request() !=
+                  //                                         PermissionStatus
+                  //                                             .granted ||
+                  //                                     await Permission.camera
+                  //                                             .request() !=
+                  //                                         PermissionStatus
+                  //                                             .granted) {
+                  //                                   await Permission.microphone
+                  //                                       .request();
+                  //                                   await Permission.camera
+                  //                                       .request();
+                  //                                 }
+                  //                                 print(
+                  //                                     'sender data is ${widget.otherUserId}, ${widget.senderName}, ${widget.senderImage}, ');
+                  //                                 final fcmToken =
+                  //                                     await serviceLocator<
+                  //                                             FcmNotificationHelper>()
+                  //                                         .getFcmUserToken();
+                  //                                 Navigator.push(
+                  //                                     context,
+                  //                                     MaterialPageRoute(
+                  //                                         builder: (context) =>
+                  //                                             SendWhatsappCallScreen(
+                  //                                               isRealCall:
+                  //                                                   false,
+                  //                                               callType:
+                  //                                                   CallType
+                  //                                                       .audio,
+                  //                                               receiver: UserModel(
+                  //                                                   id: widget
+                  //                                                       .otherUserId,
+                  //                                                   firstName:
+                  //                                                       widget.senderName ??
+                  //                                                           '',
+                  //                                                   lastName:
+                  //                                                       '',
+                  //                                                   firebaseToken:
+                  //                                                       "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
+                  //                                                   // chat.fcmToken
+                  //                                                   ),
+                  //                                               sender:
+                  //                                                   UserModel(
+                  //                                                 id: widget
+                  //                                                     .otherUserId,
+                  //                                                 firstName:
+                  //                                                     widget.senderName ??
+                  //                                                         '',
+                  //                                                 lastName:
+                  //                                                     widget.senderName ??
+                  //                                                         '',
+                  //                                                 firebaseToken:
+                  //                                                     fcmToken,
+                  //                                               ),
+                  //                                             )));
+                  //                               },
+                  //                             ),
+                  //                           )
+                  //                         ],
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 );
+                  //               },
+                  //             );
+                  //           // }
+                  //         // : () async {
+                  //         //     SubscriptionMethod().subscribe(
+                  //         //         subscribeId: widget.subcategoryId,
+                  //         //         title: LocaleKeys.ads.localize);
+                  //           },
                 ),
-                onPressed: () => JoinTripBottomSheet(
-                  context,
-                  topButtonColor: AppColors.getButtonPrimaryColor(context),
-                  topButtonTitle: LocaleKeys.freeCall.localize,
-                  bottomButtonColor: context.isDarkMode?AppColors.fill_Color_DARK:const Color(0xFFD9D9D9),
-                  bottomButtonTitle: LocaleKeys.regularCall.localize,
-                  onTap: () => showDialogTripJoin(
-                      context,
-                      DialogContent(
-                        subTitle: context.isArabic
-                            ? 'برجاء الاشتراك حتي تستطيع التواصل مع الطبيب'
-                            : 'Please Subscribe to contact Doctor',
-                        leftButtonTitle: LocaleKeys.close.localize,
-                        rightButtonTitle: LocaleKeys.subscribe.localize,
-                      )),
-                  topTextColor:
-                      context.isDarkMode ? Colors.black : Colors.white,
-                  bottomTextColor:
-                  AppColors.getTextColor(context),
-                ),
-                // !context.read<UserCubit>().isLoggedIn
-                //     ? () => context.push(Routes.LOGIN)
-                //     :
-                // snap.data == true
-                //         ?
-                //     () {
-                //             showModalBottomSheet(
-                //               backgroundColor: context.isDarkMode
-                //                   ? AppColors.DARK_BLUE_COLOR
-                //                       .withOpacity(0.95)
-                //                   : AppColors.LIGHT_COLOR,
-                //               context: context,
-                //               shape: const RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.only(
-                //                   topLeft: Radius.circular(32.0),
-                //                   topRight: Radius.circular(32.0),
-                //                 ),
-                //               ),
-                //               isDismissible: true,
-                //               isScrollControlled: true,
-                //               builder: (BuildContext context) {
-                //                 return BlocProvider.value(
-                //                   value: serviceLocator<AdvertisementCubit>(),
-                //                   child: AnimatedPadding(
-                //                     padding:
-                //                         MediaQuery.of(context).viewInsets,
-                //                     duration:
-                //                         const Duration(milliseconds: 50),
-                //                     child: Container(
-                //                       height: 150.h,
-                //                       padding: EdgeInsets.symmetric(
-                //                         vertical: 10.h,
-                //                         horizontal: 10,
-                //                       ),
-                //                       child: Row(
-                //                         crossAxisAlignment:
-                //                             CrossAxisAlignment.center,
-                //                         children: [
-                //                           Expanded(
-                //                             flex: 3,
-                //                             child: AvaialbleTripsButton(
-                //                               title: context.isArabic
-                //                                   ? "خدمة الاتصال"
-                //                                   : "Service Call",
-                //                               color:
-                //                                   AppColors.SECONDARY_COLOR,
-                //                               padding:
-                //                                   const EdgeInsets.symmetric(
-                //                                       horizontal: 15,
-                //                                       vertical: 5),
-                //                               onTap: () {
-                //                                 context.pop();
-                //                                 LaunchURLHelper().call(
-                //                                     phone: widget.phone);
-                //                               },
-                //                             ),
-                //                           ),
-                //                           const Sizer(width: 5),
-                //                           Expanded(
-                //                             flex: 3,
-                //                             child: AvaialbleTripsButton(
-                //                               title: context.isArabic
-                //                                   ? "اتصال مميز"
-                //                                   : "Premium Call",
-                //                               color:
-                //                                   AppColors.SECONDARY_COLOR,
-                //                               padding:
-                //                                   const EdgeInsets.symmetric(
-                //                                       horizontal: 15,
-                //                                       vertical: 5),
-                //                               onTap: () async {
-                //                                 context.pop();
-                //                                 if (await Permission
-                //                                             .microphone
-                //                                             .request() !=
-                //                                         PermissionStatus
-                //                                             .granted ||
-                //                                     await Permission.camera
-                //                                             .request() !=
-                //                                         PermissionStatus
-                //                                             .granted) {
-                //                                   await Permission.microphone
-                //                                       .request();
-                //                                   await Permission.camera
-                //                                       .request();
-                //                                 }
-                //                                 print(
-                //                                     'sender data is ${widget.otherUserId}, ${widget.senderName}, ${widget.senderImage}, ');
-                //                                 final fcmToken =
-                //                                     await serviceLocator<
-                //                                             FcmNotificationHelper>()
-                //                                         .getFcmUserToken();
-                //                                 Navigator.push(
-                //                                     context,
-                //                                     MaterialPageRoute(
-                //                                         builder: (context) =>
-                //                                             SendWhatsappCallScreen(
-                //                                               isRealCall:
-                //                                                   false,
-                //                                               callType:
-                //                                                   CallType
-                //                                                       .audio,
-                //                                               receiver: UserModel(
-                //                                                   id: widget
-                //                                                       .otherUserId,
-                //                                                   firstName:
-                //                                                       widget.senderName ??
-                //                                                           '',
-                //                                                   lastName:
-                //                                                       '',
-                //                                                   firebaseToken:
-                //                                                       "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
-                //                                                   // chat.fcmToken
-                //                                                   ),
-                //                                               sender:
-                //                                                   UserModel(
-                //                                                 id: widget
-                //                                                     .otherUserId,
-                //                                                 firstName:
-                //                                                     widget.senderName ??
-                //                                                         '',
-                //                                                 lastName:
-                //                                                     widget.senderName ??
-                //                                                         '',
-                //                                                 firebaseToken:
-                //                                                     fcmToken,
-                //                                               ),
-                //                                             )));
-                //                               },
-                //                             ),
-                //                           )
-                //                         ],
-                //                       ),
-                //                     ),
-                //                   ),
-                //                 );
-                //               },
-                //             );
-                //           // }
-                //         // : () async {
-                //         //     SubscriptionMethod().subscribe(
-                //         //         subscribeId: widget.subcategoryId,
-                //         //         title: LocaleKeys.ads.localize);
-                //           },
-              ),
-              IconButton(
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
-                color:
-                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                IconButton(
+                  visualDensity:
+                      const VisualDensity(horizontal: -4, vertical: -4),
+                  color:
+                      (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                          ? AppColors.getRedColor(context)
+                          : AppColors.GREY_DARK_COLOR,
+                  icon: SvgPicture.asset(
+                    Assets.mailIcon,
+                    color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
                         ? AppColors.getRedColor(context)
                         : AppColors.GREY_DARK_COLOR,
-                icon: SvgPicture.asset(
-                  Assets.mailIcon,
-                  color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                      ? AppColors.getRedColor(context)
-                      : AppColors.GREY_DARK_COLOR,
+                  ),
+                  onPressed: !context.read<UserCubit>().isLoggedIn
+                      ? () {
+                    pleaseLoginDialog(context);
+                    // context.push(Routes.LOGIN);
+                  }
+                      : snap.data == true
+                          ? () async {
+                              ChatEntity? chat = await context
+                                  .read<UserCubit>()
+                                  .createNormalChat(
+                                    otherId: widget.otherUserId,
+                                    categoryId: widget.subcategoryId,
+                                  );
+                              context.push(
+                                Routes.CHAT,
+                                extra: ChatsViewParams(
+                                  isFromStartChat: true,
+                                  initialTabIndex: 1,
+                                  selectedChat: chat,
+                                ),
+                              );
+                            }
+                          : () {
+                              SubscriptionMethod().subscribe(
+                                  subscribeId: widget.subcategoryId,
+                                  title: LocaleKeys.ads.localize);
+                            },
                 ),
-                onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () {
-                  pleaseLoginDialog(context);
-                  // context.push(Routes.LOGIN);
-                }
-                    : snap.data == true
-                        ? () async {
-                            ChatEntity? chat = await context
-                                .read<UserCubit>()
-                                .createNormalChat(
-                                  otherId: widget.otherUserId,
-                                  categoryId: widget.subcategoryId,
-                                );
-                            context.push(
-                              Routes.CHAT,
-                              extra: ChatsViewParams(
-                                isFromStartChat: true,
-                                initialTabIndex: 1,
-                                selectedChat: chat,
-                              ),
-                            );
-                          }
-                        : () {
-                            SubscriptionMethod().subscribe(
-                                subscribeId: widget.subcategoryId,
-                                title: LocaleKeys.ads.localize);
-                          },
-              ),
-              IconButton(
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
-                padding: EdgeInsets.zero,
-                color: AppColors.getRedColor(context),
-                icon: const Icon(
-                  Icons.report,
+                IconButton(
+                  visualDensity:
+                      const VisualDensity(horizontal: -4, vertical: -4),
+                  padding: EdgeInsets.zero,
+                  color: AppColors.getRedColor(context),
+                  icon: const Icon(
+                    Icons.report,
+                  ),
+                  onPressed: !context.read<UserCubit>().isLoggedIn
+                      ? () {
+                    pleaseLoginDialog(context);
+                    // context.push(Routes.LOGIN);
+                  }
+                      : () {
+                          bottomSheet(
+                              context: context,
+                              widget: ReportView(
+                                id: widget.id,
+                                categoryId: widget.subcategoryId,
+                              ));
+                        },
                 ),
-                onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () {
-                  pleaseLoginDialog(context);
-                  // context.push(Routes.LOGIN);
-                }
-                    : () {
-                        bottomSheet(
-                            context: context,
-                            widget: ReportView(
-                              id: widget.id,
-                              categoryId: widget.subcategoryId,
-                            ));
-                      },
-              ),
-            ],
+              ],
+            ),
           );
         });
   }

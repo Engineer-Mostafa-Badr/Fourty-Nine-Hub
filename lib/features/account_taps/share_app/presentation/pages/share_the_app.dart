@@ -109,12 +109,13 @@ class ShareTheApp extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          onTap: () {
+          onLongPress: () {
             Clipboard.setData(ClipboardData(text: referralId)).then((_) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(LocaleKeys.referralClipboard.localize)),
+                    backgroundColor: AppColors.getFindFillColor(context),
+                      content: Text(context.isArabic?'تم نسخ الإحالة الخاصة بك!':'Your Referral ID is copied!',style: Styles.mediumText(color: AppColors.getTextColor(context)),),),
                 );
               });
             });
