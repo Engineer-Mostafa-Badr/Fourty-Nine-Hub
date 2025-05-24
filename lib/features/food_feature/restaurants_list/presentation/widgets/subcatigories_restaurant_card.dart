@@ -81,6 +81,25 @@ class PropertyCard extends StatelessWidget {
     }
   }
 
+  String getSubscriptionType(String? subscriptionType) {
+    final normalizedType = subscriptionType?.trim().toLowerCase();
+
+    // 'Premium subscription': 2
+    // 'Regular subscription': 1
+    // 'No subscription': 0
+    switch (normalizedType) {
+      case ('no subscription'):
+        return LocaleKeys.notSubscribed.localize;
+      case ('premium subscription'):
+        return LocaleKeys.premium2.localize;
+      case ('regular subscription'):
+        return LocaleKeys.regularSubscription.localize;
+      default:
+        return 'N/A';
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final hasSubscription = item.isPremium;
@@ -129,7 +148,7 @@ class PropertyCard extends StatelessWidget {
                   ],
                 ),
                 Label(
-                  text: (context.isArabic ? item.subscriptionType?.ar : item.subscriptionType?.en) ?? "N/A",
+                  text: getSubscriptionType(item.subscriptionType?.en),
                   textAlign: TextAlign.right,
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w700,
