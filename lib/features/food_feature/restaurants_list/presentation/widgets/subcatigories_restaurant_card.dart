@@ -93,7 +93,7 @@ class PropertyCard extends StatelessWidget {
       case ('premium subscription'):
         return LocaleKeys.premium2.localize;
       case ('regular subscription'):
-        return LocaleKeys.regularSubscription.localize;
+        return LocaleKeys.regular.localize;
       default:
         return 'N/A';
     }
