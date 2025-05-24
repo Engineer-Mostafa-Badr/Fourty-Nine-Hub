@@ -16,7 +16,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
   final Widget? center;
 
   const CustomCircularProgressIndicator({
-    Key? key,
+    super.key,
     required this.radius,
     required this.lineWidth,
     this.startAngle = 0,
@@ -28,7 +28,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
     required this.backgroundColor,
     this.strokeCap = StrokeCap.round,
     this.center,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
