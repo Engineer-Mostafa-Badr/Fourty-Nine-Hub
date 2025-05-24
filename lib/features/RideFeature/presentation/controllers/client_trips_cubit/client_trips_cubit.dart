@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:go_router/go_router.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -25,6 +26,7 @@ import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../../domain/entities/get_offers_entity.dart';
 import '../../../domain/usecases/accept_non_track_trip_use_case.dart';
 import '../../../domain/usecases/cancel_non_track_trip_use_case.dart';
+import '../../../domain/usecases/client_trips/listen_to_offer_update_client_untracked_trip_use_case.dart';
 import '../../../domain/usecases/create_non_track_trip_use_case.dart';
 import '../../../domain/usecases/get_client_accepted_untracked_trips_use_case.dart';
 import '../../../domain/usecases/get_client_offer_untracked_trips_use_case.dart';
@@ -53,6 +55,8 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
   final AcceptNonTrackTripUseCase acceptNonTrackTripUseCase;
   final RefuseNonTrackTripUseCase refuseNonTrackTripUseCase;
   final GetClientPastUntrackedTripsUseCase getClientPastUntrackedTripsUseCase;
+  final ListenToOfferUpdateUntrackedTripUseCase listenToOfferUpdateUntrackedTripUseCase;
+
   ClientTripsCubit(
     this.makeNonTrackingRequestTripUsecase,
     this.getClientOffersUseCase,
@@ -60,8 +64,131 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     this._getCitiesUseCase,
     this._getGovernoratesUseCase,
     this.makeLoadingRequestTripUsecase,
-    this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase,
+    this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase, this.listenToOfferUpdateUntrackedTripUseCase,
   ) : super(const ClientTripsState());
+
+
+  void listenToUpdateOfferTripNonSocket() {
+    CliLogger.info('Listen To New Trip');
+
+    listenToOfferUpdateUntrackedTripUseCase((trip) {
+      if (isClosed) return;
+
+      final updatedTrip = ClientOfferTripEntity(
+        id: trip.id,
+        status: trip.status,
+        price: trip.price,
+        passengers: trip.passengers,
+        newOfferPrice: trip.newOfferPrice,
+        driverDetails: trip.driverDetails,
+        tripDetails: trip.tripDetails,
+        isFromSocket: true,
+      );
+
+      List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
+
+      // Debug: Log current state
+      CliLogger.info('Current list length: ${list.length}');
+      CliLogger.info('Current list IDs: ${list.map((e) => e.id).toList()}');
+      CliLogger.info('New trip ID: ${updatedTrip.id}');
+
+      // Check if trip already exists in the list
+      final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
+
+      if (existingIndex != -1) {
+        // Item exists - replace it at the same position
+        list[existingIndex] = updatedTrip;
+        CliLogger.info('Replaced existing offer at index $existingIndex');
+      } else {
+        // Item doesn't exist - add it as new item
+        list.add(updatedTrip);
+        CliLogger.info('Added new offer to list. New length: ${list.length}');
+      }
+
+      // Debug: Log state before emitting
+      CliLogger.info('About to emit state with list length: ${list.length}');
+      CliLogger.info('List IDs after update: ${list.map((e) => e.id).toList()}');
+
+      emit(state.copyWith(clientOfferTripData: list));
+
+      // Debug: Log state after emitting
+      CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData?.length}');
+      log('Final list count: ${list.length}');
+      log(updatedTrip.toString());
+    });
+  }
+
+
+  void listenToUpdateOfferTripNonSocket2() {
+    CliLogger.info('Listen To New Trip');
+
+    listenToOfferUpdateUntrackedTripUseCase((trip) {
+      if (isClosed) return;
+
+      final updatedTrip = ClientOfferTripEntity(
+        id: trip.id,
+        status: trip.status,
+        price: trip.price,
+        passengers: trip.passengers,
+        newOfferPrice: trip.newOfferPrice,
+        driverDetails: trip.driverDetails,
+        tripDetails: trip.tripDetails,
+        isFromSocket: true,
+      );
+
+      List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
+
+      // Check if list is empty or if trip doesn't exist
+      if (list.isEmpty) {
+        // If no data exists, add the new offer
+        list.add(updatedTrip);
+        CliLogger.info('Added new offer to empty list');
+      } else {
+        // Remove any existing trip with the same ID
+        final removedCount = list.length;
+        list.removeWhere((item) => item.id == updatedTrip.id);
+
+        if (list.length < removedCount) {
+          CliLogger.info('Replaced existing offer');
+        } else {
+          CliLogger.info('Added new offer to existing list');
+        }
+
+        // Insert updated trip at the beginning
+        list.insert(0, updatedTrip);
+      }
+
+      emit(state.copyWith(clientOfferTripData: list));
+      log('Final list count: ${list.length}');
+      log(updatedTrip.toString());
+    });
+  }
+
+
+
+  void listenToUpdateOfferTripNonSocket1() {
+    CliLogger.info('Listen To New Trip');
+    // TripsResponseEntity
+    listenToOfferUpdateUntrackedTripUseCase((trip) {
+      List<ClientOfferTripEntity> list = clientOfferTripsData ?? [];
+      list.insert(0, trip);
+      emit(state.copyWith(clientOfferTripData: list));
+      log(trip.toString());
+    });
+  }
+
+/*
+    void listenToNewTripNonSocket() {
+      CliLogger.info('Listen To New Trip');
+      // TripsResponseEntity
+      listenToAvailableUntrackedTripUseCase((trip) {
+        List<AvailableRideNonSocketTripEntity> list = availableRideNonSocketData ?? [];
+        list.insert(0, trip);
+        emit(state.copyWith(availableRideNonSocketTrips: list));
+        log(trip.toString());
+      });
+    }
+ */
 
 
 
