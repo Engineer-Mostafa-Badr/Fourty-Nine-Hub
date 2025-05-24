@@ -500,7 +500,7 @@ class MessageCard extends StatelessWidget {
                     AlertDialog(
                       title: const Text("Show Deleted Message"),
                       content: Text(
-                          chatRoomCubit.deletedMessage?.text ?? "Loading..."),
+                          chatRoomCubit.deletedMessage?.text ?? LocaleKeys.loading.localize),
                       actions: [
                         TextButton(
                           onPressed: () {

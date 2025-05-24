@@ -203,7 +203,8 @@ class EndPoints {
   static String myStar =
       '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
   static String uploadStar =
-      '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      // '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      '/talent/upload';
   static String bannerTalent =
       '/talent/banner?subCategory=${Constants.tubeSubCategory}';
   static String deleteMyStar({required String id}) =>

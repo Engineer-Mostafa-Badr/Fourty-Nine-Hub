@@ -200,11 +200,12 @@ class _BeStarViewState extends State<BeStarView> {
                             : state.banner?.titleEn ?? '',
                         textAlign: TextAlign.center,
                         style: Styles.mediumText(
-                          fontSize: 60.sp,
+                          fontSize: 30,
                           color: context.isDarkMode
                               ? Colors.white
                               : AppColors.PRIMARY_COLOR,
                         ),
+
                       ),
                       InkWell(
                         onTap: () {
@@ -260,7 +261,7 @@ class _BeStarViewState extends State<BeStarView> {
                         : state.banner?.subTitleEn ?? '',
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(
-                      fontSize: 32,
+                      fontSize: 28,
                       color: context.isDarkMode
                           ? Colors.white
                           : AppColors.PRIMARY_COLOR,

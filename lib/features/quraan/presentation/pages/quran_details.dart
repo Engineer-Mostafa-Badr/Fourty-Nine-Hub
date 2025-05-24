@@ -13,11 +13,13 @@ import '../../../../core/widget/custom_scaffold.dart';
 class QuranViewPage extends StatefulWidget {
   final int surahId;
   final int pageNumber;
+  final String surahName;
 
   const QuranViewPage({
     super.key,
     required this.surahId,
     required this.pageNumber,
+    required this.surahName,
   });
 
   @override
@@ -52,7 +54,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              'القران الكريم',
+              widget.surahName,
               style: TextStyle(fontSize: 40.sp),
             ),
             IconButton(

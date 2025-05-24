@@ -48,6 +48,7 @@ class _QuranPageState extends State<QuranPage> {
                           builder: (context) => QuranViewPage(
                             surahId: state.quranSurah![index].surahNo,
                             pageNumber: 1,
+                            surahName: state.quranSurah![index].surahNameAr,
                           ),
                         ),
                       );
@@ -62,6 +63,7 @@ class _QuranPageState extends State<QuranPage> {
                             builder: (context) => QuranViewPage(
                               surahId: state.quranSurah![index].surahNo,
                               pageNumber: 1,
+                              surahName: state.quranSurah![index].surahNameAr,
                             ),
                           ),
                         );

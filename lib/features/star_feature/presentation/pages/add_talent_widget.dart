@@ -9,13 +9,16 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../common/widgets/stateless/buttons/default_button.dart';
-import '../../../../core/messages/messages.dart';
+import '../../../../common/functions/global/upload_file.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class AddTalentWidget extends StatefulWidget {
   const AddTalentWidget({super.key});
@@ -31,6 +34,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   File? _selectedImages;
   File? _selectedVideo;
   VideoPlayerController? _videoController;
+  String? _mediaUrl;
 
   @override
   void dispose() {
@@ -53,71 +57,63 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   }
 
   void _showMediaPicker(bool isImage) async {
-    final ImagePicker picker = ImagePicker();
-
-    showModalBottomSheet(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      context: context,
-      builder: (BuildContext context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(LocaleKeys.gallery.localize),
-              onTap: () async {
-                Navigator.pop(context);
-                final XFile? file = isImage
-                    ? await picker.pickImage(source: ImageSource.gallery)
-                    : await picker.pickVideo(source: ImageSource.gallery);
-
-                if (file != null) {
-                  setState(() {
-                    if (isImage) {
-                      _selectedImages = File(file.path);
-                      _selectedVideo = null;
-                      _videoController?.dispose();
-                      _videoController = null;
-                    } else {
-                      _selectedVideo = File(file.path);
-                      _selectedImages = null;
-                      _initializeVideo(file.path);
-                    }
-                  });
-                }
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(LocaleKeys.camera.localize,style: Styles.mediumText(color: context.isDarkMode?AppColors.whiteColor:AppColors.black),),
-              onTap: () async {
-                Navigator.pop(context);
-                final XFile? file = isImage
-                    ? await picker.pickImage(source: ImageSource.camera)
-                    : await picker.pickVideo(source: ImageSource.camera);
-
-                if (file != null) {
-                  setState(() {
-                    if (isImage) {
-                      _selectedImages = File(file.path);
-                      _selectedVideo = null;
-                      _videoController?.dispose();
-                      _videoController = null;
-                    } else {
-                      _selectedVideo = File(file.path);
-                      _selectedImages = null;
-                      _initializeVideo(file.path);
-                    }
-                  });
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (isImage) {
+      UploadFile().uploadImage(
+        subCategoryId: Constants.tubeSubCategory,
+        onUploaded: (data) {
+          XFile? file = data.file;
+          _mediaUrl = data.mediaId;
+          if (file != null) {
+            setState(() {
+              if (isImage) {
+                _selectedImages = File(file.path);
+                _selectedVideo = null;
+                _videoController?.dispose();
+                _videoController = null;
+              } else {
+                _selectedVideo = File(file.path);
+                _selectedImages = null;
+                _initializeVideo(file.path);
+              }
+            });
+          }
+          print("data.mediaId ${data.mediaId}");
+          print("data.file ${data.file.mimeType}");
+          //Type here your code
+        },
+        context: context,
+      );
+    } else {
+      UploadFile().uploadVideo(
+        subCategoryId: Constants.tubeSubCategory,
+        onUploaded: (data) {
+          XFile? file = data.file;
+          _mediaUrl = data.mediaId;
+          if (file != null) {
+            setState(() {
+              if (isImage) {
+                _selectedImages = File(file.path);
+                _selectedVideo = null;
+                _videoController?.dispose();
+                _videoController = null;
+              } else {
+                _selectedVideo = File(file.path);
+                _selectedImages = null;
+                _initializeVideo(file.path);
+              }
+            });
+          }
+          print("data.mediaId ${data.mediaId}");
+          print("data.file ${data.file.mimeType}");
+          //Type here your code
+        },
+        context: context,
+      );
+    }
+    setState(() {});
   }
 
-  void _handleSubmit() {
+  Future<void> _handleSubmit() async {
     if (_formKey.currentState!.validate()) {
       if (_selectedImages == null && _selectedVideo == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -127,16 +123,48 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         );
         return;
       }
-
-      context.read<StarCubit>().uploadStar(
-            params: StarParams(
-              title: _titleController.text,
-              mediaUrl: _selectedImages!.path,
-              description: _descriptionController.text,
-              type: _selectedImages == null ? 'video' : 'image',
-            ),
-          );
+      serviceLocator<SubscriptionController>().checkIfUserSubscribed(
+        onSubscribed: () {
+          context
+              .read<StarCubit>()
+              .uploadStar(
+                params: StarParams(
+                  title: _titleController.text,
+                  mediaUrl: _mediaUrl ?? '',
+                  description: _descriptionController.text,
+                  type: _selectedImages == null ? 'video' : 'image',
+                ),
+              );
+          context.pop();
+          // context.pop();
+        },
+        subCategoryId: Constants.tubeSubCategory,
+      );
     }
+
+    // SubscriptionMethod().subscribe(
+    //     subscribeId: Constants.tubeSubCategory,
+    //     showRegular: true,
+    //     title: LocaleKeys.tube.localize);
+    // if (_formKey.currentState!.validate()) {
+    //   if (_selectedImages == null && _selectedVideo == null) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text(LocaleKeys.enterImageOrVideo.localize),
+    //       ),
+    //     );
+    //     return;
+    //   }
+    //
+    //   context.read<StarCubit>().uploadStar(
+    //         params: StarParams(
+    //           title: _titleController.text,
+    //           mediaUrl: _mediaUrl ?? '',
+    //           description: _descriptionController.text,
+    //           type: _selectedImages == null ? 'video' : 'image',
+    //         ),
+    //       );
+    // }
   }
 
   @override
@@ -176,7 +204,11 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                         )
                       : const Center(child: CircularProgressIndicator())
                   : _selectedImages == null
-                      ? Image.asset(Assets.cameraAddTalent,color: context.isDarkMode?AppColors.whiteColor:null,)
+                      ? Image.asset(
+                          Assets.cameraAddTalent,
+                          color:
+                              context.isDarkMode ? AppColors.whiteColor : null,
+                        )
                       : Image.file(_selectedImages!, fit: BoxFit.cover),
             ),
             const SizedBox(height: 16),
@@ -187,15 +219,17 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () => _showMediaPicker(true),
-                    icon: Image.asset(Assets.uploadIcon, color:AppColors.getReversedTextColor(context)),
+                    icon: Image.asset(Assets.uploadIcon,
+                        color: AppColors.getReversedTextColor(context)),
                     label: FittedBox(
                       child: Text(
                         LocaleKeys.talent_upload_image.localize,
-                        style: TextStyle(color:  AppColors.getReversedTextColor(context)),
+                        style: TextStyle(
+                            color: AppColors.getReversedTextColor(context)),
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:  AppColors.getRedColor(context),
+                      backgroundColor: AppColors.getRedColor(context),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -206,15 +240,17 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () => _showMediaPicker(false),
-                    icon: Image.asset(Assets.uploadIcon, color: AppColors.getReversedTextColor(context)),
+                    icon: Image.asset(Assets.uploadIcon,
+                        color: AppColors.getReversedTextColor(context)),
                     label: FittedBox(
                       child: Text(
                         LocaleKeys.talent_upload_video.localize,
-                        style: TextStyle(color: AppColors.getReversedTextColor(context)),
+                        style: TextStyle(
+                            color: AppColors.getReversedTextColor(context)),
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:AppColors.getRedColor(context),
+                      backgroundColor: AppColors.getRedColor(context),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -263,7 +299,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               decoration: InputDecoration(
                 hintText: LocaleKeys.desc.localize,
                 filled: true,
-                fillColor:  AppColors.getFindFillColor(context),
+                fillColor: AppColors.getFindFillColor(context),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -286,7 +322,8 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               ),
               child: Text(
                 LocaleKeys.publish.localize,
-                style: Styles.mediumText(color:AppColors.getReversedTextColor(context)),
+                style: Styles.mediumText(
+                    color: AppColors.getReversedTextColor(context)),
                 // const TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
