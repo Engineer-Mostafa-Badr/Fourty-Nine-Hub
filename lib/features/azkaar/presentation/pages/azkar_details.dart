@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -57,7 +58,7 @@ class _AzkarDetailsState extends State<AzkarDetails> {
         body: BlocBuilder<AzkarCubit, AzkarState>(
           builder: (BuildContext context, state) {
             if (state.status == AzkarStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             return ListView.separated(
               controller: _scrollController,
@@ -65,7 +66,7 @@ class _AzkarDetailsState extends State<AzkarDetails> {
               padding: const EdgeInsets.all(16),
               itemBuilder: (context, index) {
                 if (index == _cubit.azkarDetails.length) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomCircularProgressIndicator());
                 }
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),

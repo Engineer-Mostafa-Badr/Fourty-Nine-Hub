@@ -34,6 +34,7 @@ import '../../../../../core/constants/registration_status.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'favorite_ads.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -99,7 +100,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         },
 
         child: state.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CustomCircularProgressIndicator())
             : _buildLoggedInView(state),
       ),
     );

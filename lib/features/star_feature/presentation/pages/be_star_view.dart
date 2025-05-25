@@ -291,11 +291,11 @@ class _BeStarViewState extends State<BeStarView> {
                   //       }
                   //       if (index >= sortedStars.length) {
                   //         return const Center(
-                  //             child: CircularProgressIndicator());
+                  //             child: CustomCircularProgressIndicator());
                   //       }
                   //       if (index >= sortedStars.length) {
                   //         return const Center(
-                  //             child: CircularProgressIndicator());
+                  //             child: CustomCircularProgressIndicator());
                   //       }
                   //       final videoController = _videoControllers[index];
                   //       //final star = sortedStars[index];
@@ -360,7 +360,7 @@ class _BeStarViewState extends State<BeStarView> {
                   //                       ),
                   //                     ),
                   //                   )
-                  //                 : const CircularProgressIndicator()
+                  //                 : const CustomCircularProgressIndicator()
                   //           else
                   //             Stack(
                   //               children: [

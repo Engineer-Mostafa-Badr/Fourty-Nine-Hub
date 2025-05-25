@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class DestinationTextFieldAndFindButonMapBox extends StatefulWidget {
   const DestinationTextFieldAndFindButonMapBox({super.key});
@@ -100,7 +101,7 @@ class _DestinationTextFieldAndFindButonState
         width: 30,
         height: 30,
         child: Center(
-          child: CircularProgressIndicator(
+          child: CustomCircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,
           ),

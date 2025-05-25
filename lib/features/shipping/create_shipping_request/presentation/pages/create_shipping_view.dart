@@ -35,6 +35,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CreateShippingView extends StatefulWidget {
   const CreateShippingView({super.key, this.selectedId});
@@ -83,7 +84,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
         if (status is LoadingShippingState) {
           return const Expanded(
             child: Center(
-              child: CircularProgressIndicator(
+              child: CustomCircularProgressIndicator(
                 color: AppColors.PRIMARY_COLOR,
               ),
             ),
@@ -105,7 +106,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         builder: (context, state) {
                           if (state is LoadingShippingState) {
                             return const Center(
-                              child: CircularProgressIndicator(
+                              child: CustomCircularProgressIndicator(
                                 color: AppColors.PRIMARY_COLOR,
                               ),
                             );

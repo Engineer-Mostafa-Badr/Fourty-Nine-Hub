@@ -365,6 +365,7 @@ import '../features/authentication/presentation/controllers/create_new_forgot_pa
 import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
+import '../features/authentication/presentation/pages/complete_register_welcome_screen.dart';
 import '../features/authentication/presentation/pages/first_login_screen.dart';
 import '../features/authentication/presentation/pages/forgot_password/create_new_forget_password_view.dart';
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
@@ -528,6 +529,13 @@ class AppPages {
                 path: Routes.FirstLoginScreen,
                 name: Routes.FirstLoginScreen,
                 builder: (context, state) => const FirstLoginScreen(),
+              ),
+              GoRoute(
+                path: Routes.CompleteRegisterWelcomeScreen,
+                name: Routes.CompleteRegisterWelcomeScreen,
+                builder: (context, state) => CompleteRegisterWelcomeScreen(
+                  giftMessageEntity: state.extra as String,
+                ),
               ),
               GoRoute(
                 path: Paths.RestaurantDashboard,
@@ -785,7 +793,10 @@ class AppPages {
                           builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
-                                  child: CreatePostCompany(params: state.extra as CreatePostCompanyParams,)),
+                                  child: CreatePostCompany(
+                                    params:
+                                        state.extra as CreatePostCompanyParams,
+                                  )),
                         ),
 
                         GoRoute(
@@ -794,7 +805,9 @@ class AppPages {
                           builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
-                                  child: CreatePostReelCompany(totalPrice: state.extra as num,)),
+                                  child: CreatePostReelCompany(
+                                    totalPrice: state.extra as num,
+                                  )),
                         ),
                       ]),
                 ],
@@ -1363,8 +1376,7 @@ class AppPages {
                 path: Paths.SINGLEPOSTINSTAGRAM,
                 name: Routes.SINGLEPOSTINSTAGRAM,
                 builder: (context, state) {
-                  final String postId =
-                      state.extra as String;
+                  final String postId = state.extra as String;
 
                   return BlocProvider(
                     create: (context) =>
@@ -3537,10 +3549,10 @@ class AppPages {
                 name: Routes.supportRideScreen,
                 builder: (context, state) => BlocProvider(
                     create: (context) => serviceLocator<DashboardsCubit>(),
-                    child: SupportRideScreen(params: state.extra as SupportRideParams,)),
+                    child: SupportRideScreen(
+                      params: state.extra as SupportRideParams,
+                    )),
               ),
-
-
 
               GoRoute(
                 path: Paths.supportClientDetailsScreen,

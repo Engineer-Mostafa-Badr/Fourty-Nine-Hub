@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
 import '../../../../core/constants/constants.dart';
@@ -202,7 +203,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                             ),
                           ),
                         )
-                      : const Center(child: CircularProgressIndicator())
+                      : const Center(child: CustomCircularProgressIndicator())
                   : _selectedImages == null
                       ? Image.asset(
                           Assets.cameraAddTalent,

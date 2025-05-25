@@ -8,6 +8,7 @@ abstract class Routes {
   static const onBoardingScreen = '/OnBoardingScreen';
   static const ChooseLangScreen = '/ChooseLangScreen';
   static const FirstLoginScreen = '/FirstLoginScreen';
+  static const CompleteRegisterWelcomeScreen = '/CompleteRegisterWelcomeScreen';
   static const MY_TALENT = '/MyTalent';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
@@ -303,6 +304,7 @@ abstract class Paths {
   static const onBoardingScreen = 'OnBoardingScreen';
   static const ChooseLangScreen = 'ChooseLangScreen';
   static const FirstLoginScreen = 'FirstLoginScreen';
+  static const CompleteRegisterWelcomeScreen = 'CompleteRegisterWelcomeScreen';
   static const MY_TALENT = 'MyTalent';
   static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';

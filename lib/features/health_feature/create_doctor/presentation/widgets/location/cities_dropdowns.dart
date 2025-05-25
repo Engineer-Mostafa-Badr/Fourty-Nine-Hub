@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_dropdown_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CreateDoctorCitiesDropdowns extends StatelessWidget {
   const CreateDoctorCitiesDropdowns({super.key, this.validator});
@@ -21,7 +22,7 @@ class CreateDoctorCitiesDropdowns extends StatelessWidget {
           current is CreateDoctorCitiesLoading,
       builder: (context, state) {
         if (state is CreateDoctorCitiesLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
         if (state is CreateDoctorCitiesLoaded) {
           return CustomDropdownHealth<CityEntity>(

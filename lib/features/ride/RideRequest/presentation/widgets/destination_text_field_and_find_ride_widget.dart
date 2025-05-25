@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_d
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class DestinationTextFieldAndFindRideWidget extends StatefulWidget {
   const DestinationTextFieldAndFindRideWidget({super.key});
@@ -90,7 +91,7 @@ class _DestinationTextFieldAndFindRideWidgetState
         width: 30,
         height: 30,
         child: Center(
-          child: CircularProgressIndicator(
+          child: CustomCircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,
           ),

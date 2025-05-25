@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/ca
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RequestCashbackButton extends StatelessWidget {
   const RequestCashbackButton({
@@ -25,7 +26,7 @@ class RequestCashbackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CustomCircularProgressIndicator(),
       );
     } else {
       if (isWaitingApproval) {

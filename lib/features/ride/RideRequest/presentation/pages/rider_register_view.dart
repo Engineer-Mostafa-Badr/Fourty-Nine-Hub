@@ -31,6 +31,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RiderRegisterView extends StatefulWidget {
   const RiderRegisterView({super.key});
@@ -94,7 +95,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
               if (state is LoadingRiderState) {
                 return const Align(
                   child: Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
                     ),
                   ),

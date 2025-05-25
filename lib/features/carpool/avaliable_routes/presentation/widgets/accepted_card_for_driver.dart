@@ -18,6 +18,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class AcceptedCardForDriver extends StatelessWidget {
   const AcceptedCardForDriver({super.key, required this.entity});
@@ -189,7 +190,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
             barrierDismissible: false,
             builder: (context) {
               return const Center(
-                child: CircularProgressIndicator(
+                child: CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 ),
               );
@@ -216,7 +217,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
             barrierDismissible: false,
             builder: (context) {
               return const Center(
-                child: CircularProgressIndicator(
+                child: CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 ),
               );

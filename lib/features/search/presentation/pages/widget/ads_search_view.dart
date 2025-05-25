@@ -181,7 +181,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
 //             return BlocBuilder<SearchCubit, SearchState>(
 //               builder: (context, state) {
 //                 // if(state.status ==SearchStates.loading){
-//                 //   return const Center(child: CircularProgressIndicator());
+//                 //   return const Center(child: CustomCircularProgressIndicator());
 //                 // }
 //                 final controller = context.read<SearchCubit>();
 //                 if (controller.searchController.text.isNotEmpty) {

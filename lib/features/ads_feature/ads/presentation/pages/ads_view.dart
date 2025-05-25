@@ -24,6 +24,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_floating_action_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -248,7 +249,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                   height: double.infinity,
                   color: Colors.black.withOpacity(0.3),
                   child: const Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: Colors.white,
                     ),
                   ),

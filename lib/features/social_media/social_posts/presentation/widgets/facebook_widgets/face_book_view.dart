@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class FaceBookView extends StatefulWidget {
   const FaceBookView({super.key, required this.scrollController});
@@ -79,7 +80,7 @@ class _FaceBookViewState extends State<FaceBookView>
               // BuildPeopleYouMayKnow(),
               controller.loadFaceData
                   ? const Center(
-                      child: CircularProgressIndicator(),
+                      child: CustomCircularProgressIndicator(),
                     )
                   : Column(
                       children: [
@@ -117,7 +118,7 @@ class _FaceBookViewState extends State<FaceBookView>
                               );
                             }),
                         if (controller.isLoadingFaceMore)
-                          const Center(child: CircularProgressIndicator()),
+                          const Center(child: CustomCircularProgressIndicator()),
                       ],
                     ),
             ]),

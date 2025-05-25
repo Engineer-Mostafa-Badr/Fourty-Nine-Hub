@@ -25,6 +25,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../domain/use_case/fetch_search_use_case.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SubCategorySearchView extends StatefulWidget {
   const SubCategorySearchView({super.key});
@@ -104,7 +105,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         // No results
@@ -127,7 +128,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
             if (index >= _cubit.subCategoriesSearch.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: CustomCircularProgressIndicator()),
               );
             }
             final subCategory = _cubit.subCategoriesSearch[index];

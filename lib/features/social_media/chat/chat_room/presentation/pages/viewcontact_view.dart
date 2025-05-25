@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 
@@ -53,7 +54,7 @@ class _ViewContactViewState extends State<ViewContactView> {
             appBar: const BackAppBar(),
             body: widget.chatsCubit.user == null
                 ? const Center(
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   )
                 : SingleChildScrollView(
                   child: Column(

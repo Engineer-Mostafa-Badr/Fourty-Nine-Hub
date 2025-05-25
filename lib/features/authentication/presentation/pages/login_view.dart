@@ -20,6 +20,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/pages/complete_register_welcome_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/widgets/birth_date_field.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -127,12 +128,29 @@ class _LoginViewState extends State<LoginView> {
               print('Access Token: $accessToken');
               print(serviceLocator<UserCubit>().state.data.toString());
 
-              Navigator.pop(context);
-              context.push(Routes.HOME);
+              // Navigator.pop(context);
+              // context.push(Routes.HOME);
 
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {
-                  showDialog(
+                  context.go(
+                    Routes.CompleteRegisterWelcomeScreen,
+                    extra: context.isArabic
+                        ? state.giftMessageEntity.ar
+                        : state.giftMessageEntity.en,
+                  );
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => CompleteRegisterScreen(
+                  //       giftMessageEntity: context.isArabic
+                  //           ? state.giftMessageEntity.ar
+                  //           : state.giftMessageEntity.en,
+                  //     ),
+                  //   ),
+                  //       (route) => false,
+                  // );
+                  /* showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
@@ -196,7 +214,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       );
                     },
-                  );
+                  );*/
                 }
               });
             });
@@ -661,7 +679,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
-                EmailTextFormField(
+                EmailOrPhoneTextFormField(
                   borderColor: Colors.black,
                   currentController: registerCubit.emailTextController,
                   hint:

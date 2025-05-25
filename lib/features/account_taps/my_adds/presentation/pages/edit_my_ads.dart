@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/sel
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -541,7 +542,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CircularProgressIndicator())
+                          ? const Center(child: CustomCircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -699,7 +700,7 @@ class _EditMyAdsState extends State<EditMyAds> {
               );
             } else {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               );
             }
           },

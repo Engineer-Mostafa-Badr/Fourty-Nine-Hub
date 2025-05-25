@@ -185,7 +185,7 @@
 //             },
 //               builder: (context, state) {
 //               if (state.status == SubcategoriesStates.loading) {
-//                 return const Center(child: CircularProgressIndicator());
+//                 return const Center(child: CustomCircularProgressIndicator());
 //               }
 //               if (state.status == SubcategoriesStates.error) {
 //                 return Center(child: Text('state.failure!.message'));

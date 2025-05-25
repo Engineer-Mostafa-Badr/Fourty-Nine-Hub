@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/in
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/rate_car_widget.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ExpiredTripsScreenParams {
   final RideCubit rideCubit;
@@ -85,7 +86,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
 
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomCircularProgressIndicator());
                 } else if (state.status == RideStates.error) {
 
                   return const SizedBox();
@@ -99,7 +100,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
                     itemCount: (state.completedTrips?.length ?? 0) + (isFetching ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == state.completedTrips?.length) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
                       final trip = state.completedTrips?[index];
                       if (trip == null) return const SizedBox.shrink();

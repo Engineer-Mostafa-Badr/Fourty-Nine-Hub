@@ -23,6 +23,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -88,7 +89,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         }
         // Handle loading state
         if (state.status == SearchStates.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         // Handle success state
@@ -136,7 +137,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         builder: (context, state) {
           print("${context.read<SearchCubit>().postsSearch.length}");
           if (state.status == SearchStates.loading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {

@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.da
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -66,7 +67,7 @@ class _RestaurantRequestLogsScreenState
           height: MediaQuery.of(context).size.height *
               .65, // Make sure it takes up full height
           child: const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           ),
         );
       }
@@ -110,7 +111,7 @@ class _RestaurantRequestLogsScreenState
           height: MediaQuery.of(context).size.height *
               .65, // Make sure it takes up full height
           child: const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           ),
         );
       }

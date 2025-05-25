@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../labels/label.dart';
@@ -23,7 +24,7 @@ class RatioWidget extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-              child: CircularProgressIndicator(
+              child: CustomCircularProgressIndicator(
             value: value,
           )),
           Positioned.fill(

@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class PostBodyCreatePostInstagramGridView extends StatelessWidget {
   const PostBodyCreatePostInstagramGridView({
@@ -36,7 +37,7 @@ class PostBodyCreatePostInstagramGridView extends StatelessWidget {
               context
                   .read<CreatePostInstagramCubit>()
                   .loadMoreImages(); // استدعاء دالة تحميل المزيد
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             if (index < state.galleryPost.length) {
               return GestureDetector(

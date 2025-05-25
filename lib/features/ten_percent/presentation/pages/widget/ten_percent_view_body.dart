@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/widget/bill_value_field.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../account_taps/wallet/presentation/widgets/button_wallet_and_bill.dart';
@@ -280,7 +281,7 @@ class TenPercentViewBody extends StatelessWidget {
                 height: 8,
               ),
               state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(child: CustomCircularProgressIndicator())
                   : CustomButtonWalletAndGiftAndCashback(
                       title: LocaleKeys.sendRequest.localize,
                       onPressed: () {
@@ -336,7 +337,7 @@ class TenPercentViewBody extends StatelessWidget {
               //   height: 44,
               //   width: double.infinity,
               //   child: state.isLoading
-              //       ? const Center(child: CircularProgressIndicator())
+              //       ? const Center(child: CustomCircularProgressIndicator())
               //       : ElevatedButton(
               //           onPressed: () {
               //             if (cubit.formKey.currentState!.validate()) {

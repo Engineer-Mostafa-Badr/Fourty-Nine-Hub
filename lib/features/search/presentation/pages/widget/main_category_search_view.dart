@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -82,7 +83,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         // No results
@@ -105,7 +106,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
             if (index >= _cubit.paginatedSearch.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: CustomCircularProgressIndicator()),
               );
             }
             final subCategory = _cubit.paginatedSearch[index];

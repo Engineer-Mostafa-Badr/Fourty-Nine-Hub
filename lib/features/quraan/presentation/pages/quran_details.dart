@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.da
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 
@@ -82,7 +83,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
             },
             builder: (context, state) {
               if (state.status == QuranStates.loading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CustomCircularProgressIndicator());
               } else if (state.status == QuranStates.success &&
                   pages.isNotEmpty) {
                 return PageView.builder(
@@ -98,7 +99,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                     if (index == pages.length) {
                       return const Center(
                           child:
-                              CircularProgressIndicator()); // Loading next surah
+                              CustomCircularProgressIndicator()); // Loading next surah
                     }
                     return buildPageContent(index, pages[index]);
                   },
@@ -299,7 +300,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
 //         child: BlocBuilder<QuranCubit, QuranState>(
 //           builder: (context, state) {
 //             if (state.status == QuranStates.loading) {
-//               return Center(child: CircularProgressIndicator());
+//               return Center(child: CustomCircularProgressIndicator());
 //             } else if (state.status == QuranStates.success) {
 //               final pages = _paginateAyahs(context, state.surah!);
 //               return PageView.builder(

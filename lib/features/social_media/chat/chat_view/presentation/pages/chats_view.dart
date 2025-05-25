@@ -1343,7 +1343,7 @@ class ChatOptions extends StatelessWidget {
 //                 ? const SizedBox(
 //                     width: 16,
 //                     height: 16,
-//                     child: CircularProgressIndicator(
+//                     child: CustomCircularProgressIndicator(
 //                       color: Colors.white,
 //                       strokeWidth: 2,
 //                     ),

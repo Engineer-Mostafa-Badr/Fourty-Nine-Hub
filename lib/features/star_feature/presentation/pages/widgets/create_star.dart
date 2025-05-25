@@ -415,7 +415,7 @@ class _CreateStarState extends State<CreateStar> {
   //                                         child: VideoPlayer(videoController),
   //                                       )
   //                                     : const Center(
-  //                                         child: CircularProgressIndicator()),
+  //                                         child: CustomCircularProgressIndicator()),
   //                               ),
   //                               PositionedDirectional(
   //                                 start: 5,
