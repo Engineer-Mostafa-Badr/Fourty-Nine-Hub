@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/tr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
@@ -22,6 +23,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../domain/repositories/trip_repository.dart';
@@ -207,6 +209,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params) {
     return  remoteDataSource.deleteEmergencyContact(params);
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params) {
+    return  remoteDataSource.addRateWithDriver(params);
   }
 
 }

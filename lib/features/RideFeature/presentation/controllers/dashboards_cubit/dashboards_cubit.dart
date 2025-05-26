@@ -65,6 +65,8 @@ import '../../../../../common/functions/global/upload_image.dart';
 import '../../../../../core/error/failure.dart';
 
 import '../../../../../core/utils/ride_method_helper.dart';
+import '../../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
+import '../../../../food_feature/restaurants_list/domain/usecases/add_rate_restaurant_use_case.dart';
 import '../../../domain/entities/dashboards/create_non_track_offer_entity.dart';
 import '../../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
@@ -74,6 +76,7 @@ import '../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/dashboards/trips_response_entity.dart';
 import '../../../domain/entities/dashboards/update_driver_settings_entity.dart';
+import '../../../domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
@@ -140,6 +143,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToAvailableUntrackedTripUseCase listenToAvailableUntrackedTripUseCase;
   final ListenToAcceptUntrackedTripOfferUseCase listenToAcceptUntrackedTripOfferUseCase;
   final ListenToEndTripUseCase listenToEndTripUseCase;
+  final AddRateWithDriverUseCase addRateWithDriverUseCase;
 
   DashboardsCubit(this.getAvailableTripsUsecase,
       this.getPastTripsUsecase,
@@ -180,9 +184,27 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToEndTripUseCase,
 
       this.createNonTrackTripUseCase, this.updateDriverSettingsUseCase,
-      this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase, this.listenToAcceptUntrackedTripOfferUseCase,)
+      this.getDriverSettingsUseCase, this.listenToRemoveUntrackedTripUseCase,
+      this.listenToAcceptUntrackedTripOfferUseCase, this.addRateWithDriverUseCase,)
       : super(const DashboardsState());
 
+  Future<void> rateDriverNonSocket({required AddRateWithDriverParams params}) async {
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await addRateWithDriverUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: DashboardsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          rateResponseEntity: rateData,
+          status: DashboardsStates.success,
+        ));
+      },
+    );
+  }
 
   TextEditingController rideDriverExpireDateController = TextEditingController();
 

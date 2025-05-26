@@ -14,12 +14,14 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import '../entities/dashboards/driver_settings_entity.dart';
 import '../entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/settings_dashboard_entity.dart';
 import '../entities/dashboards/trips_response_entity.dart';
+import '../usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../usecases/dashboards/create_driver_rating_usecase.dart';
 import '../usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../usecases/dashboards/get_available_ride_trips_use_case.dart';
@@ -52,6 +54,7 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
    Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
+   Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
    void listenToNewTrip(Function(AvailableRideTripEntity trip) params);

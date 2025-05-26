@@ -377,7 +377,20 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                   Navigator.push(context, MaterialPageRoute(builder:
                                                       (context)=> RideDashboardNonSocketDetailsScreen(tripEntity:cubit.pastRideNonSocketData[
                                                       index] ,)));
-
+/*
+     final updatedLogsEntity = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider<RestaurantsCubit>(
+                  create: (context) => serviceLocator<RestaurantsCubit>(),
+                  child: LogDetailsScreen(logsEntity: orderData),
+                ),
+              ),
+            );
+            if (updatedLogsEntity != null) {
+              context.read<RestaurantsCubit>().loadInitialReqLogs();
+            }
+ */
                                                 },
                                                 child: PastNonSocketTripsWidget(
                                                   tripEntity:
