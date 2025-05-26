@@ -74,6 +74,7 @@ class DashboardsState
   final XFile? driverLicensePicture;
   final XFile? backOfDriverLicensePicture;
   final XFile? selfieDriverLicensePicture;
+  final RateResponseEntity? rateResponseEntity;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -106,6 +107,7 @@ class DashboardsState
         this.driverLicensePicture,
         this.backOfDriverLicensePicture,
         this.selfieDriverLicensePicture,
+        this.rateResponseEntity,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -140,6 +142,7 @@ class DashboardsState
         XFile? driverLicensePicture,
         XFile? backOfDriverLicensePicture,
         XFile? selfieDriverLicensePicture,
+        RateResponseEntity? rateResponseEntity,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -173,6 +176,7 @@ class DashboardsState
       backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
       selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
       remainingTime: remainingTime ?? this.remainingTime,
+      rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
     );
   }
 

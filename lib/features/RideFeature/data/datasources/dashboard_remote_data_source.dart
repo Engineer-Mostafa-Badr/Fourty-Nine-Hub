@@ -32,11 +32,14 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
+import '../../../food_feature/restaurants_list/data/models/rate_response_model.dart';
+import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import '../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
+import '../../domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
@@ -103,6 +106,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, DriverSettingsEntity >> getDriverSettings();
 
   void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
 
 }
 
@@ -626,5 +630,20 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params) async{
+    final url = "${EndPoints.addRateToClientWithDriverNonSocket}";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = RateResponseModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
   }
 }

@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -11,6 +13,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
+import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'widgets/problem_and_client_details.dart';
 import 'widgets/ride_details_rating_widget.dart';
 
@@ -116,8 +119,8 @@ class _RideDashboardNonSocketDetailsScreenState
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomRight,
-                        child: Image.asset(
-                          Assets.greyCar,
+                        child: ImageFromInternet(
+                         image: widget.tripEntity.subCategory?.pictureUrl ?? "",
                           width: 80,
                           height: 33,
                           fit: BoxFit.contain,
@@ -182,16 +185,6 @@ class _RideDashboardNonSocketDetailsScreenState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Label(
-                        //   text: "Cairo International Airport",
-                        //   style: TextStyle(
-                        //     fontWeight: FontWeight.w600,
-                        //     fontSize: 14,
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 2,
-                        // ),
                         Label(
                           text: widget.tripEntity.tripDetails?.targetLocation?.title ?? "",
                           style: const TextStyle(
@@ -212,14 +205,19 @@ class _RideDashboardNonSocketDetailsScreenState
                 ],
               ),
               const SizedBox(height: 30),
-              RideDetailsRatingWidget(
-                  isRate: isYourRate,
-                  rate: yourRate,
-                  title: LocaleKeys.youRateClient.tr()),
-              RideDetailsRatingWidget(
-                  isRate: isClientRate,
-                  rate: clientRate,
-                  title: LocaleKeys.clientRateYou.tr()),
+              // Text("${widget.tripEntity.tripDetails?.yourRating?.average}"),
+              RideDetailsRatingNonSocketWidget(
+                // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
+                rate: widget.tripEntity.tripDetails?.yourRating?.average?.toDouble() ?? 0.0,
+                title: LocaleKeys.youRateClient.tr(),
+                tripId: widget.tripEntity.tripDetails?.id ?? '',
+                cubit: context.read<DashboardsCubit>(),
+              ),
+
+              // RideDetailsRatingWidget(
+              //     isRate: isClientRate,
+              //     rate: clientRate,
+              //     title: LocaleKeys.clientRateYou.tr()),
               const ProblemAndClientDetails()
             ],
           ),
