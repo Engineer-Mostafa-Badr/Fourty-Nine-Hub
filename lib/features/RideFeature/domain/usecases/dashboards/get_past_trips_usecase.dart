@@ -5,7 +5,7 @@ import '../../../../../core/error/failure.dart';
 import '../../entities/dashboards/trips_response_entity.dart';
 import '../../repositories/trip_repository.dart';
 
-class GetPastTripsUsecase extends UseCase<TripsResponseEntity, String> {
+class GetPastTripsUsecase extends UseCase<TripsResponseEntity, GetPastTripsParams> {
   final TripRepository repository;
 
   GetPastTripsUsecase(this.repository);
@@ -14,4 +14,15 @@ class GetPastTripsUsecase extends UseCase<TripsResponseEntity, String> {
   Future<Either<Failure, TripsResponseEntity>> call(params) async {
     return await repository.getPastTrips(params);
   }
+}
+
+class GetPastTripsParams {
+  final String type;
+  final int page;
+  final int limit;
+
+  GetPastTripsParams({required this.type, required this.page, required this.limit});
+
+  //toJson
+  Map<String, dynamic> toJson() => {'tripType': type, 'page': page, 'limit': limit};
 }

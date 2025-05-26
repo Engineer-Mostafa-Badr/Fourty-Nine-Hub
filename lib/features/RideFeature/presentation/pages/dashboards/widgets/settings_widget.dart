@@ -313,20 +313,27 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               enableSound: enableSound,
                               subscriptionPlan: planTrailing,
                               favoriteCity: cityTrailing,
-                              subCategoriesActive: [
-                                SubCategoriesActive(
-                                    subcategoryId:
-                                        widget.settings!.categoryIds[0].id,
-                                    isActive: isCaptain),
-                                SubCategoriesActive(
-                                    subcategoryId:
-                                        widget.settings!.categoryIds[1].id,
-                                    isActive: isIntercity),
-                                SubCategoriesActive(
-                                    subcategoryId:
-                                        widget.settings!.categoryIds[2].id,
-                                    isActive: isPremium),
-                              ]));
+                              subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
+                                  subcategoryId:
+                                  widget.settings!.categoryIds[index].id,
+                                  isActive: isCaptain))
+
+                              // [
+                              //   SubCategoriesActive(
+                              //       subcategoryId:
+                              //           widget.settings!.categoryIds[0].id,
+                              //       isActive: isCaptain),
+                              //   SubCategoriesActive(
+                              //       subcategoryId:
+                              //           widget.settings!.categoryIds[1].id,
+                              //       isActive: isIntercity),
+                              //   SubCategoriesActive(
+                              //       subcategoryId:
+                              //           widget.settings!.categoryIds[2].id,
+                              //       isActive: isPremium),
+                              // ]
+
+                          ));
                     }),
               ),
             ],

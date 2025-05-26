@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/cr
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
@@ -40,7 +41,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Either<Failure, TripsResponseEntity>> getPastTrips(String type) async {
+  Future<Either<Failure, TripsResponseEntity>> getPastTrips(GetPastTripsParams type) async {
     final tripsResponseModel = await remoteDataSource.getPastTrips(type);
     return tripsResponseModel;
   }
