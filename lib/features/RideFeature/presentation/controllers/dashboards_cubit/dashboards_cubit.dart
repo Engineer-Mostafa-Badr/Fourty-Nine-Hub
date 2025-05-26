@@ -192,6 +192,23 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   ) : super(const DashboardsState());
 
   TextEditingController rideDriverExpireDateController = TextEditingController();
+  Future<void> rateDriverNonSocket({required AddRateWithDriverParams params}) async {
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await addRateWithDriverUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: DashboardsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          rateResponseEntity: rateData,
+          status: DashboardsStates.success,
+        ));
+      },
+    );
+  }
 
   void listenToAcceptTripOfferTrip(int index, BuildContext context, RideModeParams params) {
     CliLogger.info('Remove Trip');
