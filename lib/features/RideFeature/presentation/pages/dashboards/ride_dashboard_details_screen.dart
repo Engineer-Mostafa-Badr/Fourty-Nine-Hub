@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:easy_localization/easy_localization.dart';
@@ -21,6 +22,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
+import 'widgets/problem_and_client_details.dart';
 import 'widgets/ride_details_rating_widget.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
@@ -214,7 +216,7 @@ class _RideDashboardDetailsScreenState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -428,55 +430,58 @@ class _RideDashboardDetailsScreenState
                     ),
                   ),
                   // const ProblemAndClientDetails()
-                  if(state.supportStatus == RequestEmergencyStatus.approved.status)Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          LocaleKeys.clientDetails.localize,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      _buildLabel(LocaleKeys.clientName.localize),
-                      CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourName.localize, controller: TextEditingController(text: state.supportDetails?.name??'')),
-                      const SizedBox(height: 16),
-                      _buildLabel(LocaleKeys.clientPhone.localize),
-                      CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourPhoneNumber.localize, controller: TextEditingController(text: state.supportDetails?.phone??'')),
-                      const SizedBox(height: 16),
-                      _buildLabel(LocaleKeys.email.localize),
-                      CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourEmail.localize, controller: TextEditingController(text: state.supportDetails?.email??'')),
-                      const SizedBox(height: 16),
-                      _buildLabel(LocaleKeys.deviceID.localize),
-                      CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourDeviceID.localize, controller: TextEditingController(text: state.supportDetails?.deviceId??'')),
-                      const SizedBox(height: 30),
-                      isLoading? const Center(child: CircularProgressIndicator()): ElevatedButton.icon(
-                        onPressed: () async {
-                          setState(() => isLoading = true);
-                          final path = await _generatePdf(details:state.supportDetails,lat:31.2802705,lng: 31.6775629);
-                          setState(() {
-                            pdfPath = path;
-                            isLoading = false;
-                          });
-
-                          if (path != null) {
-                            _showPdfPreview(context, path);
-                          }
-                          // context.push(Routes.emergencyContactsScreen);
-                        },
-                        icon: const Icon(Icons.download, color: Colors.white),
-                        label: Text(LocaleKeys.locationLog.localize),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.PRIMARY_COLOR,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          minimumSize: const Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                  if(state.supportStatus == RequestEmergencyStatus.approved.status)Padding(
+                    padding: EdgeInsets.only(bottom: 16.hs),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            LocaleKeys.clientDetails.localize,
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        _buildLabel(LocaleKeys.clientName.localize),
+                        CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourName.localize, controller: TextEditingController(text: state.supportDetails?.name??'')),
+                        const SizedBox(height: 16),
+                        _buildLabel(LocaleKeys.clientPhone.localize),
+                        CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourPhoneNumber.localize, controller: TextEditingController(text: state.supportDetails?.phone??'')),
+                        const SizedBox(height: 16),
+                        _buildLabel(LocaleKeys.email.localize),
+                        CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourEmail.localize, controller: TextEditingController(text: state.supportDetails?.email??'')),
+                        const SizedBox(height: 16),
+                        _buildLabel(LocaleKeys.deviceID.localize),
+                        CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourDeviceID.localize, controller: TextEditingController(text: state.supportDetails?.deviceId??'')),
+                        const SizedBox(height: 30),
+                        isLoading? const Center(child: CircularProgressIndicator()): ElevatedButton.icon(
+                          onPressed: () async {
+                            setState(() => isLoading = true);
+                            final path = await _generatePdf(details:state.supportDetails,lat:31.2802705,lng: 31.6775629);
+                            setState(() {
+                              pdfPath = path;
+                              isLoading = false;
+                            });
+
+                            if (path != null) {
+                              _showPdfPreview(context, path);
+                            }
+                            // context.push(Routes.emergencyContactsScreen);
+                          },
+                          icon: const Icon(Icons.download, color: Colors.white),
+                          label: Text(LocaleKeys.locationLog.localize),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.PRIMARY_COLOR,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            minimumSize: const Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),

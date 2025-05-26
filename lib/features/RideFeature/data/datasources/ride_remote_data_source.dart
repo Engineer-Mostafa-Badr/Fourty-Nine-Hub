@@ -16,6 +16,8 @@ import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_user_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/loading_info_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_offer_model.dart';
@@ -41,7 +43,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_regis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
@@ -135,8 +139,8 @@ abstract class RideRemoteDataSource {
       RideExpectedPriceParams params);
   Future<Either<Failure, RideDriverStatisticsEntity>> getDriverStatistics();
   Future<Either<Failure, bool>> deleteRideRegistration();
-  Future<Either<Failure, List<String>>> getRideBrands();
-  Future<Either<Failure, List<String>>> getRideModels(String brand);
+  Future<Either<Failure, List<RideBrandEntity>>> getRideBrands();
+  Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand);
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(
       GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
@@ -468,14 +472,14 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRideBrands() async {
+  Future<Either<Failure, List<RideBrandEntity>>> getRideBrands() async {
     try {
       final response =
-          await _apiConsumer.post(EndPoints.getRideBrands, data: {"brand": ""});
+          await _apiConsumer.get(EndPoints.getRideBrands, );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] != null || data['data'].isNotEmpty)
-            ? List<String>.from(data['data'].map((e) => e['brand'].toString()))
+        return Right((data['data'] != null || data['data']['carBrands'].isNotEmpty)
+            ? List<RideBrandModel>.from(data['data']['carBrands'].map((e) =>RideBrandModel.fromJson(e)))
             : []);
       });
     } catch (e) {
@@ -484,14 +488,14 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRideModels(String brand) async {
+  Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand) async {
     try {
       final response = await _apiConsumer
-          .get(EndPoints.getRideModels, queryParameters: {"brand": brand});
+          .get(EndPoints.getRideModels(brand));
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] != null || data['data'].isNotEmpty)
-            ? List<String>.from(data['data'].map((e) => e['model'].toString()))
+        return Right((data['data'] != null || data['data']['carModels'].isNotEmpty)
+            ? List<RideCarModelModel>.from(data['data']['carModels'].map((e) => RideCarModelModel.fromJson(e)))
             : []);
       });
     } catch (e) {

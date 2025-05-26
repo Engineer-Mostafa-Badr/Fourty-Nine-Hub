@@ -1405,8 +1405,8 @@ class EndPoints {
   static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
-  static String getRideBrands = '/ride/riders/brands';
-  static String getRideModels = '/ride/riders/models';
+  static String getRideBrands = '/ride/cars/brands?page=1&limit=100';
+  static String getRideModels(String brandId) => '/ride/cars/$brandId/models?page=1&limit=100';
   static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
   static String getRideCarColors = '/ride/riders/colors';
   static String getAllUserTrips = '/loading/trip/allUserTrips';

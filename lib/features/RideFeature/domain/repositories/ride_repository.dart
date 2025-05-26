@@ -1,5 +1,6 @@
 
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
@@ -19,7 +20,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_regis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
@@ -91,9 +94,9 @@ abstract class RideRepository {
   Future<Either<Failure, List<DriversInSubcategoryEntity>>> getDriversInSubcategory(String subCategoryId);
   Future<Either<Failure, RideDriverStatisticsEntity>> getDriverStatistics();
   Future<Either<Failure, bool>> deleteRideRegistration();
-  Future<Either<Failure, List<String>>> getRideBrands();
+  Future<Either<Failure, List<RideBrandEntity>>> getRideBrands();
   Future<Either<Failure, CostPerKmEntity>> getCostPerKm();
-  Future<Either<Failure, List<String>>> getRideModels(String brand);
+  Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand);
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
