@@ -604,7 +604,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.acceptUntrackedTripOffer, (data) {
         CliLogger.info("Remove Trip data :  $data");
         log("Remove Trip data :  $data");
-        params(data['acceptedTripOffer']);
+        params(data['acceptedTripOffer']['tripId']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

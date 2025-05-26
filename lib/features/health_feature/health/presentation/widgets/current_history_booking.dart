@@ -22,9 +22,10 @@ class CurrentHistoryBooking extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40.h),
             color: isSelected?AppColors.getButtonPrimaryWhiteColor(context):AppColors.getFindFillColor(context),
-            border: Border.all(
-                color:isSelected?AppColors.SECONDARY_COLOR:AppColors.getButtonPrimaryWhiteColor(context),
-                width: 1)),
+            // border: Border.all(
+            //     color:isSelected?AppColors.SECONDARY_COLOR:AppColors.getButtonPrimaryWhiteColor(context),
+            //     width: 1)
+        ),
         child: Center(
           child: Text(
             title.localize,

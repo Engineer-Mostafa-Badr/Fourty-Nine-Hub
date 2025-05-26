@@ -42,6 +42,15 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final dashboardCubit = context.read<ClientTripsCubit>();
+      // if (!dashboardCubit.isClosed) {
+      dashboardCubit.listenToUpdateOfferTripNonSocket();
+      // // dashboardCubit.getAvailableNonSocketTrips(),
+      // dashboardCubit.listenToRemoveUntrackedTrip(),
+      // dashboardCubit.listenToNewTripNonSocket()
+      // // }
+    });
   }
 
   void _onScroll() {
@@ -103,7 +112,7 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                             text: LocaleKeys.errorHappen.localize,
                             style: const TextStyle(color: Colors.red)),
                       )
-                    : context.read<ClientTripsCubit>().clientOfferTripsData.isEmpty
+                    : state.clientOfferTripData.isEmpty
                         ?  Center(
                             child: Label(
                                 text: LocaleKeys.youDontHaveAvailableOffer.localize,
@@ -112,7 +121,7 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: context.read<ClientTripsCubit>().clientOfferTripsData!.isEmpty
+                            child: state.clientOfferTripData!.isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
                                     itemBuilder: (context, index) =>
@@ -123,7 +132,7 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(height: 5),
                                     itemCount:
-                                        context.read<ClientTripsCubit>().clientOfferTripsData.length ??
+                                        state.clientOfferTripData!.length ??
                                             0),
                           );
           },
@@ -302,10 +311,15 @@ class ClientOfferWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      // Label(
+                      //     text: "${offers?.price ?? 300}",
+                      //     style:
+                      //         Styles.mediumText(fontWeight: FontWeight.w700)),
                       Label(
-                          text: "${offers?.price ?? 300}",
-                          style:
-                              Styles.mediumText(fontWeight: FontWeight.w700)),
+                        text: "${offers?.isFromSocket == true ? offers?.newOfferPrice ?? offers?.price ?? 300 : offers?.price ?? 300}",
+                        style: Styles.mediumText(fontWeight: FontWeight.w700),
+                      ),
+
                       const Sizer(width: 4),
                       Label(
                           text: LocaleKeys.egp.tr(),

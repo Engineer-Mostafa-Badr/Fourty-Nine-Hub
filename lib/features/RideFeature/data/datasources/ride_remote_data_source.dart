@@ -241,6 +241,10 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> sendOkIamComing();
 
   Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
+
+  void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params);
+
+
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -1340,4 +1344,21 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       },
     );
   }
+
+  @override
+  void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params) {
+    try {
+      CliLogger.info("Listen to  Update Offer  Trip ");
+      log("Listen to Update Offer Trip Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateOfferUntrackedClientTrip, (data) {
+        CliLogger.info(" Update Offer Trip data :  $data");
+        log(" Update Offer Trip data :  $data");
+        print(" Update Offer Trip data :  ${data}");
+        params(ClientOfferTripModel.fromJson(data["offersUpdated"]));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
 }

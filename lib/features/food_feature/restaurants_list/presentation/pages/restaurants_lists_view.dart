@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
@@ -233,11 +234,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             : Center(
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 40.h),
-                                  child: Text(
-                                    context.isArabic
+                                  child: CustomEmptyWidget(
+                                    label:context.isArabic
                                         ? "لا توجد مطاعم متوفرة."
                                         : "No Restaurants Found.",
-                                    style: Styles.mediumText(),
                                   ),
                                 ),
                               )

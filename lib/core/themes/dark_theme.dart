@@ -53,18 +53,18 @@ ThemeData get darkTheme => ThemeData(
         ),
       ),
       datePickerTheme: DatePickerThemeData(
-        headerBackgroundColor: AppColors.PRIMARY_COLOR,
-        headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,
-        backgroundColor: AppColors.QUANTITY_COLOR,
+        headerBackgroundColor: AppColors.Floating_Button_COLOR_DARK,
+        headerForegroundColor: AppColors.black,
+        backgroundColor: AppColors.Find_fill_DARK,
         dayForegroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.AUTH_CONTAINER_COLOR; // Text color when selected
+            return AppColors.black; // Text color when selected
           }
           return AppColors.AUTH_CONTAINER_COLOR; // Default text color
         }),
         dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.PRIMARY_COLOR; // Background color when selected
+            return AppColors.Floating_Button_COLOR_DARK; // Background color when selected
           }
           return Colors.transparent; // Default background
         }),
