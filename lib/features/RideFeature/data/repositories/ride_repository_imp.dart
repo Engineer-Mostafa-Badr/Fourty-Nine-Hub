@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/data/datasources/ride_remote_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
@@ -443,5 +444,10 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params) async {
     return rideRemoteDataSource.ratingDriverByClient(params);
+  }
+
+  @override
+  void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params) {
+    return rideRemoteDataSource.listenToOfferUpdateUntrackedTrip(params);
   }
 }
