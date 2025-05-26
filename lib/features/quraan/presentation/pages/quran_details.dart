@@ -9,6 +9,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 
 class QuranViewPage extends StatefulWidget {
@@ -55,7 +56,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              widget.surahName,
+              'القران الكريم',
               style: TextStyle(fontSize: 40.sp),
             ),
             IconButton(
@@ -88,7 +89,8 @@ class _QuranViewPageState extends State<QuranViewPage> {
                   pages.isNotEmpty) {
                 return PageView.builder(
                   controller: _pageController,
-                  itemCount: pages.length + 1, // +1 for loading the next surah
+                  itemCount: pages.length + 1,
+                  // +1 for loading the next surah
                   reverse: true,
                   onPageChanged: (index) {
                     if (index == pages.length) {
@@ -99,7 +101,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                     if (index == pages.length) {
                       return const Center(
                           child:
-                              CustomCircularProgressIndicator()); // Loading next surah
+                          CustomCircularProgressIndicator()); // Loading next surah
                     }
                     return buildPageContent(index, pages[index]);
                   },
@@ -131,7 +133,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
       BuildContext context, List<SurahEntity> ayahs) {
     List<List<SurahEntity>> pages = [];
     List<SurahEntity> currentPage = [];
-    double availableHeight = MediaQuery.of(context).size.height - 200.h;
+    double availableHeight = MediaQuery.of(context).size.height ;
     double currentHeight = 0;
 
     for (var ayah in ayahs) {
@@ -161,7 +163,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
       textDirection: TextDirection.rtl,
     )..layout(maxWidth: MediaQuery.of(context).size.width - 16);
 
-    return textPainter.size.height + 50.h;
+    return textPainter.size.height;
   }
 
   Widget buildPageContent(int pageIndex, List<SurahEntity> pageAyahs) {
@@ -203,53 +205,63 @@ class _QuranViewPageState extends State<QuranViewPage> {
                   width: double.infinity,
                 ),
               ),
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: pageAyahs.map((ayah) {
-                  return Padding(
-                    padding: EdgeInsets.only(top: 20.h),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: ayah.ayahAr,
-                            style: TextStyle(
-                              fontSize: 45.sp,
-                              height: 2.0,
-                              fontFamily: 'Amiri',
-                              color: Theme.of(context).primaryColor,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 20.h),
+                  child: RichText(
+                    textAlign: TextAlign.justify,
+                    text: TextSpan(
+                      children: pageAyahs.expand(
+                            (ayah) {
+                          return [
+                            TextSpan(
+                              text: ayah.ayahAr,
+                              style: TextStyle(
+                                fontSize: 40.sp,
+                                height: 2.0,
+                                fontFamily: 'Amiri',
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/ayah.png',
-                                  height: 50.h,
-                                  width: 50.w,
-                                ),
-                                Text(
-                                  '${ayah.ayahNoSurah}',
-                                  style: TextStyle(
-                                    fontSize: 25.sp,
-                                    color: AppColors.PRIMARY_COLOR,
-                                    fontFamily: 'Amiri',
-                                  ),
-                                ),
-                              ],
+                            TextSpan(
+                              text: ' \u06DD${ayah.ayahNoSurah} ',
+                              style: TextStyle(
+                                fontSize: 40.sp,
+                                height: 2.0,
+                                fontFamily: 'Amiri',
+                                color: Colors.orangeAccent,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                            // WidgetSpan(
+                            //   alignment: PlaceholderAlignment.middle,
+                            //   child: Stack(
+                            //     alignment: AlignmentDirectional.center,
+                            //     children: [
+                            //       Image.asset(
+                            //         'assets/images/ayah.png',
+                            //         height: 50.h,
+                            //         width: 50.w,
+                            //       ),
+                            //       Text(
+                            //         '${ayah.ayahNoSurah}',
+                            //         style: TextStyle(
+                            //           fontSize: 25.sp,
+                            //           color: AppColors.PRIMARY_COLOR,
+                            //           fontFamily: 'Amiri',
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                          ];
+                        },
+                      ).toList(),
                     ),
-                  );
-                }).toList(),
+                  ),
+                ),
               ),
             ),
           ],

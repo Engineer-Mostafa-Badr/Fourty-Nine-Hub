@@ -628,7 +628,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<MainCategoriesCubit>(),
                   child: MainCategoriesFlipCardsView(
-                    data: state.extra as List<MainCategoryEntity>,
+                    mainCategoriesCardsParams: state.extra as MainCategoriesCardsParams,
                   ),
                 ),
               ),
@@ -818,7 +818,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider.value(
                   value: serviceLocator<SubcategoriesCubit>(),
                   child: CustomPageSubCategoriesView(
-                    mainCategory: state.extra as MainCategoryEntity,
+                    params: state.extra  as CustomPageSubCategoriesParams,
                   ),
                 ),
               ),
