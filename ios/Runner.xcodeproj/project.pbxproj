@@ -15,7 +15,6 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		9CC514852DDA7DBC00D474FC /* deepar_flutter_plus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CC514842DDA7DBC00D474FC /* deepar_flutter_plus.framework */; };
 		B373C455577B93FCFB75ADD0 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46F94771E8F0D7E53C523ABC /* Pods_RunnerTests.framework */; };
 		E44CBD802474E349463393A1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E8B5C9B603DB5DEBA2A232DC /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -98,7 +97,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CC514852DDA7DBC00D474FC /* deepar_flutter_plus.framework in Frameworks */,
 				8E2CC6C9BB4C94805B1745CB /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,9 +328,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -422,9 +424,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -584,7 +590,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/audioplayers_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/camera_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/deepar_flutter_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
@@ -642,7 +647,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_uikit_signaling_plugin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_zim\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_zpns\"",
-					"\"${PODS_ROOT}/../.symlinks/plugins/deepar_flutter_plus/ios\"",
 					"\"${PODS_ROOT}/../.symlinks/plugins/zego_express_engine/ios/libs\"",
 					"\"${PODS_ROOT}/AgoraInfra_iOS\"",
 					"\"${PODS_ROOT}/AgoraIrisRTC_iOS\"",
@@ -732,7 +736,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/audioplayers_darwin/audioplayers_darwin.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/camera_avfoundation/camera_avfoundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus/connectivity_plus.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/deepar_flutter/deepar_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus/device_info_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter/emoji_picker_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
@@ -1025,7 +1028,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/audioplayers_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/camera_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/deepar_flutter_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
@@ -1083,7 +1085,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_uikit_signaling_plugin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_zim\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_zpns\"",
-					"\"${PODS_ROOT}/../.symlinks/plugins/deepar_flutter_plus/ios\"",
 					"\"${PODS_ROOT}/../.symlinks/plugins/zego_express_engine/ios/libs\"",
 					"\"${PODS_ROOT}/AgoraInfra_iOS\"",
 					"\"${PODS_ROOT}/AgoraIrisRTC_iOS\"",
@@ -1173,7 +1174,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/audioplayers_darwin/audioplayers_darwin.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/camera_avfoundation/camera_avfoundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus/connectivity_plus.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/deepar_flutter/deepar_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus/device_info_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter/emoji_picker_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
@@ -1304,7 +1304,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/audioplayers_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/camera_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/deepar_flutter_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
@@ -1362,7 +1361,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_uikit_signaling_plugin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_zim\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zego_zpns\"",
-					"\"${PODS_ROOT}/../.symlinks/plugins/deepar_flutter_plus/ios\"",
 					"\"${PODS_ROOT}/../.symlinks/plugins/zego_express_engine/ios/libs\"",
 					"\"${PODS_ROOT}/AgoraInfra_iOS\"",
 					"\"${PODS_ROOT}/AgoraIrisRTC_iOS\"",
@@ -1452,7 +1450,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/audioplayers_darwin/audioplayers_darwin.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/camera_avfoundation/camera_avfoundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus/connectivity_plus.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/deepar_flutter/deepar_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus/device_info_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter/emoji_picker_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",

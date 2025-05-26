@@ -60,13 +60,13 @@ post_install do |installer|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
 
       # Optional: skip embedding if needed
-      if target.name == 'deepar_flutter_plus'
-        config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -framework "DeepAR"'
-        config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
-          '$(inherited)',
-          '$(PODS_ROOT)/deepar_flutter_plus/ios'
-        ]
-      end
+#       if target.name == 'deepar_flutter_plus'
+#         config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -framework "DeepAR"'
+#         config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
+#           '$(inherited)',
+#           '$(PODS_ROOT)/deepar_flutter_plus/ios'
+#         ]
+#       end
     end
   end
 end
