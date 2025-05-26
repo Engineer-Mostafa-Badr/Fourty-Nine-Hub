@@ -430,7 +430,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   Future<void> fetchModels(String brandId, BuildContext context) async {
     models.clear();
-    emit(state.copyWith(colors: [], status: RideRegisterStates.loadingModels));
+    emit(state.copyWith(status: RideRegisterStates.loadingModels));
     final Either<Failure, List<String>> result = await getRideModelsUseCase(brandId);
 
     result.fold(

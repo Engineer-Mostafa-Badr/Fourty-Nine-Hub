@@ -2,11 +2,11 @@ import 'location_entity.dart';
 
 class TripDetailsEntity {
   final String id;
-  final double price;
+  final num price;
   final String status;
   final String pickupTime;
   final bool isPremium;
-  final int passengers;
+  final num passengers;
   final String note;
   final LocationEntity startLocation;
   final LocationEntity targetLocation;

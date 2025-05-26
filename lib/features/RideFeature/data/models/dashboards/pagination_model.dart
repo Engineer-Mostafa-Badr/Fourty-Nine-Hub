@@ -14,14 +14,14 @@ class PaginationModel extends PaginationEntity {
 
   factory PaginationModel.fromJson(Map<String, dynamic> json) {
     return PaginationModel(
-      page: json['page'],
-      limit: json['limit'],
-      totalItems: json['totalItems'],
-      totalPages: json['totalPages'],
-      hasNextPage: json['hasNextPage'],
-      hasPrevPage: json['hasPrevPage'],
-      nextPage: json['nextPage'],
-      prevPage: json['prevPage'],
+      page: json['page']??0,
+      limit: json['limit']??0,
+      totalItems: json['totalItems']??0,
+      totalPages: json['totalPages']??0,
+      hasNextPage: json['hasNextPage']??false,
+      hasPrevPage: json['hasPrevPage']??false,
+      nextPage: json['nextPage']??0,
+      prevPage: json['prevPage']??0,
     );
   }
 }
