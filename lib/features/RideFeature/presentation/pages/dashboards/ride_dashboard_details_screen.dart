@@ -21,7 +21,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
-import 'widgets/problem_and_client_details.dart';
 import 'widgets/ride_details_rating_widget.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
