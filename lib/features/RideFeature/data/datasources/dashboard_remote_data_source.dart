@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
@@ -54,7 +55,7 @@ import '../models/dashboards/trips_response_model.dart';
 abstract class TripRemoteDataSource {
   Future<Either<Failure, TripsResponseModel>> getAvailableTrips(AvailableRideTripsUseCaseParams params);
 
-  Future<Either<Failure, TripsResponseModel>> getPastTrips(String type);
+  Future<Either<Failure, TripsResponseModel>> getPastTrips(GetPastTripsParams type);
 
   Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
 
@@ -129,9 +130,9 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, TripsResponseModel>> getPastTrips(String type) async {
+  Future<Either<Failure, TripsResponseModel>> getPastTrips(GetPastTripsParams params) async {
     try {
-      final response = await _apiConsumer.get(EndPoints.getPastTrips(1, type));
+      final response = await _apiConsumer.get(EndPoints.getPastTrips,queryParameters: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
         TripsResponseModel tripsResponseModel = TripsResponseModel.fromJson(data);

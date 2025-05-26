@@ -55,6 +55,8 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
 
+
+
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
@@ -1384,9 +1386,7 @@ class EndPoints {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
 
-  static String getPastTrips(int page, String type) {
-    return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
-  }
+  static String getPastTrips = '/ride/driver/trips/past';
 
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';

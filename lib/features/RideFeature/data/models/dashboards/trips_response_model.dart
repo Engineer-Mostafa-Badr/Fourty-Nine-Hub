@@ -15,13 +15,13 @@ class TripsResponseModel extends TripsResponseEntity {
 }
 
 class TripDataModel extends TripDataEntity {
-  TripDataModel({required List<TripModel> trips, required PaginationModel pagination})
-      : super(trips: trips, pagination: pagination);
+  TripDataModel({required List<TripModel> trips})
+      : super(trips: trips);
 
   factory TripDataModel.fromJson(Map<String, dynamic> json) {
     return TripDataModel(
       trips: List<TripModel>.from(json['trips'].map((x) => TripModel.fromJson(x))),
-      pagination: PaginationModel.fromJson(json['pagination']),
+      // pagination: PaginationModel.fromJson(json['pagination']),
     );
   }
 }

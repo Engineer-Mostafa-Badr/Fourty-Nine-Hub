@@ -1,14 +1,13 @@
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 
 import 'client_details_model.dart';
-import 'driver_details_model.dart';
 import 'sub_category_model.dart';
 import 'trip_details_model.dart';
 
 class TripModel extends TripEntity {
    TripModel({
     required ClientDetailsModel? clientDetails,
-    required DriverDetailsModel? driverDetails,
+    required ClientDetailsModel? driverDetails,
     required SubCategoryModel? subCategory,
     required TripDetailsModel? tripDetails,
     required StateModel? state,
@@ -25,8 +24,9 @@ class TripModel extends TripEntity {
   factory TripModel.fromJson(Map<String, dynamic> json) {
     return TripModel(
       clientDetails: ClientDetailsModel.fromJson(json['clientDetails']),
-      driverDetails: json['driverDetails'] != null
-          ? DriverDetailsModel.fromJson(json['driverDetails'])
+      driverDetails:
+      json['driverDetails'] != null
+          ? ClientDetailsModel.fromJson(json['driverDetails'])
           : null,
       subCategory: SubCategoryModel.fromJson(json['subCategory']),
       tripDetails: TripDetailsModel.fromJson(json['tripDetails']),
