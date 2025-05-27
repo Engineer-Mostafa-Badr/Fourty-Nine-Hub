@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -58,12 +59,14 @@ class RideModeScreen extends StatefulWidget {
 class _RideModeScreenState extends State<RideModeScreen> {
   final ScrollController _scrollController = ScrollController();
   late ScrollController _availableTripsScrollController;
+  late ScrollController _pastTripsScrollController;
 
   @override
   void initState() {
     print("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
     _availableTripsScrollController = ScrollController()..addListener(_onScroll);
+    _pastTripsScrollController = ScrollController()..addListener(_onScrollPastTrips);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
@@ -81,31 +84,27 @@ class _RideModeScreenState extends State<RideModeScreen> {
             ]
           : [
             dashboardCubit.loadInitialAvailableNonSocketTrips(),
-            // dashboardCubit.getAvailableNonSocketTrips(),
       dashboardCubit.listenToRemoveUntrackedTrip(),
         dashboardCubit.listenToNewTripNonSocket(),
         dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params)
       ];
-      //dashboardCubit.getAvailableTrips(context);
-      dashboardCubit.getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
-      [ dashboardCubit.getSettings(context),
-        dashboardCubit.getDriverSettings(),
-      ];
-      dashboardCubit.getPastTrips(context,
-          widget.params.isSocket == true ? "tracking" : 'non-tracking');
-     [ dashboardCubit.getSettings(context),
-       dashboardCubit.getDriverSettings(),
-     ];
-      // }
     });
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent) {
-      widget.params.isSocket == true
+      widget.params.isSocket == true && widget.params.currentIndex == 0
           ? context.read<DashboardsCubit>().getAvailableRideTrips(context)
           : context.read<DashboardsCubit>().getAvailableNonSocketTrips();
+    }
+  }
+
+  void _onScrollPastTrips() {
+    if(widget.params.isSocket == true && widget.params.currentIndex == 2){
+      if (_pastTripsScrollController.position.pixels >= _pastTripsScrollController.position.maxScrollExtent) {
+        context.read<DashboardsCubit>().getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
+      }
     }
   }
 
@@ -378,7 +377,20 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                   Navigator.push(context, MaterialPageRoute(builder:
                                                       (context)=> RideDashboardNonSocketDetailsScreen(tripEntity:cubit.pastRideNonSocketData[
                                                       index] ,)));
-
+/*
+     final updatedLogsEntity = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider<RestaurantsCubit>(
+                  create: (context) => serviceLocator<RestaurantsCubit>(),
+                  child: LogDetailsScreen(logsEntity: orderData),
+                ),
+              ),
+            );
+            if (updatedLogsEntity != null) {
+              context.read<RestaurantsCubit>().loadInitialReqLogs();
+            }
+ */
                                                 },
                                                 child: PastNonSocketTripsWidget(
                                                   tripEntity:
@@ -387,12 +399,15 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                 ),
                                               );
                                             })
-                                : state.isLoadingPast
+                                : cubit.isLoadingPastRideTrips
                                     ? const Center(
                                         child: CustomCircularProgressIndicator())
-                                    : state.pastTrips == null
-                                        ? Container()
+                                    : cubit.pastRideTrips.isEmpty
+                                        ? Center(
+                              child: Text(context.isArabic?"لا يوجد رحلات سابقة":"No past trips"),
+                            )
                                         : ListView.builder(
+                              controller: _pastTripsScrollController,
                                             itemBuilder: (context, index) =>
                                                 PastTripsWidget(
                                                     modeType: widget.params
@@ -400,9 +415,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                             true
                                                         ? 'ride'
                                                         : 'truk',
-                                                    tripEntity: state
-                                                        .pastTrips![index]),
-                                            itemCount: state.pastTrips!.length,
+                                                    tripEntity: cubit.pastRideTrips[index]),
+                                            itemCount: cubit.pastRideTrips.length,
                                           ),
                           ),
                         )

@@ -288,8 +288,7 @@ class TrukBusWidget extends StatelessWidget {
                                                   id: tripEntity!
                                                       .tripDetails!.id,
                                                   selectedCategoryPrice:
-                                                      tripEntity!
-                                                          .tripDetails!.price,
+                                                      tripEntity?.tripDetails?.price??0,
                                                   subCategoryId: tripEntity!
                                                       .subCategory!.id,
                                                 )),

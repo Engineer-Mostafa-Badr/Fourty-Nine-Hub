@@ -55,6 +55,8 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
 
+
+
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
@@ -1386,9 +1388,7 @@ class EndPoints {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
 
-  static String getPastTrips(int page, String type) {
-    return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
-  }
+  static String getPastTrips = '/ride/driver/trips/past';
 
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';
@@ -1407,8 +1407,8 @@ class EndPoints {
   static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
-  static String getRideBrands = '/ride/riders/brands';
-  static String getRideModels = '/ride/riders/models';
+  static String getRideBrands = '/ride/cars/brands?page=1&limit=100';
+  static String getRideModels(String brandId) => '/ride/cars/$brandId/models?page=1&limit=100';
   static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
   static String getRideCarColors = '/ride/riders/colors';
   static String getAllUserTrips = '/loading/trip/allUserTrips';
@@ -1546,4 +1546,5 @@ class EndPoints {
   static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
   static const getDriverSettings = '/ride/driver/untracked/settings';
   static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
+  static const addRateToClientWithDriverNonSocket = '/ride/untracked/ratings/driver';
 }

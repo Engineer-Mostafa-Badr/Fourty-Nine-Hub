@@ -1,12 +1,21 @@
 class RatingEntity {
-  final double? rating;
+  final String? id;
+  final num? rating;
   final String? comment;
 
-  RatingEntity({this.rating, this.comment});
+  RatingEntity({this.id,this.rating, this.comment});
+}
+
+class DriverRatingEntity {
+  final num count;
+  final num average;
+
+  DriverRatingEntity({required this.count,required this.average});
 }
 class RatingEntityy {
-  final double? average;
+  final String? id;
+  final num? average;
   final int? count;
 
-  RatingEntityy({this.average, this.count});
+  RatingEntityy({this.id,this.average, this.count});
 }

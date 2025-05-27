@@ -52,8 +52,8 @@ class RideRegisterState {
   final List<RideColorEntity>? colors;
   final RideColorEntity? color;
   final GovernorateEntity? city;
-  final List<String>? brands;
-  final List<String>? models;
+  final List<RideBrandEntity>? brands;
+  final List<RideModelEntity>? models;
   final String? selectedModel;
   final String? selectedBrand;
   final bool? isSmoking;
@@ -163,8 +163,8 @@ class RideRegisterState {
     List<String>? savedRideSubCategories,
     List<SubCategoryEntityUpdated>? shippingSubCategories,
     List<GovernorateEntity>? govs,
-    List<String>? brands,
-    List<String>? models,
+    List<RideBrandEntity>? brands,
+    List<RideModelEntity>? models,
     CostPerKmEntity? costPerKm,
     List<RideColorEntity>? colors,
     RideColorEntity? color,

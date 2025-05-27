@@ -316,7 +316,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       cubit.onSelectBrand((selectedItem as Label).text, context);
                                     },
                                     length: state.brands?.length ?? 0,
-                                    children: List.generate(state.brands?.length ?? 0, (index) => Label(text: state.brands?[index] ?? '')),
+                                    children: List.generate(state.brands?.length ?? 0, (index) => Label(text: context.isArabic? (state.brands?[index].brandNameAr ?? '') : state.brands?[index].brandNameEn ?? '')),
                                   ),
                                   const Sizer(),
                                   state.isLoadingModels
@@ -339,7 +339,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                 cubit.onSelectModel((selectedItem as Label).text);
                                               },
                                               length: state.models?.length ?? 0,
-                                              children: List.generate(state.models?.length ?? 0, (index) => Label(text: state.models?[index] ?? '')),
+                                              children: List.generate(state.models?.length ?? 0, (index) => Label(text: context.isArabic?(state.models?[index].modelAr ?? ''):state.models?[index].modelEn ?? '')),
                                             ),
                                           ],
                                         ),

@@ -19,8 +19,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_cost_per_km_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_picture_optional.dart';
@@ -385,11 +387,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   }
 
   Future<void> fetchBrands(BuildContext context) async {
-    final Either<Failure, List<String>> result = await getRideBrandsUseCase(const NoParams());
+    final Either<Failure, List<RideBrandEntity>> result = await getRideBrandsUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideRegisterStates.error, failure: failure)),
+          (failure) {
+            log("messageFailure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
+          },
           (data) async {
+            log("messageData $data ${data.length}");
         RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
         String? brand = cachedData?.vehicleBrand;
         if(brand!=null&&(brand.isNotEmpty))await onSelectBrand(brand, context);
@@ -403,7 +409,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     'Subscribe Package',
   ];
 
-  List<String> models = [];
+  List<RideModelEntity> models = [];
   onSelectBrand(String brand, BuildContext context) async {
     if (brand == state.selectedBrand) return;
     emit(state.copyWith(selectedBrand: brand, selectedModel: '', status: RideRegisterStates.loadingModels));
@@ -430,8 +436,8 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   Future<void> fetchModels(String brandId, BuildContext context) async {
     models.clear();
-    emit(state.copyWith(colors: [], status: RideRegisterStates.loadingModels));
-    final Either<Failure, List<String>> result = await getRideModelsUseCase(brandId);
+    emit(state.copyWith(status: RideRegisterStates.loadingModels));
+    final Either<Failure, List<RideModelEntity>> result = await getRideModelsUseCase(brandId);
 
     result.fold(
           (failure) {

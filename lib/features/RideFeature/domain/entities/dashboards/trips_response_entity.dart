@@ -11,8 +11,7 @@ class TripsResponseEntity {
 
 class TripDataEntity {
   final List<TripEntity> trips;
-  final PaginationEntity pagination;
 
-  TripDataEntity({required this.trips, required this.pagination});
+  TripDataEntity({required this.trips});
 }
 

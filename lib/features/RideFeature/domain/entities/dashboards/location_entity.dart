@@ -15,8 +15,8 @@ class LocationEntity extends Equatable{
 }
 // coordinates.dart
 class CoordinatesEntity extends Equatable{
-  final double lat;
-  final double lng;
+  final num lat;
+  final num lng;
 
   const CoordinatesEntity({required this.lat, required this.lng});
 
