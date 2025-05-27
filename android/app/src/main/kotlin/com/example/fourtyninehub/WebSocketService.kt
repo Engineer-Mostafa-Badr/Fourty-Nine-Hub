@@ -1,4 +1,4 @@
-package com.app.fourtynine
+package com.fourtyninehub.fourtynine
 
 import android.app.*
 import android.content.Intent
