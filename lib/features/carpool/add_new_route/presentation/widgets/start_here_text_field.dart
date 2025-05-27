@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class StartHereTextField extends StatefulWidget {
   const StartHereTextField({super.key});
@@ -96,7 +97,7 @@ class _StartHereTextField extends State<StartHereTextField> {
         width: 30,
         height: 30,
         child: Center(
-          child: CircularProgressIndicator(
+          child: CustomCircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,
           ),

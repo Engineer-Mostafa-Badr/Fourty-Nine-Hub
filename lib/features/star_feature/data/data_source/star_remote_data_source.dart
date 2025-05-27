@@ -70,7 +70,7 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       data: params.toJson(),
       queryParameters: {
         // "subCategory": "6723913b74f292b91ad2de54",
-        "subCategory": "6723913b74f292b91ad2de54",
+        // "subCategory": "6723913b74f292b91ad2de54",
       },
     );
 

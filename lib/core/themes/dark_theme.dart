@@ -5,11 +5,20 @@ import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 
 ThemeData get darkTheme => ThemeData(
+      // colorScheme: ColorScheme.fromSeed(
+      //   seedColor: AppColors.AUTH_CONTAINER_COLOR,
+      //   primary: AppColors.AUTH_CONTAINER_COLOR,
+      //   secondary: AppColors.AUTH_CONTAINER_COLOR,
+      // ),
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.AUTH_CONTAINER_COLOR,
+        secondary: AppColors.AUTH_CONTAINER_COLOR,
+      ),
       useMaterial3: true,
-      brightness: Brightness.dark,
+      // brightness: Brightness.dark,
       primaryColor: AppColors.AUTH_CONTAINER_COLOR,
-      scaffoldBackgroundColor:AppColors.Scaffold_Color_DARK,
-          // const Color(0xff0E0E0E), // AppColors.QUANTITY_COLOR,
+      scaffoldBackgroundColor: AppColors.Scaffold_Color_DARK,
+      // const Color(0xff0E0E0E), // AppColors.QUANTITY_COLOR,
       // timePickerTheme: TimePickerThemeData(
       //   backgroundColor: AppColors.QUANTITY_COLOR,
       //   hourMinuteColor: AppColors.AUTH_CONTAINER_COLOR,
@@ -72,7 +81,7 @@ ThemeData get darkTheme => ThemeData(
       ),
       appBarTheme: const AppBarTheme(
         // color: Color(0xff0E0E0E),
-      color:  AppColors.Scaffold_Color_DARK,
+        color: AppColors.Scaffold_Color_DARK,
         iconTheme: IconThemeData(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),
@@ -110,10 +119,7 @@ ThemeData get darkTheme => ThemeData(
         ),
       ),
       dividerColor: AppColors.GREY_DARK_COLOR,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.AUTH_CONTAINER_COLOR,
-        secondary: AppColors.AUTH_CONTAINER_COLOR,
-      ),
+
       drawerTheme: const DrawerThemeData(
         backgroundColor: AppColors.QUANTITY_COLOR,
       ),

@@ -58,6 +58,7 @@ import 'widgets/fare_bottom_sheet_widget.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RideHome extends StatefulWidget {
   const RideHome({super.key});
@@ -356,7 +357,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: cubit.loadingHomeData == true
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(child: CustomCircularProgressIndicator())
                   : Form(
                       key: _formKey,
                       child: SafeArea(
@@ -1056,7 +1057,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   Expanded(
                                       flex: 2,
                                       child: state.isLoadingSubmit
-                                          ? const Center(child: CircularProgressIndicator())
+                                          ? const Center(child: CustomCircularProgressIndicator())
                                           : AppButton(
                                               radius: 15,
                                               label: LocaleKeys.request.tr(),

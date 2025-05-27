@@ -7,6 +7,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../controllers/preload_cubit/preload_bloc.dart';
 import '../widgets/components/tiktok_bar.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // Entry point of the reels view
 class ReelView extends StatelessWidget {
@@ -83,7 +84,7 @@ class ReelsScreenState extends State<ReelsScreen> {
 
                       if (controller == null) {
                         return const Center(
-                            child: CircularProgressIndicator(
+                            child: CustomCircularProgressIndicator(
                           color: AppColors.SECONDARY_COLOR,
                         ));
                       }

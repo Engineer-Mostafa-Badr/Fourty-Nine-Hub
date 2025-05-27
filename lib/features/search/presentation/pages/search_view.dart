@@ -332,6 +332,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                 indicator: const BoxDecoration(
                   color: Colors.transparent,
                 ),
+                dividerHeight: 0,
                 indicatorPadding: EdgeInsets.zero,
                 labelPadding: EdgeInsets.only(left: 20.w),
                 padding: EdgeInsets.only(right: 40.w),
@@ -339,7 +340,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                   final texts = [
                     LocaleKeys.profile.localize,
                     LocaleKeys.reel.localize,
-                    LocaleKeys.post.localize,
+                    LocaleKeys.post2.localize,
                     LocaleKeys.mainCategory.localize,
                     LocaleKeys.subCategory.localize,
                     LocaleKeys.ads.localize,
@@ -358,23 +359,23 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
-          const ProfileSearchView(),
-          const ReelSearchView(),
-          const PostsSearchView(
+        children: const [
+          ProfileSearchView(),
+          ReelSearchView(),
+          PostsSearchView(
             // params: SearchParams(
             //   search: _searchController.text,
             //   params: PaginationParams(page: 1),
             // ),
           ),
-          const MainCategorySearchView(
+          MainCategorySearchView(
             // params: SearchParams(
             //   search: _searchController.text,
             //   params: PaginationParams(page: 1),
             // ),
           ),
-          const SubCategorySearchView(),
-          const AdsSearchView(
+          SubCategorySearchView(),
+          AdsSearchView(
 
           ),
           // ComeWithMeSearchView(

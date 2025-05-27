@@ -42,6 +42,8 @@ import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
+import '../../theme/cubit/cubit.dart';
+import '../../theme/cubit/states.dart';
 import '../stateless/buttons/iconAppButton.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
@@ -140,21 +142,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.pop();
                                     context.push(Routes.SETTINGS);
                                   }),
-                              drawerListTile(
-                                  // icon: Icons.privacy_tip,
-                                  image: Assets.privacy_icon,
-                                  label: LocaleKeys.privacy.localize,
-                                  onTap: () {
-                                    if (!context.read<UserCubit>().isLoggedIn) {
-                                      return pleaseLoginDialog(context);
-                                    } else {
-                                      AdInterstitialTop.loadIntersitialAd();
-                                      AdInterstitialTop.showInterstitialAd();
-
-                                      context.pop();
-                                      context.push(Routes.PRIVACY);
-                                    }
-                                  }),
+                              // drawerListTile(
+                              //     // icon: Icons.privacy_tip,
+                              //     image: Assets.privacy_icon,
+                              //     label: LocaleKeys.privacy.localize,
+                              //     onTap: () {
+                              //       if (!context.read<UserCubit>().isLoggedIn) {
+                              //         return pleaseLoginDialog(context);
+                              //       } else {
+                              //         AdInterstitialTop.loadIntersitialAd();
+                              //         AdInterstitialTop.showInterstitialAd();
+                              //
+                              //         context.pop();
+                              //         context.push(Routes.PRIVACY);
+                              //       }
+                              //     },),
                               drawerListTile(
                                   image: Assets.policy,
                                   label: LocaleKeys.policies.localize,
@@ -196,7 +198,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     showAnimatedDialog(
                                       context,
                                       AlertDialog(
-                                        // backgroundColor: context.isDarkMode?AppColors.:Colors.white,
+                                        backgroundColor: Theme.of(context).drawerTheme.backgroundColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -300,14 +302,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   context.push(Routes.LIVE);
                                 },
                               ),
-                              drawerRollWidget(
-                                label: LocaleKeys.snap.localize,
-                                image: Assets.snap,
-                                onTap: () {
-                                  context.pop();
-                                  context.push(Routes.SNAP);
-                                },
-                              ),
+                              // drawerRollWidget(
+                              //   label: LocaleKeys.snap.localize,
+                              //   image: Assets.snap,
+                              //   onTap: () {
+                              //     context.pop();
+                              //     context.push(Routes.SNAP);
+                              //   },
+                              // ),
 
                               drawerRollWidget(
                                 label: LocaleKeys.chat.localize,
@@ -1134,7 +1136,38 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 text: LocaleKeys.choiceRuler.localize,
               ),
             ],
-          )
+          ),
+          BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, theme) {
+              var themeCubit =
+              context.read<ThemeCubit>();
+              return Row(
+                children: [
+                  CustomSwitchButton(
+                    value: themeCubit.isDarkTheme,
+                    onChanged: (value) {
+                      if (theme is LightThemeModeStates) {
+                        ThemeCubit.get(context).darkThemeMode();
+                      }
+                      if (theme is DarkThemeModeStates) {
+                        ThemeCubit.get(context).lightThemeMode();
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    width: 4.w,
+                  ),
+                  themeCubit.isDarkTheme
+                      ? Label(
+                    text: LocaleKeys.lightMode.localize,
+                  )
+                      : Label(
+                    text: LocaleKeys.darkMode.localize,
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );

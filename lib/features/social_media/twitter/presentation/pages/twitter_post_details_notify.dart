@@ -25,6 +25,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -243,7 +244,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
                       await controller.editComment(params: params),
                 )
               : const Center(
-                  child: CircularProgressIndicator(),
+                  child: CustomCircularProgressIndicator(),
                 );
         },
       ),

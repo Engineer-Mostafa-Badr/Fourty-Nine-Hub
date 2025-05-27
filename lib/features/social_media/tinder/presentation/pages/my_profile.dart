@@ -270,7 +270,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(bottom: 20.h),
-                  child: CustomCircularProgressIndicator(
+                  child: CustomCircularPercentIndicator(
                     radius: 140.0.h,
                     lineWidth: 6.0,
                     startAngle: 180,

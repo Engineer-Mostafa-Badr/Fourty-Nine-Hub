@@ -13,8 +13,10 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/talent_video.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'talent_video_player.dart';
 
 class GetAllTalents extends StatelessWidget {
@@ -31,7 +33,7 @@ class GetAllTalents extends StatelessWidget {
         builder: (context, state) {
           var cubit = context.read<StarCubit>();
           if (cubit.loadAllTalents) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
 
           if (state.status == StarStates.error) {
@@ -42,9 +44,8 @@ class GetAllTalents extends StatelessWidget {
           }
 
           if (cubit.allTalents.isEmpty) {
-            return Center(
-              // child: Text('Error: ${_getErrorMessage(state.failure)}'),
-              child: Text(context.isArabic?'لا يوجد نتائج': 'No Results Found'),
+            return CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
             );
           }
 
@@ -59,7 +60,7 @@ class GetAllTalents extends StatelessWidget {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   ),
                 );
               }
@@ -278,7 +279,7 @@ class GetAllTalents extends StatelessWidget {
   //       imageUrl: mediaUrl,
   //       fit: BoxFit.cover,
   //       placeholder: (context, url) => const Center(
-  //         child: CircularProgressIndicator(),
+  //         child: CustomCircularProgressIndicator(),
   //       ),
   //       errorWidget: (context, url, error) => const Center(
   //         child: Icon(Icons.error),

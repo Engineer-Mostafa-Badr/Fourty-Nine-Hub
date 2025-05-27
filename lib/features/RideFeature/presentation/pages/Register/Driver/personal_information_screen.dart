@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/core/widget/custom_switch_list_title.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/widgets/register_expansion_tile.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -62,7 +63,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
             child: HomeAppbar(),
           ),
           body: cubit.loadingRegister == true
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CustomCircularProgressIndicator())
               : Form(
                   key: context.read<RideRegisterCubit>().formKey,
                   child: Column(
@@ -319,7 +320,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                                   const Sizer(),
                                   state.isLoadingModels
-                                      ? const Center(child: CircularProgressIndicator())
+                                      ? const Center(child: CustomCircularProgressIndicator())
                                       : Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [

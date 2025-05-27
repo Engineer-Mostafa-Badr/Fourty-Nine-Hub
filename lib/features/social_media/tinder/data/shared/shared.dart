@@ -18,6 +18,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
@@ -71,7 +72,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       builder: (context, state) {
         if (state is GiftsInitial) {
           return const Center(
-            child: CircularProgressIndicator(color: Colors.white),
+            child: CustomCircularProgressIndicator(color: Colors.white),
           );
         } else if (state is GiftsLoaded) {
           log("${state.length}  "

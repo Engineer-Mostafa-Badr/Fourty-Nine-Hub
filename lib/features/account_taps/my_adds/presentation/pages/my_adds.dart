@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
@@ -124,7 +125,7 @@ class _MyAddsViewState extends State<MyAddsView>
     return BlocBuilder<MyAddsCubit, MyAddsState>(
       builder: (context, state) {
         if (state.status == MyAddsStates.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         } else if (state.status == MyAddsStates.error) {
           return const Center(child: Text('Error loading data'));
         } else if (state.myOtherAds?.isEmpty ?? true) {
@@ -145,7 +146,7 @@ class _MyAddsViewState extends State<MyAddsView>
     return BlocBuilder<MyAddsCubit, MyAddsState>(
       builder: (context, state) {
         if (state.status == MyAddsStates.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         } else if (state.status == MyAddsStates.error) {
           return const Center(child: Text('Error loading data'));
         } else if (state.tripJoin?.docs.isEmpty ?? true) {

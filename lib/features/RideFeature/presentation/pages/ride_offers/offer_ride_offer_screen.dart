@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -101,7 +102,7 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
           builder: (context, state) {
             return state.isLoading
                 ? Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: Theme.of(context).primaryColor,
                     ),
                   )

@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -232,10 +233,10 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               ? Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                   child: state.isLoadingAvailable
-                                      ? const Center(child: CircularProgressIndicator())
+                                      ? const Center(child: CustomCircularProgressIndicator())
                                       : widget.params.isSocket == true
                                           ? cubit.isLoadingAvailableRideTrips
-                                              ? const Center(child: CircularProgressIndicator())
+                                              ? const Center(child: CustomCircularProgressIndicator())
                                               : state.availableRideTrips != null
                                                   ? Column(
                                                     children: [
@@ -273,7 +274,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                               : cubit.availableRideNonSocketData == null
                                                   ? const SizedBox.shrink()
                                                   : cubit.isLoadingMoreAvailableNonSocketTrips
-                                                      ? const Center(child: CircularProgressIndicator())
+                                                      ? const Center(child: CustomCircularProgressIndicator())
                                                       : cubit.availableRideNonSocketData.isEmpty
                                                           ? Center(child: Text(LocaleKeys.youDontHaveAvailableOffer.localize))
                                                           : ListView.separated(
@@ -361,7 +362,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                     widget.params.modeType == "ride"
                                 ? cubit.isLoadingMorePastNonSocketTrips
                                     ? const Center(
-                                        child: CircularProgressIndicator())
+                                        child: CustomCircularProgressIndicator())
                                     : cubit.pastRideNonSocketData.isEmpty
                                         ? Center(
                                             child: Text(LocaleKeys
@@ -400,7 +401,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                             })
                                 : cubit.isLoadingPastRideTrips
                                     ? const Center(
-                                        child: CircularProgressIndicator())
+                                        child: CustomCircularProgressIndicator())
                                     : cubit.pastRideTrips.isEmpty
                                         ? Center(
                               child: Text(context.isArabic?"لا يوجد رحلات سابقة":"No past trips"),
@@ -426,12 +427,12 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                     widget.params.modeType == "ride"
                                 ? state.isLoadingSettings
                                     ? const Center(
-                                        child: CircularProgressIndicator())
+                                        child: CustomCircularProgressIndicator())
                                     : SettingsNotSocket(
                                         settings: state.driverSettingsEntity)
                                 : state.isLoadingSettings
                                     ? const Center(
-                                        child: CircularProgressIndicator())
+                                        child: CustomCircularProgressIndicator())
                                     : SettingsWidget(
                                         modeType: widget.params.isSocket == true
                                             ? 'ride'
@@ -440,7 +441,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                       else if (cubit.state.currentIndex == 4)
                         Expanded(
                           child: cubit.isLoadingMoreAcceptedNonSocketTrips
-                              ? const Center(child: CircularProgressIndicator())
+                              ? const Center(child: CustomCircularProgressIndicator())
                               : cubit.acceptedRideNonSocketData.isEmpty
                                   ? Center(
                                       child: Text(LocaleKeys

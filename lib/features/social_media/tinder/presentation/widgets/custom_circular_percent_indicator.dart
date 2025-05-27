@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomCircularProgressIndicator extends StatelessWidget {
+class CustomCircularPercentIndicator extends StatelessWidget {
   final double radius;
   final double lineWidth;
   final double startAngle;
@@ -15,8 +15,8 @@ class CustomCircularProgressIndicator extends StatelessWidget {
   final StrokeCap strokeCap;
   final Widget? center;
 
-  const CustomCircularProgressIndicator({
-    Key? key,
+  const CustomCircularPercentIndicator({
+    super.key,
     required this.radius,
     required this.lineWidth,
     this.startAngle = 0,
@@ -28,7 +28,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
     required this.backgroundColor,
     this.strokeCap = StrokeCap.round,
     this.center,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +157,7 @@ class CircularProgressExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomCircularProgressIndicator(
+    return CustomCircularPercentIndicator(
       radius: 140.0.h,
       lineWidth: 6.0,
       startAngle: 180,

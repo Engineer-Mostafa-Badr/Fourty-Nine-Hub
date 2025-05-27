@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // ويدجيت لعرض الفيديو مع مراقبة الظهور وأزرار التحكم
 class AutoplayVideoWidget extends StatefulWidget {
@@ -130,7 +131,7 @@ class _AutoplayVideoWidgetState extends State<AutoplayVideoWidget> {
                       child: VideoPlayer(_controller),
                     )
                   : const Center(
-                      child: CircularProgressIndicator(
+                      child: CustomCircularProgressIndicator(
                       color: Colors.white,
                     )),
             ),

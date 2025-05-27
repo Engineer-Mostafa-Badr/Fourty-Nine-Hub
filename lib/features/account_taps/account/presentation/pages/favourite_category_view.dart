@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,7 +30,7 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
           final controller = context.read<FavouriteCategoryCubit>();
           if (state.status == StateStatus.loading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CustomCircularProgressIndicator(),
             );
           }
           // if (state.status == StateStatus.error) {

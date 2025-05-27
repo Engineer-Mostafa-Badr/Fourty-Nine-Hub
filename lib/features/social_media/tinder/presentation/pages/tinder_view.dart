@@ -168,7 +168,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
         //     if (state.status == TinderStates.success) {
         //       return _buildLoggedInContent(context, state);
         //     }
-        //     return const Center(child: CircularProgressIndicator());
+        //     return const Center(child: CustomCircularProgressIndicator());
         //   },
         // ),
         );
@@ -239,7 +239,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
             //       ),
             //     );
             //     }
-            //     return const Center(child: CircularProgressIndicator());
+            //     return const Center(child: CustomCircularProgressIndicator());
             //   },
             // ),
             // SizedBox(height: 50.h),

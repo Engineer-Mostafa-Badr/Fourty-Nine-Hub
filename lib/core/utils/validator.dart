@@ -112,11 +112,24 @@ String? validatorEmail(String? email) {
   return null;
 }
 
-String? validatorPhone(String? email) {
+String? validatorPhone(String? phone) {
   final phoneRegex = RegExp(r'^\+?\d{7,15}$');
-  if (email == null || email.isEmpty) {
+  if (phone == null || phone.isEmpty) {
     return LocaleKeys.required.localize;
-  } else if (!phoneRegex.hasMatch(email)) {
+  } else if (!phoneRegex.hasMatch(phone) && phone.length != 11) {
+    return LocaleKeys.invalidPhoneNumber.localize;
+  }
+  return null;
+}
+
+String? validatorEmailOrPhone(String? emailOrPhone) {
+  final phoneRegex = RegExp(r'^\+?\d{7,15}$');
+  final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
+  if (emailOrPhone == null || emailOrPhone.isEmpty) {
+    return LocaleKeys.required.localize;
+  } else if (!phoneRegex.hasMatch(emailOrPhone) &&
+      !emailRegex.hasMatch(emailOrPhone) &&
+      emailOrPhone.length != 11) {
     return LocaleKeys.invalidPhoneNumber.localize;
   }
   return null;
@@ -124,11 +137,11 @@ String? validatorPhone(String? email) {
 
 String? validatorNotHavePhone(String? email) {
   final phonePattern = RegExp(
-      r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'  // Common formats: +1 (123) 456-7890, 123-456-7890
-      r'\d{10}|'                                                  // 10 consecutive digits
-      r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'                            // 123 456 7890, 123.456.7890
-      r'\+\d{10,}'                                               // International format: +1234567890
-  );
+      r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|' // Common formats: +1 (123) 456-7890, 123-456-7890
+      r'\d{10}|' // 10 consecutive digits
+      r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|' // 123 456 7890, 123.456.7890
+      r'\+\d{10,}' // International format: +1234567890
+      );
   if (email == null || email.isEmpty) {
     return LocaleKeys.required.localize;
   } else if (phonePattern.hasMatch(email)) {

@@ -16,6 +16,7 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
   final ToggleSubCategoryToFavoritesUseCase
       _toggleSubCategoryToFavoritesUseCase;
+
   MainCategoriesTapsCubit(
       this._getSubCategoriesUseCase, this._toggleSubCategoryToFavoritesUseCase)
       : super(MainCategoriesTapsState()) {
@@ -29,14 +30,14 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   }
 
   final _mainCategories = FourtyNineSharedData.instance.mainCategories;
-  List<SubCategoryEntity> _subCategories = [];
+  List<SubCategoryEntity> subCategories = [];
 
   Future<void> selectMainCategory(int index) async {
-    if (index != state.selectedIndex) {
-      _subCategories = [];
+    if (index != state.selectedIndex ||index == 0) {
+      subCategories = [];
       _paginationParams = PaginationParams.basic();
       emit(state.copyWith(selectedIndex: index, status: StateStatus.updated));
-     await loadData();
+      await loadData();
     }
   }
 
@@ -47,23 +48,28 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     final user = UserCubit.to.state.data?.id;
-    final result = await _getSubCategoriesUseCase(GetSubCategoriesParams(
-      mainCategoryId: selectedCategory.id,
-      paginationParams: _paginationParams,
-      userId: user ?? '',
-    ));
+    final result = await _getSubCategoriesUseCase(
+      GetSubCategoriesParams(
+        mainCategoryId: selectedCategory.id,
+        paginationParams: _paginationParams,
+        userId: user ?? '',
+      ),
+    );
     result.fold(
         (l) => emit(state.copyWith(status: StateStatus.error, failure: l)),
         (r) {
       _paginationParams.page++;
-      _subCategories.addAll(r);
+      subCategories.addAll(r);
+      print('r.length==> ${subCategories.length}');
       _isLastPage = r.isEmpty || r.length < _paginationParams.limit;
       emit(state.copyWith(
-          status: StateStatus.success, subCategories: _subCategories));
+          status: StateStatus.success, subCategories: subCategories));
     });
+    print('r.lengthr==> ${subCategories.length}');
   }
 
   List<MainCategoryEntity> get mainCategories => _mainCategories;
+
   MainCategoryEntity get selectedCategory =>
       _mainCategories[state.selectedIndex];
 

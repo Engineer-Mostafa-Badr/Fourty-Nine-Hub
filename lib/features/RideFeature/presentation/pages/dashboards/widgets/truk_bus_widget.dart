@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -234,7 +235,7 @@ class TrukBusWidget extends StatelessWidget {
                                       )
                                       .tripDetails!
                                       .id
-                          ? const Center(child: CircularProgressIndicator())
+                          ? const Center(child: CustomCircularProgressIndicator())
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

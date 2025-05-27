@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/utils/type_defs.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../res/style/app_colors.dart';
 
 class DefaultButton extends StatefulWidget {
@@ -160,7 +161,7 @@ class _DefaultButtonState extends State<DefaultButton>
         ),
         child: FittedBox(
           fit: BoxFit.contain,
-          child: CircularProgressIndicator(
+          child: CustomCircularProgressIndicator(
             color: widget.labelStyle.color,
           ),
         ),

@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class BuildFacebookSuggestPeople extends StatefulWidget {
   const BuildFacebookSuggestPeople({super.key,});
@@ -389,7 +390,7 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                         ),
                       ), separatorBuilder: (context, index)=>const SizedBox(width: 8,), itemCount: cubit.suggestedFriends.length),
                     ),
-                    if(cubit.isLoadingPeopleMore==true) const Center(child: CircularProgressIndicator(),),
+                    if(cubit.isLoadingPeopleMore==true) const Center(child: CustomCircularProgressIndicator(),),
                   ],
                 ),
               )

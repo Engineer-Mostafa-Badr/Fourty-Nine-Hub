@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/pag
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../res/style/styles.dart';
 
@@ -64,7 +65,7 @@ class _SocialPageState extends State<SocialPage> {
           },
           builder: (BuildContext context, state) {
             if (state.status == CustomPageStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             } else if (state.status == CustomPageStates.success) {
               return Column(
                 children: [

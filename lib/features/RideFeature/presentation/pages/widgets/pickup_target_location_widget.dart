@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/functions/helper/lang_helper.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -206,7 +207,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
               bloc: widget.cubit,
               builder: (context, state) {
                 if (state.isLoadingCities || state.isLoadingGovernorates) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomCircularProgressIndicator());
                 } else if (state.isSuccess && (state.cities?.isNotEmpty ?? false)) {
                   // Show cities list if available
                   return ListView.builder(
@@ -450,7 +451,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
 //         bloc: widget.cubit,
 //         builder: (context, state) {
 //           if (state.isLoadingCities || state.isLoadingGovernorates) {
-//             return const Center(child: CircularProgressIndicator());
+//             return const Center(child: CustomCircularProgressIndicator());
 //           } else if (state.isSuccess) {
 //             return Expanded(
 //               child: ListView.builder(
@@ -672,7 +673,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                         if (state.isLoadingCities ||
                             state.isLoadingGovernorates) {
                           return const Center(
-                            child: CircularProgressIndicator(),
+                            child: CustomCircularProgressIndicator(),
                           );
                         } else if (state.isSuccess) {
                           return Expanded(

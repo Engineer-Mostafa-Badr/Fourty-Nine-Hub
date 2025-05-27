@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SupportRideParams {
   final String tripId;
@@ -54,7 +55,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
       body: BlocBuilder<DashboardsCubit, DashboardsState>(builder: (context, state) {
         var cubit = context.read<DashboardsCubit>();
         if (state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
         if(state.supportStatus == RequestEmergencyStatus.approved.status){
           return SingleChildScrollView(
@@ -134,7 +135,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: state.isLoadingSubmitRequest? const Center(child: CircularProgressIndicator()): ElevatedButton(
+                  child: state.isLoadingSubmitRequest? const Center(child: CustomCircularProgressIndicator()): ElevatedButton(
                     onPressed: () {
                       if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                         if(form.currentState!.validate()){

@@ -465,7 +465,7 @@ class _PaymentViewState extends State<PaymentView> {
             //         previous.uploadStatus != current.uploadStatus,
             //     builder: (context, state) {
             //       if (state.uploadStatus == StateStatus.loading) {
-            //         return const Center(child: CircularProgressIndicator());
+            //         return const Center(child: CustomCircularProgressIndicator());
             //       } else if (state.uploadStatus == StateStatus.success &&
             //           state.uploadedImage != null) {
             //         return Image.file(state.uploadedImage!);

@@ -28,6 +28,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 
@@ -95,7 +96,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
 
             if (state.status == StateStatus.loading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               );
             } else if (state.status == StateStatus.error ||
                 state.postDetails == null) {
@@ -389,7 +390,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                       )),
                       const Sizer(),
                       if (loading == true)
-                        CircularProgressIndicator(
+                        CustomCircularProgressIndicator(
                           strokeWidth: 8.w,
                         ),
                       if (commentTextController.text.isNotEmpty &&

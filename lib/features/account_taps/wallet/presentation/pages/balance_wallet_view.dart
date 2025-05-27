@@ -19,6 +19,7 @@ import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/wallet_history_card.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class BalanceWalletView extends StatefulWidget {
   const BalanceWalletView({super.key});
@@ -198,7 +199,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                       style: Styles.headerText(),
                     ),
                     state.status == BalanceStates.loading
-                        ? const Center(child: CircularProgressIndicator())
+                        ? const Center(child: CustomCircularProgressIndicator())
                         : SizedBox(
                             height: 400,
                             child: ListView.separated(
@@ -207,7 +208,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                               itemBuilder: (context, index) {
                                 if (index == _cubit.history.length) {
                                   return const Center(
-                                      child: CircularProgressIndicator());
+                                      child: CustomCircularProgressIndicator());
                                 }
                                 final item = state.history![index];
                                 return WalletHistoryCard(
