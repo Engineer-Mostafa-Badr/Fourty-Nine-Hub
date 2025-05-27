@@ -24,7 +24,7 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
       if (scrollController.position.maxScrollExtent ==
               scrollController.offset &&
           !_isLastPage) {
-        loadData();
+        loadData('init MainCategoriesTapsCubit');
       }
     });
   }
@@ -33,11 +33,12 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   List<SubCategoryEntity> subCategories = [];
 
   Future<void> selectMainCategory(int index) async {
-    if (index != state.selectedIndex ||index == 0) {
+    if (index != state.selectedIndex) {
+      print('selectMainCategory==> $index');
       subCategories = [];
       _paginationParams = PaginationParams.basic();
       emit(state.copyWith(selectedIndex: index, status: StateStatus.updated));
-      await loadData();
+      await loadData('selectMainCategory');
     }
   }
 
@@ -45,9 +46,11 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   PaginationParams _paginationParams = PaginationParams.basic();
   bool _isLastPage = false;
 
-  Future<void> loadData() async {
+  Future<void> loadData(String? query) async {
     emit(state.copyWith(status: StateStatus.loading));
     final user = UserCubit.to.state.data?.id;
+    print('loadData==> $query');
+    print('selectedCategory.id==>${selectedCategory.id}');
     final result = await _getSubCategoriesUseCase(
       GetSubCategoriesParams(
         mainCategoryId: selectedCategory.id,
@@ -65,7 +68,6 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
       emit(state.copyWith(
           status: StateStatus.success, subCategories: subCategories));
     });
-    print('r.lengthr==> ${subCategories.length}');
   }
 
   List<MainCategoryEntity> get mainCategories => _mainCategories;

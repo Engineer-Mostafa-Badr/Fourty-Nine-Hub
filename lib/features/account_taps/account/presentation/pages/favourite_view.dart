@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/cubit/favourite_drawer_cubit.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class FavouriteView extends StatefulWidget {
   const FavouriteView({super.key});
@@ -35,7 +36,7 @@ class _FavouriteViewState extends State<FavouriteView> {
         child: BlocConsumer<FavouriteDrawerCubit, FavouriteDrawerState>(
           builder: (context, state) {
             if (state.status == FavouriteDrawerStates.loading) {
-              return const Center(child: CircularProgressIndicator.adaptive());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             return Padding(
               padding: EdgeInsets.all(10.0.w),

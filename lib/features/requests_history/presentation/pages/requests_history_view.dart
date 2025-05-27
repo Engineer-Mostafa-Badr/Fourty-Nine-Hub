@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/requests_history/presentation/cubit/reque
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/pages/tripjoin_request_view.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -55,7 +56,7 @@ class _HistoryRequestsViewState extends State<HistoryRequestsView> {
                 onRefresh: () async => controller.loadData(),
                 child: state.isLoading
                     ? const Center(
-                        child: CircularProgressIndicator.adaptive(),
+                        child: CustomCircularProgressIndicator(),
                       )
                     : Column(
                         children: [

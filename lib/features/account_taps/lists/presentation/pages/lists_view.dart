@@ -14,6 +14,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ListsView extends StatefulWidget {
   const ListsView({super.key});
@@ -171,7 +172,7 @@ class _ListsViewState extends State<ListsView>
             Expanded(
               child: state.isLoading
                   ? const Center(
-                      child: CircularProgressIndicator.adaptive(),
+                      child: CustomCircularProgressIndicator(),
                     )
                   : _buildListUsersWidget(
                       // controller: controller.friendsPagingController,
@@ -223,7 +224,7 @@ class _ListsViewState extends State<ListsView>
                 }),
             Expanded(
               child: state.isLoading
-                  ? const Center(child: CircularProgressIndicator.adaptive())
+                  ? const Center(child: CustomCircularProgressIndicator())
                   : _buildListUsersWidget(
                       // controller: controller.followersPagingController,
                       list: state.followers ?? [],
@@ -274,7 +275,7 @@ class _ListsViewState extends State<ListsView>
                 }),
             Expanded(
               child: state.isLoading
-                  ? const Center(child: CircularProgressIndicator.adaptive())
+                  ? const Center(child: CustomCircularProgressIndicator())
                   : _buildListUsersWidget(
                       // controller: controller.requestsPagingController,
                       list: state.requests ?? [],
@@ -335,7 +336,7 @@ class _ListsViewState extends State<ListsView>
                 }),
             Expanded(
               child: state.isLoading
-                  ? const Center(child: CircularProgressIndicator.adaptive())
+                  ? const Center(child: CustomCircularProgressIndicator())
                   : _buildListUsersWidget(
                       // controller: controller.blockedPagingController,
                       list: state.blocked ?? [],
