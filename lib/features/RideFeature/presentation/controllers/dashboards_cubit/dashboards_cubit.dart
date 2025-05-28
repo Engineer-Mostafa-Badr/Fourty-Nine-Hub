@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,11 +44,14 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_governorates.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -148,6 +152,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToEndTripUseCase listenToEndTripUseCase;
   final AddRateWithDriverUseCase addRateWithDriverUseCase;
   final terminalExaminationFormKey = GlobalKey<FormState>();
+  final GetRideGovernoratesUseCase getRideGovernoratesUseCase;
 
   DashboardsCubit(
       this.getAvailableTripsUsecase,
@@ -192,6 +197,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.getDriverSettingsUseCase,
       this.listenToRemoveUntrackedTripUseCase,
       this.listenToAcceptUntrackedTripOfferUseCase,
+      this.getRideGovernoratesUseCase,
       this.addRateWithDriverUseCase)
       : super(const DashboardsState());
   TextEditingController rideVehicleExpireDateController =
@@ -745,8 +751,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAcceptedNonSocketTrips() async {
-    if (!hasMoreAcceptedNonSocketTrips || isLoadingMoreAcceptedNonSocketTrips)
+    if (!hasMoreAcceptedNonSocketTrips || isLoadingMoreAcceptedNonSocketTrips) {
       return;
+    }
     isLoadingMoreAcceptedNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getAcceptedNonSocketTripsUseCase(
@@ -796,8 +803,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAvailableNonSocketTrips() async {
-    if (!hasMoreAvailableNonSocketTrips || isLoadingMoreAvailableNonSocketTrips)
+    if (!hasMoreAvailableNonSocketTrips || isLoadingMoreAvailableNonSocketTrips) {
       return;
+    }
     isLoadingMoreAvailableNonSocketTrips = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getAvailableNonSocketTripsUseCase(
@@ -840,6 +848,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     // Index 0: Available Trips
     if (index == 0) {
       if (params.isSocket == true) {
+        fetchGovs();
         loadAvailableRideTrips(context);
       } else if (params.modeType == "ride" && settings?.isReady == true) {
         loadInitialAvailableNonSocketTrips();
@@ -848,9 +857,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     }
 
     if (index == 1 && params.isSocket == true) getActiveTrip(context);
-    if (index == 2 && params.isSocket == true)
+    if (index == 2 && params.isSocket == true) {
       loadPastRideTrips(
           context, params.isSocket == true ? "tracking" : 'non-tracking');
+    }
     if (index == 3 && params.isSocket == true) getSettings(context);
 
     // Index 2: Past Trips
@@ -938,10 +948,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       List<AvailableRideNonSocketTripEntity> list =
           availableRideNonSocketData ?? [];
       log("tripId.toString()${tripId.toString()}");
-      if (tripId.isNotEmpty)
+      if (tripId.isNotEmpty) {
         list.removeWhere((e) => e.tripDetails?.id == tripId);
-      if (tripId.isNotEmpty)
+      }
+      if (tripId.isNotEmpty) {
         list.removeWhere((e) => e.tripDetails?.id == tripId);
+      }
       // log(trip.toString());
       // list.insert(0, trip);
       emit(state.copyWith(availableRideNonSocketTrips: list));
@@ -1378,10 +1390,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (settings) {
         log("Suzccess");
+        GovernorateEntity? selectedGov = state.govs?.firstWhereOrNull((e)=>(e.nameAr==settings.data.city)||(e.nameEn==settings.data.city));
         emit(state.copyWith(
-            status: DashboardsStates.success, settings: settings.data));
+            status: DashboardsStates.success, settings: settings.data,selectedGov:selectedGov));
       },
     );
+  }
+
+  onSelectGovernorate(GovernorateEntity? selectedGov){
+    emit(state.copyWith(status: DashboardsStates.success,selectedGov: selectedGov));
   }
 
   Future<void> updateSettings(
@@ -1712,6 +1729,18 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
     return false;
   }
+
+  Future<void> fetchGovs() async {
+    final Either<Failure, List<GovernorateEntity>> result = await getRideGovernoratesUseCase(const NoParams());
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: DashboardsStates.error, failure: failure)),
+          (governorates) async {
+        emit(state.copyWith(status: DashboardsStates.success, govs: governorates));
+      },
+    );
+  }
+
 
   getEmergencyDetails(
       BuildContext context, SupportRideParams mainParams) async {

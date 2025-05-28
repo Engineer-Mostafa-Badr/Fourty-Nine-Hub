@@ -5,8 +5,17 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/creminal_record_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drivers_license_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drug_analysis_non_socket.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/helpers/responsive/responsive.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -168,21 +177,22 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             _expansionTileWidget(
               controller: cityController,
               title: LocaleKeys.favoriteCity.tr(), //'Favorite city',
-              trailing: cityTrailing.tr(),
+              trailing: context.isArabic?(context.read<DashboardsCubit>().state.selectedGov?.nameAr??''):context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
               childrenList: List.generate(
-                favoriteCity.length,
+                context.read<DashboardsCubit>().state.govs?.length??0,
                 (index) => InkWell(
                   onTap: () {
-                    setState(() {
-                      cityTrailing = favoriteCity[index];
-                      cityController.collapse();
-                    });
+                    context.read<DashboardsCubit>().onSelectGovernorate(context.read<DashboardsCubit>().state.govs?[index]);
+                    cityController.collapse();
                   },
                   child: List.generate(
-                      favoriteCity.length,
+                      context.read<DashboardsCubit>().state.govs?.length??0,
                       (index) => Align(
                           alignment: AlignmentDirectional.topEnd,
-                          child: Label(text: favoriteCity[index])))[index],
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Label(text: context.isArabic?(context.read<DashboardsCubit>().state.govs?[index].nameAr??''):context.read<DashboardsCubit>().state.govs?[index].nameEn??''),
+                          )))[index],
                 ),
               ),
             ),
@@ -242,7 +252,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                Text(widget.settings?.rating.averageRating.toString() ?? '2.5',
+                Text(widget.settings?.rating.totalRatings.toString() ?? '2.5',
                     style: const TextStyle(
                         fontSize: 12, fontWeight: FontWeight.w700))
               ],
@@ -276,19 +286,64 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ],
             ),
           ),
-          UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6),
-          UpdatePersonalInfoWidget(
-              title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+          ClickableWidget(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                    value: serviceLocator<DashboardsCubit>(),
+                    child: const PersonalDocumentsNonSocketScreen())));
+              },
+
+              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
+          ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: const DriversLicenseNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+          ),
           if (widget.modeType == 'ride') ...[
-            UpdatePersonalInfoWidget(
-                title: LocaleKeys.carLicense.tr(), exdIn: 6),
-            UpdatePersonalInfoWidget(
-                title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
-            UpdatePersonalInfoWidget(
-                title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
+            ClickableWidget(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                    value: serviceLocator<DashboardsCubit>(),
+                    child: const VehicleInformationNonSocketScreen())));
+              },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.carLicense.tr(), exdIn: 6),
+            ),
+            if(widget.settings?.isCriminalRecordEnabled == true)
+              ClickableWidget(
+                onTap: () async {
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                      value: serviceLocator<DashboardsCubit>(),
+                      child: const CriminalRecordNonSocketScreen())));
+                },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
+            ),
+            if(widget.settings?.isDrugAnalysisRecordEnabled == true)
+            ClickableWidget(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                    value: serviceLocator<DashboardsCubit>(),
+                    child: const DragAnalyticsNonSocketScreen())));
+              },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
+            ),
           ],
-          UpdatePersonalInfoWidget(
-              title: LocaleKeys.vehicleInspection.tr(), exdIn: 6),
+          if(widget.settings?.isVehicleRecordEnabled == true)
+          ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: const TechnicalExaminationNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.vehicleInspection.tr(), exdIn: 6),
+          ),
           const SizedBox(height: 16),
           Row(
             spacing: 5,
@@ -312,7 +367,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               isReady: isReady,
                               enableSound: enableSound,
                               subscriptionPlan: planTrailing,
-                              favoriteCity: cityTrailing,
+                              favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
                               subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
@@ -365,10 +420,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-                spacing: 8,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: childrenList),
+            child: SizedBox(
+              height: 200.hs,
+              child: ListView(
+                  // spacing: 8,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: childrenList),
+            ),
           ),
         ],
       );
