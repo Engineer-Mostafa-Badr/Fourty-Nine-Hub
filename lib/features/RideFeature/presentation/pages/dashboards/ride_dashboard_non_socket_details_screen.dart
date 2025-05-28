@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/cu
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
@@ -23,6 +24,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
@@ -52,6 +54,7 @@ class _RideDashboardNonSocketDetailsScreenState
   initState(){
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
         clientId: 'widget.tripEntity.clientDetails?.id??''',
+        // clientId: 'widget.tripEntity.clientDetails?.id??''',
         driverId: 'widget.tripEntity.driverDetails?.id??''',
         tripId: widget.tripEntity.tripDetails?.id??'',
         tripType: 'notSpecial',
@@ -373,12 +376,21 @@ class _RideDashboardNonSocketDetailsScreenState
                   // Text("${widget.tripEntity.tripDetails?.yourRating?.average}"),
                   RideDetailsRatingNonSocketWidget(
                     // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
-                    rate: widget.tripEntity.tripDetails?.yourRating?.average?.toDouble() ?? 0.0,
+                    // rate: 1,
+                    rate: widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble() ?? 0.0,
                     title: LocaleKeys.youRateClient.tr(),
                     tripId: widget.tripEntity.tripDetails?.id ?? '',
                     cubit: context.read<DashboardsCubit>(),
                   ),
-
+                  RideDetailsRatingNonSocketWidget(
+                    // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
+                    // rate: 2,
+                    rate: widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble() ?? 0.0,
+                    title: LocaleKeys.clientRateYou.tr(),
+                    tripId: widget.tripEntity.tripDetails?.id ?? '',
+                    cubit: context.read<DashboardsCubit>(),
+                    isClient: true,
+                  ),
                   // RideDetailsRatingWidget(
                   //     isRate: isClientRate,
                   //     rate: clientRate,
@@ -418,7 +430,7 @@ class _RideDashboardNonSocketDetailsScreenState
                             onPressed: () {
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
-                                  // cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'');
+                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'');
                                 }
                               }
                             },
@@ -489,7 +501,7 @@ class _RideDashboardNonSocketDetailsScreenState
                             if (path != null) {
                               _showPdfPreview(context, path);
                             }
-                            // context.push(Routes.emergencyContactsScreen);
+                            context.push(Routes.emergencyContactsScreen);
                           },
                           icon: const Icon(Icons.download, color: Colors.white),
                           label: Text(LocaleKeys.locationLog.localize),
