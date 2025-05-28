@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_detail
 
 class AdDetailsPropModel extends AdDetailsPropEntity {
   AdDetailsPropModel({
+    required super.id,
     required super.nameAr,
     required super.nameEn,
     required super.valueAr,
@@ -10,11 +11,12 @@ class AdDetailsPropModel extends AdDetailsPropEntity {
   });
   factory AdDetailsPropModel.fromJson(Map<String, dynamic> json) {
     return AdDetailsPropModel(
+      id: json['propertyId']?['_id'] ?? '',
       nameAr: json['propertyId']?['name_ar'] ?? json['name_ar'] ?? '',
       nameEn: json['propertyId']?['name_en'] ?? json['name_ar'] ?? '',
       valueAr: json['value']?['ar'] ?? json['ar'] ?? '',
       valueEn: json['value']?['en'] ?? json['en'] ?? '',
-      imageUrl: json['propertyId']['image'] ?? '',
+      imageUrl: json['propertyId']?['image'] ?? '',
     );
   }
 }

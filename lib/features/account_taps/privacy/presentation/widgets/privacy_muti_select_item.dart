@@ -47,7 +47,7 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
           final res = await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              contentPadding: EdgeInsets.all(8),
+              contentPadding: const EdgeInsets.all(8),
               backgroundColor: AppColors.getFindFillColor(context),
               content: StatefulBuilder(
                 builder: (context, setState) {
@@ -65,7 +65,7 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
                           icon: getPrivacyIcon(PrivacyStatus.public),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
-                          title:LocaleKeys.contacts.localize,
+                          title: LocaleKeys.contacts.localize,
                           value: PrivacyStatus.contacts,
                           icon: getPrivacyIcon(PrivacyStatus.contacts),
                           currentStatus: currentStatus),
@@ -82,7 +82,8 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
                       _buildPrivacyOption(context, setState,
                           title: LocaleKeys.friendsAndFollowers.localize,
                           value: PrivacyStatus.friendsAndFollowers,
-                          icon: getPrivacyIcon(PrivacyStatus.friendsAndFollowers),
+                          icon:
+                              getPrivacyIcon(PrivacyStatus.friendsAndFollowers),
                           currentStatus: currentStatus),
                       _buildPrivacyOption(context, setState,
                           title: LocaleKeys.onlyMe.localize,
@@ -96,7 +97,9 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
                           currentStatus: currentStatus,
                           showUserDialog: true),
                       _buildPrivacyOption(context, setState,
-                          title: context.isArabic?'ما عدا...':LocaleKeys.except_from.localize,
+                          title: context.isArabic
+                              ? 'ما عدا...'
+                              : LocaleKeys.except_from.localize,
                           value: PrivacyStatus.exceptFrom,
                           currentStatus: currentStatus,
                           icon: getPrivacyIcon(PrivacyStatus.exceptFrom),
@@ -191,17 +194,15 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Label(text: title),
-          Icon(icon,
-              color: Colors.grey),
+          Icon(icon, color: Colors.grey),
         ],
       ),
-
-      activeColor: AppColors.getButtonPrimaryColor(context) ,
+      activeColor: AppColors.getButtonPrimaryColor(context),
     );
   }
 
   Future<List<String>?> showSearchUserDialog(BuildContext context,
-      {required String name,required PrivacyStatus status}) async {
+      {required String name, required PrivacyStatus status}) async {
     final selectedUserIds = await Navigator.push<List<String>>(
       context,
       MaterialPageRoute(

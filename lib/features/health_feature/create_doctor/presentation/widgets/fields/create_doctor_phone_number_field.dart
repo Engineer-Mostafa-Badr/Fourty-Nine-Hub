@@ -16,6 +16,8 @@ class CreateDoctorPhoneNumberField extends StatelessWidget {
       currentController: context.read<CreateDoctorCubit>().phoneController,
       keyboardType: TextInputType.number,
       isRequired: true,
+      borderColor: const Color(0xffD9D9D9),
+      fillColor: const Color(0xffD9D9D9),
     );
   }
 }

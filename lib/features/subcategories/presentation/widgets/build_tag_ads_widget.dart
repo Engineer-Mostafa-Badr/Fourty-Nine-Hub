@@ -23,7 +23,7 @@ class BuildTagAdsWidget extends StatelessWidget {
     // super premium
     return Container(
       // width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       // color: status == SubscriptionStatus.premium.status
       //     ? Colors.amber
       //     : Colors.grey,
@@ -45,7 +45,7 @@ class BuildTagAdsWidget extends StatelessWidget {
           SvgPicture.asset(
             Assets.adsEyeIcon,
           ),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
           if (views == 0) ...[
             Label(
               text: LocaleKeys.noViews.localize,
@@ -93,7 +93,7 @@ class BuildTagAdsWidget extends StatelessWidget {
               ),
             ),
           ],
-          Spacer(),
+          const Spacer(),
           Label(
             text: status == SubscriptionStatus.premium.status
                 ? LocaleKeys.premium2.localize

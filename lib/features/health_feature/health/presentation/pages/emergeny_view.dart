@@ -22,7 +22,7 @@ class EmergencyView extends StatefulWidget {
 }
 
 class _EmergencyViewState extends State<EmergencyView> {
-  List specialities=[
+  List specialities = [
     'Ear/nose',
     'Neurologist',
     'Cardiologist',
@@ -58,13 +58,16 @@ class _EmergencyViewState extends State<EmergencyView> {
                   _buildTextFormField(hint: LocaleKeys.phoneNumber.localize),
                   const Sizer(),
                   SpecialityDropdown(
-                    items:specialities,
+                    items: specialities,
                     onItemSelected: (_) {},
                     displayStringForItem: (value) => value,
-                    hint: LocaleKeys.speciality.localize,),
+                    hint: LocaleKeys.speciality.localize,
+                  ),
                   const Sizer(),
                   _buildTextFormField(hint: '${LocaleKeys.address.localize}*'),
-                  const Sizer(height: 30,),
+                  const Sizer(
+                    height: 30,
+                  ),
                   GestureDetector(
                     onTap: () {},
                     child: Container(
@@ -79,7 +82,8 @@ class _EmergencyViewState extends State<EmergencyView> {
                         child: Text(
                           LocaleKeys.confirm.localize,
                           style: Styles.headerText(
-                            color: Colors.white,),
+                            color: Colors.white,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -97,9 +101,7 @@ class _EmergencyViewState extends State<EmergencyView> {
       height: 88.h,
       hint: hint,
       style: Styles.mediumText(fontWeight: FontWeight.w600, fontSize: 32),
-      fillColor: Theme
-          .of(context)
-          .scaffoldBackgroundColor,
+      fillColor: Theme.of(context).scaffoldBackgroundColor,
       borderColor: Colors.black,
       borderRadius: BorderRadius.circular(15),
     );

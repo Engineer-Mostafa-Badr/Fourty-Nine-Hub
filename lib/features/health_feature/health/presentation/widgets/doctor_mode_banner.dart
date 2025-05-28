@@ -5,14 +5,17 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class DoctorModeBanner extends StatelessWidget {
-  const DoctorModeBanner({super.key, required this.isWaitingApproval,});
+  const DoctorModeBanner({
+    super.key,
+    required this.isWaitingApproval,
+  });
   final bool isWaitingApproval;
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       children: [
         Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           width: double.infinity,
           height: 64.h,
           decoration: BoxDecoration(
@@ -25,7 +28,7 @@ class DoctorModeBanner extends StatelessWidget {
               ),
             ],
             gradient: const LinearGradient(
-              colors: [AppColors.SECONDARY_COLOR_DARK2,AppColors.c90242B],
+              colors: [AppColors.SECONDARY_COLOR_DARK2, AppColors.c90242B],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -34,8 +37,9 @@ class DoctorModeBanner extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                context.isArabic?'وضع الطبيب':'Doctor Mode',
-                style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold),
+                context.isArabic ? 'وضع الطبيب' : 'Doctor Mode',
+                style: Styles.mediumText(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,108 +33,149 @@ void showTiktokOption(BuildContext context, int randomNumber) =>
           maxChildSize: 0.7,
           minChildSize: 0.2,
           builder: (_, controller) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .scaffoldBackgroundColor, // Set background color
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(20)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    spreadRadius: 5,
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: ListView(
-                controller: controller,
-                shrinkWrap: true,
-                children: [
-// Header Section
-                  Center(
-                    child: Container(
-                      width: 50,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  Label(
-                      text: LocaleKeys.liveStreamOptions.localize,
-                      style: Styles.headerText()),
-                  const SizedBox(height: 16),
-// Option 1: Create Live
-                  ListTile(
-                    leading: const Icon(Icons.videocam, color: Colors.blue),
-                    title: Label(
-                      text: LocaleKeys.createLive.localize,
-                      style: Styles.mediumText(),
-                    ),
-                    onTap: () async {
-                      context.push(
-                        Routes.LIVEView,
-                        extra: ZegoArgs(
-                          randomNumber.toString(),
-                          true,
-                          context.read<UserCubit>().state.data!.fullName,
-                        ),
-                      );
-                      // var result = await context.read<StreamCubit>().createLive(
-                      //       title: 'create live',
-                      //       roomId: randomNumber.toString(),
-                      //       context: context,
-                      //     );
-                      // if (result == true && context.mounted) {
-                      //   context.push(
-                      //     Routes.LIVEView,
-                      //     extra: ZegoArgs(
-                      //       context
-                      //           .read<StreamCubit>()
-                      //           .state
-                      //           .liveCreateResponseEntity!
-                      //           .id,
-                      //       true,
-                      //       context.read<UserCubit>().state.data!.fullName,
-                      //     ),
-                      //   );
-                      // } else {
-                      //   print("Failed to create live stream");
-                      // }
-                    },
-                  ),
-                  const Divider(),
-// Option 2: Watch Live
-                  ListTile(
-                    leading: const Icon(Icons.tv, color: Colors.green),
-                    title: Text(LocaleKeys.watch.localize),
-                    onTap: () {
-                      context.pop();
-                      context.push(Routes.LIVE);
-                    },
-                  ),
-                  const SizedBox(height: 10),
-// Cancel Button
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Label(
-                        text: LocaleKeys.cancel.localize,
-                        style: Styles.mediumText()),
-                  ),
-                ],
-              ),
+            return TiktokOptionBottomSheetWidget(
+              randomNumber: randomNumber,
             );
           },
         );
       },
     );
+
+class TiktokOptionBottomSheetWidget extends StatelessWidget {
+  const TiktokOptionBottomSheetWidget({
+    super.key,
+    required this.randomNumber,
+  });
+
+  final int randomNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color:
+            Theme.of(context).scaffoldBackgroundColor, // Set background color
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            spreadRadius: 5,
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.only(top: 16, left: 32, right: 32),
+      child: Column(
+        // controller: controller,
+        // shrinkWrap: true,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header Section
+          Center(
+            child: Container(
+              width: 60,
+              height: 5,
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          Label(
+            text: LocaleKeys.liveStreamOptions.localize,
+            style: Styles.headerText(
+              fontWeight: FontWeight.w500,
+              fontSize: 40,
+            ),
+          ),
+          SizedBox(height: 64.h),
+          // Option 1: Create Live
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: SvgPicture.asset(Assets.tiktokVedioIcon),
+            title: Label(
+              text: LocaleKeys.createLive.localize,
+              style: Styles.mediumText(
+                fontWeight: FontWeight.w500,
+                fontSize: 32,
+              ),
+            ),
+            onTap: () async {
+              Navigator.pop(context);
+              context.push(
+                Routes.LIVEView,
+                extra: ZegoArgs(
+                  randomNumber.toString(),
+                  true,
+                  context.read<UserCubit>().state.data?.fullName ?? 'N/A',
+                  // '${UserCubit.to.state.data?.firstName} + ${UserCubit.to.state.data?.lastName}',
+                ),
+              );
+              // var result = await context.read<StreamCubit>().createLive(
+              //       title: 'create live',
+              //       roomId: randomNumber.toString(),
+              //       context: context,
+              //     );
+              // if (result == true && context.mounted) {
+              //   context.push(
+              //     Routes.LIVEView,
+              //     extra: ZegoArgs(
+              //       context
+              //           .read<StreamCubit>()
+              //           .state
+              //           .liveCreateResponseEntity!
+              //           .id,
+              //       true,
+              //       context.read<UserCubit>().state.data!.fullName,
+              //     ),
+              //   );
+              // } else {
+              //   print("Failed to create live stream");
+              // }
+            },
+          ),
+          const Divider(
+            height: 0,
+            thickness: 2,
+            color: Color(0xffD9D9D9),
+          ),
+          // Option 2: Watch Live
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: SvgPicture.asset(Assets.tiktokEyeIcon),
+            title: Label(
+              text: LocaleKeys.watch.localize,
+              style: Styles.mediumText(
+                fontWeight: FontWeight.w500,
+                fontSize: 32,
+              ),
+            ),
+            onTap: () {
+              context.pop();
+              context.push(Routes.LIVE);
+            },
+          ),
+          const SizedBox(height: 30),
+          // Cancel Button
+          AppButton(
+            label: LocaleKeys.cancel.localize,
+            backColor: AppColors.SECONDARY_COLOR_DARK2,
+            style: Styles.headerText(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 32,
+            ),
+            onPressed: () => Navigator.pop(context),
+            // style: ElevatedButton.styleFrom(
+            //   backgroundColor: Colors.redAccent,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(10),
+            //   ),
+            // ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,4 +1,5 @@
 class AdDetailsPropEntity {
+  final String id;
   final String nameAr;
   final String nameEn;
   final String valueAr;
@@ -6,6 +7,7 @@ class AdDetailsPropEntity {
   final String imageUrl;
 
   AdDetailsPropEntity({
+    required this.id,
     required this.nameAr,
     required this.nameEn,
     required this.valueAr,

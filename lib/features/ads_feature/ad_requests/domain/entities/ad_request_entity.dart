@@ -4,6 +4,10 @@ class AdRequestEntity {
   final String requestId;
   final String adId;
   final String userName;
+  final String firstName;
+  final String lastName;
+  final String profilePictureUrl;
+  final String userId;
   final String adTitle;
   final String phone;
   final String adDesc;
@@ -16,6 +20,10 @@ class AdRequestEntity {
   final bool enabled;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool isPremium;
+  final String subCategoryNameAr;
+  final String subCategoryNameEn;
+  final num views;
 
   Duration get publishedDuration => DateTime.now().difference(createdAt);
 
@@ -26,6 +34,8 @@ class AdRequestEntity {
       required this.adId,
       required this.subCategoryId,
       required this.userName,
+      required this.firstName,
+      required this.lastName,
       required this.adTitle,
       required this.phone,
       required this.adDesc,
@@ -36,5 +46,11 @@ class AdRequestEntity {
       required this.adUserId,
       required this.enabled,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt,
+      required this.profilePictureUrl,
+      required this.userId,
+      required this.isPremium,
+      required this.subCategoryNameAr,
+      required this.subCategoryNameEn,
+      required this.views});
 }

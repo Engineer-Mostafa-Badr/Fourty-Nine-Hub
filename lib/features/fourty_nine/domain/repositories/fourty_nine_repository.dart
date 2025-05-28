@@ -28,6 +28,8 @@ abstract class FourtyNineRepository {
   Future<Either<Failure, bool>> answerQuestion(AnswerQuestionParams params);
   Future<Either<Failure, bool>> toggleSubCategoryToFavorites(String id);
 
+  Future<Either<Failure, bool>> deleteAd(String id);
+
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
 
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();

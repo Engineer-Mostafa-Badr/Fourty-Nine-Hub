@@ -54,12 +54,11 @@ class AdsRepoImpl implements AdsRepo {
   @override
   Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params) {
     return _remoteDataSource.getMyAdById(params);
-
   }
 
   @override
-  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(GetMyAdByIdParams params) {
+  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(
+      GetMyAdByIdParams params) {
     return _remoteDataSource.getMyAdFavouriteAds(params);
-
   }
 }
