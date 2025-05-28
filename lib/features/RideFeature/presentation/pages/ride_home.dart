@@ -661,7 +661,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               return pleaseLoginDialog(context);
             }
             context.pop();
-            if (driverInfo == null) {
+            if (driverInfo == null|| (driverInfo.driverType?.isEmpty??false)) {
               serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
             } else {
               if (driverInfo.status == RegistrationStatus.pending.status) {
@@ -733,7 +733,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               return pleaseLoginDialog(context);
             }
             context.pop();
-            if (loadingInfo == null) {
+            if (loadingInfo == null || (loadingInfo.status?.isEmpty??false)) {
               print("object");
               serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
             } else {
