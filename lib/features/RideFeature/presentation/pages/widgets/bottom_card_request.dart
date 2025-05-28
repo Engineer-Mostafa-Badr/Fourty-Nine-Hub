@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/utils/format_numbers.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'font_manager.dart';
 
 class BottomCardRequest extends StatefulWidget {
@@ -60,6 +61,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if(serviceLocator<RideCubit>().tripViewers.isNotEmpty)
                         Container(
                           height: 40,
                           decoration: BoxDecoration(
@@ -170,39 +172,25 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
 
   // Build overlapping driver avatars
   Widget _buildStackedAvatars() {
-    final images = [
-      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-    ];
+    final tripViewers = serviceLocator<RideCubit>().tripViewers;
 
     return SizedBox(
       width: 80,
       child: Stack(
         clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            left: 28,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(images[2]),
-            ),
-          ),
-          Positioned(
-            left: 14,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(images[1]),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(images[0]),
-            ),
-          ),
-        ],
+        children: List.generate(
+          tripViewers.length > 3 ? 3 : tripViewers.length,
+              (index) {
+            final viewer = tripViewers[tripViewers.length - 1 - index];
+            return Positioned(
+              left: index * 14.0,
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(viewer.driverImage),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
