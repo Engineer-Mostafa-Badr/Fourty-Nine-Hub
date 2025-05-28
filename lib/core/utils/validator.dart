@@ -122,6 +122,23 @@ String? validatorPhone(String? email) {
   return null;
 }
 
+String? validatorEgyptPhone(String? phoneNumber) {
+  // Regex for Egyptian mobile numbers
+  // This regex allows for:
+  // - Optional country code (+20 or 0020)
+  // - Starts with 01 (for mobile numbers)
+  // - Followed by 0, 1, 2, or 5 (for network providers: Vodafone, Etisalat, Orange, WE)
+  // - Followed by 8 more digits
+  final egyptianPhoneRegex = RegExp(r'^(?:\+20|0020|0)?1[0125]\d{8}$');
+
+  if (phoneNumber == null || phoneNumber.isEmpty) {
+    return LocaleKeys.required.localize;
+  } else if (!egyptianPhoneRegex.hasMatch(phoneNumber)) {
+    return LocaleKeys.invalidPhoneNumber.localize;
+  }
+  return null;
+}
+
 String? validatorNotHavePhone(String? email) {
   final phonePattern = RegExp(
       r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'  // Common formats: +1 (123) 456-7890, 123-456-7890

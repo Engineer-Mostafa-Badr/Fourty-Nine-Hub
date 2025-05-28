@@ -81,6 +81,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
+import '../../../domain/entities/trip_viewer_entity.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
 
@@ -107,6 +108,10 @@ class RideCubit extends Cubit<RideState> {
 
   bool selectedCategoryIsSocket = true;
   String subCategoryId = '';
+
+  List<TripViewerEntity> tripViewers = [];
+
+  final TextEditingController phoneNumberController = TextEditingController();
 
   Map<String, String> socketCategories = {
     'captain': '62c8ba9f8e28a58a3edf57eb',
@@ -235,10 +240,29 @@ class RideCubit extends Cubit<RideState> {
       });
 
       // near by driver
-      SharedWebSocket.socket!.on("subcategory:driver", (data) {
-        CliLogger.info("nearbyDriversAvailable:  $data");
-        emit(state.copyWith(status: RideStates.success));
+      SharedWebSocket.socket!.on("RIDE:VIEWER_TRIPS", (data) {
+        CliLogger.info("RIDE:VIEWER_TRIPS:  $data");
+
+        if (data != null && data is Map<String, dynamic>) {
+          final TripViewerEntity newViewer = TripViewerEntity.fromJson(data);
+
+          final bool alreadyExists = tripViewers.any(
+                (viewer) => viewer.driverUserId == newViewer.driverUserId,
+          );
+
+          if (!alreadyExists) {
+            tripViewers.add(newViewer);
+            CliLogger.info("✅ Driver added: ${newViewer.driverUserId}");
+          } else {
+            CliLogger.info("ℹ️ Driver already in list: ${newViewer.driverUserId}");
+          }
+
+          emit(state.copyWith(status: RideStates.success));
+        } else {
+          CliLogger.error("❌ Invalid data format in RIDE:VIEWER_TRIPS: $data");
+        }
       });
+
 
       // trip started socket event
       SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
@@ -892,7 +916,7 @@ class RideCubit extends Cubit<RideState> {
         polyline: polyline,
         wayPointOneTitle: wayPointOneTitle,
         wayPointTwoTitle: wayPointTwoTitle,
-        phoneNumber: "01211972375"
+        phoneNumber: phoneNumberController.text,
       ),
     );
 
