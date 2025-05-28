@@ -89,5 +89,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+    <string>Allows debugging with Flutter tools</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_dartobservatory._tcp</string>
+        <string>_flutter._tcp</string>
+    </array>
 </dict>
 </plist>
