@@ -147,6 +147,7 @@ class RideDashboardServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
 
         ));
   }

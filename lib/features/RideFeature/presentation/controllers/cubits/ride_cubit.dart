@@ -669,9 +669,11 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        DriverInfoEntity? driverInfo = DriverInfoEntity(driverType: '');
+        emit(state.copyWith(status: RideStates.error,driverInfo:driverInfo, failure: failure));
       },
       (info) {
+        log("info.toJson()${info.toJson()}");
         emit(state.copyWith(
             status: RideStates.success,
             driverInfo: info,
@@ -703,7 +705,8 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        LoadingInfoEntity? loaderInfo = LoadingInfoEntity(status: '');
+        emit(state.copyWith(status: RideStates.error,loaderInfo: loaderInfo, failure: failure));
       },
       (info) {
         emit(state.copyWith(

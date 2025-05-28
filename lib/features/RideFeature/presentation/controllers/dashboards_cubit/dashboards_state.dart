@@ -75,6 +75,13 @@ class DashboardsState
   final XFile? backOfDriverLicensePicture;
   final XFile? selfieDriverLicensePicture;
   final RateResponseEntity? rateResponseEntity;
+  final XFile? vehiclePicture;
+  final XFile? vehicleFrontPicture;
+  final XFile? vehicleBackPicture;
+  final XFile? personalTechnicalExaminationPicture;
+  final List<GovernorateEntity>? govs;
+  final GovernorateEntity? selectedGov;
+
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -108,6 +115,12 @@ class DashboardsState
         this.backOfDriverLicensePicture,
         this.selfieDriverLicensePicture,
         this.rateResponseEntity,
+        this.vehiclePicture,
+        this.vehicleFrontPicture,
+        this.vehicleBackPicture,
+        this.personalTechnicalExaminationPicture,
+        this.selectedGov,
+        this.govs,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -127,7 +140,6 @@ class DashboardsState
         SupportDetailsEntity? supportDetails,
         List<EmergencyContactEntity>? emergencyContacts,
         String? supportStatus,
-
         List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
         List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
         List<HistoryTripEntity >? pastRideNonSocketTrips,
@@ -143,6 +155,13 @@ class DashboardsState
         XFile? backOfDriverLicensePicture,
         XFile? selfieDriverLicensePicture,
         RateResponseEntity? rateResponseEntity,
+        List<GovernorateEntity>? govs,
+        GovernorateEntity? selectedGov,
+
+        XFile? vehiclePicture,
+        XFile? vehicleFrontPicture,
+         XFile? vehicleBackPicture,
+        XFile? personalTechnicalExaminationPicture,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -177,6 +196,12 @@ class DashboardsState
       selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
       remainingTime: remainingTime ?? this.remainingTime,
       rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
+      vehiclePicture: vehiclePicture ?? this.vehiclePicture,
+      vehicleFrontPicture: vehicleFrontPicture ?? this.vehicleFrontPicture,
+      vehicleBackPicture: vehicleBackPicture ?? this.vehicleBackPicture,
+      personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
+      govs: govs ?? this.govs,
+      selectedGov: selectedGov ?? this.selectedGov,
     );
   }
 

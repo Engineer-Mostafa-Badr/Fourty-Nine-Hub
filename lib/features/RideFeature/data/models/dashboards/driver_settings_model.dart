@@ -12,6 +12,15 @@ class DriverSettingsModel extends DriverSettingsEntity {
     super.isRejected,
     super.rating,
     super.category,
+    super.carLicenseExpiryDate,
+    super.criminalRecordExpiryDate,
+    super.drivingLicenseExpiryDate,
+    super.drugAnalysisExpiryDate,
+    super.idExpiryDate,
+    super.isCriminalRecordEnabled,
+    super.isDrugAnalysisRecordEnabled,
+    super.isVehicleRecordEnabled,
+    super.technicalExaminationExpiryDate,
   });
 
   factory DriverSettingsModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +39,23 @@ class DriverSettingsModel extends DriverSettingsEntity {
       category: json['category'] != null
           ? CategoryModel.fromJson(json['category'])
           : null,
+      carLicenseExpiryDate: json['documentations']!=null?json['documentations']['carLicenseExpiryDate']??'':'',
+
+      criminalRecordExpiryDate: json['documentations']!=null?json['documentations']['criminalRecordExpiryDate']??'':'',
+
+      drivingLicenseExpiryDate: json['documentations']!=null?json['documentations']['drivingLicenseExpiryDate']??'':'',
+
+      drugAnalysisExpiryDate: json['documentations']!=null?json['documentations']['drugAnalysisExpiryDate']??'':'',
+
+      idExpiryDate: json['documentations']!=null?json['documentations']['idExpiryDate']??'':'',
+
+      isCriminalRecordEnabled: json['documentations']!=null?json['documentations']['isCriminalRecordEnabled']??false:false,
+
+      isDrugAnalysisRecordEnabled: json['documentations']!=null?json['documentations']['isDrugAnalysisRecordEnabled']??false:false,
+
+      isVehicleRecordEnabled: json['documentations']!=null?json['documentations']['isVehicleRecordEnabled']??false:false,
+
+      technicalExaminationExpiryDate: json['documentations']!=null?json['documentations']['technicalExaminationExpiryDate']??'':'',
     );
   }
 }

@@ -766,6 +766,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo, required Function openDrawer}) {
+    print("loadingInfo?.status ${loadingInfo?.status}");
+    print("loadingInfo?.status ${loadingInfo?.status}");
+    print("loadingInfo?.status ${driverInfo?.driverType}");
+    print("loadingInfo?.status ${driverInfo?.driverType}");
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       width: double.infinity,
@@ -794,14 +798,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               height: 50,
               child: GestureDetector(
                 onTap: () {
-                  if (driverInfo == null && loadingInfo == null) {
+                  if ((driverInfo == null||(driverInfo.driverType?.isEmpty??false)) && (loadingInfo == null||(loadingInfo.status?.isEmpty??false))) {
                     openDrawer();
-                  } else if (driverInfo != null && loadingInfo != null) {
+                  } else if ((driverInfo != null&&(driverInfo.driverType?.isNotEmpty??false)) && (loadingInfo != null&&(loadingInfo.status?.isNotEmpty??false))) {
                     openDrawer();
                   } else {
-                    if (driverInfo != null && loadingInfo == null) {
+                    if ((driverInfo != null&&(driverInfo.driverType?.isNotEmpty??false)) && (loadingInfo == null||(loadingInfo.status?.isEmpty??false))) {
                       context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo.driverType == 'socket' ? true : false));
-                    } else if (driverInfo == null && loadingInfo != null) {
+                    } else if ((driverInfo == null||(driverInfo.driverType?.isEmpty??false)) && (loadingInfo != null&&(loadingInfo.status?.isNotEmpty??false))) {
                       context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'truk', isSocket: driverInfo?.driverType == 'socket' ? true : false));
                     }
                   }
@@ -812,7 +816,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   height: 50,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: (driverInfo != null || loadingInfo != null)
+                      colors: ((driverInfo != null&&(driverInfo.driverType?.isNotEmpty??false)) || (loadingInfo != null&&(loadingInfo.status?.isNotEmpty??false)))
                           ? [
                               AppColors.cF33D49,
                               AppColors.cC0303A,
@@ -832,7 +836,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   ),
                   child: Center(
                     child: Text(
-                      (driverInfo != null || loadingInfo != null)
+                      ((driverInfo != null&&(driverInfo.driverType?.isNotEmpty??false)) || (loadingInfo != null&&(loadingInfo.status?.isNotEmpty??false)))
                           ? context.isArabic
                               ? 'وضع السائق'
                               : 'Driver Mode'

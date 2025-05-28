@@ -76,6 +76,7 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
   final String title;
   final DashboardsCubit cubit;
   final String tripId;
+  final bool isClient;
   final Function(double)? onRatingUpdated;
 
   const RideDetailsRatingNonSocketWidget({
@@ -85,9 +86,24 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
     required this.cubit,
     required this.tripId,
     this.onRatingUpdated,
+    this.isClient = false,
   });
 
   bool get isRate => rate != null && rate! > 0;
+  String getRatingLabel(double rate) {
+    if (rate >= 1 && rate <= 1.5) {
+      return LocaleKeys.poor2.tr();
+    } else if (rate > 1.5 && rate <= 2.5) {
+      return LocaleKeys.bad.tr();
+    } else if (rate > 2.5 && rate <= 3.5) {
+      return LocaleKeys.good.tr();
+    } else if (rate > 3.5 && rate <= 4.5) {
+      return LocaleKeys.veryGood.tr();
+    } else if (rate > 4.5 && rate <= 5) {
+      return LocaleKeys.excellent.tr();
+    }
+    return '';
+  }
 
   void _openRatingSheet(BuildContext context) {
     showModalBottomSheet(
@@ -103,6 +119,20 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
       ),
     );
   }
+  Color getRatingColor(double rate) {
+    if (rate >= 1 && rate <= 1.5) {
+      return Colors.red;
+    } else if (rate > 1.5 && rate <= 2.5) {
+      return Colors.orange;
+    } else if (rate > 2.5 && rate <= 3.5) {
+      return Colors.amber;
+    } else if (rate > 3.5 && rate <= 4.5) {
+      return Colors.lightGreen;
+    } else if (rate > 4.5 && rate <= 5) {
+      return Colors.green;
+    }
+    return Colors.grey;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,40 +143,85 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
         ),
         const Spacer(),
-        if (isRate) ...[
-          RatingBar(
-            initialRating: rate ?? 0,
-            ignoreGestures: true,
-            itemPadding: const EdgeInsets.symmetric(horizontal: 2),
-            ratingWidget: RatingWidget(
-              full: SvgPicture.asset(Assets.star1),
-              half: SvgPicture.asset(Assets.halfStar),
-              empty: SvgPicture.asset(Assets.starEmpty),
-            ),
-            itemSize: 14,
-            onRatingUpdate: (_) {},
-          ),
-          const SizedBox(width: 6),
-          InkWell(
-            onTap: () => _openRatingSheet(context),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-              decoration: BoxDecoration(
-                color: AppColors.cF3F3F3,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                LocaleKeys.modify.localize,
-                style: const TextStyle(
+
+        // Show for client
+        if (isClient && isRate)
+          Row(
+            children: [
+              Text(
+                getRatingLabel(rate!),
+                style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.PRIMARY_COLOR,
-                  decoration: TextDecoration.underline,
+                  color: getRatingColor(rate!),
                 ),
               ),
-            ),
+              const SizedBox(width: 6),
+              RatingBar(
+                initialRating: rate!,
+                ignoreGestures: true,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 2),
+                ratingWidget: RatingWidget(
+                  full: SvgPicture.asset(Assets.star1),
+                  half: SvgPicture.asset(Assets.halfStar),
+                  empty: SvgPicture.asset(Assets.starEmpty),
+                ),
+                itemSize: 14,
+                onRatingUpdate: (_) {},
+              ),
+            ],
           ),
-        ] else
+
+        // Show for non-client with rate
+        if (!isClient && isRate)
+          Row(
+            children: [
+              Text(
+                getRatingLabel(rate!),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: getRatingColor(rate!),
+                ),
+              ),
+              const SizedBox(width: 6),
+              RatingBar(
+                initialRating: rate!,
+                ignoreGestures: true,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 2),
+                ratingWidget: RatingWidget(
+                  full: SvgPicture.asset(Assets.star1),
+                  half: SvgPicture.asset(Assets.halfStar),
+                  empty: SvgPicture.asset(Assets.starEmpty),
+                ),
+                itemSize: 14,
+                onRatingUpdate: (_) {},
+              ),
+              const SizedBox(width: 6),
+              InkWell(
+                onTap: () => _openRatingSheet(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.cF3F3F3,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    LocaleKeys.modify.localize,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.PRIMARY_COLOR,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+        // No rate, and not client
+        if (!isRate && !isClient)
           InkWell(
             onTap: () => _openRatingSheet(context),
             child: noRateWidget(context),
@@ -154,6 +229,7 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
       ],
     );
   }
+
 
   Widget noRateWidget(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),

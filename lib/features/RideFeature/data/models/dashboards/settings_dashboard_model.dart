@@ -17,6 +17,7 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
     required super.isActive,
     required super.isApproved,
     required super.isRejected,
+    required super.isCriminalRecordEnabled, required super.isDrugAnalysisRecordEnabled, required super.isVehicleRecordEnabled, required super.idExpiryDate, required super.drivingLicenseExpiryDate, required super.carLicenseExpiryDate, required super.criminalRecordExpiryDate, required super.drugAnalysisExpiryDate, required super.technicalExaminationExpiryDate,
   });
 
   factory SettingsDashboardModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +35,15 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
       isActive: json['isActive'],
       isApproved: json['isApproved'],
       isRejected: json['isRejected'],
+      carLicenseExpiryDate: json['documentations']!=null?json['documentations']['carLicenseExpiryDate']??'':'',
+      criminalRecordExpiryDate: json['documentations']!=null?json['documentations']['criminalRecordExpiryDate']??'':'',
+      drivingLicenseExpiryDate: json['documentations']!=null?json['documentations']['drivingLicenseExpiryDate']??'':'',
+      drugAnalysisExpiryDate: json['documentations']!=null?json['documentations']['drugAnalysisExpiryDate']??'':'',
+      idExpiryDate: json['documentations']!=null?json['documentations']['idExpiryDate']??'':'',
+      isCriminalRecordEnabled: json['documentations']!=null?json['documentations']['isCriminalRecordEnabled']??false:false,
+      isDrugAnalysisRecordEnabled: json['documentations']!=null?json['documentations']['isDrugAnalysisRecordEnabled']??false:false,
+      isVehicleRecordEnabled: json['documentations']!=null?json['documentations']['isVehicleRecordEnabled']??false:false,
+      technicalExaminationExpiryDate: json['documentations']!=null?json['documentations']['technicalExaminationExpiryDate']??'':'',
     );
   }
 }

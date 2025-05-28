@@ -1,6 +1,8 @@
 import 'package:fourtyninehub/features/RideFeature/data/repositories/ride_repository_imp.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
@@ -166,6 +168,10 @@ class RideServiceLocatorUpdated {
         RatingDriverByClientUseCase(repository: serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToOfferUpdateUntrackedTripUseCase>(() =>
         ListenToOfferUpdateUntrackedTripUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<AddCarModelUseCase>(() =>
+        AddCarModelUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<AddCarBrandUseCase>(() =>
+        AddCarBrandUseCase( serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
@@ -207,6 +213,8 @@ class RideServiceLocatorUpdated {
     //       serviceLocator(),
     //     ));
     serviceLocator.registerFactory<RideRegisterCubit>(() => RideRegisterCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
