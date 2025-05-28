@@ -9,10 +9,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/utils/debouncer.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_search_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/favourite_ads_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_view.dart';
@@ -20,6 +22,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/widgets/search
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
@@ -46,7 +49,7 @@ class SubCategoriesView extends StatefulWidget {
 class _SubCategoriesViewState extends State<SubCategoriesView> {
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
-  bool isSearchOpen = false;
+  // bool isSearchOpen = false;
 
   late Debouncer _debounce;
 
@@ -237,14 +240,17 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                     IconButton(
                       padding: const EdgeInsets.all(0),
                       onPressed: () {
-                        setState(() {
-                          isSearchOpen = !isSearchOpen;
-                        });
+                        context
+                            .read<SubcategoriesCubit>()
+                            .toggleMyAds('isSearchAdsOpen');
+                        // setState(() {
+                        //   isSearchOpen = !isSearchOpen;
+                        // });
                       },
                       icon: SvgPicture.asset(
                         Assets.searchIcon,
                         colorFilter: ColorFilter.mode(
-                          isSearchOpen
+                          context.read<SubcategoriesCubit>().isSearchAdsOpen
                               ? const Color(0xffF33D49)
                               : AppColors.PRIMARY_COLOR,
                           BlendMode.srcIn,
@@ -293,7 +299,8 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           onPressed: () {
                             context
                                 .read<SubcategoriesCubit>()
-                                .loadRequestsLog(id: widget.mainCategory.id);
+                                .loadRequestsLogByMainCategory(
+                                    mainCategoryId: widget.mainCategory.id);
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isRequestLogOpen');
@@ -332,7 +339,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
               const SizedBox(
                 height: 16,
               ),
-              if (isSearchOpen)
+              if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
                 SearchBarWidget(
                   onChanged: (value) {
                     _debounce.run(() {
@@ -345,28 +352,55 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 ),
               if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen)
                 Expanded(
-                    child: FavouriteAdsView(
-                  id: widget.mainCategory.id,
+                    child: BlocProvider(
+                  create: (context) => serviceLocator<AdvertisementCubit>(),
+                  child: FavouriteAdsView(
+                    id: widget.mainCategory.id,
+                    isFloatingButtonVisible: (value) {
+                      isFloatingButtonVisible = value;
+                      setState(() {});
+                    },
+                  ),
                 )),
               if (context.read<SubcategoriesCubit>().isRequestLogOpen)
                 Expanded(
                     child: AdsRequestLogView(
-                  id: widget.mainCategory.id,
-                )),
+                        mainCategoryId: widget.mainCategory.id,
+                        isFloatingButtonVisible: (value) {
+                          isFloatingButtonVisible = value;
+                          setState(() {});
+                        })),
               if (context.read<SubcategoriesCubit>().isMyAdsOpen)
                 Expanded(
-                    child: MyAdsView(
-                  id: widget.mainCategory.id,
+                    child: BlocProvider(
+                  create: (context) => serviceLocator<AdvertisementCubit>(),
+                  child: MyAdsView(
+                    id: widget.mainCategory.id,
+                    isFloatingButtonVisible: (value) {
+                      isFloatingButtonVisible = value;
+                      setState(() {});
+                    },
+                  ),
                 )),
-              if (isSearchOpen)
+              if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
                 //kslkfjslkfjslkfsldfkjlsfld
                 Expanded(
-                  child: AdsSearch(),
+                  child: BlocProvider(
+                    create: (context) => serviceLocator<AdvertisementCubit>(),
+                    child: AdsSearchView(
+                      mainCategoryNameAr: widget.mainCategory.name ?? 'N/A',
+                      mainCategoryNameEn: widget.mainCategory.nameEn ?? 'N/A',
+                      isFloatingButtonVisible: (value) {
+                        isFloatingButtonVisible = value;
+                        setState(() {});
+                      },
+                    ),
+                  ),
                 ),
               if (!context.read<SubcategoriesCubit>().isMyAdsOpen &&
                   !context.read<SubcategoriesCubit>().isFavouriteAdsOpen &&
                   !context.read<SubcategoriesCubit>().isRequestLogOpen &&
-                  !isSearchOpen)
+                  !context.read<SubcategoriesCubit>().isSearchAdsOpen)
                 Expanded(
                   child: PaginationView<SubCategoryEntity>(
                     build: (ScrollController scrollController,
@@ -411,46 +445,5 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
             })
           : null,
     );
-  }
-}
-
-class AdsSearch extends StatelessWidget {
-  const AdsSearch({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
-        builder: (context, state) {
-      final controller = context.read<SubcategoriesCubit>();
-      if (state.isLoadingAds) {
-        return const CustomLoading();
-      }
-      if (controller.searchAdsList.isEmpty) {
-        return Center(
-          child: Label(
-            text: LocaleKeys.youHaveNoAds.localize,
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? AppColors.whiteColor
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        );
-      }
-      return ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        shrinkWrap: true,
-        // controller: _scrollController,
-        itemCount: state.searchAds!.length,
-        itemBuilder: (context, i) => MyAdCard(
-          item: state.searchAds![i],
-          onFav: (id) {},
-          onRemoveFav: (id) {},
-        ),
-        separatorBuilder: (BuildContext context, int index) =>
-            const SizedBox(height: 16),
-      );
-    });
   }
 }

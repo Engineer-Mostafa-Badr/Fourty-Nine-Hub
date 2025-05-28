@@ -51,43 +51,47 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                   )
                 : state.subCategories == []
                     ? const SizedBox.shrink()
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                            Label(
-                              text: context.isArabic
-                                  ? 'التخصصات'
-                                  : 'Specialities',
-                              style: Styles.headerText(),
-                            ),
-                            ClickableWidget(
-                              onTap: () {
-                                _scrollController?.animateTo(
-                                  (_scrollController?.position.pixels ?? 0) +
-                                      0.8.sw,
-                                  duration: const Duration(seconds: 1),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
-                              child: Row(
-                                children: [
-                                  Label(
-                                    text: context.isArabic
-                                        ? 'مشاهدة المزيد'
-                                        : 'See More',
-                                    style: Styles.mediumText(
-                                        decoration: TextDecoration.underline,
-                                        color: AppColors.getRedColor(context)),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: AppColors.getRedColor(context),
-                                    size: 30.h,
-                                  ),
-                                ],
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text: context.isArabic
+                                    ? 'التخصصات'
+                                    : 'Specialities',
+                                style: Styles.headerText(),
                               ),
-                            ),
-                          ]),
+                              ClickableWidget(
+                                onTap: () {
+                                  _scrollController?.animateTo(
+                                    (_scrollController?.position.pixels ?? 0) +
+                                        0.8.sw,
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.easeInOut,
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    Label(
+                                      text: context.isArabic
+                                          ? 'مشاهدة المزيد'
+                                          : 'See More',
+                                      style: Styles.mediumText(
+                                          decoration: TextDecoration.underline,
+                                          color:
+                                              AppColors.getRedColor(context)),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: AppColors.getRedColor(context),
+                                      size: 30.h,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ]),
+                      ),
             const Sizer(),
             Expanded(
               child: (state.subCategories != null && state.subCategories != [])
@@ -95,9 +99,15 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                       controller: _scrollController,
                       separatorBuilder: (context, index) => const Sizer(),
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) =>
-                            HealthSubCategoryCard(
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsetsDirectional.only(
+                            start: index == 0 ? 16 : 0,
+                            end: index == state.subCategories!.length - 1
+                                ? 16
+                                : 0),
+                        child: HealthSubCategoryCard(
                             subCategory: state.subCategories![index]),
+                      ),
                       itemCount: state.subCategories?.length ?? 0,
                     )
                   : state.subCategories == null

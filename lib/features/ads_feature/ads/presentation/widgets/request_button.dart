@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -24,28 +25,28 @@ class RequestButton extends StatelessWidget {
     required this.adId,
     required this.subscriptionStatus,
     this.dontPop = false,
+    required this.successRequest,
+    required this.errorRequest,
   });
 
   final String adId;
   final String subscriptionStatus;
   final bool dontPop;
+  final void Function() successRequest;
+  final void Function(Failure? failure) errorRequest;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AdvertisementCubit, AdsState>(
-        listener: (context, state) {
-      if (state.status == AdsStates.requestSuccess) {
-        context.pop();
-        showSuccessMessage(context, 'Request Sent Successfully');
-        context.read<AdvertisementCubit>().resetRequest();
+        listener: (advertisementContext, state) {
+      if (state.requestStatus == AdsStates.requestSuccess) {
+        successRequest();
       }
-      if (state.status == AdsStates.error) {
-        showErrorMessage(context,
-            getFailureMessage(state.failure ?? UnknownFailure(''), context));
-        context.pop();
-        context.pop();
+      if (state.requestStatus == AdsStates.error) {
+        errorRequest(state.failure);
+        // context.pop();
       }
-    }, builder: (context, state) {
+    }, builder: (advertisementContext, state) {
       final controller = context.read<AdvertisementCubit>();
 
       return InkWell(
@@ -80,6 +81,8 @@ class RequestButton extends StatelessWidget {
                       formKey: controller.formKey,
                       textController: controller.phoneController,
                       onChanged: (c) => controller.changePhone(v: c),
+                      isLoading:
+                          controller.state.requestStatus == AdsStates.loading,
                       onTap: () async {
                         if (controller.formKey.currentState!.validate()) {
                           await controller.makeAdRequest(id: adId);
@@ -103,10 +106,11 @@ class RequestButton extends StatelessWidget {
                           //   }
                           // }
                           // );
-                        } else {
-                          return pleaseLoginDialog(context);
-                          // context.go(Routes.LOGIN);
                         }
+                        // else {
+                        //   return pleaseLoginDialog(context);
+                        //   // context.go(Routes.LOGIN);
+                        // }
                       },
                     );
                   },
@@ -296,6 +300,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
     required this.onTap,
     required this.onChanged,
     required this.textController,
+    required this.isLoading,
   });
 
   // final AdvertisementCubit controller;
@@ -304,6 +309,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
   final void Function()? onTap;
   final void Function(String)? onChanged;
   final TextEditingController textController;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -369,23 +375,25 @@ class RequestNumberBottomSheet extends StatelessWidget {
             const SizedBox(
               height: 24,
             ),
-            InkWell(
-              onTap: onTap,
-              child: Container(
-                // width: 100,
-                // height: 40,
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    color: AppColors.getButtonPrimaryColor(context),
-                    borderRadius: BorderRadius.circular(15)),
-                alignment: Alignment.center,
-                child: Label(
-                  text: LocaleKeys.send.localize,
-                  style: Styles.headerText(
-                      color: AppColors.getReversedTextColor(context)),
-                ),
-              ),
-            ),
+            isLoading
+                ? const CustomLoading()
+                : InkWell(
+                    onTap: onTap,
+                    child: Container(
+                      // width: 100,
+                      // height: 40,
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: AppColors.getButtonPrimaryColor(context),
+                          borderRadius: BorderRadius.circular(15)),
+                      alignment: Alignment.center,
+                      child: Label(
+                        text: LocaleKeys.send.localize,
+                        style: Styles.headerText(
+                            color: AppColors.getReversedTextColor(context)),
+                      ),
+                    ),
+                  ),
             // Expanded(
             //   child: Row(
             //     children: [

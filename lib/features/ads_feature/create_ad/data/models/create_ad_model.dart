@@ -11,7 +11,9 @@ class CreateAdModel extends CreateAdEntity {
   factory CreateAdModel.fromJson(Map<String, dynamic> json) {
     return CreateAdModel(
       value: SelectionModel.fromJson(json['value']),
-      propId: json['props'] is String ? json['props'] : json['_id'] ?? '',
+      propId: json['props'] is String
+          ? json['props']
+          : json['propertyId']?['_id'] ?? '',
       nameAr: json['props'] is String
           ? ''
           : json['propertyId']['name_ar'].toString(),

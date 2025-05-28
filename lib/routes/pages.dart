@@ -743,9 +743,20 @@ class AppPages {
                                             payload: state.extra),
                                       ))
                             ],
-                            builder: (context, state) =>
-                                BlocProvider<AdDetailsCubit>(
-                                  create: (_) => serviceLocator(),
+                            builder: (context, state) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider<AdDetailsCubit>(
+                                      create: (_) => serviceLocator(),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) =>
+                                          serviceLocator<SubcategoriesCubit>(),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) =>
+                                          serviceLocator<AdvertisementCubit>(),
+                                    ),
+                                  ],
                                   child: AdDetailsView(payload: state.extra),
                                 )),
                         GoRoute(
@@ -1821,9 +1832,19 @@ class AppPages {
               GoRoute(
                   path: Paths.VISITA,
                   name: Routes.VISITA,
-                  builder: (context, state) => BlocProvider<HealthCubit>(
-                      create: (_) => serviceLocator<HealthCubit>()..loadData(),
-                      child: HealthView()),
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider<HealthCubit>(
+                            create: (_) =>
+                                serviceLocator<HealthCubit>()..loadData(),
+                          ),
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<SubcategoriesCubit>(),
+                          ),
+                        ],
+                        child: const HealthView(),
+                      ),
                   routes: [
                     GoRoute(
                       path: Paths.CREATERESTURANT,

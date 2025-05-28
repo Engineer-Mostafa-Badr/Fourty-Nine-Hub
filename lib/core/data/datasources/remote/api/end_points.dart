@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_b
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/usecases/get_requests_log_by_main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_my_ad_by_id_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
@@ -601,6 +602,9 @@ class EndPoints {
   static searchAds({required String mainCategoryId}) =>
       '/ads/searchAds?mainCategoryId=$mainCategoryId';
 
+  static searchAdsByMainCategory({required String mainCategoryId}) =>
+      '/ads/searchAdsMainCategory?mainCategoryId=$mainCategoryId';
+
   static const riderInfoRegister = '/ride/riders/register';
   static const sendComeWithYou = '/ride/come-with-you';
   static const sendPickMe = '/ride/pick-me';
@@ -859,8 +863,10 @@ class EndPoints {
       '/user-follow/follow/$userId';
 
   static String getFriends = '/friendship/friends';
-  static String getSocialFollowers({required GetAllFollowersParams params}) => '/user-follow/followers?limit=${params.limit}&page=${params.page}';
-  static String getSocialFollowing({required GetAllFollowersParams params}) => '/user-follow/following?limit=${params.limit}&page=${params.page}';
+  static String getSocialFollowers({required GetAllFollowersParams params}) =>
+      '/user-follow/followers?limit=${params.limit}&page=${params.page}';
+  static String getSocialFollowing({required GetAllFollowersParams params}) =>
+      '/user-follow/following?limit=${params.limit}&page=${params.page}';
 
   static String unFollowUserInstagram({required String userId}) =>
       '/user-follow/unfollow/$userId';
@@ -1098,6 +1104,11 @@ class EndPoints {
 
   static String getAdRequests(GetAdRequestsParams params) {
     return '/ads-requests/getAdRequest/${params.id}?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getRequestsLogByMainCategory(
+      GetRequestsLogByMainCategoryParams params) {
+    return '/ads-requests/log?limit=${params.limit}&page=${params.page}&mainCategory=${params.mainCategoryId}';
   }
 
   // /installment
@@ -1426,7 +1437,8 @@ class EndPoints {
   static String goingToClient(String id) => '/ride/driver/trips/$id/going';
   static String arrivedToClient(String id) => '/ride/driver/trips/$id/arrived';
   static String startDriverTrip(String id) => '/ride/driver/trips/$id/start';
-  static String completeDriverTrip(String id) => '/ride/driver/trips/$id/completed';
+  static String completeDriverTrip(String id) =>
+      '/ride/driver/trips/$id/completed';
 
   static String updateDriverLocation() {
     return '/ride/update-driver-location';
@@ -1536,16 +1548,19 @@ class EndPoints {
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
   static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
   static const createOfferNonTrackedTrips = '/ride/non-tracking/offers/trip/';
-  static const updateDriverSettingsNonTrack= '/ride/driver/untracked/settings';
+  static const updateDriverSettingsNonTrack = '/ride/driver/untracked/settings';
 
   static const sendOkIamComing = "/ride/client/tracking/trips/approach";
   static const ratingDriverByClient = "/ride/trip/ratings/client";
-  static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
+  static const getAvailableRideNonSocketTrip =
+      '/ride/driver/trips/available/not-tracking';
   static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
-  static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
+  static const getPastRideNonSocketTrip =
+      '/ride/driver/untracked/trips/history';
   static const getEmergencyContacts = '/users/emergency-contacts';
   static const addEmergencyContacts = '/users/add-emergency-contacts';
-  static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
+  static editEmergencyContacts(String id) =>
+      '/users/update-emergency-contacts/$id';
   static const getDriverSettings = '/ride/driver/untracked/settings';
   static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
   static const addRateToClientWithDriverNonSocket = '/ride/untracked/ratings/driver';

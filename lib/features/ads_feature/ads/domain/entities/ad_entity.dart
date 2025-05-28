@@ -66,6 +66,7 @@ class AdEntity {
   final String? subscriptionStatus;
   final num? views;
   final String? userSubscriptionStatus;
+  final String? ownerSubscriptionStatus;
   final String? currencyEn;
   final String? currencyAr;
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
@@ -96,6 +97,7 @@ class AdEntity {
     this.userId,
     this.subscriptionStatus,
     this.userSubscriptionStatus,
+    this.ownerSubscriptionStatus,
     this.views,
     required this.active,
     required this.approved,

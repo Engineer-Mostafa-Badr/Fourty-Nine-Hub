@@ -3,6 +3,7 @@ part of 'subcategories_cubit.dart';
 class SubcategoriesState {
   final Failure? failure;
   final SubcategoriesStates status;
+  final SubcategoriesStates deleteAdStatus;
   final int? subCatIndex;
   final String? selectedSubCatId;
   final List<AdModel>? ads;
@@ -11,7 +12,8 @@ class SubcategoriesState {
   String? governorate;
   final FilterModel? filterModel;
   final List<AdModel>? myAds;
-  final List<AdRequestEntity>? adsRequestsLog;
+  final List<RequestsLogByMainCategoryEntity>? adsRequestsLog;
+  final List<RequestsLogByMainCategoryEntity>? requestsLogByMainCategory;
 
   final List<SubCategoryEntity>? subCategories;
   final List<SubCategoryEntity>? customPageSubCategories;
@@ -29,15 +31,18 @@ class SubcategoriesState {
       this.filterModel,
       this.myAds,
       this.adsRequestsLog,
+      this.requestsLogByMainCategory,
       this.mainCategory,
       this.marriageSubCategories,
       this.subCatIndex = 0,
       this.status = SubcategoriesStates.loading,
+      this.deleteAdStatus = SubcategoriesStates.initState,
       this.selectedSubCatId});
 
   SubcategoriesState copyWith({
     Failure? failure,
     SubcategoriesStates? status,
+    SubcategoriesStates? deleteAdStatus,
     MainCategoryEntity? mainCategory,
     int? subCatIndex,
     String? selectedSubCatId,
@@ -50,11 +55,13 @@ class SubcategoriesState {
     List<AdModel>? ads,
     List<AdModel>? searchAds,
     List<AdModel>? myAds,
-    List<AdRequestEntity>? adsRequestsLog,
+    List<RequestsLogByMainCategoryEntity>? adsRequestsLog,
+    List<RequestsLogByMainCategoryEntity>? requestsLogByMainCategory,
   }) {
     return SubcategoriesState(
       failure: failure ?? this.failure,
       status: status ?? this.status,
+      deleteAdStatus: deleteAdStatus ?? this.deleteAdStatus,
       ads: ads ?? this.ads,
       searchAds: searchAds ?? this.searchAds,
       subCategories: subCategories ?? this.subCategories,
@@ -66,6 +73,8 @@ class SubcategoriesState {
           marriageSubCategories ?? this.marriageSubCategories,
       myAds: myAds ?? this.myAds,
       adsRequestsLog: adsRequestsLog ?? this.adsRequestsLog,
+      requestsLogByMainCategory:
+          requestsLogByMainCategory ?? this.requestsLogByMainCategory,
       selectedSubCatId: selectedSubCatId ?? this.selectedSubCatId,
     );
   }
