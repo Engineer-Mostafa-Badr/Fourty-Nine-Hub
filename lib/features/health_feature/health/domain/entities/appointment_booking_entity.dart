@@ -33,13 +33,13 @@ extension BookingTypesExtension on BookingTypes {
   String get translatedName {
     switch (this) {
       case BookingTypes.call:
-        return LocaleKeys.call.localize;
+        return LocaleKeys.call;
       case BookingTypes.clinic:
-        return LocaleKeys.clinicVisit.localize;
+        return LocaleKeys.clinicVisit;
       case BookingTypes.home:
-        return LocaleKeys.homeVisit.localize;
+        return LocaleKeys.homeVisit;
       case BookingTypes.emergency:
-        return LocaleKeys.emergency.localize;
+        return LocaleKeys.emergency;
     }
   }
 }

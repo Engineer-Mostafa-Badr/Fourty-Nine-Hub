@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class PaginationView<T> extends StatefulWidget {
   final PaginationParams intialPagination;
@@ -73,7 +74,7 @@ class _PaginationViewState<T> extends State<PaginationView<T>> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return widget.loadingWidget ??
-          const Center(child: CircularProgressIndicator.adaptive());
+          const Center(child: CustomCircularProgressIndicator());
     } else if (_isEmpty) {
       return widget.emptyWidget ??
           Center(

@@ -15,6 +15,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/usecases/get_all_counts_usecase.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CustomButtonCount extends StatelessWidget {
   const CustomButtonCount({super.key, required this.id, required this.status});
@@ -39,7 +40,7 @@ class CustomButtonCount extends StatelessWidget {
           listener: (BuildContext context, MyAddsState state) {},
           builder: (BuildContext context, state) {
             if (state.status == MyAddsStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             if (state.status == MyAddsStates.initState) {
               if (state.allCounts == null || state.allCounts!.isEmpty) {
@@ -59,7 +60,7 @@ class CustomButtonCount extends StatelessWidget {
                 ),
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
           },
         ),

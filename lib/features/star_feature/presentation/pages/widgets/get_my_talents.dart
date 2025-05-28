@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/pages/talent_vi
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/talent_video.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 
 class GetMyTalents extends StatelessWidget {
@@ -30,7 +31,7 @@ class GetMyTalents extends StatelessWidget {
         builder: (context, state) {
           var cubit = context.read<StarCubit>();
           if (cubit.loadMyTalents) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
 
           if (state.status == StarStates.error) {
@@ -57,7 +58,7 @@ class GetMyTalents extends StatelessWidget {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   ),
                 );
               }
@@ -277,7 +278,7 @@ class GetMyTalents extends StatelessWidget {
   //       imageUrl: mediaUrl,
   //       fit: BoxFit.cover,
   //       placeholder: (context, url) => const Center(
-  //         child: CircularProgressIndicator(),
+  //         child: CustomCircularProgressIndicator(),
   //       ),
   //       errorWidget: (context, url, error) => const Center(
   //         child: Icon(Icons.error),

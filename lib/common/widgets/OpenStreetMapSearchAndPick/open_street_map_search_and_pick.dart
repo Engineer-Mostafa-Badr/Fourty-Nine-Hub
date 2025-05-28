@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
+import '../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../res/style/app_colors.dart';
 
 class OpenStreetMapSearchAndPick extends StatefulWidget {
@@ -242,7 +243,7 @@ class _OpenStreetMapSearchAndPickState
         LatLng? mapCentre;
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           );
         }
         if (snapshot.hasError) {

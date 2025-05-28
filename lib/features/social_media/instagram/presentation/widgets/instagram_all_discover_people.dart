@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -77,7 +78,7 @@ class _InstagramAllDiscoverPeopleState extends State<InstagramAllDiscoverPeople>
           }, builder: (context, state) {
         final cubit = context.read<InstagramCubit>();
         return state.status==StateStatus.loading?const Center(
-          child: CircularProgressIndicator(),
+          child: CustomCircularProgressIndicator(),
         ):cubit.facebookSuggestPeople.isEmpty
             ? const SizedBox.shrink()
             : ListView.builder(
@@ -88,7 +89,7 @@ class _InstagramAllDiscoverPeopleState extends State<InstagramAllDiscoverPeople>
           itemBuilder: (context, index) {
             if (index ==
                 cubit.facebookSuggestPeople.length) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
 
             final user =

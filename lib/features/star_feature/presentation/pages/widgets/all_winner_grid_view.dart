@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/duration_helper.dart';
@@ -26,7 +27,7 @@ class AllWinnerGridView extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         if (index == starCubit.winner.length) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
         return _buildWinnerCard(winner![index]);
       },

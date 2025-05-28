@@ -24,7 +24,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_regis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
@@ -691,9 +693,11 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        DriverInfoEntity? driverInfo = DriverInfoEntity(driverType: '');
+        emit(state.copyWith(status: RideStates.error,driverInfo:driverInfo, failure: failure));
       },
       (info) {
+        log("info.toJson()${info.toJson()}");
         emit(state.copyWith(
             status: RideStates.success,
             driverInfo: info,
@@ -725,7 +729,8 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        LoadingInfoEntity? loaderInfo = LoadingInfoEntity(status: '');
+        emit(state.copyWith(status: RideStates.error,loaderInfo: loaderInfo, failure: failure));
       },
       (info) {
         emit(state.copyWith(
@@ -1284,7 +1289,7 @@ class RideCubit extends Cubit<RideState> {
   }
 
   Future<void> fetchBrands(BuildContext context) async {
-    final Either<Failure, List<String>> result =
+    final Either<Failure, List<RideBrandEntity>> result =
         await getRideBrandsUseCase(const NoParams());
 
     result.fold(
@@ -1308,7 +1313,7 @@ class RideCubit extends Cubit<RideState> {
     'Subscribe Package',
   ];
 
-  List<String> models = [];
+  List<RideModelEntity> models = [];
   onSelectBrand(String brand, BuildContext context) async {
     if (brand == state.selectedBrand) return;
     emit(state.copyWith(
@@ -1341,7 +1346,7 @@ class RideCubit extends Cubit<RideState> {
   Future<void> fetchModels(String brandId, BuildContext context) async {
     models.clear();
     emit(state.copyWith(colors: [], status: RideStates.loadingModels));
-    final Either<Failure, List<String>> result =
+    final Either<Failure, List<RideModelEntity>> result =
         await getRideModelsUseCase(brandId);
 
     result.fold(

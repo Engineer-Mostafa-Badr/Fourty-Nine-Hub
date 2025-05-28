@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/register_floating_action_button.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class WelcomeRideRegister extends StatefulWidget {
   const WelcomeRideRegister({super.key, required this.isShipping});
@@ -56,7 +57,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
                     builder: (context,state) {
                       var cubit = context.read<RideRegisterCubit>();
                       if(state.isLoading){
-                        return const Center(child: CircularProgressIndicator(),);
+                        return const Center(child: CustomCircularProgressIndicator(),);
                       }
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SupportRideParams {
   final String tripId;
@@ -54,7 +55,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
       body: BlocBuilder<DashboardsCubit, DashboardsState>(builder: (context, state) {
         var cubit = context.read<DashboardsCubit>();
         if (state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
         if(state.supportStatus == RequestEmergencyStatus.approved.status){
           return SingleChildScrollView(
@@ -65,33 +66,33 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                 Center(
                   child: Text(
                     LocaleKeys.clientDetails.localize,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildLabel(LocaleKeys.clientName.localize),
                 CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourName.localize, controller: TextEditingController(text: state.supportDetails?.name??'')),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildLabel(LocaleKeys.clientPhone.localize),
                 CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourPhoneNumber.localize, controller: TextEditingController(text: state.supportDetails?.phone??'')),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildLabel(LocaleKeys.email.localize),
                 CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourEmail.localize, controller: TextEditingController(text: state.supportDetails?.email??'')),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildLabel(LocaleKeys.deviceID.localize),
                 CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourDeviceID.localize, controller: TextEditingController(text: state.supportDetails?.deviceId??'')),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
-                    context.push(Routes.emergencyContactsScreen);
+                    // context.push(Routes.emergencyContactsScreen);
                   },
-                  icon: Icon(Icons.download, color: Colors.white),
+                  icon: const Icon(Icons.download, color: Colors.white),
                   label: Text(LocaleKeys.locationLog.localize),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.PRIMARY_COLOR,
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    minimumSize: Size(double.infinity, 50),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -134,7 +135,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: state.isLoadingSubmitRequest? const Center(child: CircularProgressIndicator()): ElevatedButton(
+                  child: state.isLoadingSubmitRequest? const Center(child: CustomCircularProgressIndicator()): ElevatedButton(
                     onPressed: () {
                       if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                         if(form.currentState!.validate()){
@@ -181,7 +182,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
       padding: const EdgeInsets.only(bottom: 6),
       child: Text(
         text,
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
     );
   }

@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -11,13 +13,17 @@ import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
+import '../../../domain/use_cases/login_with_phone_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase _loginUseCase;
+  final LoginWithPhoneUseCase _loginWithPhoneUseCase;
   final AppleSignInUseCase _appleSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
@@ -28,6 +34,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   LoginCubit(
     this._loginUseCase,
+    this._loginWithPhoneUseCase,
     this._saveTokens,
     this._attachToken,
     this._appleSignInUseCase, {
@@ -42,14 +49,25 @@ class LoginCubit extends Cubit<LoginState> {
     log("all tokens before login : ${await CacheManager.getAccessToken()}");
 
     if (formKey.currentState!.validate()) {
+      Either<Failure, UserTokensEntity> result;
       emit(LoginLoading());
-      final result = await _loginUseCase(
-        LoginParams(
-          email: emailTextController.text.trim(),
-          password: passwordTextController.text.trim(),
-          token: token ?? "",
-        ),
-      );
+      if (_isEmail(emailTextController.text.trim())) {
+        result = await _loginUseCase(
+          LoginParams(
+            email: emailTextController.text.trim(),
+            password: passwordTextController.text.trim(),
+            token: token ?? "",
+          ),
+        );
+      } else {
+        result = await _loginWithPhoneUseCase(
+          LoginWithPhoneParams(
+            phoneNumber: emailTextController.text.trim(),
+            password: passwordTextController.text.trim(),
+            token: token ?? "",
+          ),
+        );
+      }
 
       result.fold(
         (failure) => emit(LoginError(failure)),
@@ -99,6 +117,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   final GoogleSignIn googleSignIn;
   final FirebaseAuth firebaseAuth;
+
   Future<void> signInWithApple() async {
     if (state is LoginLoading) return;
     emit(const SocialAuthState(status: AuthStatus.authenticating));
@@ -156,5 +175,15 @@ class LoginCubit extends Cubit<LoginState> {
     emailTextController.dispose();
     passwordFocusNode.dispose();
     return super.close();
+  }
+
+  bool _isEmail(String input) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(input);
+  }
+
+  bool _isPhoneNumber(String input) {
+    final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
+    return phoneRegex.hasMatch(input);
   }
 }

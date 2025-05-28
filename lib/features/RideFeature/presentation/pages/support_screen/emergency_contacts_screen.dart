@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/em
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class EmergencyContactsScreen extends StatefulWidget {
   const EmergencyContactsScreen({super.key});
@@ -40,7 +41,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
       body: BlocBuilder<DashboardsCubit, DashboardsState>(builder: (context, state) {
         var cubit = context.read<DashboardsCubit>();
         if (state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
         log('state.emergencyContacts?.length${state.emergencyContacts?.length}');
         return ListView(

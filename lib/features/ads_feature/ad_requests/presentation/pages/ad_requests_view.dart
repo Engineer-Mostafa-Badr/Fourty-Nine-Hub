@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class AdRequestsView extends StatefulWidget {
   var id;
@@ -103,7 +104,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
               builder: (context, state) {
                 if (state.isLoading &&
                     context.read<AdRequestsCubit>().adRequests.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomCircularProgressIndicator());
                 }
 
                 return ListView.builder(

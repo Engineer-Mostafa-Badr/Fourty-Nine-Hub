@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CommentInstagramView extends StatefulWidget {
   const CommentInstagramView({
@@ -296,7 +297,7 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
                         ),
                       ),
                       if (state.addStatus.isLoading)
-                        const CircularProgressIndicator(
+                        const CustomCircularProgressIndicator(
                           color: AppColors.c161F68,
                         )
                       else

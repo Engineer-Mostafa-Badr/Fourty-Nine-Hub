@@ -7,6 +7,7 @@ import '../../../zego_uikit/src/services/uikit_service.dart';
 import '../minimizing/defines.dart';
 import '../minimizing/overlay_machine.dart';
 import 'logout_notifier.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // Project imports:
 
@@ -80,7 +81,7 @@ class _ZegoUIKitPrebuiltLiveStreamingScrollerElementState
                 color: Colors.black.withOpacity(0.5),
                 child: Center(
                   child: widget.loadingBuilder?.call(widget.targetRoomID) ??
-                      const CircularProgressIndicator(),
+                      const CustomCircularProgressIndicator(),
                 ),
               );
       },

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
@@ -34,6 +35,7 @@ import '../../../../../core/constants/registration_status.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'favorite_ads.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -99,7 +101,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         },
 
         child: state.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CustomCircularProgressIndicator())
             : _buildLoggedInView(state),
       ),
     );
@@ -232,11 +234,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             : Center(
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 40.h),
-                                  child: Text(
-                                    context.isArabic
+                                  child: CustomEmptyWidget(
+                                    label:context.isArabic
                                         ? "لا توجد مطاعم متوفرة."
                                         : "No Restaurants Found.",
-                                    style: Styles.mediumText(),
                                   ),
                                 ),
                               )

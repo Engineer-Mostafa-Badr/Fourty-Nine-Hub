@@ -13,6 +13,7 @@ import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/messages/messages.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SelectDropOffPoints extends StatefulWidget {
   const SelectDropOffPoints({super.key});
@@ -117,7 +118,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                 hintColor: AppColors.QUANTITY_COLOR,
               ),
               const Sizer(),
-              if (state.loading) const CircularProgressIndicator.adaptive(),
+              if (state.loading) const CustomCircularProgressIndicator(),
               if (state.nearByPlaces.isNotEmpty)
                 Expanded(
                   child: ListView.separated(

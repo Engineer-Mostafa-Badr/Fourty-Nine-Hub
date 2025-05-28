@@ -25,6 +25,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RiderRegisterNoSocketScreen extends StatefulWidget {
   const RiderRegisterNoSocketScreen({super.key, required this.formKey});
@@ -75,7 +76,7 @@ class _RiderRegisterNoSocketScreenState
           if (state is LoadingShippingState) {
             return const Align(
               child: Center(
-                child: CircularProgressIndicator(
+                child: CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 ),
               ),

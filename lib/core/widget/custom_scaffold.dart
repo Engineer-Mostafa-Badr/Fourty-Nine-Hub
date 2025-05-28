@@ -170,6 +170,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
         child: Image.asset(
           image,
           fit: BoxFit.cover,
+          color: context.isDarkMode ? AppColors.whiteColor : null,
         ),
       ),
     );
@@ -282,7 +283,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.reel.localize,
-                              image: Assets.reel,
+                              image: context.isDarkMode ? Assets.reelBarPng : Assets.reel,
                               onTap: () {
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
@@ -314,15 +315,15 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                 context.push(Routes.LIVE);
                               },
                             ),
-                            drawerRollWidget(
-                              label: LocaleKeys.snap.localize,
-                              image: Assets.snap,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                context.push(Routes.SNAP);
-                              },
-                            ),
+                            // drawerRollWidget(
+                            //   label: LocaleKeys.snap.localize,
+                            //   image: Assets.snap,
+                            //   onTap: () {
+                            //     floatingNavigatorCubit
+                            //         .changeFloatingNavigator();
+                            //     context.push(Routes.SNAP);
+                            //   },
+                            // ),
                             drawerRollWidget(
                               label: LocaleKeys.chat.localize,
                               image: Assets.whatsApp,

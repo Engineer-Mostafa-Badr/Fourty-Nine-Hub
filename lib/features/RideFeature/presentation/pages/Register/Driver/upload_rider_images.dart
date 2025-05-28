@@ -18,6 +18,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class UploadRiderImagesParams{
   final bool? isShipping;
@@ -52,7 +53,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           body: BlocBuilder<RideRegisterCubit,RideRegisterState>(
             builder: (context,state) {
               var cubit = context.read<RideRegisterCubit>();
-              return state.isLoading?const Center(child: CircularProgressIndicator()):ListView(
+              return state.isLoading?const Center(child: CustomCircularProgressIndicator()):ListView(
                 padding: const EdgeInsets.only(top: 82, left: 16, right: 16),
                 children: [
                   Label(

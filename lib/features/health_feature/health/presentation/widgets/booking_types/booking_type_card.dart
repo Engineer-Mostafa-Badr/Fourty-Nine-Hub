@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
@@ -41,12 +43,27 @@ class HealthBookingTypeCard extends StatelessWidget {
           children: [
             Expanded(child: Image.asset(bookingFilterModel.image)),
             Text(
-              bookingFilterModel.bookingType.translatedName,
+              getTranslatedName(context,bookingFilterModel.bookingType.translatedName),
               style: Styles.mediumText(),
             ),
           ],
         ),
       ),
     );
+  }
+
+  String getTranslatedName(BuildContext context, var name) {
+    switch (name) {
+      case LocaleKeys.call:
+        return context.isArabic ? 'اتصال' : 'Call';
+      case LocaleKeys.clinicVisit:
+        return context.isArabic ? 'زيارة عيادة' : 'Clinic Visit';
+      case LocaleKeys.homeVisit:
+        return context.isArabic ? 'زيارة منزلية' : 'Home Visit';
+      case LocaleKeys.emergency:
+        return context.isArabic ? 'طوارئ' : 'Emergency';
+      default:
+        return '';
+    }
   }
 }

@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class PublishButton extends StatefulWidget {
   const PublishButton({
@@ -88,7 +89,7 @@ class _PublishButtonState extends State<PublishButton> {
                   builder: (context, state) {
                     if (state is PublishTripJoinLoading) {
                       return const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
+                        child: CustomCircularProgressIndicator(color: Colors.white),
                       );
                     }
                     if (state is PublishTripJoinSuccess) {

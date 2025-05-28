@@ -21,6 +21,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../cubit/share_app_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ShareTheApp extends StatelessWidget {
   const ShareTheApp({super.key});
@@ -93,7 +94,7 @@ class ShareTheApp extends StatelessWidget {
                   ),
                 );
               }
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             },
           ),
         ));
@@ -109,12 +110,13 @@ class ShareTheApp extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          onTap: () {
+          onLongPress: () {
             Clipboard.setData(ClipboardData(text: referralId)).then((_) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(LocaleKeys.referralClipboard.localize)),
+                    backgroundColor: AppColors.getFindFillColor(context),
+                      content: Text(context.isArabic?'تم نسخ الإحالة الخاصة بك!':'Your Referral ID is copied!',style: Styles.mediumText(color: AppColors.getTextColor(context)),),),
                 );
               });
             });

@@ -52,10 +52,12 @@ class RideRegisterState {
   final List<RideColorEntity>? colors;
   final RideColorEntity? color;
   final GovernorateEntity? city;
-  final List<String>? brands;
-  final List<String>? models;
-  final String? selectedModel;
-  final String? selectedBrand;
+  final List<RideBrandEntity>? brands;
+  final List<RideModelEntity>? models;
+  final RideCarModelModel? newModel;
+  final RideModelEntity? selectedModel;
+  final RideBrandEntity? selectedBrand;
+  final RideBrandModel? newBrand;
   final bool? isSmoking;
   final bool? hasAirCondition;
   final RideColorEntity? selectedColors;
@@ -138,6 +140,8 @@ class RideRegisterState {
     this.isUploadCriminalRecord,
     this.isUploadTechnicalExamination,
     this.isShipping,
+    this.newModel,
+    this.newBrand,
   });
 
   RideRegisterState copyWith({
@@ -163,8 +167,8 @@ class RideRegisterState {
     List<String>? savedRideSubCategories,
     List<SubCategoryEntityUpdated>? shippingSubCategories,
     List<GovernorateEntity>? govs,
-    List<String>? brands,
-    List<String>? models,
+    List<RideBrandEntity>? brands,
+    List<RideModelEntity>? models,
     CostPerKmEntity? costPerKm,
     List<RideColorEntity>? colors,
     RideColorEntity? color,
@@ -180,8 +184,8 @@ class RideRegisterState {
     List<CompletedTripsEntity>? completedTrips,
     List<RunningTripsEntity>? runningTrips,
     ActivityTripEntity ? activityTrips,
-    String? selectedModel,
-    String? selectedBrand,
+    RideModelEntity? selectedModel,
+    RideBrandEntity? selectedBrand,
     bool? isSmoking,
     String? registerType,
     bool? isShipping,
@@ -199,6 +203,8 @@ class RideRegisterState {
     bool? isUploadDrugAnalysis,
     bool? isUploadCriminalRecord,
     bool? isUploadTechnicalExamination,
+    RideCarModelModel? newModel,
+    RideBrandModel? newBrand,
   }) {
     return RideRegisterState(
       status: status ?? this.status,
@@ -259,6 +265,8 @@ class RideRegisterState {
       isShipping: isShipping ?? this.isShipping,
       loaderInfo: loaderInfo ?? this.loaderInfo,
       savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
+      newModel: newModel ?? this.newModel,
+      newBrand: newBrand ?? this.newBrand,
     );
   }
 }

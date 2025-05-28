@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_token
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/login_with_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_profile_view_usecase.dart';
@@ -95,4 +96,6 @@ abstract class AuthRepository {
 
 
   Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params);
+
+  Future<Either<Failure, UserTokensEntity>> loginWithPhone(LoginWithPhoneParams params);
 }

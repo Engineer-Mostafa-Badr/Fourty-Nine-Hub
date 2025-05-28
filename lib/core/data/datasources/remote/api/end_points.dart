@@ -55,12 +55,15 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
 
+
+
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
   static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
+  static const loginWithPhone = '/auth/login/phone-number';
   static const getProfile = '/users/profile';
   static const getCountries = '/ride/countries';
   static const register = '/auth/register';
@@ -202,7 +205,8 @@ class EndPoints {
   static String myStar =
       '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
   static String uploadStar =
-      '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      // '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      '/talent/upload';
   static String bannerTalent =
       '/talent/banner?subCategory=${Constants.tubeSubCategory}';
   static String deleteMyStar({required String id}) =>
@@ -1384,9 +1388,7 @@ class EndPoints {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
 
-  static String getPastTrips(int page, String type) {
-    return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
-  }
+  static String getPastTrips = '/ride/driver/trips/past';
 
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';
@@ -1405,8 +1407,8 @@ class EndPoints {
   static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
-  static String getRideBrands = '/ride/riders/brands';
-  static String getRideModels = '/ride/riders/models';
+  static String getRideBrands = '/ride/cars/brands?page=1&limit=100';
+  static String getRideModels(String brandId) => '/ride/cars/$brandId/models?page=1&limit=100';
   static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
   static String getRideCarColors = '/ride/riders/colors';
   static String getAllUserTrips = '/loading/trip/allUserTrips';
@@ -1518,6 +1520,8 @@ class EndPoints {
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
   static const getMostBooking = '/health/doctors';
+  static const addCarModel = '/ride/cars/models';
+  static const addCarBrand = '/ride/cars/brands';
 
   static const getDoctorList = '/health/doctors';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
@@ -1544,4 +1548,5 @@ class EndPoints {
   static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
   static const getDriverSettings = '/ride/driver/untracked/settings';
   static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
+  static const addRateToClientWithDriverNonSocket = '/ride/untracked/ratings/driver';
 }

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/base_status_enum.dart';
@@ -29,7 +30,7 @@ class FavSubCategoryView extends StatelessWidget {
             return state.status == StateStatus.loading
                 ? const Center(
                     // ignore: unnecessary_const
-                    child: const CircularProgressIndicator(),
+                    child: const CustomCircularProgressIndicator(),
                   )
                 : state.data != null && state.data!.isNotEmpty
                     ? GridView.builder(

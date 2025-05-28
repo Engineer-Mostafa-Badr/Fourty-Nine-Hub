@@ -25,6 +25,7 @@ import 'package:get_it/get_it.dart';
 import '../features/RideFeature/data/datasources/dashboard_remote_data_source.dart';
 import '../features/RideFeature/data/repositories/trip_repository_impl.dart';
 import '../features/RideFeature/domain/repositories/trip_repository.dart';
+import '../features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
@@ -98,10 +99,13 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<ListenToAvailableUntrackedTripUseCase>(() => ListenToAvailableUntrackedTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToAcceptUntrackedTripOfferUseCase>(() => ListenToAcceptUntrackedTripOfferUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToEndTripUseCase>(() => ListenToEndTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<AddRateWithDriverUseCase>(() => AddRateWithDriverUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
