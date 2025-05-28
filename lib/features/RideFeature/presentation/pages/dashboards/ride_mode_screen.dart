@@ -261,44 +261,64 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                     ],
                                                   )
                                                   : const SizedBox.shrink()
-                                          : (state.driverSettingsEntity?.isReady !=
-                                                  true)
-                                              ? Center(
-                                                  child: Text(
-                                                    LocaleKeys
-                                                        .youCantGetTripUntilYouReady.localize,
-                                                    style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontSize: 16),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                )
-                                              : cubit.availableRideNonSocketData == null
-                                                  ? const SizedBox.shrink()
-                                                  : cubit.isLoadingMoreAvailableNonSocketTrips
-                                                      ? const Center(child: CustomCircularProgressIndicator())
-                                                      : cubit.availableRideNonSocketData.isEmpty
-                                                          ? Center(child: Text(LocaleKeys.youDontHaveAvailableOffer.localize))
-                                                          : ListView.separated(
-                                                              controller:
-                                                                  _availableTripsScrollController,
-                                                              itemBuilder: (context,
-                                                                      index) =>
-                                                                  AvailableNonSocketWidget(
-                                                                offers: cubit
-                                                                        .availableRideNonSocketData[
-                                                                    index],
-                                                              ),
-                                                              itemCount: cubit
-                                                                  .availableRideNonSocketData
-                                                                  .length,
-                                                              separatorBuilder: (context,
-                                                                      index) =>
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          15),
-                                                            ))
-                              : const NotReadyAvailableTripsWidget(),
+                                          : (state.driverSettingsEntity?.isReady == false)
+                                      ? (cubit.isLoadingAvailableNonSocketTrips
+                                      ? const Center(child: CustomCircularProgressIndicator())
+                                      : Center(
+                                    child: Text(
+                                      LocaleKeys.youCantGetTripUntilYouReady.localize,
+                                      style: TextStyle(color: Colors.red, fontSize: 16),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ))
+                                      : (cubit.isLoadingAvailableNonSocketTrips
+                                      ? const Center(child: CustomCircularProgressIndicator())
+                                      : (cubit.availableRideNonSocketData.isEmpty
+                                      ? Center(child: Text(LocaleKeys.youDontHaveAvailableOffer.localize))
+                                      : ListView.separated(
+                                    controller: _availableTripsScrollController,
+                                    itemBuilder: (context, index) => AvailableNonSocketWidget(
+                                      offers: cubit.availableRideNonSocketData[index],
+                                    ),
+                                    itemCount: cubit.availableRideNonSocketData.length,
+                                    separatorBuilder: (context, index) => const SizedBox(height: 15),
+                                  ))))  : const NotReadyAvailableTripsWidget(),
+                              // (state.driverSettingsEntity?.isReady !=
+                                  //                 true)
+                                  //             ? Center(
+                                  //                 child: Text(
+                                  //                   LocaleKeys
+                                  //                       .youCantGetTripUntilYouReady.localize,
+                                  //                   style: TextStyle(
+                                  //                       color: Colors.red,
+                                  //                       fontSize: 16),
+                                  //                   textAlign: TextAlign.center,
+                                  //                 ),
+                                  //               )
+                                  //             : cubit.isLoadingAvailableNonSocketTrips
+                                  //                     ? const Center(child: CustomCircularProgressIndicator())
+                                  //                     : cubit.availableRideNonSocketData.isEmpty
+                                  //                         ? Center(child: Text(LocaleKeys.youDontHaveAvailableOffer.localize))
+                                  //                         : ListView.separated(
+                                  //                             controller:
+                                  //                                 _availableTripsScrollController,
+                                  //                             itemBuilder: (context,
+                                  //                                     index) =>
+                                  //                                 AvailableNonSocketWidget(
+                                  //                               offers: cubit
+                                  //                                       .availableRideNonSocketData[
+                                  //                                   index],
+                                  //                             ),
+                                  //                             itemCount: cubit
+                                  //                                 .availableRideNonSocketData
+                                  //                                 .length,
+                                  //                             separatorBuilder: (context,
+                                  //                                     index) =>
+                                  //                                 const SizedBox(
+                                  //                                     height:
+                                  //                                         15),
+                                  //                           ))
+
                         )
                       // running Trips
                       else if (cubit.state.currentIndex == 1)

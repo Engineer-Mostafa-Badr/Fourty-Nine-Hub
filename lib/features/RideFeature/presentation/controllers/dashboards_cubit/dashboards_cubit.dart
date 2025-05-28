@@ -782,13 +782,16 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   bool hasMoreAvailableNonSocketTrips = true;
   int currentPageAvailableNonSocketTrips = 1;
   bool isLoadingMoreAvailableNonSocketTrips = false;
+  bool isLoadingAvailableNonSocketTrips = false;
 
   void loadInitialAvailableNonSocketTrips() async {
     // emit(state.copyWith(status: RestaurantsListStates.loading));
+    isLoadingAvailableNonSocketTrips = true;
     availableRideNonSocketData.clear();
     currentPageAvailableNonSocketTrips = 1;
     hasMoreAvailableNonSocketTrips = true;
     await getAvailableNonSocketTrips();
+    isLoadingAvailableNonSocketTrips = false;
     emit(state.copyWith(status: DashboardsStates.success));
   }
 
