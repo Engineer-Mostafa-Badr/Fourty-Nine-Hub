@@ -18,6 +18,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class UploadImages{
   Future<Either<Failure, bool>?> uploadImage(
@@ -90,7 +91,7 @@ class UploadImages{
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const CircularProgressIndicator.adaptive(),
+                        const CustomCircularProgressIndicator(),
                         const SizedBox(height: 20),
                         Text(
                            context.isArabic?'جاري التحميل...':'Loading...',

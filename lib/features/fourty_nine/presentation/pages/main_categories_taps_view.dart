@@ -52,6 +52,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   void initState() {
     // context.read<MainCategoriesTapsCubit>().selectMainCategory(0);
     super.initState();
+
     _tabController = TabController(
         length: context.read<MainCategoriesTapsCubit>().mainCategories.length,
         vsync: this);
@@ -72,9 +73,9 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
         setState(() {});
       });
     });
-    _fetchSubcategories(
-      stateSubCategories: [],
-    );
+    // _fetchSubcategories(
+    //   stateSubCategories: [],
+    // );
   }
 
   @override
@@ -105,39 +106,42 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     );
   }
 
-  List<SubCategoryEntity> subCategories = [];
+  // List<SubCategoryEntity> subCategories = [];
   String? selectedValue;
 
 // TODO: Handel Pagination
-  void _fetchSubcategories({
-    List<SubCategoryEntity>? stateSubCategories,
-  }) async {
-    final subCategoriesList = stateSubCategories ?? [];
-    print(
-        'subCategories==> ${context.read<MainCategoriesTapsCubit>().subCategories.length}');
-    print(
-        'state.subCategories==> ${context.read<MainCategoriesTapsCubit>().state.subCategories?.length}');
-    if (stateSubCategories!.isEmpty) {
-      await context.read<MainCategoriesTapsCubit>().selectMainCategory(0);
-      subCategoriesList.addAll(
-        context.read<MainCategoriesTapsCubit>().subCategories,
-      );
-      print(
-          'stateSubCategories!.isEmpty==> ${context.read<MainCategoriesTapsCubit>().subCategories.length}');
-    }
+//   void _fetchSubcategories({
+//     List<SubCategoryEntity>? stateSubCategories,
+//   }) async {
+//     // if (stateSubCategories!.isEmpty) {
+//     //  await context.read<MainCategoriesTapsCubit>().loadData();
+//     // }
+//     final subCategoriesList = stateSubCategories ?? [];
+//     // print(
+//     //     'subCategories==> ${context.read<MainCategoriesTapsCubit>().subCategories.length}');
+//     // print(
+//     //     'state.subCategories==> ${context.read<MainCategoriesTapsCubit>().state.subCategories?.length}');
+//
+//     setState(() {
+//       subCategories = subCategoriesList;
+//       // subCategories = stateSubCategories ?? [];
+//     });
+//     print(subCategoriesList);
+//     // if (stateSubCategories!.isEmpty) {
+//     //   // await context.read<MainCategoriesTapsCubit>().loadData('_fetchSubcategories');
+//     //   // subCategoriesList.addAll(
+//     //   //   context.read<MainCategoriesTapsCubit>().subCategories,
+//     //   // );
+//     //   print(
+//     //       'stateSubCategories!.isEmpty==> ${context.read<MainCategoriesTapsCubit>().subCategories.length}');
+//     // }
+//   }
 
-    print(subCategoriesList);
-    setState(() {
-      subCategories = subCategoriesList;
-      // subCategories = stateSubCategories ?? [];
-    });
-  }
-
-  void _showDropdownMenu(BuildContext context) async {
+  void _showDropdownMenu(BuildContext context, List<SubCategoryEntity>? subCategories) async {
     print(
         'selectedCategory in dropdown ${context.read<MainCategoriesTapsCubit>().selectedCategory.subcategories?.length}');
     print(subCategories);
-    if (subCategories.isEmpty) {
+    if (subCategories!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(LocaleKeys.noCategoriesAvailable.localize)),
       );
@@ -258,9 +262,9 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                             onTap: (i) async {
                               // controller.state.subCategories;
                               await controller.selectMainCategory(i);
-                              _fetchSubcategories(
-                                  stateSubCategories:
-                                      controller.state.subCategories);
+                              // _fetchSubcategories(
+                              //     stateSubCategories:
+                              //         controller.state.subCategories);
                               // _fetchSubcategories(
                               //     mainCategoryId:
                               //         controller.mainCategories[i].id);
@@ -490,9 +494,15 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
               ),
             ),
             floatingActionButton: isFloatingButtonVisible
-                ? buildFloatingAction(context, () {
-                    _showDropdownMenu(context);
-                  })
+                ? BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
+                    builder: (context, state) {
+                      final controller =
+                          context.read<MainCategoriesTapsCubit>();
+                      return buildFloatingAction(context, () {
+                        _showDropdownMenu(context,state.subCategories);
+                      });
+                    },
+                  )
                 : null,
           );
         },

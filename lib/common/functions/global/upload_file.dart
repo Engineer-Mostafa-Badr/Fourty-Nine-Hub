@@ -15,6 +15,7 @@ import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -108,7 +109,7 @@ class UploadFile {
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const CircularProgressIndicator.adaptive(),
+                          const CustomCircularProgressIndicator(),
                           const SizedBox(height: 20),
                           Text(
                             context.isArabic?'جاري التحميل...':'Loading...',
@@ -376,7 +377,7 @@ class UploadFile {
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const CircularProgressIndicator.adaptive(),
+                        const CustomCircularProgressIndicator(),
                         const SizedBox(height: 20),
                         Text(
                           context.isArabic?'جاري التحميل...':'Loading...',

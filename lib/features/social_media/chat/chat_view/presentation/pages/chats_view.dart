@@ -671,7 +671,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       return state.chats == null || state.isLoading
           ?
           // const Center(
-          //     child: CircularProgressIndicator.adaptive(),
+          //     child: CustomCircularProgressIndicator(),
           //   )
           const SizedBox()
           : state.chats!.isEmpty

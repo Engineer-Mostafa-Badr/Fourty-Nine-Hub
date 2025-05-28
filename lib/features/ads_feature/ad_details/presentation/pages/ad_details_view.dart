@@ -32,6 +32,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
@@ -99,7 +100,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         }, builder: (context, state) {
           if (state.ad == null) {
             return const Center(
-              child: CircularProgressIndicator.adaptive(),
+              child: CustomCircularProgressIndicator(),
             );
           }
           List<AdDetailsPropEntity>? details = state.ad?.details

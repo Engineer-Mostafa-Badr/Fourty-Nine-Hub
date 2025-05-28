@@ -736,7 +736,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     // if (state.isImageUploading)
-                    //   const CircularProgressIndicator.adaptive(),
+                    //   const CustomCircularProgressIndicator(),
                     // if (!state.isImageUploading)
                     SvgPicture.asset(
                       Assets.image2Icon,

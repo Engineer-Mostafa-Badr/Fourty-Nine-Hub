@@ -21,6 +21,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../core/error/failure.dart';
 import '../helper/file_picker_helper.dart';
@@ -188,7 +189,7 @@ class UploadVideo {
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const CircularProgressIndicator.adaptive(),
+                        const CustomCircularProgressIndicator(),
                         const SizedBox(height: 20),
                         Text(
                           context.isArabic?'جاري التحميل...':'Loading...',

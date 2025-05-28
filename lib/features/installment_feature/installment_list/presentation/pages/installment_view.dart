@@ -10,6 +10,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/installment_list_cubit.dart';
 import '../widgets/installment_ad_card.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class InstallmentView extends StatelessWidget {
   const InstallmentView({super.key});
@@ -169,7 +170,7 @@ class InstallmentView extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: state.isLoading
             ? const Center(
-                child: CircularProgressIndicator.adaptive(),
+                child: CustomCircularProgressIndicator(),
               )
             : state.isGrid
                 ? GridView.builder(
