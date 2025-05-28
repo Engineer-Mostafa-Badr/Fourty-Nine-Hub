@@ -106,11 +106,13 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
-                    .read<ReelsCubit>()
-                    .state
-                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
+                        .read<ReelsCubit>()
+                        .state
+                        .controllers[
+                            context.read<ReelsCubit>().state.focusedIndex]
+                        ?.value
+                        .isPlaying ??
+                    false) {
                   context
                       .read<ReelsCubit>()
                       .state

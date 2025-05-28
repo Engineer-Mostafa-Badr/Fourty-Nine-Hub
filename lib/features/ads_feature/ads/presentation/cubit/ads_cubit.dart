@@ -390,6 +390,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   Future<bool> makeAdRequest({
     required String id,
   }) async {
+    emit(state.copyWith(requestStatus: AdsStates.loading));
     bool data = false;
     print(phone);
     final response = await _makeAdRequestUsecase(
@@ -397,10 +398,11 @@ class AdvertisementCubit extends Cubit<AdsState> {
     );
     response.fold((l) {
       emit(state.copyWith(
-          failure: l, makeRequest: false, status: AdsStates.error));
+          failure: l, makeRequest: false, requestStatus: AdsStates.error));
     }, (r) {
       data = r;
-      emit(state.copyWith(status: AdsStates.requestSuccess, makeRequest: true));
+      emit(state.copyWith(
+          requestStatus: AdsStates.requestSuccess, makeRequest: true));
     });
     return data;
   }
@@ -408,6 +410,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   Future<bool> makeAdPremiumRequest({
     required String id,
   }) async {
+    emit(state.copyWith(requestStatus: AdsStates.loading));
     bool data = false;
     print(phone);
     final response = await _makeAdPremiumRequestUsecase(
@@ -415,10 +418,11 @@ class AdvertisementCubit extends Cubit<AdsState> {
     );
     response.fold((l) {
       emit(state.copyWith(
-          failure: l, makeRequest: false, status: AdsStates.error));
+          failure: l, makeRequest: false, requestStatus: AdsStates.error));
     }, (r) {
       data = r;
-      emit(state.copyWith(status: AdsStates.requestSuccess, makeRequest: true));
+      emit(state.copyWith(
+          requestStatus: AdsStates.requestSuccess, makeRequest: true));
     });
     return data;
   }

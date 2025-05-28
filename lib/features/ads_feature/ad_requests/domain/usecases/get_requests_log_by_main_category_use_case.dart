@@ -5,31 +5,29 @@ import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/repositori
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class GetAdRequestsUseCase extends UseCase<
-    List<RequestsLogByMainCategoryEntity>, GetAdRequestsParams> {
+class GetRequestsLogByMainCategoryUseCase extends UseCase<
+    List<RequestsLogByMainCategoryEntity>, GetRequestsLogByMainCategoryParams> {
   final AdRequestsRepo _repo;
 
-  GetAdRequestsUseCase(this._repo);
+  GetRequestsLogByMainCategoryUseCase(this._repo);
 
   @override
   Future<Either<Failure, List<RequestsLogByMainCategoryEntity>>> call(
-      GetAdRequestsParams params) {
-    return _repo.getAdRequests(params: params);
+      GetRequestsLogByMainCategoryParams params) {
+    return _repo.getRequestsLogByMainCategory(params: params);
   }
 }
 
-class GetAdRequestsParams {
-  final String id;
+class GetRequestsLogByMainCategoryParams {
+  final String mainCategoryId;
   final int page;
   final int limit;
-  final String username;
 
-  GetAdRequestsParams({
-    required this.id,
+  GetRequestsLogByMainCategoryParams({
+    required this.mainCategoryId,
     required this.page,
     required this.limit,
-    required this.username,
   });
 
-  Map<String, dynamic> toJson() => {"page": page, "limit": limit};
+  // Map<String, dynamic> toJson() => {"page": page, "limit": limit};
 }

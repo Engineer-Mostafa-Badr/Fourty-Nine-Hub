@@ -7,49 +7,42 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class FavouriteAdsView extends StatefulWidget {
-  const FavouriteAdsView({
+class AdsSearchView extends StatefulWidget {
+  const AdsSearchView({
     super.key,
-    required this.id,
+    required this.mainCategoryNameAr,
+    required this.mainCategoryNameEn,
     required this.isFloatingButtonVisible,
   });
-  final String id;
+
+  final String mainCategoryNameAr;
+  final String mainCategoryNameEn;
   final void Function(bool) isFloatingButtonVisible;
+
   @override
-  State<FavouriteAdsView> createState() => _FavouriteAdsViewState();
+  State<AdsSearchView> createState() => _AdsSearchViewState();
 }
 
-class _FavouriteAdsViewState extends State<FavouriteAdsView> {
+class _AdsSearchViewState extends State<AdsSearchView> {
   late ScrollController _scrollController;
-  late SubcategoriesCubit _cubit;
-  bool isFirstSearchListenerCall = true;
 
   @override
   void initState() {
-    print("FavouriteAdsView initState");
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        widget.isFloatingButtonVisible(false);
+      } else {
+        widget.isFloatingButtonVisible(true);
+      }
+      setState(() {});
+    });
     super.initState();
-    _cubit = context.read<SubcategoriesCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id);
-    }
-
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      widget.isFloatingButtonVisible(false);
-    } else {
-      widget.isFloatingButtonVisible(true);
-    }
   }
 
   @override
@@ -57,13 +50,38 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
         builder: (context, state) {
       final controller = context.read<SubcategoriesCubit>();
-      if (controller.isLoadingMyFavouriteAds == true) {
+      if (state.isLoadingAds) {
         return const CustomLoading();
       }
-      if (controller.myFavouriteAds.isEmpty) {
+      if (controller.initalSearchAds) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search,
+              size: 100,
+              color: context.isDarkMode
+                  ? Colors.white.withValues(alpha: 178)
+                  : Colors.black.withValues(alpha: 178),
+            ),
+            Label(
+                text: context.isArabic
+                    ? 'ابحث عن اي اعلان داخل ${widget.mainCategoryNameAr}'
+                    : 'Search for any ad inside ${widget.mainCategoryNameEn}',
+                style: Styles.headerText(
+                  fontSize: 40,
+                  color: context.isDarkMode
+                      ? Colors.white.withValues(alpha: 178)
+                      : Colors.black.withValues(alpha: 178),
+                  height: 1.60,
+                )),
+          ],
+        );
+      }
+      if (controller.searchAdsList.isEmpty) {
         return Center(
           child: Label(
-            text: LocaleKeys.noFavouriteAds.localize,
+            text: LocaleKeys.youHaveNoAds.localize,
             style: Styles.headerText(
               fontSize: 40,
               color: context.isDarkMode
@@ -75,33 +93,28 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
         );
       }
       return ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.all(16),
         shrinkWrap: true,
         controller: _scrollController,
-        itemCount: controller.myFavouriteAds.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
+        itemCount: controller.searchAdsList.length,
         itemBuilder: (context, i) => MyAdCard(
-          item: controller.myFavouriteAds[i],
+          item: controller.searchAdsList[i],
           showSubCategory: true,
           onFav: (id) async {
             bool result = await context
                 .read<AdvertisementCubit>()
-                .unFavouriteAd(controller.myFavouriteAds[i].id);
-            controller.myFavouriteAds.remove(controller.myFavouriteAds[i]);
-            setState(() {});
+                .favouriteAd(controller.searchAdsList[i].id);
             return result;
-            // bool result = await context
-            //     .read<AdvertisementCubit>()
-            //     .favouriteAd(controller.myFavouriteAds[i].id);
-            // return result;
           },
           onRemoveFav: (id) async {
             bool result = await context
                 .read<AdvertisementCubit>()
-                .unFavouriteAd(controller.myFavouriteAds[i].id);
+                .unFavouriteAd(controller.searchAdsList[i].id);
             return result;
           },
         ),
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(height: 16),
       );
     });
   }
