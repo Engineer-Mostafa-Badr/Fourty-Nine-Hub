@@ -33,6 +33,7 @@ import '../../../../../res/style/const.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../cubit/stories_cubit.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For localization keys
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -136,7 +137,7 @@ class CameraScreenState extends State<CameraScreen> {
       autoPlay: true,
       looping: false,
       showControls: true,
-      placeholder: const Center(child: CircularProgressIndicator()),
+      placeholder: const Center(child: CustomCircularProgressIndicator()),
       errorBuilder: (context, errorMessage) {
         return Center(
           child: Text(
@@ -620,7 +621,7 @@ class CameraScreenState extends State<CameraScreen> {
                     child: CameraPreview(_cameraController!),
                   )
                 : const Center(
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   )
             : Image.file(
                 _selectedFile!,
@@ -742,7 +743,7 @@ class CameraScreenState extends State<CameraScreen> {
                     height: double.infinity,
                     child: CameraPreview(_cameraController!),
                   )
-                : const Center(child: CircularProgressIndicator())
+                : const Center(child: CustomCircularProgressIndicator())
             : _videoPlayerController != null
                 ? Center(
                     child: AspectRatio(
@@ -1563,7 +1564,7 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
     return SizedBox(
       height: 80,
       width: 80,
-      child: CircularProgressIndicator(
+      child: CustomCircularProgressIndicator(
         value: 1 - (_time / widget.duration.inSeconds),
         valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
         backgroundColor: AppColors.SECONDARY_COLOR,

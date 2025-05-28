@@ -35,6 +35,7 @@ import '../features/authentication/domain/use_cases/change_password_use_case.dar
 import '../features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/get_user_use_case.dart';
 import '../features/authentication/domain/use_cases/login_use_case.dart';
+import '../features/authentication/domain/use_cases/login_with_phone_use_case.dart';
 import '../features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import '../features/authentication/domain/use_cases/register_use_case.dart';
 import '../features/authentication/domain/use_cases/save_tokens_use_case.dart';
@@ -115,6 +116,7 @@ class AuthServiceLocator {
     );
     // auth use cases
     serviceLocator.registerFactory(() => LoginUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => LoginWithPhoneUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
     // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
@@ -161,6 +163,7 @@ class AuthServiceLocator {
         final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
         final GoogleSignIn googleSignIn = GoogleSignIn();
         return LoginCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

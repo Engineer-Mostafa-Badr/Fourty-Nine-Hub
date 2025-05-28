@@ -8,6 +8,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
@@ -20,7 +22,9 @@ import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
+import 'creminal_record_non_socket_screen.dart';
 import 'drivers_license_non_socket_screen.dart';
+import 'drug_analysis_non_socket.dart';
 import 'update_personal_info_widget.dart';
 
 class SettingsNotSocket extends StatefulWidget {
@@ -124,6 +128,48 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
             },
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+          ),
+
+            ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: VehicleInformationNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.carLicense.tr(), exdIn: 6),
+          ),
+
+          if(widget.settings?.isCriminalRecordEnabled == true)
+          ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: CriminalRecordNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
+          ),
+          if(widget.settings?.isVehicleRecordEnabled == true)
+            ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: TechnicalExaminationNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.technicalExamination.tr(), exdIn: 6),
+          ),
+          if(widget.settings?.isDrugAnalysisRecordEnabled == true)
+
+            ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: DragAnalyticsNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
           ),
           const SizedBox(height: 16),
           Row(

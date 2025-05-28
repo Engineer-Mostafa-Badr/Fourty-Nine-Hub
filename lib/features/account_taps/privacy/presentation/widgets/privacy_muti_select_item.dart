@@ -129,7 +129,7 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 16),
           child: Row(
             children: [
               Expanded(
@@ -145,7 +145,6 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
                       color: Colors.grey),
                 ],
               ),
-              const SizedBox(width: 15),
             ],
           ),
         ),

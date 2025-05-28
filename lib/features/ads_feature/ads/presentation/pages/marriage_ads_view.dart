@@ -326,7 +326,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //           Expanded(
       //             child: state.status == SubcategoriesStates.loadingAds
       //                 ? const Center(
-      //                     child: CircularProgressIndicator(),
+      //                     child: CustomCircularProgressIndicator(),
       //                   )
       //                 : ListView.builder(
       //                     controller: _scrollController,

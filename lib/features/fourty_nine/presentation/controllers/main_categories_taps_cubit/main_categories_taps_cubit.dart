@@ -16,6 +16,7 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
   final ToggleSubCategoryToFavoritesUseCase
       _toggleSubCategoryToFavoritesUseCase;
+
   MainCategoriesTapsCubit(
       this._getSubCategoriesUseCase, this._toggleSubCategoryToFavoritesUseCase)
       : super(MainCategoriesTapsState()) {
@@ -23,20 +24,21 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
       if (scrollController.position.maxScrollExtent ==
               scrollController.offset &&
           !_isLastPage) {
-        loadData();
+        loadData('init MainCategoriesTapsCubit');
       }
     });
   }
 
   final _mainCategories = FourtyNineSharedData.instance.mainCategories;
-  List<SubCategoryEntity> _subCategories = [];
+  List<SubCategoryEntity> subCategories = [];
 
   Future<void> selectMainCategory(int index) async {
     if (index != state.selectedIndex) {
-      _subCategories = [];
+      print('selectMainCategory==> $index');
+      subCategories = [];
       _paginationParams = PaginationParams.basic();
       emit(state.copyWith(selectedIndex: index, status: StateStatus.updated));
-     await loadData();
+      await loadData('selectMainCategory');
     }
   }
 
@@ -44,26 +46,32 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   PaginationParams _paginationParams = PaginationParams.basic();
   bool _isLastPage = false;
 
-  Future<void> loadData() async {
+  Future<void> loadData(String? query) async {
     emit(state.copyWith(status: StateStatus.loading));
     final user = UserCubit.to.state.data?.id;
-    final result = await _getSubCategoriesUseCase(GetSubCategoriesParams(
-      mainCategoryId: selectedCategory.id,
-      paginationParams: _paginationParams,
-      userId: user ?? '',
-    ));
+    print('loadData==> $query');
+    print('selectedCategory.id==>${selectedCategory.id}');
+    final result = await _getSubCategoriesUseCase(
+      GetSubCategoriesParams(
+        mainCategoryId: selectedCategory.id,
+        paginationParams: _paginationParams,
+        userId: user ?? '',
+      ),
+    );
     result.fold(
         (l) => emit(state.copyWith(status: StateStatus.error, failure: l)),
         (r) {
       _paginationParams.page++;
-      _subCategories.addAll(r);
+      subCategories.addAll(r);
+      print('r.length==> ${subCategories.length}');
       _isLastPage = r.isEmpty || r.length < _paginationParams.limit;
       emit(state.copyWith(
-          status: StateStatus.success, subCategories: _subCategories));
+          status: StateStatus.success, subCategories: subCategories));
     });
   }
 
   List<MainCategoryEntity> get mainCategories => _mainCategories;
+
   MainCategoryEntity get selectedCategory =>
       _mainCategories[state.selectedIndex];
 

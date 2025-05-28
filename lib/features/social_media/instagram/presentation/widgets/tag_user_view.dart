@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class TagUserView extends StatefulWidget {
   const TagUserView({super.key});
@@ -273,7 +274,7 @@ class _TagUserViewState extends State<TagUserView> {
                                         .users
                                         .length) {
                                   return const Center(
-                                      child: CircularProgressIndicator());
+                                      child: CustomCircularProgressIndicator());
                                 }
                                 final user =
                                     context.read<TagUsersCubit>().users[index];

@@ -17,6 +17,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/end_to_end_Encrypted_widget.dart';
 import '../widgets/new_chat_card.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class OptionsChatsViewParams {
   final ChatsCubit chatsCubit;
@@ -387,7 +388,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
                       child: Center(
-                        child: CircularProgressIndicator.adaptive(),
+                        child: CustomCircularProgressIndicator(),
                       ),
                     );
                   } else if (state.chats!.isEmpty) {
@@ -463,7 +464,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
 
                   // return state.chats == null || state.isLoading
                   //     ? const Center(
-                  //         child: CircularProgressIndicator.adaptive(),
+                  //         child: CustomCircularProgressIndicator(),
                   //       )
                   //     : state.chats!.isEmpty
                   //         ? Center(

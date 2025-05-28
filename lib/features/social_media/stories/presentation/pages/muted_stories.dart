@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.da
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -82,7 +83,7 @@ class _MutedStoriesState extends State<MutedStories> {
                     //   // Show loading indicator while fetching more data
                     //
                     //   return const Center(
-                    //       child: CircularProgressIndicator.adaptive());
+                    //       child: CustomCircularProgressIndicator());
                     // }
 
                     final userStory =
@@ -138,7 +139,7 @@ class _MutedStoriesState extends State<MutedStories> {
                 ),
               ],
             )
-          : const Center(child: CircularProgressIndicator.adaptive()),
+          : const Center(child: CustomCircularProgressIndicator()),
     );
   }
 }

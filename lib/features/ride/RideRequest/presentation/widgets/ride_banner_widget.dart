@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RideBannerWidget extends StatelessWidget {
   const RideBannerWidget({super.key});
@@ -36,7 +37,7 @@ class RideBannerWidget extends StatelessWidget {
                 builder: (context, state) {
                   log(state.toString(), name: "lskdfjlskdjflskdjflskdjf");
                   if (state is LoadingShippingState) {
-                    return const CircularProgressIndicator(
+                    return const CustomCircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
                     );
                   }
@@ -103,7 +104,7 @@ class RideBannerWidget extends StatelessWidget {
             ],
           );
         } else {
-          return const CircularProgressIndicator();
+          return const CustomCircularProgressIndicator();
         }
       },
     );

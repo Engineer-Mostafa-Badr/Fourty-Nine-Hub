@@ -8,7 +8,7 @@ class LocationModel extends LocationEntity {
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
-      title: json['title'],
+      title: json['title']??'',
       // coordinates: CoordinatesModel.fromJson(json['coordinates']),
     );
   }
@@ -20,8 +20,8 @@ class CoordinatesModel extends CoordinatesEntity {
 
   factory CoordinatesModel.fromJson(Map<String, dynamic> json) {
     return CoordinatesModel(
-      lat: json['lat'].toDouble(),
-      lng: json['lng'].toDouble(),
+      lat: json['lat']??0,
+      lng: json['lng']??0,
     );
   }
 }

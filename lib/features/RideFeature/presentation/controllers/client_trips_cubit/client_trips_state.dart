@@ -50,7 +50,7 @@ class ClientTripsState {
   final CreateNonTrackTripEntity? createNonTrackTripEntity;
   final List<ClientPendingTripEntity>? clientPendingTripData;
   final List<ClientAcceptedTripEntity>? clientAcceptedTripData;
-  final List<ClientOfferTripEntity>? clientOfferTripData;
+  final List<ClientOfferTripEntity> clientOfferTripData;
   final List<ClientPastTripEntity>? clientPastTripData;
   final String? message;
   final bool showSnackbar;
@@ -65,7 +65,7 @@ class ClientTripsState {
     this.message,
     this.showSnackbar = false,
     this.clientAcceptedTripData,
-    this.clientOfferTripData,
+    this.clientOfferTripData  = const  [],
     this.clientPastTripData,
   });
   ClientTripsState copyWith({

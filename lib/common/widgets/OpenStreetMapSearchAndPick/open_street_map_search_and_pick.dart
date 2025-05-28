@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
+import '../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../res/style/app_colors.dart';
 
 class OpenStreetMapSearchAndPick extends StatefulWidget {
@@ -31,6 +32,9 @@ class OpenStreetMapSearchAndPick extends StatefulWidget {
   final double buttonWidth;
   final TextStyle buttonTextStyle;
   final String baseUri;
+  final LatLng? minDistanceReferencePoint;
+  final double minAllowedDistanceKm;
+  final String? allowedCountryCode;
 
   const OpenStreetMapSearchAndPick({
     Key? key,
@@ -52,6 +56,10 @@ class OpenStreetMapSearchAndPick extends StatefulWidget {
     this.buttonWidth = 200,
     this.baseUri = 'https://nominatim.openstreetmap.org',
     this.locationPinIcon = Icons.location_on,
+    this.minDistanceReferencePoint, // Initialize the new parameters
+    this.minAllowedDistanceKm =
+        0,
+    this.allowedCountryCode = 'EG',
   }) : super(key: key);
 
   @override
@@ -68,6 +76,51 @@ class _OpenStreetMapSearchAndPickState
   Timer? _debounce;
   var client = http.Client();
   late Future<Position?> latlongFuture;
+  bool isLoading = false; // Moved to the state class
+
+  // Map to store country names in English and Arabic
+  static const Map<String, Map<String, String>> _countryNames = {
+    'eg': {'en': 'Egypt', 'ar': 'مصر'},
+    'us': {'en': 'USA', 'ar': 'أمريكا'},
+    'my': {'en': 'Malaysia', 'ar': 'ماليزيا'},
+    'ae': {'en': 'UAE', 'ar': 'الإمارات'},
+    'sa': {'en': 'Saudi Arabia', 'ar': 'السعودية'},
+    // Add more countries as needed
+  };
+
+  String _getCountryName(String? countryCode, BuildContext context) {
+    if (countryCode == null) {
+      return context.isArabic ? 'المنطقة المدعومة' : 'the supported region';
+    }
+    final country = _countryNames[countryCode.toLowerCase()];
+    if (country == null) {
+      return context.isArabic ? 'هذه المنطقة' : 'this region'; // Fallback if country code not found
+    }
+    return context.isArabic ? country['ar']! : country['en']!;
+  }
+
+
+  Future<bool> isLocationAllowed(double lat, double lon) async {
+    if (widget.allowedCountryCode == null) {
+      return true; // No country code specified, all locations allowed
+    }
+
+    try {
+      final url =
+          '${widget.baseUri}/reverse?format=json&lat=$lat&lon=$lon&zoom=10&addressdetails=1';
+      log(url);
+      final response = await http.get(Uri.parse(url));
+      final decoded = jsonDecode(utf8.decode(response.bodyBytes));
+
+      final countryCode = decoded['address']?['country_code'];
+
+      return countryCode?.toString().toLowerCase() ==
+          widget.allowedCountryCode!.toLowerCase();
+    } catch (e) {
+      debugPrint('Error checking location: $e');
+      return false;
+    }
+  }
 
   Future<Position?> getCurrentPosLatLong() async {
     LocationPermission locationPermission = await Geolocator.checkPermission();
@@ -130,6 +183,7 @@ class _OpenStreetMapSearchAndPickState
     log(url);
     var response = await client.get(Uri.parse(url));
     // var response = await client.post(Uri.parse(url));
+    log(response.body);
     var decodedResponse =
         jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>;
 
@@ -147,7 +201,7 @@ class _OpenStreetMapSearchAndPickState
           var client = http.Client();
           String url =
               '${widget.baseUri}/reverse?format=json&lat=${event.camera.center.latitude}&lon=${event.camera.center.longitude}&zoom=18&addressdetails=1';
-log(url);
+          log(url);
           var response = await client.get(Uri.parse(url));
           // var response = await client.post(Uri.parse(url));
           var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes))
@@ -174,11 +228,13 @@ log(url);
   Widget build(BuildContext context) {
     // String? _autocompleteSelection;
     OutlineInputBorder inputBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: widget.buttonColor.withValues(alpha: 0.5), width: 1),
+      borderSide: BorderSide(
+          color: widget.buttonColor.withValues(alpha: 0.5), width: 1),
       borderRadius: BorderRadius.circular(10.0),
     );
     OutlineInputBorder inputFocusBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: widget.buttonColor.withValues(alpha: 0.5), width: 1.0),
+      borderSide: BorderSide(
+          color: widget.buttonColor.withValues(alpha: 0.5), width: 1.0),
       borderRadius: BorderRadius.circular(10.0),
     );
     return FutureBuilder<Position?>(
@@ -187,7 +243,7 @@ log(url);
         LatLng? mapCentre;
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           );
         }
         if (snapshot.hasError) {
@@ -211,17 +267,10 @@ log(url);
                     mapController: _mapController,
                     children: [
                       TileLayer(
-                        urlTemplate:
-                            // "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-                            // "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                            // "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-                        context.isDarkMode
+                        urlTemplate: context.isDarkMode
                             ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
                             : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
                         subdomains: const ['a', 'b', 'c'],
-                        // attributionBuilder: (_) {
-                        //   return Text("© OpenStreetMap contributors");
-                        // },
                       ),
                     ],
                   ),
@@ -335,16 +384,23 @@ log(url);
                                 }
                                 var client = http.Client();
                                 try {
+                                  // String url =
+                                  //     '${widget.baseUri}/search?q=$value&format=json&polygon_geojson=1&addressdetails=1&countrycodes=eg';
+
                                   String url =
-                                      '${widget.baseUri}/search?q=$value&format=json&polygon_geojson=1&addressdetails=1&countrycodes=eg';
+                                      '${widget.baseUri}/search?q=$value&format=json&polygon_geojson=1&addressdetails=1';
+                                  if (widget.allowedCountryCode != null) {
+                                    url += '&countrycodes=${widget.allowedCountryCode!.toLowerCase()}';
+                                  }
                                   if (kDebugMode) {
                                     print(url);
                                   }
-                                  var response = await client.get(Uri.parse(url));
+                                  var response =
+                                      await client.get(Uri.parse(url));
                                   // var response = await client.post(Uri.parse(url));
-                                  var decodedResponse =
-                                      jsonDecode(utf8.decode(response.bodyBytes))
-                                          as List<dynamic>;
+                                  var decodedResponse = jsonDecode(
+                                          utf8.decode(response.bodyBytes))
+                                      as List<dynamic>;
                                   if (kDebugMode) {
                                     print(decodedResponse);
                                   }
@@ -367,27 +423,39 @@ log(url);
                             }),
                         StatefulBuilder(
                           builder: ((context, setState) {
-
                             return Container(
                               decoration: BoxDecoration(
-                                color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                                color: context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: ListView.builder(
                                 shrinkWrap: true,
-
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount:
                                     _options.length > 6 ? 6 : _options.length,
                                 itemBuilder: (context, index) {
                                   return ListTile(
-                                    tileColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-                                    textColor: context.isDarkMode ? Colors.white : Colors.black87,
+                                    tileColor: context.isDarkMode
+                                        ? AppColors.QUANTITY_COLOR
+                                        : Colors.white,
+                                    textColor: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black87,
                                     title: Text(_options[index].displayname,
-                                        style:  TextStyle(color: context.isDarkMode ? Colors.white : Colors.black,)),
+                                        style: TextStyle(
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                        )),
                                     subtitle: Text(
                                         '${_options[index].lat},${_options[index].lon}',
-                                        style:  TextStyle(color: context.isDarkMode ? Colors.white : Colors.black87,)),
+                                        style: TextStyle(
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black87,
+                                        )),
                                     onTap: () {
                                       _mapController.move(
                                           LatLng(_options[index].lat,
@@ -413,62 +481,155 @@ log(url);
                   left: 0,
                   right: 0,
                   child: Center(
-                    child: isLoading ? const Padding(
-                      padding: EdgeInsets.all(24),
-                      child: CircularProgressIndicator(
-                        color: AppColors.PRIMARY_COLOR_DARK,
-                      ),
-                    ) : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: WideButton(
-                        widget.buttonText,
-                        textStyle: widget.buttonTextStyle,
-                        height: widget.buttonHeight,
-                        width: widget.buttonWidth,
-                        onPressed: () async {
-                          // final value = await pickData();
-                          // widget.onPicked(value);
-                          setState(() {
-                            isLoading = true;
-                          });
-                          final lat = _mapController.center.latitude;
-                          final lon = _mapController.center.longitude;
+                    child: isLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(24),
+                            child: CircularProgressIndicator(
+                              color: AppColors.PRIMARY_COLOR_DARK,
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: WideButton(
+                              widget.buttonText,
+                              textStyle: widget.buttonTextStyle,
+                              height: widget.buttonHeight,
+                              width: widget.buttonWidth,
+                              onPressed: () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                final lat = _mapController.center.latitude;
+                                final lon = _mapController.center.longitude;
 
-                          final isInEgypt = await isLocationInEgypt(lat, lon);
+                                final isAllowed =
+                                await isLocationAllowed(lat, lon);
 
-                          if (!isInEgypt) {
-                            if (context.mounted) {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-                                  title:  Text(context.isArabic? "الموقع غير مدعوم" : "Location not supported"),
-                                  content:  Text(context.isArabic? "حالياً التطبيق متاح فقط داخل مصر." : "The app is currently available only in Egypt."),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child:  Text( context.isArabic? "اغلاق" : "Close"),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            setState(() {
-                              isLoading = false;
-                            });
-                            return;
-                          }
+                                if (!isAllowed) {
+                                  if (context.mounted) {
+                                    final String countryName = _getCountryName(
+                                        widget.allowedCountryCode, context);
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        backgroundColor: context.isDarkMode
+                                            ? AppColors.QUANTITY_COLOR
+                                            : Colors.white,
+                                        title: Text(
+                                          context.isArabic
+                                              ? "الموقع غير مدعوم"
+                                              : "Location not supported",
+                                          style: const TextStyle(
+                                              color: AppColors.PRIMARY_COLOR),
+                                        ),
+                                        content: Text(
+                                          context.isArabic
+                                              ? "حالياً التطبيق متاح فقط داخل $countryName."
+                                              : "The app is currently available only in $countryName.",
+                                        ),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: AppColors
+                                                  .PRIMARY_COLOR_DARK, // خلفية الزر
+                                              foregroundColor:
+                                                  Colors.white, // لون النص
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text(
+                                              context.isArabic
+                                                  ? "إغلاق"
+                                                  : "Close",
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  return;
+                                }
 
-                          final value = await pickData();
-                          setState(() {
-                            isLoading = false;
-                          });
-                          widget.onPicked(value);
-                        },
-                        backgroundColor: widget.buttonColor,
-                        foregroundColor: widget.buttonTextColor,
-                      ),
-                    ),
+                                // New: Distance check
+                                if (widget.minDistanceReferencePoint != null &&
+                                    widget.minAllowedDistanceKm > 0) {
+                                  final double distanceInMeters =
+                                      Geolocator.distanceBetween(
+                                    widget.minDistanceReferencePoint!.latitude,
+                                    widget.minDistanceReferencePoint!.longitude,
+                                    lat,
+                                    lon,
+                                  );
+                                  final double distanceInKm =
+                                      distanceInMeters / 1000;
+
+                                  if (distanceInKm <
+                                      widget.minAllowedDistanceKm) {
+                                    if (context.mounted) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) => AlertDialog(
+                                          backgroundColor: context.isDarkMode
+                                              ? AppColors.QUANTITY_COLOR
+                                              : Colors.white,
+                                          title: Text(
+                                            context.isArabic
+                                                ? "المسافة صغيرة جداً"
+                                                : "Distance too short",
+                                            style: const TextStyle(
+                                                color: AppColors.PRIMARY_COLOR),
+                                          ),
+                                          content: Text(context.isArabic
+                                              ? "أقل مسافة متاحة هي ${widget.minAllowedDistanceKm} كيلومتر."
+                                              : "The minimum allowed distance is ${widget.minAllowedDistanceKm} kilometers."),
+                                          actions: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: AppColors
+                                                    .PRIMARY_COLOR_DARK, // خلفية الزر
+                                                foregroundColor:
+                                                    Colors.white, // لون النص
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text(
+                                                context.isArabic
+                                                    ? "إغلاق"
+                                                    : "Close",
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    return;
+                                  }
+                                }
+
+                                final value = await pickData();
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                widget.onPicked(value);
+                              },
+                              backgroundColor: widget.buttonColor,
+                              foregroundColor: widget.buttonTextColor,
+                            ),
+                          ),
                   ),
                 )
               ],
@@ -478,10 +639,9 @@ log(url);
       },
     );
   }
-  bool isLoading = false;
+
   Future<bool> isLocationInEgypt(double lat, double lon) async {
     try {
-
       final url =
           '${widget.baseUri}/reverse?format=json&lat=$lat&lon=$lon&zoom=10&addressdetails=1';
       log(url);
@@ -497,7 +657,6 @@ log(url);
       return false;
     }
   }
-
 
   Future<PickedData> pickData() async {
     LatLong center = LatLong(

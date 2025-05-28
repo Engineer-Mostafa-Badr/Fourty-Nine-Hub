@@ -9,6 +9,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ImageGalleryPage extends StatelessWidget {
   final List<String> images;
@@ -81,7 +82,7 @@ class ImageGalleryPage extends StatelessWidget {
                   child: SizedBox(
                     width: 20.0,
                     height: 20.0,
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       value: event == null
                           ? 0
                           : event.cumulativeBytesLoaded /

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_speciality_filed.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -50,7 +51,7 @@ class _EditDoctorPersonalInfoViewState
             "widget.doctor.address.governorateId${widget.doctor.address.governorateId}");
         return state.isLoading
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               )
             : ListView(
                 padding: const EdgeInsets.all(18),

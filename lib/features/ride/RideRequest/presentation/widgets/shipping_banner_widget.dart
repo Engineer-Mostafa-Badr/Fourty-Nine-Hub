@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ShippingBannerWidget extends StatefulWidget {
   const ShippingBannerWidget({super.key});
@@ -26,7 +27,7 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
       builder: (context, state) {
         if (state is LoadingShippingState) {
           return const Center(
-            child: CircularProgressIndicator(
+            child: CustomCircularProgressIndicator(
               color: AppColors.PRIMARY_COLOR,
             ),
           );

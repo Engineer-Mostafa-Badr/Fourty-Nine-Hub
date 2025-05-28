@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart'; // Ensure correct path
@@ -153,7 +154,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CustomCircularProgressIndicator(),
             );
           } else if (state.cart != null && state.cart!.allItems.isNotEmpty) {
             // return Text("hi wwwwwwwwwwwwwwwwwwwwwwwwwwww");
@@ -532,7 +533,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                         ? const SizedBox(
                             width: 24,
                             height: 24,
-                            child: CircularProgressIndicator(
+                            child: CustomCircularProgressIndicator(
                               strokeWidth: 2.0,
                               color: Colors.white,
                             ),

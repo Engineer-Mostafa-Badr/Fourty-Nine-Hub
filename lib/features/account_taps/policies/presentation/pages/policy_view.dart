@@ -7,6 +7,7 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -67,7 +68,7 @@ class _PolicyViewState extends State<PolicyView> {
       ),
       body: Center(
         child: _isLoading
-            ? const CircularProgressIndicator()
+            ? const CustomCircularProgressIndicator()
             : _filePath != null
                 ? PDFView(
                     filePath: _filePath!,

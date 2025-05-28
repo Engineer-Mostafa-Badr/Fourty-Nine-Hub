@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/edit_clinic_time_table.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/edit_home_visit_time_table.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/time_table_options_checkbox.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -44,7 +45,7 @@ class _EditDoctorTimetableViewState extends State<EditDoctorTimetableView> {
       body: BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
           builder: (context, state) => state.status ==
                   EditDoctorTimetableStateStatus.initial
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CustomCircularProgressIndicator())
               : ListView(
                   padding: EdgeInsets.all(10.w),
                   shrinkWrap: true,
@@ -77,7 +78,7 @@ class _EditDoctorTimetableViewState extends State<EditDoctorTimetableView> {
                       const Sizer()
                     ],
                     state.status == EditDoctorTimetableStateStatus.editLoading
-                        ? const Center(child: CircularProgressIndicator())
+                        ? const Center(child: CustomCircularProgressIndicator())
                         : AppButton(
                             label: LocaleKeys.update.localize,
                             onPressed: () {

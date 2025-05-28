@@ -22,6 +22,7 @@ import '../../domain/useCase/update_media_privacy_use_case.dart';
 import '../../domain/useCase/update_only_with_privacy_use_case.dart';
 import '../../domain/useCase/update_personal_privacy_use_case.dart';
 import '../widgets/privacy_muti_select_item.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class PrivacyView extends StatelessWidget {
   PrivacyView({super.key});
@@ -43,8 +44,8 @@ class PrivacyView extends StatelessWidget {
               create: (BuildContext context) => serviceLocator()..loadData(),
               child: BlocBuilder<PrivacyCubit, PrivacyState>(
                 builder: (BuildContext context, state) {
-                  if (state.status == PrivacyStates.loading) {
-                    return const Center(child: CircularProgressIndicator());
+                  if(state.status == PrivacyStates.loading ){
+                    return const Center(child: CustomCircularProgressIndicator());
                   }
                   if (state.personalPrivacyEntity == null) {
                     return Center(
@@ -1313,7 +1314,7 @@ class PrivacyView extends StatelessWidget {
                       ),
                     );
                   }
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomCircularProgressIndicator());
                 },
               ),
             )

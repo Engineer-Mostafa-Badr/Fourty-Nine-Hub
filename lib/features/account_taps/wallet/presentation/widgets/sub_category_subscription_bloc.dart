@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fetch_sub_category_wallet/fetch_sub_category_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/main_category_subscription.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SubCategorySubscriptionBloc extends StatelessWidget {
   const SubCategorySubscriptionBloc({
@@ -19,7 +20,7 @@ class SubCategorySubscriptionBloc extends StatelessWidget {
       builder: (context, state) {
         if (state is FetchSubCategoryWalletLoading) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           );
         }
         if (state is FetchSubCategoryWalletSuccess) {

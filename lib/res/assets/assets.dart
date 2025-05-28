@@ -187,6 +187,7 @@ abstract class Assets {
   // navigator
   static String logo = 'assets/images/logo_600.png';
   static String womanPlaceHolder = 'assets/icons/woman_place_holder.png';
+  static String logoWithBlackText = 'assets/images/logoWithBlackText.png';
   static String allRestaurants = 'assets/images/allRestaurants.png';
   static String healthcare = 'assets/images/healthcare.png';
   static String facebookShare = 'assets/icons/share.png';
@@ -352,6 +353,7 @@ abstract class Assets {
   static String checkCircle = 'assets/icons/check-circle.png';
   static String walletImage = 'assets/images/wallet_image.svg';
   static String walletImageDark = 'assets/images/wallet_image_dark.svg';
+  static String welcomeLogin = 'assets/images/welcomeLogin.svg';
 
 // .png
   //drawer
@@ -638,6 +640,7 @@ abstract class Assets {
   static String marriage = "assets/images/marriage.png";
   static String ellipsis = "assets/icons/ellipsis.svg";
   static String reelBar = "assets/icons/reelBar.svg";
+  static String reelBarPng = "assets/icons/reelBar.png";
   static String gridIcon = "assets/icons/gridIcon.png";
   static String sliderIcon = "assets/icons/sliderIcon.png";
   static String grid = "assets/icons/grid.png";
@@ -691,4 +694,10 @@ abstract class Assets {
   static String verified = 'assets/icons/tinder/verified.png';
   static String volt = 'assets/icons/tinder/volt.png';
   static String zodiac = 'assets/icons/tinder/zodiac.png';
+
+
+  static String loginGIF = 'assets/gifs/loginGIF.gif';
+  static String langGIF = 'assets/gifs/languagGIF.gif';
+  static String themeModeGIF = 'assets/gifs/themeModeGIF.gif';
+  static String talentGIF = 'assets/gifs/talentGIF.gif';
 }

@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -269,7 +270,7 @@ class NormalPostScreen extends StatelessWidget {
           imageUrl: media[0],
           fit: BoxFit.cover,
           placeholder: (context, url) =>
-          const Center(child: CircularProgressIndicator()),
+          const Center(child: CustomCircularProgressIndicator()),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       );

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/live_card.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class VideoStreamTabBar extends StatefulWidget {
   const VideoStreamTabBar({super.key});
@@ -46,7 +47,7 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
         builder: (context, state) {
           final cubit = context.read<StreamCubit>();
           if (cubit.state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
 
           return PageView.builder(
@@ -59,7 +60,7 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
                 return LiveCard(live: cubit.rooms[index]);
               } else {
                 // Show loading indicator on the last extra page
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CustomCircularProgressIndicator());
               }
             },
           );

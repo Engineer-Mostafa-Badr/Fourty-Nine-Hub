@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/data/datasources/ride_remote_data_source.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
@@ -27,13 +29,16 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_regis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_non_track_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
@@ -151,13 +156,23 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRideBrands() async {
+  Future<Either<Failure, List<RideBrandEntity>>> getRideBrands() async {
     return await rideRemoteDataSource.getRideBrands();
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRideModels(String brand) async {
+  Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand) async {
     return await rideRemoteDataSource.getRideModels(brand);
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarModel(AddCarModelParams params) async {
+    return await rideRemoteDataSource.addCarModel(params);
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarBrand(String params) async {
+    return await rideRemoteDataSource.addCarBrand(params);
   }
 
   @override
@@ -443,5 +458,10 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params) async {
     return rideRemoteDataSource.ratingDriverByClient(params);
+  }
+
+  @override
+  void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params) {
+    return rideRemoteDataSource.listenToOfferUpdateUntrackedTrip(params);
   }
 }

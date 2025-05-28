@@ -163,7 +163,7 @@ class FareBottomSheetWidget2 extends StatelessWidget {
               selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
         );
 
-  final double selectedCategoryPrice;
+  final num selectedCategoryPrice;
   final String id;
   final String subCategoryId;
   final BuildContext contextScreen;
@@ -231,7 +231,7 @@ class FareBottomSheetWidget2 extends StatelessWidget {
               const SizedBox(height: 20),
               AppButton(
                       // iconWidget: state.isLoadingCreateOffer
-                      //     ? const CircularProgressIndicator.adaptive()
+                      //     ? const CustomCircularProgressIndicator()
                       //     : null,
                       width: double.infinity,
                       label: LocaleKeys.done.tr(),

@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/c
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/car_year_type_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CarModelRegisterCardWidget extends StatefulWidget {
   const CarModelRegisterCardWidget({super.key});
@@ -54,7 +55,7 @@ class _CarModelRegisterCardWidgetState
           BlocBuilder<GetCarBrandRideCubit, RiderState>(
             builder: (context, state) {
               if (state is LoadingRiderState) {
-                return const CircularProgressIndicator(
+                return const CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 );
               }
@@ -144,7 +145,7 @@ class _CarModelRegisterCardWidgetState
           BlocBuilder<GetCarModelByBrandRideCubit, RiderState>(
             builder: (context, state) {
               if (state is LoadingRiderState) {
-                return const CircularProgressIndicator(
+                return const CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 );
               }
@@ -242,7 +243,7 @@ class _CarModelRegisterCardWidgetState
           BlocBuilder<GetCarYearByModelRideCubit, RiderState>(
             builder: (context, state) {
               if (state is LoadingRiderState) {
-                return const CircularProgressIndicator(
+                return const CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 );
               }
@@ -333,7 +334,7 @@ class _CarModelRegisterCardWidgetState
                 BlocBuilder<GetCarColorsRideCubit, RiderState>(
                   builder: (context, state) {
                     if (state is LoadingRiderState) {
-                      return const CircularProgressIndicator(
+                      return const CustomCircularProgressIndicator(
                         color: AppColors.PRIMARY_COLOR,
                       );
                     }

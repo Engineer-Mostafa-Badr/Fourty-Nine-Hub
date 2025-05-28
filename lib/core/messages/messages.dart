@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../common/widgets/stateless/buttons/app_button.dart';
 import '../../common/widgets/stateless/buttons/default_button.dart';
@@ -242,7 +243,7 @@ void showLoadingDialog(BuildContext context,
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const CircularProgressIndicator.adaptive(),
+                  const CustomCircularProgressIndicator(),
                   const SizedBox(height: 20),
                   Text(
                     message ?? 'Loading...',
@@ -283,7 +284,7 @@ void showLoadingDialog(BuildContext context,
 //       content: Column(
 //         mainAxisSize: MainAxisSize.min,
 //         children: [
-//           const CircularProgressIndicator.adaptive(),
+//           const CustomCircularProgressIndicator(),
 //           Sizer(height: 20.h),
 //           Text(
 //             message ?? Labels.loading,

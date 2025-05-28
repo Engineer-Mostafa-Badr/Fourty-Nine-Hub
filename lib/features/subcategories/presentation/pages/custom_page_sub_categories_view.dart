@@ -185,7 +185,7 @@
 //             },
 //               builder: (context, state) {
 //               if (state.status == SubcategoriesStates.loading) {
-//                 return const Center(child: CircularProgressIndicator());
+//                 return const Center(child: CustomCircularProgressIndicator());
 //               }
 //               if (state.status == SubcategoriesStates.error) {
 //                 return Center(child: Text('state.failure!.message'));
@@ -252,11 +252,20 @@ import '../cubit/subcategories_cubit.dart';
 import '../widgets/floating_add_button.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
-class CustomPageSubCategoriesView extends StatefulWidget {
+class CustomPageSubCategoriesParams {
   final MainCategoryEntity mainCategory;
+  final bool isCustomPage;
 
-  const CustomPageSubCategoriesView({super.key, required this.mainCategory});
+  CustomPageSubCategoriesParams(
+      {required this.mainCategory, required this.isCustomPage,});
+}
 
+class CustomPageSubCategoriesView extends StatefulWidget {
+
+  const CustomPageSubCategoriesView(
+      {super.key, required this.params,});
+
+  final CustomPageSubCategoriesParams params;
   @override
   State<CustomPageSubCategoriesView> createState() =>
       _CustomPageSubCategoriesViewState();
@@ -269,14 +278,11 @@ class _CustomPageSubCategoriesViewState
 
   @override
   void initState() {
-    print('widget.mainCategory.id ${widget.mainCategory.id}');
-    // context
-    //     .read<SubcategoriesCubit>()
-    //     .init(mainCategoryId: widget.mainCategory.id);
+    print('widget.mainCategory.id ${widget.params.mainCategory.nameEn}');
     context
         .read<SubcategoriesCubit>()
-        .init(mainCategoryId: widget.mainCategory.id);
-    _fetchSubcategories();
+        .init(mainCategoryId: widget.params.mainCategory.id);
+    _fetchSubcategories(widget.params.isCustomPage);
     scrollController = ScrollController();
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection ==
@@ -293,12 +299,31 @@ class _CustomPageSubCategoriesViewState
   List<SubCategoryEntity> subCategories = [];
   String? selectedValue;
 
-  void _fetchSubcategories() async {
-    final subCategoriesList =
-    await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
-    setState(() {
-      subCategories = subCategoriesList;
-    });
+  Future<void> _fetchSubcategories(bool isCustomPage) async {
+    if (isCustomPage) {
+      final subCategoriesList =
+      await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
+      setState(() {
+        subCategories = subCategoriesList;
+      });
+      return;
+    } else {
+      final subCategoriesList = await context
+          .read<SubcategoriesCubit>()
+          .getSubcategories(
+          paginationParams: PaginationParams(page: 1, limit: 200),
+          mainCategoryId: widget.params.mainCategory.id);
+      setState(() {
+        subCategories = subCategoriesList;
+      });
+      print('subCategories.length ${subCategories.length}');
+      return;
+    }
+    // final subCategoriesList =
+    // await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
+    // setState(() {
+    //   subCategories = subCategoriesList;
+    // });
   }
 
   void _showDropdownMenu(BuildContext context) async {
@@ -358,7 +383,7 @@ class _CustomPageSubCategoriesViewState
                               Navigator.pop(context);
                               context.push(Routes.CREATEAD,
                                   extra: CategorizationEntity(
-                                      mainCategory: widget.mainCategory,
+                                      mainCategory: widget.params.mainCategory,
                                       subCategory: item));
                             } else {
                               return pleaseLoginDialog(context);
@@ -437,7 +462,7 @@ class _CustomPageSubCategoriesViewState
     return CustomScaffold(
       enableCustomAppBar: true,
       appBar: BackAppBar(
-        label: widget.mainCategory.name,
+        label: widget.params.mainCategory.name,
         textColor: Colors.white,
         iconColor: Colors.white,
         enableCustomAppBar: true,
@@ -481,7 +506,7 @@ class _CustomPageSubCategoriesViewState
                                 } else {
                                   context
                                       .read<SubcategoriesCubit>()
-                                      .getRequestsLog(widget.mainCategory.id);
+                                      .getRequestsLog(widget.params.mainCategory.id);
 
                                   context
                                       .read<SubcategoriesCubit>()
@@ -507,7 +532,7 @@ class _CustomPageSubCategoriesViewState
                             onPressed: () {
                               context
                                   .read<SubcategoriesCubit>()
-                                  .getRequestsLog(widget.mainCategory.id);
+                                  .getRequestsLog(widget.params.mainCategory.id);
                               context
                                   .read<SubcategoriesCubit>()
                                   .toggleMyAds('isRequestLogOpen');
@@ -533,7 +558,7 @@ class _CustomPageSubCategoriesViewState
                             } else {
                               context
                                   .read<SubcategoriesCubit>()
-                                  .getMarriageMyAds(widget.mainCategory.id);
+                                  .getMarriageMyAds(widget.params.mainCategory.id);
                               context
                                   .read<SubcategoriesCubit>()
                                   .toggleMyAds('isMyAdsOpen');
@@ -572,7 +597,7 @@ class _CustomPageSubCategoriesViewState
                           ),
                           itemBuilder: (context, index) =>
                               SubCategoryCard(
-                                mainCategory: widget.mainCategory,
+                                mainCategory: widget.params.mainCategory,
                                 item: data[index],
                                 onFav: () async {
                                   var result = await controller
@@ -583,10 +608,18 @@ class _CustomPageSubCategoriesViewState
                               ),
                         );
                       },
-                      fetchData: (PaginationParams paginationParams) =>
-                          context
+                      fetchData: (PaginationParams paginationParams)
+                      {
+                        if(widget.params.isCustomPage){
+                          return context
                               .read<SubcategoriesCubit>()
-                              .getCustomPageSubcategories(),
+                              .getCustomPageSubcategories();
+                        }else{
+                          return context
+                              .read<SubcategoriesCubit>()
+                              .getSubcategories(mainCategoryId: widget.params.mainCategory.id, paginationParams: PaginationParams(page: 1, limit: 200));
+                        }
+                  },
                     ),
                   ),
               ],

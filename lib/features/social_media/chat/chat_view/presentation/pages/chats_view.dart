@@ -671,7 +671,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       return state.chats == null || state.isLoading
           ?
           // const Center(
-          //     child: CircularProgressIndicator.adaptive(),
+          //     child: CustomCircularProgressIndicator(),
           //   )
           const SizedBox()
           : state.chats!.isEmpty
@@ -1343,7 +1343,7 @@ class ChatOptions extends StatelessWidget {
 //                 ? const SizedBox(
 //                     width: 16,
 //                     height: 16,
-//                     child: CircularProgressIndicator(
+//                     child: CustomCircularProgressIndicator(
 //                       color: Colors.white,
 //                       strokeWidth: 2,
 //                     ),

@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ForwardMessagesViewParams {
   final ChatsCubit chatsCubit;
@@ -183,7 +184,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                     );
                   } else {
                     return const Center(
-                      child: CircularProgressIndicator.adaptive(),
+                      child: CustomCircularProgressIndicator(),
                     );
                   }
                 }),
@@ -267,7 +268,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                               },
                               backgroundColor: AppColors.PRIMARY_COLOR,
                               child: isLoading
-                                  ? const CircularProgressIndicator(
+                                  ? const CustomCircularProgressIndicator(
                                       color: AppColors.BACKGROUND_COLOR)
                                   : const Icon(Icons.send,
                                       color: AppColors.BACKGROUND_COLOR),
@@ -287,7 +288,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
         return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
           return state.chats == null || state.isLoading
               ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
+                  child: CustomCircularProgressIndicator(),
                 )
               : state.chats!.isEmpty
                   ? Center(

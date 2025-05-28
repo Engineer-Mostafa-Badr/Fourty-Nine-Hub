@@ -24,7 +24,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_regis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
@@ -81,6 +83,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
+import '../../../domain/entities/trip_viewer_entity.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
 
@@ -107,6 +110,10 @@ class RideCubit extends Cubit<RideState> {
 
   bool selectedCategoryIsSocket = true;
   String subCategoryId = '';
+
+  List<TripViewerEntity> tripViewers = [];
+
+  final TextEditingController phoneNumberController = TextEditingController();
 
   Map<String, String> socketCategories = {
     'captain': '62c8ba9f8e28a58a3edf57eb',
@@ -235,10 +242,29 @@ class RideCubit extends Cubit<RideState> {
       });
 
       // near by driver
-      SharedWebSocket.socket!.on("subcategory:driver", (data) {
-        CliLogger.info("nearbyDriversAvailable:  $data");
-        emit(state.copyWith(status: RideStates.success));
+      SharedWebSocket.socket!.on("RIDE:VIEWER_TRIPS", (data) {
+        CliLogger.info("RIDE:VIEWER_TRIPS:  $data");
+
+        if (data != null && data is Map<String, dynamic>) {
+          final TripViewerEntity newViewer = TripViewerEntity.fromJson(data);
+
+          final bool alreadyExists = tripViewers.any(
+                (viewer) => viewer.driverUserId == newViewer.driverUserId,
+          );
+
+          if (!alreadyExists) {
+            tripViewers.add(newViewer);
+            CliLogger.info("✅ Driver added: ${newViewer.driverUserId}");
+          } else {
+            CliLogger.info("ℹ️ Driver already in list: ${newViewer.driverUserId}");
+          }
+
+          emit(state.copyWith(status: RideStates.success));
+        } else {
+          CliLogger.error("❌ Invalid data format in RIDE:VIEWER_TRIPS: $data");
+        }
       });
+
 
       // trip started socket event
       SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
@@ -667,9 +693,11 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        DriverInfoEntity? driverInfo = DriverInfoEntity(driverType: '');
+        emit(state.copyWith(status: RideStates.error,driverInfo:driverInfo, failure: failure));
       },
       (info) {
+        log("info.toJson()${info.toJson()}");
         emit(state.copyWith(
             status: RideStates.success,
             driverInfo: info,
@@ -701,7 +729,8 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        LoadingInfoEntity? loaderInfo = LoadingInfoEntity(status: '');
+        emit(state.copyWith(status: RideStates.error,loaderInfo: loaderInfo, failure: failure));
       },
       (info) {
         emit(state.copyWith(
@@ -892,7 +921,7 @@ class RideCubit extends Cubit<RideState> {
         polyline: polyline,
         wayPointOneTitle: wayPointOneTitle,
         wayPointTwoTitle: wayPointTwoTitle,
-        phoneNumber: "01211972375"
+        phoneNumber: phoneNumberController.text,
       ),
     );
 
@@ -1260,7 +1289,7 @@ class RideCubit extends Cubit<RideState> {
   }
 
   Future<void> fetchBrands(BuildContext context) async {
-    final Either<Failure, List<String>> result =
+    final Either<Failure, List<RideBrandEntity>> result =
         await getRideBrandsUseCase(const NoParams());
 
     result.fold(
@@ -1284,7 +1313,7 @@ class RideCubit extends Cubit<RideState> {
     'Subscribe Package',
   ];
 
-  List<String> models = [];
+  List<RideModelEntity> models = [];
   onSelectBrand(String brand, BuildContext context) async {
     if (brand == state.selectedBrand) return;
     emit(state.copyWith(
@@ -1317,7 +1346,7 @@ class RideCubit extends Cubit<RideState> {
   Future<void> fetchModels(String brandId, BuildContext context) async {
     models.clear();
     emit(state.copyWith(colors: [], status: RideStates.loadingModels));
-    final Either<Failure, List<String>> result =
+    final Either<Failure, List<RideModelEntity>> result =
         await getRideModelsUseCase(brandId);
 
     result.fold(

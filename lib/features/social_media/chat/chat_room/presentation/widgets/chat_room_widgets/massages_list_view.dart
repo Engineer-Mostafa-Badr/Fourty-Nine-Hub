@@ -43,7 +43,7 @@ import 'message_card.dart';
 //             );
 //           } else {
 //             return const Center(
-//               child: CircularProgressIndicator(),
+//               child: CustomCircularProgressIndicator(),
 //             );
 //           }
 //         },
@@ -162,7 +162,7 @@ class MessagesListView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       // if (index == state.messages!.length) {
                       //   // Show a loading indicator at the end
-                      //   return const Center(child: CircularProgressIndicator());
+                      //   return const Center(child: CustomCircularProgressIndicator());
                       // }
 
                       final message = state.messages![index];

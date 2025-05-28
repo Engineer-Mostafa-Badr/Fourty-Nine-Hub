@@ -17,6 +17,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+
 
 class ShareTheAppViewBody extends StatelessWidget {
   const ShareTheAppViewBody({super.key});
@@ -76,7 +78,7 @@ class ShareTheAppViewBody extends StatelessWidget {
             ),
           );
         }
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CustomCircularProgressIndicator());
       },
     );
   }

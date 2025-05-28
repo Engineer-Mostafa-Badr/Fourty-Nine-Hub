@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RetailAds extends StatefulWidget {
   const RetailAds({super.key});
@@ -34,7 +35,7 @@ class _RetailAdsState extends State<RetailAds> {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(builder: (context, state) {
       if (state.status == StateStatus.loading) {
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CustomCircularProgressIndicator());
       }
       return Padding(
         padding: EdgeInsets.all(16.w),
@@ -87,7 +88,7 @@ class _RetailAdsState extends State<RetailAds> {
             height: 30.h,
           ),
           state.status == StateStatus.loadingSubCategories
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CustomCircularProgressIndicator())
               : state.subCategories == null || (state.subCategories?.isEmpty ?? false)
                   ? const SizedBox()
                   : SizedBox(

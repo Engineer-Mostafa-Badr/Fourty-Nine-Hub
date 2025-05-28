@@ -229,7 +229,7 @@ class StarCubit extends Cubit<StarState> {
   //   return main;
   // }
 
-  Future<void> uploadStar({
+  Future<bool> uploadStar({
     required StarParams params,
   }) async {
     emit(state.copyWith(status: StarStates.loading));
@@ -239,15 +239,16 @@ class StarCubit extends Cubit<StarState> {
     response.fold(
       (failure) {
         emit(state.copyWith(failure: failure, status: StarStates.error));
+        return false;
       },
       (data) {
         emit(state.copyWith(
           status: StarStates.uploadSuccess,
-          
-
         ));
+        return true;
       },
     );
+    return false;
   }
 
   Future<void> fetchBanner() async {

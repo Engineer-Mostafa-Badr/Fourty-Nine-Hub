@@ -1608,5 +1608,6 @@ abstract class  LocaleKeys {
   static const youCantGetTripUntilYouReady = 'youCantGetTripUntilYouReady';
   static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
   static const noInternetConnection = 'noInternetConnection';
+  static const createAds = 'createAds';
 
 }

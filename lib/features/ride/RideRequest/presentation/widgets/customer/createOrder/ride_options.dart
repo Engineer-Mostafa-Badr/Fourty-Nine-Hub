@@ -8,6 +8,7 @@ import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../../../cubit/riderequest_cubit.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RideOptions extends StatelessWidget {
   const RideOptions({super.key});
@@ -19,7 +20,7 @@ class RideOptions extends StatelessWidget {
         builder: (context, state) {
       if (state.loading) {
         return const Center(
-          child: CircularProgressIndicator.adaptive(),
+          child: CustomCircularProgressIndicator(),
         );
       }
 

@@ -1,6 +1,8 @@
 import 'package:fourtyninehub/features/RideFeature/data/repositories/ride_repository_imp.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
@@ -40,6 +42,7 @@ import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/shipping_repository.dart';
 import '../features/RideFeature/domain/usecases/accept_non_track_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/cancel_non_track_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/client_trips/listen_to_offer_update_client_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_client_accepted_untracked_trips_use_case.dart';
@@ -163,6 +166,12 @@ class RideServiceLocatorUpdated {
 
     serviceLocator.registerLazySingleton<RatingDriverByClientUseCase>(() =>
         RatingDriverByClientUseCase(repository: serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToOfferUpdateUntrackedTripUseCase>(() =>
+        ListenToOfferUpdateUntrackedTripUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<AddCarModelUseCase>(() =>
+        AddCarModelUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<AddCarBrandUseCase>(() =>
+        AddCarBrandUseCase( serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
@@ -217,8 +226,11 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
     serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

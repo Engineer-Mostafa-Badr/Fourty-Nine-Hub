@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +32,8 @@ class GridBlocksWidget extends StatelessWidget {
         childAspectRatio: 1.5,
       ),
       children: [
-        _buildStarWidget(context,
+        _buildStarWidget(
+          context,
           onTap: () {
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
@@ -41,7 +43,8 @@ class GridBlocksWidget extends StatelessWidget {
           image: Assets.car2Image,
           title: LocaleKeys.ride.localize,
         ),
-        _buildStarWidget(context,
+        _buildStarWidget(
+          context,
           onTap: () {
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
@@ -51,7 +54,8 @@ class GridBlocksWidget extends StatelessWidget {
           image: Assets.doctorImage,
           title: LocaleKeys.health.localize,
         ),
-        _buildStarWidget(context,
+        _buildStarWidget(
+          context,
           onTap: () {
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
@@ -62,9 +66,10 @@ class GridBlocksWidget extends StatelessWidget {
           image: Assets.mealImage,
           title: LocaleKeys.meal.localize,
         ),
-        _buildStarWidget(context,
+        _buildStarWidget(
+          context,
           onTap: () {
-            if(!context.read<UserCubit>().isLoggedIn){
+            if (!context.read<UserCubit>().isLoggedIn) {
               return pleaseLoginDialog(context);
             }
             AdInterstitialTop.loadIntersitialAd();
@@ -72,27 +77,26 @@ class GridBlocksWidget extends StatelessWidget {
             HandleCashback.setCount('tripJoinCount', context);
             context.push(Routes.newRideModeScreen);
           },
-          shadowColor:
-          AppColors.PRIMARY_COLOR.withValues(alpha: .8),
+          shadowColor: context.isDarkMode
+              ? AppColors.whiteColor.withValues(alpha: .8)
+              : AppColors.PRIMARY_COLOR.withValues(alpha: .8),
           image: Assets.joinTrip,
           title: LocaleKeys.tripJoin.localize,
         ),
-        _buildStarWidget(context,
+        _buildStarWidget(
+          context,
           onTap: () {
-          if(!context.read<UserCubit>().isLoggedIn){
-            return pleaseLoginDialog(context);
-          }
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('beAStarCount', context);
             context.push(Routes.BE_STAR);
           },
-          shadowColor:
-          AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
           image: Assets.tube1,
           title: LocaleKeys.tube.localize,
         ),
-        _buildStarWidget(context,
+        _buildStarWidget(
+          context,
           onTap: () {
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
@@ -105,7 +109,9 @@ class GridBlocksWidget extends StatelessWidget {
       ],
     );
   }
-  Widget _buildStarWidget(context,{
+
+  Widget _buildStarWidget(
+    context, {
     void Function()? onTap,
     required Color shadowColor,
     required String title,

@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/enti
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -480,7 +481,7 @@ class _EditFoodViewState extends State<EditFoodView>
         var cubit = context.read<EditFoodCubit>();
         return state.isLoading
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               )
             : Column(
                 // controller: _scrollController,

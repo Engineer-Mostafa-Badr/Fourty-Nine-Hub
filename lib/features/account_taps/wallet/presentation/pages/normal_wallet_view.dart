@@ -25,6 +25,7 @@ import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
 import '../widgets/wallet_card_widget.dart';
 import '../widgets/wallet_history_card.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class NormalWalletView extends StatefulWidget {
   const NormalWalletView({super.key});
@@ -223,7 +224,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                   style: Styles.headerText(),
                 ),
                 state.status == WalletStates.loading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const Center(child: CustomCircularProgressIndicator())
                     : SizedBox(
                         height: 400,
                         child: ListView.separated(
@@ -232,7 +233,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                           itemBuilder: (context, index) {
                             if (index == _cubit.history.length) {
                               return const Center(
-                                  child: CircularProgressIndicator());
+                                  child: CustomCircularProgressIndicator());
                             }
                             final item = state.history![index];
                             return WalletHistoryCard(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
@@ -15,6 +16,9 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:flutter/src/services/text_formatter.dart';
+
 
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../helpers/subscription_method.dart';
@@ -111,7 +115,7 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
               if (state.isLoadingMoreMostBooking ?? false)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
+                  child: CustomCircularProgressIndicator(),
                 ),
             ],
           ),
@@ -576,8 +580,10 @@ class CallMessageReportButtons extends StatelessWidget {
             color: isChatEnabled == true
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
-            onPressed: isChatEnabled == true
-                ? () {
+            onPressed:
+            // isChatEnabled == true
+            //     ?
+                () {
                     showModalBottomSheet(
                       context: context,
                       backgroundColor: AppColors.getFindFillColor(context),
@@ -618,12 +624,12 @@ class CallMessageReportButtons extends StatelessWidget {
                       },
                     );
                   }
-                : () {
-                    SubscriptionMethod().subscribe(
-                      subscribeId: item.subCategory?.first.id ?? '',
-                      title: item.firstName ?? '',
-                    );
-                  },
+                // : () {
+                //     SubscriptionMethod().subscribe(
+                //       subscribeId: item.subCategory?.first.id ?? '',
+                //       title: item.firstName ?? '',
+                //     );
+                //   },
           ),
 
           // const SizedBox(width: 4),
@@ -746,33 +752,29 @@ class CallMessageReportButtons extends StatelessWidget {
                         const VisualDensity(horizontal: -4, vertical: -4),
                   ),
                   const SizedBox(height: 10),
-                  TextField(
-                    // enabled: isBookingForAnotherClient,
-                    controller: phoneController,
+                  DefaultTextFormField(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                    inputFormatter: [
+                      FilteringTextInputFormatter.digitsOnly, // يسمح بالأرقام فقط
+                    ],
+                    fillColor: Colors.transparent,
+                    borderColor: AppColors.getTextColor(context),
+                    currentController: phoneController,
+                    hint: LocaleKeys.phone.localize,
                     keyboardType: TextInputType.phone,
-                    style: TextStyle(
-                      color: AppColors.getTextColor(context),
-                    ),
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SvgPicture.asset(
-                          color: AppColors.getButtonPrimaryWhiteColor(context),
-                          Assets.phoneIconRed,
-                          width: 18,
-                          height: 18,
-                          fit: BoxFit.contain,
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Icon(
+                          Icons.phone,
+                          color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
+                          // size: 27,
                         ),
                       ),
-                      hintText: LocaleKeys.phone.localize,
-                      errorText: hasPhoneError
-                          ? LocaleKeys.enterPhoneNumber.localize
-                          : null,
-                      filled: true,
-                      fillColor: AppColors.getFillColor(context),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none),
                     ),
                   ),
                   const SizedBox(height: 20),

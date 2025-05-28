@@ -27,6 +27,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
@@ -82,7 +83,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
             builder: (context, state) {
               if (state is LoadingRiderState) {
                 return const Center(
-                  child: CircularProgressIndicator(
+                  child: CustomCircularProgressIndicator(
                     color: AppColors.PRIMARY_COLOR,
                   ),
                 );

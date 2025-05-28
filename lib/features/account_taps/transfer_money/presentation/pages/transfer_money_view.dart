@@ -23,6 +23,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../food_feature/create_restaurant/views/widgets/mneu/name/price_text_form_field.dart';
 import '../../domain/entities/user_transfer_money_entity.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class TransferMoneyView extends StatefulWidget {
   const TransferMoneyView({super.key});
@@ -252,7 +253,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                     ),
                     if (state.isTransferLoading)
                       const Center(
-                        child: CircularProgressIndicator(),
+                        child: CustomCircularProgressIndicator(),
                       ),
                     if (!state.isTransferLoading)
                       AppButton(
@@ -536,7 +537,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
         //               ),
         //               if (state.isTransferLoading)
         //                 const Center(
-        //                   child: CircularProgressIndicator(),
+        //                   child: CustomCircularProgressIndicator(),
         //                 ),
         //               if (!state.isTransferLoading)
         //                 AppButton(

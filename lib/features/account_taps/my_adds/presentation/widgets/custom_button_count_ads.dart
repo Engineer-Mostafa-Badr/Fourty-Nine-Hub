@@ -16,6 +16,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../domain/entity/get_all_count_ads_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/usecases/get_all_counts_ads_usecase.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CustomButtonCountAds extends StatelessWidget {
   const CustomButtonCountAds(
@@ -40,7 +41,7 @@ class CustomButtonCountAds extends StatelessWidget {
         child: BlocBuilder<MyAddsCubit, MyAddsState>(
           builder: (BuildContext context, state) {
             if (state.status == MyAddsStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             if (state.status == MyAddsStates.initState) {
               if (state.countAds == null || state.countAds!.isEmpty) {
@@ -56,7 +57,7 @@ class CustomButtonCountAds extends StatelessWidget {
                 ),
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
           },
         ),
