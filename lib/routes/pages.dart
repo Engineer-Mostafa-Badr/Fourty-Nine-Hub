@@ -723,9 +723,20 @@ class AppPages {
                                             payload: state.extra),
                                       ))
                             ],
-                            builder: (context, state) =>
-                                BlocProvider<AdDetailsCubit>(
-                                  create: (_) => serviceLocator(),
+                            builder: (context, state) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider<AdDetailsCubit>(
+                                      create: (_) => serviceLocator(),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) =>
+                                          serviceLocator<SubcategoriesCubit>(),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) =>
+                                          serviceLocator<AdvertisementCubit>(),
+                                    ),
+                                  ],
                                   child: AdDetailsView(payload: state.extra),
                                 )),
                         GoRoute(
@@ -773,7 +784,10 @@ class AppPages {
                           builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
-                                  child: CreatePostCompany(params: state.extra as CreatePostCompanyParams,)),
+                                  child: CreatePostCompany(
+                                    params:
+                                        state.extra as CreatePostCompanyParams,
+                                  )),
                         ),
 
                         GoRoute(
@@ -782,7 +796,9 @@ class AppPages {
                           builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
-                                  child: CreatePostReelCompany(totalPrice: state.extra as num,)),
+                                  child: CreatePostReelCompany(
+                                    totalPrice: state.extra as num,
+                                  )),
                         ),
                       ]),
                 ],
@@ -1351,8 +1367,7 @@ class AppPages {
                 path: Paths.SINGLEPOSTINSTAGRAM,
                 name: Routes.SINGLEPOSTINSTAGRAM,
                 builder: (context, state) {
-                  final String postId =
-                      state.extra as String;
+                  final String postId = state.extra as String;
 
                   return BlocProvider(
                     create: (context) =>
@@ -1797,9 +1812,19 @@ class AppPages {
               GoRoute(
                   path: Paths.VISITA,
                   name: Routes.VISITA,
-                  builder: (context, state) => BlocProvider<HealthCubit>(
-                      create: (_) => serviceLocator<HealthCubit>()..loadData(),
-                      child: HealthView()),
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider<HealthCubit>(
+                            create: (_) =>
+                                serviceLocator<HealthCubit>()..loadData(),
+                          ),
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<SubcategoriesCubit>(),
+                          ),
+                        ],
+                        child: const HealthView(),
+                      ),
                   routes: [
                     GoRoute(
                       path: Paths.CREATERESTURANT,
@@ -3525,10 +3550,10 @@ class AppPages {
                 name: Routes.supportRideScreen,
                 builder: (context, state) => BlocProvider(
                     create: (context) => serviceLocator<DashboardsCubit>(),
-                    child: SupportRideScreen(params: state.extra as SupportRideParams,)),
+                    child: SupportRideScreen(
+                      params: state.extra as SupportRideParams,
+                    )),
               ),
-
-
 
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
