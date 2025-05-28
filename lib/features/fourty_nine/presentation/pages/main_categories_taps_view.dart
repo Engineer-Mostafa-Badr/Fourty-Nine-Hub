@@ -50,6 +50,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
 
   @override
   void initState() {
+    // context.read<MainCategoriesTapsCubit>().selectMainCategory(0);
     super.initState();
     _tabController = TabController(
         length: context.read<MainCategoriesTapsCubit>().mainCategories.length,
@@ -71,14 +72,9 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
         setState(() {});
       });
     });
-    // controller.state.subCategories
     _fetchSubcategories(
-      stateSubCategories:
-          context.read<MainCategoriesTapsCubit>().state.subCategories,
+      stateSubCategories: [],
     );
-    // .mainCategories
-    // .first
-    // .subcategories);
   }
 
   @override
@@ -112,10 +108,24 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   List<SubCategoryEntity> subCategories = [];
   String? selectedValue;
 
+// TODO: Handel Pagination
   void _fetchSubcategories({
     List<SubCategoryEntity>? stateSubCategories,
   }) async {
     final subCategoriesList = stateSubCategories ?? [];
+    print(
+        'subCategories==> ${context.read<MainCategoriesTapsCubit>().subCategories.length}');
+    print(
+        'state.subCategories==> ${context.read<MainCategoriesTapsCubit>().state.subCategories?.length}');
+    if (stateSubCategories!.isEmpty) {
+      await context.read<MainCategoriesTapsCubit>().selectMainCategory(0);
+      subCategoriesList.addAll(
+        context.read<MainCategoriesTapsCubit>().subCategories,
+      );
+      print(
+          'stateSubCategories!.isEmpty==> ${context.read<MainCategoriesTapsCubit>().subCategories.length}');
+    }
+
     print(subCategoriesList);
     setState(() {
       subCategories = subCategoriesList;
@@ -124,7 +134,8 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   }
 
   void _showDropdownMenu(BuildContext context) async {
-    print(context.read<MainCategoriesTapsCubit>().selectedCategory);
+    print(
+        'selectedCategory in dropdown ${context.read<MainCategoriesTapsCubit>().selectedCategory.subcategories?.length}');
     print(subCategories);
     if (subCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -342,18 +353,19 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                   .read<SubcategoriesCubit>()
                                   .isFavouriteAdsOpen,
                               onPressed: () {
-    if (!context.isUserLoggedIn) {
-    return pleaseLoginDialog(context);
-    } else {
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .getRequestsLog(controller
-                                        .mainCategories[_tabController.index]
-                                        .id);
+                                if (!context.isUserLoggedIn) {
+                                  return pleaseLoginDialog(context);
+                                } else {
+                                  context
+                                      .read<SubcategoriesCubit>()
+                                      .getRequestsLog(controller
+                                          .mainCategories[_tabController.index]
+                                          .id);
 
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .toggleMyAds('isFavouriteAdsOpen');}
+                                  context
+                                      .read<SubcategoriesCubit>()
+                                      .toggleMyAds('isFavouriteAdsOpen');
+                                }
                               },
                             ),
                           ),
@@ -395,14 +407,16 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                             onPressed: () {
                               // TODO: EDIT THIS
                               if (!context.isUserLoggedIn) {
-                              return pleaseLoginDialog(context);
+                                return pleaseLoginDialog(context);
                               } else {
-                              context
-                                  .read<SubcategoriesCubit>()
-                                  .getMarriageMyAds('62c8b5b09332225799fe335e');
-                              context
-                                  .read<SubcategoriesCubit>()
-                                  .toggleMyAds('isMyAdsOpen');}
+                                context
+                                    .read<SubcategoriesCubit>()
+                                    .getMarriageMyAds(
+                                        '62c8b5b09332225799fe335e');
+                                context
+                                    .read<SubcategoriesCubit>()
+                                    .toggleMyAds('isMyAdsOpen');
+                              }
                               // context.push(Routes.MYADDS);
                             },
                           ),
@@ -790,18 +804,19 @@ class _MainCategoriesGridViewCustomPageState
                                   .read<SubcategoriesCubit>()
                                   .isFavouriteAdsOpen,
                               onPressed: () {
-    if (!context.isUserLoggedIn) {
-    return pleaseLoginDialog(context);
-    } else {
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .getRequestsLog(controller
-                                        .mainCategories[_tabController.index]
-                                        .id);
+                                if (!context.isUserLoggedIn) {
+                                  return pleaseLoginDialog(context);
+                                } else {
+                                  context
+                                      .read<SubcategoriesCubit>()
+                                      .getRequestsLog(controller
+                                          .mainCategories[_tabController.index]
+                                          .id);
 
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .toggleMyAds('isFavouriteAdsOpen');}
+                                  context
+                                      .read<SubcategoriesCubit>()
+                                      .toggleMyAds('isFavouriteAdsOpen');
+                                }
                               },
                             ),
                           ),
@@ -843,14 +858,16 @@ class _MainCategoriesGridViewCustomPageState
                             onPressed: () {
                               // TODO: EDIT THIS
                               if (!context.isUserLoggedIn) {
-                              return pleaseLoginDialog(context);
+                                return pleaseLoginDialog(context);
                               } else {
-                              context
-                                  .read<SubcategoriesCubit>()
-                                  .getMarriageMyAds('62c8b5b09332225799fe335e');
-                              context
-                                  .read<SubcategoriesCubit>()
-                                  .toggleMyAds('isMyAdsOpen');}
+                                context
+                                    .read<SubcategoriesCubit>()
+                                    .getMarriageMyAds(
+                                        '62c8b5b09332225799fe335e');
+                                context
+                                    .read<SubcategoriesCubit>()
+                                    .toggleMyAds('isMyAdsOpen');
+                              }
                               // context.push(Routes.MYADDS);
                             },
                           ),

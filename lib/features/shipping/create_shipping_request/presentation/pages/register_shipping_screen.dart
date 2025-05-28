@@ -32,6 +32,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RegisterShippingScreen extends StatefulWidget {
   const RegisterShippingScreen({super.key});
@@ -86,7 +87,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
           if (state is LoadingShippingState) {
             return const Align(
               child: Center(
-                child: CircularProgressIndicator(
+                child: CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 ),
               ),
@@ -358,7 +359,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           builder: (context, state) {
                             if (state.isLoading) {
                               return const Align(
-                                child: CircularProgressIndicator(
+                                child: CustomCircularProgressIndicator(
                                   color: AppColors.PRIMARY_COLOR,
                                 ),
                               );

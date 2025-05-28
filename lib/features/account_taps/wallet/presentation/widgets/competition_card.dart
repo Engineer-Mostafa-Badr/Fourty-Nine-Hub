@@ -15,6 +15,7 @@ import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/competitions_wallet_entity.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CompetitionCard extends StatelessWidget {
   final CompetitionsWalletEntity competitionsWalletEntity;
@@ -63,7 +64,7 @@ class CompetitionCard extends StatelessWidget {
                         Positioned.fill(
                           child: Padding(
                             padding: EdgeInsets.all(8.w),
-                            child: CircularProgressIndicator(
+                            child: CustomCircularProgressIndicator(
                               value: countOfRequest / maxRequests,
                               strokeWidth: 8,
                               color: AppColors.SECONDARY_COLOR,

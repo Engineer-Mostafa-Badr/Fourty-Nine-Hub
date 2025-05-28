@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -88,7 +89,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
           },
           builder: (BuildContext context, state) {
             if (state.status == StateStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             final controller = context.read<PaymentCacheOutCubit>();
             return Padding(

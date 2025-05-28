@@ -82,7 +82,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // if (isLoading) {
-    //   return const Center(child: CircularProgressIndicator());
+    //   return const Center(child: CustomCircularProgressIndicator());
     // }
     // if (images.isEmpty) {
     //   return const Center(child: Text('No images found!'));
@@ -295,7 +295,7 @@ class _ReelBodyCreatePostInstagramState
             //               _buildVideoControls(),
             //             ],
             //           )
-            //         : const Center(child: CircularProgressIndicator()),
+            //         : const Center(child: CustomCircularProgressIndicator()),
             //   ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),

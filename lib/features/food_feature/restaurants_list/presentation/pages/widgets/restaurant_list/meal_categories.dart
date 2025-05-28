@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../cubit/restaurants_list_cubit.dart';
@@ -107,7 +108,7 @@ class _MealCategoriesState extends State<MealCategories> {
                                     .subCategories
                                     .length) {
                               return const Center(
-                                  child: CircularProgressIndicator());
+                                  child: CustomCircularProgressIndicator());
                             }
 
                             final subCategory = context
@@ -142,7 +143,7 @@ class _MealCategoriesState extends State<MealCategories> {
                           },
                         )),
                   ),
-                  // if (state.isLoadingMore==true)  const Center(child: CircularProgressIndicator())
+                  // if (state.isLoadingMore==true)  const Center(child: CustomCircularProgressIndicator())
                 ],
               ),
             ],

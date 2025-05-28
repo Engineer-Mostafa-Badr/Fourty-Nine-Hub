@@ -8,6 +8,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 
 import '../../../../res/style/app_colors.dart';
@@ -277,7 +278,7 @@ class _AddressPickerWidgetState extends State<AddressPickerWidget> {
             Container(
               color: Colors.black.withOpacity(0.5),
               child: const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               ),
             ),
         ],

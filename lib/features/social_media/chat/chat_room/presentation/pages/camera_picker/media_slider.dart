@@ -281,7 +281,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                     ? AppColors.BACKGROUND_COLOR
                     : Colors.grey,
                 child: isLoading
-                    ? const CircularProgressIndicator(
+                    ? const CustomCircularProgressIndicator(
                         color: AppColors.PRIMARY_COLOR)
                     : const Icon(Icons.send, color: AppColors.PRIMARY_COLOR),
               ),
@@ -493,7 +493,7 @@ class _VideoPlayerCardState extends State<VideoPlayerCard> {
                 ),
               ),
             )
-          : const CircularProgressIndicator(),
+          : const CustomCircularProgressIndicator(),
     );
   }
 }

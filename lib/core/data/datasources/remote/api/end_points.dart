@@ -63,6 +63,7 @@ class EndPoints {
   static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
+  static const loginWithPhone = '/auth/login/phone-number';
   static const getProfile = '/users/profile';
   static const getCountries = '/ride/countries';
   static const register = '/auth/register';
@@ -204,7 +205,8 @@ class EndPoints {
   static String myStar =
       '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
   static String uploadStar =
-      '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      // '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      '/talent/upload';
   static String bannerTalent =
       '/talent/banner?subCategory=${Constants.tubeSubCategory}';
   static String deleteMyStar({required String id}) =>

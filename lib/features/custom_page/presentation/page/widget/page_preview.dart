@@ -204,8 +204,8 @@ class _PagePreviewState extends State<PagePreview>
                         },
                       ),
                     ),
-                    const ServicePagePreview(
-                      noNavBar: true,
+                    ServicePagePreview(
+                      noNavBar: widget.isButtonsVisible,
                     ),
                     // Container()
                   ],

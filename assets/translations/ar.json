@@ -156,8 +156,8 @@
   "governorate": "المحافظة",
   "city": "المدينة",
   "emptyFieldNotValid": "حقل فارغ غير صالح",
-  "login": "تسجيل الدخول",
-  "register": "تسجيل",
+  "login": "حسابى",
+  "register": "حساب جديد",
   "emailOrPhone": "البريد الإلكتروني",
   "password": "كلمة المرور",
   "forgetPassword": "نسيت كلمة المرور",
@@ -347,7 +347,7 @@
   "newBroadcast": "رسالة جماعية جديدة",
   "linkedDevice": "الاجهزة المرتبطة",
   "starredMessages": "الرسائل المميزة بنجمة",
-  "profile": "الملف الشخصي",
+  "profile": "ملف شخصي",
   "about": "الحالة",
   "phone": "الهاتف",
   "name": "الاسم",
@@ -833,7 +833,7 @@
   "deleteRegistration": "حذف التسجيل",
   "successUpdateDriver": "تم تحديث السائق بنجاح",
   "welcomeToShipRegister": "مرحبًا بك في سجل الشحن",
-  "subCategory": "فئة فرعية",
+  "subCategory": "فئه فرعيه",
   "carPicture": "صورة السيارة",
   "idNumber": "رقم الهوية",
   "plateInformation": "معلومات اللوحة",
@@ -1123,7 +1123,7 @@
   "reached": "وصل",
   "running": "جارية",
   "comeWithMe": "تعال معي",
-  "mainCategory": "الفئة الرئيسية",
+  "mainCategory": "فئه رئيسيه",
   "failedTryAgain": "فشل. من فضلك حاول مجددا",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
   "loadingDashboard": "لوحة تحكم تحميلة",
@@ -1615,6 +1615,7 @@
   "selectFromMap": "اختر من الخريطة",
   "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا",
   "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
-  "noInternetConnection": "لا يوجد اتصال بالإنترنت"
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+  "createAds": "انشاء اعلانات"
 
 }

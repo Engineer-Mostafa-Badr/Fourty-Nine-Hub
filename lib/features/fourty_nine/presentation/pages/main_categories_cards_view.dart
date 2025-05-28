@@ -15,16 +15,27 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/localization/locales.dart';
+import '../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
+
+class MainCategoriesCardsParams {
+  final List<MainCategoryEntity>? data;
+  final bool isCustomPage;
+
+  MainCategoriesCardsParams({
+    this.data,
+    required this.isCustomPage,
+  });
+}
 
 class MainCategoriesFlipCardsView extends StatefulWidget {
   const MainCategoriesFlipCardsView({
     super.key,
     this.isAppBarShow = true,
-    this.data,
+    required this.mainCategoriesCardsParams, // custom
   });
 
   final bool isAppBarShow;
-  final List<MainCategoryEntity>? data;
+  final MainCategoriesCardsParams mainCategoriesCardsParams;
 
   @override
   _MainCategoriesFlipCardsViewState createState() =>
@@ -57,10 +68,10 @@ class _MainCategoriesFlipCardsViewState
     // }
 
     // print('data is ${widget.data}');
-    if (widget.data != null) {
+    if (widget.mainCategoriesCardsParams.data != null) {
       labelName = context.isArabic
-          ? widget.data![0].name.toString()
-          : widget.data![0].nameEn.toString();
+          ? widget.mainCategoriesCardsParams.data![0].name.toString()
+          : widget.mainCategoriesCardsParams.data![0].nameEn.toString();
     }
     if (mainCategoriesCubit.state.customPage != null) {
       labelName = context.isArabic
@@ -81,144 +92,155 @@ class _MainCategoriesFlipCardsViewState
     // var mainCategories = mainCategoriesCubit.state.customPage ?? [];
     // var mainCategories = widget.data!;
     var mainCategories = <MainCategoryEntity>[];
-    if (widget.data != null) {
-      mainCategories = widget.data!;
+    print('BuildContext data is ${widget.mainCategoriesCardsParams.data}');
+    if (widget.mainCategoriesCardsParams.data != null) {
+      mainCategories = widget.mainCategoriesCardsParams.data!;
     } else if (mainCategoriesCubit.state.customPage != null) {
       mainCategories = mainCategoriesCubit.state.customPage!;
     }
     return Scaffold(
       appBar: widget.isAppBarShow
           ? PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: mainCategories.isNotEmpty ? labelName : '',
-        ),
-      )
+              preferredSize: const Size.fromHeight(30),
+              child: BackAppBar(
+                label: mainCategories.isNotEmpty ? labelName : '',
+              ),
+            )
           : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: widget.isAppBarShow ? MediaQuery
-                .sizeOf(context)
-                .height * .7 : 400,
+            height: widget.isAppBarShow
+                ? MediaQuery.sizeOf(context).height * .7
+                : 400,
             child: mainCategories.isEmpty
                 ? Center(
-              child: Label(text: LocaleKeys.noCategoriesAvailable.localize,),
-            )
-                : CardSwiper(
-              padding:
-              EdgeInsets.only(left: 10.w, right: 10.w, bottom: 20.h),
-              cardsCount: mainCategories.length,
-              onSwipe: (previousIndex, currentIndex, direction) {
-                // setState(() {
-                //   labelName = context.locale == Locales.english
-                //       ? mainCategoriesCubit
-                //           .state.customPage![currentIndex!].nameEn
-                //           .toString()
-                //       : mainCategoriesCubit
-                //           .state.customPage![currentIndex!].name
-                //           .toString();
-                // });
-                if (currentIndex != null &&
-                    currentIndex >= 0 &&
-                    currentIndex < mainCategories.length) {
-                  setState(() {
-                    labelName = (context.locale == Locales.english
-                        ? mainCategories[currentIndex].nameEn
-                        : mainCategories[currentIndex].name)!;
-                  });
-                }
-                return true;
-              },
-              cardBuilder:
-                  (context, index, percentThresholdX, percentThresholdY) {
-                return GestureDetector(
-                  onTap: () {
-                    final item = mainCategories[index];
-                    if (item.id == '62c8b5b09332225799fe335e') {
-                      context.push(Routes.MARRIAGESUBCATEGORIES,
-                          extra: item);
-                    } else {
-                      context.push(Routes.CustomPageSubCategoriesView,
-                          extra: item);
-                    }
-                  },
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: CachedNetworkImageProvider(
-                          mainCategories[index].banner,
-                        ),
-                      ),
-                      gradient: const LinearGradient(
-                        colors: [Colors.black, Colors.white],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
+                    child: Label(
+                      text: LocaleKeys.noCategoriesAvailable.localize,
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black38,
-                                  ),
-                                ],
+                  )
+                : CardSwiper(
+                    padding:
+                        EdgeInsets.only(left: 10.w, right: 10.w, bottom: 20.h),
+                    cardsCount: mainCategories.length,
+                    onSwipe: (previousIndex, currentIndex, direction) {
+                      // setState(() {
+                      //   labelName = context.locale == Locales.english
+                      //       ? mainCategoriesCubit
+                      //           .state.customPage![currentIndex!].nameEn
+                      //           .toString()
+                      //       : mainCategoriesCubit
+                      //           .state.customPage![currentIndex!].name
+                      //           .toString();
+                      // });
+                      if (currentIndex != null &&
+                          currentIndex >= 0 &&
+                          currentIndex < mainCategories.length) {
+                        setState(() {
+                          labelName = (context.locale == Locales.english
+                              ? mainCategories[currentIndex].nameEn
+                              : mainCategories[currentIndex].name)!;
+                        });
+                      }
+                      return true;
+                    },
+                    cardBuilder:
+                        (context, index, percentThresholdX, percentThresholdY) {
+                      return GestureDetector(
+                        onTap: () {
+                          final item = mainCategories[index];
+                          print('item id is ${item.id}');
+                          // print('item id is ${item}');
+                          if (item.id == '62c8b5b09332225799fe335e') {
+                            context.push(Routes.MARRIAGESUBCATEGORIES,
+                                extra: item);
+                          } else {
+                            context.push(
+                              Routes.CustomPageSubCategoriesView,
+                              extra: CustomPageSubCategoriesParams(
+                                mainCategory: item,
+                                isCustomPage: widget
+                                    .mainCategoriesCardsParams.isCustomPage,
                               ),
-                              child: Padding(
-                                padding:
-                                const EdgeInsetsDirectional.all(8),
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.end,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(10),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Colors.black26,
-                                            spreadRadius: 0.03,
-                                            blurRadius: 6,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Text(
-                                        mainCategories[index].name ?? '',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 60.sp,
-                                          color: Colors.white,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 100),
-                                  ],
-                                ),
+                            );
+                          }
+                        },
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16.0),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                mainCategories[index].banner,
                               ),
                             ),
+                            gradient: const LinearGradient(
+                              colors: [Colors.black, Colors.white],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16.0),
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black38,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.all(8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.black26,
+                                                  spreadRadius: 0.03,
+                                                  blurRadius: 6,
+                                                ),
+                                              ],
+                                            ),
+                                            child: Text(
+                                              mainCategories[index].name ?? '',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 60.sp,
+                                                color: Colors.white,
+                                              ),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 100),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
 
           // Expanded(

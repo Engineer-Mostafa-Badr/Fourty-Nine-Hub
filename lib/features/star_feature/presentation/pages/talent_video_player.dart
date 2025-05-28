@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../service_locator/service_locator.dart';
 import 'get_all_talents.dart';
@@ -132,7 +133,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer> {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         if (state.status == StarStates.loading && state.star == null) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         final videos = state.star ?? [];
@@ -177,7 +178,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer> {
                             placeholder: (context, url) => Container(
                               color: Colors.grey[300],
                               child: const Center(
-                                  child: CircularProgressIndicator()),
+                                  child: CustomCircularProgressIndicator()),
                             ),
                             errorWidget: (context, url, error) => Container(
                               color: Colors.grey[300],
@@ -245,7 +246,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer> {
                   : const AspectRatio(
                       aspectRatio: 16 / 9,
                       child: Center(
-                        child: CircularProgressIndicator(color: Colors.white),
+                        child: CustomCircularProgressIndicator(color: Colors.white),
                       ),
                     ),
             ),

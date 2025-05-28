@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 
@@ -70,7 +71,7 @@ class _FacebookSuggestedPeopleState extends State<FacebookSuggestedPeople> {
               (cubit.isLoadingMore ? 1 : 0),
           itemBuilder: (context, index) {
             if (index == cubit.facebookSuggestPeople.length) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
 
             final user = cubit.facebookSuggestPeople[index];

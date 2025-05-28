@@ -202,7 +202,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     ),
                   ],
                 );
-              //: const Center(child: CircularProgressIndicator());
+              //: const Center(child: CustomCircularProgressIndicator());
         },
       ),
     );

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
@@ -206,7 +207,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                 ],
               );
             } else if (state.status == CustomPageStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             } else {
               return Center(
                   child: Text(LocaleKeys.failedToLoadCategories.localize));

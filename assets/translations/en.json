@@ -1631,7 +1631,8 @@
   "selectFromMap": "Select from map",
   "youCantGetTripUntilYouReady": "You can't get trips until you ready",
   "youDontHaveAvailableOffer": "You don't Have Available Offers",
-  "noInternetConnection" : "No internet connection"
+  "noInternetConnection" : "No internet connection",
+  "createAds" : "Create Ads"
 
 
 }

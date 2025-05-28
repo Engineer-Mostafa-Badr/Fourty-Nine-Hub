@@ -17,6 +17,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../routes/routes.dart';
@@ -294,7 +295,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
       }
       return snapshot.data != null
           ? Text(getFormattedDuration(snapshot.data!))
-          : const CircularProgressIndicator();
+          : const CustomCircularProgressIndicator();
     } else {
       return Container();
     }

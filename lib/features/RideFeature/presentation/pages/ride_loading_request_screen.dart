@@ -103,7 +103,7 @@ import 'dashboards/widgets/client_offers_widget.dart';
 //           builder: (context, state) {
 //             return state.isLoading
 //                 ? Center(
-//                     child: CircularProgressIndicator(
+//                     child: CustomCircularProgressIndicator(
 //                       color: Theme.of(context).primaryColor,
 //                     ),
 //                   )

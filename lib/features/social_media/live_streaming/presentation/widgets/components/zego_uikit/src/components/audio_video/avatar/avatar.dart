@@ -11,7 +11,8 @@ import '../../../../../../../../../../authentication/presentation/controllers/us
 import '../../../services/defines/user.dart' as zego_local;
 import '../../../services/uikit_service.dart';
 import '../../defines.dart';
-import 'ripple_avatar.dart';
+import 'ripple_avatar.dart';import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+
 // Project imports:
 
 class ZegoAvatar extends StatelessWidget {
@@ -97,7 +98,7 @@ class ZegoAvatar extends StatelessWidget {
                     ),
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
+                            CustomCircularProgressIndicator(
                                 value: downloadProgress.progress),
                     errorWidget: (context, url, error) {
                       ZegoLoggerService.logError(

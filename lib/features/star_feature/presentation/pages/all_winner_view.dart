@@ -84,7 +84,7 @@ class _AllWinnerViewState extends State<AllWinnerView> {
             //   physics: const AlwaysScrollableScrollPhysics(),
             //   itemBuilder: (context, index) {
             //     if (index == _cubit.winner.length) {
-            //       return const Center(child: CircularProgressIndicator());
+            //       return const Center(child: CustomCircularProgressIndicator());
             //     }
             //     return buildItem(context, state.winner![index]);
             //   },

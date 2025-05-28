@@ -24,6 +24,7 @@ import '../../internal/pk_combine_notifier.dart';
 import '../defines.dart';
 import '../utils/pop_up_manager.dart';
 import '../utils/pop_up_sheet_menu.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 /// @nodoc
 class ZegoLiveStreamingMemberListSheet extends StatefulWidget {
@@ -271,7 +272,7 @@ class _ZegoLiveStreamingMemberListSheetState
                 ),
               ),
               progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
+                  CustomCircularProgressIndicator(value: downloadProgress.progress),
               errorWidget: (context, url, error) {
                 ZegoLoggerService.logInfo(
                   '$user avatar url is invalid',
@@ -514,7 +515,7 @@ class _ZegoLiveStreamingMemberListSheetState
         ),
       ),
       progressIndicatorBuilder: (context, url, downloadProgress) =>
-          CircularProgressIndicator(value: downloadProgress.progress),
+          CustomCircularProgressIndicator(value: downloadProgress.progress),
       errorWidget: (context, url, error) {
         ZegoLoggerService.logInfo(
           '$user avatar url is invalid',

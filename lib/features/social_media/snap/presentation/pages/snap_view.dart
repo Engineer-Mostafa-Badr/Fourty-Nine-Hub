@@ -26,6 +26,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../routes/routes.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SnapView extends StatelessWidget {
   const SnapView({super.key});
@@ -282,7 +283,7 @@ class _AdvancedSnapchatCameraScreenState
   Widget build(BuildContext context) {
     if (!isReady || !_cameraController.value.isInitialized) {
       return const CustomScaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CustomCircularProgressIndicator()),
       );
     }
 

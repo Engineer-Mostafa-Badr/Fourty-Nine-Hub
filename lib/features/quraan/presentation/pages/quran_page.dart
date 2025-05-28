@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.da
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
 import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 
@@ -34,7 +35,7 @@ class _QuranPageState extends State<QuranPage> {
         child: BlocBuilder<QuranCubit, QuranState>(
           builder: (context, state) {
             if (state.status == QuranStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             } else if (state.status == QuranStates.success) {
               return ListView.builder(
                 itemCount: state.quranSurah?.length,
@@ -48,6 +49,7 @@ class _QuranPageState extends State<QuranPage> {
                           builder: (context) => QuranViewPage(
                             surahId: state.quranSurah![index].surahNo,
                             pageNumber: 1,
+                            surahName: state.quranSurah![index].surahNameAr,
                           ),
                         ),
                       );
@@ -62,6 +64,7 @@ class _QuranPageState extends State<QuranPage> {
                             builder: (context) => QuranViewPage(
                               surahId: state.quranSurah![index].surahNo,
                               pageNumber: 1,
+                              surahName: state.quranSurah![index].surahNameAr,
                             ),
                           ),
                         );

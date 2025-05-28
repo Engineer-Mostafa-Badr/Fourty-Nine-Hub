@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/enums/wheel.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -51,7 +52,7 @@ class LuckyWheelView extends StatelessWidget {
         },
         builder: (context, state) {
           if (state.status != StateStatus.success) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
           return BlocBuilder<SpinWheelCubit, BasicState<WheelItemEntity>>(
             builder: (_, priceState) => Padding(

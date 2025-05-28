@@ -17,6 +17,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class AttachmentTypes extends StatefulWidget {
   final ChatRoomCubit chatRoomCubit;
@@ -34,7 +35,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(
-        child: CircularProgressIndicator(
+        child: CustomCircularProgressIndicator(
           color: AppColors.PRIMARY_COLOR,
         ))
         : GridView(

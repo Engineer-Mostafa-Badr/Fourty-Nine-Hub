@@ -303,6 +303,7 @@ import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
+import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
@@ -364,6 +365,8 @@ import '../features/authentication/presentation/controllers/create_new_forgot_pa
 import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
+import '../features/authentication/presentation/pages/complete_register_welcome_screen.dart';
+import '../features/authentication/presentation/pages/first_login_screen.dart';
 import '../features/authentication/presentation/pages/forgot_password/create_new_forget_password_view.dart';
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
 import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
@@ -518,6 +521,23 @@ class AppPages {
                 builder: (context, state) => const OnBoardingScreen(),
               ),
               GoRoute(
+                path: Routes.ChooseLangScreen,
+                name: Routes.ChooseLangScreen,
+                builder: (context, state) => const ChooseLangScreen(),
+              ),
+              GoRoute(
+                path: Routes.FirstLoginScreen,
+                name: Routes.FirstLoginScreen,
+                builder: (context, state) => const FirstLoginScreen(),
+              ),
+              GoRoute(
+                path: Routes.CompleteRegisterWelcomeScreen,
+                name: Routes.CompleteRegisterWelcomeScreen,
+                builder: (context, state) => CompleteRegisterWelcomeScreen(
+                  giftMessageEntity: state.extra as String,
+                ),
+              ),
+              GoRoute(
                 path: Paths.RestaurantDashboard,
                 name: Routes.RestaurantDashboard,
                 builder: (context, state) => MultiBlocProvider(
@@ -608,7 +628,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<MainCategoriesCubit>(),
                   child: MainCategoriesFlipCardsView(
-                    data: state.extra as List<MainCategoryEntity>,
+                    mainCategoriesCardsParams: state.extra as MainCategoriesCardsParams,
                   ),
                 ),
               ),
@@ -773,7 +793,10 @@ class AppPages {
                           builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
-                                  child: CreatePostCompany(params: state.extra as CreatePostCompanyParams,)),
+                                  child: CreatePostCompany(
+                                    params:
+                                        state.extra as CreatePostCompanyParams,
+                                  )),
                         ),
 
                         GoRoute(
@@ -782,7 +805,9 @@ class AppPages {
                           builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
-                                  child: CreatePostReelCompany(totalPrice: state.extra as num,)),
+                                  child: CreatePostReelCompany(
+                                    totalPrice: state.extra as num,
+                                  )),
                         ),
                       ]),
                 ],
@@ -793,7 +818,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider.value(
                   value: serviceLocator<SubcategoriesCubit>(),
                   child: CustomPageSubCategoriesView(
-                    mainCategory: state.extra as MainCategoryEntity,
+                    params: state.extra  as CustomPageSubCategoriesParams,
                   ),
                 ),
               ),
@@ -1351,8 +1376,7 @@ class AppPages {
                 path: Paths.SINGLEPOSTINSTAGRAM,
                 name: Routes.SINGLEPOSTINSTAGRAM,
                 builder: (context, state) {
-                  final String postId =
-                      state.extra as String;
+                  final String postId = state.extra as String;
 
                   return BlocProvider(
                     create: (context) =>
@@ -3525,10 +3549,10 @@ class AppPages {
                 name: Routes.supportRideScreen,
                 builder: (context, state) => BlocProvider(
                     create: (context) => serviceLocator<DashboardsCubit>(),
-                    child: SupportRideScreen(params: state.extra as SupportRideParams,)),
+                    child: SupportRideScreen(
+                      params: state.extra as SupportRideParams,
+                    )),
               ),
-
-
 
               GoRoute(
                 path: Paths.supportClientDetailsScreen,

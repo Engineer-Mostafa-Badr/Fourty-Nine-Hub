@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -188,7 +189,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
     return BlocBuilder<PrivacyCubit, PrivacyState>(
       builder: (context, state) {
         if (state.status == PrivacyStates.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         if (state.status == PrivacyStates.success) {
@@ -311,7 +312,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
     return BlocBuilder<PrivacyCubit, PrivacyState>(
       builder: (context, state) {
         if (state.status == PrivacyStates.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         if (state.status == PrivacyStates.error) {
@@ -380,8 +381,11 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                       },
                       child: Icon(
                         isSelected ? Icons.check_circle : Icons.circle_outlined,
-                        color:
-                            isSelected ? AppColors.PRIMARY_COLOR : Colors.grey,
+                        color: isSelected
+                            ? context.isDarkMode
+                                ? AppColors.whiteColor
+                                : AppColors.PRIMARY_COLOR
+                            : Colors.grey,
                       ),
                     ),
                   ],

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dash
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -149,7 +150,7 @@ class AvailableRideTripItem extends StatelessWidget {
                     ),
                   ),
                   state.isLoadingAcceptOffer
-                      ? const Center(child: CircularProgressIndicator())
+                      ? const Center(child: CustomCircularProgressIndicator())
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

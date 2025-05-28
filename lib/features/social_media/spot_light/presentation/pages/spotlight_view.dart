@@ -31,6 +31,7 @@ import '../../../reels/presentation/controllers/explore_reels_cubit/reel_cubit.d
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 //Todo:Mohamed Magdy: جميع الاكواد اللي معمول لها كومينت هي اكواد فيها لوجيك انا شايلها عشان اشتغل علي ال يو اي او اكواد ملغيه انا عاملها كومنت عشان لو اللي هيربط يستفاد منها او ياخد اجزاء منها
 class SpotlightView extends StatefulWidget {
@@ -149,7 +150,7 @@ class _SpotlightViewState extends State<SpotlightView> {
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   ),
                 ),
               ),
@@ -303,7 +304,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                   //     right: 16,
                   //     top: 16,
                   //     bottom: 16,
-                  //     child: Center(child: CircularProgressIndicator()),
+                  //     child: Center(child: CustomCircularProgressIndicator()),
                   //   ),
                 ],
               );

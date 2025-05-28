@@ -38,6 +38,7 @@ import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class OtherAccountView extends StatefulWidget {
   OtherAccountView({super.key, payload}) {
@@ -80,7 +81,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CustomCircularProgressIndicator())
               : CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(

@@ -21,6 +21,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class TripJoinRequestBuilder extends StatefulWidget {
   const TripJoinRequestBuilder({super.key});
@@ -84,7 +85,7 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
         children: [
           Sizer(),
           Center(
-              child: CircularProgressIndicator(
+              child: CustomCircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
           )),
         ],

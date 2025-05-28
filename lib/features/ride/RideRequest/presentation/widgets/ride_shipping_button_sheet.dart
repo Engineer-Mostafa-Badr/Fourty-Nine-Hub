@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RideShippingButtonSheet extends StatelessWidget {
   const RideShippingButtonSheet({super.key, required this.model});
@@ -28,8 +29,8 @@ class RideShippingButtonSheet extends StatelessWidget {
           BlocBuilder<ShippingCubit, ShippingState>(
             builder: (context, state) {
               if (state is LoadingShippingState) {
-                return const Center(
-                  child: CircularProgressIndicator(
+                return Center(
+                  child: CustomCircularProgressIndicator(
                     color: AppColors.PRIMARY_COLOR,
                   ),
                 );

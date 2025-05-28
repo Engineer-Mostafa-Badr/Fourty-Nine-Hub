@@ -72,7 +72,7 @@ class CashbackViewBody extends StatelessWidget {
                   isWaitingApproval: state.cashback?.isWaitingApproval ?? false,
                 ),
                 // state.isLoadingButton
-                //     ? const Center(child: CircularProgressIndicator())
+                //     ? const Center(child: CustomCircularProgressIndicator())
                 //     : CustomButtonWalletAndGiftAndCashback(
                 //         title: LocaleKeys.requestTransaction2.localize,
                 //         status: state.cashback!.balance >= 1002,

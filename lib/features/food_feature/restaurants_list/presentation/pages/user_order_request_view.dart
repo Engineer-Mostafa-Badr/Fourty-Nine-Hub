@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.da
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/restaurants_list_cubit.dart';
@@ -81,14 +82,14 @@ class _UserOrderRequestScreenState
                   ),
                   if (controller.isLoadingExpiredOrdersMore)
                     const Center(
-                      child: CircularProgressIndicator(),
+                      child: CustomCircularProgressIndicator(),
                     )
                 ],
               ),
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CustomCircularProgressIndicator(),
             );
           }
         });

@@ -16,6 +16,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -66,7 +67,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
           final controller = context.read<RestaurantDashboardCubit>();
 
           if (state.status == RestaurantDashboardStates.loading && controller.orders.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
 
           if (controller.orders.isEmpty) {
@@ -594,7 +595,7 @@ class _PastRequestFoodState extends State<PastRequestFood> {
           final controller = context.read<RestaurantDashboardCubit>();
 
           if (state.status == RestaurantDashboardStates.loading && controller.ordersPast.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
 
           if (controller.ordersPast.isEmpty) {
