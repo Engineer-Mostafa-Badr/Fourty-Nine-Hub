@@ -79,6 +79,8 @@ class DashboardsState
   final XFile? vehicleFrontPicture;
   final XFile? vehicleBackPicture;
   final XFile? personalTechnicalExaminationPicture;
+  final List<GovernorateEntity>? govs;
+  final GovernorateEntity? selectedGov;
 
   const DashboardsState(
       {this.failure,
@@ -117,6 +119,8 @@ class DashboardsState
         this.vehicleFrontPicture,
         this.vehicleBackPicture,
         this.personalTechnicalExaminationPicture,
+        this.selectedGov,
+        this.govs,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -151,6 +155,8 @@ class DashboardsState
         XFile? backOfDriverLicensePicture,
         XFile? selfieDriverLicensePicture,
         RateResponseEntity? rateResponseEntity,
+        List<GovernorateEntity>? govs,
+        GovernorateEntity? selectedGov,
 
         XFile? vehiclePicture,
         XFile? vehicleFrontPicture,
@@ -194,6 +200,8 @@ class DashboardsState
       vehicleFrontPicture: vehicleFrontPicture ?? this.vehicleFrontPicture,
       vehicleBackPicture: vehicleBackPicture ?? this.vehicleBackPicture,
       personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
+      govs: govs ?? this.govs,
+      selectedGov: selectedGov ?? this.selectedGov,
     );
   }
 
