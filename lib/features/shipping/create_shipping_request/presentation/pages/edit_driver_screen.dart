@@ -26,6 +26,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class EditDriverScreen extends StatefulWidget {
   const EditDriverScreen({super.key});
@@ -86,7 +87,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
               if (mainState is LoadingShippingState) {
                 return const Align(
                   child: Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
                     ),
                   ),
@@ -940,7 +941,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
               } else {
                 return const Align(
                   child: Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
                     ),
                   ),

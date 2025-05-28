@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_personal_info/edit_doctor_personal_info_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 
@@ -75,7 +76,7 @@ class EditDoctorAddressField extends StatelessWidget {
             height: 20.h,
           ),
           state.isLoadingCities
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CustomCircularProgressIndicator())
               : (state.isLoadingCitiesSuccess ||
                       state.selectedGovernorateId != null)
                   ? SizedBox(

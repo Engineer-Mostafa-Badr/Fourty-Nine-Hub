@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import '../../../../subscripe/presentation/widgets/amounts.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ChargeWalletButtonBloc extends StatelessWidget {
   const ChargeWalletButtonBloc({
@@ -36,7 +37,7 @@ class ChargeWalletButtonBloc extends StatelessWidget {
       builder: (context, state) {
         if (state is ChargeWalletLoading) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           );
         } else {
           return CustomButtonWalletAndGiftAndCashback(

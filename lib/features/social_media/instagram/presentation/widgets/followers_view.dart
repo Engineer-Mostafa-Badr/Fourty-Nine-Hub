@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import 'instagram_user_follow_widget.dart';
 
@@ -92,7 +93,7 @@ class _FollowersViewState extends State<FollowersView> {
         BlocBuilder<FollowCubit, FollowState>(
           builder: (context, state) {
             if (state.isLoading && _cubit.followers.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             return Expanded(
               child: ListView.separated(
@@ -103,7 +104,7 @@ class _FollowersViewState extends State<FollowersView> {
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {
                   if (index == _cubit.followers.length) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CustomCircularProgressIndicator());
                   }
                   final followers = _cubit.followers[index];
                   return GestureDetector(

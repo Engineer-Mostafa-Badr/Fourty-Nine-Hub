@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -123,7 +124,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
               ),
               const Sizer(),
               state.status == CreateAdStates.loadCities
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(child: CustomCircularProgressIndicator())
                   : state.status == CreateAdStates.loadCitiesSuccess
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

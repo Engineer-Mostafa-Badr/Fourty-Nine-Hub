@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -55,7 +56,7 @@ class _SelectFeelingViewState extends State<SelectFeelingView> {
         body: BlocBuilder<CreatePostCubit,CreatePostState>(
             builder: (context,state) {
               var cubit = context.read<CreatePostCubit>();
-              return cubit.loadFeelings==true?const Center(child: CircularProgressIndicator(),):Column(
+              return cubit.loadFeelings==true?const Center(child: CustomCircularProgressIndicator(),):Column(
                 children: [
                   Expanded(
                     child: GridView.builder(
@@ -94,7 +95,7 @@ class _SelectFeelingViewState extends State<SelectFeelingView> {
                   cubit.isLoadingMoreFeelings?const Column(
                       children: [
                         Sizer(),
-                        Center(child: CircularProgressIndicator()),
+                        Center(child: CustomCircularProgressIndicator()),
                       ]):const SizedBox(),
 
                 ],

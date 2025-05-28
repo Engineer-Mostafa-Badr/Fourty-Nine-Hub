@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/cu
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/image_text_row.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../helpers/subscription_method.dart';
@@ -559,7 +560,7 @@ class _RidePersonalMoreInfoScreenState
                 text: LocaleKeys.freeCancellation.localize),
             const SizedBox(height: 15),
             state.isLoadingSubmit
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(child: CustomCircularProgressIndicator())
                 : SizedBox(
                     height: 40,
                     child: Row(

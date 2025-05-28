@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../domain/entities/booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
@@ -96,7 +97,7 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
               if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
+                  child: CustomCircularProgressIndicator(),
                 ),
             ],
           ),

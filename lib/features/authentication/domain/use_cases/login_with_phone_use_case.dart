@@ -1,0 +1,46 @@
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
+
+class LoginWithPhoneUseCase
+    extends UseCase<UserTokensEntity, LoginWithPhoneParams> {
+  final AuthRepository _repository;
+
+  LoginWithPhoneUseCase(this._repository);
+
+  @override
+  Future<Either<Failure, UserTokensEntity>> call(LoginWithPhoneParams params) {
+    return _repository.loginWithPhone(params);
+  }
+}
+
+class LoginWithPhoneParams extends Equatable {
+  final String phoneNumber;
+  final String password;
+  final String token;
+
+  const LoginWithPhoneParams({
+    required this.phoneNumber,
+    required this.password,
+    required this.token,
+  });
+
+  Future<Map<String, dynamic>> toJson() async => {
+        'phoneNumber': phoneNumber,
+        'password': password,
+        'fcmToken': token,
+        "deviceId":
+            "3b53853fa46eedcdb5bacfcfa154fddadd4ad9d504c13c5d60ffc533245d63dd",
+        // 'fcmToken': 'fcmToken',
+      };
+
+  @override
+  List<Object?> get props => [
+        phoneNumber,
+        password,
+        token,
+      ];
+}

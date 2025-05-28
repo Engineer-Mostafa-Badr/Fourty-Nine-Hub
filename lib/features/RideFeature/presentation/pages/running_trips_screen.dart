@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/in
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/person_trip_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/rate_car_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
@@ -93,7 +94,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomCircularProgressIndicator());
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 } else if (state.status == RideStates.success) {
@@ -105,7 +106,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
                     itemCount: (state.runningTrips?.length ?? 0) + (isFetching ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == state.runningTrips?.length) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
                       final trip = state.runningTrips?[index];
                       if (trip == null) return const SizedBox.shrink();

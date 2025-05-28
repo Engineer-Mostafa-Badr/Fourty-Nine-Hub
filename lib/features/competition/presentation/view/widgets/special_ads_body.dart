@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/competition/presentation/view/widgets/bui
 import '../../../../../service_locator/service_locator.dart';
 import '../../cubit/competition_cubit/competition_cubit.dart';
 import '../../cubit/competition_cubit/competition_state.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SpecialAdsBody extends StatelessWidget {
   const SpecialAdsBody({super.key});
@@ -52,7 +53,7 @@ class SpecialAdsBody extends StatelessWidget {
               ),
             );
           }
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         },
       ),
     );

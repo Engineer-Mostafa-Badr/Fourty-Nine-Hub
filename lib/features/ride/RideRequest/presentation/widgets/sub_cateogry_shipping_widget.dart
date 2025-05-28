@@ -23,6 +23,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SubCateogryShippingWidget extends StatefulWidget {
   const SubCateogryShippingWidget({
@@ -54,7 +55,7 @@ class _SubCateogryShippingWidgetState extends State<SubCateogryShippingWidget> {
         if (status is LoadingShippingState) {
           return const Align(
             child: Center(
-              child: CircularProgressIndicator(
+              child: CustomCircularProgressIndicator(
                 color: AppColors.PRIMARY_COLOR,
               ),
             ),
@@ -65,7 +66,7 @@ class _SubCateogryShippingWidgetState extends State<SubCateogryShippingWidget> {
             log(state.toString());
             if (state is LoadingShippingState) {
               return const Center(
-                child: CircularProgressIndicator(
+                child: CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 ),
               );

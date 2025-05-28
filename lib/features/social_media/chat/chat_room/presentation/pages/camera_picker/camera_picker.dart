@@ -22,6 +22,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../../core/widget/custom_scaffold.dart';
 
@@ -599,7 +600,7 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
     return SizedBox(
       height: 80,
       width: 80,
-      child: CircularProgressIndicator(
+      child: CustomCircularProgressIndicator(
         value: 1 - (_time / widget.duration.inSeconds),
         valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
         backgroundColor: AppColors.SECONDARY_COLOR,

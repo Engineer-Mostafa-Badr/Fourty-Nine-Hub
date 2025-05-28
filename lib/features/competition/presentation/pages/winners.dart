@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/competition/presentation/view/widgets/win
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class Winners extends StatelessWidget {
   const Winners({super.key});
@@ -43,7 +44,7 @@ class Winners extends StatelessWidget {
                 ),
               );
             }
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           },
         ),
       ),

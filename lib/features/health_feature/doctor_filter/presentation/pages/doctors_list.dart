@@ -12,6 +12,7 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -92,7 +93,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
 
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CustomCircularProgressIndicator(),
             );
           } else {
             return
@@ -132,7 +133,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                 ),
                 // if (context.read<DoctorsListCubit>().isLoadingMore)
                 //   const Center(
-                //     child: CircularProgressIndicator(),
+                //     child: CustomCircularProgressIndicator(),
                 //   )
               ],
             );

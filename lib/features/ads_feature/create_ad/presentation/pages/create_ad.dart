@@ -34,6 +34,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/categorization_entity.dart';
 import '../widgets/ad_dynamic_inputs.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CreateAdView extends StatefulWidget {
   final CategorizationEntity categorization;
@@ -442,7 +443,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         height: 10,
                       ),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CircularProgressIndicator())
+                          ? const Center(child: CustomCircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -636,7 +637,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         height: 16,
                       ),
                       state.isLoadingCreateAd
-                          ? const Center(child: CircularProgressIndicator())
+                          ? const Center(child: CustomCircularProgressIndicator())
                           : Row(
                               children: [
                                 Expanded(

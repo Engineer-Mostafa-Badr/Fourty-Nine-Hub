@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -190,7 +191,7 @@ class UploadVideo {
                         const CircularProgressIndicator.adaptive(),
                         const SizedBox(height: 20),
                         Text(
-                          'Loading...',
+                          context.isArabic?'جاري التحميل...':'Loading...',
                           textAlign: TextAlign.center,
                         ),
                       ],

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -92,7 +93,7 @@ class UploadImages{
                         const CircularProgressIndicator.adaptive(),
                         const SizedBox(height: 20),
                         Text(
-                           'Loading...',
+                           context.isArabic?'جاري التحميل...':'Loading...',
                           textAlign: TextAlign.center,
                         ),
                       ],

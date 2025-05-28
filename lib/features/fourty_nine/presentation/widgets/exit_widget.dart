@@ -100,30 +100,34 @@ class ExitWidget extends StatelessWidget {
                       color: context.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Expanded(
+                        child: buildButton(
+                          context,
+                          label: LocaleKeys.yes.localize,
+                          color: AppColors.SECONDARY_COLOR,
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            SystemNavigator.pop();
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: buildButton(
+                          context,
+                          label: LocaleKeys.no.localize,
+                          onTap: () {
+                            Navigator.of(context).pop(false);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              actionsPadding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              actions: [
-                buildButton(
-                  context,
-                  label: LocaleKeys.yes.localize,
-                  color: AppColors.SECONDARY_COLOR,
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    SystemNavigator.pop();
-                  },
-                ),
-                buildButton(
-                  context,
-                  label: LocaleKeys.no.localize,
-                  onTap: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-                // buildButton(LocaleKeys.sure.localize, AppColors.PRIMARY_COLOR,Colors.white,(){SystemNavigator.pop();}),
-                // buildButton(LocaleKeys.no.localize, Colors.white,AppColors.PRIMARY_COLOR,(){Navigator.of(context).pop(false);}),
-              ],
+
             )) ??
         false;
     // return await showDialog<bool>(
@@ -193,7 +197,7 @@ class ExitWidget extends StatelessWidget {
         //     : (context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white),
         padding: const EdgeInsets.all(0),
         minimumSize: const Size(70, 30),
-        maximumSize: const Size(70, 30),
+        maximumSize: const Size(200, 30),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

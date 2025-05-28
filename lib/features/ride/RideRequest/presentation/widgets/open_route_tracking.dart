@@ -107,7 +107,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
       ),
       body:
           // currentLocation == null
-          //     ? const Center(child: CircularProgressIndicator())
+          //     ? const Center(child: CustomCircularProgressIndicator())
           //     :
           FlutterMap(
         mapController: mapController,

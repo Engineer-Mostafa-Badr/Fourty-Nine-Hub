@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ImagesPageViewParams {
   final MessageEntity messageEntity;
@@ -247,7 +248,7 @@ class _CustomVideoPlayerCardState extends State<CustomVideoPlayerCard> {
                 ),
               ),
             )
-          : const CircularProgressIndicator(),
+          : const CustomCircularProgressIndicator(),
     );
   }
 
