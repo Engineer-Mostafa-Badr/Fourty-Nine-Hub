@@ -111,7 +111,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isCaptainShare = value;
                   });
                 }),
-            switchWidget(
+            if((widget.settings?.categoryIds.length ?? 0) >= 1)switchWidget(
                 title: widget
                     .settings?.categoryIds[0].pictureUrl, //Assets.greyCar,
                 isText: false,
@@ -125,7 +125,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isCaptain = value;
                   });
                 }),
-            switchWidget(
+            if((widget.settings?.categoryIds.length ?? 0) > 1)switchWidget(
                 title: widget
                     .settings?.categoryIds[1].pictureUrl, //Assets.greyCar,
                 isText: false,
