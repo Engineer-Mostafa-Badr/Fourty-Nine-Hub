@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_item.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/cart_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart'; // Ensure correct path
@@ -152,18 +154,13 @@ class _FoodCartViewState extends State<FoodCartView> {
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CustomCircularProgressIndicator(),
             );
           } else if (state.cart != null && state.cart!.allItems.isNotEmpty) {
             // return Text("hi wwwwwwwwwwwwwwwwwwwwwwwwwwww");
             return _buildCartContent(state.cart!);
           } else {
-            return Center(
-              child: Text(
-                LocaleKeys.your_cart_empty.tr(),
-                style: Styles.headerText(),
-              ),
-            );
+            return CustomEmptyWidget(label: LocaleKeys.your_cart_empty.tr(),);
           }
         },
       ),
@@ -243,11 +240,11 @@ class _FoodCartViewState extends State<FoodCartView> {
           },
         ),
         Align(
-          alignment: Alignment.centerRight,
+          alignment:context.isArabic?Alignment.centerRight:Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              '${LocaleKeys.restaurant_total.tr()} ${cartItem.total.toStringAsFixed(2)} ${currency}',
+              '${LocaleKeys.restaurant_total.tr()} ${context.isArabic?NumberFormat.decimalPattern('ar').format(cartItem.total):(cartItem.total).toStringAsFixed(0)} ${currency}',
               style: Styles.headerText(),
             ),
           ),
@@ -329,7 +326,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         Row(
           children: [
             Text(
-              (subTotal ?? 0.0).toStringAsFixed(2),
+              context.isArabic?NumberFormat.decimalPattern('ar').format(subTotal ?? 0.0):(subTotal ?? 0.0).toStringAsFixed(0),
               style: Styles.headerText(),
             ),
             Text(
@@ -536,7 +533,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                         ? const SizedBox(
                             width: 24,
                             height: 24,
-                            child: CircularProgressIndicator(
+                            child: CustomCircularProgressIndicator(
                               strokeWidth: 2.0,
                               color: Colors.white,
                             ),

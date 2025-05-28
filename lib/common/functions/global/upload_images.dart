@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -17,6 +18,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class UploadImages{
   Future<Either<Failure, bool>?> uploadImage(
@@ -71,7 +73,52 @@ class UploadImages{
 
         XFile finalFile = XFile(croppedImages[0].path??'');
         List<XFile> finalFiles = List<XFile>.generate(croppedImages.length, (index) => XFile(croppedImages[index].path));
-        showLoadingDialog(context);
+        showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          transitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (context, _, __) {
+            return PopScope(
+              canPop: false,
+              child: Center(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CustomCircularProgressIndicator(),
+                        const SizedBox(height: 20),
+                        Text(
+                           context.isArabic?'جاري التحميل...':'Loading...',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    contentPadding: const EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                      top: 20,
+                      bottom: 40,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+              ),
+              child: child,
+            );
+          },
+        );
         List<File> compressedImages = [];
         final tempDir = await getTemporaryDirectory();
 

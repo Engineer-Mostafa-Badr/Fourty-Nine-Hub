@@ -30,6 +30,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
 
@@ -183,7 +184,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                           name: "slkfjsldkjfdkdkkkkdddddddddd");
                                       if (state is LoadingRiderState) {
                                         return const Center(
-                                          child: CircularProgressIndicator(),
+                                          child: CustomCircularProgressIndicator(),
                                         );
                                       }
                                       return BlocConsumer<
@@ -210,7 +211,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                           if (state is LoadingRiderState) {
                                             return const Center(
                                               child:
-                                                  CircularProgressIndicator(),
+                                                  CustomCircularProgressIndicator(),
                                             );
                                           }
                                           return Column(
@@ -224,7 +225,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                                         is LoadingRiderState) {
                                                       return const Center(
                                                         child:
-                                                            CircularProgressIndicator(
+                                                            CustomCircularProgressIndicator(
                                                           color: AppColors
                                                               .PRIMARY_COLOR,
                                                         ),
@@ -312,7 +313,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                       if (state
                                           is GetAvailableTripsForDriversLoading) {
                                         return const Center(
-                                            child: CircularProgressIndicator(
+                                            child: CustomCircularProgressIndicator(
                                           color: AppColors.PRIMARY_COLOR,
                                         ));
                                       } else if (state
@@ -382,7 +383,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                     builder: (context, state) {
                                       if (state is GetAcceptedTripLoading) {
                                         return const Center(
-                                            child: CircularProgressIndicator(
+                                            child: CustomCircularProgressIndicator(
                                                 color:
                                                     AppColors.PRIMARY_COLOR));
                                       } else if (state

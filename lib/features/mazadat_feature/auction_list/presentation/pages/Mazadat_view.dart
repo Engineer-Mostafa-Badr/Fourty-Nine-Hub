@@ -10,6 +10,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/auction_card.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class MazadatView extends StatelessWidget {
   const MazadatView({super.key});
@@ -33,7 +34,7 @@ class MazadatView extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: state.isLoading
                         ? const Center(
-                            child: CircularProgressIndicator.adaptive())
+                            child: CustomCircularProgressIndicator())
                         : state.isGrid
                             ? GridView.builder(
                                 itemBuilder: (context, index) => AuctionCard(

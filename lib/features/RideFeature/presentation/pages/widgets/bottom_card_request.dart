@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/utils/format_numbers.dart';
 import 'font_manager.dart';
 
 class BottomCardRequest extends StatefulWidget {
@@ -75,7 +76,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                      "${widget.driversCount} ",
+                                      "${FormatNumbers().convertNumberToLocalizedString(widget.driversCount.toString(), isArabic: context.isArabic)} ",
                                       style: TextStyle(
                                         fontSize: FontSize.s14,
                                         fontWeight: FontWeight.bold,
@@ -104,7 +105,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                             ConstrainedBox(
                               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
                               child: Text(
-                                "${LocaleKeys.acceptTheNearestDriverFor.tr()} ${state.requestedTrip?.price?.toInt().toString() ?? "0"} ${context.isArabic ? "ج.م تلقائيا" : "EGP Automatically"}",
+                                "${LocaleKeys.acceptTheNearestDriverFor.tr()} ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip?.price?.toInt().toString() ?? "0", isArabic: context.isArabic)} ${context.isArabic ? "ج.م تلقائيا" : "EGP Automatically"}",
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: textColor,
@@ -237,7 +238,7 @@ class OfferRow extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child:  Text(
-                          "-3",
+                          FormatNumbers().convertNumberToLocalizedString('-3', isArabic: context.isArabic),
                           style: TextStyle(color: ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) ? AppColors.PRIMARY_COLOR : Colors.white, fontSize: 18),
                         ),
                       ),
@@ -245,7 +246,7 @@ class OfferRow extends StatelessWidget {
                     const Spacer(), // Space between buttons and text
                     // Offer Text
                      Text(
-                      context.isArabic ? "ج.م ${state.requestedTrip!.price!.toInt()}" : "EGP ${state.requestedTrip!.price!.toInt()}",
+                      context.isArabic ? " ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip!.price!.toInt().toString(), isArabic: context.isArabic)} ج.م" : "EGP ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip!.price!.toInt().toString(), isArabic: context.isArabic)}",
                       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(), // Space between text and buttons
@@ -262,7 +263,7 @@ class OfferRow extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child:  Text(
-                          "+3",
+                          FormatNumbers().convertNumberToLocalizedString('+3', isArabic: context.isArabic),
                           style: TextStyle(color:((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) ? AppColors.PRIMARY_COLOR: Colors.white, fontSize: 18),
                         ),
                       ),

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -40,7 +41,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   final referrerTextController = TextEditingController();
   final bioTextController = TextEditingController();
   final statusController = TextEditingController();
-  String country = LocaleKeys.country.localize;
+  String city = ''; // LocaleKeys.country.localize;
   String? gender;
 
   @override
@@ -59,15 +60,15 @@ class _EditProfileViewState extends State<EditProfileView> {
         context.read<UserCubit>().state.data?.lastName ?? '';
     phoneTextController.text =
         context.read<UserCubit>().state.data?.phone ?? '';
-    if (context.read<UserCubit>().state.data?.country == null) {
+    if (context.read<UserCubit>().state.data?.city == null) {
       cityTextController.text = LocaleKeys.country.localize;
-    } else if (context.read<UserCubit>().state.data?.country == '') {
+    } else if (context.read<UserCubit>().state.data?.city == '') {
       cityTextController.text = LocaleKeys.country.localize;
     } else {
-      cityTextController.text = context.read<UserCubit>().state.data!.country!;
+      cityTextController.text = context.read<UserCubit>().state.data!.city!;
     }
-    country = cityTextController.text;
-    context.read<EditProfileCubit>().state.selectedCountry = country;
+    city = cityTextController.text;
+    context.read<EditProfileCubit>().state.selectedCity = city;
     // DateFormat('hh:mm a')
     //     .format(DateTime.parse(
     //     context.read<UserCubit>().state.data!.birthday.toString().substring(0, 19)))
@@ -181,6 +182,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         child: RadioListTile<String>(
                           activeColor:
                               context.isDarkMode ? Color(0xffCACFF4) : null,
+                          contentPadding: EdgeInsets.zero,
                           title: Text(context.isArabic ? 'ذكر' : 'Male'),
                           value: 'male',
                           groupValue: gender,
@@ -193,6 +195,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                       Expanded(
                         child: RadioListTile<String>(
+                          contentPadding: EdgeInsets.zero,
                           activeColor:
                               context.isDarkMode ? Color(0xffCACFF4) : null,
                           title: Text(context.isArabic ? 'انثى' : 'Female'),
@@ -312,7 +315,13 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ),
                   const Sizer(),
                   GoverDropdown(
-                    country: country,
+                    country: city,
+                    onSelected: (String? selectedCity) {
+                      setState(() {
+                        city = selectedCity!;
+                        state.selectedCity = selectedCity;
+                      });
+                    },
                   ),
 
                   // Row(
@@ -509,9 +518,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     height: 30,
                   ),
                   state.status == EditProfileStates.loading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
+                      ? const CustomLoading()
                       : InkWell(
                           onTap: () async {
                             DateFormat format = DateFormat("dd/MM/yyyy");
@@ -546,13 +553,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 bio: bioTextController.text,
                                 phone: phoneTextController.text,
                                 job: jobTextController.text,
-                                country: state.selectedCountry!,
+                                country: context
+                                        .read<UserCubit>()
+                                        .state
+                                        .data
+                                        ?.country ??
+                                    '',
                                 // country: '',
-                                city: cityTextController.text,
+                                city: state.selectedCity!,
                                 birthday: dateTime.toString(),
                                 // maritalPrivacy:
                                 //     state.selectedStatusPrivacy ?? 'public',
-                                maritalStatus: state.selectedStatus ?? 'single',
+                                // maritalStatus: state.selectedStatus ?? 'single',
                                 isMale: gender == 'male' ? true : false,
                               ),
                             );
@@ -601,8 +613,7 @@ class _EditProfileViewState extends State<EditProfileView> {
             (context.read<UserCubit>().state.data?.bio ?? '') &&
         jobTextController.text ==
             (context.read<UserCubit>().state.data?.job ?? '') &&
-        cityTextController.text ==
-            (context.read<UserCubit>().state.data?.city ?? '') &&
+        city == (context.read<UserCubit>().state.data?.city ?? '') &&
         gender == context.read<UserCubit>().state.data?.gender;
   }
 }

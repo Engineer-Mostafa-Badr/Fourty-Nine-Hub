@@ -14,8 +14,17 @@ class SettingsDashboardEntity {
   final bool isActive;
   final bool isApproved;
   final bool isRejected;
+  final bool isCriminalRecordEnabled;
+  final bool isDrugAnalysisRecordEnabled;
+  final bool isVehicleRecordEnabled;
+  final String idExpiryDate;
+  final String drivingLicenseExpiryDate;
+  final String carLicenseExpiryDate;
+  final String criminalRecordExpiryDate;
+  final String drugAnalysisExpiryDate;
+  final String technicalExaminationExpiryDate;
 
-  SettingsDashboardEntity({
+  SettingsDashboardEntity( {
     required this.isReady,
     required this.enableNotificationSound,
     required this.categoryIds,
@@ -28,6 +37,7 @@ class SettingsDashboardEntity {
     required this.isActive,
     required this.isApproved,
     required this.isRejected,
+    required this.isCriminalRecordEnabled, required this.isDrugAnalysisRecordEnabled, required this.isVehicleRecordEnabled, required this.idExpiryDate, required this.drivingLicenseExpiryDate, required this.carLicenseExpiryDate, required this.criminalRecordExpiryDate, required this.drugAnalysisExpiryDate, required this.technicalExaminationExpiryDate,
   });
 }
 

@@ -47,7 +47,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         index: 0,
         cacheKey: 'adCount',
         image: Assets.spcialAdsIcon,
-        route: Routes.ADS,
+        route: Routes.CREATECOMPANYAD,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.list,
@@ -93,8 +93,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         if (index == 4) {
           Scaffold.of(context).openDrawer();
         } else if (index == 0) {
-          soonDialog(context);
-          // context.push(pages[index].route,extra: AdsViewParams(mainCategory: , subCategory: null));
+          // soonDialog(context);
+          context.push(pages[index].route);
         } else if (index == 3) {
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);
@@ -246,12 +246,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                       CustomNotificationWidget(
                                         icon: Image.asset(
                                           Assets.notification,
-                                          height: widget.items[index].height,
-                                          width: widget.items[index].height - 4,
+                                          // height: widget.items[index].height,
+                                          // width: widget.items[index].height - 4,
                                           color: context.isDarkMode
                                               ? Colors.white
                                               : AppColors.PRIMARY_COLOR,
                                         ),
+                                        height: widget.items[index].height-5,
                                         unreadCount: !context
                                                 .read<UserCubit>()
                                                 .isLoggedIn

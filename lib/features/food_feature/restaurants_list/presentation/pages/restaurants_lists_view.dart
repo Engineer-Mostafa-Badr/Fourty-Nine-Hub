@@ -10,8 +10,10 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
@@ -33,6 +35,7 @@ import '../../../../../core/constants/registration_status.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'favorite_ads.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -87,6 +90,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       mainCategoryId: 1,
       // backgroundColor: scaffoldDarkColor(context),
       body: RefreshIndicator(
+        backgroundColor: AppColors.getFindFillColor(context),
+        color: AppColors.getTextColor(context),
         onRefresh: () async {
           if (context.read<UserCubit>().isLoggedIn) {
             setState(() {
@@ -96,7 +101,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         },
 
         child: state.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CustomCircularProgressIndicator())
             : _buildLoggedInView(state),
       ),
     );
@@ -105,146 +110,141 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   Widget _buildLoggedInView(RestaurantsListState state) {
     return Padding(
       padding: EdgeInsets.all(10.w),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const MealBanner(),
-            _buildRegisterRestaurantPrompt(state),
-            const Sizer(),
-            _buildSearchAndExpiredRequests(),
-            if (_showSearch)
-              BlocProvider(
-                create: (context) => SearchRestaurantsCubit(
-                  serviceLocator(),
-                  serviceLocator(),
-                  serviceLocator(),
-                  serviceLocator(),
-                )..loadData(),
-                child: SearchRestaurantView(
-                  onClose: () => setState(() => _showSearch = false),
-                ),
+      child: ListView(
+        children: [
+          const MealBanner(),
+          _buildRegisterRestaurantPrompt(state),
+          _buildSearchAndExpiredRequests(),
+          if (_showSearch)
+            BlocProvider(
+              create: (context) => SearchRestaurantsCubit(
+                serviceLocator(),
+                serviceLocator(),
+                serviceLocator(),
+                serviceLocator(),
+              )..loadData(),
+              child: SearchRestaurantView(
+                onClose: () => setState(() => _showSearch = false),
               ),
-            if (_showExpire)
-              BlocProvider(
-                key: ValueKey("expired-${DateTime.now().millisecondsSinceEpoch}"),
-                create: (context) =>
-                    serviceLocator<RestaurantsCubit>()..loadInitialExpiredOrders(),
-                child: RestaurantExpiredRequestsScreen(
-                  key: ValueKey(
-                      "expired-screen-${DateTime.now().millisecondsSinceEpoch}"),
-                  onClose: () => setState(() => _showExpire = false),
-                ),
+            ),
+          if (_showExpire)
+            BlocProvider(
+              key: ValueKey("expired-${DateTime.now().millisecondsSinceEpoch}"),
+              create: (context) =>
+                  serviceLocator<RestaurantsCubit>()..loadInitialExpiredOrders(),
+              child: RestaurantExpiredRequestsScreen(
+                key: ValueKey(
+                    "expired-screen-${DateTime.now().millisecondsSinceEpoch}"),
+                onClose: () => setState(() => _showExpire = false),
               ),
-            if (_showLog)
-              BlocProvider(
-                key: ValueKey("log-${DateTime.now().millisecondsSinceEpoch}"),
-                create: (context) =>
-                serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
-                child: RestaurantRequestLogsScreen(
-                  key: ValueKey("log-screen-${DateTime.now().millisecondsSinceEpoch}"),
-                  onClose: () => setState(() => _showLog = false),
-                ),
+            ),
+          if (_showLog)
+            BlocProvider(
+              key: ValueKey("log-${DateTime.now().millisecondsSinceEpoch}"),
+              create: (context) =>
+              serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
+              child: RestaurantRequestLogsScreen(
+                key: ValueKey("log-screen-${DateTime.now().millisecondsSinceEpoch}"),
+                onClose: () => setState(() => _showLog = false),
               ),
-
-            if (_showFavAds)
-              BlocProvider(
-                create: (context) =>
-                serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
-                child: RestaurantFavAdsScreen(
-                  onClose: () => setState(() {
-                    context.read<RestaurantsCubit>().loadInitialData();
-                    _showFavAds = false;
-                  }),
-                ),
+            ),
+          if (_showFavAds)
+            BlocProvider(
+              create: (context) =>
+              serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
+              child: RestaurantFavAdsScreen(
+                onClose: () => setState(() {
+                  context.read<RestaurantsCubit>().loadInitialData();
+                  _showFavAds = false;
+                }),
               ),
-            if (!_showSearch && !_showExpire && !_showLog && !_showFavAds)
-              Padding(
-                padding: EdgeInsets.all(10.w),
-                child: Column(
-                  children: [
-                    const Sizer(),
-                    const Sizer(),
-                    const MealCategories(),
-                    const Sizer(),
-                    Label(
-                      text: context.isArabic
-                          ? "${state.selectedCategory?.id != '' ? "مطاعم " : ''}${state.selectedCategory?.nameAr}"
-                          : "${state.selectedCategory?.nameEn}${state.selectedCategory?.id != '' ? " Restaurants" : ''}",
-                      style: Styles.headerText(),
-                    ),
-                    const Sizer(),
-                    (state.isLoadingRestaurantsMore == true &&
-                            context
-                                    .read<RestaurantsCubit>()
-                                    .currentRestaurantsPage ==
-                                1)
-                        ? ListView.builder(
-                            itemCount: 1,
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, i) =>
-                                const PropertyCardShimmer(),
-                          )
-                        : context.read<RestaurantsCubit>().restaurants.isNotEmpty
-                            ? ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: context
-                                    .read<RestaurantsCubit>()
-                                    .restaurants
-                                    .length,
-                                separatorBuilder: (context, index) => const Sizer(),
-                                itemBuilder: (context, i) {
-                                  // if (i > nativeAdStart && i % adFrequency == adFrequency - 1) {
-                                  //   return getAdIfNeeded(i, _adsManager);
-                                  // }
-                                  // if (i > context.read<RestaurantsCubit>().restaurants.length && i % adFrequency == adFrequency - 1) {
-                                  //   print("the index ${context.read<RestaurantsCubit>().restaurants.length}");
-                                  //   return getAdIfNeeded(i, _adsManager);
-                                  // }
-
-                                    return Column(
-                                      children: [
-                                        if (i % adFrequency == adFrequency - 1)
-                                          getAdIfNeeded(
-                                              i, _adsManager), // Only show ad
-                                        SubCategoriesRestaurantCard(
-                                          item: context
-                                              .read<RestaurantsCubit>()
-                                              .restaurants[i],
-                                          mealId: '',
-                                          favouriteRestaurant: (String id) async {
-                                            var result = await context
-                                                .read<RestaurantsCubit>()
-                                                .toggleFavoriteRestaurant(id);
-                                            if (result == true) {
-                                              context.read<RestaurantsCubit>().restaurants[i].isFavorite
-                                              = !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
-
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                )
-                              : Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 40.h),
-                                    child: Text(
-                                      context.isArabic
-                                          ? "لا توجد مطاعم متوفرة."
-                                          : "No Restaurants Found.",
-                                      style: Styles.mediumText(),
-                                    ),
-                                  ),
-                                )
-                    ],
+            ),
+          if (!_showSearch && !_showExpire && !_showLog && !_showFavAds)
+            Padding(
+              padding: EdgeInsets.all(10.w),
+              child: Column(
+                children: [
+                  const Sizer(),
+                  const Sizer(),
+                  const MealCategories(),
+                  const Sizer(),
+                  Label(
+                    text: context.isArabic
+                        ? "${state.selectedCategory?.id != '' ? "مطاعم " : ''}${state.selectedCategory?.nameAr}"
+                        : "${state.selectedCategory?.nameEn}${state.selectedCategory?.id != '' ? " Restaurants" : ''}",
+                    style: Styles.headerText(),
                   ),
-                )
-            ],
-        ),
+                  const Sizer(),
+                  (state.isLoadingRestaurantsMore == true &&
+                          context
+                                  .read<RestaurantsCubit>()
+                                  .currentRestaurantsPage ==
+                              1)
+                      ? ListView.builder(
+                          itemCount: 1,
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, i) =>
+                              const PropertyCardShimmer(),
+                        )
+                      : context.read<RestaurantsCubit>().restaurants.isNotEmpty
+                          ? ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: context
+                                  .read<RestaurantsCubit>()
+                                  .restaurants
+                                  .length,
+                              separatorBuilder: (context, index) => const Sizer(),
+                              itemBuilder: (context, i) {
+                                // if (i > nativeAdStart && i % adFrequency == adFrequency - 1) {
+                                //   return getAdIfNeeded(i, _adsManager);
+                                // }
+                                // if (i > context.read<RestaurantsCubit>().restaurants.length && i % adFrequency == adFrequency - 1) {
+                                //   print("the index ${context.read<RestaurantsCubit>().restaurants.length}");
+                                //   return getAdIfNeeded(i, _adsManager);
+                                // }
+
+                                  return Column(
+                                    children: [
+                                      if (i % adFrequency == adFrequency - 1)
+                                        getAdIfNeeded(
+                                            i, _adsManager), // Only show ad
+                                      SubCategoriesRestaurantCard(
+                                        item: context
+                                            .read<RestaurantsCubit>()
+                                            .restaurants[i],
+                                        mealId: '',
+                                        favouriteRestaurant: (String id) async {
+                                          var result = await context
+                                              .read<RestaurantsCubit>()
+                                              .toggleFavoriteRestaurant(id);
+                                          if (result == true) {
+                                            context.read<RestaurantsCubit>().restaurants[i].isFavorite
+                                            = !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 40.h),
+                                  child: CustomEmptyWidget(
+                                    label:context.isArabic
+                                        ? "لا توجد مطاعم متوفرة."
+                                        : "No Restaurants Found.",
+                                  ),
+                                ),
+                              )
+                  ],
+                ),
+              )
+          ],
       ),
     );
   }
@@ -390,46 +390,48 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   Widget _buildSearchAndExpiredRequests() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Row(
-        spacing: 5,
-        children: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  if (context.read<UserCubit>().isLoggedIn) {
-                    setState(() {
-                      _showSearch = !_showSearch;
-                      if (_showSearch) {
-                        _showExpire = false;
-                        _showLog = false;
-                        _showFavAds = false;
-                      }
-                    });
-                  } else {
-                    return pleaseLoginDialog(context);
-
-                    // context.push(Routes.LOGIN);
-                  }
-                },
-                child:Icon(
-                    _showSearch ?Icons.search_off_rounded : Icons.search,
-                  color:_showSearch ?AppColors.getRedColor(context):AppColors.getTextColor(context)),
-              ),
-              const Sizer(),
-              GestureDetector(
+      padding: const EdgeInsets.symmetric(horizontal: 5,),
+      child:SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          spacing: 5,
+          children: [
+            Row(
+              children: [
+                GestureDetector(
                   onTap: () {
-                    context.push(Routes.FOODCART);
+                    if (context.read<UserCubit>().isLoggedIn) {
+                      setState(() {
+                        _showSearch = !_showSearch;
+                        if (_showSearch) {
+                          _showExpire = false;
+                          _showLog = false;
+                          _showFavAds = false;
+                        }
+                      });
+                    } else {
+                      return pleaseLoginDialog(context);
+
+                      // context.push(Routes.LOGIN);
+                    }
                   },
-                  child: Icon(
-                    Icons.shopping_cart,
-                    color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR ,
-                  )),
-            ],
-          ),
-          Expanded(
-            child: GestureDetector(
+                  child:Icon(
+                      _showSearch ?Icons.search_off_rounded : Icons.search,
+                    color:_showSearch ?AppColors.getRedColor(context):AppColors.getTextColor(context)),
+                ),
+                const Sizer(),
+                GestureDetector(
+                    onTap: () {
+                      context.push(Routes.FOODCART);
+                    },
+                    child: Icon(
+                      Icons.shopping_cart,
+                      color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR ,
+                    )),
+              ],
+            ),
+            GestureDetector(
               onTap: () {
                 if (context.read<UserCubit>().isLoggedIn) {
                   setState(() {
@@ -449,8 +451,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 }
               },
               child: Container(
-                width: double.infinity,
                 padding: EdgeInsets.all(6),
+                width:210.w,
                 decoration: BoxDecoration(
                     border: Border.all(
                         color: _showFavAds
@@ -471,11 +473,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 ),
               ),
             ),
-          ),
-          BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-            builder: (context, state) {
-              return Expanded(
-                child: Stack(
+            BlocBuilder<RestaurantsCubit, RestaurantsListState>(
+              builder: (context, state) {
+                return Stack(
                   clipBehavior: Clip.none,
                   children: [
                     GestureDetector(
@@ -496,8 +496,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         }
                       },
                       child: Container(
-                        width: double.infinity,
                         padding: const EdgeInsets.all(6),
+                        width:210.w,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: _showLog
@@ -510,7 +510,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                               : AppColors.getFillColor(context),
                         ),
                         child: Label(
-                          text: LocaleKeys.requestLog.localize,
+                          text: context.isArabic?'سجل طلبات':'requestLog',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
@@ -522,80 +522,84 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         ),
                       ),
                     ),
-                    PositionedDirectional(
-                      top: -10,
-                      start: -6,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: AppColors.getRedColor(context),
-                          shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 20,
-                          minHeight: 20,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
-                            style: TextStyle(
-                              color:AppColors.getReversedTextColor(context),
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                    Visibility(
+                      visible:context.read<RestaurantsCubit>().state.reqCount?.count!=0,
+                      child: PositionedDirectional(
+                        top: -10,
+                        start: -6,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppColors.getRedColor(context),
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 20,
+                            minHeight: 20,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${context.isArabic?numAr(context.read<RestaurantsCubit>().state.reqCount?.count??0):context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
+                              style: TextStyle(
+                                color:AppColors.getReversedTextColor(context),
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                     ),
                   ],
-                ),
-              );
-            },
-          ),
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (context.read<UserCubit>().isLoggedIn) {
-                  setState(() {
-                    _showExpire = !_showExpire;
-                    if (_showExpire) {
-                      _showSearch = false;
-                      _showLog = false;
-                      _showFavAds = false;
-                    }
-                  });
-                } else {
-                  return pleaseLoginDialog(context);
-
-                  // context.push(Routes.LOGIN);
-                }
+                );
               },
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: _showExpire
-                            ? AppColors.getRedColor(context)
-                            :AppColors.getButtonPrimaryColor(context)),
-                    borderRadius: BorderRadius.circular(15),
-                    color: _showExpire
-                        ? AppColors.getButtonPrimaryColor(context)
-                        : AppColors.getFillColor(context)),
-                child: Label(
-                  text: context.isArabic?'منتهي':'Expired',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color:
-                          _showExpire ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0.h),
+              child: GestureDetector(
+                onTap: () {
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    setState(() {
+                      _showExpire = !_showExpire;
+                      if (_showExpire) {
+                        _showSearch = false;
+                        _showLog = false;
+                        _showFavAds = false;
+                      }
+                    });
+                  } else {
+                    return pleaseLoginDialog(context);
+
+                    // context.push(Routes.LOGIN);
+                  }
+                },
+                child: Container(
+                  width:210.w,
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: _showExpire
+                              ? AppColors.getRedColor(context)
+                              :AppColors.getButtonPrimaryColor(context)),
+                      borderRadius: BorderRadius.circular(15),
+                      color: _showExpire
+                          ? AppColors.getButtonPrimaryColor(context)
+                          : AppColors.getFillColor(context)),
+                  child: Label(
+                    text: context.isArabic?'منتهية':'Expired',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color:
+                            _showExpire ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context)),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

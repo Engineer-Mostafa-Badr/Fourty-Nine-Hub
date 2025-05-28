@@ -3,6 +3,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
@@ -56,10 +58,10 @@ class RideState {
   final RideCategoryEntityUpdated? rideCategory;
   final RideCategoryEntityUpdated? shippingCategory;
   final List<GovernorateEntity>? governorates;
-  final GetLocationFromAddressEntity? currentLocation;
-  final GetLocationFromAddressEntity? toLocation;
-  final GetLocationFromAddressEntity? wayPointOne;
-  final GetLocationFromAddressEntity? wayPointTwo;
+   GetLocationFromAddressEntity? currentLocation;
+   GetLocationFromAddressEntity? toLocation;
+   GetLocationFromAddressEntity? wayPointOne;
+   GetLocationFromAddressEntity? wayPointTwo;
   RideExpectedPriceEntity? rideExpectedPrice;
   RideRequestTripEntity? requestedTrip;
   final List<CompletedTripsEntity>? completedTrips;
@@ -72,8 +74,8 @@ class RideState {
   final List<RideColorEntity>? colors;
   final RideColorEntity? color;
   final GovernorateEntity? city;
-  final List<String>? brands;
-  final List<String>? models;
+  final List<RideBrandEntity>? brands;
+  final List<RideModelEntity>? models;
   final String? selectedModel;
   final String? selectedBrand;
   final bool? isSmoking;
@@ -186,8 +188,8 @@ class RideState {
     List<String>? savedRideSubCategories,
     List<SubCategoryEntityUpdated>? shippingSubCategories,
     List<GovernorateEntity>? govs,
-    List<String>? brands,
-    List<String>? models,
+    List<RideBrandEntity>? brands,
+    List<RideModelEntity>? models,
     CostPerKmEntity? costPerKm,
     List<RideColorEntity>? colors,
     RideColorEntity? color,
@@ -198,6 +200,7 @@ class RideState {
     GetLocationFromAddressEntity? toLocation,
     GetLocationFromAddressEntity? wayPointOne,
     GetLocationFromAddressEntity? wayPointTwo,
+    GetLocationFromAddressEntity? carLocation,
     RideExpectedPriceEntity? rideExpectedPrice,
     RideRequestTripEntity? requestedTrip,
     List<CompletedTripsEntity>? completedTrips,

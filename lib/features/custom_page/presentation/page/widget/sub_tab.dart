@@ -12,6 +12,7 @@ import '../../../domain/entity/sub_tab_entity.dart';
 import '../../../domain/use_case/update_sub_tab_use_case.dart';
 import '../../cubit/custom_page_cubit.dart';
 import '../../cubit/custom_page_states.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SubTab extends StatefulWidget {
   const SubTab({super.key});
@@ -78,7 +79,7 @@ class _SubTabState extends State<SubTab> {
                 },
               );
             } else if (state.status == CustomPageStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             } else {
               return Center(
                   child: Text(LocaleKeys.failedToLoadCategories.localize));

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -60,6 +61,11 @@ class _ChangePasswordSecondViewBodyState
       child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccess) {
+            showSuccessMessage(
+                context,
+                context.isArabic
+                    ? 'تم تغيير كلمة المرور بنجاح'
+                    : 'Password changed successfully');
             context.pop();
             print('emit(ChangePasswordSuccess());');
             serviceLocator<UserCubit>()
@@ -94,6 +100,10 @@ class _ChangePasswordSecondViewBodyState
                   : 'Password does not match',
             );
           }
+          if (state is ChangePasswordFailure) {
+            showErrorMessage(
+                context, getFailureMessage(state.failure, context));
+          }
         },
         builder: (context, state) {
           var forgotPasswordCubit = context.read<ForgotPasswordCubit>();
@@ -104,9 +114,10 @@ class _ChangePasswordSecondViewBodyState
               child: Column(
                 children: [
                   LabelAndTextFormField(
-                    label: LocaleKeys.oldPassword.localize,
+                    label:
+                        context.isArabic ? 'كلمة مرور قديمة' : 'Old Password',
                     controller: forgotPasswordCubit.odlPasswordController,
-                    hint: LocaleKeys.oldPassword.localize,
+                    hint: context.isArabic ? 'كلمة مرور قديمة' : 'Old Password',
                   ),
                   const SizedBox(
                     height: 8,
@@ -131,10 +142,50 @@ class _ChangePasswordSecondViewBodyState
                   SizedBox(
                     width: double.infinity,
                     child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                      builder: (context, state) {
+                      builder: (context, userState) {
+                        if (state is ChangePasswordLoading) {
+                          return CustomLoading();
+                        }
                         return CustomFloatingActionButton(
-                          text: LocaleKeys.submit.localize,
+                          text: LocaleKeys.confirm.localize,
                           onPressed: () {
+                            if (forgotPasswordCubit.odlPasswordController.text.isEmpty ||
+                                forgotPasswordCubit
+                                    .newPasswordController.text.isEmpty ||
+                                forgotPasswordCubit.confirmNewPasswordController
+                                    .text.isEmpty) {
+                              showErrorMessage(
+                                context,
+                                context.isArabic
+                                    ? 'الرجاء ملء جميع الحقول'
+                                    : 'Please fill in all fields',
+                              );
+                              return;
+                            }
+                            if (forgotPasswordCubit
+                                    .newPasswordController.text !=
+                                forgotPasswordCubit
+                                    .confirmNewPasswordController.text) {
+                              showErrorMessage(
+                                context,
+                                context.isArabic
+                                    ? 'كلمة المرور الجديدة لا تتطابق مع تأكيد كلمة المرور الجديدة'
+                                    : 'New password does not match confirm new password',
+                              );
+                              return;
+                            }
+                            if (forgotPasswordCubit
+                                    .odlPasswordController.text ==
+                                forgotPasswordCubit
+                                    .newPasswordController.text) {
+                              showErrorMessage(
+                                context,
+                                context.isArabic
+                                    ? 'كلمة المرور الجديدة يجب أن تكون مختلفة عن كلمة المرور القديمة'
+                                    : 'New password must be different from old password',
+                              );
+                              return;
+                            }
                             forgotPasswordCubit.changePassword(context);
                             // context.push(Routes.VERIFICATION);
                           },

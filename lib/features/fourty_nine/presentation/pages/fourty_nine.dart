@@ -41,6 +41,7 @@ import '../widgets/announce_widget.dart';
 import '../widgets/exit_widget.dart';
 import '../widgets/favourite_screens_view.dart';
 import '../widgets/grid_blocks_widget.dart';
+import 'main_categories_cards_view.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -320,6 +321,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
                 builder: (context, state) {
                   var data = state.data;
+                  print('MainCategoriesCubit data is $data');
                   return _buildMainCategoriesViews(data);
                 },
               ),
@@ -478,7 +480,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
     return InkWell(
       onTap: () {
         onTab();
-        context.push(routeName, extra: extra);
+        if (routeName == Routes.MAINCATEGORIESCARDS) {
+          context.push(routeName, extra: MainCategoriesCardsParams(data: extra,isCustomPage: false));
+        } else {
+          context.push(routeName, extra: extra);
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

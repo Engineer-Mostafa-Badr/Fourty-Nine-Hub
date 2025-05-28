@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -9,10 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +26,7 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../core/error/failure.dart';
 import '../helper/file_picker_helper.dart';
+import 'package:video_compress/video_compress.dart';
 
 class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
@@ -86,7 +90,54 @@ class UploadFile {
         signedURLResponse.fold((l) {
           print(l.toString());
         }, (data) async {
-          if (hasLoading != false) showLoadingDialog(context);
+          if (hasLoading != false) {
+            showGeneralDialog(
+            context: context,
+            barrierDismissible: true,
+            barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+            transitionDuration: const Duration(milliseconds: 400),
+            pageBuilder: (context, _, __) {
+              return PopScope(
+                canPop: false,
+                child: Center(
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const CustomCircularProgressIndicator(),
+                          const SizedBox(height: 20),
+                          Text(
+                            context.isArabic?'جاري التحميل...':'Loading...',
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 20,
+                        bottom: 40,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+            transitionBuilder: (context, animation, secondaryAnimation, child) {
+              return ScaleTransition(
+                scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+                ),
+                child: child,
+              );
+            },
+          );
+          };
 
           log("responseData: ${jsonEncode(data)}");
           final tempDir = await getTemporaryDirectory();
@@ -299,6 +350,7 @@ class UploadFile {
   Future<Either<Failure, bool>?> uploadVideo({
     bool isGallery = true,
     required String subCategoryId,
+    required BuildContext context,
     required Function(UploadFileEntity) onUploaded,
   }) async {
     final file = await FilePickerHelper()
@@ -307,32 +359,102 @@ class UploadFile {
                 isGallery) // Assuming you have a method to pick video files
         .then((file) async {
       if (file != null) {
-        final bytes = await file.readAsBytes();
+        showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          transitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (context, _, __) {
+            return PopScope(
+              canPop: false,
+              child: Center(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CustomCircularProgressIndicator(),
+                        const SizedBox(height: 20),
+                        Text(
+                          context.isArabic?'جاري التحميل...':'Loading...',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    contentPadding: const EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                      top: 20,
+                      bottom: 40,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+              ),
+              child: child,
+            );
+          },
+        );
+        final tempDir = await getTemporaryDirectory();
+        final uniqueFileName =
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+
+        final targetPath = '${tempDir.path}/$uniqueFileName';
+        // Compress the video
+        final result = await VideoCompressionService.compressVideo(
+          path: '/path/to/input/video.mp4',
+          quality: VideoQuality.MediumQuality,
+          onProgress: (p) {
+          },
+        );
+        XFile? finalFile;
+        if(result != null){
+          finalFile = XFile(result.file?.path??'');
+        }else{
+          finalFile = XFile(file.path);
+        }
+        final bytes = await finalFile.readAsBytes();
         int size = bytes.length;
         // Get signed URL
         final signedURLResponse =
             await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
           "type":
-              "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
+              "video/${finalFile.mimeType ?? 'mp4'}", // Change to video MIME type
           "size": size,
           "subcategoryId": subCategoryId
         });
 
         // Send to W3 storage
         signedURLResponse.fold((l) {
+          log("Test Loading 1");
+          context.pop();
           print(l.toString());
         }, (data) async {
           log("responseData: ${jsonEncode(data)}");
           await sendBinaryFileData(
-                  file: file, signedUrl: data['data']['signedUrl'])
+                  file: finalFile!, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
 
             confirmUploadResponse.fold((l) {
+              log("Test Loading 2");
+              context.pop();
               return Left(l);
             }, (data) {
+              log("Test Loading 3");
+              context.pop();
               onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
               return const Right(true);
             });
@@ -542,4 +664,40 @@ class UploadFileEntity {
     required this.mediaId,
     required this.file,
   });
+}
+
+
+class VideoCompressionService {
+  static Future<MediaInfo?> compressVideo({
+    required String path,
+    VideoQuality quality = VideoQuality.MediumQuality,
+    bool deleteOrigin = false,
+    Function(double)? onProgress,
+  }) async {
+    try {
+      // Subscribe to progress updates if callback provided
+      StreamSubscription<double>? progressSub;
+      if (onProgress != null) {
+        VideoCompress.compressProgress$.subscribe((progress) {
+          onProgress(progress.toDouble());
+        });
+      }
+
+      // Compress the video
+      final compressedInfo = await VideoCompress.compressVideo(
+        path,
+        quality: quality,
+        deleteOrigin: deleteOrigin,
+      );
+
+      await progressSub?.cancel();
+      return compressedInfo;
+    } catch (e) {
+      print('Video compression error: $e');
+      return null;
+    } finally {
+      // You may want to dispose when you're completely done with compression
+      // VideoCompress.dispose();
+    }
+  }
 }

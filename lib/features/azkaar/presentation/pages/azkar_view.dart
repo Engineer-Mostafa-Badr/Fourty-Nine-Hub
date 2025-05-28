@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.da
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
@@ -62,7 +63,7 @@ class _AzkarViewState extends State<AzkarView> {
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
           if (state.status == AzkarStates.loading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
           final isSearching = state.azkarSearch != null &&
               state.azkarSearch!.isNotEmpty &&
@@ -118,7 +119,7 @@ class _AzkarViewState extends State<AzkarView> {
                         isSearching ? state.azkarSearch! : state.akar!;
 
                     if (index >= items.length) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: CustomCircularProgressIndicator());
                     }
 
                     return _buildAzkarItem(context, items[index], isSearching);

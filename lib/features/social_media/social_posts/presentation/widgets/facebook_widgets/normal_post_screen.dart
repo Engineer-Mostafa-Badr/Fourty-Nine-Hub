@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -33,8 +34,8 @@ class NormalPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.BG_GRAY_COLOR,width: 6)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.getFindFillColor(context),width: 6)),
       ),
       child: Column(
         children: [
@@ -42,7 +43,7 @@ class NormalPostScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
             child: BuildFacebookHeader(user:postEntity.user, sinceTime: '\u200E 2h',activity: postEntity.activity,feeling: postEntity.feeling,users: postEntity.users,location: postEntity.location,),
           ),
-          const SizedBox(height: 16.0),
+          // const SizedBox(height: 8.0),
 
           // if (postEntity.images?.isNotEmpty??false)
             Column(
@@ -97,7 +98,9 @@ class NormalPostScreen extends StatelessWidget {
                  Label(
                   text: "Claude-Arthur Mbonzi ${context.isArabic?'و':'and'} 276 ${context.isArabic?'اخرين':'Others'}",
                   style: TextStyle(
-                    color: AppColors.c46484B,
+                    color: context.isDarkMode
+                        ? Colors.grey[300]
+                        : Colors.grey[700],
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                   ),
@@ -267,7 +270,7 @@ class NormalPostScreen extends StatelessWidget {
           imageUrl: media[0],
           fit: BoxFit.cover,
           placeholder: (context, url) =>
-          const Center(child: CircularProgressIndicator()),
+          const Center(child: CustomCircularProgressIndicator()),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       );

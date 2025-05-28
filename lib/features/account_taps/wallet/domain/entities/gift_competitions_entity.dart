@@ -26,7 +26,7 @@ class GiftCompetitionEntity {
   final String? descriptionGiftWalletEn;
   final String? descriptionGiftWalletAr;
   final int? countOfRequest;
-  final num? amount;
+  final String? amount;
   final bool? awaitApproval;
 }
 

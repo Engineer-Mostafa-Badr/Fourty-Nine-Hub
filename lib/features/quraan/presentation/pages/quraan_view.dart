@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.d
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 
@@ -83,7 +84,7 @@ class _QuraanViewState extends State<QuraanView> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   if (index == _cubit.quran.length) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CustomCircularProgressIndicator());
                   }
                   return InkWell(
                       onTap: () {
@@ -93,6 +94,7 @@ class _QuraanViewState extends State<QuraanView> {
                             builder: (context) => QuranViewPage(
                               surahId: state.quranSurah![index].surahNo,
                               pageNumber: 0,
+                              surahName: state.quranSurah![index].surahNameAr,
                             ),
                           ),
                         );

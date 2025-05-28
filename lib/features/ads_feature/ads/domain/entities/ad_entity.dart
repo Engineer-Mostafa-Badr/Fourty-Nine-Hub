@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_statistics_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +6,38 @@ import 'package:intl/intl.dart';
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../authentication/domain/entities/user_entity.dart';
 import 'ads_address_entity.dart';
+
+class DataAdEntity {
+  final List<AdModel> ads;
+  final String currencyEn;
+  final String currencyAr;
+  final PaginationDetailsEntity paginationDetails;
+
+  DataAdEntity({
+    required this.ads,
+    required this.paginationDetails,
+    required this.currencyEn,
+    required this.currencyAr,
+  });
+}
+
+class PaginationDetailsEntity {
+  final int page;
+  final int limit;
+  final int totalItems;
+  final int totalPages;
+  final bool hasNextPage;
+  final bool hasPrevPage;
+
+  PaginationDetailsEntity({
+    required this.page,
+    required this.limit,
+    required this.totalItems,
+    required this.totalPages,
+    required this.hasNextPage,
+    required this.hasPrevPage,
+  });
+}
 
 class AdEntity {
   final String id;
@@ -27,6 +60,8 @@ class AdEntity {
   final String? phone;
   final String? subCategoryId;
   final String? mainCategoryId;
+  final String? subCategoryNameEn;
+  final String? subCategoryNameAr;
   final String? userId;
   final String? subscriptionStatus;
   final num? views;
@@ -56,6 +91,8 @@ class AdEntity {
     required this.user,
     this.subCategoryId,
     this.mainCategoryId,
+    this.subCategoryNameEn,
+    this.subCategoryNameAr,
     this.userId,
     this.subscriptionStatus,
     this.userSubscriptionStatus,

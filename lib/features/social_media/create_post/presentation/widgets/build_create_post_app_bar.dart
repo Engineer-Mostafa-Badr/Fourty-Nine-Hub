@@ -28,7 +28,7 @@ class BuildCreatePostAppBar extends StatelessWidget {
                     extra: SocialParams(
                         userId: UserCubit.to.state.data?.id ?? '', index: 0));
               },
-              child: SvgPicture.asset(Assets.backIcon,height: 18,width: 10,color: context.isDarkMode?Colors.white:null)),
+              child: Icon(Icons.arrow_back_ios_new)),
           const SizedBox(
             width: 18,
           ),

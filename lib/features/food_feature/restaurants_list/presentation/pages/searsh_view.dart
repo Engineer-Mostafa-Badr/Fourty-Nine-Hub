@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -96,7 +97,7 @@ class SearchRestaurantView extends StatelessWidget {
                 builder: (context) {
                   if (state.status == SearchRestaurantStates.loading) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: CustomCircularProgressIndicator(),
                     );
                   } else if (state.status == SearchRestaurantStates.error) {
                     return ListView(
@@ -521,7 +522,7 @@ class SearchRestaurantView extends StatelessWidget {
                   builder: (context) {
                     if (state.status == SearchRestaurantStates.loading) {
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: CustomCircularProgressIndicator(),
                       );
                     } else if (state.status == SearchRestaurantStates.error) {
                       return RefreshIndicator(

@@ -2,18 +2,26 @@ class HistoryTripEntity {
   final ClientDetailsEntity? clientDetails;
   final SubCategoryEntity? subCategory;
   final TripDetailsEntity? tripDetails;
+  final DriverDetailsEntity? driverDetails;
 
-  HistoryTripEntity({this.clientDetails, this.subCategory, this.tripDetails});
+  HistoryTripEntity({
+    this.clientDetails,
+    this.subCategory,
+    this.tripDetails,
+    this.driverDetails,
+  });
 }
 
 class ClientDetailsEntity {
+  final String? id;
   final String? firstName;
   final String? profilePictureUrl;
   final String? gender;
   final bool? verifiedBadge;
-  final RatingDetailEntity? rating;
+  final RatingEntity? rating;
 
   ClientDetailsEntity({
+    this.id,
     this.firstName,
     this.profilePictureUrl,
     this.gender,
@@ -22,7 +30,22 @@ class ClientDetailsEntity {
   });
 }
 
-// Keep all other entity classes exactly the same as you have them
+class DriverDetailsEntity {
+  final String? id;
+  final String? driverUserId;
+  final String? firstName;
+  final String? profilePictureUrl;
+  final RatingEntity? rating;
+
+  DriverDetailsEntity({
+    this.id,
+    this.driverUserId,
+    this.firstName,
+    this.profilePictureUrl,
+    this.rating,
+  });
+}
+
 class SubCategoryEntity {
   final String? id;
   final String? nameEn;
@@ -43,7 +66,8 @@ class TripDetailsEntity {
   final String? createdAt;
   final LocationTitleEntity? startLocation;
   final LocationTitleEntity? targetLocation;
-  final TripRatingEntity? rating;
+  final RateEntity? yourRateClient; // Changed from yourRating
+  final RateEntity? clientRateYou; // New field
 
   TripDetailsEntity({
     this.id,
@@ -56,7 +80,8 @@ class TripDetailsEntity {
     this.createdAt,
     this.startLocation,
     this.targetLocation,
-    this.rating,
+    this.yourRateClient,
+    this.clientRateYou,
   });
 }
 
@@ -66,16 +91,15 @@ class LocationTitleEntity {
   LocationTitleEntity({this.title});
 }
 
-class TripRatingEntity {
-  final RatingDetailEntity? driver;
-  final RatingDetailEntity? client;
-
-  TripRatingEntity({this.driver, this.client});
-}
-
-class RatingDetailEntity {
+class RatingEntity {
   final num? average;
   final num? count;
 
-  RatingDetailEntity({this.average, this.count});
+  RatingEntity({this.average, this.count});
+}
+
+class RateEntity {
+  final num? rate;
+
+  RateEntity({this.rate});
 }

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class AdRequestsView extends StatefulWidget {
   var id;
@@ -102,7 +104,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
               builder: (context, state) {
                 if (state.isLoading &&
                     context.read<AdRequestsCubit>().adRequests.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomCircularProgressIndicator());
                 }
 
                 return ListView.builder(
@@ -113,7 +115,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                   itemBuilder: (context, index) {
                     if (index ==
                         context.read<AdRequestsCubit>().adRequests.length) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const CustomLoading();
                     }
 
                     final adRequest =

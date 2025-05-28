@@ -6,6 +6,9 @@ abstract class Routes {
   static const HOME = '/';
   static const RIDE_HOME = '/RideHome';
   static const onBoardingScreen = '/OnBoardingScreen';
+  static const ChooseLangScreen = '/ChooseLangScreen';
+  static const FirstLoginScreen = '/FirstLoginScreen';
+  static const CompleteRegisterWelcomeScreen = '/CompleteRegisterWelcomeScreen';
   static const MY_TALENT = '/MyTalent';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
@@ -32,6 +35,8 @@ abstract class Routes {
   static const ADRequests = '/Subcategories/ADS/AD-Details/AD-Requests';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+  static const CREATECOMPANYPOSTAD = '/Subcategories/ADS/CreatePostCompany';
+  static const CREATECOMPANYPOSTREALAD = '/Subcategories/ADS/CreatePostRealCompany';
 
   // static const CAMERA
 
@@ -188,6 +193,7 @@ abstract class Routes {
   static const TRIP_JOIN = '/TripJoin';
   static const BE_STAR = '/BeAStar';
   static const TenPercent = '/TenPercent';
+  static const WinnersTenPercent = '/WinnersTenPercent';
   static const Married = '/Married';
   static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
@@ -288,7 +294,6 @@ abstract class Routes {
   static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
   static const followersScreen = '/FollowersScreen';
   static const rideOffer = '/RiderOffer';
-
 }
 
 abstract class Paths {
@@ -297,6 +302,9 @@ abstract class Paths {
   static const HOME = '/';
   static const RIDEHOME = 'RideHome';
   static const onBoardingScreen = 'OnBoardingScreen';
+  static const ChooseLangScreen = 'ChooseLangScreen';
+  static const FirstLoginScreen = 'FirstLoginScreen';
+  static const CompleteRegisterWelcomeScreen = 'CompleteRegisterWelcomeScreen';
   static const MY_TALENT = 'MyTalent';
   static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';
@@ -324,6 +332,8 @@ abstract class Paths {
   static const ARCHIVEDCHATS = 'ArchivedChatsView';
   static const CREATEAD = 'CreateAd';
   static const CREATECOMPANYAD = 'CreateCompanyAd';
+  static const CREATECOMPANYPOSTAD = 'CreatePostCompany';
+  static const CREATECOMPANYPOSTREALAD = 'CreatePostRealCompany';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERSCASHBACK = 'WinnersCashback';
@@ -458,6 +468,7 @@ abstract class Paths {
   static const TRIP_JOIN = 'TripJoin';
   static const BE_STAR = 'BeAStar';
   static const TenPercent = 'TenPercent';
+  static const WinnersTenPercent = 'WinnersTenPercent';
   static const Married = 'Married';
   static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';

@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/subcategory_card_tinder.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 
@@ -82,7 +83,7 @@ class _TinderScreenState extends State<TinderScreen> {
           if (state.status == TinderStates.success) {
             return _buildLoggedInContent(context, state);
           }
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         },
       ),
     );
@@ -126,7 +127,7 @@ class _TinderScreenState extends State<TinderScreen> {
                     ),
                   );
                 }
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CustomCircularProgressIndicator());
               },
             ),
             SizedBox(height: 50.h),

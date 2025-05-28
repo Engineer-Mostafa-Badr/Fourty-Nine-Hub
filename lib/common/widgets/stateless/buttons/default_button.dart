@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/utils/type_defs.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../res/style/app_colors.dart';
 
 class DefaultButton extends StatefulWidget {
@@ -11,7 +12,7 @@ class DefaultButton extends StatefulWidget {
     super.key,
     this.label,
     required this.onPressed,
-    this.padding = const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
     this.margin = const EdgeInsets.only(),
     this.labelStyle = const TextStyle(
       fontSize: 16,
@@ -82,9 +83,11 @@ class _DefaultButtonState extends State<DefaultButton>
           padding: widget.icon != null
               ? const EdgeInsets.only(top: 3.0)
               : EdgeInsets.zero,
-          child: Text(
-            widget.label!,
-            style: widget.labelStyle,
+          child: Center(
+            child: Text(
+              widget.label!,
+              style: widget.labelStyle,
+            ),
           ),
         ),
     ];
@@ -158,7 +161,7 @@ class _DefaultButtonState extends State<DefaultButton>
         ),
         child: FittedBox(
           fit: BoxFit.contain,
-          child: CircularProgressIndicator(
+          child: CustomCircularProgressIndicator(
             color: widget.labelStyle.color,
           ),
         ),

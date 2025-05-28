@@ -3,8 +3,10 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/driver_settings_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
@@ -12,14 +14,17 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/tr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../domain/repositories/trip_repository.dart';
@@ -38,7 +43,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Either<Failure, TripsResponseEntity>> getPastTrips(String type) async {
+  Future<Either<Failure, TripsResponseEntity>> getPastTrips(GetPastTripsParams type) async {
     final tripsResponseModel = await remoteDataSource.getPastTrips(type);
     return tripsResponseModel;
   }
@@ -103,6 +108,16 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToEndTrip(Function(String tripId) params) {
+    remoteDataSource.listenToEndTrip(params);
+  }
+
+  @override
+  void listenToClientComing(Function(String tripId) params) {
+    remoteDataSource.listenToClientComing(params);
+  }
+
+  @override
   Future<Either<Failure, RunningTripEntity>> getRunningTrip() async{
     return await remoteDataSource.getRunningTrip();
   }
@@ -155,6 +170,51 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, List<HistoryTripEntity>>> getPastNonSocketTrips(ClientPendingTripParams params) {
     return  remoteDataSource.getPastNonSocketTrips(params);
+  }
+
+  @override
+  Future<Either<Failure, DriverSettingsEntity>> getDriverSettings() {
+    return remoteDataSource.getDriverSettings();
+  }
+
+  @override
+  void listenToRemoveUntrackedTrip(Function(String tripId) params) {
+    remoteDataSource.listenToRemoveUntrackedTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts() {
+    return  remoteDataSource.getEmergencyContacts();
+  }
+
+  @override
+  Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params) {
+    return  remoteDataSource.addEmergencyContacts(params);
+  }
+
+  @override
+  Future<Either<Failure, EmergencyContactEntity>> editEmergencyContacts(EmergencyContactEntity params) {
+    return  remoteDataSource.editEmergencyContacts(params);
+  }
+
+  @override
+  void listenToAcceptUntrackedTripOffer(Function(String tripId) params) {
+    return remoteDataSource.listenToAcceptUntrackedTripOffer(params);
+  }
+
+  @override
+  void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params) {
+  return remoteDataSource.listenToAvailableUntrackedTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params) {
+    return  remoteDataSource.deleteEmergencyContact(params);
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params) {
+    return  remoteDataSource.addRateWithDriver(params);
   }
 
 }

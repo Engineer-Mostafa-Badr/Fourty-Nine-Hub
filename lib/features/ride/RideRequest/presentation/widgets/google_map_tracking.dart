@@ -221,7 +221,7 @@ class _GoogleMapTrackingState extends State<GoogleMapTracking> {
       body:
           // currentLocation == null
           // ? const Center(
-          //     child: CircularProgressIndicator(
+          //     child: CustomCircularProgressIndicator(
           //       color: AppColors.PRIMARY_COLOR,
           //     ),
           //   )

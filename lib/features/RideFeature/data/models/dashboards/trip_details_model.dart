@@ -15,13 +15,13 @@ class TripDetailsModel extends TripDetailsEntity {
 
   factory TripDetailsModel.fromJson(Map<String, dynamic> json) {
     return TripDetailsModel(
-      id: json['id'],
-      price: json['price'].toDouble(),
-      status: json['status'],
-      pickupTime: json['pickupTime'],
-      isPremium: json['isPremium'],
-      passengers: json['passengers'],
-      note: json['note'],
+      id: json['id']??'',
+      price: json['price']??0,
+      status: json['status']??'',
+      pickupTime: json['pickupTime']??'',
+      isPremium: json['isPremium']??false,
+      passengers: json['passengers']??0,
+      note: json['note']??'',
       startLocation: LocationModel.fromJson(json['startLocation']),
       targetLocation: LocationModel.fromJson(json['targetLocation']),
       createdAt: json['createdAt'],

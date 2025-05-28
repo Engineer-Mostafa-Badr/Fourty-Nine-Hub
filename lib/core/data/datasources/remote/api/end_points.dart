@@ -37,6 +37,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
+import 'package:fourtyninehub/features/ten_percent/domain/usecases/get_winners_ten_percent_use_case.dart';
 
 import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
@@ -54,12 +55,15 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
 
+
+
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
   static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
+  static const loginWithPhone = '/auth/login/phone-number';
   static const getProfile = '/users/profile';
   static const getCountries = '/ride/countries';
   static const register = '/auth/register';
@@ -201,7 +205,8 @@ class EndPoints {
   static String myStar =
       '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
   static String uploadStar =
-      '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      // '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+      '/talent/upload';
   static String bannerTalent =
       '/talent/banner?subCategory=${Constants.tubeSubCategory}';
   static String deleteMyStar({required String id}) =>
@@ -593,7 +598,8 @@ class EndPoints {
     return '/navigators/navigateCategories-enable/${params.mainCategoryId ?? '62c8b5779332225799fe3304'}';
   }
 
-  static const searchAds = '/ads/searchAds';
+  static searchAds({required String mainCategoryId}) =>
+      '/ads/searchAds?mainCategoryId=$mainCategoryId';
 
   static const riderInfoRegister = '/ride/riders/register';
   static const sendComeWithYou = '/ride/come-with-you';
@@ -1112,6 +1118,9 @@ class EndPoints {
 
   static String addToCart = '/food/addToCart';
   static String tenPercent = '/tenPercent/send';
+  static String getWinnersTenPercent(
+          {required GetWinnersTenPercentParams params}) =>
+      '/ten-percent/winners?page=${params.page}&limit=${params.limit}';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
@@ -1367,7 +1376,7 @@ class EndPoints {
   }
 
   static String requestTrip(String subcategoryId) {
-    return '/ride/trips/newTrip/$subcategoryId';
+    return '/ride/client/tracking/trips/$subcategoryId';
   }
 
   static String retrieveClientLatestTrip = '/ride/client/trips/latest';
@@ -1379,9 +1388,7 @@ class EndPoints {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
 
-  static String getPastTrips(int page, String type) {
-    return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
-  }
+  static String getPastTrips = '/ride/driver/trips/past';
 
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';
@@ -1395,13 +1402,13 @@ class EndPoints {
     return '/ride/trip/rating/$id/client';
   }
 
-  static String createDriverRating = '/ride/trip/rating/driver';
+  static String createDriverRating = '/ride/trip/ratings/client';
   static String emergencySupport = '/users/emergencySupport';
   static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
-  static String getRideBrands = '/ride/riders/brands';
-  static String getRideModels = '/ride/riders/models';
+  static String getRideBrands = '/ride/cars/brands?page=1&limit=100';
+  static String getRideModels(String brandId) => '/ride/cars/$brandId/models?page=1&limit=100';
   static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
   static String getRideCarColors = '/ride/riders/colors';
   static String getAllUserTrips = '/loading/trip/allUserTrips';
@@ -1473,6 +1480,10 @@ class EndPoints {
     return '/ride/trips/cancel-by-rider/$tripId';
   }
 
+  static String finalizeTripByRider(String tripId) {
+    return '/ride/driver/tracking/trips/$tripId/finalize/pre-start';
+  }
+
   static String cancelTripByClient(String tripId) {
     return '/ride/trips/cancel-by-client/$tripId';
   }
@@ -1498,7 +1509,7 @@ class EndPoints {
   }
 
   static String acceptOfferByClient(String offerId) {
-    return '/ride/offers/accept/offer/$offerId';
+    return '/ride/client/tracking/offers/$offerId';
   }
 
   static String updateTripAutoAcceptByClient() {
@@ -1509,19 +1520,33 @@ class EndPoints {
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
   static const getMostBooking = '/health/doctors';
+  static const addCarModel = '/ride/cars/models';
+  static const addCarBrand = '/ride/cars/brands';
 
   static const getDoctorList = '/health/doctors';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
-  static const getClientPendingUntrackedTrips = '/ride/non-tracking/trips/client/pending';
-  static const getClientAcceptedUntrackedTrips = '/ride/non-tracking/trips/client';
-  static const getClientPastUntrackedTrips = '/ride/non-tracking/trips/client/history';
+  static const getClientPendingUntrackedTrips =
+      '/ride/non-tracking/trips/client/pending';
+  static const getClientAcceptedUntrackedTrips =
+      '/ride/non-tracking/trips/client';
+  static const getClientPastUntrackedTrips =
+      '/ride/non-tracking/trips/client/history';
   static const getClientOfferUntrackedTrips = '/ride/non-tracking/offers';
   static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
   static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const createOfferNonTrackedTrips = '/ride/non-tracking/offers/trip/';
+  static const updateDriverSettingsNonTrack= '/ride/driver/untracked/settings';
 
-
+  static const sendOkIamComing = "/ride/client/tracking/trips/approach";
+  static const ratingDriverByClient = "/ride/trip/ratings/client";
   static const getAvailableRideNonSocketTrip = '/ride/driver/trips/available/not-tracking';
   static const getAcceptedRideNonSocketTrip = '/ride/driver/untracked/trips';
   static const getPastRideNonSocketTrip = '/ride/driver/untracked/trips/history';
+  static const getEmergencyContacts = '/users/emergency-contacts';
+  static const addEmergencyContacts = '/users/add-emergency-contacts';
+  static editEmergencyContacts (String id)=> '/users/update-emergency-contacts/$id';
+  static const getDriverSettings = '/ride/driver/untracked/settings';
+  static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
+  static const addRateToClientWithDriverNonSocket = '/ride/untracked/ratings/driver';
 }

@@ -1,0 +1,476 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/loaders/default_loader.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/mobile_ad_card.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/provider_ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/user_ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../core/widget/custom_floating_action_button.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+
+class AdsView extends StatefulWidget {
+  final AdsViewParams params;
+
+  const AdsView({
+    super.key,
+    required this.params,
+  });
+
+  @override
+  State<AdsView> createState() => _AdsViewState();
+}
+
+class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+
+    if (widget.params.mainCategory.nameEn == 'Dating') {
+      context.read<AdvertisementCubit>().loadAdsData(
+            subCategoryId: widget.params.subCategory.id,
+            filter: 'male',
+          );
+    } else {
+      context.read<AdvertisementCubit>().loadAdsData(
+            subCategoryId: widget.params.subCategory.id,
+            filter: widget.params.subCategory.hasAuction == true
+                ? 'sale'
+                : 'provider',
+          );
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String userType = '';
+    if (_tabController.index == 0 &&
+        widget.params.mainCategory.nameEn == 'Dating') {
+      userType = 'male';
+    } else if (_tabController.index == 1 &&
+        widget.params.mainCategory.nameEn == 'Dating') {
+      userType = 'female';
+    } else if (_tabController.index == 0 &&
+        widget.params.subCategory.hasAuction == true) {
+      userType = 'sale';
+    } else if (_tabController.index == 1 &&
+        widget.params.subCategory.hasAuction == true) {
+      userType = 'rent';
+      print('provider');
+    } else if (_tabController.index == 0 &&
+        widget.params.subCategory.hasAuction == false) {
+      userType = 'provider';
+      print('provider');
+    } else {
+      userType = 'user';
+      print('user');
+    }
+    print(_tabController.index);
+    return CustomScaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(isWithBackArrow: true,),
+        child: HomeAppbar(
+          isWithBackArrow: true,
+        ),
+      ),
+      body: BlocConsumer<AdvertisementCubit, AdsState>(
+          listener: (context, state) {
+        if (state.status == AdsStates.loading) {
+          print("state.status${state.status}");
+        } else if (state.status == AdsStates.error) {
+          print("state.status${state.status}");
+        } else if (state.status == AdsStates.success) {
+          print("state.status${state.status}");
+        }
+      }, builder: (context, state) {
+        final controller = context.read<AdvertisementCubit>();
+        return SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  const Sizer(),
+                  SizedBox(
+                      width: double.infinity,
+                      child: MainCategoryBanner(
+                        category: widget.params.mainCategory,
+                        onFavorite: () {},
+                        isFavorite: widget.params.mainCategory.isFavorite,
+                      )),
+                  const Sizer(),
+                  Label(
+                    text: context.isArabic
+                        ? widget.params.subCategory.nameAr
+                        : widget.params.subCategory.nameEn,
+                    style: Styles.headerText(),
+                  ),
+                  const Sizer(),
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: AppColors.SECONDARY_COLOR,
+                    unselectedLabelColor: Theme.of(context).primaryColor,
+                    indicatorColor: AppColors.SECONDARY_COLOR,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    labelStyle: Styles.headerText(),
+                    onTap: (i) {
+                      if (i == 1) {
+                        state.city = '';
+                        state.governorate = '';
+                        if (widget.params.mainCategory.nameEn == 'Dating') {
+                          controller.loadAdsData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter: 'female',
+                              );
+                        } else {
+                          controller.loadAdsData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter:
+                                  widget.params.subCategory.hasAuction == true
+                                      ? 'rent'
+                                      : 'user',
+                              );
+                        }
+                      } else {
+                        if (widget.params.mainCategory.nameEn == 'Dating') {
+                          controller.loadAdsData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter: 'male',
+                              );
+                        } else {
+                          controller.loadAdsData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter:
+                                  widget.params.subCategory.hasAuction == true
+                                      ? 'sale'
+                                      : 'provider',
+                              );
+                        }
+                      }
+                    },
+                    tabs: [
+                      Tab(
+                          text: widget.params.mainCategory.nameEn == 'Dating'
+                              ? LocaleKeys.maleUser.localize
+                              : widget.params.subCategory.hasAuction == true
+                                  ? LocaleKeys.sale.localize
+                                  : LocaleKeys.provider.localize),
+                      Tab(
+                          text: widget.params.mainCategory.nameEn == 'Dating'
+                              ? LocaleKeys.femaleUser.localize
+                              : widget.params.subCategory.hasAuction == true
+                                  ? LocaleKeys.rent.localize
+                                  : LocaleKeys.user.localize),
+                    ],
+                  ),
+                  /// Provider Ads and User Ads
+                  state.status == AdsStates.loading
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 20.h),
+                            child: const DLoader(),
+                          ),
+                        )
+                      : Expanded(
+                          child: TabBarView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _tabController,
+                          children: [
+                            /// provider Ads view
+                            ProviderAdsView(
+                              params: widget.params,
+                              userType: userType,
+                              controller: controller,
+                            ),
+                            /// user ads View
+                            UserAdsView(
+                              params: widget.params,
+                              userType: userType,
+                            ),
+                          ],
+                        ))
+                ],
+              ),
+              if (state.isFilterLoading)
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.black.withOpacity(0.3),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+            ],
+          ),
+        );
+      }),
+      // floatingActionButton:buildFloatingAction(context),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () {
+          if (context.isUserLoggedIn) {
+            context.push(Routes.CREATEAD,
+                extra: CategorizationEntity(
+                    mainCategory: widget.params.mainCategory,
+                    subCategory: widget.params.subCategory));
+          } else {
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          }
+        },
+        iconSize: 18,
+        icon: Icons.add,
+        text: LocaleKeys.addAde.localize,
+      ),
+    );
+  }
+
+  Widget buildFloatingAction(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        if (context.isUserLoggedIn) {
+          context.push(Routes.CREATEAD,
+              extra: CategorizationEntity(
+                  mainCategory: widget.params.mainCategory,
+                  subCategory: widget.params.subCategory));
+        } else {
+          return pleaseLoginDialog(context);
+
+          // context.push(Routes.LOGIN);
+        }
+      },
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      icon: const Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+      label: Label(
+        text: LocaleKeys.addAde.localize,
+        style:
+            Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class AdsViewParams {
+  final MainCategoryEntity mainCategory;
+  final SubCategoryEntity subCategory;
+
+  AdsViewParams({required this.mainCategory, required this.subCategory});
+}
+
+enum Categories {
+  craft,
+  talent,
+  homeService,
+  homeEssentials,
+  healthyTools,
+  industry,
+  scenery,
+  realEstate,
+  cars,
+  vehicles,
+  spareParts,
+  fashionBeauty,
+  accessories,
+  jewelryWatches,
+  collectiblesGifts,
+  animals,
+  computersCameras,
+  mobilesTablets,
+  musicalInstruments,
+  fitness,
+  education,
+  libraries,
+  packaging,
+  equipment,
+  rawMaterials,
+  remnants,
+  marketingSales,
+  jobs,
+  tourism,
+  technology,
+  accountantJob,
+  doctorJob,
+  engineerJob,
+  otherJob,
+  events,
+  projects,
+  health,
+  dating,
+  smooking,
+  farming,
+  governmentCharity
+}
+
+extension CategoriesExtension on Categories {
+  Widget view(
+      {required AdEntity item,
+      required Function(String) onFav,
+      required Function(String) onRemoveFav}) {
+    switch (this) {
+      case Categories.craft:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.technology:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.smooking:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.projects:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.jobs:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.tourism:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.industry:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.talent:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.homeService:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.homeEssentials:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.healthyTools:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.scenery:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.realEstate:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.cars:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.vehicles:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.spareParts:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.fashionBeauty:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.accessories:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.jewelryWatches:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.collectiblesGifts:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.animals:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.computersCameras:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.mobilesTablets:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.musicalInstruments:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.fitness:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.education:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.libraries:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.packaging:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.equipment:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.rawMaterials:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.remnants:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.marketingSales:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.accountantJob:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.doctorJob:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.engineerJob:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.otherJob:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.events:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.health:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.dating:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.farming:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.governmentCharity:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      default:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+    }
+  }
+
+  static Categories fromId(String id) {
+    switch (id) {
+      case "62c8b5829332225799fe330e":
+        return Categories.craft;
+      case "62c8b5819332225799fe330c":
+        return Categories.homeService;
+      case "62c8b5919332225799fe3322":
+        return Categories.homeEssentials;
+      case "62c8b5849332225799fe3310":
+        return Categories.realEstate;
+      case "62c8b5889332225799fe3316":
+        return Categories.cars;
+      case "62c8b5ae9332225799fe3358":
+        return Categories.fashionBeauty;
+      case "62c8b5af9332225799fe335a":
+        return Categories.animals;
+      case "62c8b5979332225799fe3330":
+        return Categories.computersCameras;
+      case "62c8b59f9332225799fe333e":
+        return Categories.musicalInstruments;
+      case "62c8b5a29332225799fe3348":
+        return Categories.fitness;
+      case "62c8b5a49332225799fe334a":
+        return Categories.libraries;
+      case "62c8b5879332225799fe3312":
+        return Categories.industry;
+      case "62c8b5949332225799fe3328":
+        return Categories.jobs;
+      case "62c8b5a09332225799fe3340":
+        return Categories.tourism;
+      case "62c8b5959332225799fe332a":
+        return Categories.technology;
+      case "62c8b5969332225799fe332e":
+        return Categories.projects;
+      case "62c8b58a9332225799fe331a":
+        return Categories.smooking;
+      case "62c8b5b19332225799fe3360":
+        return Categories.farming;
+      case "62c8b5b29332225799fe3362":
+        return Categories.governmentCharity;
+      case "62c8b57c9332225799fe3306":
+        return Categories.health;
+      default:
+        throw ArgumentError("Invalid category id: $id");
+    }
+  }
+}

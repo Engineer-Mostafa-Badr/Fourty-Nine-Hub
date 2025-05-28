@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/trip_offer_card_no_scoket.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/styles.dart';
@@ -111,7 +112,7 @@ class _AllTripNoSocketScreenState extends State<AllTripNoSocketScreen> {
                 ];
                 if (state is LoadingRiderState) {
                   return const Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
                     ),
                   );

@@ -9,7 +9,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_other_profile.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_people_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_profile.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -32,6 +34,9 @@ class _FacebookBodyState extends State<FacebookBody>
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -48,6 +53,9 @@ class _FacebookBodyState extends State<FacebookBody>
             ..getMutedStories(),
           // create: (context) => serviceLocator<StoryCubit>(),
         ),
+        BlocProvider(
+          create: (_) => PeopleTabCubit(),
+        ),
       ],
       child: Column(
         children: [
@@ -60,12 +68,12 @@ class _FacebookBodyState extends State<FacebookBody>
                   Assets.home,
                   width: 30.h,
                   height: 30.h,
-                  color: context.isDarkMode ? Colors.white : null,
+                  color: tabController.index==0? AppColors.getButtonPrimaryWhiteColor(context) : AppColors.grey,
                 ),
                 const Sizer(),
                 Text(LocaleKeys.home.localize,
                     style: TextStyle(
-                        color: AppColors.getTextColor(context),
+                        color: tabController.index==0? AppColors.getTextColor(context) : AppColors.grey,
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w700))
               ]),
@@ -80,12 +88,12 @@ class _FacebookBodyState extends State<FacebookBody>
                   Assets.people,
                   width: 30.h,
                   height: 30.h,
-                  color: context.isDarkMode ? Colors.white : null,
+                  color: tabController.index==1? AppColors.getButtonPrimaryWhiteColor(context) : AppColors.grey,
                 ),
                     const Sizer(),
                 Text(LocaleKeys.people.localize,
                     style: TextStyle(
-                        color: AppColors.getTextColor(context),
+                        color: tabController.index==1? AppColors.getTextColor(context) : AppColors.grey,
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w700))
               ]),
@@ -100,13 +108,13 @@ class _FacebookBodyState extends State<FacebookBody>
                   Assets.profile,
                   width: 30.h,
                   height: 30.h,
-                  color: context.isDarkMode ? Colors.white : null,
+                  color: tabController.index==2? AppColors.getButtonPrimaryWhiteColor(context) : AppColors.grey,
                 ),
                     const Sizer(),
                 Label(
                   text: LocaleKeys.profile.localize,
                   style: TextStyle(
-                      color: AppColors.getTextColor(context),
+                      color: tabController.index==2? AppColors.getTextColor(context) : AppColors.grey,
                       fontSize: 24.sp,
                       fontWeight: FontWeight.w700),
                   overflow: TextOverflow.ellipsis,
@@ -117,11 +125,20 @@ class _FacebookBodyState extends State<FacebookBody>
           ]),
           Expanded(
               child: TabBarView(controller: tabController, children: [
-            const FaceBookView(),
-            const FacebookPeopleView(),
-            //Expanded(child: Center(child: Label(text: context.isArabic?'لايوجد محتوي':'There is no content'),)),
-            Expanded(child: Center(child: Label(text: context.isArabic?'لايوجد محتوي':'There is no content'),)),
-          ]))
+             FaceBookView(scrollController: widget.scrollController),
+              FacebookPeopleView(scrollController: widget.scrollController),
+                BlocBuilder<PeopleTabCubit, ProfileTabState>(
+                  builder: (context, state) {
+                    if (state is OtherProfileState) {
+                      return FacebookOtherProfile(scrollController: widget.scrollController);
+                    }
+                    else {
+                      return FacebookProfile(scrollController: widget.scrollController,);
+                    }
+                  },
+                ),
+
+         ]))
         ],
       ),
       // child: FaceBookView(),

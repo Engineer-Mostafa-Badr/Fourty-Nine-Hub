@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -10,9 +13,11 @@ import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_pag
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../res/style/styles.dart';
 
@@ -34,9 +39,9 @@ class _SocialPageState extends State<SocialPage> {
   ];
 
   final List<String> _images = [
-    Assets.facebookLogo,
-    Assets.instaLogo,
-    Assets.twitterLogo,
+    Assets.facebookIcon,
+    Assets.instagramIcon,
+    Assets.twitterIcon,
   ];
 
   @override
@@ -60,7 +65,7 @@ class _SocialPageState extends State<SocialPage> {
           },
           builder: (BuildContext context, state) {
             if (state.status == CustomPageStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             } else if (state.status == CustomPageStates.success) {
               return Column(
                 children: [
@@ -75,7 +80,7 @@ class _SocialPageState extends State<SocialPage> {
                           leading: Radio<int>(
                             value: index,
                             groupValue: _selectedItem,
-                            // activeColor: Theme.of(context).primaryColor,
+                            activeColor: AppColors.getButtonPrimaryWhiteColor(context),
                             onChanged: (int? value) {
                               setState(() {
                                 _selectedItem = value;
@@ -83,15 +88,23 @@ class _SocialPageState extends State<SocialPage> {
                             },
                           ),
                           title: Text(
-                            _items[index],
+                            context.isArabic?convertToArabicNumbers(_items[index]):_items[index],
                             style: Styles.mediumText(
                               fontSize: 65.sp,
                               fontWeight: FontWeight.w400,
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
-                          trailing: Image.asset(_images[index],
-                              height: 50.h, width: 50.w),
+                          trailing:CircleAvatar(
+                            radius: 12,
+                            backgroundColor: AppColors.getButtonPrimaryWhiteColor(context),
+                            child: SvgPicture.asset(
+                              _images[index],
+                              height: 25.h,
+                              width: 25.w,
+                              color: context.isDarkMode?AppColors.PRIMARY_COLOR:null,
+                            ),
+                          ),
                           selected: _selectedItem == index,
                           selectedTileColor: Colors.transparent,
                         );

@@ -88,7 +88,7 @@ class DoctorGovernorateFilterView extends StatelessWidget {
                 //   case DoctorGovernorateFilterError _:
                 //     return Center(child: Text(state.message));
                 //   default:
-                //     return  Center(child: CircularProgressIndicator());
+                //     return  Center(child: CustomCircularProgressIndicator());
                 // }
               },
             ),

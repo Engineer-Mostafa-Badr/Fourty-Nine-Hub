@@ -18,6 +18,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 
@@ -86,21 +87,21 @@ class AttachementsViewState extends State<AttachementsView> {
                   children: [
                     state.messages == null
                         ? const Center(
-                            child: CircularProgressIndicator(),
+                            child: CustomCircularProgressIndicator(),
                           )
                         : MediaAttachementsTab(
                             messages: state.messages ?? [],
                           ),
                     state.messages == null
                         ? const Center(
-                            child: CircularProgressIndicator(),
+                            child: CustomCircularProgressIndicator(),
                           )
                         : DocumentsAttachementsTab(
                             messages: state.messages ?? [],
                           ),
                     state.messages == null
                         ? const Center(
-                            child: CircularProgressIndicator(),
+                            child: CustomCircularProgressIndicator(),
                           )
                         : LinksAttachementsTab(
                             messages: state.messages ?? [],
@@ -496,7 +497,7 @@ class CustomVideoCard extends StatelessWidget {
                     ],
                   )
                 : const Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
                     ),
                   ),

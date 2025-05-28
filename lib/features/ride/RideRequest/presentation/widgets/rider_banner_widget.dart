@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/com
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RiderBannerWidget extends StatelessWidget {
   const RiderBannerWidget({super.key});
@@ -78,7 +79,7 @@ class RiderBannerWidget extends StatelessWidget {
             ],
           );
         } else {
-          return const CircularProgressIndicator();
+          return const CustomCircularProgressIndicator();
         }
       },
     );

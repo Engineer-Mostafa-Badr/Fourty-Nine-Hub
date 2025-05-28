@@ -14,6 +14,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
 class AdsSearchView extends StatefulWidget {
   const AdsSearchView({super.key});
@@ -80,19 +81,18 @@ class _AdsSearchViewState extends State<AdsSearchView> {
                   prev.status != curr.status,
               builder: (context, state) {
                 final ads = _cubit.adsSearch;
-
+                if (_cubit.searchController.text.trim().isEmpty) {
+                  return CustomEmptyWidget(
+                    label: LocaleKeys.noData.localize,
+                  );
+                }
                 if (state.status == SearchStates.loading && ads.isEmpty) {
                   return const Center(child: CupertinoActivityIndicator());
                 }
 
                 if (ads.isEmpty) {
-                  return Center(
-                    child: Text(
-                      context.isArabic
-                          ? 'قم بالبحث عن اعلانات'
-                          : 'Search for ads',
-                      style: Styles.mediumText(),
-                    ),
+                  return CustomEmptyWidget(
+                    label: LocaleKeys.noResultsFound.localize,
                   );
                 }
 
@@ -181,7 +181,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
 //             return BlocBuilder<SearchCubit, SearchState>(
 //               builder: (context, state) {
 //                 // if(state.status ==SearchStates.loading){
-//                 //   return const Center(child: CircularProgressIndicator());
+//                 //   return const Center(child: CustomCircularProgressIndicator());
 //                 // }
 //                 final controller = context.read<SearchCubit>();
 //                 if (controller.searchController.text.isNotEmpty) {

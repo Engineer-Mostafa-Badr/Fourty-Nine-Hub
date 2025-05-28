@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as path;
 import 'package:video_player/video_player.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../service_locator/service_locator.dart';
@@ -223,7 +224,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                                 ),
                               ),
                             )
-                          : const Center(child: CircularProgressIndicator()),
+                          : const Center(child: CustomCircularProgressIndicator()),
                 ),
                 Padding(
                   padding:

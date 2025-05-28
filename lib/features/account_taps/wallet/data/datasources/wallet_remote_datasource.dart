@@ -222,6 +222,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
         },
       );
     } catch (e) {
+      print(e);
       final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
       return Left(
           UnknownFailure(error != null ? error.toString() : 'Unknown error'));
