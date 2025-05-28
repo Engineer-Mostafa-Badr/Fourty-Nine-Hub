@@ -51,6 +51,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
@@ -141,6 +142,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> deleteRideRegistration();
   Future<Either<Failure, List<RideBrandEntity>>> getRideBrands();
   Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand);
+  Future<Either<Failure, String>> addCarModel(AddCarModelParams params);
+  Future<Either<Failure, String>> addCarBrand(String params);
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(
       GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
@@ -1363,6 +1366,36 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarModel(AddCarModelParams params) async {
+    final response = await _apiConsumer.post(
+        EndPoints.addCarModel,
+        data: params.toJson(),
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['data']['modelId']??'');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarBrand(String params) async {
+    final response = await _apiConsumer.post(
+        EndPoints.addCarBrand,
+        data: {
+          'brandName':params
+        },
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['data']['brandId']??'');
+      },
+    );
   }
 
 }

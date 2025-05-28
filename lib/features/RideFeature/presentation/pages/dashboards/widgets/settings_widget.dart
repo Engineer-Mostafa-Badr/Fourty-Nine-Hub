@@ -5,8 +5,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drivers_license_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -276,12 +280,33 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ],
             ),
           ),
-          UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6),
-          UpdatePersonalInfoWidget(
-              title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+          ClickableWidget(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                    value: serviceLocator<DashboardsCubit>(),
+                    child: PersonalDocumentsNonSocketScreen())));
+              },
+
+              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
+          ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: DriversLicenseNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+          ),
           if (widget.modeType == 'ride') ...[
-            UpdatePersonalInfoWidget(
-                title: LocaleKeys.carLicense.tr(), exdIn: 6),
+            ClickableWidget(
+              onTap: () async {
+                // await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                //     value: serviceLocator<DashboardsCubit>(),
+                //     child: DriversLicenseNonSocketScreen())));
+              },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.carLicense.tr(), exdIn: 6),
+            ),
             UpdatePersonalInfoWidget(
                 title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
             UpdatePersonalInfoWidget(

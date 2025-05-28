@@ -38,6 +38,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_non_track_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
@@ -162,6 +163,16 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand) async {
     return await rideRemoteDataSource.getRideModels(brand);
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarModel(AddCarModelParams params) async {
+    return await rideRemoteDataSource.addCarModel(params);
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarBrand(String params) async {
+    return await rideRemoteDataSource.addCarBrand(params);
   }
 
   @override
