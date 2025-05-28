@@ -85,7 +85,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
             dashboardCubit.loadInitialAvailableNonSocketTrips(),
       dashboardCubit.listenToRemoveUntrackedTrip(),
         dashboardCubit.listenToNewTripNonSocket(),
-        dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params)
+        dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params),
+        dashboardCubit.getDriverSettings(),
+
       ];
     });
   }

@@ -9,6 +9,15 @@ class DriverSettingsEntity {
   final bool? isRejected;
   final RatingEntity? rating;
   final CategoryEntity? category;
+  final bool? isCriminalRecordEnabled;
+  final bool? isDrugAnalysisRecordEnabled;
+  final bool? isVehicleRecordEnabled;
+  final String? idExpiryDate;
+  final String? drivingLicenseExpiryDate;
+  final String? carLicenseExpiryDate;
+  final String? criminalRecordExpiryDate;
+  final String? drugAnalysisExpiryDate;
+  final String? technicalExaminationExpiryDate;
 
   DriverSettingsEntity({
     this.id,
@@ -21,6 +30,15 @@ class DriverSettingsEntity {
     this.isRejected,
     this.rating,
     this.category,
+    this.isCriminalRecordEnabled,
+    this.isDrugAnalysisRecordEnabled,
+    this.isVehicleRecordEnabled,
+    this.idExpiryDate,
+    this.drivingLicenseExpiryDate,
+    this.carLicenseExpiryDate,
+    this.criminalRecordExpiryDate,
+    this.drugAnalysisExpiryDate,
+    this.technicalExaminationExpiryDate,
   });
 }
 
