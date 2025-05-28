@@ -211,6 +211,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   onSubmitUploadingTechnicalExamination(BuildContext context) async {
     if (terminalExaminationFormKey.currentState!.validate()) {
       emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
+      showLoadingDialog(context, canPop: false);
 
       await RideMethodHelper().uploadTechnicalExamination(
           technicalExaminationDate: rideTechnicalExaminationExpireDateController.text, technicalExaminationImage: state.personalTechnicalExaminationPicture!, onSuccessUploaded: (bool isSuccess) async{
@@ -220,7 +221,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
               context.isArabic
                   ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                   : "Successfully uploaded images, please wait for the approval of all data.");
-          // context.pop();
+          context.pop();
           context.pop();
           emit(state.copyWith(status: DashboardsStates.success));
         } else {
@@ -246,7 +247,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
               context.isArabic
                   ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                   : "Successfully uploaded images, please wait for the approval of all data.");
-          // context.pop();
+          context.pop();
           context.pop();
           emit(state.copyWith(status: DashboardsStates.success));
         } else {
@@ -278,7 +279,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   onSubmitUploadingCriminalRecord(BuildContext context) async {
     if (criminalRecordFormKey.currentState!.validate()) {
       emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
-
+      showLoadingDialog(context, canPop: false);
       await RideMethodHelper().uploadCriminalRecord(criminalRecordDate: rideCriminalRecordExpireDateController.text, criminalRecordImage: state.personalCriminalRecordPicture!, onSuccessUploaded: (bool isSuccess) async{
         if (isSuccess) {
           showSuccessMessage(
@@ -286,7 +287,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
               context.isArabic
                   ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                   : "Successfully uploaded images, please wait for the approval of all data.");
-          // context.pop();
+          context.pop();
           context.pop();
           emit(state.copyWith(status: DashboardsStates.success));
         } else {
