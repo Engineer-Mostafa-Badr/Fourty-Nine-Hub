@@ -18,6 +18,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/navigate_bar_entity.dart';
 import '../../../domain/use_case/update_navigate_bar_use_case.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class NavigateBar extends StatefulWidget {
   const NavigateBar({super.key});
@@ -165,7 +166,7 @@ class _NavigateBarState extends State<NavigateBar> {
                 ],
               );
             } else if (state.status == CustomPageStates.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             } else {
               return Center(
                   child: Text(LocaleKeys.failedToLoadCategories.localize));

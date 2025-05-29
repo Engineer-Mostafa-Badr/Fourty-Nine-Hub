@@ -127,7 +127,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
           // if (state.isFetchingComments &&
           //     context.read<ReelsCubit>().comments.isEmpty) {
           //   return const Center(
-          //     child: CircularProgressIndicator(
+          //     child: CustomCircularProgressIndicator(
           //       color: AppColors.SECONDARY_COLOR,
           //     ),
           //   );

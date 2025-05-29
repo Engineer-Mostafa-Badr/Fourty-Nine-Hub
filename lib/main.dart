@@ -41,7 +41,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'core/service/cache_service.dart';
+import 'core/service/connectivity_service.dart';
 import 'core/themes/light_theme.dart';
+import 'core/widget/network_alert_banner.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import 'features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
@@ -100,7 +102,8 @@ void main() async {
   );
   // ZegoGiftManager().cache.cache(giftItemList);
   isActivate = await CacheManager.getActivation() ?? false;
-  isShowOnboarding = await CacheManager.getShowOnboarding() ?? false;
+  isShowOnboarding = await CacheManager.getShowOnboarding();
+  // isShowOnboarding = false;
   await CacheManager.getFloatingNavigator();
   //Admob.initialize();
 
@@ -115,8 +118,9 @@ void main() async {
   // final isActivated =  false;
   // Routes.onBoardingScreen
   print('will go onBoardingScreen ${!isShowOnboarding}');
+  // final initialRoute = Routes.ChooseLangScreen;
   final initialRoute = !isShowOnboarding
-      ? Routes.onBoardingScreen
+      ? Routes.ChooseLangScreen
       : isActivate
           ? Routes.PAGEPREVIEW
           : Routes.HOME;
@@ -146,6 +150,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
+    NetworkManager().initialize();
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -298,50 +304,63 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
-              return FutureBuilder<bool>(
-                future: CacheManager.getMode(),
+              return StreamBuilder<bool>(
+                  stream: NetworkManager().onStatusChange,
+                  initialData: true, // assume connected at start
                 builder: (context, snapshot) {
-                  return BlocBuilder<CustomPageCubit, CustomPageState>(
-                    builder: (BuildContext context, custom) {
-                      return Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Stack(
-                          children: [
-                            MaterialApp.router(
-                              routerConfig: AppPages.router,
-                              builder: (BuildContext context, Widget? child) {
-                                final mediaQuery = MediaQuery.of(context);
-                                return MediaQuery(
-                                  data: mediaQuery.copyWith(
-                                    textScaler: TextScaler.noScaling,
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      child!,
-                                      const WhatsAppCallScreen(),
-                                    ],
-                                  ),
-                                );
-                              },
-                              themeMode: (snapshot.data ?? false)
-                                  ? ThemeMode.dark
-                                  : ThemeMode.light,
-                              theme: lightTheme,
-                              darkTheme: darkTheme,
-                              title: '49',
-                              debugShowCheckedModeBanner: false,
-                              localizationsDelegates:
-                                  context.localizationDelegates,
-                              supportedLocales: context.supportedLocales,
-                              locale: context.locale,
+                  final bool isConnected = snapshot.data ?? true;
+                  return FutureBuilder<bool>(
+                    future: CacheManager.getMode(),
+                    builder: (context, snapshot) {
+                      return BlocBuilder<CustomPageCubit, CustomPageState>(
+                        builder: (BuildContext context, custom) {
+                          return Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Stack(
+                              children: [
+                                MaterialApp.router(
+                                  routerConfig: AppPages.router,
+                                  builder: (BuildContext context, Widget? child) {
+                                    final mediaQuery = MediaQuery.of(context);
+                                    return MediaQuery(
+                                      data: mediaQuery.copyWith(
+                                        textScaler: TextScaler.noScaling,
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          child!,
+                                          const WhatsAppCallScreen(),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  themeMode: (snapshot.data ?? false)
+                                      ? ThemeMode.dark
+                                      : ThemeMode.light,
+                                  theme: lightTheme,
+                                  darkTheme: darkTheme,
+                                  title: '49',
+                                  debugShowCheckedModeBanner: false,
+                                  localizationsDelegates:
+                                      context.localizationDelegates,
+                                  supportedLocales: context.supportedLocales,
+                                  locale: context.locale,
+                                ),
+                                const MinimizedCallOverlay(),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: NetworkAlertBanner(isConnected: isConnected),
+                                ),
+                              ],
                             ),
-                            const MinimizedCallOverlay(),
-                          ],
-                        ),
+                          );
+                        },
                       );
                     },
                   );
-                },
+                }
               );
             },
           );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -21,12 +22,12 @@ class BuildCreatePost extends StatelessWidget {
 
         return Container(
           height: ((state.backColor == '#FFFFFFFF' && state.isBiggerThen150 == false)||state.selectedLifeEvent!=null)
-              ? 150
-              :((state.backColor == '#FFFFFFFF' && state.isBiggerThen120 == true)||state.selectedLifeEvent!=null)?150: (state.isBiggerThen150 == true)
+              ? 250
+              :((state.backColor == '#FFFFFFFF' && state.isBiggerThen120 == true)||state.selectedLifeEvent!=null)?250: (state.isBiggerThen150 == true)
               ? 300
               : 250,
           alignment: state.isBiggerThen150 == false ? AlignmentDirectional.topStart : Alignment.center,
-          color: Color(int.parse((state.selectedLifeEvent!=null?'#FFFFFFFF':state.backColor??'#FFFFFFFF').replaceAll("#", ""), radix: 16),),
+          color: Color(int.parse((state.selectedLifeEvent!=null?(context.isDarkMode?'#00000000':'#FFFFFFFF'):state.backColor ?? (context.isDarkMode?'#00000000':'#FFFFFFFF')).replaceAll("#", ""), radix: 16),),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,11 +36,9 @@ class BuildCreatePost extends StatelessWidget {
                 child: TextField(
                   maxLines: null,
                   expands: true,
-                  textAlign: (state.backColor == '#FFFFFFFF' || state.isBiggerThen150 == true||state.selectedLifeEvent!=null)
-                      ? TextAlign.start
-                      : TextAlign.center,
+                  textAlign:TextAlign.start,
                   style: TextStyle(
-                    color: (state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.selectedLifeEvent==null)
+                    color: (state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.selectedLifeEvent==null&&state.backColor!='#FFFFFF00')
                         ? Colors.white
                         : AppColors.QUANTITY_COLOR,
                     fontSize: (state.isBiggerThen120 == true && state.isBiggerThan80 == false)
@@ -76,10 +75,14 @@ class BuildCreatePost extends StatelessWidget {
                     hintStyle: TextStyle(
                       fontSize: 45.sp,
                       fontWeight: FontWeight.w400,
-                      color:(state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false)
+                      color:(state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.backColor!='#FFFFFF00')
                           ? Colors.white
                           : AppColors.GREYTEXT
                     ),
+                    focusColor:(state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.backColor!='#FFFFFF00')
+                        ? Colors.white
+                        : AppColors.GREYTEXT,
+
                     floatingLabelAlignment: FloatingLabelAlignment.center,
                     fillColor: state.isBiggerThen150?Colors.white:Color(int.parse((state.backColor??'#FFFFFFFF').replaceAll("#", ""), radix: 16),),
                     border: InputBorder.none,

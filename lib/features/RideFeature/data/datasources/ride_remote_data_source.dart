@@ -16,6 +16,8 @@ import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_user_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/loading_info_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_offer_model.dart';
@@ -41,17 +43,21 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_regis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
@@ -80,6 +86,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
 import '../../domain/entities/create_no_track_trip_entity.dart';
+import '../../domain/entities/dashboards/create_non_track_offer_entity.dart';
+import '../../domain/entities/dashboards/update_driver_settings_entity.dart';
 import '../../domain/entities/get_client_accepted_trips_entity.dart';
 import '../../domain/entities/get_client_offer_trips_entity.dart';
 import '../../domain/entities/get_client_past_trips_entity.dart';
@@ -88,14 +96,19 @@ import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/accept_non_track_trip_use_case.dart';
 import '../../domain/usecases/cancel_non_track_trip_use_case.dart';
 import '../../domain/usecases/create_non_track_trip_use_case.dart';
+import '../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
+import '../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../../domain/usecases/rating_driver_by_client.dart';
 import '../models/create_no_track_trip_model.dart';
+import '../models/dashboards/create_non_track_offer_model.dart';
 import '../models/dashboards/get_offers_response_model.dart';
 import '../../../../shared_web_socket.dart';
 import '../../../account_taps/my_adds/data/model/click_model.dart';
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
+import '../models/dashboards/update_driver_settings_model.dart';
 import '../models/get_client_accepted_trips_model.dart';
 import '../models/get_client_offer_trips_model.dart';
 import '../models/get_client_past_trips_model.dart';
@@ -107,6 +120,7 @@ abstract class RideRemoteDataSource {
       GetRideCategoriesParams params);
   Future<Either<Failure, bool>> listenToUpdateLocation(
       UpdateSocketLocationParams params);
+  Future<Either<Failure, bool>> watchingTripsParams(WatchingTripsParams params);
   Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(
       GetRideCategoriesParams params);
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
@@ -126,8 +140,10 @@ abstract class RideRemoteDataSource {
       RideExpectedPriceParams params);
   Future<Either<Failure, RideDriverStatisticsEntity>> getDriverStatistics();
   Future<Either<Failure, bool>> deleteRideRegistration();
-  Future<Either<Failure, List<String>>> getRideBrands();
-  Future<Either<Failure, List<String>>> getRideModels(String brand);
+  Future<Either<Failure, List<RideBrandEntity>>> getRideBrands();
+  Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand);
+  Future<Either<Failure, String>> addCarModel(AddCarModelParams params);
+  Future<Either<Failure, String>> addCarBrand(String params);
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(
       GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
@@ -166,6 +182,9 @@ abstract class RideRemoteDataSource {
 
   Future<Either<Failure, bool>> cancelTripByRider(
       CancelTripByRiderUseCaseParams params);
+
+  Future<Either<Failure, bool>> finalizeTripByRider(
+      String params);
 
   Future<Either<Failure, bool>> cancelTripByClient(
       CancelTripByClientUseCaseParams params);
@@ -223,6 +242,14 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params);
 
   Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
+
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createNonTrackOffer(CreateNonTrackOfferParams params);
+  Future<Either<Failure, UpdateDriverSettingsEntity >> updateDriverSettings(UpdateDriverSettingsParams params);
+  Future<Either<Failure, bool>> sendOkIamComing();
+
+  Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
+
+  void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params);
 
 
 }
@@ -348,10 +375,8 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        log('requested trip id before : ${data['data']['trip']['_id']}');
-        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['trip']);
-        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
-        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
+        log('requested trip id before : ${data['data']['tripId']}');
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']);
         log('requested trip id after : ${rideRequestTripModel.id}');
         return Right(rideRequestTripModel);
       });
@@ -369,9 +394,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       );
 
       return response.fold((failure) => Left(failure), (data) {
+        log('latest trip id before : ${data['data']['latestTrip']['tripId']}');
         RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['latestTrip']);
-        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
-        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
+        log('latest trip id after : ${rideRequestTripModel.id}');
         return Right(rideRequestTripModel);
       });
     } catch (e) {
@@ -450,14 +475,14 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRideBrands() async {
+  Future<Either<Failure, List<RideBrandEntity>>> getRideBrands() async {
     try {
       final response =
-          await _apiConsumer.post(EndPoints.getRideBrands, data: {"brand": ""});
+          await _apiConsumer.get(EndPoints.getRideBrands, );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] != null || data['data'].isNotEmpty)
-            ? List<String>.from(data['data'].map((e) => e['brand'].toString()))
+        return Right((data['data'] != null || data['data']['carBrands'].isNotEmpty)
+            ? List<RideBrandModel>.from(data['data']['carBrands'].map((e) =>RideBrandModel.fromJson(e)))
             : []);
       });
     } catch (e) {
@@ -466,14 +491,14 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRideModels(String brand) async {
+  Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand) async {
     try {
       final response = await _apiConsumer
-          .get(EndPoints.getRideModels, queryParameters: {"brand": brand});
+          .get(EndPoints.getRideModels(brand));
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] != null || data['data'].isNotEmpty)
-            ? List<String>.from(data['data'].map((e) => e['model'].toString()))
+        return Right((data['data'] != null || data['data']['carModels'].isNotEmpty)
+            ? List<RideCarModelModel>.from(data['data']['carModels'].map((e) => RideCarModelModel.fromJson(e)))
             : []);
       });
     } catch (e) {
@@ -735,6 +760,21 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, bool>> finalizeTripByRider(
+      String params) async {
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.finalizeTripByRider(params),
+      );
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> cancelTripByClient(
       CancelTripByClientUseCaseParams params) async {
     try {
@@ -954,6 +994,22 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, bool>> watchingTripsParams(WatchingTripsParams params) async {
+    try {
+      CliLogger.info('Listen To Watching Trips');
+      CliLogger.info('Listen To Watching Trips ${params.toJson()}');
+      SharedWebSocket.socket!.emit(SocketIOEvents.watchingTrips, params.toJson());
+      CliLogger.info(
+          "SocketIOEvents.watchingTrips${SocketIOEvents.watchingTrips}");
+
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t Watching Trips error $e');
+      return const Left(ServerFailure(message: "can't Watching Trips "));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> makeNonTrackingRequestTrip(
       MakeNonTrackingRequestTripUsecaseParam params) async {
     try {
@@ -993,9 +1049,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         EndPoints.acceptOfferByClient(offerId),
       );
       return response.fold((failure) => Left(failure), (data) {
-        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['tripDetails']);
-        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
-        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
+        log('accepted trip id before : ${data['data']['tripId']}');
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']);
+        log('accepted trip id after : ${rideRequestTripModel.id}');
         return Right(rideRequestTripModel);
       });
     } catch (e) {
@@ -1233,5 +1289,113 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     );
   }
 
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createNonTrackOffer(CreateNonTrackOfferParams params) async{
+    final url = "${EndPoints.createOfferNonTrackedTrips}${params.tripId}";
+    final response = await _apiConsumer.post(
+      url,
+      data: params.toJson()
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final createOffer = CreateNonTrackOfferModel.fromJson(data);
+        return Right(createOffer);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UpdateDriverSettingsEntity>> updateDriverSettings(UpdateDriverSettingsParams params)async {
+    final url = EndPoints.updateDriverSettingsNonTrack;
+    final response = await _apiConsumer.put(
+        url,
+        data: params.toJson()
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final updateDriver = UpdateDriverSettingsModel .fromJson(data);
+        return Right(updateDriver);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendOkIamComing() async{
+    const url = EndPoints.sendOkIamComing;
+    final response = await _apiConsumer.get(
+      url,
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return const Right(true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params) async{
+    const url = EndPoints.ratingDriverByClient;
+
+    final response = await _apiConsumer.post(
+      url,
+      data: params.toJson(),
+    );
+
+    return response.fold(
+          (l) => Left(l),
+          (r) {
+        return const Right(true);
+      },
+    );
+  }
+
+  @override
+  void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params) {
+    try {
+      CliLogger.info("Listen to  Update Offer  Trip ");
+      log("Listen to Update Offer Trip Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateOfferUntrackedClientTrip, (data) {
+        CliLogger.info(" Update Offer Trip data :  $data");
+        log(" Update Offer Trip data :  $data");
+        print(" Update Offer Trip data :  ${data}");
+        params(ClientOfferTripModel.fromJson(data["offersUpdated"]));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarModel(AddCarModelParams params) async {
+    final response = await _apiConsumer.post(
+        EndPoints.addCarModel,
+        data: params.toJson(),
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['data']['modelId']??'');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> addCarBrand(String params) async {
+    final response = await _apiConsumer.post(
+        EndPoints.addCarBrand,
+        data: {
+          'brandName':params
+        },
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['data']['brandId']??'');
+      },
+    );
+  }
 
 }

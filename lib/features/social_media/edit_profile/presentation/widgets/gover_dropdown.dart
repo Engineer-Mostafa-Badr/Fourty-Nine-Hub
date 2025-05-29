@@ -37,7 +37,7 @@ class _GoverDropdownState extends State<GoverDropdown> {
         onSelected: (String? country) {
           setState(() {
             _selectedCountry = country;
-            state.selectedCountry = country;
+            state.selectedCity = country;
           });
           if (widget.onSelected != null) {
             widget.onSelected!(country);
@@ -55,7 +55,7 @@ class _GoverDropdownState extends State<GoverDropdown> {
             [],
         leadingIcon: const Icon(Icons.public),
         selectedTrailingIcon: const Icon(Icons.keyboard_arrow_up),
-        hintText: _selectedCountry ?? widget.country,
+        hintText: widget.country, // _selectedCountry ?? widget.country,
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(UIConst.radius)),

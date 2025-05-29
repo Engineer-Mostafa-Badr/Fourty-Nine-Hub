@@ -18,6 +18,11 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/registration_banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/favourite_ads_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -66,6 +71,44 @@ class _HealthViewState extends State<HealthView> {
     });
   }
 
+  bool _showFavoriteAds = false;
+  bool _showRequestLog = false;
+  bool _showMyAds = false;
+
+  void _toggleAdsView(String viewType) {
+    setState(() {
+      if (viewType == 'favouriteAds') {
+        _showFavoriteAds = !_showFavoriteAds;
+
+        if (_showFavoriteAds) {
+          _showRequestLog = false;
+          _showMyAds = false;
+          context
+              .read<SubcategoriesCubit>()
+              .loadMyFavouriteAds(id: '62c8b57c9332225799fe3306');
+        }
+      } else if (viewType == 'requestLog') {
+        _showRequestLog = !_showRequestLog;
+        if (_showRequestLog) {
+          _showFavoriteAds = false;
+          _showMyAds = false;
+          context
+              .read<SubcategoriesCubit>()
+              .loadRequestsLog(id: '62c8b57c9332225799fe3306');
+        }
+      } else if (viewType == 'myAds') {
+        _showMyAds = !_showMyAds;
+        if (_showMyAds) {
+          _showFavoriteAds = false;
+          _showRequestLog = false;
+          context
+              .read<SubcategoriesCubit>()
+              .loadMyAds(id: '62c8b57c9332225799fe3306');
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isWaitingApproval = false;
@@ -74,22 +117,28 @@ class _HealthViewState extends State<HealthView> {
       body: BlocBuilder<HealthCubit, HealthState>(
         builder: (context, state) {
           return ListView(
-            padding: EdgeInsets.all(16.0.w),
+            // padding: EdgeInsets.all(16.0.w),
             children: [
-              const HealthBanner(),
-              const Sizer(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: HealthBanner(),
+              ),
+              Sizer(),
               state.isDoctor == false
                   ? const RegistrationBanner()
                   : DoctorModeBanner(
                       isWaitingApproval: isWaitingApproval,
                     ),
               if (isWaitingApproval) WaitingAprovalText(),
-              const Sizer(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+              Sizer(),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    const SizedBox(
+                      width: 16,
+                    ),
                     Icon(
                       Icons.search,
                       size: 50.sp,
@@ -97,68 +146,138 @@ class _HealthViewState extends State<HealthView> {
                     const Sizer(),
 
                     /// Favourite Ads
-                    Expanded(
-                      child: CurrentHistoryBooking(
-                        title: LocaleKeys.mostBooking.localize,
-                        isSelected: _showMost,
-                        onTap: () => _toggleView('most'),
-                      ),
+                    CurrentHistoryBooking(
+                      title: LocaleKeys.mostBooking.localize,
+                      isSelected: _showMost,
+                      onTap: () => _toggleView('most'),
                     ),
                     const Sizer(),
 
                     /// History
-                    Expanded(
-                      child: CurrentHistoryBooking(
-                        title: context.isArabic
-                            ? 'سجل الحجوزات'
-                            : 'Booking History',
-                        isSelected: _showHistory,
-                        onTap: () {
-                          if (!context.read<UserCubit>().isLoggedIn) {
-                            return pleaseLoginDialog(context);
-                          } else {
-                            _toggleView('history');
-                          }
-                        },
-                      ),
+                    CurrentHistoryBooking(
+                      title:
+                          context.isArabic ? 'سجل حجوزات' : 'Booking History',
+                      isSelected: _showHistory,
+                      onTap: () {
+                        if (!context.read<UserCubit>().isLoggedIn) {
+                          return pleaseLoginDialog(context);
+                        } else {
+                          _toggleView('history');
+                        }
+                      },
                     ),
                     const Sizer(),
 
                     /// Current Booking
-                    Expanded(
-                      child: CurrentHistoryBooking(
-                        title: context.isArabic
-                            ? 'الحجوزات الحالية'
-                            : 'Current Booking',
-                        isSelected: _showCurrent,
-                        onTap: () {
-                          if (!context.read<UserCubit>().isLoggedIn) {
-                            return pleaseLoginDialog(context);
-                          } else {
-                            _toggleView('current');
-                          }
-                        },
-                      ),
+                    CurrentHistoryBooking(
+                      title:
+                          context.isArabic ? 'حجوزات حالية' : 'Current Booking',
+                      isSelected: _showCurrent,
+                      onTap: () {
+                        if (!context.read<UserCubit>().isLoggedIn) {
+                          return pleaseLoginDialog(context);
+                        } else {
+                          _toggleView('current');
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      width: 16,
                     ),
                   ],
                 ),
               ),
-              const Sizer(height: 20),
+              Sizer(height: 20),
 
               // Default view when none are selected
-              if (!_showMost && !_showHistory && !_showCurrent)
-                const Column(
+              if (!_showMost && !_showHistory && !_showCurrent) ...[
+                Column(
                   children: [
-                    HealthBookingTypesWidgt(),
-                    Sizer(),
-                    HealthSubCategories(),
-                    Sizer(),
-                    HealthMedicalServices(),
-                    Sizer(),
-                    HealthBookings(),
-                    Sizer(),
+                    const HealthBookingTypesWidgt(),
+                    const Sizer(),
+                    const HealthSubCategories(),
+                    const Sizer(),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Icon(
+                            Icons.search,
+                            size: 50.sp,
+                          ),
+                          const Sizer(),
+
+                          /// Favourite Ads
+                          CurrentHistoryBooking(
+                            title: LocaleKeys.favouriteAds.localize,
+                            isSelected: _showFavoriteAds,
+                            onTap: () => _toggleAdsView('favouriteAds'),
+                          ),
+                          const Sizer(),
+
+                          /// Request Log
+                          CurrentHistoryBooking(
+                            title: LocaleKeys.requestLog.localize,
+                            isSelected: _showRequestLog,
+                            onTap: () {
+                              if (!context.read<UserCubit>().isLoggedIn) {
+                                return pleaseLoginDialog(context);
+                              } else {
+                                _toggleAdsView('requestLog');
+                              }
+                            },
+                          ),
+                          const Sizer(),
+
+                          /// My Ads
+                          CurrentHistoryBooking(
+                            title: LocaleKeys.myAds.localize,
+                            isSelected: _showMyAds,
+                            onTap: () {
+                              if (!context.read<UserCubit>().isLoggedIn) {
+                                return pleaseLoginDialog(context);
+                              } else {
+                                _toggleAdsView('myAds');
+                              }
+                            },
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Sizer(height: 8),
+                    if (!_showFavoriteAds &&
+                        !_showRequestLog &&
+                        !_showMyAds) ...[
+                      const HealthMedicalServices(),
+                      const Sizer(),
+                      const HealthBookings(),
+                      const Sizer(),
+                    ],
+                    if (_showFavoriteAds)
+                      FavouriteAdsView(
+                        id: '62c8b57c9332225799fe3306',
+                        isFloatingButtonVisible: (p0) {},
+                      ),
+                    if (_showRequestLog)
+                      AdsRequestLogView(
+                        mainCategoryId: '62c8b57c9332225799fe3306',
+                        isFloatingButtonVisible: (p0) {},
+                      ),
+                    if (_showMyAds)
+                      MyAdsView(
+                        id: '62c8b57c9332225799fe3306',
+                        isFloatingButtonVisible: (p0) {},
+                      ),
                   ],
                 ),
+              ],
 
               // Current Booking view
               if (_showCurrent)
@@ -185,7 +304,7 @@ class _HealthViewState extends State<HealthView> {
               // Favourite Ads view
               if (_showMost)
                 BlocProvider(
-                  key: ValueKey('MostBookingScreen'),
+                  key: const ValueKey('MostBookingScreen'),
                   create: (context) =>
                       serviceLocator<HealthCubit>()..loadInitialMostBooking(),
                   child: MostBookingScreen(
@@ -218,3 +337,39 @@ class _HealthViewState extends State<HealthView> {
     );
   }
 }
+
+// class FavoriteAdsHealth extends StatelessWidget {
+//   const FavoriteAdsHealth({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
+//       builder: (context, state) {
+//               final controller = context.read<SubcategoriesCubit>();
+
+//         return MyAdCard(
+//           item: controller.myFavouriteAds[index],
+//           showSubCategory: true,
+//           onFav: (id) async {
+//             bool result = await context
+//                 .read<AdvertisementCubit>()
+//                 .unFavouriteAd(controller.myFavouriteAds[i].id);
+//             controller.myFavouriteAds.remove(controller.myFavouriteAds[i]);
+//             setState(() {});
+//             return result;
+//             // bool result = await context
+//             //     .read<AdvertisementCubit>()
+//             //     .favouriteAd(controller.myFavouriteAds[i].id);
+//             // return result;
+//           },
+//           onRemoveFav: (id) async {
+//             bool result = await context
+//                 .read<AdvertisementCubit>()
+//                 .unFavouriteAd(controller.myFavouriteAds[i].id);
+//             return result;
+//           },
+//         );
+//       },
+//     );
+//   }
+// }

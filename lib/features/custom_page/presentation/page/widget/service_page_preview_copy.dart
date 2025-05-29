@@ -43,9 +43,12 @@ import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../fourty_nine/presentation/widgets/grid_blocks_widget.dart';
 import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
+import '../../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 
 class ServicePagePreview extends StatefulWidget {
-  const ServicePagePreview({super.key});
+  const ServicePagePreview({super.key, this.noNavBar = false});
+
+  final bool noNavBar;
 
   @override
   State<ServicePagePreview> createState() => _ServicePagePreviewState();
@@ -145,7 +148,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           MainCategoriesCubit controller, MainCategoriesState state) =>
       [
         MainCategoriesListView(controller: controller, state: state),
-        SliverToBoxAdapter(child: MainCategoriesGrideViewSection(controller: controller, state: state)),
+        SliverToBoxAdapter(
+            child: MainCategoriesGrideViewSection(
+                controller: controller, state: state)),
         SliverToBoxAdapter(
           child: BlocProvider(
             create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
@@ -156,7 +161,12 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                   height: 400,
                   child: MainCategoriesFlipCardsView(
                     isAppBarShow: false,
-                    data: context.read<MainCategoriesTapsCubit>().mainCategories,
+                    mainCategoriesCardsParams: MainCategoriesCardsParams(
+                      data: context
+                          .read<MainCategoriesTapsCubit>()
+                          .mainCategories,
+                      isCustomPage: true,
+                    ),
                   ),
                 ),
               );
@@ -176,9 +186,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             child: Builder(builder: (context) {
               return SizedBox(
                 height: MediaQuery.sizeOf(context).height * .7,
-                child: const MainCategoriesGridViewCustomPage(
-                  isAppBarShow: false,
-                ),
+                child:
+                    const MainCategoriesGridViewCustomPage(isAppBarShow: false),
               );
             }),
           ),
@@ -206,13 +215,15 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        bottomNavigationBar: BottomNavigator(
-          scrollController: scrollController,
-          isScrollingDown: _isScrollingDown,
-          mainCategory: 1,
-          index: 2,
-        ),
-        floatingActionButton: _isScrollingDown
+        bottomNavigationBar: widget.noNavBar
+            ? null
+            : BottomNavigator(
+                scrollController: scrollController,
+                isScrollingDown: _isScrollingDown,
+                mainCategory: 1,
+                index: 2,
+              ),
+        floatingActionButton: _isScrollingDown || widget.noNavBar
             ? null
             : const FloatingButton(
                 changeView: 1,
@@ -333,7 +344,12 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                 //     ),
                 //   ),
                 // ),
-                SliverToBoxAdapter(child: GridBlocksWidget()),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: const GridBlocksWidget(),
+                  ),
+                ),
                 const SliverToBoxAdapter(child: Sizer()),
                 SliverToBoxAdapter(
                   child: CustomAnimatedText(
@@ -435,7 +451,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                       if (state.customPage != null) {
                         return getMainCategoryWidgets(controller, state)[
                             CacheManager.getInt(
-                                CacheManager.selectedCategoryView)??0];
+                                    CacheManager.selectedCategoryView) ??
+                                0];
                       } else {
                         return const SliverToBoxAdapter(
                             child: SizedBox.shrink());
@@ -946,7 +963,7 @@ class MainCategoriesShimmerLoading extends StatelessWidget {
         child: Column(
           children: List.generate(
             6,
-                (index) => Padding(
+            (index) => Padding(
               padding: EdgeInsets.only(bottom: 15.h),
               child: Container(
                 height: MediaQuery.of(context).size.height * .15.h,
@@ -981,7 +998,7 @@ class MainCategoriesListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           final isLastItem = index == (state.customPage?.length ?? 0) * 2 - 1;
 
           if (index.isOdd) {
@@ -1001,7 +1018,11 @@ class MainCategoriesListView extends StatelessWidget {
               if (category.id == '62c8b5b09332225799fe335e') {
                 context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
               } else {
-                context.push(Routes.CustomPageSubCategoriesView, extra: category);
+                context.push(
+                  Routes.CustomPageSubCategoriesView,
+                  extra: CustomPageSubCategoriesParams(
+                      mainCategory: category, isCustomPage: true),
+                );
               }
             },
             child: Padding(
@@ -1009,7 +1030,8 @@ class MainCategoriesListView extends StatelessWidget {
               child: MainCategoryBanner(
                 category: category,
                 onFavorite: () async {
-                  final result = await controller.toggleFavoriteMedicalService(category.id);
+                  final result = await controller
+                      .toggleFavoriteMedicalService(category.id);
                   print("result $result");
                   return result;
                 },
@@ -1017,7 +1039,8 @@ class MainCategoriesListView extends StatelessWidget {
             ),
           );
         },
-        childCount: (state.customPage?.length ?? 0) * 2 - 1, // account for separators
+        childCount:
+            (state.customPage?.length ?? 0) * 2 - 1, // account for separators
       ),
     );
   }

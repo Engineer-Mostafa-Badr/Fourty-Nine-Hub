@@ -20,6 +20,7 @@ class ImageFromInternet extends StatelessWidget {
     this.defaultLogo = false,
     this.isSvg = false,
     this.fit,
+    this.isMale = true,
   });
   final String image;
   final double? width;
@@ -30,6 +31,7 @@ class ImageFromInternet extends StatelessWidget {
   final bool? isSvg;
   final bool? defaultLogo;
   final BoxFit? fit;
+  final bool isMale;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -71,10 +73,15 @@ class ImageFromInternet extends StatelessWidget {
                       image: AssetImage(Assets.logo),
                       fit: BoxFit.fill,
                     )
-                  : const DecorationImage(
-                      image: NetworkImage(UIConst.profilePlaceHolder),
-                      fit: BoxFit.fill,
-                    ),
+                  : isMale
+                      ? const DecorationImage(
+                          image: NetworkImage(UIConst.profilePlaceHolder),
+                          fit: BoxFit.fill,
+                        )
+                      : DecorationImage(
+                          image: AssetImage(Assets.womanPlaceHolder),
+                          fit: BoxFit.fill,
+                        ),
         ),
       ),
       placeholder: (context, url) => Container(

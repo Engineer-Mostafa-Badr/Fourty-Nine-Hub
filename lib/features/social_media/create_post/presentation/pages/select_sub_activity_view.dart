@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 
@@ -55,7 +56,7 @@ class _SelectSubActivityState extends State<SelectSubActivity> {
             builder: (context, state) {
               var cubit = context.read<CreatePostCubit>();
               if (cubit.loadSubActivities) {
-                return const Center(child: CircularProgressIndicator(),);
+                return const Center(child: CustomCircularProgressIndicator(),);
               }
               return GridView.builder(
                   controller: _scrollController,

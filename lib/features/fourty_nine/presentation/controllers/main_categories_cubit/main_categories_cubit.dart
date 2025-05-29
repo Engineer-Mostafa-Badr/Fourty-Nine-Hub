@@ -360,16 +360,24 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
           },
         );
       }
+      final currentLocation = GoRouter.of(context).state.path;
+      if('$currentLocation' == Paths.rideModeScreen){
+        return;
+      }
       context.push(Routes.rideModeScreen,
           extra: const RideModeParams(
               modeType: 'ride',
-              isSocket: true));
+              isSocket: true,currentIndex: 0));
     });
   }
 
   void listenToAcceptOffer(BuildContext context) {
     CliLogger.info('Listen To Update Trip Auto Accept');
     listenToAcceptOfferUseCase((trip) {
+      final currentLocation = GoRouter.of(context).state.path;
+      if('$currentLocation' == Paths.rideModeScreen){
+        return;
+      }
       context.push(Routes.rideModeScreen,
           extra: const RideModeParams(
               modeType: 'ride',

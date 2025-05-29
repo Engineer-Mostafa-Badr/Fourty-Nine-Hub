@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class InvestmentItem extends StatelessWidget {
   const InvestmentItem({
@@ -72,7 +73,7 @@ class InvestmentItem extends StatelessWidget {
             : isLoading
                 ? const Padding(
                     padding: EdgeInsetsDirectional.only(end: 26),
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   )
                 : CustomButtonWalletAndGiftAndCashback(
                     title: LocaleKeys.transfer.localize,

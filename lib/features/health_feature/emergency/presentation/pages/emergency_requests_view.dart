@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_requests_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/widgets/emergency_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -60,7 +61,7 @@ class _EmergencyRequestsViewState extends State<EmergencyRequestsView> {
           builder: (context, state) {
         var cubit = context.read<EmergencyRequestsCubit>();
         return state.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CustomCircularProgressIndicator())
             : cubit.emergencies.isNotEmpty
                 ? ListView.separated(
                     controller: _scrollController,

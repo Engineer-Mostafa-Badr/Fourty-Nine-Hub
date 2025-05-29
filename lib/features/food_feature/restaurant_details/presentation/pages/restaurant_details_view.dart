@@ -17,6 +17,7 @@ import '../../../../../routes/routes.dart';
 import '../../../restaurant_details/presentation/widgets/restaurant_header.dart';
 import '../cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
   final GetAllRestaurantEntity restaurant;
@@ -73,7 +74,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
         builder: (context, state) {
           return state.isLoading
               ? const Center(
-                  child: CircularProgressIndicator(),
+                  child: CustomCircularProgressIndicator(),
                 )
               : Stack(
                   children: [
@@ -93,7 +94,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                                       .isLoadingMore ==
                                   true)
                                 const Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CustomCircularProgressIndicator(),
                                 ),
                             ],
                           ),
@@ -115,7 +116,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15.r)),
-                              child: const CircularProgressIndicator(
+                              child: const CustomCircularProgressIndicator(
                                 color: AppColors.PRIMARY_COLOR,
                               )),
                         ),

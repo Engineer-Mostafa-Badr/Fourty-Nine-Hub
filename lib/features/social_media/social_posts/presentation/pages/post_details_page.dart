@@ -25,6 +25,7 @@ import '../../domain/entities/comment_entity.dart';
 import '../../domain/usecases/post_comment_usecase.dart';
 import '../../domain/usecases/post_react_usecase.dart';
 import '../widgets/posts/comment_card.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class PostDetailsPage extends StatefulWidget {
   // final PostEntity post;
@@ -83,7 +84,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
             if (state.status == StateStatus.loading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               );
             } else if (state.status == StateStatus.error ||
                 state.postDetails == null) {

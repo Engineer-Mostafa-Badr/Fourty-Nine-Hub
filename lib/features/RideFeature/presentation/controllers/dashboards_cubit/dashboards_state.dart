@@ -58,7 +58,30 @@ class DashboardsState
   final bool? isClientNotShownReason;
   final List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips;
   final List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips;
-  final List<HistoryTripEntity >? pastRideNonSocketTrips;
+  final List<HistoryTripEntity>? pastRideNonSocketTrips;
+  final List<EmergencyContactEntity>? emergencyContacts;
+  final SupportDetailsEntity? supportDetails;
+  final DateTime? remainingTime;
+      final String? supportStatus;
+  final CreateNonTrackOfferEntity? createNonTrackOfferEntity;
+  final bool? offerCreatedShown;
+  final UpdateDriverSettingsEntity? updateDriverSettingsEntity;
+  final DriverSettingsEntity? driverSettingsEntity;
+  final XFile? personalFrontIdPicture;
+  final XFile? personalBackIdPicture;
+  final XFile? personalCriminalRecordPicture;
+  final XFile? personalDrugAnalysisPicture;
+  final XFile? driverLicensePicture;
+  final XFile? backOfDriverLicensePicture;
+  final XFile? selfieDriverLicensePicture;
+  final RateResponseEntity? rateResponseEntity;
+  final XFile? vehiclePicture;
+  final XFile? vehicleFrontPicture;
+  final XFile? vehicleBackPicture;
+  final XFile? personalTechnicalExaminationPicture;
+  final List<GovernorateEntity>? govs;
+  final GovernorateEntity? selectedGov;
+
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -71,11 +94,33 @@ class DashboardsState
       this.acceptedRideNonSocketTrips,
       this.pastRideNonSocketTrips,
       this.tripStatus,
+      this.remainingTime,
       this.lastStatus,
       this.activeTrip,
+      this.supportDetails,
+      this.supportStatus,
+      this.emergencyContacts,
       this.isChangedMindReason=false,
       this.isOtherReason=false,
       this.isClientNotShownReason=false,
+      this.createNonTrackOfferEntity,
+        this.offerCreatedShown = false,
+        this.updateDriverSettingsEntity ,
+        this.driverSettingsEntity ,
+        this.personalFrontIdPicture,
+        this.personalBackIdPicture,
+        this.personalCriminalRecordPicture,
+        this.personalDrugAnalysisPicture,
+        this.driverLicensePicture,
+        this.backOfDriverLicensePicture,
+        this.selfieDriverLicensePicture,
+        this.rateResponseEntity,
+        this.vehiclePicture,
+        this.vehicleFrontPicture,
+        this.vehicleBackPicture,
+        this.personalTechnicalExaminationPicture,
+        this.selectedGov,
+        this.govs,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -86,15 +131,37 @@ class DashboardsState
       SettingsDashboardEntity? settings,
       int? currentIndex,
         String? tripStatus,
+        DateTime? remainingTime,
         String? lastStatus,
         RunningTripEntity? activeTrip,
         bool? isChangedMindReason,
         bool? isOtherReason,
         bool? isClientNotShownReason,
-
+        SupportDetailsEntity? supportDetails,
+        List<EmergencyContactEntity>? emergencyContacts,
+        String? supportStatus,
         List<AvailableRideNonSocketTripEntity>? availableRideNonSocketTrips,
         List<AcceptedRideNonSocketTripEntity>? acceptedRideNonSocketTrips,
         List<HistoryTripEntity >? pastRideNonSocketTrips,
+        CreateNonTrackOfferEntity? createNonTrackOfferEntity,
+        bool? offerCreatedShown,
+        UpdateDriverSettingsEntity? updateDriverSettingsEntity,
+        DriverSettingsEntity? driverSettingsEntity,
+        XFile? personalBackIdPicture,
+        XFile? personalFrontIdPicture,
+        XFile? personalCriminalRecordPicture,
+        XFile? personalDrugAnalysisPicture,
+        XFile? driverLicensePicture,
+        XFile? backOfDriverLicensePicture,
+        XFile? selfieDriverLicensePicture,
+        RateResponseEntity? rateResponseEntity,
+        List<GovernorateEntity>? govs,
+        GovernorateEntity? selectedGov,
+
+        XFile? vehiclePicture,
+        XFile? vehicleFrontPicture,
+         XFile? vehicleBackPicture,
+        XFile? personalTechnicalExaminationPicture,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -113,6 +180,28 @@ class DashboardsState
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
       isOtherReason: isOtherReason ?? this.isOtherReason,
       isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,
+      supportStatus: supportStatus ?? this.supportStatus,
+      supportDetails: supportDetails ?? this.supportDetails,
+      emergencyContacts: emergencyContacts ?? this.emergencyContacts,
+      createNonTrackOfferEntity: createNonTrackOfferEntity ?? this.createNonTrackOfferEntity,
+      offerCreatedShown: offerCreatedShown ?? this.offerCreatedShown,
+      updateDriverSettingsEntity: updateDriverSettingsEntity ?? this.updateDriverSettingsEntity,
+      driverSettingsEntity: driverSettingsEntity ?? this.driverSettingsEntity,
+      personalFrontIdPicture: personalFrontIdPicture ?? this.personalFrontIdPicture,
+      personalBackIdPicture: personalBackIdPicture ?? this.personalBackIdPicture,
+      personalCriminalRecordPicture: personalCriminalRecordPicture ?? this.personalCriminalRecordPicture,
+      personalDrugAnalysisPicture: personalDrugAnalysisPicture ?? this.personalDrugAnalysisPicture,
+      driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
+      backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
+      selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
+      remainingTime: remainingTime ?? this.remainingTime,
+      rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
+      vehiclePicture: vehiclePicture ?? this.vehiclePicture,
+      vehicleFrontPicture: vehicleFrontPicture ?? this.vehicleFrontPicture,
+      vehicleBackPicture: vehicleBackPicture ?? this.vehicleBackPicture,
+      personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
+      govs: govs ?? this.govs,
+      selectedGov: selectedGov ?? this.selectedGov,
     );
   }
 

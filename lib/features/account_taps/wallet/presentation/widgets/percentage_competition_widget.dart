@@ -103,12 +103,16 @@ class _PercentageCompetitionWidgetState
                   shape: const OvalBorder(),
                 ),
                 child: Center(
-                  child: Label(
-                    text:
-                        '${FormatNumbers().formatNumber(widget.price, useArabicNumerals: context.isArabic)} ${widget.currency}',
-                    style: Styles.headerText(
-                      color: Colors.white,
-                      fontSize: 32,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Label(
+                      textAlign: TextAlign.center,
+                      text:
+                          '${FormatNumbers().formatNumber(widget.price, useArabicNumerals: context.isArabic)}\n ${widget.currency}',
+                      style: Styles.headerText(
+                        color: Colors.white,
+                        fontSize: 32,
+                      ),
                     ),
                   ),
                 ),
@@ -145,7 +149,7 @@ class _PercentageCompetitionWidgetState
                 child: Center(
                   child: Label(
                     text:
-                        '${FormatNumbers().convertNumberToLocalizedString(widget.percentage.toStringAsFixed(1), isArabic: context.isArabic)}%',
+                        '${FormatNumbers().convertNumberToLocalizedString(widget.percentage >= 100 ? '100' : widget.percentage.toStringAsFixed(1), isArabic: context.isArabic)}%',
                     style: Styles.headerText(
                       color: Colors.white,
                       fontSize: 32,

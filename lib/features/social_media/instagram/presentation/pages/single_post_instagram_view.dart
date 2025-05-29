@@ -11,13 +11,25 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/si
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/single_post_instagram_cubit/single_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class SinglePostInstagramView extends StatelessWidget {
   const SinglePostInstagramView({super.key, required this.postId});
 
   final String postId;
-
+//   print("objectitemId$payload");
+//   if (payload is String) {
+//   userId = payload;
+//   } else {
+//   print("payloadpayloadpayload $payload");
+//   print("payloadpayloadpayload ${payload['userId']}");
+//   // print(id);
+//   // print('itemId${payload['itemId']}');
+//   userId = payload['userId'];
+//   }
+// }
+// var userId;
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -45,11 +57,12 @@ class SinglePostInstagramView extends StatelessWidget {
         centerTitle: true,
       ),
       body: BlocBuilder<SinglePostInstagramCubit, SinglePostInstagramState>(
+        // bloc: serviceLocator<SinglePostInstagramCubit>(),
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {
             return const CustomLoading();
           }
-          if (state.status.isFailure) {
+          if (state.status == SinglePostInstagramStatus.failure) {
             return CustomFailureWidget(
               title: getFailureMessage(
                 state.failure ?? UnknownFailure(''),
@@ -70,18 +83,24 @@ class SinglePostInstagramView extends StatelessWidget {
 }
 
 class SinglePostInstagramViewBody extends StatelessWidget {
-  const SinglePostInstagramViewBody({super.key, required this.post});
+  const SinglePostInstagramViewBody({
+    super.key,
+    required this.post,
+  });
 
   final SinglePostInstagramEntity post;
 
   @override
   Widget build(BuildContext context) {
     return PostInstagramWidget(
+      posts: [],
+      currentIndex: 0,
       instagramPostEntity: InstagramPostEntity(
         id: post.id,
         commentsCounter: post.commentsCounter,
         shareCounter: post.shearsCounter,
-        createdAt: DateTime.now().toString(), // post.createdAt,
+        createdAt: DateTime.now().toString(),
+        // post.createdAt,
         content: post.content,
         countOfStory: post.owner.hasStory,
         favoritesCounter: post.favoritesCounter,
@@ -90,9 +109,11 @@ class SinglePostInstagramViewBody extends StatelessWidget {
         username: post.owner.username,
         verifiedBadge: post.owner.verifiedBadge,
         hashtags: post.hashtags,
-        isFriend: false, // post.isFriend,
+        isFriend: false,
+        // post.isFriend,
         likesCounter: post.likesCounter,
-        locationName: null, // post.locationName,
+        locationName: null,
+        // post.locationName,
         medias: post.mediaUrls,
         profilePictureUrl: post.owner.profilePictureUrl,
         userId: post.owner.id,
@@ -111,8 +132,10 @@ class SinglePostInstagramViewBody extends StatelessWidget {
               username: c.owner.username,
               userId: c.owner.id,
               createdAt: c.createdAt,
-              likesCounter: 0, // c.likesCounter,
-              repliesCount: 0, // c.repliesCount,
+              likesCounter: 0,
+              // c.likesCounter,
+              repliesCount: 0,
+              // c.repliesCount,
               replies: List<CommentInstagramModel>.from(
                 c.replies.map(
                   (r) => CommentInstagramModel(
@@ -121,8 +144,10 @@ class SinglePostInstagramViewBody extends StatelessWidget {
                     username: r.owner.username,
                     userId: r.owner.id,
                     createdAt: r.createdAt,
-                    likesCounter: 0, // r.likesCounter,
-                    repliesCount: 0, // r.repliesCount,
+                    likesCounter: 0,
+                    // r.likesCounter,
+                    repliesCount: 0,
+                    // r.repliesCount,
                     replies: [],
                   ),
                 ),

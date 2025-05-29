@@ -8,6 +8,7 @@ import '../../config.dart';
 import '../core/defines.dart' as defines;
 import '../layout/layout.dart';
 import 'common.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // Project imports:
 
@@ -105,7 +106,7 @@ class ZegoLiveStreamingPKHostViewState
                                         updatedUser,
                                         {},
                                       ) ??
-                                      const CircularProgressIndicator(),
+                                      const CustomCircularProgressIndicator(),
                                 ),
                               ],
                             )

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class LifeEventSubCategories extends StatefulWidget {
   const LifeEventSubCategories({super.key, required this.lifeEvent});
@@ -49,7 +50,7 @@ class _LifeEventSubCategoriesState extends State<LifeEventSubCategories> {
                     )
                 ),
                 Expanded(
-                    child:cubit.isLoadingMoreLifeEventSubCat?const Center(child: CircularProgressIndicator(),):ListView.builder(
+                    child:cubit.isLoadingMoreLifeEventSubCat?const Center(child: CustomCircularProgressIndicator(),):ListView.builder(
                       shrinkWrap: true,
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       itemCount: cubit.lifeEventSubCategories.length,

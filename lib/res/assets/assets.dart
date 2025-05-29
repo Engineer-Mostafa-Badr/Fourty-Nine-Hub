@@ -7,14 +7,17 @@ abstract class Assets {
   static String drawerCameraIcon = 'assets/icons/drawer_camera_icon.svg';
   static String drawerCameraIconDark =
       'assets/icons/drawer_camera_icon_dark.svg';
+  static String rideRecord = 'assets/icons/ride_record.svg';
   static String cameraAddTalent = 'assets/49-New-icons/camera.png';
   static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
-  static String starIcon = 'assets/images/star.svg';
+  // static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
   static String logoHub = 'assets/icons/logoHub.png';
   static String logoWithoutText = 'assets/icons/logoWithoutText.png';
   static String supportIcon = 'assets/icons/support_icon.svg';
+  static String rideMenu = 'assets/icons/ride_menu.png';
+  static String targetLocation = 'assets/icons/targetLocation.png';
   static String callEmergencyIcon = 'assets/icons/call_emergency_icon.svg';
   static String beforeRide = 'assets/icons/before_ride.svg';
   static String driverIdentityIcon = 'assets/icons/driver_identity_icon.svg';
@@ -22,11 +25,14 @@ abstract class Assets {
   static String emergencyChatIcon = 'assets/icons/emergency_chat_icon.svg';
   static String checkCarIcon = 'assets/icons/check_car_icon.svg';
   static String safeCommunications = 'assets/icons/safe_communications.svg';
-  static String emergencyContactsIcon = 'assets/icons/emergency_contacts_icon.svg';
-  static String tube = 'assets/images/tube.png';
+  static String emergencyContactsIcon =
+      'assets/icons/emergency_contacts_icon.svg';
+  static String tiktokVedioIcon = 'assets/icons/tiktok_vedio_icon.svg';
+  static String tiktokEyeIcon = 'assets/icons/tiktok_eye_icon.svg';
+  // static String tube = 'assets/images/tube.png';
   static String joinTrip = 'assets/images/join_trip.png';
   static String tube1 = 'assets/images/tube1.png';
-  static String tubeCat = 'assets/images/tubeCat.jpg';
+  // static String tubeCat = 'assets/images/tubeCat.jpg';
   static String captainShare = 'assets/images/captain_share.png';
   static String tripJoinNew = 'assets/images/trip_join.png';
   static String pickMe = 'assets/images/pick_me.png';
@@ -59,7 +65,6 @@ abstract class Assets {
   static String saveIcon = 'assets/icons/save_icon.svg';
   static String speakerIcon = 'assets/icons/speader_icon.svg';
   static String starYellowIcon = 'assets/icons/star_yellow_icon.svg';
-  static String rideRecord = 'assets/icons/ride_record.svg';
   static String starRedIcon = 'assets/icons/star_red_icon.svg';
   static String mapPinIcon = 'assets/icons/map_pin_icon.svg';
   static String phoneIcon = 'assets/icons/phone_icon.svg';
@@ -181,6 +186,8 @@ abstract class Assets {
 
   // navigator
   static String logo = 'assets/images/logo_600.png';
+  static String womanPlaceHolder = 'assets/icons/woman_place_holder.png';
+  static String logoWithBlackText = 'assets/images/logoWithBlackText.png';
   static String allRestaurants = 'assets/images/allRestaurants.png';
   static String healthcare = 'assets/images/healthcare.png';
   static String facebookShare = 'assets/icons/share.png';
@@ -346,6 +353,7 @@ abstract class Assets {
   static String checkCircle = 'assets/icons/check-circle.png';
   static String walletImage = 'assets/images/wallet_image.svg';
   static String walletImageDark = 'assets/images/wallet_image_dark.svg';
+  static String welcomeLogin = 'assets/images/welcomeLogin.svg';
 
 // .png
   //drawer
@@ -632,6 +640,7 @@ abstract class Assets {
   static String marriage = "assets/images/marriage.png";
   static String ellipsis = "assets/icons/ellipsis.svg";
   static String reelBar = "assets/icons/reelBar.svg";
+  static String reelBarPng = "assets/icons/reelBar.png";
   static String gridIcon = "assets/icons/gridIcon.png";
   static String sliderIcon = "assets/icons/sliderIcon.png";
   static String grid = "assets/icons/grid.png";
@@ -641,6 +650,9 @@ abstract class Assets {
   static String chatStatus = "assets/icons/chatStatus.png";
   // simple loadings
   static String circleLoader = 'assets/lottie/loader.json';
+
+  // special loading in ads
+  static String searchLoading = 'assets/lottie/special_loading.json';
 
   //SpotLight
   static String bitmoji = "assets/images/bitmoji.png";
@@ -682,4 +694,10 @@ abstract class Assets {
   static String verified = 'assets/icons/tinder/verified.png';
   static String volt = 'assets/icons/tinder/volt.png';
   static String zodiac = 'assets/icons/tinder/zodiac.png';
+
+
+  static String loginGIF = 'assets/gifs/loginGIF.gif';
+  static String langGIF = 'assets/gifs/languagGIF.gif';
+  static String themeModeGIF = 'assets/gifs/themeModeGIF.gif';
+  static String talentGIF = 'assets/gifs/talentGIF.gif';
 }

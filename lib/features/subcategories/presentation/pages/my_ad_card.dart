@@ -11,9 +11,12 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/constants/subscription_status.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
@@ -25,6 +28,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/requ
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/are_you_sure_delete_ad_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/build_tag_ads_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/image_ads_widget.dart';
@@ -42,13 +46,18 @@ import '../../../../../routes/routes.dart';
 
 class MyAdCard extends StatefulWidget {
   final AdEntity item;
-  const MyAdCard(
-      {super.key,
-      required this.item,
-      required this.onFav,
-      required this.onRemoveFav});
+  const MyAdCard({
+    super.key,
+    required this.item,
+    required this.onFav,
+    required this.onRemoveFav,
+    this.deleteAd,
+    this.showSubCategory = false,
+  });
   final Function(String) onFav;
   final Function(String) onRemoveFav;
+  final Function(String)? deleteAd;
+  final bool showSubCategory;
 
   @override
   State<MyAdCard> createState() => _MyAdCardState();
@@ -73,7 +82,7 @@ class _MyAdCardState extends State<MyAdCard> {
           // width: kToolbarHeight * 2.5,
           // height: 600.h,
           // margin: EdgeInsetsDirectional.all(10.w),
-          padding: EdgeInsetsDirectional.only(bottom: 8),
+          padding: const EdgeInsetsDirectional.only(bottom: 8),
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
@@ -88,7 +97,7 @@ class _MyAdCardState extends State<MyAdCard> {
             children: [
               if (context.read<UserCubit>().isLoggedIn)
                 BuildTagAdsWidget(
-                    status: widget.item.subscriptionStatus ?? '',
+                    status: widget.item.ownerSubscriptionStatus ?? '',
                     views: widget.item.views ?? 0),
               Expanded(
                 child: ImageAdsWidget(
@@ -106,15 +115,18 @@ class _MyAdCardState extends State<MyAdCard> {
                         widget.item.isFavourite = !widget.item.isFavourite!;
                       }
                     }
+                    setState(() {});
                   },
+                  isVerified: true, // widget.item.isVerified ?? false,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
+                  spacing: 4,
                   children: [
                     Row(
                       children: [
@@ -125,7 +137,7 @@ class _MyAdCardState extends State<MyAdCard> {
                             height: 1.6,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         SvgPicture.asset(Assets.adsCashIcon),
                         const Sizer(width: 5),
                         Label(
@@ -138,65 +150,107 @@ class _MyAdCardState extends State<MyAdCard> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 4,
-                    ),
+                    // اذا كان الاعلان من نوع المركبات
+                    if (widget.item.mainCategoryId ==
+                        '62c8b5889332225799fe3316') ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: widget.item.details
+                            .where((e) =>
+                                e.propId == '66ec666f12cfcdf9779dfcc5' ||
+                                e.propId == '66ec666f12cfcdf9779dfd05' ||
+                                e.propId == '66ec666f12cfcdf9779dfcc6')
+                            .map((e) {
+                          return Row(
+                            children: [
+                              ImageFromInternet(
+                                image: e.image ?? '',
+                                width: 24,
+                                height: 24,
+                                defaultLogo: true,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Label(
+                                text: context.isArabic
+                                    ? e.value.nameAr
+                                    : e.value.nameEn,
+                                style: Styles.headerText(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.60,
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ] else
+                      Column(
+                        children: widget.item.details
+                            .where((e) => e.nameEn == 'experience level')
+                            .map((e) {
+                          return Row(
+                            children: [
+                              ImageFromInternet(
+                                image: e.image ?? '',
+                                width: 30.w,
+                                height: 30.h,
+                                defaultLogo: true,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Label(
+                                text: context.isArabic
+                                    ? e.value.nameAr
+                                    : e.value.nameEn,
+                                style: Styles.headerText(
+                                  fontSize: 24,
+                                  height: 1.60,
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SvgPicture.asset(Assets.adsTimeIcon),
-                        const SizedBox(
-                          width: 4,
+                        Row(
+                          children: [
+                            SvgPicture.asset(Assets.adsLocationIcon),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Label(
+                              text:
+                                  '${context.isArabic ? widget.item.address?.addressAr : widget.item.address?.addressEn}',
+                              style: Styles.headerText(
+                                fontSize: 24,
+                                height: 1.60,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ],
                         ),
-                        Label(
-                          text: '***** / years',
-                          style: Styles.headerText(
-                            fontSize: 24,
-                            height: 1.60,
+                        if (widget.showSubCategory)
+                          Label(
+                            text: (context.isArabic
+                                    ? widget.item.subCategoryNameAr
+                                    : widget.item.subCategoryNameEn) ??
+                                'N/A',
+                            style: Styles.smallText(
+                              color: const Color(0xFFF33D49),
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              height: 1.60,
+                            ),
                           ),
-                          maxLines: 1,
-                        ),
                       ],
                     ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(Assets.adsBagIcon),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Label(
-                          text: '${LocaleKeys.exp.localize}: *****',
-                          style: Styles.headerText(
-                            fontSize: 24,
-                            height: 1.60,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(Assets.adsLocationIcon),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Label(
-                          text:
-                              '${context.isArabic ? widget.item.address?.addressAr : widget.item.address?.addressEn}',
-                          style: Styles.headerText(
-                            fontSize: 24,
-                            height: 1.60,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     userId == widget.item.user?.id
@@ -219,7 +273,9 @@ class _MyAdCardState extends State<MyAdCard> {
                                     subTitle: LocaleKeys
                                         .areYouSureAboutDeletingTheAD.localize,
                                     action: () {
-                                      // TODO: delete ad
+                                      if (widget.deleteAd != null) {
+                                        widget.deleteAd!(widget.item.id);
+                                      }
                                     },
                                   ));
                             },
@@ -230,7 +286,7 @@ class _MyAdCardState extends State<MyAdCard> {
                             subcategoryId: widget.item.subCategoryId ?? '',
                             phone: widget.item.user?.phone ?? '',
                             subscriptionStatus:
-                                widget.item.subscriptionStatus ?? '',
+                                widget.item.userSubscriptionStatus ?? '',
                           )
                   ],
                 ),
@@ -426,7 +482,27 @@ class _MyAdCardState extends State<MyAdCard> {
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: IconButton(
+                              iconSize: 20,
+                              padding: EdgeInsets.zero,
+                              style: IconButton.styleFrom(
+                                backgroundColor: const Color(0xffD9D9D9),
+                              ),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.black,
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           PremiumRequestButton(
                             adId: adId,
                             subCategoryId: subcategoryId,
@@ -440,6 +516,23 @@ class _MyAdCardState extends State<MyAdCard> {
                             adId: adId,
                             subscriptionStatus: subscriptionStatus,
                             dontPop: true,
+                            successRequest: () {
+                              context.pop();
+                              showSuccessMessage(
+                                  context,
+                                  context.isArabic
+                                      ? 'تم ارسال طلب التواصل'
+                                      : 'Request Sent Successfully');
+                              context.read<AdvertisementCubit>().resetRequest();
+                            },
+                            errorRequest: (failure) {
+                              context.pop();
+                              context.pop();
+                              showErrorMessage(
+                                  context,
+                                  getFailureMessage(
+                                      failure ?? UnknownFailure(''), context));
+                            },
                           ),
                         ],
                       ),

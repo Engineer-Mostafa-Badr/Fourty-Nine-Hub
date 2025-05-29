@@ -5,8 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -52,11 +55,15 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:widget.fromSlider == false ? null : PreferredSize(
-          preferredSize: Size.fromHeight(30),
-          child: BackAppBar(
-            label: LocaleKeys.yellowCardMember.localize,
-          )),
+      appBar: widget.fromSlider == false
+          ? null
+          : PreferredSize(
+              preferredSize: Size.fromHeight(30),
+              child: BackAppBar(
+                label: context.isArabic
+                    ? "عضو البطاقة الصفراء"
+                    : " Yellow Card Member",
+              )),
       body: BlocProvider(
         create: (BuildContext context) =>
             serviceLocator<PaymentCacheOutCubit>()..loadData(),
@@ -81,8 +88,8 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
             }
           },
           builder: (BuildContext context, state) {
-            if(state.status == StateStatus.loading){
-              return const Center(child: CircularProgressIndicator());
+            if (state.status == StateStatus.loading) {
+              return const Center(child: CustomCircularProgressIndicator());
             }
             final controller = context.read<PaymentCacheOutCubit>();
             return Padding(
@@ -183,14 +190,15 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                               vertical: 20.h, horizontal: 10.w),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20.r),
-                            color: AppColors.SECONDARY_COLOR,
+                            color: AppColors.getRedColor(context),
                           ),
                           child: Center(
                             child: Label(
-                              text:
-                                  '${LocaleKeys.requestYellowCard.localize} (${state.price?.yellowCardCharge} ${state.price?.currency} ${LocaleKeys.deducted.localize})',
+                              text: context.isArabic
+                                  ? '${LocaleKeys.requestYellowCard.localize} ( ${'سيتم خصم مبلغ'} ${FormatNumbers().formatNumber(state.price?.yellowCardCharge ?? 0, useArabicNumerals: context.isArabic)} ${state.price?.currencyAr?? ''} )'
+                                  : '${LocaleKeys.requestYellowCard.localize} (${state.price?.yellowCardCharge ?? ''} ${state.price?.currencyEn ?? ''} ${LocaleKeys.deducted.localize})',
                               maxLines: 2,
-                              color: AppColors.AUTH_CONTAINER_COLOR,
+                              color: AppColors.getReversedTextColor(context),
                             ),
                           ),
                         ),

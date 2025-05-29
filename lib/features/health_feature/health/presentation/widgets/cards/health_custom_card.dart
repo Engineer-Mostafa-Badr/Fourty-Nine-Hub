@@ -22,9 +22,7 @@ class HealthCustomCard extends StatelessWidget {
       padding: padding??EdgeInsets.zero,
       decoration: BoxDecoration(
         border: Border.all(
-          color: context.isDarkMode
-              ? AppColors.PRIMARY_COLOR_DARK
-              : AppColors.PRIMARY_COLOR_LIGHT,
+          color: AppColors.getButtonPrimaryWhiteColor(context),
         ),
         borderRadius: radiusGeometry,
         color: Theme.of(context).scaffoldBackgroundColor,

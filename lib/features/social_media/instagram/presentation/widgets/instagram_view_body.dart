@@ -191,6 +191,8 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                 // 4. المنشور العادي
                 return PostInstagramWidget(
                   key: ValueKey('post_${state.posts[index].id}'),
+                  posts: state.posts,
+                  currentIndex: index,
                   instagramPostEntity: state.posts[index],
                 );
               },
@@ -481,7 +483,9 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
 class VideoControllerManager {
   static final VideoControllerManager _instance =
       VideoControllerManager._internal();
+
   factory VideoControllerManager() => _instance;
+
   VideoControllerManager._internal();
 
   // تخزين مشغل الفيديو النشط حالياً

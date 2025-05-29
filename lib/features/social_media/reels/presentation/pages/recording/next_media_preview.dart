@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../routes/routes.dart';
@@ -80,7 +81,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
             final controller = context.read<ReelsCubit>();
             // if (state.status == ReelsStates.loading) {
             //   return const Center(
-            //     child: CircularProgressIndicator(color: AppColors.PRIMARY_COLOR,),
+            //     child: CustomCircularProgressIndicator(color: AppColors.PRIMARY_COLOR,),
             //   );
             // }
             return Padding(
@@ -136,7 +137,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                                 ),
                               ),
                             )
-                          : const CircularProgressIndicator(),
+                          : const CustomCircularProgressIndicator(),
                   const Sizer(),
                   TextFormField(
                     maxLines: 6,

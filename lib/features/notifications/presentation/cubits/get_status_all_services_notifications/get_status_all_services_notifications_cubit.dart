@@ -26,96 +26,96 @@ class GetStatusAllServicesNotificationsCubit
       status = [
         {
           'nameEn': 'Ride Registration',
-          'nameAr': 'تسجيل الرحلة',
+          'nameAr': 'تسجيل توصيلة',
           'valueEn': r.rideRegistration,
           'valueAr': _changeStatusLang(r.rideRegistration),
         },
         {
           'nameEn': 'Shipping Registration',
-          'nameAr': 'تسجيل الشحن',
+          'nameAr': 'تسجيل تحميلة',
           'valueEn': r.shippingRegistration,
           'valueAr': _changeStatusLang(r.shippingRegistration),
           
         },
         {
           'nameEn': 'Restaurant Registration',
-          'nameAr': 'تسجيل المطعم',
+          'nameAr': 'تسجيل مطعم',
           'valueEn': r.restaurantRegistration,
           'valueAr': _changeStatusLang(r.restaurantRegistration),
           
         },
         {
           'nameEn': 'Health Registration',
-          'nameAr': 'التسجيل الصحي',
+          'nameAr': 'تسجيل صحة',
           'valueEn': r.healthRegistration,
           'valueAr': _changeStatusLang(r.healthRegistration),
           
         },
         {
           'nameEn': 'Ads',
-          'nameAr': 'تسجيل الإعلانات',
+          'nameAr': 'اعلان منشأ',
           'valueEn': r.adsRegistration,
           'valueAr': _changeStatusLang(r.adsRegistration),
           
         },
         {
           'nameEn': 'Company Ads',
-          'nameAr': 'إعلانات الشركة',
+          'nameAr': 'إعلان شركة',
           'valueEn': r.companyAdsRegistration,
           'valueAr': _changeStatusLang(r.companyAdsRegistration),
           
         },
         {
           'nameEn': 'Talent',
-          'nameAr': 'المواهب',
+          'nameAr': 'موهبة',
           'valueEn': r.talentRegistration,
           'valueAr': _changeStatusLang(r.talentRegistration),
           
         },
         {
           'nameEn': 'Yellow Card',
-          'nameAr': 'البطاقة الصفراء',
+          'nameAr': 'بطاقة صفراء',
           'valueEn': r.yellowCardStatus,
           'valueAr': _changeStatusLang(r.yellowCardStatus),
           
         },
         {
           'nameEn': 'Bills',
-          'nameAr': 'الفواتير',
+          'nameAr': 'هدية فاتورة',
           'valueEn': r.billsStatus,
           'valueAr': _changeStatusLang(r.billsStatus),
           
         },
         {
           'nameEn': 'Help',
-          'nameAr': 'المساعدة',
+          'nameAr': 'مساعدة',
           'valueEn': r.helpStatus,
           'valueAr': _changeStatusLang(r.helpStatus),
           
         },
         {
           'nameEn': 'Cashback Withdraw',
-          'nameAr': 'سحب النقود المستردة',
+          'nameAr': 'تحويل نقود مستردة',
           'valueEn': r.cashbackWithdrawStatus,
           'valueAr': _changeStatusLang(r.cashbackWithdrawStatus),
           
         },
         {
           'nameEn': 'Wallet Withdraw',
-          'nameAr': 'سحب المحفظة',
+          'nameAr': 'سحب محفظة',
           'valueEn': r.walletWithdrawStatus,
           'valueAr': _changeStatusLang(r.walletWithdrawStatus),
           
         },
         {
           'nameEn': 'Report',
-          'nameAr': 'التقرير',
+          'nameAr': 'تقرير',
           'valueEn': r.reportStatus,
           'valueAr': _changeStatusLang(r.reportStatus),
         },
         {
           'nameEn': 'Gift Transfer',
-          'nameAr': 'نقل الهدايا',
+          'nameAr': 'تحويل الهدايا',
           'valueEn': r.giftTransfer,
           'valueAr': _changeStatusLang(r.giftTransfer),
           

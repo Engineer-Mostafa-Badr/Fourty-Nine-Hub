@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/view_followers_and_following.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,12 +24,14 @@ class ValueAndTitleHeaderProfileInstagram extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (index == 0 || index == 1) {
-          context.push(Routes.followersScreen, extra: FollowersScreenArguments(
-            index: index,
-            dataProfile: dataProfile,
-          ));
-        }
+        // if (index == 0 || index == 1) {
+        //   context.push(Routes.followersScreen, extra: FollowersScreenArguments(
+        //     index: index,
+        //     dataProfile: dataProfile,
+        //   ));
+        // }
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ViewFollowersAndFollowing(otherId: '67bf629b82c3f5a684b4ebfb', email: '',)));
+        // ViewFollowersAndFollowing(index: index, email: '');
       },
       child: Column(
         children: [

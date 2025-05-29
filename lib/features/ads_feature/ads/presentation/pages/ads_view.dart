@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
@@ -23,6 +24,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_floating_action_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -42,8 +44,19 @@ class AdsView extends StatefulWidget {
 class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  bool isFloatingButtonVisible = true;
+
   @override
   void initState() {
+    // scrollController.addListener(() {
+    //   if (scrollController.position.userScrollDirection ==
+    //       ScrollDirection.reverse) {
+    //     isFloatingButtonVisible = false;
+    //   } else {
+    //     isFloatingButtonVisible = true;
+    //   }
+    //   setState(() {});
+    // });
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
@@ -96,7 +109,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     return CustomScaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(30),
-        child: HomeAppbar(isWithBackArrow: true,),
+        child: HomeAppbar(
+          isWithBackArrow: true,
+        ),
       ),
 
       body: BlocConsumer<AdvertisementCubit, AdsState>(
@@ -207,12 +222,22 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                               params: widget.params,
                               userType: userType,
                               controller: controller,
+                              onScrollChanged: (isVisible) {
+                                setState(() {
+                                  isFloatingButtonVisible = isVisible;
+                                });
+                              },
                             ),
 
                             /// user ads View
                             UserAdsView(
                               params: widget.params,
                               userType: userType,
+                              onScrollChanged: (isVisible) {
+                                setState(() {
+                                  isFloatingButtonVisible = isVisible;
+                                });
+                              },
                             ),
                           ],
                         ))
@@ -224,7 +249,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                   height: double.infinity,
                   color: Colors.black.withOpacity(0.3),
                   child: const Center(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       color: Colors.white,
                     ),
                   ),
@@ -234,22 +259,24 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
         );
       }),
       // floatingActionButton:buildFloatingAction(context),
-      floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {
-          if (context.isUserLoggedIn) {
-            context.push(Routes.CREATEAD,
-                extra: CategorizationEntity(
-                    mainCategory: widget.params.mainCategory,
-                    subCategory: widget.params.subCategory));
-          } else {
-            return pleaseLoginDialog(context);
-            // context.push(Routes.LOGIN);
-          }
-        },
-        iconSize: 18,
-        icon: Icons.add,
-        text: LocaleKeys.addAde.localize,
-      ),
+      floatingActionButton: isFloatingButtonVisible
+          ? CustomFloatingActionButton(
+              onPressed: () {
+                if (context.isUserLoggedIn) {
+                  context.push(Routes.CREATEAD,
+                      extra: CategorizationEntity(
+                          mainCategory: widget.params.mainCategory,
+                          subCategory: widget.params.subCategory));
+                } else {
+                  return pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
+              },
+              iconSize: 18,
+              icon: Icons.add,
+              text: LocaleKeys.addAde.localize,
+            )
+          : null,
     );
   }
 
@@ -270,12 +297,13 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       backgroundColor: AppColors.getButtonPrimaryColor(context),
       icon: Icon(
         Icons.add,
-        color:AppColors.getReversedTextColor(context),
+        color: AppColors.getReversedTextColor(context),
       ),
       label: Label(
         text: LocaleKeys.addAde.localize,
-        style:
-            Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.getReversedTextColor(context)),
+        style: Styles.mediumText(
+            fontWeight: FontWeight.bold,
+            color: AppColors.getReversedTextColor(context)),
       ),
     );
   }

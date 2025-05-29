@@ -13,6 +13,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../domain/entity/custom_page_categories_entity.dart';
 import '../../cubit/custom_page_cubit.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class NavigatorSubCategoriesView extends StatefulWidget {
   final CustomPageCategoriesEntity mainCategory;
@@ -41,7 +42,6 @@ class _NavigatorSubCategoriesViewState
       builder: (context, state) {
         return CustomScaffold(
           enableCustomAppBar: true,
-
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(30),
             child: BackAppBar(
@@ -59,7 +59,7 @@ class _NavigatorSubCategoriesViewState
               builder: (context, state) {
                 if (state.status == CustomPageStates.loading) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   );
                 }
                 if (state.status == CustomPageStates.error) {

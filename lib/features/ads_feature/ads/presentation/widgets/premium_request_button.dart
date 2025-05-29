@@ -9,10 +9,12 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
@@ -50,11 +52,14 @@ class PremiumRequestButton extends StatelessWidget {
         onPressed: () {
           if (!dontPop) context.pop();
           if (context.read<UserCubit>().isLoggedIn) {
-            if (subscriptionStatus != 'premium') {
+            // TODO: change
+            // if (subscriptionStatus != 'premium') {
+            if (false) {
               SubscriptionMethod().subscribe(
-                  subscribeId: subCategoryId,
-                  showRegular: false,
-                  title: LocaleKeys.premiumRequest.localize);
+                subscribeId: subCategoryId,
+                showRegular: false,
+                title: subCategoryId,
+              );
             } else {
               showModalBottomSheet(
                 backgroundColor: Colors.white,
@@ -68,6 +73,38 @@ class PremiumRequestButton extends StatelessWidget {
                 isDismissible: true,
                 isScrollControlled: true,
                 builder: (BuildContext context) {
+                  return BlocProvider(
+                    create: (context) => serviceLocator<AdvertisementCubit>(),
+                    child: RequestNumberBottomSheet(
+                      // controller: controller,
+                      // adId: adId,
+                      formKey: controller.formKey,
+                      textController: controller.phoneController,
+                      isLoading: state.requestStatus == AdsStates.loading,
+                      onChanged: (c) => controller.changePhone(v: c),
+                      onTap: () async {
+                        if (controller.formKey.currentState!.validate()) {
+                          await controller.makeAdPremiumRequest(id: adId);
+                          //     .then((value) {
+                          //   if (value == true) {
+                          //     context.pop();
+                          //     showSuccessMessage(
+                          //         context, 'Request Sent Successfully');
+                          //     controller.resetRequest();
+                          //   } else {
+                          //     context.pop();
+                          //     if (state.failure != null) {
+                          //       showErrorMessage(context,
+                          //           getFailureMessage(state.failure!, context));
+                          //     } else {
+                          //       showErrorMessage(context, 'Please Try Again!');
+                          //     }
+                          //   }
+                          // });
+                        }
+                      },
+                    ),
+                  );
                   return AnimatedPadding(
                     padding: MediaQuery.of(context).viewInsets,
                     duration: const Duration(milliseconds: 50),

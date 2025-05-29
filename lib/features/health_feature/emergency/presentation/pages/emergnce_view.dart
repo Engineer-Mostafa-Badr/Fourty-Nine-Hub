@@ -3,8 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -42,57 +47,89 @@ class HealthEmergencyView extends StatelessWidget {
             break;
         }
       },
-      child: CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-            label: LocaleKeys.emergency.localize,
-          ),
-        ),
-        body: Form(
-          key: context.read<HealthEmergencyCubit>().formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(15.0),
-            children: [
-              Sizer(height: 30.h),
-              FirstNameTextFormField(
-                hintColor: AppColors.QUANTITY_COLOR,
-                currentFocusNode: emergencyCubit.firstNameFocusNode,
-                currentController: emergencyCubit.firstNameController,
-                nextFocusNode: emergencyCubit.phoneFocusNode,
-              ),
-              Sizer(height: 30.h),
-              // PhoneTextFormField(
-              //   currentFocusNode: emergencyCubit.phoneFocusNode,
-              //   nextFocusNode: emergencyCubit.locationFocusNode,
-              //   currentController: emergencyCubit.phoneController,
-              //   onInputChanged: (value) {},
-              // ),
-              CustomPhoneTextFormField(
-                currentFocusNode: emergencyCubit.phoneFocusNode,
-                nextFocusNode: emergencyCubit.locationFocusNode,
-                currentController: emergencyCubit.phoneController,
-                onInputChanged: (value) {},
-              ),
-              Sizer(height: 30.h),
-              const HealthEmergencySubCategoriesDropdown(),
-              Sizer(height: 30.h),
-              DefaultTextFormField(
-                hintColor: AppColors.QUANTITY_COLOR,
-                currentFocusNode: emergencyCubit.locationFocusNode,
-                currentController: emergencyCubit.locationController,
-                isRequired: true,
-                hint: LocaleKeys.address.localize,
-              ),
-              Sizer(height: 30.h),
-              ElevatedAppButton(
-                label: LocaleKeys.confirm.localize,
-                onPressed: () {
-                  emergencyCubit.bookEmergency();
-                },
-                backColor: AppColors.SECONDARY_COLOR,
-              ),
-            ],
+      child: SharedScaffold(
+        // appBar: PreferredSize(
+        //   preferredSize: const Size.fromHeight(30),
+        //   child: AppBar(
+        //     label: LocaleKeys.emergency.localize,
+        //   ),
+        // ),
+        mainCategoryId: 1,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            key: context.read<HealthEmergencyCubit>().formKey,
+            child: Column(
+              // padding: const EdgeInsets.all(15.0),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 16.h,
+              children: [
+                const SizedBox(height: 4),
+                Label(
+                  text: LocaleKeys.emergency.localize,
+                  style: Styles.headerText(
+                    fontSize: 36,
+                  ),
+                ),
+                // Sizer(height: 30.h),
+                DefaultTextFormField(
+                  // hintColor: AppColors.QUANTITY_COLOR,
+                  hint: LocaleKeys.firstName.localize,
+                  currentFocusNode: emergencyCubit.firstNameFocusNode,
+                  currentController: emergencyCubit.firstNameController,
+                  nextFocusNode: emergencyCubit.phoneFocusNode,
+                ),
+                // Sizer(height: 30.h),
+                // PhoneTextFormField(
+                //   currentFocusNode: emergencyCubit.phoneFocusNode,
+                //   nextFocusNode: emergencyCubit.locationFocusNode,
+                //   currentController: emergencyCubit.phoneController,
+                //   onInputChanged: (value) {},
+                // ),
+                NewPhoneNumberTextFormField(
+                  currentController: emergencyCubit.phoneController,
+                  currentFocusNode: emergencyCubit.phoneFocusNode,
+                  nextFocusNode: emergencyCubit.locationFocusNode,
+                  isRequired: true,
+                ),
+                // CustomPhoneTextFormField(
+                //   currentFocusNode: emergencyCubit.phoneFocusNode,
+                //   nextFocusNode: emergencyCubit.locationFocusNode,
+                //   currentController: emergencyCubit.phoneController,
+                //   onInputChanged: (value) {},
+                // ),
+                // Sizer(height: 30.h),
+                const HealthEmergencySubCategoriesDropdown(),
+                // Sizer(height: 30.h),
+                DefaultTextFormField(
+                  hintColor: AppColors.QUANTITY_COLOR,
+                  currentFocusNode: emergencyCubit.locationFocusNode,
+                  currentController: emergencyCubit.locationController,
+                  isRequired: true,
+                  hint: LocaleKeys.address.localize,
+                ),
+                const SizedBox(height: 8),
+                AppButton(
+                  label: LocaleKeys.confirm.localize,
+                  style: Styles.headerText(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 36,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    emergencyCubit.bookEmergency();
+                  },
+                  backColor: AppColors.SECONDARY_COLOR,
+                ),
+                // ElevatedAppButton(
+                //   label: LocaleKeys.confirm.localize,
+                //   onPressed: () {
+                //     emergencyCubit.bookEmergency();
+                //   },
+                //   backColor: AppColors.SECONDARY_COLOR,
+                // ),
+              ],
+            ),
           ),
         ),
       ),

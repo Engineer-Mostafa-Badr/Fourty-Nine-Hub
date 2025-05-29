@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../res/assets/assets.dart';
@@ -446,7 +447,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       return const CustomLoading();
     }
     if (widget.state.status == SubcategoriesStates.loadingAds) {
-      return const CircularProgressIndicator();
+      return const CustomCircularProgressIndicator();
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
@@ -509,7 +510,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       }
 
       if (widget.state.adsRequestsLog!.isEmpty) {
-        return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
+        return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
       return MarriageRequest(
         scrollController: widget._scrollController,

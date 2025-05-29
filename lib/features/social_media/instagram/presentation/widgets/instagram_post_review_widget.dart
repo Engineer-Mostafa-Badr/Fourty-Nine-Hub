@@ -14,10 +14,14 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 
 class InstagramPostReviewWidget extends StatelessWidget {
-  const InstagramPostReviewWidget(
-      {super.key, required this.instagramPostEntity});
+  const InstagramPostReviewWidget({
+    super.key,
+    required this.posts,
+    required this.currentPost,
+  });
 
-  final InstagramPostEntity instagramPostEntity;
+  final List<InstagramPostEntity> posts;
+  final int currentPost;
 
   @override
   Widget build(BuildContext context) {
@@ -25,26 +29,28 @@ class InstagramPostReviewWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         IconsActionPostInsta(
-          instagramPostEntity: instagramPostEntity,
+          posts: posts,
+          currentPost: currentPost,
+          // instagramPostEntity: posts[currentPost],
         ),
         const SizedBox(
           height: 10,
         ),
-        if (instagramPostEntity.lastLikeEntity != null)
+        if (posts[currentPost].lastLikeEntity != null)
           LikedByWidget(
-            imageUrl: instagramPostEntity.lastLikeEntity!.profilePic,
-            name: instagramPostEntity.lastLikeEntity!.userId ==
+            imageUrl: posts[currentPost].lastLikeEntity!.profilePic,
+            name: posts[currentPost].lastLikeEntity!.userId ==
                     context.read<UserCubit>().state.data!.id
                 ? 'You'
-                : instagramPostEntity.lastLikeEntity!.username,
-            others: instagramPostEntity.likesCounter - 1,
+                : posts[currentPost].lastLikeEntity!.username,
+            others: posts[currentPost].likesCounter - 1,
           ),
-        if (instagramPostEntity.likesCounter != 0)
+        if (posts[currentPost].likesCounter != 0)
           const SizedBox(
             height: 10,
           ),
         DescriptionPost(
-          instagramPostEntity: instagramPostEntity,
+          instagramPostEntity: posts[currentPost],
         ),
         const Sizer(),
         Padding(
@@ -53,7 +59,7 @@ class InstagramPostReviewWidget extends StatelessWidget {
             text: FormatDate().fromatDateLikeMonthDay(
                 // context, '2025-04-05T22:39:39.466Z'),
                 context,
-                instagramPostEntity.createdAt!),
+                posts[currentPost].createdAt!),
             style: Styles.mediumText(
               color: context.isDarkMode
                   ? const Color(0x66FFFFFF)

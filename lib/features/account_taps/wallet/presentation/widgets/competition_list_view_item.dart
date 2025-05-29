@@ -172,9 +172,10 @@ class CompetitionListViewItem extends StatelessWidget {
                   currency: currency,
                   currentPoints: competition.countOfRequest ?? 0,
                   totalPoints: competition.maxRequests ?? 0,
-                  price: competition.amount ?? 0,
-                  percentage: (competition.amount ?? 0) /
-                      (competition.withdrawLimit ?? 0),
+                  price: num.tryParse(competition.amount ?? '0') ?? 0,
+                  percentage: ((num.tryParse(competition.amount ?? '') ?? 0) /
+                          (competition.withdrawLimit ?? 0)) *
+                      100,
                 ),
                 // const SizedBox(
                 //   height: 4,
@@ -245,8 +246,9 @@ class CompetitionListViewItem extends StatelessWidget {
                         title: LocaleKeys.requestTransfer.localize,
                         //'Request Transfer',
                         onPressed: onPressed,
-                        status: (competition.countOfRequest ?? 0) >
-                            (competition.maxRequests ?? 0),
+                        status:
+                            (num.tryParse(competition.amount ?? '0') ?? 0) >=
+                                (competition.withdrawLimit ?? 0),
                       ),
                 const SizedBox(
                   height: 8,

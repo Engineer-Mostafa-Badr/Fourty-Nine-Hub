@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/utils/format_numbers.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'font_manager.dart';
 
 class BottomCardRequest extends StatefulWidget {
@@ -59,6 +61,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if(serviceLocator<RideCubit>().tripViewers.isNotEmpty)
                         Container(
                           height: 40,
                           decoration: BoxDecoration(
@@ -75,7 +78,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                      "${widget.driversCount} ",
+                                      "${FormatNumbers().convertNumberToLocalizedString(widget.driversCount.toString(), isArabic: context.isArabic)} ",
                                       style: TextStyle(
                                         fontSize: FontSize.s14,
                                         fontWeight: FontWeight.bold,
@@ -104,7 +107,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                             ConstrainedBox(
                               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
                               child: Text(
-                                "${LocaleKeys.acceptTheNearestDriverFor.tr()} ${state.requestedTrip?.price?.toInt().toString() ?? "0"} ${context.isArabic ? "ج.م تلقائيا" : "EGP Automatically"}",
+                                "${LocaleKeys.acceptTheNearestDriverFor.tr()} ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip?.price?.toInt().toString() ?? "0", isArabic: context.isArabic)} ${context.isArabic ? "ج.م تلقائيا" : "EGP Automatically"}",
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: textColor,
@@ -169,39 +172,25 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
 
   // Build overlapping driver avatars
   Widget _buildStackedAvatars() {
-    final images = [
-      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-    ];
+    final tripViewers = serviceLocator<RideCubit>().tripViewers;
 
     return SizedBox(
       width: 80,
       child: Stack(
         clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            left: 28,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(images[2]),
-            ),
-          ),
-          Positioned(
-            left: 14,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(images[1]),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(images[0]),
-            ),
-          ),
-        ],
+        children: List.generate(
+          tripViewers.length > 3 ? 3 : tripViewers.length,
+              (index) {
+            final viewer = tripViewers[tripViewers.length - 1 - index];
+            return Positioned(
+              left: index * 14.0,
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(viewer.driverImage),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -237,7 +226,7 @@ class OfferRow extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child:  Text(
-                          "-3",
+                          FormatNumbers().convertNumberToLocalizedString('-3', isArabic: context.isArabic),
                           style: TextStyle(color: ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) ? AppColors.PRIMARY_COLOR : Colors.white, fontSize: 18),
                         ),
                       ),
@@ -245,7 +234,7 @@ class OfferRow extends StatelessWidget {
                     const Spacer(), // Space between buttons and text
                     // Offer Text
                      Text(
-                      context.isArabic ? "ج.م ${state.requestedTrip!.price!.toInt()}" : "EGP ${state.requestedTrip!.price!.toInt()}",
+                      context.isArabic ? " ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip!.price!.toInt().toString(), isArabic: context.isArabic)} ج.م" : "EGP ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip!.price!.toInt().toString(), isArabic: context.isArabic)}",
                       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(), // Space between text and buttons
@@ -262,7 +251,7 @@ class OfferRow extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child:  Text(
-                          "+3",
+                          FormatNumbers().convertNumberToLocalizedString('+3', isArabic: context.isArabic),
                           style: TextStyle(color:((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) ? AppColors.PRIMARY_COLOR: Colors.white, fontSize: 18),
                         ),
                       ),

@@ -18,7 +18,7 @@ class ContactUsCubit extends Cubit<ContactUsState> {
   ) : super(const ContactUsState());
 
   void createContactUs(BuildContext context) async {
-    state.copyWith(status: StateStatus.initial);
+    state.copyWith(status: StateStatus.loading);
 
     if (formKey.currentState?.validate() ?? false) {
       // Exclude the phone field if it's empty
@@ -34,8 +34,8 @@ class ContactUsCubit extends Cubit<ContactUsState> {
       response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          messageController=TextEditingController(text: "");
-          phoneController=TextEditingController(text: "");
+          messageController = TextEditingController(text: "");
+          phoneController = TextEditingController(text: "");
           print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
           print(r);
           print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');

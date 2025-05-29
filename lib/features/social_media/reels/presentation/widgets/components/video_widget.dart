@@ -2,6 +2,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import 'chewie_controls.dart';
 
@@ -96,7 +97,7 @@ class _VideoWidgetState extends State<VideoWidget> {
             return const SizedBox(
               height: 200,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               ),
             );
           }

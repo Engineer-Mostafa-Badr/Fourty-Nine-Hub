@@ -31,7 +31,7 @@ class DefaultTextFormField extends MainTextFormField {
     super.minLines,
     super.obscureText,
     super.fillColor,
-    final int? maxLength,
+    super.maxLength,
     super.suffixIcon,
     super.prefixIcon,
     final String? Function(String?)? validator,
@@ -45,5 +45,6 @@ class DefaultTextFormField extends MainTextFormField {
           hintText: hint + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
           inputFormatters: inputFormatter,
+          // maxLength: maxLength,
         );
 }

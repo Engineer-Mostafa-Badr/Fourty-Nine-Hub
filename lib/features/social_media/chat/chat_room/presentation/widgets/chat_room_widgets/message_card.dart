@@ -37,6 +37,7 @@ import 'package:voice_message_package/voice_message_package.dart';
 import '../../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../../res/assets/assets.dart';
 import '../widgets_contacts/recived_contacts.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class MessageCard extends StatelessWidget {
   final MessageEntity messageEntity;
@@ -500,7 +501,7 @@ class MessageCard extends StatelessWidget {
                     AlertDialog(
                       title: const Text("Show Deleted Message"),
                       content: Text(
-                          chatRoomCubit.deletedMessage?.text ?? "Loading..."),
+                          chatRoomCubit.deletedMessage?.text ?? LocaleKeys.loading.localize),
                       actions: [
                         TextButton(
                           onPressed: () {
@@ -2320,7 +2321,7 @@ class CustomVideoCard extends StatelessWidget {
                         ],
                       )
                     : const Center(
-                        child: CircularProgressIndicator(
+                        child: CustomCircularProgressIndicator(
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),

@@ -11,8 +11,10 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/ten_percent/data/datasources/ten_percent_remote_data_source.dart';
 import 'package:fourtyninehub/features/ten_percent/data/repositories/ten_percent_repo_impl.dart';
 import 'package:fourtyninehub/features/ten_percent/domain/repositories/ten_percent_repo.dart';
+import 'package:fourtyninehub/features/ten_percent/domain/usecases/get_winners_ten_percent_use_case.dart';
 import 'package:fourtyninehub/features/ten_percent/domain/usecases/send_bill_request_use_case.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class StarServiceLocator {
@@ -61,6 +63,11 @@ class StarServiceLocator {
         () => SentBillRequestUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<GetWinnersTenPercentUseCase>(
+        () => GetWinnersTenPercentUseCase(
+              serviceLocator(),
+            ));
+
     serviceLocator
         .registerLazySingleton<FetchBannerUseCase>(() => FetchBannerUseCase(
               serviceLocator(),
@@ -78,5 +85,10 @@ class StarServiceLocator {
     serviceLocator.registerFactory<TenPercentCubit>(() => TenPercentCubit(
           serviceLocator(),
         ));
+
+    serviceLocator
+        .registerFactory<WinnersTenPercentCubit>(() => WinnersTenPercentCubit(
+              serviceLocator(),
+            ));
   }
 }

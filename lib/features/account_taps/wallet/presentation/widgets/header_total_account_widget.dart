@@ -89,7 +89,7 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                             text: currency,
                             style: Styles.headerText(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 30,
                             ),
                           ),
                         );

@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/cu
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/image_text_row.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../helpers/subscription_method.dart';
@@ -29,13 +30,8 @@ import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'widgets/pickup_target_location_widget.dart';
 
-
-
-
 import 'package:flutter/material.dart';
 import 'ride_personal_more_info_screen.dart';
-
-
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
   final bool isTruk;
@@ -77,6 +73,146 @@ class _RidePersonalMoreInfoScreenState
           r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'
           r'\+\d{10,}');
 
+  Future<String?> showLocationMethodDialog(BuildContext context) async {
+    return await showDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Choose Location Method',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                _buildOptionButton(
+                  context,
+                  icon: Icons.format_list_bulleted_rounded,
+                  title: 'Choose from List',
+                  description: 'Use saved or predefined locations',
+                  value: 'list',
+                ),
+                const SizedBox(height: 16),
+                _buildOptionButton(
+                  context,
+                  icon: Icons.map_rounded,
+                  title: 'Pick on Map',
+                  description: 'Set a location manually on the map',
+                  value: 'map',
+                ),
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildOptionButton(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String description,
+    required String value,
+  }) {
+    return InkWell(
+      onTap: () => Navigator.pop(context, value),
+      borderRadius: BorderRadius.circular(16),
+      splashColor: Colors.blue.withOpacity(0.1),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.grey.shade100,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.blue.shade50,
+              child: Icon(icon, color: Colors.blue),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      )),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.grey),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Future<String?> showLocationMethodDialog(BuildContext context) async {
+  //   return await showDialog<String>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text("Choose Location"),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             ListTile(
+  //               leading: const Icon(Icons.list),
+  //               title: Text("List"),
+  //               onTap: () => Navigator.pop(context, 'list'),
+  //             ),
+  //             ListTile(
+  //               leading: const Icon(Icons.map),
+  //               title: Text("Map"),
+  //               onTap: () => Navigator.pop(context, 'map'),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClientTripsCubit, ClientTripsState>(
@@ -97,15 +233,14 @@ class _RidePersonalMoreInfoScreenState
             // Try to get errors from the errors list first
             if (failure.errors != null && failure.errors!.isNotEmpty) {
               showErrorMessage(context, failure.errors!.first);
-                          return;
+              return;
             }
             errorName == 'DebtError'
-                ? showDebtDialog(context,widget.subCategoryId)
+                ? showDebtDialog(context, widget.subCategoryId)
                 : errorName == 'SubscribeError'
-                ? showSubscribeDialog(context, widget.subCategoryId)
-                : showErrorMessage(
-                context, getFailureMessage(state.failure!, context));
-
+                    ? showSubscribeDialog(context, widget.subCategoryId)
+                    : showErrorMessage(
+                        context, getFailureMessage(state.failure!, context));
           }
         }
         if (state.isSuccessCreateTrip) {
@@ -136,62 +271,6 @@ class _RidePersonalMoreInfoScreenState
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async {
-                      // First check if date is selected
-                      if (_selectedDate.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(LocaleKeys.pleaseSelectDateFirst
-                                  .localize)), // Please select date first
-                        );
-                        return;
-                      }
-                      final TimeOfDay? selectedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-
-                      if (selectedTime != null) {
-                        final now = DateTime.now();
-                        final selectedDateParsed =
-                        DateFormat('dd/MM/yyyy').parse(_selectedDate);
-                        final selectedDateTime = DateTime(
-                            selectedDateParsed.year,
-                            selectedDateParsed.month,
-                            selectedDateParsed.day,
-                            selectedTime.hour,
-                            selectedTime.minute);
-
-                        // Check if selected date is today
-                        final isToday = selectedDateParsed.year == now.year &&
-                            selectedDateParsed.month == now.month &&
-                            selectedDateParsed.day == now.day;
-
-                        // If today is selected, validate that time is not in the past
-                        final minTime = now.add(Duration(minutes: 15));
-                        if (isToday && selectedDateTime.isBefore(minTime)) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(LocaleKeys.youCantChoosePastTime.tr()),
-                            ),
-                          );
-                          return;
-                        }
-
-                        // Valid time selected - update state
-                        setState(() {
-                          _selectedTime = selectedTime.format(context);
-
-                          if (widget.isTruk) {
-                            cubit.makeLoadingTripParam.date = selectedDateTime;
-                          } else {
-                            cubit.makeNonTrackingTripParam.date =
-                                selectedDateTime;
-                          }
-                        });
-                      }
-                    },
-
                     // onTap: () async {
                     //   // First check if date is selected
                     //   if (_selectedDate.isEmpty) {
@@ -210,7 +289,7 @@ class _RidePersonalMoreInfoScreenState
                     //   if (selectedTime != null) {
                     //     final now = DateTime.now();
                     //     final selectedDateParsed =
-                    //         DateFormat('dd/MM/yyyy').parse(_selectedDate);
+                    //     DateFormat('dd/MM/yyyy').parse(_selectedDate);
                     //     final selectedDateTime = DateTime(
                     //         selectedDateParsed.year,
                     //         selectedDateParsed.month,
@@ -224,11 +303,12 @@ class _RidePersonalMoreInfoScreenState
                     //         selectedDateParsed.day == now.day;
                     //
                     //     // If today is selected, validate that time is not in the past
-                    //     if (isToday && selectedDateTime.isBefore(now)) {
+                    //     final minTime = now.add(Duration(minutes: 15));
+                    //     if (isToday && selectedDateTime.isBefore(minTime)) {
                     //       ScaffoldMessenger.of(context).showSnackBar(
                     //         SnackBar(
-                    //             content: Text(
-                    //                 LocaleKeys.youCantChoosePastTime.tr())),
+                    //           content: Text(LocaleKeys.youCantChoosePastTime.tr()),
+                    //         ),
                     //       );
                     //       return;
                     //     }
@@ -246,6 +326,74 @@ class _RidePersonalMoreInfoScreenState
                     //     });
                     //   }
                     // },
+                    onTap: () async {
+                      if (_selectedDate.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  LocaleKeys.pleaseSelectDateFirst.localize)),
+                        );
+                        return;
+                      }
+
+                      final TimeOfDay? selectedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (selectedTime != null) {
+                        final now = DateTime.now();
+
+                        // Robust date parsing
+                        final parts = _selectedDate.split(RegExp(r'[/-]'));
+                        if (parts.length != 3) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Invalid date format')),
+                          );
+                          return;
+                        }
+
+                        final selectedDateParsed = DateTime(
+                          int.parse(parts[2]), // year
+                          int.parse(parts[1]), // month
+                          int.parse(parts[0]), // day
+                        );
+
+                        final selectedDateTime = DateTime(
+                          selectedDateParsed.year,
+                          selectedDateParsed.month,
+                          selectedDateParsed.day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+
+                        // Rest of your existing code...
+                        final isToday = selectedDateParsed.year == now.year &&
+                            selectedDateParsed.month == now.month &&
+                            selectedDateParsed.day == now.day;
+
+                        final minTime = now.add(Duration(minutes: 15));
+                        if (isToday && selectedDateTime.isBefore(minTime)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    LocaleKeys.youCantChoosePastTime.tr())),
+                          );
+                          return;
+                        }
+
+                        setState(() {
+                          _selectedTime = selectedTime.format(context);
+                          if (widget.isTruk) {
+                            cubit.makeLoadingTripParam.date = selectedDateTime;
+                          } else {
+                            cubit.makeNonTrackingTripParam.date =
+                                selectedDateTime;
+                          }
+                        });
+                      }
+                    },
+
                     child: PickUpContainer(
                       fontWeight: FontWeight.w400,
                       title: _selectedTime.isEmpty
@@ -265,8 +413,38 @@ class _RidePersonalMoreInfoScreenState
                         _selectedDate = newDate;
                         _selectedTime = ""; // Reset time when date changes
 
-                        final parsedDate =
-                            DateFormat('dd/MM/yyyy').parse(newDate);
+                        // Parse the date safely using multiple formats
+                        DateTime parsedDate;
+                        try {
+                          // Format input string to ensure consistent format
+                          final parts = newDate.split('/');
+                          if (parts.length == 3) {
+                            // Make sure month has leading zero if needed
+                            final day = parts[0];
+                            final month = parts[1].length == 1
+                                ? '0${parts[1]}'
+                                : parts[1];
+                            final year = parts[2];
+
+                            // Now parse with consistent format
+                            parsedDate = DateFormat('dd/MM/yyyy')
+                                .parse('$day/$month/$year');
+                          } else {
+                            // Fallback for unexpected format
+                            throw FormatException('Invalid date format');
+                          }
+                        } catch (e) {
+                          // Try alternative parsing methods
+                          try {
+                            parsedDate = DateTime.parse(newDate);
+                          } catch (_) {
+                            // Last resort: use current date
+                            print(
+                                'Failed to parse date: $newDate, using current date');
+                            parsedDate = DateTime.now();
+                          }
+                        }
+
                         final now = DateTime.now();
 
                         // Set initial time to current time or start of day for future dates
@@ -294,7 +472,6 @@ class _RidePersonalMoreInfoScreenState
               ],
             ),
             const SizedBox(height: 8),
-
             PickUpTextFormField(
               fieldType: FieldType.phone,
               controller: passengerController,
@@ -329,7 +506,8 @@ class _RidePersonalMoreInfoScreenState
                 }
 
                 return null;
-              }, hintText: LocaleKeys.numberOfPassenger.localize,
+              },
+              hintText: LocaleKeys.numberOfPassenger.localize,
             ),
             const SizedBox(height: 8),
             PickUpTextFormField(
@@ -382,7 +560,7 @@ class _RidePersonalMoreInfoScreenState
                 text: LocaleKeys.freeCancellation.localize),
             const SizedBox(height: 15),
             state.isLoadingSubmit
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(child: CustomCircularProgressIndicator())
                 : SizedBox(
                     height: 40,
                     child: Row(
@@ -400,7 +578,8 @@ class _RidePersonalMoreInfoScreenState
                               }
                               final price = double.tryParse(offerPrice) ?? 0.0;
                               final passengerText = passengerController.text;
-                              final passengerCount = int.tryParse(passengerText) ?? 0;
+                              final passengerCount =
+                                  int.tryParse(passengerText) ?? 0;
 
                               if (passengerCount > 1000) {
                                 showErrorMessage(
@@ -412,12 +591,14 @@ class _RidePersonalMoreInfoScreenState
                                 return;
                               }
 
-                              final p = cubit.makeNonTrackingTripParam..passengers = passengerCount;
+                              final p = cubit.makeNonTrackingTripParam
+                                ..passengers = passengerCount;
 
                               if (!_validateRequiredFields(p, price)) {
                                 showErrorMessage(
                                   context,
-                                  LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                  LocaleKeys
+                                      .pleaseFillAllRequiredFields.localize,
                                 );
                                 return;
                               }
@@ -434,7 +615,8 @@ class _RidePersonalMoreInfoScreenState
                                 description: p.description ?? '',
                               );
 
-                              cubit.createNonTrackTrip(params: tripParams, context: context);
+                              cubit.createNonTrackTrip(
+                                  params: tripParams, context: context);
                             },
                             backColor: AppColors.SECONDARY_COLOR_DARK2,
                             width: MediaQuery.of(context).size.width,
@@ -453,7 +635,8 @@ class _RidePersonalMoreInfoScreenState
 
                               final price = double.tryParse(offerPrice) ?? 0.0;
                               final passengerText = passengerController.text;
-                              final passengerCount = int.tryParse(passengerText) ?? 0;
+                              final passengerCount =
+                                  int.tryParse(passengerText) ?? 0;
 
                               if (passengerCount > 1000) {
                                 showErrorMessage(
@@ -470,22 +653,26 @@ class _RidePersonalMoreInfoScreenState
                                   ..isPremium = false
                                   ..price = price;
 
-                                if (!_validateLoadingTripParams(cubit.makeLoadingTripParam)) {
+                                if (!_validateLoadingTripParams(
+                                    cubit.makeLoadingTripParam)) {
                                   showErrorMessage(
                                     context,
-                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                    LocaleKeys
+                                        .pleaseFillAllRequiredFields.localize,
                                   );
                                   return;
                                 }
 
                                 // cubit.makeLoadingRequestTrip(context);
                               } else {
-                                final p = cubit.makeNonTrackingTripParam..passengers = passengerCount;
+                                final p = cubit.makeNonTrackingTripParam
+                                  ..passengers = passengerCount;
 
                                 if (!_validateRequiredFields(p, price)) {
                                   showErrorMessage(
                                     context,
-                                    LocaleKeys.pleaseFillAllRequiredFields.localize,
+                                    LocaleKeys
+                                        .pleaseFillAllRequiredFields.localize,
                                   );
                                   return;
                                 }
@@ -502,14 +689,14 @@ class _RidePersonalMoreInfoScreenState
                                   description: p.description ?? '',
                                 );
 
-                                cubit.createNonTrackTrip(params: tripParams, context: context);
+                                cubit.createNonTrackTrip(
+                                    params: tripParams, context: context);
                               }
                             },
                             backColor: AppColors.PRIMARY_COLOR,
                             width: MediaQuery.of(context).size.width,
                           ),
                         ),
-
 
                         /*
                         Expanded(
@@ -808,11 +995,17 @@ class _RidePersonalMoreInfoScreenState
   }
 
   void _showOfferFareBottomSheet(BuildContext context) {
-    TextEditingController offerPriceController = TextEditingController();
+    final TextEditingController offerPriceController = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.whiteColor,
       isScrollControlled: true,
+      isDismissible: false,
+      // Prevent tap outside to close
+      enableDrag: false,
+      // Prevent swipe down to close
       builder: (context) {
         return FractionallySizedBox(
           alignment: Alignment.bottomCenter,
@@ -820,97 +1013,129 @@ class _RidePersonalMoreInfoScreenState
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Centered Text
-                      Align(
-                        alignment: Alignment.center,
-                        child: Label(
-                          text: LocaleKeys.offerYourFare.localize,
-                          style: const TextStyle(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Label(
+                            text: LocaleKeys.offerYourFare.localize,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.PRIMARY_COLOR),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              color: AppColors.cEEEEEEE,
-                              shape: BoxShape.circle,
+                              color: AppColors.PRIMARY_COLOR,
                             ),
-                            child: Icon(Icons.close,
-                                color: AppColors.PRIMARY_COLOR),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    cursorColor: AppColors.PRIMARY_COLOR,
-                    controller: offerPriceController,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: "EGP",
-                      hintStyle:
-                          TextStyle(fontSize: 40, color: AppColors.c96979B),
-                      border: UnderlineInputBorder(),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1),
-                      ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              offerPriceController.clear(); // ✅ Clear input
+                              Navigator.pop(context); // ✅ Then close
+                            },
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                color: AppColors.cEEEEEEE,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.close,
+                                color: AppColors.PRIMARY_COLOR,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    keyboardType: TextInputType.number,
-                    enableInteractiveSelection: false,
-                    contextMenuBuilder: (context, editableTextState) =>
-                        const SizedBox.shrink(),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      // Allow only digits
-                      NoPasteFormatter(),
-                      // Custom formatter to block paste
-                    ],
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      cursorColor: AppColors.PRIMARY_COLOR,
+                      controller: offerPriceController,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "EGP",
+                        hintStyle: TextStyle(
+                          fontSize: 40,
+                          color: AppColors.c96979B,
+                        ),
+                        border: UnderlineInputBorder(),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 1),
+                        ),
+                      ),
+                      keyboardType: TextInputType.number,
+                      enableInteractiveSelection: false,
+                      contextMenuBuilder: (context, editableTextState) =>
+                          const SizedBox.shrink(),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(9), // ✅ Max 9 digits
+                        NoPasteFormatter(),
+                      ],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.PRIMARY_COLOR),
-                    onChanged: (value) {
-                      offerPrice = value;
-                    },
-                  ),
-                  const SizedBox(height: 50),
-                  AppButton(
-                    radius: 15,
-                    backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        offerPrice = offerPriceController.text;
-                      });
-                    },
-                    label: LocaleKeys.done.localize,
-                    style: const TextStyle(
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return context.isArabic
+                              ? 'هذا الحقل مطلوب'
+                              : 'This field is required';
+                        }
+
+                        final numValue = int.tryParse(value);
+                        if (numValue == null) {
+                          return context.isArabic
+                              ? 'الرجاء إدخال رقم صحيح'
+                              : 'Please enter a valid number';
+                        }
+
+                        if (numValue < 100) {
+                          return context.isArabic
+                              ? 'الرقم يجب أن لا يقل عن 100'
+                              : 'The number must be at least 100';
+                        }
+
+                        return null; // Valid
+                      },
+                    ),
+                    const SizedBox(height: 50),
+                    AppButton(
+                      radius: 15,
+                      backColor: AppColors.PRIMARY_COLOR,
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          Navigator.pop(context);
+                          setState(() {
+                            offerPrice = offerPriceController.text;
+                          });
+                        }
+                      },
+                      label: LocaleKeys.done.localize,
+                      style: const TextStyle(
                         color: AppColors.LIGHT_COLOR,
                         fontWeight: FontWeight.w500,
-                        fontSize: 18),
-                  ),
-                ],
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

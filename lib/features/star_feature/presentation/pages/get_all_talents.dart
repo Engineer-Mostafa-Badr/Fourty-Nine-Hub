@@ -6,14 +6,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/talent_video.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'talent_video_player.dart';
 
 class GetAllTalents extends StatelessWidget {
@@ -30,7 +33,7 @@ class GetAllTalents extends StatelessWidget {
         builder: (context, state) {
           var cubit = context.read<StarCubit>();
           if (cubit.loadAllTalents) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomCircularProgressIndicator());
           }
 
           if (state.status == StarStates.error) {
@@ -41,9 +44,8 @@ class GetAllTalents extends StatelessWidget {
           }
 
           if (cubit.allTalents.isEmpty) {
-            return Center(
-              // child: Text('Error: ${_getErrorMessage(state.failure)}'),
-              child: Text(context.isArabic?'لا يوجد نتائج': 'No results found'),
+            return CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
             );
           }
 
@@ -51,12 +53,14 @@ class GetAllTalents extends StatelessWidget {
             controller: scrollController,
             itemCount:
                 cubit.allTalents.length + (state.status == StarStates.loading ? 1 : 0),
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemBuilder: (context, index) {
               if (index == cubit.allTalents.length) {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator(),
+                    child: CustomCircularProgressIndicator(),
                   ),
                 );
               }
@@ -169,7 +173,7 @@ class GetAllTalents extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
+                              "${context.isArabic?convertToArabicNumbers(talent.totalViews.toShortScale):talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${context.isArabic?convertToArabicNumbers(timeago.format(createdAt, locale: context.locale.languageCode)):timeago.format(createdAt, locale: context.locale.languageCode)}",
                               style: TextStyle(
                                 fontSize: 26.sp,
                                 color: context.isDarkMode?Colors.white:Colors.grey,
@@ -275,7 +279,7 @@ class GetAllTalents extends StatelessWidget {
   //       imageUrl: mediaUrl,
   //       fit: BoxFit.cover,
   //       placeholder: (context, url) => const Center(
-  //         child: CircularProgressIndicator(),
+  //         child: CustomCircularProgressIndicator(),
   //       ),
   //       errorWidget: (context, url, error) => const Center(
   //         child: Icon(Icons.error),

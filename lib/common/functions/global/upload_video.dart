@@ -1,0 +1,459 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+
+import '../../../core/error/failure.dart';
+import '../helper/file_picker_helper.dart';
+
+class UploadVideo {
+  Future<Either<Failure, bool>?> uploadImage(
+      {bool isGallery = true,
+      required String subCategoryId,
+      bool? hasLoading,
+      required BuildContext context,
+      required Function(UploadVideoEntity) onUploaded,
+      bool useWeChatPicker =false}) async {
+      if(!useWeChatPicker) {
+        final file = await FilePickerHelper()
+        .pickVideo(isGallery: isGallery)
+        .then((file) async {
+      if (file != null) {
+        XFile finalFile = XFile(file.path ?? '');
+        final tempDir = await getTemporaryDirectory();
+        final uniqueFileName =
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
+        final targetPath = '${tempDir.path}/$uniqueFileName';
+        print("finalFile.path${finalFile.path}");
+        print("finalFile.path$targetPath");
+        print("image/${finalFile.mimeType ?? 'png'}");
+        print("objectUpload2");
+        // var result = await FlutterImageCompress.compressAndGetFile(
+        //   finalFile.path,
+        //   targetPath,
+        //   quality: 50,
+        //   rotate: 360,
+        // );
+        // if (result == null) {
+        //   context.pop();
+        // }
+
+        final bytes = await finalFile.readAsBytes();
+        int size = bytes.length;
+        print("objectUpload2 $size");
+        // get signed url
+        final signedURLResponse =
+            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+          "type": "video/${finalFile.mimeType ?? 'mp4'}",
+          "size": size,
+          "subcategoryId": subCategoryId
+        });
+        // send to w3 storage
+        signedURLResponse.fold((l) {
+          print("l.toString()${l.toString()}");
+        }, (data) async {
+          log("responseData: ${jsonEncode(data)}");
+          final tempDir = await getTemporaryDirectory();
+          final uniqueFileName =
+              'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
+          final targetPath = '${tempDir.path}/$uniqueFileName';
+          print("finalFile.path${finalFile.path}");
+          print("finalFile.path$targetPath");
+          print("objectUpload2");
+          var result = await FlutterImageCompress.compressAndGetFile(
+            finalFile.path,
+            targetPath,
+            quality: 50,
+            rotate: 360,
+          );
+          await sendBinaryFileData(
+                  file: result!, signedUrl: data['data']['signedUrl'])
+              .then((value) async {
+            print("amdl;maldmaslkd");
+            final mediaId = data['data']['mediaId'];
+            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                .put(EndPoints.confirmUpload(mediaId));
+            /* confirmUploadResponse.fold((l) {
+              print("object22222");
+              return Left(l);
+            }, (data) { */
+            print("object111");
+            onUploaded(UploadVideoEntity(mediaId: mediaId, file: finalFile));
+
+            return const Right(true);
+            // });
+          });
+          if (hasLoading != false) context.pop();
+        });
+      }
+    });
+      }
+      else{
+         try {
+        // 1) فتح شاشة الاختيار (يمكنك تخصيص الإعدادات كما شئت)
+        final pickedAssets = await AssetPicker.pickAssets(
+          context,
+          pickerConfig: const AssetPickerConfig(
+            maxAssets: 1, // اختر صورة واحدة في كل مرة
+            requestType: RequestType.image,
+          ),
+        );
+
+        // إذا ألغى المستخدم العملية
+        if (pickedAssets == null || pickedAssets.isEmpty) return null;
+
+        final asset = pickedAssets.first;
+        final File? rawFile = await asset.file; // يمكنك الحصول على الـFile عبر PhotoManager
+        if (rawFile == null) return null;
+
+        // قص الصورة
+        final CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: rawFile.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: LocaleKeys.cropImage.localize,
+              toolbarColor: AppColors.SECONDARY_COLOR,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false,
+            ),
+            IOSUiSettings(
+              title: 'Crop Image',
+            ),
+          ],
+        );
+
+        // إذا ألغى القص
+        if (croppedFile == null) return null;
+
+        // تغليفها في XFile كي يستمر المنطق موحّد
+        XFile finalFile = XFile(croppedFile.path);
+
+        // ضغط الصورة
+        final tempDir = await getTemporaryDirectory();
+        final uniqueFileName =
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
+        final targetPath = '${tempDir.path}/$uniqueFileName';
+
+        var result = await FlutterImageCompress.compressAndGetFile(
+          finalFile.path,
+          targetPath,
+          quality: 50,
+          rotate: 360,
+        );
+        if (result == null) {
+          // لو حدثت مشكلة بالضغط
+          return null;
+        }
+
+        // حساب الحجم
+        final bytes = await result.readAsBytes();
+        final size = bytes.length;
+
+        // يظهر لودينغ إن أردت
+        showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          transitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (context, _, __) {
+            return PopScope(
+              canPop: false,
+              child: Center(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CustomCircularProgressIndicator(),
+                        const SizedBox(height: 20),
+                        Text(
+                          context.isArabic?'جاري التحميل...':'Loading...',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    contentPadding: const EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                      top: 20,
+                      bottom: 40,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+              ),
+              child: child,
+            );
+          },
+        );
+
+        // 2) استدعاء السيرفر لجلب signedUrl
+        final signedURLResponse = await serviceLocator<ApiConsumer>()
+            .post(EndPoints.mediaUrl, data: {
+          "type": "image/${finalFile.mimeType ?? 'png'}",
+          "size": size,
+          "subcategoryId": subCategoryId,
+        });
+
+        // 3) رفع الصورة على الـ signedUrl
+        signedURLResponse.fold((failure) {
+          print(failure.toString());
+        }, (data) async {
+          final signedUrl = data['data']['signedUrl'];
+          final mediaId = data['data']['mediaId'];
+
+          // ارفع البيانات الثنائية
+          await sendBinaryFileData(file: result, signedUrl: signedUrl).then((_) async {
+            // 4) تأكيد الرفع
+            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                .put(EndPoints.confirmUpload(mediaId));
+
+            confirmUploadResponse.fold((l) {
+              return Left(l);
+            }, (data) {
+              // نعيد الـmediaId والملف في الكول باك
+              onUploaded(UploadVideoEntity(mediaId: mediaId, file: finalFile));
+              return const Right(true);
+            });
+          });
+        });
+
+        // أغلق الـLoading
+        if (hasLoading != false) {
+          context.pop();
+        }
+      } catch (e) {
+        print('Error using wechat_assets_picker: $e');
+        return null;
+      }
+      }
+    return null;
+  }
+
+  Future<Either<Failure, bool>?> uploadAudio({
+    bool isGallery = true,
+    required String subCategoryId,
+    required Function(UploadVideoEntity) onUploaded,
+  }) async {
+    final file = await FilePickerHelper()
+        .pickMedia(isGallery: isGallery)
+        .then((file) async {
+      if (file != null) {
+        final bytes = await file.readAsBytes();
+        int size = bytes.length;
+        // Step 2: Get a signed URL for uploading.
+        final signedURLResponse = await serviceLocator<ApiConsumer>().post(
+          EndPoints.mediaUrl,
+          data: {
+            "type": "audio/${file.mimeType ?? 'mp3'}",
+            "size": size,
+            "subcategoryId": subCategoryId,
+          },
+        );
+
+        // Step 3: Handle the signed URL response.
+        return signedURLResponse.fold(
+          (failure) {
+            // Log and handle failure in getting signed URL.
+            print(failure.toString());
+            return Left(failure);
+          },
+          (data) async {
+            log("Signed URL response: ${jsonEncode(data)}");
+
+            // Step 4: Upload the audio to the signed URL.
+            await sendBinaryFileData(
+              file: file,
+              signedUrl: data['data']['signedUrl'],
+            ).then((value) async {
+              // Step 5: Confirm the upload.
+              final mediaId = data['data']['mediaId'];
+              final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                  .put(EndPoints.confirmUpload(mediaId));
+
+              // Handle the confirmation response.
+              confirmUploadResponse.fold(
+                (failure) {
+                  print("Error confirming upload: $failure");
+                  return Left(failure);
+                },
+                (confirmation) {
+                  print("Upload confirmed.");
+                  // Pass the uploaded file details to the callback function.
+                  onUploaded(UploadVideoEntity(mediaId: mediaId, file: file));
+                  return const Right(true);
+                },
+              );
+            });
+          },
+        );
+      }
+    });
+    return null;
+  }
+
+  Future<Either<Failure, bool>?> uploadVideo({
+    bool isGallery = true,
+    required String subCategoryId,
+    required Function(UploadVideoEntity) onUploaded,
+  }) async {
+    final file = await FilePickerHelper()
+        .pickVideo(
+            isGallery:
+                isGallery) // Assuming you have a method to pick video files
+        .then((file) async {
+      if (file != null) {
+        final bytes = await file.readAsBytes();
+        int size = bytes.length;
+        // Get signed URL
+        final signedURLResponse =
+            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+          "type":
+              "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
+          "size": size,
+          "subcategoryId": subCategoryId
+        });
+
+        // Send to W3 storage
+        signedURLResponse.fold((l) {
+          print(l.toString());
+        }, (data) async {
+          log("responseData: ${jsonEncode(data)}");
+          await sendBinaryFileData(
+                  file: file, signedUrl: data['data']['signedUrl'])
+              .then((value) async {
+            final mediaId = data['data']['mediaId'];
+            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                .put(EndPoints.confirmUpload(mediaId));
+
+            confirmUploadResponse.fold((l) {
+              return Left(l);
+            }, (data) {
+              onUploaded(UploadVideoEntity(mediaId: mediaId, file: file));
+              return const Right(true);
+            });
+          });
+        });
+      }
+    });
+    return null;
+  }
+
+  static Future<String?> uploadPickedFile({
+    required File file,
+    required String subCategoryId,
+  }) async {
+    try {
+      final fileInBytes = await file.readAsBytes();
+      String? mediaId;
+      CliLogger.info("Creating upload URL for: ${file.path}");
+
+      log("file name + path is : ${file.type.name == 'document' ? file.type.name.substring(0, 3) : file.type.name}/${file.path.split('.').last}");
+      log("file path is : ${file.path.split('/').last}");
+      final uploadUrlResponse = await serviceLocator<ApiConsumer>().post(
+        EndPoints.mediaUrl,
+        data: {
+          "type":
+              "${file.type.name == 'document' ? file.type.name.substring(0, 3) : file.type.name}/${file.path.split('.').last}",
+          "size": fileInBytes.length,
+          "fileName": file.path.split('/').last,
+          "subcategoryId": subCategoryId,
+        },
+      ); // mark as deleveerd , database, creating new chat
+
+      await uploadUrlResponse.fold(
+        (l) {
+          CliLogger.error("Can't get upload URL");
+        },
+        (data) async {
+          CliLogger.info(
+              "Upload URL: ${data['data']['signedUrl']}\nMediaId: ${data['data']['mediaId']}");
+          final uploadUrl = data['data']['signedUrl'];
+          mediaId = data['data']['mediaId'];
+
+          final options = Options(
+            contentType: file.type.name,
+            headers: {
+              'Accept': "*/*",
+              'Content-Type': 'application/octet-stream',
+              'Content-Length': fileInBytes.length,
+              'Connection': 'keep-alive',
+              'User-Agent': 'ClinicPlush',
+            },
+          );
+
+          CliLogger.info("Uploading file: ${file.path}");
+          await Dio().put(uploadUrl, data: fileInBytes, options: options);
+          CliLogger.success("File uploaded: ${file.path}");
+        },
+      );
+
+      return mediaId;
+    } catch (e) {
+      CliLogger.error("Can't upload file: $e");
+      return null;
+    }
+  }
+
+  Future<void> sendBinaryFileData(
+      {required XFile file, required String signedUrl}) async {
+    print("signedUrl$signedUrl");
+    Uint8List image = await file.readAsBytes();
+    print("object${image.length}");
+    print("object$image");
+    String fileName = file.path.split('/').last;
+
+    Options options = Options(contentType: file.mimeType, headers: {
+      'Accept': "*/*",
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': image.length,
+      'Connection': 'keep-alive',
+      'User-Agent': 'ClinicPlush',
+      // 'File-Name': fileName,
+    });
+
+    await Dio().put(signedUrl, data: image, options: options);
+    print("aasl;das;ld,");
+  }
+}
+
+class UploadVideoEntity {
+  final String mediaId;
+  final XFile file;
+
+  UploadVideoEntity({
+    required this.mediaId,
+    required this.file,
+  });
+}

@@ -15,8 +15,10 @@ abstract class AdsRepo {
   Future<Either<Failure, bool>> requestPickMe({required RequestParams params});
   Future<Either<Failure, bool>> favouriteAd({required String params});
   Future<Either<Failure, bool>> removeFavouriteAd({required String params});
-  Future<Either<Failure, bool>> requestComeWithMe({required RequestParams params});
+  Future<Either<Failure, bool>> requestComeWithMe(
+      {required RequestParams params});
 
   Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params);
-  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(GetMyAdByIdParams params);
+  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(
+      GetMyAdByIdParams params);
 }

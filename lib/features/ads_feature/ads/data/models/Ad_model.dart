@@ -23,6 +23,7 @@ class AdModel extends AdEntity {
     super.userId,
     super.subscriptionStatus,
     super.userSubscriptionStatus,
+    super.ownerSubscriptionStatus,
     super.views,
     super.statistics,
     required super.active,
@@ -30,6 +31,8 @@ class AdModel extends AdEntity {
     required super.createdAt,
     required super.details,
     super.subCategoryId,
+    super.subCategoryNameEn,
+    super.subCategoryNameAr,
     super.phone,
     super.currencyEn,
     super.currencyAr,
@@ -55,12 +58,16 @@ class AdModel extends AdEntity {
       images: images,
       price: json['price'] ?? 0,
       subCategoryId: json['subCategoryId'],
+      mainCategoryId: json['mainCategoryId'],
+      subCategoryNameEn: json['subCategory']?['nameEn'] ?? '',
+      subCategoryNameAr: json['subCategory']?['nameAr'] ?? '',
       active: json['isActive'] ?? true,
       approved: json['isApproved'] ?? true,
       isFavourite: json['isFavorite'] ?? false,
       subscriptionStatus: json['ownerSubscriptionStatus'] ?? '',
       views: json['views'] ?? 0,
       userSubscriptionStatus: json['userLoginSubscriptionStatus'] ?? '',
+      ownerSubscriptionStatus: json['ownerSubscriptionStatus'] ?? '',
       phone: json['phone'] ?? '',
       userId: json['userId'],
       statistics: json['statistics'] == null
@@ -87,6 +94,7 @@ class AdModel extends AdEntity {
         // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
+        // TODO: add the user model
         if (price != null) "price": price,
         // "userId": userId,
         "searchText": "testPropsAndAds",
@@ -99,6 +107,11 @@ class AdModel extends AdEntity {
             };
           }
         }).toList(),
+        // TODO: add the address model
         "address": {"government": governorate, "city": city}
+        // "address": {
+        //   "type": "Point",
+        //   "coordinates": [30.030030, 30.5262]
+        // }
       };
 }

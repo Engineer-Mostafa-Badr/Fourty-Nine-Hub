@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -15,12 +17,14 @@ class ImageAdsWidget extends StatelessWidget {
     required this.images,
     required this.isFavourite,
     required this.onPressedFavorite,
+    required this.isVerified,
   });
 
   // final MyAdCard myAdCard;
   final List<String> images;
   final Function() onPressedFavorite;
   final bool isFavourite;
+  final bool isVerified;
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +84,50 @@ class ImageAdsWidget extends StatelessWidget {
               })),
             ),
           ),
+          if (isVerified)
+            PositionedDirectional(
+              end: 0,
+              top: 16,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadiusDirectional.only(
+                    topStart: Radius.circular(8),
+                    bottomStart: Radius.circular(8),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      Assets.verified,
+                      height: 15,
+                      width: 15,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Label(
+                      text: context.isArabic ? 'موثق' : 'Verified',
+                      style: Styles.smallText(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           PositionedDirectional(
             start: 16,
             top: 16,
             child: IconAppButton(
-                size: 32,
-                icon: isFavourite == false
-                    ? Icons.favorite_border
-                    : Icons.favorite,
-                color: AppColors.SECONDARY_COLOR,
-                onPressed: onPressedFavorite),
+              size: 32,
+              icon:
+                  isFavourite == false ? Icons.favorite_border : Icons.favorite,
+              color: AppColors.SECONDARY_COLOR,
+              onPressed: onPressedFavorite,
+            ),
           ),
         ],
       ),

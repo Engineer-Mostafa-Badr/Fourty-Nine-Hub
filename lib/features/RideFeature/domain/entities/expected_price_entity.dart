@@ -6,8 +6,8 @@ class RideExpectedPriceEntity{
   double priceForTaxi;
   double priceForScooter;
   double priceForSUV;
-  final double priceForPremium;
-  final double priceForIntercity;
+   double priceForPremium;
+   double priceForIntercity;
   final double lowestFare;
   final double highestFare;
   final String from;

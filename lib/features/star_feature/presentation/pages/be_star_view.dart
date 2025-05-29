@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/widget/custom_text_no_login.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
@@ -44,28 +45,47 @@ class _BeStarViewState extends State<BeStarView> {
   late List<VideoPlayerController?> _videoControllers = [];
   late List<bool> _isVideoEnded = [];
   late ScrollController _scrollController;
+  late ScrollController _controller;
   late StarCubit _cubit;
   bool isFloatingButtonVisible = true;
   bool showMore = false;
   final AdsManager _adsManager = AdsManager();
+  bool _showButtons = true;
 
   @override
   void initState() {
     super.initState();
     _cubit = context.read<StarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
+    _controller = ScrollController()..addListener(_onScroll2);
     _cubit.loadAllTalentsData();
     _adsManager.preloadAds();
   }
 
   void _onScroll2() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      isFloatingButtonVisible = false;
-    } else {
-      isFloatingButtonVisible = true;
-    }
-    setState(() {});
+    // if (_scrollController.position.userScrollDirection ==
+    //     ScrollDirection.reverse) {
+    //   isFloatingButtonVisible = false;
+    // } else {
+    //   isFloatingButtonVisible = true;
+    // }
+    // setState(() {});
+    _controller.addListener(() {
+      if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
+        if (_showButtons) {
+          setState(() {
+            _showButtons = false;
+          });
+        }
+      } else if (_controller.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_showButtons) {
+          setState(() {
+            _showButtons = true;
+          });
+        }
+      }
+    });
   }
 
   void _onScroll() {
@@ -112,34 +132,20 @@ class _BeStarViewState extends State<BeStarView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customTalentAppBar(),
-      // appBar: BackAppBar(
-      // label: LocaleKeys.beAStar.localize,
-      //   actions: [
-      //     if (context.read<UserCubit>().isLoggedIn)
-      //       TextButton(
-      //         onPressed: () {
-      //           context.push(Routes.BE_STAR_DETAILS);
-      //            Navigator.push(context, MaterialPageRoute(builder: (context)=>const StarWinnerView()));
-      //         },
-      //         child: Text(
-      //           '${LocaleKeys.winners.localize} 🏆',
-      //           style: Styles.mediumText(
-      //               color: AppColors.SECONDARY_COLOR, fontSize: 60.sp),
-      //         ),
-      //       ),
-      //   ],
-      // ),
-      // floatingActionButton: const FloatingActionButtonStar(),
       floatingActionButton: context.read<UserCubit>().isLoggedIn
-          ? isFloatingButtonVisible
-              ? const FloatingActionButtonStar()
-              : null
+          ? AnimatedSlide(
+              duration: const Duration(milliseconds: 300),
+              offset: _showButtons ? Offset.zero : const Offset(0, 2),
+              child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: _showButtons ? 1.0 : 0.0,
+                  child: const FloatingActionButtonStar()))
           : null,
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
-          if (!context.read<UserCubit>().isLoggedIn) {
-            return const CustomNotLogged();
-          }
+          // if (!context.read<UserCubit>().isLoggedIn) {
+          //   return const CustomNotLogged();
+          // }
           if (state.status == StarStates.loading) {
             return const CustomLoading();
           }
@@ -157,16 +163,19 @@ class _BeStarViewState extends State<BeStarView> {
           }
 
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: RefreshIndicator(
+              color: AppColors.getTextColor(context),
+              backgroundColor: AppColors.getFindFillColor(context),
               onRefresh: () async =>
                   context.read<StarCubit>().getAllTalent(refresh: true),
-              child: Column(
+              child: ListView(
+                controller: _controller,
                 children: [
                   // ImageFromInternet(image: state.banner?.banner ?? ''),
                   Container(
                     width: double.infinity,
-                    height: MediaQuery.sizeOf(context).height * 0.13.h,
+                    height: MediaQuery.sizeOf(context).height * 0.2,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.r),
                       // image: DecorationImage(
@@ -180,29 +189,82 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                   ),
                   const Sizer(),
-                  Text(
-                    context.isArabic
-                        ? state.banner?.titleAr ?? ''
-                        : state.banner?.titleEn ?? '',
-                    textAlign: TextAlign.center,
-                    style: Styles.mediumText(
-                      fontSize: 60.sp,
-                      color: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.SECONDARY_COLOR,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        context.isArabic
+                            ? convertToArabicNumbers(
+                                state.banner?.titleAr ?? '',
+                              )
+                            : state.banner?.titleEn ?? '',
+                        textAlign: TextAlign.center,
+                        style: Styles.mediumText(
+                          fontSize: 30,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                        ),
+
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showAnimatedDialog(
+                            context,
+                            AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap:(){
+                                          context.pop();
+                                        },
+                                        child: Image.asset(
+                                          Assets.close,
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Sizer(),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    child: Image.asset(
+                                      Assets.talentGIF,
+                                      width: MediaQuery.of(context).size.width * 0.8,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          Assets.idea,
+                          height: 24,
+                          width: 24,
+                        ),
+                      ),
+                    ],
                   ),
                   const Sizer(),
                   Text(
                     context.isArabic
-                        ? state.banner?.subTitleAr ?? ''
+                        ? convertToArabicNumbers(state.banner?.subTitleAr ?? '')
                         : state.banner?.subTitleEn ?? '',
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(
-                      fontSize: 60.sp,
+                      fontSize: 28,
                       color: context.isDarkMode
                           ? Colors.white
-                          : AppColors.SECONDARY_COLOR,
+                          : AppColors.PRIMARY_COLOR,
                     ),
                   ),
                   const Sizer(),
@@ -229,11 +291,11 @@ class _BeStarViewState extends State<BeStarView> {
                   //       }
                   //       if (index >= sortedStars.length) {
                   //         return const Center(
-                  //             child: CircularProgressIndicator());
+                  //             child: CustomCircularProgressIndicator());
                   //       }
                   //       if (index >= sortedStars.length) {
                   //         return const Center(
-                  //             child: CircularProgressIndicator());
+                  //             child: CustomCircularProgressIndicator());
                   //       }
                   //       final videoController = _videoControllers[index];
                   //       //final star = sortedStars[index];
@@ -298,7 +360,7 @@ class _BeStarViewState extends State<BeStarView> {
                   //                       ),
                   //                     ),
                   //                   )
-                  //                 : const CircularProgressIndicator()
+                  //                 : const CustomCircularProgressIndicator()
                   //           else
                   //             Stack(
                   //               children: [
@@ -660,7 +722,7 @@ class _BeStarViewState extends State<BeStarView> {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xff0B1035),
+                color: AppColors.getButtonPrimaryWhiteColor(context),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Align(
@@ -668,7 +730,9 @@ class _BeStarViewState extends State<BeStarView> {
                 child: Text(
                   LocaleKeys.myTalent.localize,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: context.isDarkMode
+                        ? AppColors.PRIMARY_COLOR
+                        : Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 28.sp,
                   ),
@@ -680,21 +744,17 @@ class _BeStarViewState extends State<BeStarView> {
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: GestureDetector(
             onTap: () {
-              if (!context.read<UserCubit>().isLoggedIn) {
-                pleaseLoginDialog(context);
-              } else {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => serviceLocator<StarCubit>(),
-                      child: const AllWinnerView(),
-                    ),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => serviceLocator<StarCubit>(),
+                    child: const AllWinnerView(),
                   ),
-                );
-              }
+                ),
+              );
             },
             child: Row(
               children: [

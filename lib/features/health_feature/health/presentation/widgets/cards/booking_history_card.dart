@@ -5,13 +5,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../controllers/health_cubit/health_cubit.dart';
 class BookingHistoryScreen extends StatefulWidget {
@@ -52,23 +56,18 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
         final cubit = context.read<HealthCubit>();
 
         if (state.status == HealthStates.loading && cubit.historyBookings.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return SizedBox(
+              height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
         }
 
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height * 0.67,
           child: Column(
             children: [
               Expanded(
                 child: cubit.historyBookings.isEmpty
                     ? Center(
-                  child: Text(
-                    context.isArabic ? 'لا يوجد حجوزات سابقة' : 'No booking history',
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.grey,
-                    ),
-                  ),
+                  child: CustomEmptyWidget(label: context.isArabic ? 'لا يوجد حجوزات سابقة' : 'No booking history',),
                 )
                     : ListView.separated(
                   controller: _scrollController,
@@ -89,7 +88,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
               if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
+                  child: CustomCircularProgressIndicator(),
                 ),
             ],
           ),
@@ -142,13 +141,13 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                     children: [
                       Icon(
                         Icons.location_on_sharp,
-                        color: AppColors.PRIMARY_COLOR,
+                        color: AppColors.getButtonPrimaryWhiteColor(context),
                         size: 48.h,
                       ),
                       const Sizer(),
                       Label(
-                        text: 'Nasr City, Cairo',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                        text: context.isArabic?'مدينة نصر ،القاهرة':'Nasr City, Cairo',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
                       )
                     ],
                   ),
@@ -165,12 +164,12 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                       Expanded(
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
-                          style: Styles.mediumText(fontWeight: FontWeight.w500),
+                          style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
                         ),
                       ),
                       Label(
-                        text: '100 ${LocaleKeys.egp.localize}',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                        text: '${100.toLocalizedArabic(context)} ${context.isArabic?'ج.م':LocaleKeys.egp.localize}',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
                       )
                     ],
                   ),
@@ -179,12 +178,12 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                     Row(
                     children: [
                       Icon(Icons.watch_later_outlined,
-                          color: AppColors.black, size: 48.h),
+                          color: AppColors.getButtonPrimaryWhiteColor(context), size: 48.h),
                       const Sizer(),
                       Label(
                         text:
-                            '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: 10 ${context.isArabic ? 'دقيقة' : 'min'}',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                            '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: 10 ${context.isArabic ? 'دقيقة' : 'min'}'.toArabicNumbers(context),
+                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
                       )
                     ],
                   ),
@@ -244,7 +243,7 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                         child: Row(children: [
                           SvgPicture.asset(Assets.star2, width: 8, height: 8),
                           const Sizer(width: 4),
-                          Label(text: '4.4', style: Styles.smallText())
+                          Label(text: '4.4'.toArabicNumbers(context), style: Styles.smallText(color: Colors.black))
                         ]))))
           ],
         ),
@@ -260,7 +259,7 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
               ),
               if (widget.isSubscribed)
                 Label(
-                  text: 'Ear/Nose',
+                  text:context.isArabic?'انف/أذن': 'Ear/Nose',
                   style: Styles.mediumText(),
                 )
             ],
@@ -277,7 +276,7 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
           child: Label(
             text: LocaleKeys.expired.localize,
             style: Styles.mediumText(
-              color: AppColors.SECONDARY_COLOR,
+              color: AppColors.getRedColor(context),
               fontWeight: FontWeight.w600
             ),
           ),

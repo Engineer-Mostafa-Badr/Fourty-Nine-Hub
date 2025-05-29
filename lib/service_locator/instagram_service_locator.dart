@@ -234,7 +234,7 @@ class InstagramServiceLocator {
       () => InstagramAddMusicCubit(),
     );
 
-    serviceLocator.registerLazySingleton<SinglePostInstagramCubit>(
+    serviceLocator.registerFactory<SinglePostInstagramCubit>(
       () => SinglePostInstagramCubit(
         serviceLocator<GetSinglePostInstagramUseCase>(),
       ),

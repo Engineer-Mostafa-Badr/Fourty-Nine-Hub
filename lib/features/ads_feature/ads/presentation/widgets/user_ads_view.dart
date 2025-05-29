@@ -18,9 +18,15 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class UserAdsView extends StatelessWidget {
-  const UserAdsView({super.key, required this.params, required this.userType});
+  const UserAdsView({
+    super.key,
+    required this.params,
+    required this.userType,
+    required this.onScrollChanged,
+  });
   final AdsViewParams params;
   final String userType;
+  final Function(bool) onScrollChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -88,20 +94,23 @@ class UserAdsView extends StatelessWidget {
                   ],
                 ))),
         Expanded(
-            child: controller.ads.isEmpty
-                ? Center(
-                    child: Label(
-                      text: LocaleKeys.noAds.localize,
-                      style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? AppColors.whiteColor
-                              : AppColors.PRIMARY_COLOR),
-                    ),
-                  )
-                : UserAds(
-                    params: params,
-                    userType: userType,
-                  ))
+            child:
+                //  controller.ads.isEmpty
+                //     ? Center(
+                //         child: Label(
+                //           text: LocaleKeys.noAds.localize,
+                //           style: Styles.mediumText(
+                //               color: context.isDarkMode
+                //                   ? AppColors.whiteColor
+                //                   : AppColors.PRIMARY_COLOR),
+                //         ),
+                //       )
+                //     :
+                UserAds(
+          params: params,
+          userType: userType,
+          onScrollChanged: onScrollChanged,
+        ))
       ]);
     });
   }
