@@ -92,7 +92,7 @@ class _MainCategoriesFlipCardsViewState
     // var mainCategories = mainCategoriesCubit.state.customPage ?? [];
     // var mainCategories = widget.data!;
     var mainCategories = <MainCategoryEntity>[];
-    print('BuildContext data is ${widget.mainCategoriesCardsParams.data}');
+    print('BuildContext data is ${widget.mainCategoriesCardsParams.data?.first.nameEn}');
     if (widget.mainCategoriesCardsParams.data != null) {
       mainCategories = widget.mainCategoriesCardsParams.data!;
     } else if (mainCategoriesCubit.state.customPage != null) {
@@ -219,7 +219,13 @@ class _MainCategoriesFlipCardsViewState
                                               ],
                                             ),
                                             child: Text(
-                                              mainCategories[index].name ?? '',
+                                              context.isArabic
+                                                  ? mainCategories[index]
+                                                          .name ??
+                                                      ''
+                                                  : mainCategories[index]
+                                                          .nameEn ??
+                                                      '',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 60.sp,

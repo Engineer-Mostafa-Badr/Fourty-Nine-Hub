@@ -218,7 +218,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
-          label: widget.mainCategory.name,
+          label:context.isArabic ? widget.mainCategory.name: widget.mainCategory.nameEn,
           textColor: Colors.white,
           iconColor: Colors.white,
           enableCustomAppBar: true,

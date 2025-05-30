@@ -24,12 +24,14 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          const Spacer(),
-          Image.asset(
-            context.isDarkMode ? Assets.logo : Assets.logoWithBlackText,
-            height: 200,
+          const Spacer(flex: 2,),
+          Expanded(
+            flex: 5,
+            child: Image.asset(
+              context.isDarkMode ? Assets.logo : Assets.logoWithBlackText,
+            ),
           ),
-          const Spacer(),
+          const Spacer(flex: 2,),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -55,43 +57,41 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          const Spacer(),
+          const Spacer(flex: 2,),
           Text(
             LocaleKeys.congratulations.localize,
             style: Styles.headerText(
               color: AppColors.SECONDARY_COLOR,
             ),
           ),
-          const Sizer(),
+          const Spacer(),
           Text(
             giftMessageEntity,
             textAlign: TextAlign.center,
             style: Styles.mediumText(),
           ),
-          const Spacer(),
+          const Spacer(flex: 2,),
           SizedBox(
             width: MediaQuery.sizeOf(context).width * .4,
-            height: 64,
-            child: Expanded(
-              child: DefaultButton(
-                backgroundColor: context.isDarkMode
-                    ? AppColors.whiteColor
-                    : AppColors.PRIMARY_COLOR,
-                width: double.infinity,
-                label: LocaleKeys.next.localize,
-                labelStyle: TextStyle(
-                  fontSize: 32.sp,
-                  color: context.isDarkMode
-                      ? AppColors.PRIMARY_COLOR
-                      : AppColors.AUTH_CONTAINER_COLOR,
-                ),
-                onPressed: () {
-                  context.go(Routes.HOME);
-                },
+            height: 50,
+            child: DefaultButton(
+              backgroundColor: context.isDarkMode
+                  ? AppColors.whiteColor
+                  : AppColors.PRIMARY_COLOR,
+              width: double.infinity,
+              label: LocaleKeys.next.localize,
+              labelStyle: TextStyle(
+                fontSize: 32.sp,
+                color: context.isDarkMode
+                    ? AppColors.PRIMARY_COLOR
+                    : AppColors.AUTH_CONTAINER_COLOR,
               ),
+              onPressed: () {
+                context.go(Routes.HOME);
+              },
             ),
           ),
-          const Spacer(),
+          const Spacer(flex: 2,),
         ],
       ),
     );

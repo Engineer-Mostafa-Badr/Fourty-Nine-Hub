@@ -21,7 +21,8 @@ class FirstLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: PreferredSize(preferredSize: const Size.fromHeight(30),
+      child: AppBar()),
       body: BlocBuilder<ThemeCubit, ThemeStates>(
           builder: (BuildContext context, theme) {
         var themeCubit = context.read<ThemeCubit>();
@@ -30,17 +31,15 @@ class FirstLoginScreen extends StatelessWidget {
             child: Column(
               children: [
                 const Spacer(),
-                Image.asset(
-                  themeCubit.isDarkTheme
-                      ? Assets.logo
-                      : Assets.logoWithBlackText,
-                  height: 200,
+                Expanded(
+                  flex: 5,
+                  child: Image.asset(
+                    themeCubit.isDarkTheme
+                        ? Assets.logo
+                        : Assets.logoWithBlackText,
+                  ),
                 ),
                 const Spacer(),
-                // SvgPicture.asset(
-                //   Assets.welcomeLogin,
-                //   height: 200,
-                // ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
@@ -73,7 +72,7 @@ class FirstLoginScreen extends StatelessWidget {
                     color: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR,
-                    fontSize: 38,
+                    fontSize: 32,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Tangerine',
                   ),
@@ -82,7 +81,7 @@ class FirstLoginScreen extends StatelessWidget {
                   'A L L   Y O U   N E E D',
                   style: TextStyle(
                     color: AppColors.SECONDARY_COLOR,
-                    fontSize: 32,
+                    fontSize: 28,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Tangerine',
                   ),
@@ -90,7 +89,7 @@ class FirstLoginScreen extends StatelessWidget {
                 const Spacer(),
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * .4,
-                  height: 64,
+                  height: 50,
                   child: DefaultButton(
                     backgroundColor: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
@@ -107,11 +106,9 @@ class FirstLoginScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                const Sizer(
-                  height: 24,
-                ),
+                const Spacer(),
                 SizedBox(
-                  height: 64,
+                  height: 50,
                   width: MediaQuery.sizeOf(context).width * .4,
                   child: DefaultButton(
                     backgroundColor: themeCubit.isDarkTheme

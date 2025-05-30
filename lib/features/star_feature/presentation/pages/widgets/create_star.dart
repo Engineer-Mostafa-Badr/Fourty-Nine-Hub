@@ -150,7 +150,6 @@ class _CreateStarState extends State<CreateStar> {
                 },
                 builder: (BuildContext context, state) {
                   controllerStar = context.read<StarCubit>();
-
                   _videoControllers = state.video?.map((video) {
                         return VideoPlayerController.file(File(video.file.path))
                           ..initialize().then((_) {

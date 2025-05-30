@@ -462,7 +462,7 @@ class _CustomPageSubCategoriesViewState
     return CustomScaffold(
       enableCustomAppBar: true,
       appBar: BackAppBar(
-        label: widget.params.mainCategory.name,
+        label:context.isArabic ? widget.params.mainCategory.name : widget.params.mainCategory.nameEn,
         textColor: Colors.white,
         iconColor: Colors.white,
         enableCustomAppBar: true,
