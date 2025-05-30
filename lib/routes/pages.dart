@@ -332,6 +332,8 @@ import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_offers/all_client_rating_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_offers/all_driver_rating_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_offers/main_tabs_ride_offer_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
@@ -3755,6 +3757,23 @@ class AppPages {
                     child: const AddStoryScreen(),
                   );
                 },
+              ),
+              GoRoute(
+                path: Paths.allDriverRatingScreen,
+                name: Routes.allDriverRatingScreen,
+                builder: (context, state) => BlocProvider(
+                    create: (context) => serviceLocator<ClientTripsCubit>()..getDriverAllRating(params: state.extra as String),
+                    child: AllDriverRatingScreen(
+
+                    )),
+              ),
+              GoRoute(
+                path: Paths.allClientRatingScreen,
+                name: Routes.allClientRatingScreen,
+                builder: (context, state) => BlocProvider(
+                    create: (context) => serviceLocator<ClientTripsCubit>()..getClientAllRating(params: state.extra as String),
+                    child: AllClientRatingScreen(
+                    )),
               ),
             ],
           ),

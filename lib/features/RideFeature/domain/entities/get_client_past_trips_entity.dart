@@ -1,35 +1,41 @@
 class ClientPastTripEntity {
   final TripDetailsEntity? tripDetails;
-  final YourDetailsEntity? yourDetails;
+  final SubCategoryEntity? subCategory;
+  final ClientDetailsEntity? clientDetails;
+  final DriverDetailsEntity? driverDetails;
 
   ClientPastTripEntity({
     this.tripDetails,
-    this.yourDetails,
+    this.subCategory,
+    this.clientDetails,
+    this.driverDetails,
   });
 }
 
 class TripDetailsEntity {
   final String? id;
+  final num? price;
+  final String? pickupTime;
   final String? status;
   final bool? isPremium;
-  final num? price;
-  final num? passengers;
-  final String? date;
   final String? note;
+  final num? passengers;
   final LocationEntity? location;
-  final CategoryEntity? category;
+  final RateEntity? yourRateDriver;
+  final RateEntity? driverRateYou;
   final String? createdAt;
 
   TripDetailsEntity({
     this.id,
+    this.price,
+    this.pickupTime,
     this.status,
     this.isPremium,
-    this.price,
-    this.passengers,
-    this.date,
     this.note,
+    this.passengers,
     this.location,
-    this.category,
+    this.yourRateDriver,
+    this.driverRateYou,
     this.createdAt,
   });
 }
@@ -44,29 +50,45 @@ class LocationEntity {
   });
 }
 
-class CategoryEntity {
+class SubCategoryEntity {
+  final String? id;
   final String? nameAr;
   final String? nameEn;
-  final String? picture;
+  final String? pictureUrl;
 
-  CategoryEntity({
+  SubCategoryEntity({
+    this.id,
     this.nameAr,
     this.nameEn,
-    this.picture,
+    this.pictureUrl,
   });
 }
 
-class YourDetailsEntity {
+class ClientDetailsEntity {
   final String? id;
   final String? firstName;
-  final String? lastName;
+  final String? profilePictureUrl;
+  final bool? verifiedBadge;
+  final RatingEntity? rating;
+
+  ClientDetailsEntity({
+    this.id,
+    this.firstName,
+    this.profilePictureUrl,
+    this.verifiedBadge,
+    this.rating,
+  });
+}
+
+class DriverDetailsEntity {
+  final String? id;
+  final String? firstName;
   final String? pictureUrl;
   final RatingEntity? rating;
 
-  YourDetailsEntity({
+  DriverDetailsEntity({
     this.id,
     this.firstName,
-    this.lastName,
     this.pictureUrl,
     this.rating,
   });
@@ -82,3 +104,10 @@ class RatingEntity {
   });
 }
 
+class RateEntity {
+  final int? rate;
+
+  RateEntity({
+    this.rate,
+  });
+}

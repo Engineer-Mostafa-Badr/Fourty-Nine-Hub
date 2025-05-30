@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -89,7 +90,8 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                                       style: Styles.smallText(
                                         color: AppColors.PRIMARY_COLOR
                                       ))
-                                ]))))
+                                ])))),
+                    const VerifiedWidget(),
                   ],
                 ),
                 Label(

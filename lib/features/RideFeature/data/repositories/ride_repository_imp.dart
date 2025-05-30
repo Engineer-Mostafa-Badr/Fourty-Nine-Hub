@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/data/datasources/ride_remote_data_source.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/client/driver_all_rating_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/client_all_rating_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
@@ -41,7 +43,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_non_tr
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/get_driver_all_rating_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
@@ -52,6 +57,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_a
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
@@ -72,6 +78,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_p
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 
+import '../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 
@@ -453,4 +460,26 @@ class RideRepositoryImplementation extends RideRepository {
   void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params) {
     return rideRemoteDataSource.listenToOfferUpdateUntrackedTrip(params);
   }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params) {
+    return rideRemoteDataSource.addRateWithClient(params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params) {
+    return rideRemoteDataSource.updateClientRateNonSocket(params);
+  }
+
+  @override
+  Future<Either<Failure, DriverAllRatingEntity>> getDriverAllRating(params) {
+    return rideRemoteDataSource.getDriverAllRating(params);
+  }
+
+  @override
+  Future<Either<Failure, ClientAllRatingEntity>> getClientAllRating(DriverAllRatingParams params) {
+    return rideRemoteDataSource.getClientAllRating(params);
+  }
+
+
 }

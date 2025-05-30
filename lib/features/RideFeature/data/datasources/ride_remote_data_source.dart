@@ -84,6 +84,10 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
+import '../../../food_feature/restaurants_list/data/models/rate_response_model.dart';
+import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
+import '../../domain/entities/client/client_all_rating_entity.dart';
+import '../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../domain/entities/create_no_track_trip_entity.dart';
 import '../../domain/entities/dashboards/create_non_track_offer_entity.dart';
 import '../../domain/entities/dashboards/update_driver_settings_entity.dart';
@@ -94,13 +98,18 @@ import '../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/accept_non_track_trip_use_case.dart';
 import '../../domain/usecases/cancel_non_track_trip_use_case.dart';
+import '../../domain/usecases/client_trips/get_driver_all_rating_use_case.dart';
+import '../../domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../../domain/usecases/create_non_track_trip_use_case.dart';
+import '../../domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../../domain/usecases/rating_driver_by_client.dart';
+import '../models/client/client_all_rating_model.dart';
+import '../models/client/driver_all_rating_model.dart';
 import '../models/create_no_track_trip_model.dart';
 import '../models/dashboards/create_non_track_offer_model.dart';
 import '../models/dashboards/get_offers_response_model.dart';
@@ -247,6 +256,13 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
 
   void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params);
+  Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params);
+
+  Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params);
+  Future<Either<Failure, DriverAllRatingEntity >> getDriverAllRating(DriverAllRatingParams params);
+
+
+  Future<Either<Failure, ClientAllRatingEntity>> getClientAllRating(DriverAllRatingParams params);
 
 
 }
@@ -1363,6 +1379,66 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params)async {
+    final url = "${EndPoints.addRateToDriverWithClientNonSocket}";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = RateResponseModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params) async {
+    final url = "${EndPoints.updateClientRating}";
+
+    final response = await _apiConsumer.put(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = CreateNonTrackTripModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, DriverAllRatingEntity>> getDriverAllRating(DriverAllRatingParams params) async{
+    final url = "${EndPoints.getDriverAllRating}/${params.id}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = DriverAllRatingModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, ClientAllRatingEntity>> getClientAllRating(DriverAllRatingParams params) async{
+    final url = "${EndPoints.getClientAllRating}/${params.id}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = ClientAllRatingModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
   }
 
 }

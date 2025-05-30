@@ -55,6 +55,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
+import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
+import '../../data/models/client/driver_all_rating_model.dart';
+import '../entities/client/client_all_rating_entity.dart';
+import '../entities/client/driver_all_rating_entity.dart';
 import '../entities/create_no_track_trip_entity.dart';
 import '../entities/dashboards/create_non_track_offer_entity.dart';
 import '../entities/dashboards/update_driver_settings_entity.dart';
@@ -65,7 +69,10 @@ import '../entities/get_client_pending_trips_entity.dart';
 import '../entities/get_offers_entity.dart';
 import '../usecases/accept_non_track_trip_use_case.dart';
 import '../usecases/cancel_non_track_trip_use_case.dart';
+import '../usecases/client_trips/get_driver_all_rating_use_case.dart';
+import '../usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../usecases/create_non_track_trip_use_case.dart';
+import '../usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../usecases/dashboards/update_driver_settings_use_case.dart';
 import '../usecases/get_client_pending_untracked_trips_use_case.dart';
@@ -145,4 +152,9 @@ abstract class RideRepository {
   Future<Either<Failure, List<ClientPastTripEntity >>> getClientPastUntrackedTrips({required ClientPendingTripParams params});
   Future<Either<Failure, bool>> sendOkIamComing();
   Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
+  Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params);
+  Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params);
+  Future<Either<Failure, DriverAllRatingEntity >> getDriverAllRating(DriverAllRatingParams params);
+  Future<Either<Failure, ClientAllRatingEntity >> getClientAllRating(DriverAllRatingParams params);
+
 }

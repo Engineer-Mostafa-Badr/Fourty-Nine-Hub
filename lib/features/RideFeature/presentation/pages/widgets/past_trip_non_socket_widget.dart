@@ -7,7 +7,9 @@ import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
@@ -115,6 +117,8 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
                           ),
                         ),
                       ),
+                      const VerifiedWidget(),
+
                     ],
                   ),
                   const SizedBox(height: 4),

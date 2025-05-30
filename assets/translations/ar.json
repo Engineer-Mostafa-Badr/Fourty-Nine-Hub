@@ -1616,6 +1616,11 @@
   "youCantGetTripUntilYouReady": "لا يمكنك الحصول على رحلات حتى تكون مستعدًا",
   "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
   "noInternetConnection": "لا يوجد اتصال بالإنترنت",
-  "createAds": "انشاء اعلانات"
+  "createAds": "انشاء اعلانات",
+  "driverRateYou": "تقييم السائق لك",
+  "ratingsCount": "عدد التقييمات",
+  "averageRate": "متوسط التقييم",
+  "time": "الوقت"
+
 
 }

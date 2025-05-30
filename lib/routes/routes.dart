@@ -294,6 +294,9 @@ abstract class Routes {
   static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
   static const followersScreen = '/FollowersScreen';
   static const rideOffer = '/RiderOffer';
+  static const allDriverRatingScreen = '/allDriverRatingScreen';
+  static const allClientRatingScreen = '/allClientRatingScreen';
+
 }
 
 abstract class Paths {
@@ -549,6 +552,7 @@ abstract class Paths {
   static const newRideModeScreen = 'NewRideModeScreen';
   static const registerVerifyPhoneOTP = 'RegisterVerifyPhoneOTP';
   static const rideOffer = 'RiderOffer';
+  static const allDriverRatingScreen = 'allDriverRatingScreen';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';
@@ -575,4 +579,6 @@ abstract class Paths {
   static const SINGLEPOSTINSTAGRAM = 'SinglePostInstagram';
   static const FOLLOWREQUESTSINSTAGRAM = 'FollowRequestsInstagram';
   static const followersScreen = 'FollowersScreen';
+  static const allClientRatingScreen = 'allClientRatingScreen';
+
 }

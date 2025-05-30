@@ -1547,4 +1547,8 @@ class EndPoints {
   static const getDriverSettings = '/ride/driver/untracked/settings';
   static deleteEmergencyContact (String id)=> '/users/delete-emergency-contacts/$id';
   static const addRateToClientWithDriverNonSocket = '/ride/untracked/ratings/driver';
+  static const addRateToDriverWithClientNonSocket = '/ride/untracked/ratings/client';
+  static const updateClientRating = '/ride/untracked/ratings/client';
+  static const getDriverAllRating = '/ride/untracked/ratings/driver';
+  static const getClientAllRating = '/ride/untracked/ratings/client';
 }

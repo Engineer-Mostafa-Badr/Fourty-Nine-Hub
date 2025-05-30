@@ -108,6 +108,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
                 Sizer(),
                 Expanded(
                   child: AppButton(
+                    color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.black,
                     radius: 15,
                     label: context.isArabic?'تحميله':'Shipping',
                     onPressed: () {
@@ -115,7 +116,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
                         selectedTap='shipping';
                       });
                     },
-                    backColor: selectedTap=='shipping'?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
+                    backColor: selectedTap=='shipping'?AppColors.SECONDARY_COLOR:Color(0xFFE0E0E0),
                   ),
                 ),
               ],
