@@ -237,7 +237,7 @@ class _LoginViewState extends State<LoginView> {
                 extra: loginCubit.emailTextController.text,
               );
               // Call the resendOTP method from VerifyOtpCubit
-              verifyOtpCubit.resendOTP(loginCubit.emailTextController.text);
+              verifyOtpCubit.resendOTP(loginCubit.emailTextController.text,true);
             }
             showErrorMessage(
               context,

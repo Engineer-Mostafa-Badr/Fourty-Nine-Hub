@@ -88,11 +88,11 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
     emit(ResendOtpEnabled());
   }
 
-  void resendOTP(String email) async {
+  void resendOTP(String email, bool forVerification) async {
     if (state is VerifyOtpLoading) return;
     emit(ResendOtpLoading());
 
-    final result = await _resendOTPUseCase(ResendOTPParams(email: email));
+    final result = await _resendOTPUseCase(ResendOTPParams(email: email, forVerification: forVerification));
     result.fold(
       (l) {
         emit(ResendOtpError(l));
