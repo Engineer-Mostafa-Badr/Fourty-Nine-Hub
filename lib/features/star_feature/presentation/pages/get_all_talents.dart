@@ -9,13 +9,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/talent_video.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'talent_video_player.dart';
 
@@ -86,8 +85,10 @@ class GetAllTalents extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        TalentVideoPlayer(videoUrl: mediaUrl),
+                                    builder: (context) => TalentVideoPlayer(
+                                      videoUrl: mediaUrl,
+                                      talent: talent,
+                                    ),
                                   ),
                                 );
                               }

@@ -8,18 +8,18 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/talent_video_player.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/talent_video.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-
 
 class GetMyTalents extends StatelessWidget {
   final bool isMyTalent;
   final ScrollController? scrollController;
+
   const GetMyTalents(
       {super.key, this.scrollController, this.isMyTalent = false});
 
@@ -44,15 +44,18 @@ class GetMyTalents extends StatelessWidget {
           if (cubit.myTalents.isEmpty) {
             return Center(
               // child: Text('Error: ${_getErrorMessage(state.failure)}'),
-              child: Text(context.isArabic?'لا يوجد نتائج': 'No results found',style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black),),
+              child: Text(
+                context.isArabic ? 'لا يوجد نتائج' : 'No results found',
+                style: Styles.mediumText(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
+              ),
             );
           }
 
-
           return ListView.builder(
             controller: scrollController,
-            itemCount:
-                cubit.myTalents.length + (state.status == StarStates.loading ? 1 : 0),
+            itemCount: cubit.myTalents.length +
+                (state.status == StarStates.loading ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == cubit.myTalents.length) {
                 return const Center(
@@ -83,34 +86,40 @@ class GetMyTalents extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        TalentVideoPlayer(videoUrl: mediaUrl),
+                                    builder: (context) => TalentVideoPlayer(
+                                      videoUrl: mediaUrl,
+                                      talent: talent,
+                                    ),
                                   ),
                                 );
                               }
                             : null,
-                        child: isVideo?TalentVideo(path: mediaUrl,):Container(
-                          height: 300.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            // borderRadius: BorderRadius.circular(12),
-                            image: mediaUrl.isNotEmpty
-                                ? DecorationImage(
-                                    image: NetworkImage(mediaUrl),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
-                          ),
-                          // child:
-                          // mediaUrl.isEmpty
-                          //     ?
-                          //     const Center(
-                          //   child: Icon(Icons.image_not_supported, size: 50),
-                          // )
-                          // :
-                          // _buildMediaContent(context, mediaUrl, isVideo),
-                        ),
+                        child: isVideo
+                            ? TalentVideo(
+                                path: mediaUrl,
+                              )
+                            : Container(
+                                height: 300.h,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  // borderRadius: BorderRadius.circular(12),
+                                  image: mediaUrl.isNotEmpty
+                                      ? DecorationImage(
+                                          image: NetworkImage(mediaUrl),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
+                                ),
+                                // child:
+                                // mediaUrl.isEmpty
+                                //     ?
+                                //     const Center(
+                                //   child: Icon(Icons.image_not_supported, size: 50),
+                                // )
+                                // :
+                                // _buildMediaContent(context, mediaUrl, isVideo),
+                              ),
                       ),
                       // isVideo
                       //     ? Padding(
@@ -165,7 +174,9 @@ class GetMyTalents extends StatelessWidget {
                               talent.title,
                               style: TextStyle(
                                 fontSize: 28.sp,
-                                color: context.isDarkMode?Colors.white:Colors.black,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -174,7 +185,9 @@ class GetMyTalents extends StatelessWidget {
                               "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
                               style: TextStyle(
                                 fontSize: 26.sp,
-                                color: context.isDarkMode?Colors.white:Colors.grey,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.grey,
                               ),
                             ),
                           ],
@@ -188,7 +201,7 @@ class GetMyTalents extends StatelessWidget {
                             index < talent.averageRating.floor()
                                 ? "assets/49-New-icons/star_gold.png"
                                 : "assets/49-New-icons/star.png",
-                            color: context.isDarkMode?Colors.white:null,
+                            color: context.isDarkMode ? Colors.white : null,
                           ),
                         ),
                       ),
@@ -239,53 +252,53 @@ class GetMyTalents extends StatelessWidget {
     );
   }
 
-  // Widget _buildMediaContent(
-  //     BuildContext context, String mediaUrl, bool isVideo) {
-  //   if (isVideo) {
-  //     return Stack(
-  //       alignment: Alignment.center,
-  //       children: [
-  //         // Image.network(
-  //         //   // Use a thumbnail or first frame if available
-  //         //   mediaUrl.replaceAll('.mp4', '.jpg'),
-  //         //   fit: BoxFit.cover,
-  //         //   errorBuilder: (context, error, stackTrace) {
-  //         //     return Container(
-  //         //       color: Colors.grey[300],
-  //         //       child: const Icon(Icons.video_library, size: 50),
-  //         //     );
-  //         //   },
-  //         // ),
-  //         IconButton(
-  //           icon: const Icon(
-  //             Icons.play_circle_fill,
-  //             size: 60,
-  //             color: Colors.black,
-  //           ),
-  //           onPressed: () {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(
-  //                 builder: (context) => TalentVideoPlayer(videoUrl: mediaUrl),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ],
-  //     );
-  //   } else {
-  //     return CachedNetworkImage(
-  //       imageUrl: mediaUrl,
-  //       fit: BoxFit.cover,
-  //       placeholder: (context, url) => const Center(
-  //         child: CustomCircularProgressIndicator(),
-  //       ),
-  //       errorWidget: (context, url, error) => const Center(
-  //         child: Icon(Icons.error),
-  //       ),
-  //     );
-  //   }
-  // }
+// Widget _buildMediaContent(
+//     BuildContext context, String mediaUrl, bool isVideo) {
+//   if (isVideo) {
+//     return Stack(
+//       alignment: Alignment.center,
+//       children: [
+//         // Image.network(
+//         //   // Use a thumbnail or first frame if available
+//         //   mediaUrl.replaceAll('.mp4', '.jpg'),
+//         //   fit: BoxFit.cover,
+//         //   errorBuilder: (context, error, stackTrace) {
+//         //     return Container(
+//         //       color: Colors.grey[300],
+//         //       child: const Icon(Icons.video_library, size: 50),
+//         //     );
+//         //   },
+//         // ),
+//         IconButton(
+//           icon: const Icon(
+//             Icons.play_circle_fill,
+//             size: 60,
+//             color: Colors.black,
+//           ),
+//           onPressed: () {
+//             Navigator.push(
+//               context,
+//               MaterialPageRoute(
+//                 builder: (context) => TalentVideoPlayer(videoUrl: mediaUrl),
+//               ),
+//             );
+//           },
+//         ),
+//       ],
+//     );
+//   } else {
+//     return CachedNetworkImage(
+//       imageUrl: mediaUrl,
+//       fit: BoxFit.cover,
+//       placeholder: (context, url) => const Center(
+//         child: CustomCircularProgressIndicator(),
+//       ),
+//       errorWidget: (context, url, error) => const Center(
+//         child: Icon(Icons.error),
+//       ),
+//     );
+//   }
+// }
 }
 
 // Get All Talents
