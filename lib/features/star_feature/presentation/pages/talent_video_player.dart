@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../service_locator/service_locator.dart';
 import 'get_all_talents.dart';
 
@@ -57,6 +58,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer> {
     return Column(
       children: [
         AspectRatio(aspectRatio: 16 / 9, child: VideoPlayer(_controller)),
+
       ],
     );
   }
@@ -236,30 +238,31 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            // Video Player Section
-            Container(
-              color: Colors.black,
-              child: _isInitialized
-                  ? _buildVideoPlayer()
-                  : const AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Center(
-                        child: CustomCircularProgressIndicator(color: Colors.white),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Video Player Section
+              Container(
+                color: Colors.black,
+                child: _isInitialized
+                    ? _buildVideoPlayer()
+                    : const AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Center(
+                          child: CustomCircularProgressIndicator(color: Colors.white),
+                        ),
                       ),
-                    ),
-            ),
-            // Content Section
-            Expanded(
-              child: BlocProvider(
-                create: (context) => serviceLocator<StarCubit>()
-                  ..loadInitialData()
-                  ..getAllTalent(),
+              ),
+              Sizer(),
+              // Content Section
+              BlocProvider.value(
+                value: serviceLocator<StarCubit>()
+                  // ..loadInitialData()
+                  ..getAllTalents(),
                 child: const GetAllTalents(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
