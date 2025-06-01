@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CheckBoxItem extends StatelessWidget {
@@ -24,7 +25,7 @@ class CheckBoxItem extends StatelessWidget {
           child: Checkbox(
             value: value,
             onChanged: onChanged,
-            side: const BorderSide(width: 2),
+            side: BorderSide(width: 2,color:  AppColors.getTextColor(context)),
             activeColor: Colors.grey,
           ),
         ),

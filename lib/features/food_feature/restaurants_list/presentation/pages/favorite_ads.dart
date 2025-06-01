@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
@@ -99,9 +100,8 @@ class _RestaurantFavAdsScreenState
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
                 child: Center( // This will center it vertically and horizontally
-                  child: Text(
-                    LocaleKeys.noResultsFound.tr(),
-                    textAlign: TextAlign.center,
+                  child: CustomEmptyWidget(
+                    label: LocaleKeys.noResultsFound.tr(),
                   ),
                 ),
               ),
@@ -132,6 +132,25 @@ class FavFoodCard extends StatelessWidget {
       return views.toString();
     }
   }
+
+  String getSubscriptionType(String? subscriptionType) {
+    final normalizedType = subscriptionType?.trim().toLowerCase();
+
+    // 'Premium subscription': 2
+    // 'Regular subscription': 1
+    // 'No subscription': 0
+    switch (normalizedType) {
+      case ('no subscription'):
+        return LocaleKeys.notSubscribed.localize;
+      case ('premium subscription'):
+        return LocaleKeys.premium2.localize;
+      case ('regular subscription'):
+        return LocaleKeys.regular.localize;
+      default:
+        return 'N/A';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -178,7 +197,7 @@ class FavFoodCard extends StatelessWidget {
                   ],
                 ),
                 Label(
-                  text: (context.isArabic ? data.subscriptionType?.ar : data.subscriptionType?.en) ?? "N/A",
+                  text: getSubscriptionType(data.subscriptionType?.en),
                   textAlign: TextAlign.right,
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w700,

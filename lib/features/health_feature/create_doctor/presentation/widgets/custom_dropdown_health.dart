@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CustomDropdownHealth<T> extends StatefulWidget {
@@ -133,7 +134,7 @@ class _CustomDropdownHealthState<T> extends State<CustomDropdownHealth<T>>
                       ),
                       decoration: widget.dropdownDecoration ??
                           ShapeDecoration(
-                            color: const Color(0xFFE1E1E1),
+                            color: AppColors.getFindFillColor(context),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -166,7 +167,7 @@ class _CustomDropdownHealthState<T> extends State<CustomDropdownHealth<T>>
                                             height: 1.60,
                                             color: _selectedItem == item
                                                 ? const Color(0xFFF33D49)
-                                                : Colors.black,
+                                                : AppColors.getTextColor(context),
                                           ),
                                     ),
                                   ),
@@ -195,7 +196,7 @@ class _CustomDropdownHealthState<T> extends State<CustomDropdownHealth<T>>
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
-            color: const Color(0xFFD9D9D9),
+            color: AppColors.getFindFillColor(context),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -212,7 +213,7 @@ class _CustomDropdownHealthState<T> extends State<CustomDropdownHealth<T>>
                 text: _getDisplayText(),
                 style: widget.buttonTextStyle ??
                     Styles.mediumText(
-                      color: const Color(0xCC000000),
+                      color:  AppColors.getTextColor(context),
                       fontSize: 32,
                       height: 1.60,
                     ),
@@ -222,7 +223,7 @@ class _CustomDropdownHealthState<T> extends State<CustomDropdownHealth<T>>
                 isOpen
                     ? (widget.openedIcon ?? Icons.keyboard_arrow_up)
                     : (widget.closedIcon ?? Icons.keyboard_arrow_down),
-                color: widget.iconColor ?? const Color(0xff0B1035),
+                color: widget.iconColor ?? AppColors.getTextColor(context),
               ),
             ],
           ),

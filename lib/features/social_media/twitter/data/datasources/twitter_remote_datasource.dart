@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -57,8 +58,17 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   @override
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
       {required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(
-        "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db");
+    // final response = await _apiConsumer.get(
+    //     "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db");
+    final uri = Uri.parse(EndPoints.getTwitterFeedPosts).replace(
+      queryParameters: {
+        'page': params.page.toString(),
+        'limit': params.limit.toString(),
+        'subCategory': '66a3583454e6e337915514db',
+      },
+    );
+
+    final response = await _apiConsumer.get(uri.toString());
 
     return response.fold((l) {
       return Left(l);
