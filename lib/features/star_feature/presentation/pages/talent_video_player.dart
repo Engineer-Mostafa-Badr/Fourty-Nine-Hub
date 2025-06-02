@@ -111,155 +111,6 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     }
   }
 
-  // Widget _buildVideoPlayer() {
-  //   return Stack(
-  //     alignment: Alignment.center,
-  //     children: [
-  //       Padding(
-  //         padding: const EdgeInsets.only(bottom: 5.0),
-  //         child: AspectRatio(
-  //           aspectRatio:
-  //               MediaQuery.of(context).orientation == Orientation.portrait
-  //                   ? 16 / 9
-  //                   : MediaQuery.of(context).size.aspectRatio,
-  //           child: VideoPlayer(_controller),
-  //         ),
-  //       ),
-  //
-  //       // Background progress track
-  //       Positioned(
-  //         bottom: 5,
-  //         left: 0,
-  //         right: 0,
-  //         child: Container(
-  //           height: 2,
-  //           color: Colors.grey[300],
-  //         ),
-  //       ),
-  //
-  //       // Progress indicator (starts from left)
-  //       Positioned(
-  //         bottom: 0,
-  //         left: 0,
-  //         right: 0,
-  //         child: ValueListenableBuilder<VideoPlayerValue>(
-  //           valueListenable: _controller,
-  //           builder: (context, value, child) {
-  //             if (!value.isInitialized || value.duration == Duration.zero) {
-  //               return const SizedBox();
-  //             }
-  //
-  //             final progressFraction =
-  //                 value.position.inMilliseconds / value.duration.inMilliseconds;
-  //             final safeFraction = progressFraction.clamp(0.0, 1.0);
-  //             final screenWidth = MediaQuery.of(context).size.width;
-  //
-  //             return SizedBox(
-  //               height: 10, // Space for thumb circle
-  //               child: Stack(
-  //                 children: [
-  //                   // Progress bar
-  //                   Positioned(
-  //                     left: 0,
-  //                     top: 4, // Vertically center with thumb
-  //                     child: Container(
-  //                       height: 2,
-  //                       width: screenWidth * safeFraction,
-  //                       color: AppColors.SECONDARY_COLOR,
-  //                     ),
-  //                   ),
-  //
-  //                   // Thumb circle
-  //                   Positioned(
-  //                     left: screenWidth * safeFraction - 5,
-  //                     // Center circle on progress
-  //                     child: Container(
-  //                       height: 10,
-  //                       width: 10,
-  //                       decoration: BoxDecoration(
-  //                         shape: BoxShape.circle,
-  //                         color: AppColors.SECONDARY_COLOR,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //
-  //       // Play/Pause button
-  //       ValueListenableBuilder<VideoPlayerValue>(
-  //         valueListenable: _controller,
-  //         builder: (context, value, child) {
-  //           return AnimatedOpacity(
-  //             opacity: value.isPlaying ? 0.0 : 1.0,
-  //             duration: const Duration(milliseconds: 300),
-  //             child: IconButton(
-  //               icon: Icon(
-  //                 value.isPlaying ? Icons.pause : Icons.play_arrow,
-  //                 size: 50,
-  //                 color: Colors.white.withValues(alpha: 0.8),
-  //               ),
-  //               onPressed: _togglePlayPause,
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //
-  //       // Time display at bottom left
-  //       Positioned(
-  //         bottom: 15,
-  //         left: 10,
-  //         child: ValueListenableBuilder<VideoPlayerValue>(
-  //           valueListenable: _controller,
-  //           builder: (context, value, child) {
-  //             return Container(
-  //               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-  //               decoration: BoxDecoration(
-  //                 color: Colors.black54,
-  //                 borderRadius: BorderRadius.circular(4),
-  //               ),
-  //               child: Text(
-  //                 '${formatDuration(value.position)} / ${formatDuration(value.duration)}',
-  //                 style: const TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 12,
-  //                   fontWeight: FontWeight.w500,
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //
-  //       // Full-screen button (add to Stack children)
-  //       Positioned(
-  //         bottom: 15,
-  //         right: 10,
-  //         child: GestureDetector(
-  //           onTap: _toggleFullScreen,
-  //           child: Container(
-  //             padding: const EdgeInsets.all(4),
-  //             decoration: BoxDecoration(
-  //               color: Colors.black54,
-  //               borderRadius: BorderRadius.circular(4),
-  //             ),
-  //             child: Icon(
-  //               MediaQuery.of(context).orientation == Orientation.portrait
-  //                   ? Icons.fullscreen
-  //                   : Icons.fullscreen_exit,
-  //               color: Colors.white,
-  //               size: 20,
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget _buildVideoDetails(StarEntity talent) {
     final createdAt = talent.createdAt ?? DateTime.now();
     return Padding(
@@ -472,67 +323,82 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     );
   }
 
-  Widget _buildVideoInfo() {
+  Widget _buildVideoInfo(StarEntity talent) {
+    final createdAt = talent.createdAt ?? DateTime.now();
     return Container(
-      padding: const EdgeInsets.all(16),
-      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Video Title', // Replace with actual video title
+          Text(
+            talent.title, // Replace with actual video title
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
+          Text(
+            "${context.isArabic ? convertToArabicNumbers(talent.totalViews.toShortScale) : talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${context.isArabic ? convertToArabicNumbers(timeago.format(createdAt, locale: context.locale.languageCode)) : timeago.format(createdAt, locale: context.locale.languageCode)}",
+            // Replace with actual stats
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+          ),
           const SizedBox(height: 8),
           Row(
             children: [
-              // const CircleAvatar(
-              //   radius: 20,
-              //   // Replace with actual user avatar
-              //   backgroundImage: NetworkImage('https://placeholder.com/user'),
-              // ),
+              CircleAvatar(
+                radius: 15,
+                backgroundImage: talent.user.image.isNotEmpty
+                    ? CachedNetworkImageProvider(talent.user.image)
+                    : null,
+              ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'User Name', // Replace with actual user name
+                      '${talent.user.firstName} ${talent.user.lastName}',
+                      // Replace with actual user name
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      '1K views • 2 days ago', // Replace with actual stats
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
                       ),
                     ),
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.thumb_up_outlined),
-                onPressed: () {
-                  // Handle like
-                },
+              ...List.generate(
+                5,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: Image.asset(
+                    index < talent.averageRating.floor()
+                        ? "assets/49-New-icons/star_gold.png"
+                        : "assets/49-New-icons/star.png",
+                  ),
+                ),
               ),
-              IconButton(
-                icon: const Icon(Icons.thumb_down_outlined),
-                onPressed: () {
-                  // Handle dislike
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.share),
-                onPressed: () {
-                  // Handle share
-                },
-              ),
+              SizedBox(width: 10.w),
+              // IconButton(
+              //   icon: const Icon(Icons.thumb_up_outlined),
+              //   onPressed: () {
+              //     // Handle like
+              //   },
+              // ),
+              // IconButton(
+              //   icon: const Icon(Icons.thumb_down_outlined),
+              //   onPressed: () {
+              //     // Handle dislike
+              //   },
+              // ),
+              // IconButton(
+              //   icon: const Icon(Icons.share),
+              //   onPressed: () {
+              //     // Handle share
+              //   },
+              // ),
             ],
           ),
         ],
@@ -677,7 +543,8 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                               ),
                       ),
                       Sizer(),
-                      _buildVideoDetails(widget.talent),
+                      _buildVideoInfo(widget.talent),
+                      // _buildVideoDetails(widget.talent),
                       Sizer(
                         height: 32,
                       ),
