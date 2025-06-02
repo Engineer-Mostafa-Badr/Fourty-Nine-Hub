@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -10,7 +9,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -90,8 +88,8 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                 ),
               ),
               const Sizer(),
-              widget.logsEntity.userRateRestaurant == null ||
-                      widget.logsEntity.userRateRestaurant == 0
+              _currentLogsEntity.userRateRestaurant == null ||
+                  _currentLogsEntity.userRateRestaurant == 0
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -125,6 +123,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                   );
                                 },
                               );
+                              setState(() {});
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal:8,vertical: 6),
@@ -162,10 +161,10 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                           children: [
                             Label(
                               text: context.isArabic
-                                  ? widget.logsEntity.userRateRestaurantName
+                                  ? _currentLogsEntity.userRateRestaurantName
                                   ?.ar ??
                                   ""
-                                  : widget.logsEntity.userRateRestaurantName
+                                  : _currentLogsEntity.userRateRestaurantName
                                   ?.en ??
                                   "",
                               style: Styles.mediumText(
@@ -210,6 +209,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                       );
                                     },
                                   );
+                                  setState(() {});
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal:8,vertical: 6),
@@ -243,15 +243,15 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                       ),
                     ),
                   ),
-                  widget.logsEntity.restaurantRateUser == null
+                  _currentLogsEntity.restaurantRateUser == null
                       ? Row(
                           children: [
                             Label(
                               text: context.isArabic
-                                  ? widget.logsEntity.restaurantRateUserName
+                                  ? _currentLogsEntity.restaurantRateUserName
                                           ?.ar ??
                                       ""
-                                  : widget.logsEntity.restaurantRateUserName
+                                  : _currentLogsEntity.restaurantRateUserName
                                           ?.en ??
                                       "",
                               style: Styles.mediumText(
@@ -281,9 +281,9 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                         )
                       : Label(
                           text: context.isArabic
-                              ? widget.logsEntity.restaurantRateUserName?.ar ??
+                              ? _currentLogsEntity.restaurantRateUserName?.ar ??
                                   ""
-                              : widget.logsEntity.restaurantRateUserName?.en ??
+                              : _currentLogsEntity.restaurantRateUserName?.en ??
                                   "",
                           style: Styles.mediumText(fontWeight: FontWeight.w600,
 
@@ -313,12 +313,12 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                 radius: 30,
                 backgroundColor: Colors.grey[600],
                 backgroundImage:
-                    widget.logsEntity.userId?.userProfile?.profilePictureKey !=
+                    _currentLogsEntity.userId?.userProfile?.profilePictureKey !=
                             null
-                        ? NetworkImage(widget.logsEntity.userId!.userProfile!
+                        ? NetworkImage(_currentLogsEntity.userId!.userProfile!
                             .profilePictureKey!.mediaKey!)
                         : null,
-                child: widget.logsEntity.userId?.userProfile?.profilePictureKey ==
+                child: _currentLogsEntity.userId?.userProfile?.profilePictureKey ==
                         null
                     ? const Icon(
                         Icons.person,
@@ -345,7 +345,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                     color: AppColors.ACCENT_COLOR,
                   ),
                   Text(
-                    context.isArabic?numAr(widget.logsEntity.userId?.restaurantRate??0):"${widget.logsEntity.userId?.restaurantRate ?? 0}",
+                    context.isArabic?numAr(_currentLogsEntity.userId?.restaurantRate??0):"${_currentLogsEntity.userId?.restaurantRate ?? 0}",
                     style: Styles.smallText(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -379,7 +379,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
   Widget _buildUserName() {
     return Label(
       text: capitalizeAndSplit2Only(
-          widget.logsEntity.userId?.firstName ?? LocaleKeys.noName.tr()),
+          _currentLogsEntity.userId?.firstName ?? LocaleKeys.noName.tr()),
       style: Styles.mediumText(
         fontWeight: FontWeight.w600,
         color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
@@ -393,7 +393,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          capitalizeAndSplit2Only(widget.logsEntity.restaurantId?.name ??
+          capitalizeAndSplit2Only(_currentLogsEntity.restaurantId?.name ??
               LocaleKeys.unknownRestaurant.tr()),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
@@ -402,13 +402,13 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
             color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
           ),
         ),
-        if (widget.logsEntity.restaurantId?.subcategoryId != null)
+        if (_currentLogsEntity.restaurantId?.subcategoryId != null)
           Text(
             context.isArabic
-                ? widget.logsEntity.restaurantId!.subcategoryId!.nameAr
+                ? _currentLogsEntity.restaurantId!.subcategoryId!.nameAr
                     .toString()
                 : capitalizeAndSplit2Only(
-                    widget.logsEntity.restaurantId!.subcategoryId!.nameEn ??
+                _currentLogsEntity.restaurantId!.subcategoryId!.nameEn ??
                         ''),
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
@@ -422,14 +422,14 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
   }
 
   Widget _buildFoodDetails() {
-    if (widget.logsEntity.orders == null || widget.logsEntity.orders!.isEmpty) {
+    if (_currentLogsEntity.orders == null || _currentLogsEntity.orders!.isEmpty) {
       return Text(
         LocaleKeys.noOrders.tr(),
         style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
       );
     }
 
-    final foodList = widget.logsEntity.orders!
+    final foodList = _currentLogsEntity.orders!
         .map((order) => order.foodId?.foodName ?? LocaleKeys.unknownFood.tr())
         .toList();
 
@@ -449,7 +449,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
       children: [
         Expanded(
           child: Text(
-                "${context.isArabic?numAr(widget.logsEntity.total??0):widget.logsEntity.total?.toString() ?? '0'} ${context.isArabic?widget.logsEntity.currencyAr:widget.logsEntity.currencyEn}",
+                "${context.isArabic?numAr(_currentLogsEntity.total??0):_currentLogsEntity.total?.toString() ?? '0'} ${context.isArabic?_currentLogsEntity.currencyAr:_currentLogsEntity.currencyEn}",
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
               color: context.isDarkMode ? AppColors.whiteColor : AppColors.black,
@@ -462,15 +462,34 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
     );
   }
 
+  String getSubscriptionType(String? subscriptionType) {
+    final normalizedType = subscriptionType?.trim().toLowerCase();
+
+    // 'Premium subscription': 2
+    // 'Regular subscription': 1
+    // 'No subscription': 0
+    switch (normalizedType) {
+      case ('no subscription'):
+        return LocaleKeys.notSubscribed.localize;
+      case ('premium subscription'):
+        return LocaleKeys.premium2.localize;
+      case ('regular subscription'):
+        return LocaleKeys.regular.localize;
+      default:
+        return 'N/A';
+    }
+  }
+
+
   Widget _buildFooter(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          widget.logsEntity.createdAt != null
-              ?(context.isArabic? DateFormat('MMM d, yyyy h:mm a','ar')
-                  .format(DateTime.parse(widget.logsEntity.createdAt!)):DateFormat('MMM d, yyyy h:mm a')
-              .format(DateTime.parse(widget.logsEntity.createdAt!)))
+          _currentLogsEntity.createdAt != null
+              ?(context.isArabic? DateFormat('d MMM, yyyy h:mm a','ar')
+                  .format(DateTime.parse(_currentLogsEntity.createdAt!)):DateFormat('MMM d, yyyy h:mm a')
+              .format(DateTime.parse(_currentLogsEntity.createdAt!)))
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
             // fontSize: 12,
@@ -482,11 +501,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         Flexible(
           flex: 5,
           child: Text(
-            context.isArabic
-                ? widget.logsEntity.subscriptionType?.ar ??
-                    LocaleKeys.noSubscription.tr()
-                : widget.logsEntity.subscriptionType?.en ??
-                    LocaleKeys.noSubscription.tr(),
+            getSubscriptionType(_currentLogsEntity.subscriptionType?.en),
             style: Styles.smallText(
               // fontSize: 12,
               color: AppColors.SECONDARY_COLOR_DARK,

@@ -454,10 +454,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 padding: EdgeInsets.all(6),
                 width:210.w,
                 decoration: BoxDecoration(
-                    border: Border.all(
-                        color: _showFavAds
-                            ? AppColors.getRedColor(context)
-                            : AppColors.getButtonPrimaryColor(context)),
+                    // border: Border.all(
+                    //     color: _showFavAds
+                    //         ? AppColors.getRedColor(context)
+                    //         : AppColors.getButtonPrimaryColor(context)),
                     borderRadius: BorderRadius.circular(15),
                     color: _showFavAds
                         ? AppColors.getButtonPrimaryColor(context)
@@ -499,18 +499,18 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         padding: const EdgeInsets.all(6),
                         width:210.w,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _showLog
-                                ? AppColors.getRedColor(context)
-                                : AppColors.getButtonPrimaryColor(context),
-                          ),
+                          // border: Border.all(
+                          //   color: _showLog
+                          //       ? AppColors.getRedColor(context)
+                          //       : AppColors.getButtonPrimaryColor(context),
+                          // ),
                           borderRadius: BorderRadius.circular(15),
                           color: _showLog
                               ?AppColors.getButtonPrimaryColor(context)
                               : AppColors.getFillColor(context),
                         ),
                         child: Label(
-                          text: context.isArabic?'سجل طلبات':'requestLog',
+                          text: context.isArabic?'سجل طلبات':'Request Log',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
@@ -524,9 +524,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     ),
                     Visibility(
                       visible:context.read<RestaurantsCubit>().state.reqCount?.count!=0,
-                      child: PositionedDirectional(
+                      child: Positioned(
                         top: -10,
-                        start: -6,
+                        right: -6,
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
@@ -578,10 +578,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   width:210.w,
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                      border: Border.all(
-                          color: _showExpire
-                              ? AppColors.getRedColor(context)
-                              :AppColors.getButtonPrimaryColor(context)),
+                      // border: Border.all(
+                      //     color: _showExpire
+                      //         ? AppColors.getRedColor(context)
+                      //         :AppColors.getButtonPrimaryColor(context)),
                       borderRadius: BorderRadius.circular(15),
                       color: _showExpire
                           ? AppColors.getButtonPrimaryColor(context)

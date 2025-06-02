@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
@@ -154,7 +155,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                         onRatingUpdate: (double value) {},
                                       ),
                                       Text(
-                                        '${widget.restaurant.totalRating ?? '0.0'} ',
+                                        '${widget.restaurant.totalRating ?? '0.0'} '.toArabicNumbers(context),
                                         style: Styles.mediumText(
                                           fontWeight: FontWeight.w500,
                                           color: AppColors.PRIMARY_COLOR
@@ -165,7 +166,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})',
+                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})'.toArabicNumbers(context),
                                   style: Styles.mediumText(
                                     color: Colors.white70,
                                   ),

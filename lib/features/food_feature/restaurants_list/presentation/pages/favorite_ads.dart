@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -81,8 +82,8 @@ class _RestaurantFavAdsScreenState
             return context.read<RestaurantsCubit>().foodAdData.isNotEmpty ? Padding(
               padding: EdgeInsets.symmetric(vertical:  16,horizontal: 10),
               child: SizedBox(
-                height: MediaQuery.sizeOf(context).height * .8,
-                child: ListView.builder(
+                // height: MediaQuery.sizeOf(context).height * .8,
+                child: ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount:  context
@@ -91,8 +92,8 @@ class _RestaurantFavAdsScreenState
                     .length,
                   itemBuilder: (context,index){
                     var data =  context.read<RestaurantsCubit>().foodAdData[index];
-                    return  FavFoodCard(data: data,index: index);
-                  },
+                    return  FavFoodCard(data: data,index: index,);
+                  }, separatorBuilder: (BuildContext context, int index) =>const Sizer(),
 
                 ),
               ),
@@ -178,7 +179,7 @@ class FavFoodCard extends StatelessWidget {
                     ),
                     Label(
                       // text: "100k",
-                      text: formatViews(data.totalViews!.toInt()),
+                      text: formatViews(data.totalViews!.toInt()).toArabicNumbers(context),
                       style:  Styles.mediumText(
                         // fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -320,7 +321,7 @@ class FavFoodCard extends StatelessWidget {
                           SizedBox(width: 4),
                           Flexible(
                             child: Text(
-                              '${context.isArabic ? data.government?.governorateNameAr ?? '' : data.government?.governorateNameEn ?? ''}, ${context.isArabic ? data.city?.cityNameAr ?? '' : data.city?.cityNameEn ?? ''}',
+                              '${context.isArabic ? data.government?.governorateNameAr ?? '' : data.government?.governorateNameEn ?? ''}, ${context.isArabic ? data.city?.cityNameAr ?? '' : data.city?.cityNameEn ?? ''}'.toArabicNumbers(context),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,

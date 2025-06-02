@@ -8,11 +8,13 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
@@ -40,7 +42,8 @@ class _RestaurantRequestLogsScreenState
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()
+      ..addListener(_onScroll);
   }
 
   void _onScroll() {
@@ -61,61 +64,69 @@ class _RestaurantRequestLogsScreenState
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
-      final controller = context.read<RestaurantsCubit>();
-      if (state.isLoading) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height *
-              .65, // Make sure it takes up full height
-          child: const Center(
-            child: CustomCircularProgressIndicator(),
-          ),
-        );
-      }
-      if (controller.reqLogs.isEmpty) {
-        return Center(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height *
-                .65, // Make sure it takes up full height
-            child: Center(
-              // This will center it vertically and horizontally
-              child: Text(
-                LocaleKeys.noResultsFound.tr(),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        );
-      }
-
-      if (!state.isLoading) {
-        return ListView.separated(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: controller.reqLogs.length,
-          itemBuilder: (context, index) {
-            final request = controller.reqLogs[index];
-            return Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: TripLogRequestCard(
-                orderData: request,
-                index: index,
+          final controller = context.read<RestaurantsCubit>();
+          if (state.isLoading) {
+            return SizedBox(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height *
+                  .65, // Make sure it takes up full height
+              child: const Center(
+                child: CustomCircularProgressIndicator(),
               ),
             );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Sizer();
-          },
-        );
-      } else {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height *
-              .65, // Make sure it takes up full height
-          child: const Center(
-            child: CustomCircularProgressIndicator(),
-          ),
-        );
-      }
-    });
+          }
+          if (controller.reqLogs.isEmpty) {
+            return Center(
+              child: SizedBox(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height *
+                    .65, // Make sure it takes up full height
+                child: Center(
+                  // This will center it vertically and horizontally
+                  child: CustomEmptyWidget(
+                    label: LocaleKeys.noResultsFound.tr(),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          if (!state.isLoading) {
+            return ListView.separated(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: controller.reqLogs.length,
+              itemBuilder: (context, index) {
+                final request = controller.reqLogs[index];
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: TripLogRequestCard(
+                    orderData: request,
+                    index: index,
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Sizer();
+              },
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height *
+                  .65, // Make sure it takes up full height
+              child: const Center(
+                child: CustomCircularProgressIndicator(),
+              ),
+            );
+          }
+        });
   }
 }
 
@@ -138,49 +149,65 @@ class TripLogRequestCard extends StatelessWidget {
           text: orderData.restaurantId?.name ?? "N/A",
           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
         ),
-        InkWell(
-          onTap: () async {
-            if (orderData.seen == false)
-              context
-                  .read<RestaurantsCubit>()
-                  .setReqSeen(params: orderData.id ?? '');
-            final updatedLogsEntity = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => BlocProvider<RestaurantsCubit>(
-                  create: (context) => serviceLocator<RestaurantsCubit>(),
-                  child: LogDetailsScreen(logsEntity: orderData),
-                ),
-              ),
-            );
-            if (updatedLogsEntity != null) {
-              context.read<RestaurantsCubit>().loadInitialReqLogs();
-            }
-          },
-          child: Container(
-            // elevation: context.isDarkMode ? 0 : 2,
-            decoration: BoxDecoration(
-              color: (orderData.seen == true
-                  ? AppColors.getButtonPrimaryColor(context)
-                  : AppColors.getRedColor(context)),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: orderData.userId?.userProfile?.profilePictureKey !=
-                              null &&
-                          orderData.userId!.userProfile!.profilePictureKey!
-                              .mediaKey!.isNotEmpty
-                      ? Image.network(
-                          orderData.userId!.userProfile!.profilePictureKey!
-                              .mediaKey!,
-                          width: 100,
-                          height: 80,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
+        ...?orderData.orders?.map((order) =>
+            InkWell(
+                onTap: () async {
+                  if (orderData.seen == false) {
+                    context
+                        .read<RestaurantsCubit>()
+                        .setReqSeen(params: orderData.id ?? '');
+                  }
+                  final updatedLogsEntity = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          BlocProvider<RestaurantsCubit>(
+                            create: (context) =>
+                                serviceLocator<RestaurantsCubit>(),
+                            child: LogDetailsScreen(logsEntity: orderData),
+                          ),
+                    ),
+                  );
+                  if (updatedLogsEntity != null) {
+                    context.read<RestaurantsCubit>().loadInitialReqLogs();
+                  }
+                },
+                child: Container(
+                  // elevation: context.isDarkMode ? 0 : 2,
+                    decoration: BoxDecoration(
+                      color: (
+                          // orderData.seen == true
+                          // ?
+                          AppColors.getFindFillColor(context)
+                          //: AppColors.getRedColor(context)
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: order.foodId?.picture?.mediaKey !=
+                                null
+                                ? Image.network(
+                              order.foodId?.picture?.mediaKey??UIConst.imageBaseUrl,
+                              width: 100,
+                              height: 80,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: 100,
+                                  height: 70,
+                                  color: Colors.grey[200],
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  ),
+                                );
+                              },
+                            )
+                                : Container(
                               width: 100,
                               height: 70,
                               color: Colors.grey[200],
@@ -189,60 +216,153 @@ class TripLogRequestCard extends StatelessWidget {
                                 size: 40,
                                 color: Colors.grey,
                               ),
-                            );
-                          },
-                        )
-                      : Container(
-                          width: 100,
-                          height: 70,
-                          color: Colors.grey[200],
-                          child: const Icon(
-                            Icons.broken_image,
-                            size: 40,
-                            color: Colors.grey,
+                            ),
                           ),
-                        ),
-                ),
-                const SizedBox(width: 12),
+                          const SizedBox(width: 12),
 
-                // MAIN CONTENT
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        (orderData.orders != null &&
-                                index < orderData.orders!.length)
-                            ? orderData.orders![index].foodId?.foodName ??
-                                'Unknown'
-                            : context.isArabic?'غير معروف':'Unknown',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.getReversedTextColor(context)),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        (orderData.orders != null &&
-                                index < orderData.orders!.length) ?
-                        (context.isArabic?numAr(orderData.orders![index].price??0):orderData.orders![index].price.toString()
-                        ): context.isArabic?'صفر':'00',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.getReversedTextColor(context)),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+                          // MAIN CONTENT
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  order.foodId?.foodName ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.getTextColor(context)),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '${
+                            context.isArabic
+                                ? numAr(order.price ?? 0)
+                                : order.price.toString()
+                          } ${context.isArabic?orderData.currencyAr:orderData.currencyEn}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.getTextColor(context)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ])))),
+        // InkWell(
+        //   onTap: () async {
+        //     if (orderData.seen == false) {
+        //       context
+        //           .read<RestaurantsCubit>()
+        //           .setReqSeen(params: orderData.id ?? '');
+        //     }
+        //     final updatedLogsEntity = await Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (_) => BlocProvider<RestaurantsCubit>(
+        //           create: (context) => serviceLocator<RestaurantsCubit>(),
+        //           child: LogDetailsScreen(logsEntity: orderData),
+        //         ),
+        //       ),
+        //     );
+        //     if (updatedLogsEntity != null) {
+        //       context.read<RestaurantsCubit>().loadInitialReqLogs();
+        //     }
+        //   },
+        //   child: Container(
+        //     // elevation: context.isDarkMode ? 0 : 2,
+        //     decoration: BoxDecoration(
+        //       color: (
+        //           // orderData.seen == true
+        //           // ?
+        //           AppColors.getFindFillColor(context)
+        //           //: AppColors.getRedColor(context)
+        //           ),
+        //       borderRadius: BorderRadius.circular(15),
+        //     ),
+        //     child: Row(
+        //       children: [
+        //         ClipRRect(
+        //           borderRadius: BorderRadius.circular(15),
+        //           child: orderData.userId?.userProfile?.profilePictureKey !=
+        //                       null &&
+        //                   orderData.userId!.userProfile!.profilePictureKey!
+        //                       .mediaKey!.isNotEmpty
+        //               ? Image.network(
+        //                   orderData.userId!.userProfile!.profilePictureKey!
+        //                       .mediaKey!,
+        //                   width: 100,
+        //                   height: 80,
+        //                   fit: BoxFit.cover,
+        //                   errorBuilder: (context, error, stackTrace) {
+        //                     return Container(
+        //                       width: 100,
+        //                       height: 70,
+        //                       color: Colors.grey[200],
+        //                       child: const Icon(
+        //                         Icons.broken_image,
+        //                         size: 40,
+        //                         color: Colors.grey,
+        //                       ),
+        //                     );
+        //                   },
+        //                 )
+        //               : Container(
+        //                   width: 100,
+        //                   height: 70,
+        //                   color: Colors.grey[200],
+        //                   child: const Icon(
+        //                     Icons.broken_image,
+        //                     size: 40,
+        //                     color: Colors.grey,
+        //                   ),
+        //                 ),
+        //         ),
+        //         const SizedBox(width: 12),
+        //
+        //         // MAIN CONTENT
+        //         Expanded(
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             mainAxisAlignment: MainAxisAlignment.start,
+        //             children: [
+        //               Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //
+        //               Text(
+        //                 (orderData.orders != null &&
+        //                         index < orderData.orders!.length)
+        //                     ? orderData.orders![index].foodId?.foodName ??
+        //                         'Unknown'
+        //                     : context.isArabic?'غير معروف':'Unknown',
+        //                 style: TextStyle(
+        //                     fontSize: 16,
+        //                     fontWeight: FontWeight.w600,
+        //                     color: AppColors.getTextColor(context)),
+        //                 maxLines: 1,
+        //                 overflow: TextOverflow.ellipsis,
+        //               ),
+        //               const SizedBox(height: 8),
+        //               Text(
+        //                 (orderData.orders != null &&
+        //                         index < orderData.orders!.length) ?
+        //                 (context.isArabic?numAr(orderData.orders![index].price??0):orderData.orders![index].price.toString()
+        //                 ): context.isArabic?'صفر':'00',
+        //                 style: TextStyle(
+        //                     fontSize: 16,
+        //                     fontWeight: FontWeight.w600,
+        //                     color: AppColors.getTextColor(context)),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+      ],);
   }
 }

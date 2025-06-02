@@ -7,7 +7,9 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -105,7 +107,13 @@ class _RestaurantExpiredRequestsScreenState
         builder: (context, state) {
           final controller = context.read<RestaurantsCubit>();
           if (!state.isLoading) {
-            return SizedBox(
+            if(controller.expiredOrders.isEmpty) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+                child:CustomEmptyWidget(label: LocaleKeys.thereNoItems.localize) ,
+              );
+            } else {
+              return SizedBox(
               // height:double.minPositive,
               child: Column(
                 children: [
@@ -135,6 +143,7 @@ class _RestaurantExpiredRequestsScreenState
                 ],
               ),
             );
+            }
           } else {
             return SizedBox(
               height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
@@ -341,13 +350,32 @@ class TripRequestCard extends StatelessWidget {
 
   }
 
+  String getSubscriptionType(String? subscriptionType) {
+    final normalizedType = subscriptionType?.trim().toLowerCase();
+
+    // 'Premium subscription': 2
+    // 'Regular subscription': 1
+    // 'No subscription': 0
+    switch (normalizedType) {
+      case ('no subscription'):
+        return LocaleKeys.notSubscribed.localize;
+      case ('premium subscription'):
+        return LocaleKeys.premium2.localize;
+      case ('regular subscription'):
+        return LocaleKeys.regular.localize;
+      default:
+        return 'N/A';
+    }
+  }
+
+
   Widget _buildFooter(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           orderData.createdAt != null
-              ? (context.isArabic?DateFormat('MMM d, yyyy h:mm a','ar').format(orderData.createdAt!):DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!))
+              ? (context.isArabic?DateFormat('d MMM, yyyy h:mm a','ar').format(orderData.createdAt!):DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!))
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
             fontWeight: FontWeight.w600,
@@ -359,8 +387,8 @@ class TripRequestCard extends StatelessWidget {
         Flexible(
           flex: 5,
           child: Text(
-            (context.isArabic ? orderData.subscriptionType?.ar : orderData.subscriptionType?.en)
-                ?? LocaleKeys.noSubscription.tr(),
+            (getSubscriptionType(orderData.subscriptionType?.en))
+                ?? LocaleKeys.notSubscribed.tr(),
             style: Styles.smallText(
               color: AppColors.getRedColor(context),
               fontWeight: FontWeight.w600,

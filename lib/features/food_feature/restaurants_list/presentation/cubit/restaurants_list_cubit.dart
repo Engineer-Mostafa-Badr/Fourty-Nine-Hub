@@ -74,6 +74,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   final GetReqLogsCountUseCase getReqLogsCountUseCase;
   final SetRequestLogSeenUseCase setRequestLogSeenUseCase;
   final GetFoodAdsUseCase getFoodAdsUseCase;
+
   RestaurantsCubit(
     this._getMainCategoryDetailsUseCase,
     this._getAllRestaurantUseCase,
@@ -184,9 +185,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     );
   }
 
-
-
-
   Future<void> loadData() async {
     await _getUser();
     _getMainCategoryDetails();
@@ -241,6 +239,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     });
     return result;
   }
+
   void removeFromFavorites(String id) {
     restaurants.removeWhere((element) => element.id == id);
     // Also update the foodAdData if needed
@@ -655,6 +654,5 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       },
     );
   }
-
 
 }
