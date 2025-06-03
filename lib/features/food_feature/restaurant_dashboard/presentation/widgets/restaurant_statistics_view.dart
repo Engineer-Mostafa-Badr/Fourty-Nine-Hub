@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -15,9 +14,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../create_restaurant/cubit/create_resturant_cubit.dart';
-import '../../../create_restaurant/views/widgets/photo/restaurant_photo_picker.dart';
-import '../../../restaurants_list/domain/usecases/create_restaurant.dart';
 import '../../domain/usecases/update_restaurant_usecase.dart';
 
 class RestaurantStatisticsView extends StatefulWidget {
