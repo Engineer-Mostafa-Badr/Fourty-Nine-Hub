@@ -126,8 +126,9 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                           margin: const EdgeInsetsDirectional.only(end: 10,start: 1,bottom: 2,top: 1),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12), // Rounded corners
-                            // border: Border.all(color: AppColors.DIVIDER_GRAY_COLOR),
-                            color: Colors.white, // White background for the entire container
+                            border: Border.all(color:context.isDarkMode?Colors.white:Colors.transparent
+                            ),
+                            color: AppColors.getFindFillColor(context), // White background for the entire container
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.1),
@@ -156,10 +157,10 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                               Expanded(
                                 flex: 2, // Takes the other half of the container height
                                 child: Container(
-                                  padding: const EdgeInsets.only(bottom: 10,left: 8,right: 8,top: 8),
+                                  padding: const EdgeInsets.only(bottom: 10,left: 8,right: 8,top: 4),
                                   // padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white, // White background
+                                  decoration: BoxDecoration(
+                                    color:context.isDarkMode?AppColors.fill_Color_DARK:Colors.white , // White background
                                     borderRadius: BorderRadius.vertical(
                                       bottom: Radius.circular(12), // Rounded bottom corners
                                     ),
@@ -171,10 +172,10 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                       Text(
                                         "${cubit.suggestedFriends[index].firstName} ${cubit.suggestedFriends[index].lastName}",
                                         maxLines: 1,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14,
-                                            color: AppColors.PRIMARY_COLOR
+                                            color: AppColors.getButtonPrimaryWhiteColor(context)
                                         ),
                                       ),
                                       // const SizedBox(height: 4), // Spacing
@@ -185,7 +186,7 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                         style:  TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
-                                            color: AppColors.black.withOpacity(0.5)
+                                            color:context.isDarkMode?AppColors.whiteColor.withOpacity(0.5) :AppColors.black.withOpacity(0.5)
                                         ),
                                       ),
                                       // const Spacer(),
@@ -314,15 +315,15 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
                                                   border: cubit.suggestedFriends[index].followSuccessfully == true
-                                                      ? Border.all(color: AppColors.PRIMARY_COLOR_DARK)
+                                                      ? Border.all(color: AppColors.getRedColor(context))
                                                       : null,
                                                   borderRadius: BorderRadius.circular(8),
                                                   color: cubit.suggestedFriends[index].addedSuccessfully == false
-                                                      ? AppColors.PRIMARY_COLOR
+                                                      ? AppColors.getButtonPrimaryWhiteColor(context)
                                                       : cubit.suggestedFriends[index].addedSuccessfully == true &&
                                                       cubit.suggestedFriends[index].followSuccessfully == false
-                                                      ? AppColors.PRIMARY_COLOR_DARK
-                                                      : Colors.white,
+                                                      ? AppColors.getRedColor(context)
+                                                      : Colors.transparent,
                                                 ),
                                                 child: Text(
                                                   cubit.suggestedFriends[index].addedSuccessfully == false
@@ -333,8 +334,8 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                                       : LocaleKeys.sendGreetMessage.localize,
                                                   style: TextStyle(
                                                     color: cubit.suggestedFriends[index].followSuccessfully == true
-                                                        ? AppColors.PRIMARY_COLOR_DARK
-                                                        : Colors.white,
+                                                        ? AppColors.getRedColor(context)
+                                                        : AppColors.getReversedTextColor(context),
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -345,7 +346,7 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                           const SizedBox(width: 4), // Spacing
                                           // Remove Button
                                           if (cubit.suggestedFriends[index].addedSuccessfully == false)
-                                            Expanded(child:    ClickableWidget(
+                                            Expanded(child: ClickableWidget(
                                               onTap: () async {
                                                 bool data = await context.read<SocialPostsCubit>().removeSuggestUser(
                                                   context: context,
@@ -364,15 +365,15 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(8),
-                                                    color: AppColors.whiteColor,
+                                                    color:context.isDarkMode?AppColors.PRIMARY_COLOR_DARK: AppColors.whiteColor,
                                                     border: Border.all(
                                                         color: AppColors.PRIMARY_COLOR_DARK
                                                     )
                                                 ),
                                                 child: Text(
                                                   LocaleKeys.deleteRequest.localize,
-                                                  style: const TextStyle(
-                                                    color: AppColors.PRIMARY_COLOR_DARK,
+                                                  style: TextStyle(
+                                                    color:context.isDarkMode?Colors.white :AppColors.PRIMARY_COLOR_DARK,
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w600,
                                                   ),

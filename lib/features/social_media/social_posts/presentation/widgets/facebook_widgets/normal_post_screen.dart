@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,29 +30,48 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/post_entity.dart';
 
 class NormalPostScreen extends StatelessWidget {
-  const NormalPostScreen({super.key, required this.postEntity,});
+  const NormalPostScreen({
+    super.key,
+    required this.postEntity,
+  });
+
   final PostEntity postEntity;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.getFindFillColor(context),width: 6)),
+        border: Border(
+            bottom: BorderSide(
+                color: AppColors.getFindFillColor(context), width: 6)),
       ),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
-            child: BuildFacebookHeader(user:postEntity.user, sinceTime: '\u200E 2h',activity: postEntity.activity,feeling: postEntity.feeling,users: postEntity.users,location: postEntity.location,),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+            child: BuildFacebookHeader(
+              user: postEntity.user,
+              sinceTime: context.isArabic
+                  ? DateFormat('d MMM, h:mm a', 'ar')
+                      .format(postEntity.createdAt!)
+                  : DateFormat('MMM d, h:mm a').format(postEntity.createdAt!),
+              activity: postEntity.activity,
+              feeling: postEntity.feeling,
+              users: postEntity.users,
+              location: postEntity.location,
+            ),
           ),
           // const SizedBox(height: 8.0),
 
           // if (postEntity.images?.isNotEmpty??false)
-            Column(
-              children: [
-                if(postEntity.content?.isNotEmpty??false)Padding(
-                  padding: const EdgeInsets.only(right: 10,left: 10,bottom: 16),
+          Column(
+            children: [
+              if (postEntity.content?.isNotEmpty ?? false)
+                Padding(
+                  padding:
+                      const EdgeInsets.only(right: 10, left: 10, bottom: 16),
                   child: ReadMoreLabel(
-                    text: postEntity.content??'',
+                    text: postEntity.content ?? '',
                     // textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
                     style: TextStyle(
                         fontSize: 16,
@@ -59,16 +79,26 @@ class NormalPostScreen extends StatelessWidget {
                         color: AppColors.getTextColor(context)),
                   ),
                 ),
-                // if(postEntity.type=="live_event_post")FacebookLifeEventWidget(postEntity: postEntity,),
-                if(postEntity.type=="gif_post"&&postEntity.gifUrl!=null&&postEntity.gifUrl!.isNotEmpty)
-                  ImageFromInternet(image: postEntity.gifUrl??'',width: double.infinity,height: 256,fit: BoxFit.cover,),
-                if(postEntity.images!=null&&postEntity.images!.isNotEmpty&&postEntity.type=="normal_post")SizedBox(
+              // if(postEntity.type=="live_event_post")FacebookLifeEventWidget(postEntity: postEntity,),
+              if (postEntity.type == "gif_post" &&
+                  postEntity.gifUrl != null &&
+                  postEntity.gifUrl!.isNotEmpty)
+                ImageFromInternet(
+                  image: postEntity.gifUrl ?? '',
+                  width: double.infinity,
+                  height: 256,
+                  fit: BoxFit.cover,
+                ),
+              if (postEntity.images != null &&
+                  postEntity.images!.isNotEmpty &&
+                  postEntity.type == "normal_post")
+                SizedBox(
                   height: 256,
                   width: double.infinity,
-                  child: _buildImageGrid(context,postEntity.images??[]),
+                  child: _buildImageGrid(context, postEntity.images ?? []),
                 ),
-              ],
-            ),
+            ],
+          ),
           const SizedBox(height: 12),
 
           Padding(
@@ -95,8 +125,9 @@ class NormalPostScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 // Increased space between reactions and text
-                 Label(
-                  text: "Claude-Arthur Mbonzi ${context.isArabic?'و':'and'} 276 ${context.isArabic?'اخرين':'Others'}",
+                Label(
+                  text:
+                      "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'اخرين' : 'Others'}",
                   style: TextStyle(
                     color: context.isDarkMode
                         ? Colors.grey[300]
@@ -140,74 +171,75 @@ class NormalPostScreen extends StatelessWidget {
 
                 // Comment button
                 ClickableWidget(
-                    onTap: () {
-                      bottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          widget: BlocProvider.value(
-                            value:
-                            serviceLocator<SocialPostsCubit>()
-                              ..loadPostCommentsData(context:context, postId:postEntity.id),
-                            child: FacebookPostComments(
-                              postId: postEntity.id,
-                              onAddComment:
-                                  (PostCommentParams params) {
-                                // return controller.onPostComment(
-                                //     params: params, from: 'feed');
-                              },
-                              onCommentReply:
-                                  (ReplyOnCommentParams params) {
-                                // return controller.replyOnComment(
-                                //   params: ReplyOnCommentParams(
-                                //       postId: params.postId,
-                                //       content: params.content,
-                                //       commentId:
-                                //       params.commentId),
-                                //   from: 'feed',
-                                // );
-                              },
-                              onDeleteComment: (String id) async {
-                                // return await controller
-                                //     .deleteComment(
-                                //     context: context,
-                                //     commentId: id,
-                                //     postId: state.postDetails
-                                //         ?.id ??
-                                //         '',
-                                //     from: 'feed');
-                                // print(result);
-                              },
-                              onDeleteReply: (String id) async {
-                                // return await controller
-                                //     .deleteComment(
-                                //     context: context,
-                                //     commentId: id,
-                                //     postId: state.postDetails
-                                //         ?.id ??
-                                //         '',
-                                //     from: 'feed');
-                              },
-                              from: 'feed',
-                              onEditComment: (PostCommentParams
-                              params) async {
-                                // var result = await controller
-                                //     .editComment(params: params);
-                                // return result;
-                              },
-                            ),
-                          ));
-                    },
+                  onTap: () {
+                    bottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        widget: BlocProvider.value(
+                          value: serviceLocator<SocialPostsCubit>()
+                            ..loadPostCommentsData(
+                                context: context, postId: postEntity.id),
+                          child: FacebookPostComments(
+                            postId: postEntity.id,
+                            onAddComment: (PostCommentParams params) {
+                              // return controller.onPostComment(
+                              //     params: params, from: 'feed');
+                            },
+                            onCommentReply: (ReplyOnCommentParams params) {
+                              // return controller.replyOnComment(
+                              //   params: ReplyOnCommentParams(
+                              //       postId: params.postId,
+                              //       content: params.content,
+                              //       commentId:
+                              //       params.commentId),
+                              //   from: 'feed',
+                              // );
+                            },
+                            onDeleteComment: (String id) async {
+                              // return await controller
+                              //     .deleteComment(
+                              //     context: context,
+                              //     commentId: id,
+                              //     postId: state.postDetails
+                              //         ?.id ??
+                              //         '',
+                              //     from: 'feed');
+                              // print(result);
+                            },
+                            onDeleteReply: (String id) async {
+                              // return await controller
+                              //     .deleteComment(
+                              //     context: context,
+                              //     commentId: id,
+                              //     postId: state.postDetails
+                              //         ?.id ??
+                              //         '',
+                              //     from: 'feed');
+                            },
+                            from: 'feed',
+                            onEditComment: (PostCommentParams params) async {
+                              // var result = await controller
+                              //     .editComment(params: params);
+                              // return result;
+                            },
+                          ),
+                        ));
+                  },
                   child: Row(
                     children: [
-                      SvgPicture.asset(Assets.commentIcon,color: context.isDarkMode?Colors.white:null), // Comment Icon
-                      SizedBox(width: 8.w), // Space between icon and text
+                      SvgPicture.asset(Assets.commentIcon,
+                          color: context.isDarkMode ? Colors.white : null),
+                      // Comment Icon
+                      SizedBox(width: 8.w),
+                      // Space between icon and text
                       Label(
                         text: LocaleKeys.comment.localize,
                         style: TextStyle(
-                            color:AppColors.getTextColor(context),
+                            color: AppColors.getTextColor(context),
                             fontSize: 14,
                             fontWeight: FontWeight.w400),
-                      ), // Comment Text
+                      ),
+                      // Comment Text
                     ],
                   ),
                 ),
@@ -216,15 +248,21 @@ class NormalPostScreen extends StatelessWidget {
                 // Send button
                 Row(
                   children: [
-                    SvgPicture.asset(Assets.sendIcon,color: context.isDarkMode?Colors.white:null,), // Send Icon
-                    SizedBox(width: 8.w), // Space between icon and text
+                    SvgPicture.asset(
+                      Assets.sendIcon,
+                      color: context.isDarkMode ? Colors.white : null,
+                    ),
+                    // Send Icon
+                    SizedBox(width: 8.w),
+                    // Space between icon and text
                     Label(
                       text: LocaleKeys.send.localize,
                       style: TextStyle(
                           color: AppColors.getTextColor(context),
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
-                    ), // Send Text
+                    ),
+                    // Send Text
                   ],
                 ),
                 const SizedBox(width: 16), // Space between buttons
@@ -232,27 +270,31 @@ class NormalPostScreen extends StatelessWidget {
                 // Share button
                 Row(
                   children: [
-                    SvgPicture.asset(Assets.shareIcon,color: context.isDarkMode?Colors.white:null), // Share Icon
-                    SizedBox(width: 8.w), // Space between icon and text
+                    SvgPicture.asset(Assets.shareIcon,
+                        color: context.isDarkMode ? Colors.white : null),
+                    // Share Icon
+                    SizedBox(width: 8.w),
+                    // Space between icon and text
                     Label(
                       text: LocaleKeys.share.localize,
                       style: TextStyle(
-                          color:AppColors.getTextColor(context),
+                          color: AppColors.getTextColor(context),
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
-                    ), // Share Text
+                    ),
+                    // Share Text
                   ],
                 ),
               ],
             ),
           ),
           const Sizer(),
-
         ],
       ),
     );
   }
-  Widget _buildImageGrid(BuildContext context,List<String> media) {
+
+  Widget _buildImageGrid(BuildContext context, List<String> media) {
     if (media.length == 1) {
       return GestureDetector(
         onTap: () {
@@ -270,7 +312,7 @@ class NormalPostScreen extends StatelessWidget {
           imageUrl: media[0],
           fit: BoxFit.cover,
           placeholder: (context, url) =>
-          const Center(child: CustomCircularProgressIndicator()),
+              const Center(child: CustomCircularProgressIndicator()),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       );
@@ -279,7 +321,7 @@ class NormalPostScreen extends StatelessWidget {
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -454,8 +496,7 @@ class NormalPostScreen extends StatelessWidget {
                           return ShowAllImages(
                             images: [],
                             imagesUrls: media,
-                            onRemoveImage: (image) {
-                            },
+                            onRemoveImage: (image) {},
                           );
                         },
                       );
@@ -495,5 +536,4 @@ class NormalPostScreen extends StatelessWidget {
       );
     }
   }
-
 }

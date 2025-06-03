@@ -26,6 +26,7 @@ class CustomSwitchButton extends StatelessWidget {
     return Transform.scale(
       scale: .7,
       child: Switch(
+        padding: EdgeInsets.zero,
         value: value,
         onChanged: onChanged,
         thumbColor:
@@ -39,9 +40,9 @@ class CustomSwitchButton extends StatelessWidget {
         //         WidgetStatePropertyAll(context.isDarkMode
         //             ? Colors.white
         //             : AppColors.PRIMARY_COLOR),
-        trackOutlineColor: WidgetStatePropertyAll(context.isDarkMode
-            ? const Color(0xffF45560)
-            : const Color(0xffF33D49)),
+        // trackOutlineColor: WidgetStatePropertyAll(context.isDarkMode
+        //     ? const Color(0xffF45560)
+        //     : const Color(0xffF33D49)),
         trackOutlineWidth: const WidgetStatePropertyAll(1),
         // inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
         inactiveTrackColor:

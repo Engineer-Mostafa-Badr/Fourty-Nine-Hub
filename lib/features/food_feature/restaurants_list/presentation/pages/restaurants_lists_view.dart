@@ -539,7 +539,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                           ),
                           child: Center(
                             child: Text(
-                              '${context.isArabic?numAr(context.read<RestaurantsCubit>().state.reqCount?.count??0):context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
+                              '${context.read<RestaurantsCubit>().state.reqCount?.count??0}'.toArabicNumbers(context),
                               style: TextStyle(
                                 color:AppColors.getReversedTextColor(context),
                                 fontSize: 10,

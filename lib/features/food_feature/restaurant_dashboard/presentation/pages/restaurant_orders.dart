@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/widgets/restaurant_order_card.dart';
@@ -71,7 +72,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
           }
 
           if (controller.orders.isEmpty) {
-            return Center(child: Label(text: LocaleKeys.thereNoItems.localize));
+            return Center(child: CustomEmptyWidget(label: LocaleKeys.thereNoItems.localize));
           }
 
           return ListView.builder(
@@ -599,7 +600,7 @@ class _PastRequestFoodState extends State<PastRequestFood> {
           }
 
           if (controller.ordersPast.isEmpty) {
-            return Center(child: Label(text: LocaleKeys.thereNoItems.localize));
+            return Center(child: CustomEmptyWidget(label: LocaleKeys.thereNoItems.localize));
           }
           return ListView.builder(
             controller: _scrollController,

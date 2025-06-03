@@ -39,12 +39,14 @@ class BuildFacebookHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // if (user != null && user.image != null)
-        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ImageFromInternet(
-          image: user.image ?? '',
-          isCircle: true,
-          defaultLogo: false,
-          width: 40,
-          height: 40,
+        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.email),
+          child: ImageFromInternet(
+            image: user.image ?? '',
+            isCircle: true,
+            defaultLogo: false,
+            width: 40,
+            height: 40,
+          ),
         ),
         const SizedBox(width: 10.0),
         Expanded(

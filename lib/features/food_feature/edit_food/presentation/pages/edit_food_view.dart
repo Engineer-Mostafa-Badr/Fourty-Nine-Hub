@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -115,7 +116,7 @@ class _EditFoodViewState extends State<EditFoodView>
         context,
         title: context.isArabic ? 'حذف الوجبة' : 'Delete Item',
         message: context.isArabic
-            ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
+            ? 'هل أنت متأكد أنك تريد حذف هذا العنصر ؟'
             : 'Are you sure you want to remove this item?',
         onConfirm: () async {
           Navigator.pop(context);
@@ -147,7 +148,7 @@ class _EditFoodViewState extends State<EditFoodView>
             return Container(
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cD9D9D9,
+                color:AppColors.getFindFillColor(context),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -189,15 +190,15 @@ class _EditFoodViewState extends State<EditFoodView>
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          '${meal.price ?? ''} \$',
-                          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                          '${meal.price?.toInt().toLocalizedArabic(context) ?? ''} ${context.isArabic?'ج.م':'EGP'}',
+                          style: Styles.mediumText(color: AppColors.getTextColor(context),fontSize: 32),
                         ),
                       ],
                     ),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.getRedColor(context),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -207,17 +208,20 @@ class _EditFoodViewState extends State<EditFoodView>
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text(
-                              context.isArabic ? 'حذف الوجبة' : 'Delete Item',
-                              style: Styles.headerText(
-                                color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                            title: Center(
+                              child: Text(
+                                context.isArabic ? 'حذف الوجبة' : 'Delete Item',
+                                style: Styles.headerText(
+                                  color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                                ),
                               ),
                             ),
                             content: Text(
                               context.isArabic
-                                  ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
+                                  ? 'هل أنت متأكد أنك تريد حذف هذا العنصر؟'
                                   : 'Are you sure you want to remove this item?',
                               style: Styles.mediumText(
+                                fontSize: 32,
                                 color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
 
                               ),
@@ -234,21 +238,28 @@ class _EditFoodViewState extends State<EditFoodView>
                                 ),
                               ),
                               ElevatedButton(
+                                style :ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.getButtonPrimaryColor(context),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
                                 onPressed: () {
                                   onDelete(meal.id ?? '');
                                   // Navigator.of(context).pop();
                                 },
                                 child: Text(
                                   LocaleKeys.yes.localize,
-                                  style: Styles.mediumText(color: Colors.white),
+                                  style: Styles.mediumText(color: AppColors.getReversedTextColor(context)),
                                 ),
+
                               ),
                             ],
                           );
                         },
                       );
                     },
-                    child: const Icon(Icons.delete, color: Colors.white),
+                    child: Icon(Icons.delete, color: AppColors.getReversedTextColor(context)),
                   ),
                 ],
               ),
@@ -263,7 +274,7 @@ class _EditFoodViewState extends State<EditFoodView>
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-          color: context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,
+          color: AppColors.getFindFillColor(context),
           borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -294,24 +305,26 @@ class _EditFoodViewState extends State<EditFoodView>
                     builder: (context, state) {
                       if (state.files != null && state.files!.isNotEmpty) {
                         final imagePath = state.files!.last.path;
-                        return ImagePickerPlaceholder(
-                          image: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.cover,
+                        return SizedBox(
+                          height: 120,
+                          child: ImagePickerPlaceholder(
+                            image: Image.file(
+                              File(imagePath),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         );
                       }
                       return Container(
                         height: 120,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(color:context.isDarkMode?Colors.grey.shade300:Colors.grey.shade600),
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey.shade100,
                         ),
                         child: Center(
                           child: Text(
                             LocaleKeys.photoForMeal.tr(),
-                            style: Styles.mediumText(color: Colors.grey.shade600),
+                            style: Styles.mediumText(),
                           ),
                         ),
                       );
@@ -350,17 +363,17 @@ class _EditFoodViewState extends State<EditFoodView>
           Center(
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.SECONDARY_COLOR,
+                backgroundColor: AppColors.getRedColor(context),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
               onPressed: _onAddOrUpdatePressed,
-              icon: const Icon(Icons.add, color: Colors.white),
+              icon: Icon(Icons.add, color: AppColors.getReversedTextColor(context)),
               label: Text(
                 LocaleKeys.add.localize,
-                style: Styles.mediumText(color: Colors.white),
+                style: Styles.mediumText(color: AppColors.getReversedTextColor(context)),
               ),
             ),
           ),
@@ -403,7 +416,7 @@ class _EditFoodViewState extends State<EditFoodView>
         contentPadding: const EdgeInsets.all(10),
         hintText: hintText,
         hintStyle: Styles.mediumText(
-          color: AppColors.SECONDARY_COLOR,
+          color: AppColors.getTextColor(context),
           fontSize: 32,
         ),
         enabledBorder: OutlineInputBorder(
@@ -475,6 +488,7 @@ class _EditFoodViewState extends State<EditFoodView>
     return CustomScaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.editFood.localize),
+        leading: IconButton(onPressed: ()=>context.pop(), icon: Icon(Icons.arrow_back)),
       ),
       body:
           BlocBuilder<EditFoodCubit, EditFoodState>(builder: (context, state) {

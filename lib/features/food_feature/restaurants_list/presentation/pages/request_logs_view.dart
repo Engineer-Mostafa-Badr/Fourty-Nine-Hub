@@ -176,10 +176,10 @@ class TripLogRequestCard extends StatelessWidget {
                   // elevation: context.isDarkMode ? 0 : 2,
                     decoration: BoxDecoration(
                       color: (
-                          // orderData.seen == true
-                          // ?
-                          AppColors.getFindFillColor(context)
-                          //: AppColors.getRedColor(context)
+                          orderData.seen == true
+                          ?
+                          AppColors.getButtonPrimaryColor(context)
+                          : AppColors.getRedColor(context)
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -231,7 +231,7 @@ class TripLogRequestCard extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      color: AppColors.getTextColor(context)),
+                                      color: AppColors.getReversedTextColor(context)),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -245,7 +245,7 @@ class TripLogRequestCard extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      color: AppColors.getTextColor(context)),
+                                      color: AppColors.getReversedTextColor(context)),
                                 ),
                               ],
                             ),

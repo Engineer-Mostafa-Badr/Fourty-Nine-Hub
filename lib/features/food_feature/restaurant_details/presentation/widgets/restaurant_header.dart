@@ -177,7 +177,6 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                           ],
                         ),
                         // Favorite icon
-
                       ],
                     ),
                   ],

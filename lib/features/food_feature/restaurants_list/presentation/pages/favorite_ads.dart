@@ -152,6 +152,21 @@ class FavFoodCard extends StatelessWidget {
     }
   }
 
+  String getRatingText(double rating) {
+    if (rating <= 1) {
+      return LocaleKeys.bad.localize;
+    } else if (rating <= 2) {
+      return LocaleKeys.poor2.localize;
+    } else if (rating <= 3) {
+      return LocaleKeys.good.localize;
+    } else if (rating <= 4) {
+      return LocaleKeys.veryGood.localize;
+    } else if (rating <= 5) {
+      return LocaleKeys.excellent.localize;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -275,7 +290,7 @@ class FavFoodCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Label(text: (context.isArabic ? data.rateName?.ar :data.rateName?.en) ?? "N/A",
+                        Label(text: (getRatingText(data.totalRating!.toDouble())) ?? "N/A",
                           style: Styles.smallText(
                             fontWeight: FontWeight.w600,
                             // fontSize: 16
