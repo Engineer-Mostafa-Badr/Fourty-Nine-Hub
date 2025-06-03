@@ -70,6 +70,7 @@ class StarCubit extends Cubit<StarState> {
   Future<void> getAllTalents() async {
     print(hasMoreAllTalentsData);
     print(isLoadingAllTalentsMore);
+    print('getAllTalents ==>');
     if (!hasMoreAllTalentsData || isLoadingAllTalentsMore) return;
     isLoadingAllTalentsMore = true;
     emit(state.copyWith(status: StarStates.loading));
@@ -137,6 +138,7 @@ class StarCubit extends Cubit<StarState> {
   }
 
   Future<void> getAllTalent({bool refresh = false}) async {
+    print('getAllTalent ==>');
     if (refresh) {
       star.clear();
       currentPage = 1;

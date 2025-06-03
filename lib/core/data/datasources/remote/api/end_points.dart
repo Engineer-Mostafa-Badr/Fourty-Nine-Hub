@@ -199,7 +199,7 @@ class EndPoints {
 
   // Star
   static String allStar(StarPaginationParams params) =>
-      '/talent/?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
+      '/talent?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
 
   static String winnerStar(StarPaginationParams params) =>
       '/talent/all-winner?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
