@@ -33,7 +33,7 @@ class CustomSwitchButton extends StatelessWidget {
             // thumbColor ?? WidgetStatePropertyAll(context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR),
             thumbColor ??
                 WidgetStatePropertyAll(
-                    context.isDarkMode ? Color(0xff0D0D0D) : Colors.white),
+                   value? context.isDarkMode ? Color(0xff0D0D0D) : Colors.white:context.isDarkMode ?Colors.white : Color(0xff0D0D0D)),
         // trackOutlineColor: value
         //     ? const WidgetStatePropertyAll(Colors.transparent)
         //     : trackOutlineColor ??

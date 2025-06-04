@@ -47,7 +47,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
             // Text("${state.info?.government.toString()}"),
             // Text("${state.info?.city.toString()}"),
             _buildStatisticColumn(
-              LocaleKeys.totalProfit.localize,
+              context.isArabic?'اجمالي الأرباح':LocaleKeys.totalProfit.localize,
               state.statistics?.data.totalRevenue.toString() ?? "N/A",
             ),
             _buildStatisticColumn(
