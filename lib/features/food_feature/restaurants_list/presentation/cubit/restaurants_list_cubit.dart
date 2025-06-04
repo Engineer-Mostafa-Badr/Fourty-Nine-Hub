@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
@@ -30,8 +29,6 @@ import '../../../../../core/enums/main_services_enum.dart';
 import '../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../data/models/expired_requests_model.dart';
-import '../../data/models/restaurant_2_model.dart';
-import '../../domain/entities/food_ads_entity.dart';
 import '../../domain/entities/log_count_entity.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/entities/rate_response_entity.dart';
@@ -142,7 +139,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         emit(state.copyWith(
           reqCount: reqCount,
           status: RestaurantsListStates.success,
-
         ));
       },
     );

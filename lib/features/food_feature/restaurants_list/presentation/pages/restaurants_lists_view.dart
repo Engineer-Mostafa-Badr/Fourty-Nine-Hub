@@ -113,6 +113,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           const MealBanner(),
           _buildRegisterRestaurantPrompt(state),
           _buildSearchAndExpiredRequests(),
+          const Sizer(),
           if (_showSearch)
             BlocProvider(
               create: (context) => SearchRestaurantsCubit(
@@ -478,6 +479,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   children: [
                     GestureDetector(
                       onTap: () {
+                        print(context.read<RestaurantsCubit>().state.logsEntity?.length);
                         if (context.read<UserCubit>().isLoggedIn) {
                           setState(() {
                             _showLog = !_showLog;
@@ -523,10 +525,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     Visibility(
                       visible:context.read<RestaurantsCubit>().state.reqCount?.count!=0,
                       child: Positioned(
-                        top: -10,
+                        top: -8,
                         right: -6,
                         child: Container(
-                          padding: const EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             color: AppColors.getRedColor(context),
                             shape: BoxShape.circle,
@@ -540,7 +542,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                               '${context.read<RestaurantsCubit>().state.reqCount?.count??0}'.toArabicNumbers(context),
                               style: TextStyle(
                                 color:AppColors.getReversedTextColor(context),
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,

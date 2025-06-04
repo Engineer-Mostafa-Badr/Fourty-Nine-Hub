@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart'; // Ensure correct path
@@ -103,15 +104,14 @@ class _FoodCartViewState extends State<FoodCartView> {
     required String foodId,
   }) async {
     if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
-        1) {
+        1&&context.read<RestaurantDetailsCubit>().state.cart?.allItems.first.restaurantItems.length==1) {
       await context.read<RestaurantDetailsCubit>().deleteFromCart(
             context,
             restaurantId: restaurantId,
             foodId: foodId,
           );
-      setState(() {
-      });
-      // context.pop();
+      await context.read<RestaurantDetailsCubit>().fetchCart();
+      context.pop();
     } else {
       await context.read<RestaurantDetailsCubit>().deleteFromCart(
             context,
@@ -160,7 +160,7 @@ class _FoodCartViewState extends State<FoodCartView> {
             // return Text("hi wwwwwwwwwwwwwwwwwwwwwwwwwwww");
             return _buildCartContent(state.cart!);
           } else {
-            return CustomEmptyWidget(label: LocaleKeys.your_cart_empty.tr(),);
+            return CustomEmptyWidget(label:context.isArabic?'السلة فارغة': LocaleKeys.your_cart_empty.tr(),);
           }
         },
       ),

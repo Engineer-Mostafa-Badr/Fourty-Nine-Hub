@@ -142,115 +142,115 @@ class TripLogRequestCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(
-          height: 16,
-        ),
         Label(
           text: orderData.restaurantId?.name ?? "N/A",
           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
         ),
         ...?orderData.orders?.map((order) =>
-            InkWell(
-                onTap: () async {
-                  if (orderData.seen == false) {
-                    context
-                        .read<RestaurantsCubit>()
-                        .setReqSeen(params: orderData.id ?? '');
-                  }
-                  final updatedLogsEntity = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          BlocProvider<RestaurantsCubit>(
-                            create: (context) =>
-                                serviceLocator<RestaurantsCubit>(),
-                            child: LogDetailsScreen(logsEntity: orderData),
-                          ),
-                    ),
-                  );
-                  if (updatedLogsEntity != null) {
-                    context.read<RestaurantsCubit>().loadInitialReqLogs();
-                  }
-                },
-                child: Container(
-                  // elevation: context.isDarkMode ? 0 : 2,
-                    decoration: BoxDecoration(
-                      color: (
-                          orderData.seen == true
-                          ?
-                          AppColors.getButtonPrimaryColor(context)
-                          : AppColors.getRedColor(context)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: InkWell(
+                  onTap: () async {
+                    if (orderData.seen == false) {
+                      context
+                          .read<RestaurantsCubit>()
+                          .setReqSeen(params: orderData.id ?? '');
+                    }
+                    final updatedLogsEntity = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            BlocProvider<RestaurantsCubit>(
+                              create: (context) =>
+                                  serviceLocator<RestaurantsCubit>(),
+                              child: LogDetailsScreen(logsEntity: orderData),
+                            ),
                       ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: order.foodId?.picture?.mediaKey !=
-                                null
-                                ? Image.network(
-                              order.foodId?.picture?.mediaKey??UIConst.imageBaseUrl,
-                              width: 100,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 100,
-                                  height: 70,
-                                  color: Colors.grey[200],
-                                  child: const Icon(
-                                    Icons.broken_image,
-                                    size: 40,
-                                    color: Colors.grey,
-                                  ),
-                                );
-                              },
-                            )
-                                : Container(
-                              width: 100,
-                              height: 70,
-                              color: Colors.grey[200],
-                              child: const Icon(
-                                Icons.broken_image,
-                                size: 40,
-                                color: Colors.grey,
+                    );
+                    if (updatedLogsEntity != null) {
+                      context.read<RestaurantsCubit>().loadInitialReqLogs();
+                    }
+                  },
+                  child: Container(
+                    // elevation: context.isDarkMode ? 0 : 2,
+                      decoration: BoxDecoration(
+                        color: (
+                            orderData.seen == true
+                            ?
+                            AppColors.getButtonPrimaryColor(context)
+                            : AppColors.getRedColor(context)
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: order.foodId?.picture?.mediaKey !=
+                                  null
+                                  ? Image.network(
+                                order.foodId?.picture?.mediaKey??UIConst.imageBaseUrl,
+                                width: 100,
+                                height: 80,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    width: 100,
+                                    height: 70,
+                                    color: Colors.grey[200],
+                                    child: const Icon(
+                                      Icons.broken_image,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    ),
+                                  );
+                                },
+                              )
+                                  : Container(
+                                width: 100,
+                                height: 70,
+                                color: Colors.grey[200],
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  size: 40,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 12),
+                            const SizedBox(width: 12),
 
-                          // MAIN CONTENT
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  order.foodId?.foodName ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.getReversedTextColor(context)),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  '${
-                            context.isArabic
-                                ? numAr(order.price ?? 0)
-                                : order.price.toString()
-                          } ${context.isArabic?orderData.currencyAr:orderData.currencyEn}',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.getReversedTextColor(context)),
-                                ),
-                              ],
+                            // MAIN CONTENT
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    order.foodId?.foodName ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.getReversedTextColor(context)),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${
+                              context.isArabic
+                                  ? numAr(order.price ?? 0)
+                                  : order.price.toString()
+                            } ${context.isArabic?orderData.currencyAr:orderData.currencyEn}',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.getReversedTextColor(context)),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ])))),
+                          ]))),
+            ) ),
         // InkWell(
         //   onTap: () async {
         //     if (orderData.seen == false) {
