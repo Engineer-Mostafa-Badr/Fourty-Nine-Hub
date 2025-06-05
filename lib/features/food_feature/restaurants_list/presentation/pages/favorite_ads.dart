@@ -330,7 +330,7 @@ class FavFoodCard extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            const Icon(Icons.location_on_rounded),
+                            const Icon(Icons.location_on_rounded,size: 18,),
                             SizedBox(width: 4),
                             Flexible(
                               child: Text(
