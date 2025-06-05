@@ -96,5 +96,9 @@
         <string>_dartobservatory._tcp</string>
         <string>_flutter._tcp</string>
     </array>
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    </array>
 </dict>
 </plist>
