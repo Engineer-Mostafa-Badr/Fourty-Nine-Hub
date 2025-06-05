@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -150,7 +151,10 @@ class _ItemCardState extends State<ItemCard> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _formatPrice(widget.meal.price ?? 0.0),
+                      '${
+                        _formatPrice(widget.meal.price ?? 0.0)
+                            .toArabicNumbers(context)
+                      } ${context.isArabic?'ج.م':'EGP'}',
                       style: Styles.mediumText(
                         fontWeight: FontWeight.w600,
                       ),
@@ -182,7 +186,7 @@ class _ItemCardState extends State<ItemCard> {
                         ),
                         const SizedBox(width: 12),
                         Label(
-                          text: '$qty',
+                          text: '$qty'.toArabicNumbers(context),
                           style:  TextStyle(fontSize: 12, color: context.isDarkMode ? AppColors.whiteColor :AppColors.black),
                         ),
                         const SizedBox(width: 12),
