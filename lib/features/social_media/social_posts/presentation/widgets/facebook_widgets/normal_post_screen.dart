@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -18,7 +19,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_header.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_life_event_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -51,7 +51,8 @@ class NormalPostScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
             child: BuildFacebookHeader(
               user: postEntity.user,
-              sinceTime: context.isArabic
+              sinceTime:
+             context.isArabic
                   ? DateFormat('d MMM, h:mm a', 'ar')
                       .format(postEntity.createdAt!)
                   : DateFormat('MMM d, h:mm a').format(postEntity.createdAt!),
@@ -99,16 +100,16 @@ class NormalPostScreen extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
+          //const SizedBox(height: 12),
 
-          Padding(
+          if(postEntity.totalCount!=0)Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Positioned(
+                    if(postEntity.likesCount!=0)Positioned(
                       left: 14, // Adjust position for overlap
                       child: Image.asset(
                         Assets.loveReact,
@@ -116,8 +117,28 @@ class NormalPostScreen extends StatelessWidget {
                         height: 20, // Set a fixed height
                       ),
                     ),
-                    Image.asset(
+                    if(postEntity.loveCount!=0)Image.asset(
                       Assets.likeReact,
+                      width: 20, // Set a fixed width to ensure it's not cut off
+                      height: 20, // Set a fixed height to match the other image
+                    ),
+                    if(postEntity.wowCount!=0)Image.asset(
+                      Assets.wowReaction,
+                      width: 20, // Set a fixed width to ensure it's not cut off
+                      height: 20, // Set a fixed height to match the other image
+                    ),
+                    if(postEntity.hahaCount!=0)Image.asset(
+                      Assets.hahaReaction,
+                      width: 20, // Set a fixed width to ensure it's not cut off
+                      height: 20, // Set a fixed height to match the other image
+                    ),
+                    if(postEntity.sadCount!=0)Image.asset(
+                      Assets.sadReaction,
+                      width: 20, // Set a fixed width to ensure it's not cut off
+                      height: 20, // Set a fixed height to match the other image
+                    ),
+                    if(postEntity.angryCount!=0)Image.asset(
+                      Assets.angryReaction,
                       width: 20, // Set a fixed width to ensure it's not cut off
                       height: 20, // Set a fixed height to match the other image
                     ),
@@ -126,8 +147,8 @@ class NormalPostScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 // Increased space between reactions and text
                 Label(
-                  text:
-                      "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'اخرين' : 'Others'}",
+                  text:postEntity.totalCount.toString().toArabicNumbers(context)??'',
+                     // "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'اخرين' : 'Others'}",
                   style: TextStyle(
                     color: context.isDarkMode
                         ? Colors.grey[300]

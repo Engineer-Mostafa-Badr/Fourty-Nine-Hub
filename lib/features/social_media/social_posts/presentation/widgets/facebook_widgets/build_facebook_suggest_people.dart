@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
@@ -180,8 +181,16 @@ class _BuildFacebookSuggestPeopleState extends State<BuildFacebookSuggestPeople>
                                       ),
                                       // const SizedBox(height: 4), // Spacing
                                       // Mutual Friends Count
-                                      Text(
-                                        "${cubit.suggestedFriends[index].mutualFriendsCount} ${LocaleKeys.mutualFriend.localize}",
+                                      cubit.suggestedFriends[index].mutualFriendsCount==0?Text(
+                                        context.isArabic?'لا يوجد اصدقاء مشتركين':'No Mutual Friends',
+                                        maxLines: 1,
+                                        style:  TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12,
+                                            color:context.isDarkMode?AppColors.whiteColor.withOpacity(0.5) :AppColors.black.withOpacity(0.5)
+                                        ),
+                                      ):Text(
+                                        "${cubit.suggestedFriends[index].mutualFriendsCount.toLocalizedArabic(context)} ${LocaleKeys.mutualFriend.localize}",
                                         maxLines: 1,
                                         style:  TextStyle(
                                             fontWeight: FontWeight.w400,

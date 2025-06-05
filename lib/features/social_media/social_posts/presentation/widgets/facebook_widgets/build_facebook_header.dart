@@ -39,7 +39,7 @@ class BuildFacebookHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // if (user != null && user.image != null)
-        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.email),
+        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.image),
           child: ImageFromInternet(
             image: user.image ?? '',
             isCircle: true,
@@ -247,7 +247,7 @@ class BuildFacebookHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                      "$sinceTime .",
+                      "${sinceTime??''} .",
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 14,
