@@ -16,6 +16,8 @@ import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/t
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+
 class GetMyTalents extends StatelessWidget {
   final bool isMyTalent;
   final ScrollController? scrollController;
@@ -150,63 +152,60 @@ class GetMyTalents extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8.0,
-                          bottom: 8.0,
-                          left: 16.0,
-                        ),
-                        child: CircleAvatar(
-                          radius: 45.r,
-                          backgroundImage: user.image.isNotEmpty
-                              ? CachedNetworkImageProvider(user.image)
-                              : null,
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              talent.title,
-                              style: TextStyle(
-                                fontSize: 28.sp,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
-                              style: TextStyle(
-                                fontSize: 26.sp,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ...List.generate(
-                        5,
-                        (index) => Padding(
-                          padding: const EdgeInsets.only(right: 4.0),
-                          child: Image.asset(
-                            index < talent.averageRating.floor()
-                                ? "assets/49-New-icons/star_gold.png"
-                                : "assets/49-New-icons/star.png",
-                            color: context.isDarkMode ? Colors.white : null,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 32,
+                          height: 32,
+                          child: ProfileWithStoriesBorder(
+                            profilePictureUrl: talent.user.image ?? '',
+                            storiesCount: talent.storyCount ?? 0,
                           ),
                         ),
-                      ),
-                      SizedBox(width: 10.w),
-                    ],
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                talent.title,
+                                style: TextStyle(
+                                  fontSize: 28.sp,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
+                                style: TextStyle(
+                                  fontSize: 26.sp,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ...List.generate(
+                          5,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: Image.asset(
+                              index < talent.averageRating.floor()
+                                  ? "assets/49-New-icons/star_gold.png"
+                                  : "assets/49-New-icons/star.png",
+                              color: context.isDarkMode ? Colors.white : null,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 8),
                   if (!isMyTalent)

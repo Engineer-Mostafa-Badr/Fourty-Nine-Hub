@@ -59,14 +59,14 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAcLUPf0rh7vBTVxfUweafXv3sTDpOkWEo',
-    appId: '1:872417805780:ios:f7768fd45fe620df850241',
+    appId: '1:872417805780:ios:af9be494449aa24f850241',
     messagingSenderId: '872417805780',
     projectId: 'app-af0a7',
-    storageBucket: 'app-af0a7.appspot.com',
+    storageBucket: 'app-af0a7.firebasestorage.app',
     androidClientId:
         '872417805780-16bqk61d1vspkehfatdogbqaqpvhco3i.apps.googleusercontent.com',
     iosClientId:
-        '872417805780-9fcstpdvbg6t1rpmmgmk6ogjmcjrb21i.apps.googleusercontent.com',
-    iosBundleId: 'com.app.fourtynine',
+        '872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com',
+    iosBundleId: 'com.fourtyninehub.fourtynine',
   );
 }

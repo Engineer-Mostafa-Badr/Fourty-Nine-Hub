@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/t
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'talent_video_player.dart';
 
 class GetAllTalents extends StatelessWidget {
@@ -153,17 +154,25 @@ class GetAllTalents extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 8.0,
-                            bottom: 8.0,
-                            left: 16.0,
-                          ),
-                          child: CircleAvatar(
-                            radius: 45.r,
-                            backgroundImage: user.image.isNotEmpty
-                                ? CachedNetworkImageProvider(user.image)
-                                : null,
+                        // Padding(
+                        //   padding: const EdgeInsets.only(
+                        //     top: 8.0,
+                        //     bottom: 8.0,
+                        //     left: 16.0,
+                        //   ),
+                        //   child: CircleAvatar(
+                        //     radius: 45.r,
+                        //     backgroundImage: user.image.isNotEmpty
+                        //         ? CachedNetworkImageProvider(user.image)
+                        //         : null,
+                        //   ),
+                        // ),
+                        SizedBox(
+                          width: 32,
+                          height: 32,
+                          child: ProfileWithStoriesBorder(
+                            profilePictureUrl: talent.user.image ?? '',
+                            storiesCount: talent.storyCount ?? 0,
                           ),
                         ),
                         SizedBox(width: 16.w),

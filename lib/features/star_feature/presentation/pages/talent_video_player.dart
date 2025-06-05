@@ -19,6 +19,7 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/extensions/numbers_extensions.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../main.dart';
+import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../domain/entity/star_entity.dart';
 
 class TalentVideoPlayer extends StatefulWidget {
@@ -532,12 +533,20 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
           const SizedBox(height: 8),
           Row(
             children: [
-              CircleAvatar(
-                radius: 15,
-                backgroundImage: talent.user.image.isNotEmpty
-                    ? CachedNetworkImageProvider(talent.user.image)
-                    : null,
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: ProfileWithStoriesBorder(
+                  profilePictureUrl: talent.user.image ?? '',
+                  storiesCount: talent.storyCount ?? 0,
+                ),
               ),
+              // CircleAvatar(
+              //   radius: 15,
+              //   backgroundImage: talent.user.image.isNotEmpty
+              //       ? CachedNetworkImageProvider(talent.user.image)
+              //       : null,
+              // ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -867,7 +876,7 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
   // Calculate floating player dimensions based on video orientation
   Size get _floatingSize {
     var width = MediaQuery.of(navigatorKey.currentContext!).size.width;
-    final baseWidth = _showControls ? width*.9 : width*.6;
+    final baseWidth = _showControls ? width * .9 : width * .6;
 
     if (!_controller.value.isInitialized) {
       return Size(baseWidth, baseWidth * 16 / 9); // Default landscape
