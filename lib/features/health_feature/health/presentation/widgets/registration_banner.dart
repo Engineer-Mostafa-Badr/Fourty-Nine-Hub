@@ -10,6 +10,7 @@ class RegistrationBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       width: double.infinity,
       height: 64.h,
       decoration: BoxDecoration(
@@ -23,7 +24,11 @@ class RegistrationBanner extends StatelessWidget {
           ),
         ],
         gradient: const LinearGradient(
-          colors: [AppColors.PRIMARY_COLOR, Color(0xFF3A4CD1),AppColors.PRIMARY_COLOR],
+          colors: [
+            AppColors.PRIMARY_COLOR,
+            Color(0xFF3A4CD1),
+            AppColors.PRIMARY_COLOR
+          ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
@@ -32,7 +37,9 @@ class RegistrationBanner extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            context.isArabic?'ساعد العملاء بالضغط علي تسجيل ':'Serve clients by click Register',
+            context.isArabic
+                ? 'ساعد العملاء بالضغط علي تسجيل '
+                : 'Serve clients by click Register',
             style: Styles.mediumText(color: Colors.white),
           ),
         ),

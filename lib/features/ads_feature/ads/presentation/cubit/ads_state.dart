@@ -24,6 +24,8 @@ extension AdsStateX on AdsState {
 class AdsState {
   final Failure? failure;
   final AdsStates? status;
+  final AdsStates requestStatus;
+  final AdsStates cardStatus;
   final List<AdModel>? ads;
   final List<TripEntity>? comeWithMeAds;
   final List<TripEntity>? pickMeAds;
@@ -36,6 +38,8 @@ class AdsState {
       {this.ads,
       this.failure,
       this.status,
+      this.requestStatus = AdsStates.initState,
+      this.cardStatus = AdsStates.initState,
       this.city = '',
       this.governorate = '',
       this.filterModel,
@@ -46,6 +50,8 @@ class AdsState {
   AdsState copyWith({
     Failure? failure,
     AdsStates? status,
+    AdsStates? requestStatus,
+    AdsStates? cardStatus,
     List<TripEntity>? comeWithMeAds,
     List<TripEntity>? pickMeAds,
     bool? hasFilter,
@@ -58,6 +64,8 @@ class AdsState {
     return AdsState(
         failure: failure ?? this.failure,
         status: status ?? this.status,
+        requestStatus: requestStatus ?? this.requestStatus,
+        cardStatus: cardStatus ?? this.cardStatus,
         ads: ads ?? this.ads,
         city: city ?? this.city,
         governorate: governorate ?? this.governorate,

@@ -262,6 +262,8 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                               subscriptionStatus:
                                   widget.item.subscriptionStatus,
                               //subscriptionStatus: widget.item.subscriptionStatus??'',
+                              successRequest: () {},
+                              errorRequest: (failure) {},
                             ),
                           )
                         ],

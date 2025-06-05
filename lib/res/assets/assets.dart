@@ -10,7 +10,7 @@ abstract class Assets {
   static String rideRecord = 'assets/icons/ride_record.svg';
   static String cameraAddTalent = 'assets/49-New-icons/camera.png';
   static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
-  static String starIcon = 'assets/images/star.svg';
+  // static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
   static String logoHub = 'assets/icons/logoHub.png';
@@ -25,11 +25,14 @@ abstract class Assets {
   static String emergencyChatIcon = 'assets/icons/emergency_chat_icon.svg';
   static String checkCarIcon = 'assets/icons/check_car_icon.svg';
   static String safeCommunications = 'assets/icons/safe_communications.svg';
-  static String emergencyContactsIcon = 'assets/icons/emergency_contacts_icon.svg';
-  static String tube = 'assets/images/tube.png';
+  static String emergencyContactsIcon =
+      'assets/icons/emergency_contacts_icon.svg';
+  static String tiktokVedioIcon = 'assets/icons/tiktok_vedio_icon.svg';
+  static String tiktokEyeIcon = 'assets/icons/tiktok_eye_icon.svg';
+  // static String tube = 'assets/images/tube.png';
   static String joinTrip = 'assets/images/join_trip.png';
   static String tube1 = 'assets/images/tube1.png';
-  static String tubeCat = 'assets/images/tubeCat.jpg';
+  // static String tubeCat = 'assets/images/tubeCat.jpg';
   static String captainShare = 'assets/images/captain_share.png';
   static String tripJoinNew = 'assets/images/trip_join.png';
   static String pickMe = 'assets/images/pick_me.png';
@@ -183,6 +186,7 @@ abstract class Assets {
 
   // navigator
   static String logo = 'assets/images/logo_600.png';
+  static String womanPlaceHolder = 'assets/icons/woman_place_holder.png';
   static String logoWithBlackText = 'assets/images/logoWithBlackText.png';
   static String allRestaurants = 'assets/images/allRestaurants.png';
   static String healthcare = 'assets/images/healthcare.png';
@@ -646,6 +650,9 @@ abstract class Assets {
   static String chatStatus = "assets/icons/chatStatus.png";
   // simple loadings
   static String circleLoader = 'assets/lottie/loader.json';
+
+  // special loading in ads
+  static String searchLoading = 'assets/lottie/special_loading.json';
 
   //SpotLight
   static String bitmoji = "assets/images/bitmoji.png";

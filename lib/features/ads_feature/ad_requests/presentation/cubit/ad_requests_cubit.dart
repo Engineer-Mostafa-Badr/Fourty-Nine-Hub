@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/requests_log_by_main_category_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../domain/usecases/get_ad_requests_usecase.dart';
@@ -11,7 +12,7 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
   final GetAdRequestsUseCase _getAdRequestsUseCase;
 
   TextEditingController searchController = TextEditingController();
-  List<AdRequestEntity> adRequests = [];
+  List<RequestsLogByMainCategoryEntity> adRequests = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;

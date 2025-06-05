@@ -288,6 +288,8 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                         adId: widget.item.id,
                                         subscriptionStatus:
                                             widget.item.subscriptionType,
+                                        successRequest: () {},
+                                        errorRequest: (failure) {},
                                       ),
                                     )
                                   ],
@@ -298,7 +300,9 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                   subcategoryId: widget.item.subCategoryId,
                                   phone: widget.item.phone,
                                   id: widget.item.id,
-                                  hasReport: true, senderName: '', senderImage: '',
+                                  hasReport: true,
+                                  senderName: '',
+                                  senderImage: '',
                                 ),
                               ],
                             )

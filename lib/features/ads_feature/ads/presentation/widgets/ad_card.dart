@@ -351,6 +351,9 @@ class _AdCardState extends State<AdCard> {
                                                                 .item
                                                                 .subscriptionStatus ??
                                                             '',
+                                                        errorRequest:
+                                                            (failure) {},
+                                                        successRequest: () {},
                                                       ),
                                                     )
                                                   ],

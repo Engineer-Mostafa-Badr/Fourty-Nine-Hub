@@ -165,6 +165,7 @@ dependency_overrides:
 
 #  webview_flutter_android: ^4.7.0
   flutter_date_pickers:
+  web: ^1.0.0
 #  wakelock_plus: ^1.2.8
 dev_dependencies:
   build_runner: ^2.4.9

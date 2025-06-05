@@ -42,9 +42,12 @@ import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../core/messages/messages.dart';
 import '../../../../core/utils/format_numbers.dart';
+import '../../../../core/utils/validator.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
@@ -73,6 +76,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   final MapController _mapController = MapController();
 
+  final GlobalKey<FormState> _phoneNumberFormKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +87,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         rideCubit.initHome(context);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Widget buildPendingSheet() {
@@ -98,14 +109,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
-                color: context.isDarkMode ? AppColors.QUANTITY_COLOR : AppColors.whiteColor,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : AppColors.whiteColor,
               ),
               child: BottomCardRequest(
-                driversCount: 3,
+                driversCount: serviceLocator<RideCubit>().tripViewers.length,
                 rideCubit: serviceLocator<RideCubit>(),
                 onCancel: () async {
                   await context.read<RideCubit>().cancelPendingTripByClient(
-                        tripId: context.read<RideCubit>().state.requestedTrip?.id ?? '',
+                        tripId:
+                            context.read<RideCubit>().state.requestedTrip?.id ??
+                                '',
                       );
                 },
               ),
@@ -151,7 +166,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 rideOffer: offerEntity,
                 rideCubit: serviceLocator<RideCubit>(),
                 onAccept: () async {
-                  await context.read<RideCubit>().acceptOfferByClient(offerId: offerEntity.offerId);
+                  await context
+                      .read<RideCubit>()
+                      .acceptOfferByClient(offerId: offerEntity.offerId);
                 },
               );
             },
@@ -194,63 +211,89 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-                        print("state.requestedTrip?.status ${state.requestedTrip?.status}");
+                      BlocBuilder<RideCubit, RideState>(
+                          builder: (context, state) {
+                        print(
+                            "state.requestedTrip?.status ${state.requestedTrip?.status}");
                         return DriverHeaderWidget(
                           carModel: state.requestedTrip?.vehicleModel,
                           carColor: state.requestedTrip?.vehicleColor,
-                          rideStatusWidget: state.requestedTrip?.status == TripState.started.name
+                          rideStatusWidget: state.requestedTrip?.status ==
+                                  TripState.started.name
                               ? TripDurationCountdown(
-                                  key: ValueKey("${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
-                                  tripDurationSeconds: state.requestedTrip?.duration?.toDouble(),
+                                  key: ValueKey(
+                                      "${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
+                                  tripDurationSeconds:
+                                      state.requestedTrip?.duration?.toDouble(),
                                   isArabic: context.isArabic,
                                 )
                               : DriverArrivalCountdown(
-                                  key: ValueKey("${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
-                                  arrivalTimestampMs: state.requestedTrip?.driverIsArrivingIn ?? 0,
-                                  isCountdown: state.requestedTrip?.status == TripState.goToClient.name,
-                                  isInLocation: state.requestedTrip?.status == TripState.inLocation.name,
+                                  key: ValueKey(
+                                      "${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
+                                  arrivalTimestampMs:
+                                      state.requestedTrip?.driverIsArrivingIn ??
+                                          0,
+                                  isCountdown: state.requestedTrip?.status ==
+                                      TripState.goToClient.name,
+                                  isInLocation: state.requestedTrip?.status ==
+                                      TripState.inLocation.name,
                                 ),
-                          carImageUrl: state.requestedTrip?.vehiclePicture ?? "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
+                          carImageUrl: state.requestedTrip?.vehiclePicture ??
+                              "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
                           carName: state.requestedTrip?.vehicleBrand,
-                          carNumber: state.requestedTrip?.vehiclePlateNumber ?? "",
+                          carNumber:
+                              state.requestedTrip?.vehiclePlateNumber ?? "",
                         );
                       }),
-                      if (state.requestedTrip?.status != TripState.inLocation.name) const Divider(height: 1),
-                      if (state.requestedTrip?.status == TripState.inLocation.name)
+                      if (state.requestedTrip?.status !=
+                          TripState.inLocation.name)
+                        const Divider(height: 1),
+                      if (state.requestedTrip?.status ==
+                          TripState.inLocation.name)
                         Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: Container(
                               decoration: BoxDecoration(
-                                color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREY_NORMAL_COLOR.withValues(alpha: 0.3),
+                                color: context.isDarkMode
+                                    ? AppColors.GREY_DARK_COLOR
+                                    : AppColors.GREY_NORMAL_COLOR
+                                        .withValues(alpha: 0.3),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Column(
                                   children: [
-                                    BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+                                    BlocBuilder<RideCubit, RideState>(
+                                        builder: (context, state) {
                                       return CountdownTimerWidget(
-                                        isActive: state.requestedTrip?.status == TripState.inLocation.name,
+                                        isActive: state.requestedTrip?.status ==
+                                            TripState.inLocation.name,
                                         isArabic: context.isArabic,
                                       );
                                     }),
                                     const SizedBox(height: 16),
                                     GestureDetector(
                                       onTap: () async {
-                                        await serviceLocator<RideCubit>().sendIamOkMessage(context);
+                                        await serviceLocator<RideCubit>()
+                                            .sendIamOkMessage(context);
                                       },
                                       child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.6,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
                                         decoration: BoxDecoration(
                                           color: AppColors.PRIMARY_COLOR,
-                                          borderRadius: BorderRadius.circular(16),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
                                         ),
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(8),
                                             child: Text(
-                                              context.isArabic ? "حسنا، أنا قادم" : "Ok, I'm coming",
+                                              context.isArabic
+                                                  ? "حسنا، أنا قادم"
+                                                  : "Ok, I'm coming",
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16,
@@ -266,7 +309,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               )),
                         ),
                       ActionButtonsWidget(
-                        driverImageUrl: state.requestedTrip?.driverProfilePicture,
+                        driverImageUrl:
+                            state.requestedTrip?.driverProfilePicture,
                         driverRating: state.requestedTrip?.driverRating,
                         driverName: state.requestedTrip?.driverFirstName ?? "",
                         onContactDriver: () {
@@ -282,27 +326,37 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       // const Divider(height: 2),
                       Container(
                           decoration: BoxDecoration(
-                            color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREY_NORMAL_COLOR.withValues(alpha: 0.3),
+                            color: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.GREY_NORMAL_COLOR
+                                    .withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: AppColors.PRIMARY_COLOR),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(6),
-                            child: Center(child: Text(context.isArabic ? "الابلاغ عن السائق" : "Report Driver")),
+                            child: Center(
+                                child: Text(context.isArabic
+                                    ? "الابلاغ عن السائق"
+                                    : "Report Driver")),
                           )),
 
                       BottomRideStatusWidget(
                         price: state.requestedTrip?.price?.toInt() ?? 0,
-                        fromLocation: state.requestedTrip?.from ?? 'أول العاشر من رمضان',
-                        toLocation: state.requestedTrip?.to ?? 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                        fromLocation:
+                            state.requestedTrip?.from ?? 'أول العاشر من رمضان',
+                        toLocation: state.requestedTrip?.to ??
+                            'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                         onGoogleMap: () {},
                         onPartialPayment: () {},
                         onCallEmergency: () {},
                         onCancelRide: () {},
-                        isRecording: state.requestedTrip?.status == TripState.started.name,
+                        isRecording: state.requestedTrip?.status ==
+                            TripState.started.name,
                         audioDuration: '',
                         onMicTap: () {},
-                        paymentMethod: state.requestedTrip?.paymentMethod ?? "cash",
+                        paymentMethod:
+                            state.requestedTrip?.paymentMethod ?? "cash",
                         wayPointOne: state.requestedTrip?.wayPointOneTitle,
                         wayPointTwo: state.requestedTrip?.wayPointTwoTitle,
                         otp: state.requestedTrip?.otp,
@@ -322,7 +376,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final ScrollController _shippingScrollController = ScrollController();
 
   void _scrollRight(String type) {
-    final ScrollController? activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController? activeController =
+        type == "ride" ? _rideScrollController : _shippingScrollController;
 
     if (activeController != null && activeController.hasClients) {
       activeController.animateTo(
@@ -334,7 +389,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   void _scrollToStart(String type) {
-    final ScrollController? activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController? activeController =
+        type == "ride" ? _rideScrollController : _shippingScrollController;
 
     if (activeController != null && activeController.hasClients) {
       activeController.animateTo(
@@ -357,7 +413,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: cubit.loadingHomeData == true
-                  ? const Center(child: CustomCircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : Form(
                       key: _formKey,
                       child: SafeArea(
@@ -368,41 +424,80 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             appBars: const [],
                             body: Stack(
                               children: [
-                                context.read<RideCubit>().selectedCategoryIsSocket ? _buildTopImage() : const SizedBox.shrink(),
+                                context
+                                        .read<RideCubit>()
+                                        .selectedCategoryIsSocket
+                                    ? _buildTopImage()
+                                    : const SizedBox.shrink(),
                                 state.requestedTrip == null
                                     ? _buildBottomSheet()
-                                    : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name
+                                    : state.requestedTrip!.status ==
+                                                TripState.completed.name ||
+                                            state.requestedTrip!.status ==
+                                                TripState.canceled.name
                                         ? _buildBottomSheet()
                                         : const SizedBox.shrink(),
-                                !context.read<RideCubit>().selectedCategoryIsSocket
+                                !context
+                                        .read<RideCubit>()
+                                        .selectedCategoryIsSocket
                                     ? const SizedBox()
                                     : state.requestedTrip == null
                                         ? const SizedBox()
-                                        : state.requestedTrip!.status == TripState.pending.name
+                                        : state.requestedTrip!.status ==
+                                                TripState.pending.name
                                             ? buildDriversOffers(context)
                                             : const SizedBox(),
-                                !context.read<RideCubit>().selectedCategoryIsSocket
+                                !context
+                                        .read<RideCubit>()
+                                        .selectedCategoryIsSocket
                                     ? const SizedBox()
                                     : state.requestedTrip == null
                                         ? _buildBottomSheet()
-                                        : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name
+                                        : state.requestedTrip!.status ==
+                                                    TripState.completed.name ||
+                                                state.requestedTrip!.status ==
+                                                    TripState.canceled.name
                                             ? _buildBottomSheet()
-                                            : state.requestedTrip!.status == TripState.pending.name
+                                            : state.requestedTrip!.status ==
+                                                    TripState.pending.name
                                                 ? buildPendingSheet()
-                                                : state.requestedTrip!.status == TripState.accepted.name ||
-                                                        state.requestedTrip!.status == TripState.goToClient.name ||
-                                                        state.requestedTrip!.status == TripState.inLocation.name ||
-                                                        state.requestedTrip!.status == TripState.started.name
+                                                : state.requestedTrip!.status ==
+                                                            TripState.accepted
+                                                                .name ||
+                                                        state.requestedTrip!.status ==
+                                                            TripState.goToClient
+                                                                .name ||
+                                                        state.requestedTrip!
+                                                                .status ==
+                                                            TripState.inLocation
+                                                                .name ||
+                                                        state.requestedTrip!
+                                                                .status ==
+                                                            TripState
+                                                                .started.name
                                                     ? acceptedTripButtonSheet()
-                                                    : state.requestedTrip!.status == TripState.ratingSheet.name
+                                                    : state.requestedTrip!
+                                                                .status ==
+                                                            TripState
+                                                                .ratingSheet
+                                                                .name
                                                         ? BuildClientRateDriverSheet(
-                                                            onPressed: (String message, double rate) async {
-                                                              await serviceLocator<RideCubit>().ratingDriverByClient(
+                                                            onPressed: (String
+                                                                    message,
+                                                                double
+                                                                    rate) async {
+                                                              await serviceLocator<
+                                                                      RideCubit>()
+                                                                  .ratingDriverByClient(
                                                                 context,
                                                                 RatingDriverByClientUseCaseParams(
-                                                                  tripId: state.requestedTrip!.id!,
-                                                                  ratingValue: rate.toInt(),
-                                                                  comment: message,
+                                                                  tripId: state
+                                                                      .requestedTrip!
+                                                                      .id!,
+                                                                  ratingValue:
+                                                                      rate.toInt(),
+                                                                  comment:
+                                                                      message,
                                                                 ),
                                                               );
                                                             },
@@ -410,21 +505,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                         : const SizedBox(),
                                 context.read<RideCubit>().selectedCategoryIsSocket
                                     && (state.requestedTrip == null
-                                ||state.requestedTrip?.status == TripState.completed.name
-                                ||state.requestedTrip?.status == TripState.canceled.name)
+                                    ||state.requestedTrip?.status == TripState.completed.name
+                                    ||state.requestedTrip?.status == TripState.canceled.name)
                                     ? _carTruckBtn(
-                                        driverInfo: state.driverInfo,
-                                        loadingInfo: state.loaderInfo,
-                                        openDrawer: () {
-                                          showModalBottomSheet(
-                                            backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-                                            context: context,
-                                            builder: (context) => _buttonsWidget(
-                                              driverInfo: state.driverInfo,
-                                              loadingInfo: state.loaderInfo,
-                                            ),
-                                          );
-                                        })
+                                    driverInfo: state.driverInfo,
+                                    loadingInfo: state.loaderInfo,
+                                    openDrawer: () {
+                                      showModalBottomSheet(
+                                        backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                                        context: context,
+                                        builder: (context) => _buttonsWidget(
+                                          driverInfo: state.driverInfo,
+                                          loadingInfo: state.loaderInfo,
+                                        ),
+                                      );
+                                    })
                                     : const SizedBox.shrink(),
                               ],
                             ),
@@ -439,13 +534,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildTopMap(RideState state, BuildContext context) {
     List<LatLng> routePoints = [];
-    if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
-      routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+    if (state.requestedTrip == null ||
+        state.requestedTrip!.status == TripState.canceled.name ||
+        state.requestedTrip!.status == TripState.completed.name) {
+      routePoints =
+          _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
     } else {
-      routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
+      routePoints =
+          _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
     }
 
-    if (state.currentLocation != null && state.rideExpectedPrice == null && state.requestedTrip == null) {
+    if (state.currentLocation != null &&
+        state.rideExpectedPrice == null &&
+        state.requestedTrip == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
           LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
@@ -456,7 +557,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
     return SizedBox(
       width: double.infinity,
-      height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
+      height: state.requestedTrip != null
+          ? MediaQuery.of(context).size.height
+          : MediaQuery.of(context).size.height * 0.5,
       child: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
@@ -481,31 +584,38 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             markers: [
               if (state.currentLocation != null)
                 Marker(
-                  point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+                  point: LatLng(
+                      state.currentLocation!.lat!, state.currentLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.green, size: 40),
                 ),
               if (state.toLocation != null)
                 Marker(
                   point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.blue, size: 40),
                 ),
               if (state.wayPointOne != null)
                 Marker(
-                  point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
+                  point:
+                      LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
                 ),
               if (state.wayPointTwo != null)
                 Marker(
-                  point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
+                  point:
+                      LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
                 ),
             ],
           ),
@@ -519,7 +629,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               polylines: [
                 Polyline(
                   points: routePoints,
-                  color: context.isDarkMode ? Colors.blue : Colors.black87,
+                  color: context.isDarkMode ? Colors.blue :  Colors.black87,
                   strokeWidth: 4.0,
                 ),
               ],
@@ -541,20 +651,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         Align(
           alignment: AlignmentDirectional.topStart,
           child: ClickableWidget(
-              onTap: () => context.pop(),
-              child: const Icon(
-                Icons.close,
-                color: AppColors.black,
-              )),
+              onTap: ()=>context.pop(),
+              child: const Icon(Icons.close,color: AppColors.black,)),
         ),
         const Sizer(),
         GestureDetector(
           onTap: () {
-            if (!context.read<UserCubit>().isLoggedIn) {
+            if(!context.read<UserCubit>().isLoggedIn){
               return pleaseLoginDialog(context);
             }
             context.pop();
-            if (driverInfo == null) {
+            if (driverInfo == null|| (driverInfo.driverType?.isEmpty??false)) {
               serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
             } else {
               if (driverInfo.status == RegistrationStatus.pending.status) {
@@ -621,17 +728,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         const Sizer(),
         GestureDetector(
           onTap: () {
-            if (!context.read<UserCubit>().isLoggedIn) {
+            if(!context.read<UserCubit>().isLoggedIn){
               context.pop();
               return pleaseLoginDialog(context);
             }
             context.pop();
-            if (loadingInfo == null) {
+            if (loadingInfo == null || (loadingInfo.status?.isEmpty??false)) {
               print("object");
               serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
             } else {
               print("loadingInfo.toJson()${loadingInfo.toJson()}");
-              if (loadingInfo.status == RegistrationStatus.pending.status) {
+              if (loadingInfo.status ==
+                  RegistrationStatus.pending.status) {
                 return;
               } else if (loadingInfo.status == RegistrationStatus.rejected.status) {
                 context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
@@ -697,7 +805,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           onTap: () {
             if (context.isUserLoggedIn) {
               context.pop();
-              context.push(Routes.rideOffer, extra: false);
+              context.push(Routes.rideOffer,extra: false);
             } else {
               context.pop();
               return pleaseLoginDialog(context);
@@ -944,7 +1052,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       if (!context.read<RideCubit>().selectedCategoryIsSocket)
                         RidePersonalMoreInfoScreen(
                           isTruk: context.read<RideCubit>().isTruk,
-                          subCategoryId: context.read<RideCubit>().subCategoryId,
+                          subCategoryId:
+                              context.read<RideCubit>().subCategoryId,
                         ),
                       context.read<RideCubit>().selectedCategoryIsSocket
                           ? _customLocationField(
@@ -956,13 +1065,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   context.push(
                                     Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                                     extra: RideOpenStreetMapSearchAndPickParams(
+                                      minDistanceReferencePoint:
+                                          state.toLocation == null
+                                              ? null
+                                              : LatLng(state.toLocation!.lat!,
+                                                  state.toLocation!.lng!),
                                       onPicked: (pickedData) async {
-                                        serviceLocator<RideCubit>().updateFromLocation(
+                                        serviceLocator<RideCubit>()
+                                            .updateFromLocation(
                                           lat: pickedData.latLong.latitude,
                                           lng: pickedData.latLong.longitude,
                                           address: pickedData.addressName,
                                         );
-                                        await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                                        await context
+                                            .read<RideCubit>()
+                                            .fetchRideExpectedPrice(id: 'id');
                                         context.pop();
                                       },
                                     ),
@@ -983,13 +1100,22 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   context.push(
                                     Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                                     extra: RideOpenStreetMapSearchAndPickParams(
+                                      minDistanceReferencePoint:
+                                          state.currentLocation == null
+                                              ? null
+                                              : LatLng(
+                                                  state.currentLocation!.lat!,
+                                                  state.currentLocation!.lng!),
                                       onPicked: (pickedData) async {
-                                        serviceLocator<RideCubit>().updateToLocation(
+                                        serviceLocator<RideCubit>()
+                                            .updateToLocation(
                                           lat: pickedData.latLong.latitude,
                                           lng: pickedData.latLong.longitude,
                                           address: pickedData.addressName,
                                         );
-                                        await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                                        await context
+                                            .read<RideCubit>()
+                                            .fetchRideExpectedPrice(id: 'id');
                                         context.pop();
                                       },
                                     ),
@@ -1000,7 +1126,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               },
                             )
                           : const SizedBox(),
-                      context.read<RideCubit>().selectedCategoryIsSocket ? _fareField() : const SizedBox(),
+                      context.read<RideCubit>().selectedCategoryIsSocket
+                          ? _fareField()
+                          : const SizedBox(),
                       context.read<RideCubit>().selectedCategoryIsSocket
                           ? SizedBox(
                               height: 40,
@@ -1012,43 +1140,350 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                       child: AppButton(
                                           radius: 15,
                                           label: LocaleKeys.premiumRequest.tr(),
+                                          // onPressed: () async {
+                                          //   if (context.isUserLoggedIn) {
+                                          //     if (state.toLocation != null &&
+                                          //         state.currentLocation !=
+                                          //             null) {
+                                          //       bool isSubscribed = await context
+                                          //           .read<RideCubit>()
+                                          //           .isSubscribed(
+                                          //           userId: UserCubit
+                                          //               .to
+                                          //               .state
+                                          //               .data
+                                          //               ?.id ??
+                                          //               '',
+                                          //           subcategoryId: state
+                                          //               .rideCategory
+                                          //               ?.subCategories[context
+                                          //               .read<
+                                          //               RideCubit>()
+                                          //               .selectedCategoryIndex!]
+                                          //               .subCategoryId ??
+                                          //               '');
+                                          //       if (!isSubscribed) {
+                                          //         SubscriptionMethod()
+                                          //             .subscribe(
+                                          //             subscribeId: state
+                                          //                 .rideCategory
+                                          //                 ?.subCategories[context
+                                          //                 .read<
+                                          //                 RideCubit>()
+                                          //                 .selectedCategoryIndex!]
+                                          //                 .subCategoryId ??
+                                          //                 '',
+                                          //             onSubscribe: () {
+                                          //               context.pop();
+                                          //               context.pop();
+                                          //             },
+                                          //             showRegular: false,
+                                          //             title: LocaleKeys
+                                          //                 .premiumRequest
+                                          //                 .localize);
+                                          //       } else {
+                                          //         showModalBottomSheet(
+                                          //           context: context,
+                                          //           isScrollControlled: true,
+                                          //           backgroundColor:
+                                          //           Colors.transparent,
+                                          //           builder: (context) =>
+                                          //               CustomReserveRideBottomSheet(
+                                          //                 rideCubit: serviceLocator<
+                                          //                     RideCubit>(),
+                                          //                 selectedCategoryId: state
+                                          //                     .rideCategory
+                                          //                     ?.subCategories[
+                                          //                 serviceLocator<
+                                          //                     RideCubit>()
+                                          //                     .selectedCategoryIndex!]
+                                          //                     .subCategoryId ??
+                                          //                     '',
+                                          //                 isPremium: true,
+                                          //               ),
+                                          //         );
+                                          //       }
+                                          //     } else {
+                                          //       ScaffoldMessenger.of(context)
+                                          //           .showSnackBar(
+                                          //         SnackBar(
+                                          //           content: Text(
+                                          //             context.isArabic
+                                          //                 ? "يرجى تحديد الموقع"
+                                          //                 : "Please select location", // Ensure you define this key in your localization file
+                                          //             textAlign:
+                                          //             TextAlign.center,
+                                          //             style: const TextStyle(
+                                          //                 color: Colors.white),
+                                          //           ),
+                                          //           backgroundColor: Colors.red,
+                                          //           duration: const Duration(
+                                          //               seconds: 2),
+                                          //         ),
+                                          //       );
+                                          //     }
+                                          //   } else {
+                                          //     context.push(Routes.LOGIN);
+                                          //   }
+                                          // },
                                           onPressed: () async {
                                             if (context.isUserLoggedIn) {
-                                              if (state.toLocation != null && state.currentLocation != null) {
-                                                bool isSubscribed = await context.read<RideCubit>().isSubscribed(
-                                                    userId: UserCubit.to.state.data?.id ?? '',
-                                                    subcategoryId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '');
+                                              if (state.toLocation != null &&
+                                                  state.currentLocation !=
+                                                      null) {
+                                                bool isSubscribed =
+                                                    await context
+                                                        .read<RideCubit>()
+                                                        .isSubscribed(
+                                                          userId: UserCubit
+                                                                  .to
+                                                                  .state
+                                                                  .data
+                                                                  ?.id ??
+                                                              '',
+                                                          subcategoryId: state
+                                                                  .rideCategory
+                                                                  ?.subCategories[context
+                                                                      .read<
+                                                                          RideCubit>()
+                                                                      .selectedCategoryIndex!]
+                                                                  .subCategoryId ??
+                                                              '',
+                                                        );
                                                 if (!isSubscribed) {
-                                                  SubscriptionMethod().subscribe(
-                                                      subscribeId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
-                                                      onSubscribe: () {
-                                                        context.pop();
-                                                        context.pop();
-                                                      },
-                                                      showRegular: false,
-                                                      title: LocaleKeys.premiumRequest.localize);
+                                                  SubscriptionMethod()
+                                                      .subscribe(
+                                                          subscribeId: state
+                                                                  .rideCategory
+                                                                  ?.subCategories[context
+                                                                      .read<
+                                                                          RideCubit>()
+                                                                      .selectedCategoryIndex!]
+                                                                  .subCategoryId ??
+                                                              '',
+                                                          onSubscribe: () {
+                                                            context.pop();
+                                                            context.pop();
+                                                          },
+                                                          showRegular: false,
+                                                          title: LocaleKeys
+                                                              .premiumRequest
+                                                              .localize);
                                                 } else {
-                                                  showModalBottomSheet(
+                                                  // Reset the controller and form state before showing the sheet
+                                                  serviceLocator<RideCubit>()
+                                                      .phoneNumberController
+                                                      .clear(); // Clear any previous input
+                                                  _phoneNumberFormKey
+                                                      .currentState
+                                                      ?.reset(); // Reset validation state
+
+                                                  // Show the phone number input bottom sheet
+                                                  final bool?
+                                                      isPhoneNumberValid =
+                                                      await showModalBottomSheet<
+                                                          bool>(
                                                     context: context,
                                                     isScrollControlled: true,
-                                                    backgroundColor: Colors.transparent,
-                                                    builder: (context) => CustomReserveRideBottomSheet(
-                                                      rideCubit: serviceLocator<RideCubit>(),
-                                                      selectedCategoryId: state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
-                                                      isPremium: true,
-                                                    ),
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          bottom: MediaQuery.of(
+                                                                  context)
+                                                              .viewInsets
+                                                              .bottom,
+                                                        ),
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(20.0),
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius.vertical(
+                                                                    top: Radius
+                                                                        .circular(
+                                                                            20.0)),
+                                                          ),
+                                                          child: Form(
+                                                            key:
+                                                                _phoneNumberFormKey, // Use the class-level key
+                                                            child: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            24),
+                                                                    Text(
+                                                                      LocaleKeys
+                                                                          .phoneNumber
+                                                                          .localize,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                    IconButton(
+                                                                      icon: const Icon(
+                                                                          Icons
+                                                                              .close),
+                                                                      onPressed:
+                                                                          () =>
+                                                                              Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 20),
+                                                                NewPhoneNumberTextFormField(
+                                                                  currentController:
+                                                                      serviceLocator<
+                                                                              RideCubit>()
+                                                                          .phoneNumberController, // Use the class-level controller
+                                                                  keyboardType:
+                                                                      TextInputType
+                                                                          .number,
+                                                                  isRequired:
+                                                                      true,
+                                                                  validator:
+                                                                      validatorEgyptPhone,
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 20),
+                                                                SizedBox(
+                                                                  width: double
+                                                                      .infinity,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      if (_phoneNumberFormKey
+                                                                          .currentState!
+                                                                          .validate()) {
+                                                                        Navigator.of(context)
+                                                                            .pop(true); // Pass true if validated
+                                                                      }
+                                                                    },
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          AppColors
+                                                                              .PRIMARY_COLOR,
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          vertical:
+                                                                              15),
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                      ),
+                                                                    ),
+                                                                    child: Text(
+                                                                      LocaleKeys
+                                                                          .submit
+                                                                          .localize,
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
                                                   );
+
+                                                  // This block runs after the phone number bottom sheet is dismissed
+                                                  // isPhoneNumberValid will be true if validated, false if dismissed without validating
+                                                  if (isPhoneNumberValid ==
+                                                      true) {
+                                                    // If valid, show the CustomReserveRideBottomSheet
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      builder: (context) =>
+                                                          CustomReserveRideBottomSheet(
+                                                        rideCubit:
+                                                            serviceLocator<
+                                                                RideCubit>(),
+                                                        selectedCategoryId: state
+                                                                .rideCategory
+                                                                ?.subCategories[
+                                                                    serviceLocator<
+                                                                            RideCubit>()
+                                                                        .selectedCategoryIndex!]
+                                                                .subCategoryId ??
+                                                            '',
+                                                        isPremium: true,
+                                                        // Pass the phone number here if CustomReserveRideBottomSheet needs it
+                                                        // phoneNumber: _phoneNumberController.text,
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    // If phone number is null or invalid, do nothing (sheet already closed)
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          context.isArabic
+                                                              ? "رقم الهاتف غير صالح أو لم يتم إدخاله."
+                                                              : "Phone number is invalid or not entered.",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 2),
+                                                      ),
+                                                    );
+                                                  }
                                                 }
                                               } else {
-                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
                                                   SnackBar(
                                                     content: Text(
-                                                      context.isArabic ? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
-                                                      textAlign: TextAlign.center,
-                                                      style: const TextStyle(color: Colors.white),
+                                                      context.isArabic
+                                                          ? "يرجى تحديد الموقع"
+                                                          : "Please select location",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color: Colors.white),
                                                     ),
                                                     backgroundColor: Colors.red,
-                                                    duration: const Duration(seconds: 2),
+                                                    duration: const Duration(
+                                                        seconds: 2),
                                                   ),
                                                 );
                                               }
@@ -1056,41 +1491,271 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               context.push(Routes.LOGIN);
                                             }
                                           },
-                                          backColor: AppColors.SECONDARY_COLOR_DARK2,
-                                          width: MediaQuery.of(context).size.width)),
+                                          backColor:
+                                              AppColors.SECONDARY_COLOR_DARK2,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width)),
                                   Expanded(
                                       flex: 2,
                                       child: state.isLoadingSubmit
-                                          ? const Center(child: CustomCircularProgressIndicator())
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator())
                                           : AppButton(
                                               radius: 15,
                                               label: LocaleKeys.request.tr(),
                                               onPressed: () async {
                                                 if (context.isUserLoggedIn) {
-                                                  if (state.toLocation != null && state.currentLocation != null) {
-                                                    showModalBottomSheet(
+                                                  if (state.toLocation !=
+                                                          null &&
+                                                      state.currentLocation !=
+                                                          null) {
+                                                    // showModalBottomSheet(
+                                                    //   context: context,
+                                                    //   isScrollControlled: true,
+                                                    //   backgroundColor:
+                                                    //   Colors.transparent,
+                                                    //   builder: (context) =>
+                                                    //       BlocProvider.value(
+                                                    //           value: serviceLocator<
+                                                    //               RideCubit>(),
+                                                    //           child:
+                                                    //           CustomReserveRideBottomSheet(
+                                                    //             rideCubit:
+                                                    //             serviceLocator<
+                                                    //                 RideCubit>(),
+                                                    //             selectedCategoryId: state
+                                                    //                 .rideCategory
+                                                    //                 ?.subCategories[
+                                                    //             serviceLocator<RideCubit>().selectedCategoryIndex!]
+                                                    //                 .subCategoryId ??
+                                                    //                 '',
+                                                    //             isPremium:
+                                                    //             false,
+                                                    //           )),
+                                                    // );
+                                                    // Reset the controller and form state before showing the sheet
+                                                    serviceLocator<RideCubit>()
+                                                        .phoneNumberController
+                                                        .clear(); // Clear any previous input
+                                                    _phoneNumberFormKey
+                                                        .currentState
+                                                        ?.reset(); // Reset validation state
+
+                                                    // Show the phone number input bottom sheet
+                                                    final bool?
+                                                        isPhoneNumberValid =
+                                                        await showModalBottomSheet<
+                                                            bool>(
                                                       context: context,
                                                       isScrollControlled: true,
-                                                      backgroundColor: Colors.transparent,
-                                                      builder: (context) => BlocProvider.value(
-                                                          value: serviceLocator<RideCubit>(),
-                                                          child: CustomReserveRideBottomSheet(
-                                                            rideCubit: serviceLocator<RideCubit>(),
-                                                            selectedCategoryId:
-                                                                state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
-                                                            isPremium: false,
-                                                          )),
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            bottom:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .viewInsets
+                                                                    .bottom,
+                                                          ),
+                                                          child: Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(20.0),
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius.vertical(
+                                                                      top: Radius
+                                                                          .circular(
+                                                                              20.0)),
+                                                            ),
+                                                            child: Form(
+                                                              key:
+                                                                  _phoneNumberFormKey, // Use the class-level key
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              24),
+                                                                      Text(
+                                                                        LocaleKeys
+                                                                            .phoneNumber
+                                                                            .localize,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              18,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      IconButton(
+                                                                        icon: const Icon(
+                                                                            Icons.close),
+                                                                        onPressed:
+                                                                            () =>
+                                                                                Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          20),
+                                                                  NewPhoneNumberTextFormField(
+                                                                    currentController:
+                                                                        serviceLocator<RideCubit>()
+                                                                            .phoneNumberController, // Use the class-level controller
+                                                                    keyboardType:
+                                                                        TextInputType
+                                                                            .number,
+                                                                    isRequired:
+                                                                        true,
+                                                                    validator:
+                                                                        validatorEgyptPhone,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          20),
+                                                                  SizedBox(
+                                                                    width: double
+                                                                        .infinity,
+                                                                    child:
+                                                                        ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        if (_phoneNumberFormKey
+                                                                            .currentState!
+                                                                            .validate()) {
+                                                                          Navigator.of(context)
+                                                                              .pop(true); // Pass true if validated
+                                                                        }
+                                                                      },
+                                                                      style: ElevatedButton
+                                                                          .styleFrom(
+                                                                        backgroundColor:
+                                                                            AppColors.PRIMARY_COLOR,
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            vertical:
+                                                                                15),
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                        ),
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        LocaleKeys
+                                                                            .submit
+                                                                            .localize,
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            color:
+                                                                                Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
                                                     );
+
+                                                    // This block runs after the phone number bottom sheet is dismissed
+                                                    // isPhoneNumberValid will be true if validated, false if dismissed without validating
+                                                    if (isPhoneNumberValid ==
+                                                        true) {
+                                                      // If valid, show the CustomReserveRideBottomSheet
+                                                      showModalBottomSheet(
+                                                        context: context,
+                                                        isScrollControlled:
+                                                            true,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        builder: (context) =>
+                                                            CustomReserveRideBottomSheet(
+                                                          rideCubit:
+                                                              serviceLocator<
+                                                                  RideCubit>(),
+                                                          selectedCategoryId: state
+                                                                  .rideCategory
+                                                                  ?.subCategories[
+                                                                      serviceLocator<
+                                                                              RideCubit>()
+                                                                          .selectedCategoryIndex!]
+                                                                  .subCategoryId ??
+                                                              '',
+                                                          isPremium: false,
+                                                          // Pass the phone number here if CustomReserveRideBottomSheet needs it
+                                                          // phoneNumber: _phoneNumberController.text,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      // If phone number is null or invalid, do nothing (sheet already closed)
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            context.isArabic
+                                                                ? "رقم الهاتف غير صالح أو لم يتم إدخاله."
+                                                                : "Phone number is invalid or not entered.",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                          ),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 2),
+                                                        ),
+                                                      );
+                                                    }
                                                   } else {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
                                                       SnackBar(
                                                         content: Text(
-                                                          context.isArabic ? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
-                                                          textAlign: TextAlign.center,
-                                                          style: const TextStyle(color: Colors.white),
+                                                          context.isArabic
+                                                              ? "يرجى تحديد الموقع"
+                                                              : "Please select location", // Ensure you define this key in your localization file
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white),
                                                         ),
-                                                        backgroundColor: Colors.red,
-                                                        duration: const Duration(seconds: 2),
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 2),
                                                       ),
                                                     );
                                                   }
@@ -1098,8 +1763,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                   context.push(Routes.LOGIN);
                                                 }
                                               },
-                                              backColor: AppColors.PRIMARY_COLOR,
-                                              width: MediaQuery.of(context).size.width)),
+                                              backColor:
+                                                  AppColors.PRIMARY_COLOR,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width)),
                                 ],
                               ),
                             )
@@ -1131,7 +1799,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildCategoryList(String type, List subCategories) {
-    final ScrollController controller = type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController controller =
+        type == "ride" ? _rideScrollController : _shippingScrollController;
 
     return Row(
       children: [
@@ -1145,11 +1814,26 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               itemCount: subCategories.length,
               itemBuilder: (context, index) {
                 final subCategory = subCategories[index];
-                final bool isSelected = context.read<RideCubit>().selectedCategoryType == type && context.read<RideCubit>().selectedCategoryIndex == index;
+                final bool isSelected =
+                    context.read<RideCubit>().selectedCategoryType == type &&
+                        context.read<RideCubit>().selectedCategoryIndex ==
+                            index;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (context.read<RideCubit>().selectedCategoryType == type && context.read<RideCubit>().selectedCategoryIndex == index) {
+                      if(context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null){
+                        if(serviceLocator<UserCubit>().state.data?.gender == "male" && subCategory.subCategoryNameEn.trim().toLowerCase() == "lady"){
+                          showErrorMessage(context,
+                              context.isArabic
+                                  ? "أنت رجل, لا يمكنك استخدام هذه الخدمة"
+                                  : "You are a man, you can't use this service");
+                          return;
+                        }
+                      }
+                      if (context.read<RideCubit>().selectedCategoryType ==
+                              type &&
+                          context.read<RideCubit>().selectedCategoryIndex ==
+                              index) {
                         // context.read<RideCubit>().selectedCategoryType = null;
                         // context.read<RideCubit>().selectedCategoryIndex = null;
                       } else {
@@ -1157,12 +1841,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         context.read<RideCubit>().selectedCategoryIndex = 0;
                         subCategories.insert(0, subCategories.removeAt(index));
                       }
-                      context.read<RideCubit>().subCategoryId = subCategory.subCategoryId;
-                      context.read<RideCubit>().checkSelectedCategoryIsSocket(subCategory.subCategoryId);
+                      context.read<RideCubit>().subCategoryId =
+                          subCategory.subCategoryId;
+                      context.read<RideCubit>().checkSelectedCategoryIsSocket(
+                          subCategory.subCategoryId);
                     });
                     _scrollToStart(type);
                   },
-                  child: _categoryItem(context.isArabic ? subCategory.subCategoryNameAr : subCategory.subCategoryNameEn, subCategory.picture, isSelected),
+                  child: _categoryItem(
+                      context.isArabic
+                          ? subCategory.subCategoryNameAr
+                          : subCategory.subCategoryNameEn,
+                      subCategory.picture,
+                      isSelected),
                 );
               },
             ),
@@ -1174,7 +1865,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             onTap: () {
               _scrollRight(type);
             },
-            child: const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.SECONDARY_COLOR_DARK),
+            child: const Icon(Icons.arrow_forward_ios,
+                size: 18, color: AppColors.SECONDARY_COLOR_DARK),
           ),
         ),
       ],
@@ -1186,16 +1878,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? Colors.redAccent.withOpacity(0.2) : Colors.transparent,
+          color: isSelected
+              ? Colors.redAccent.withOpacity(0.2)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(imageUrl, width: 50, height: 20, fit: BoxFit.fitWidth),
+            Image.network(imageUrl,
+                width: 50, height: 20, fit: BoxFit.fitWidth),
             const SizedBox(height: 5),
-            Text(title, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
+            Text(title,
+                style:
+                    const TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
           ],
         ),
       ),
@@ -1223,7 +1920,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : const Color(0xFFEEEEEE),
+            color: context.isDarkMode
+                ? AppColors.GREY_DARK_COLOR
+                : const Color(0xFFEEEEEE),
           ),
           child: Row(
             children: [
@@ -1232,20 +1931,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 child: CircleAvatar(
                   backgroundColor: color,
                   radius: 10,
-                  child: const CircleAvatar(backgroundColor: Colors.white, radius: 5),
+                  child: const CircleAvatar(
+                      backgroundColor: Colors.white, radius: 5),
                 ),
               ),
               Expanded(
                 child: Text(
                   text == 'From'
                       ? context.isArabic
-                          ? "من"
-                          : "From"
+                      ? "من"
+                      : "From"
                       : text == 'To'
-                          ? context.isArabic
-                              ? "إلى"
-                              : "To"
-                          : text!,
+                      ? context.isArabic
+                      ? "إلى"
+                      : "To"
+                      : text!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -1277,25 +1977,43 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       String selectedCategoryName = "Captain";
       double selectedCategoryPrice = 0.0;
       if (context.read<RideCubit>().selectedCategoryType == "ride") {
-        selectedCategoryName = state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryNameEn ?? "";
+        selectedCategoryName = state
+                .rideCategory
+                ?.subCategories[
+                    context.read<RideCubit>().selectedCategoryIndex!]
+                .subCategoryNameEn ??
+            "";
       } else {
-        selectedCategoryName = state.shippingCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryNameEn ?? "";
+        selectedCategoryName = state
+                .shippingCategory
+                ?.subCategories[
+                    context.read<RideCubit>().selectedCategoryIndex!]
+                .subCategoryNameEn ??
+            "";
       }
       // log("""selectedCategoryName: $selectedCategoryName""");
-      if (selectedCategoryName.trim().toLowerCase() == "Captain".toLowerCase()) {
+      if (selectedCategoryName.trim().toLowerCase() ==
+          "Captain".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForCaptain ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() == "Scooter".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() ==
+          "Scooter".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForScooter ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() == "Taxi".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() ==
+          "Taxi".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForTaxi ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() == "Suv".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() ==
+          "Suv".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForSUV ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() == "Lady".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() ==
+          "Lady".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForWomen ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() == "Premium".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() ==
+          "Premium".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForPremium ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() == "Intercity".toLowerCase()) {
-        selectedCategoryPrice = state.rideExpectedPrice?.priceForIntercity ?? 0.0;
+      } else if (selectedCategoryName.trim().toLowerCase() ==
+          "Intercity".toLowerCase()) {
+        selectedCategoryPrice =
+            state.rideExpectedPrice?.priceForIntercity ?? 0.0;
       }
       return GestureDetector(
         onTap: () {
@@ -1322,7 +2040,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(12.0),
                   child: FareBottomSheetWidget(
                     rideCubit: serviceLocator<RideCubit>(),
-                    selectedCategoryPrice: context.read<RideCubit>().getTotalPrice(selectedCategoryPrice),
+                    selectedCategoryPrice: context
+                        .read<RideCubit>()
+                        .getTotalPrice(selectedCategoryPrice),
                     selectedCategoryName: selectedCategoryName,
                   ),
                 ),
@@ -1336,23 +2056,35 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               Expanded(
                 flex: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYFIELD,
+                    color: context.isDarkMode
+                        ? AppColors.GREY_DARK_COLOR
+                        : AppColors.GREYFIELD,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     spacing: 10,
                     children: [
-                      Text(LocaleKeys.egp.tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                      Text(LocaleKeys.egp.tr(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 12)),
                       state.rideExpectedPrice != null
-                          ? Text(FormatNumbers()
-                              .convertNumberToLocalizedString(context.read<RideCubit>().getTotalPrice(selectedCategoryPrice).toInt().toString(), isArabic: context.isArabic))
+                          ? Text(FormatNumbers().convertNumberToLocalizedString(
+                              context
+                                  .read<RideCubit>()
+                                  .getTotalPrice(selectedCategoryPrice)
+                                  .toInt()
+                                  .toString(),
+                              isArabic: context.isArabic))
                           : Text(LocaleKeys.offerYourFare.tr()),
                       const Spacer(),
                       Icon(
                         Icons.edit_outlined,
-                        color: context.isDarkMode ? null : AppColors.DARK_BLUE_COLOR,
+                        color: context.isDarkMode
+                            ? null
+                            : AppColors.DARK_BLUE_COLOR,
                       ),
                     ],
                   ),
@@ -1384,7 +2116,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: OptionsBottomsheetWidget(
                             rideCubit: serviceLocator<RideCubit>(),
                             selectedCategoryName: selectedCategoryName,
-                            selectedCategoryPrice: context.read<RideCubit>().getTotalPrice(selectedCategoryPrice),
+                            selectedCategoryPrice: context
+                                .read<RideCubit>()
+                                .getTotalPrice(selectedCategoryPrice),
                           ),
                           title: LocaleKeys.options.tr());
                     }
@@ -1393,7 +2127,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     height: 25,
                     child: Icon(
                       Icons.tune_outlined,
-                      color: context.isDarkMode ? null : AppColors.DARK_BLUE_COLOR,
+                      color:
+                          context.isDarkMode ? null : AppColors.DARK_BLUE_COLOR,
                     ),
                   ),
                 ),
@@ -1437,7 +2172,10 @@ class _CarMarkerWidgetState extends State<CarMarkerWidget> {
       create: (_) => CarLocationCubit(),
       child: BlocBuilder<CarLocationCubit, GetLocationFromAddressEntity?>(
         builder: (context, state) {
-          if (state == null || state.lat == null || state.lng == null || _initialDirection == null) {
+          if (state == null ||
+              state.lat == null ||
+              state.lng == null ||
+              _initialDirection == null) {
             return const SizedBox.shrink();
           }
 
@@ -1457,7 +2195,8 @@ class _CarMarkerWidgetState extends State<CarMarkerWidget> {
 }
 
 class CarMarker {
-  static Marker build(LatLng carLocation, LatLng? previousLocation, {required double initialDirection}) {
+  static Marker build(LatLng carLocation, LatLng? previousLocation,
+      {required double initialDirection}) {
     double rotation = initialDirection;
 
     if (previousLocation != null) {
@@ -1478,7 +2217,8 @@ class CarMarker {
     final double deltaLng = (to.longitude - from.longitude) * (pi / 180);
 
     final double y = sin(deltaLng) * cos(lat2);
-    final double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLng);
+    final double x =
+        cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLng);
     final double bearing = atan2(y, x);
     return (bearing * (180 / pi) + 360) % 360; // Degrees
   }
@@ -1536,7 +2276,8 @@ class CountdownTimerWidget extends StatefulWidget {
   State<CountdownTimerWidget> createState() => _CountdownTimerWidgetState();
 }
 
-class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with SingleTickerProviderStateMixin {
+class _CountdownTimerWidgetState extends State<CountdownTimerWidget>
+    with SingleTickerProviderStateMixin {
   static const int totalSeconds = 300;
   late Duration _remaining = const Duration(seconds: totalSeconds);
   Timer? _timer;
@@ -1616,8 +2357,12 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with Single
     final isLastMinute = _remaining.inSeconds <= 60 && widget.isActive;
 
     final message = widget.isArabic
-        ? (isLastMinute ? "كن حذرًا، يمكن أن يلغي السائق الرحلة، ولديه مبررات قوية لذلك." : "لا تتأخر، قد يؤثر على تقييمك")
-        : (isLastMinute ? "Be careful, the driver could cancel the ride, and he has every right to do so." : "Please don't be late, it might affect your rating");
+        ? (isLastMinute
+            ? "كن حذرًا، يمكن أن يلغي السائق الرحلة، ولديه مبررات قوية لذلك."
+            : "لا تتأخر، قد يؤثر على تقييمك")
+        : (isLastMinute
+            ? "Be careful, the driver could cancel the ride, and he has every right to do so."
+            : "Please don't be late, it might affect your rating");
 
     return AnimatedBuilder(
       animation: _animationController,

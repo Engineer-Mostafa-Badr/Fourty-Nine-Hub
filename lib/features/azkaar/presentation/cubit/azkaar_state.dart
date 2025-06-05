@@ -11,7 +11,8 @@ class AzkarState {
   final Failure? failure;
   final List<AzkarEntity>? akar;
   final List<AzkarDetailsEntity>? azkarDetail;
-  final List<AzkarSearchEntity>? azkarSearch;
+  // final List<AzkarSearchEntity>? azkarSearch;
+  final List<AzkarEntity>? azkarSearch;
 
   const AzkarState({
     this.status = AzkarStates.loading,
@@ -25,7 +26,7 @@ class AzkarState {
     Failure? failure,
     List<AzkarEntity>? akar,
     List<AzkarDetailsEntity>? azkarDetail,
-    List<AzkarSearchEntity>? azkarSearch,
+    List<AzkarEntity>? azkarSearch,
   }) {
     return AzkarState(
       status: status ?? this.status,
