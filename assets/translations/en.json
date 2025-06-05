@@ -1632,7 +1632,9 @@
   "youCantGetTripUntilYouReady": "You can't get trips until you ready",
   "youDontHaveAvailableOffer": "You don't Have Available Offers",
   "noInternetConnection" : "No internet connection",
-  "createAds" : "Create Ads"
+  "createAds" : "Create Ads",
+  "DidntReceiveOTP" : "Didn't receive OTP?",
+  "resendOTP" : "Resend OTP"
 
 
 }
