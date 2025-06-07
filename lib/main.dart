@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:firebase_core/firebase_core.dart';
@@ -124,7 +125,7 @@ void main() async {
       : isActivate
           ? Routes.PAGEPREVIEW
           : Routes.HOME;
-
+  await requestTrackingPermission();
   AppPages.initializeRouter(initialRoute);
   runApp(
     LocalizationService.rootWidget(
@@ -138,7 +139,12 @@ void main() async {
     ),
   );
 }
-
+Future<void> requestTrackingPermission() async {
+  final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+  if (status == TrackingStatus.notDetermined) {
+    await AppTrackingTransparency.requestTrackingAuthorization();
+  }
+}
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
