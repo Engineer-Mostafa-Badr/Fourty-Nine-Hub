@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,11 +11,11 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/talent_video.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import '../custom_video_player.dart';
 import 'talent_video_player.dart';
 
 class GetAllTalents extends StatelessWidget {
@@ -95,9 +94,16 @@ class GetAllTalents extends StatelessWidget {
                               }
                             : null,
                         child: isVideo
-                            ? TalentVideo(
-                                path: mediaUrl,
+                            ? SizedBox(
+                                height: 200,
+                                child: CustomVideoPlayer(
+                                  videoUrl: mediaUrl,
+                                  title: 'test',
+                                ),
                               )
+                            // TalentVideo(
+                            //         path: mediaUrl,
+                            //       )
                             : Container(
                                 height: 300.h,
                                 width: double.infinity,
