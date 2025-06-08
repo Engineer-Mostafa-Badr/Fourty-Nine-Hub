@@ -39,9 +39,9 @@ class _SocialPageState extends State<SocialPage> {
   ];
 
   final List<String> _images = [
-    Assets.facebookIcon,
-    Assets.instagramIcon,
-    Assets.twitterIcon,
+    Assets.facebookAppBarIcon,
+    Assets.instagramAppBarIcon,
+    Assets.twitterAppBarIcon,
   ];
 
   @override

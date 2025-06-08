@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -24,7 +23,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/searsh_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -115,6 +113,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           const MealBanner(),
           _buildRegisterRestaurantPrompt(state),
           _buildSearchAndExpiredRequests(),
+          const Sizer(),
           if (_showSearch)
             BlocProvider(
               create: (context) => SearchRestaurantsCubit(
@@ -454,10 +453,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 padding: EdgeInsets.all(6),
                 width:210.w,
                 decoration: BoxDecoration(
-                    border: Border.all(
-                        color: _showFavAds
-                            ? AppColors.getRedColor(context)
-                            : AppColors.getButtonPrimaryColor(context)),
+                    // border: Border.all(
+                    //     color: _showFavAds
+                    //         ? AppColors.getRedColor(context)
+                    //         : AppColors.getButtonPrimaryColor(context)),
                     borderRadius: BorderRadius.circular(15),
                     color: _showFavAds
                         ? AppColors.getButtonPrimaryColor(context)
@@ -480,6 +479,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   children: [
                     GestureDetector(
                       onTap: () {
+                        print(context.read<RestaurantsCubit>().state.logsEntity?.length);
                         if (context.read<UserCubit>().isLoggedIn) {
                           setState(() {
                             _showLog = !_showLog;
@@ -499,18 +499,18 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         padding: const EdgeInsets.all(6),
                         width:210.w,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _showLog
-                                ? AppColors.getRedColor(context)
-                                : AppColors.getButtonPrimaryColor(context),
-                          ),
+                          // border: Border.all(
+                          //   color: _showLog
+                          //       ? AppColors.getRedColor(context)
+                          //       : AppColors.getButtonPrimaryColor(context),
+                          // ),
                           borderRadius: BorderRadius.circular(15),
                           color: _showLog
                               ?AppColors.getButtonPrimaryColor(context)
                               : AppColors.getFillColor(context),
                         ),
                         child: Label(
-                          text: context.isArabic?'سجل طلبات':'requestLog',
+                          text: context.isArabic?'سجل طلبات':'Request Log',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
@@ -524,11 +524,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     ),
                     Visibility(
                       visible:context.read<RestaurantsCubit>().state.reqCount?.count!=0,
-                      child: PositionedDirectional(
-                        top: -10,
-                        start: -6,
+                      child: Positioned(
+                        top: -8,
+                        right: -6,
                         child: Container(
-                          padding: const EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             color: AppColors.getRedColor(context),
                             shape: BoxShape.circle,
@@ -539,10 +539,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                           ),
                           child: Center(
                             child: Text(
-                              '${context.isArabic?numAr(context.read<RestaurantsCubit>().state.reqCount?.count??0):context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
+                              '${context.read<RestaurantsCubit>().state.reqCount?.count??0}'.toArabicNumbers(context),
                               style: TextStyle(
                                 color:AppColors.getReversedTextColor(context),
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
@@ -578,10 +578,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   width:210.w,
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                      border: Border.all(
-                          color: _showExpire
-                              ? AppColors.getRedColor(context)
-                              :AppColors.getButtonPrimaryColor(context)),
+                      // border: Border.all(
+                      //     color: _showExpire
+                      //         ? AppColors.getRedColor(context)
+                      //         :AppColors.getButtonPrimaryColor(context)),
                       borderRadius: BorderRadius.circular(15),
                       color: _showExpire
                           ? AppColors.getButtonPrimaryColor(context)

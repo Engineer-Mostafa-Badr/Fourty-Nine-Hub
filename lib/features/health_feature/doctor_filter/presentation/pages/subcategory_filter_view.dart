@@ -38,16 +38,16 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Label(text: LocaleKeys.governorate.localize ,style: Styles.headerText(fontWeight: FontWeight.w600),),
+            Label(text: LocaleKeys.speciality.localize ,style: Styles.headerText(fontWeight: FontWeight.w600),),
             Sizer(),
             DefaultTextFormField(
               hintColor: Theme.of(context).scaffoldBackgroundColor,
               currentFocusNode: doctorSubcategoryFilter.searchFocusNode,
               currentController: doctorSubcategoryFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.search,
-                color: AppColors.QUANTITY_COLOR,
+                color: AppColors.getTextColor(context),
               ),
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),

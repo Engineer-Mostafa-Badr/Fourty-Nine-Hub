@@ -1609,5 +1609,7 @@ abstract class  LocaleKeys {
   static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
   static const noInternetConnection = 'noInternetConnection';
   static const createAds = 'createAds';
+  static const DidntReceiveOTP = 'DidntReceiveOTP';
+  static const resendOTP = 'resendOTP';
 
 }

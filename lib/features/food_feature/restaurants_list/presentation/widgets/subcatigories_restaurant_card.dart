@@ -7,11 +7,10 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
@@ -20,14 +19,12 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
-import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class SubCategoriesRestaurantCard extends StatelessWidget {
@@ -129,7 +126,7 @@ class PropertyCard extends StatelessWidget {
                       color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                     ),
                     Label(
-                      text: formatViews(item.totalViews!.toInt()),
+                      text: formatViews(item.totalViews!.toInt()).toArabicNumbers(context),
                       style:  Styles.mediumText(
                         // fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -500,11 +497,11 @@ class DetailsSection extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Icon(Icons.location_on_rounded),
+                      const Icon(Icons.location_on_rounded,size: 18,),
                       SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr ?? '' : item.city?.cityNameEn ?? ''}',
+                          '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr ?? '' : item.city?.cityNameEn ?? ''}'.toArabicNumbers(context),
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
@@ -607,6 +604,7 @@ class CallMessageReportButtons extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Align(
+                            alignment: Alignment.topLeft,
                             child: GestureDetector(
                               onTap: () => Navigator.of(context).pop(),
                               child: CircleAvatar(
@@ -617,8 +615,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                   color: AppColors.getTextColor(context),
                                 ),
                               ),
-                            ),
-                        alignment: Alignment.topLeft,),
+                            ),),
                         const Sizer(),
                         AppButton(
                           backColor: AppColors.getButtonPrimaryColor(context),
@@ -899,7 +896,7 @@ class CallMessageReportButtons extends StatelessWidget {
                       ),
                       decoration: InputDecoration(
                         hintStyle: Styles.mediumText(
-                          color: AppColors.getRedColor(context)
+                          color: AppColors.getTextColor(context)
                         ),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.all(12.0),

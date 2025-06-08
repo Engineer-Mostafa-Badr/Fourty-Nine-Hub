@@ -1,11 +1,10 @@
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../doctor_details/domain/entities/doctor_entity.dart';
 
 class BookedAppointmentEntity {
   final String id;
   final bool bookedPremium;
-  final DoctorEntity doctor;
+  final DoctorEntity? doctor;
   final String userId;
   final BookingTypes bookingType;
   final String day;
@@ -17,7 +16,7 @@ class BookedAppointmentEntity {
   BookedAppointmentEntity(
       {required this.id,
       required this.bookedPremium,
-      required this.doctor,
+        this.doctor,
       required this.userId,
       required this.bookingType,
       required this.day,

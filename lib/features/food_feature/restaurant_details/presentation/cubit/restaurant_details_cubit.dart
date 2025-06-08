@@ -373,7 +373,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         // final order = Order.fromJson(orderData);
         log("${data['message']}    const url = 'https://49backend.com/api/v1/food/make-order';");
         Navigator.pop(context);
-        showSuccessMessage(context, data['message']);
+        showSuccessMessage(context,LocaleKeys.orderCreatedSuccessfully.localize);
         // WidgetsBinding.instance.addPostFrameCallback(
         //   (_) => ScaffoldMessenger.of(context).showSnackBar(
         //     SnackBar(

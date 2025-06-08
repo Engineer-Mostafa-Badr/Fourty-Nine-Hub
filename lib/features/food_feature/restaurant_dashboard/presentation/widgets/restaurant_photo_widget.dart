@@ -29,6 +29,8 @@ class RestaurantPhotoPicker extends StatefulWidget {
 
 class _RestaurantPhotoPickerState
     extends State<RestaurantPhotoPicker> {
+
+  bool _showPic=false;
   @override
   Widget build(BuildContext context) {
     final createRestaurantCubit = context.read<RestaurantDashboardCubit>();
@@ -45,7 +47,7 @@ class _RestaurantPhotoPickerState
                     // runSpacing: 10,
                     // spacing: 10,
                     children: [
-                      if (state.files?.isNotEmpty ?? false) ...[
+                      if (((state.files?.isNotEmpty??false) &&_showPic)) ...[
                         ...state.files!.map(
                               (e) => Stack(
                             children: [
@@ -80,22 +82,27 @@ class _RestaurantPhotoPickerState
                             ],
                           ),
                         ),
+                        const Sizer(),
                       ],
-                      if (state.files?.isNotEmpty ?? false)
-                        AppButton(
-                          backColor:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
+                      if ((state.files?.isNotEmpty??false) &&_showPic)
+                        ...[AppButton(
+                          backColor:AppColors.getRedColor(context),
                           color:AppColors.whiteColor,
                           onPressed: () {
                             _updateRestaurantImage(context);
                           },
                           label: LocaleKeys.update.localize,
                         ),
+                        const Sizer(),],
                       InkWell(
                         onTap: () async {
                           await createRestaurantCubit.uploadProfileImage(
                               subcategoryId: widget.subcategoryId,
                               context: context
                           );
+                          setState(() {
+                            _showPic=true;
+                          });
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,11 +131,11 @@ class _RestaurantPhotoPickerState
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       border: Border.all(
-                                          color: AppColors.PRIMARY_COLOR,
+                                          color: AppColors.getButtonPrimaryWhiteColor(context),
                                           width: 1
                                       )
                                   ),
-                                  child: SvgPicture.asset(Assets.arrowUp),
+                                  child: SvgPicture.asset(Assets.arrowUp,color: AppColors.getButtonPrimaryWhiteColor(context),),
                                 ),
                               ],
                             ),
@@ -178,8 +185,13 @@ class _RestaurantPhotoPickerState
         restaurantMedia: imageIds, // Send only the image IDs
       ),
     ).then((_) {
+     setState(() {
+       _showPic=false;
+     });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Updated")),
+        SnackBar(
+            backgroundColor: AppColors.getFindFillColor(context),
+            content: Text(context.isArabic?'تم التحديث':"Updated",style: TextStyle(color: AppColors.getTextColor(context)),)),
       );
     });
   }

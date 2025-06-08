@@ -4,9 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_item.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/cart_model.dart';
@@ -14,8 +13,8 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/presentat
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart'; // Ensure correct path
@@ -43,74 +42,75 @@ class _FoodCartViewState extends State<FoodCartView> {
     context.read<RestaurantDetailsCubit>().fetchCart(first: true);
   }
 
-  Future<void> _updateQuantity({
-    required String restaurantId,
-    required String mealId,
-    required int qtyChange,
-    required int currentQty,
-  }) async {
-    setState(() {});
-    final newQty = currentQty + qtyChange;
-    if (newQty < 0) return;
-
-    await context.read<RestaurantDetailsCubit>().addToCart(
-          context,
-          restaurantId: restaurantId,
-          foodId: mealId,
-          quantity: 1,
-        );
-    await context.read<RestaurantDetailsCubit>().fetchCart();
-  }
-
-  Future<void> _decrement({
-    required String restaurantId,
-    required String mealId,
-    required int qtyChange,
-    required int currentQty,
-  }) async {
-    setState(() {});
-    final newQty = currentQty - qtyChange;
-    if (newQty < 0) return;
-
-    await context.read<RestaurantDetailsCubit>().decrement(
-          context,
-          restaurantId: restaurantId,
-          foodId: mealId,
-          quantity: newQty,
-        );
-    await context.read<RestaurantDetailsCubit>().fetchCart();
-  }
-
-  Future<void> _deleteFromCart({
-    required String restaurantId,
-    required String mealId,
-  }) async {
-    setState(() {});
-
-    await context.read<RestaurantDetailsCubit>().deleteFromCart(
-          context,
-          restaurantId: restaurantId,
-          foodId: mealId,
-        );
-    if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
-        1) {
-      context.pop();
-    } else {
-      await context.read<RestaurantDetailsCubit>().fetchCart();
-    }
-  }
+  // Future<void> _updateQuantity({
+  //   required String restaurantId,
+  //   required String mealId,
+  //   required int qtyChange,
+  //   required int currentQty,
+  // }) async {
+  //   setState(() {});
+  //   final newQty = currentQty + qtyChange;
+  //   if (newQty < 0) return;
+  //
+  //   await context.read<RestaurantDetailsCubit>().addToCart(
+  //         context,
+  //         restaurantId: restaurantId,
+  //         foodId: mealId,
+  //         quantity: 1,
+  //       );
+  //   await context.read<RestaurantDetailsCubit>().fetchCart();
+  // }
+  //
+  // Future<void> _decrement({
+  //   required String restaurantId,
+  //   required String mealId,
+  //   required int qtyChange,
+  //   required int currentQty,
+  // }) async {
+  //   setState(() {});
+  //   final newQty = currentQty - qtyChange;
+  //   if (newQty < 0) return;
+  //
+  //   await context.read<RestaurantDetailsCubit>().decrement(
+  //         context,
+  //         restaurantId: restaurantId,
+  //         foodId: mealId,
+  //         quantity: newQty,
+  //       );
+  //   await context.read<RestaurantDetailsCubit>().fetchCart();
+  // }
+  //
+  // Future<void> _deleteFromCart({
+  //   required String restaurantId,
+  //   required String mealId,
+  // }) async {
+  //   setState(() {});
+  //
+  //   await context.read<RestaurantDetailsCubit>().deleteFromCart(
+  //         context,
+  //         restaurantId: restaurantId,
+  //         foodId: mealId,
+  //       );
+  //   if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
+  //       1) {
+  //     context.pop();
+  //   } else {
+  //     await context.read<RestaurantDetailsCubit>().fetchCart();
+  //   }
+  // }
 
   Future<void> _removeItem({
     required String restaurantId,
     required String foodId,
   }) async {
     if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
-        1) {
+        1&&context.read<RestaurantDetailsCubit>().state.cart?.allItems.first.restaurantItems.length==1) {
       await context.read<RestaurantDetailsCubit>().deleteFromCart(
             context,
             restaurantId: restaurantId,
             foodId: foodId,
           );
+      await context.read<RestaurantDetailsCubit>().fetchCart();
       context.pop();
     } else {
       await context.read<RestaurantDetailsCubit>().deleteFromCart(
@@ -160,7 +160,7 @@ class _FoodCartViewState extends State<FoodCartView> {
             // return Text("hi wwwwwwwwwwwwwwwwwwwwwwwwwwww");
             return _buildCartContent(state.cart!);
           } else {
-            return CustomEmptyWidget(label: LocaleKeys.your_cart_empty.tr(),);
+            return CustomEmptyWidget(label:context.isArabic?'السلة فارغة': LocaleKeys.your_cart_empty.tr(),);
           }
         },
       ),
@@ -171,7 +171,7 @@ class _FoodCartViewState extends State<FoodCartView> {
     return PreferredSize(
       preferredSize: const Size.fromHeight(30),
       child: BackAppBar(
-        label: LocaleKeys.your_cart.tr(),
+        label: context.isArabic?'السلة':'Cart',
       ),
     );
   }
@@ -244,7 +244,7 @@ class _FoodCartViewState extends State<FoodCartView> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              '${LocaleKeys.restaurant_total.tr()} ${context.isArabic?NumberFormat.decimalPattern('ar').format(cartItem.total):(cartItem.total).toStringAsFixed(0)} ${currency}',
+              '${LocaleKeys.restaurant_total.tr()} ${context.isArabic?(cartItem.total).toLocalizedArabic(context):(cartItem.total).toStringAsFixed(0)} ${currency}',
               style: Styles.headerText(),
             ),
           ),
@@ -281,7 +281,7 @@ class _FoodCartViewState extends State<FoodCartView> {
               backgroundColor: AppColors.getRedColor(context),
               foregroundColor: Colors.white,
               icon: Icons.delete,
-              label:context.isArabic?'تأكيد المسح؟': LocaleKeys.delete.tr(),
+              label:context.isArabic?'تأكيد المسح؟': 'Confirm Delete?',
             ),
           ],
         ),
@@ -326,7 +326,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         Row(
           children: [
             Text(
-              context.isArabic?NumberFormat.decimalPattern('ar').format(subTotal ?? 0.0):(subTotal ?? 0.0).toStringAsFixed(0),
+              context.isArabic?(subTotal ?? 0.0).toLocalizedArabic(context):(subTotal ?? 0.0).toStringAsFixed(0),
               style: Styles.headerText(),
             ),
             Text(
