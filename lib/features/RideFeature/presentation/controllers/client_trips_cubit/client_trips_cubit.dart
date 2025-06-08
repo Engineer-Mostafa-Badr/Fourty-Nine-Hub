@@ -6,6 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/create_loading_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_shipping_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_shipping_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/listen_to_offer_update_client_shipping_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_accepted_shipping_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_offer_shipping_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_past_shipping_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_shipping_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/refuse_shipping_trip_use_case.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -48,14 +58,23 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
   final GetCitiesUseCase _getCitiesUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final CreateNonTrackTripUseCase createNonTrackTripUseCase;
+  final CreateLoadingTripUseCase createLoadingTripUseCase;
   final GetClientPendingUntrackedTripsUseCase getClientPendingUntrackedTripsUseCase;
+  final GetClientPendingShippingTripsUseCase getClientPendingShippingTripsUseCase;
   final CancelNonTrackTripUseCase cancelNonTrackTripUseCase;
+  final CancelShippingTripUseCase cancelShippingTripUseCase;
   final GetClientAcceptedUntrackedTripsUseCase getClientAcceptedUntrackedTripsUseCase;
+  final GetClientAcceptedShippingTripsUseCase getClientAcceptedShippingTripsUseCase;
   final GetClientOfferUntrackedTripsUseCase getClientOfferUntrackedTripsUseCase;
+  final GetClientOfferShippingTripsUseCase getClientOfferShippingTripsUseCase;
   final AcceptNonTrackTripUseCase acceptNonTrackTripUseCase;
+  final AcceptShippingTripUseCase acceptShippingTripUseCase;
   final RefuseNonTrackTripUseCase refuseNonTrackTripUseCase;
+  final RefuseShippingTripUseCase refuseShippingTripUseCase;
   final GetClientPastUntrackedTripsUseCase getClientPastUntrackedTripsUseCase;
+  final GetClientPastShippingTripsUseCase getClientPastShippingTripsUseCase;
   final ListenToOfferUpdateUntrackedTripUseCase listenToOfferUpdateUntrackedTripUseCase;
+  final ListenToOfferUpdateShippingTripUseCase listenToOfferUpdateShippingTripUseCase;
 
   ClientTripsCubit(
     this.makeNonTrackingRequestTripUsecase,
@@ -64,10 +83,37 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     this._getCitiesUseCase,
     this._getGovernoratesUseCase,
     this.makeLoadingRequestTripUsecase,
-    this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase, this.listenToOfferUpdateUntrackedTripUseCase,
+    this.getClientAcceptedShippingTripsUseCase,
+    this.getClientOfferShippingTripsUseCase,
+    this.createLoadingTripUseCase,
+    this.cancelShippingTripUseCase,
+    this.listenToOfferUpdateShippingTripUseCase,
+    this.refuseShippingTripUseCase,
+    this.acceptShippingTripUseCase,
+    this.getClientPastShippingTripsUseCase,
+    this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase,this.getClientPendingShippingTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase, this.listenToOfferUpdateUntrackedTripUseCase,
   ) : super(const ClientTripsState());
 
 
+  void listenToUpdateOfferTripShipping() {
+    CliLogger.info('Listen To New Offer Trip');
+    listenToOfferUpdateShippingTripUseCase((trip) {
+      CliLogger.info('Listen To New Offer Trip111');
+      clientOfferTripsData.removeWhere((e) => e.id == trip.id);
+      final updatedTrip = ClientOfferTripEntity(
+        id: trip.id,
+        status: trip.status,
+        price: trip.price,
+        passengers: trip.passengers,
+        newOfferPrice: trip.newOfferPrice,
+        driverDetails: trip.driverDetails,
+        tripDetails: trip.tripDetails,
+        isFromSocket: true,
+      );
+      clientOfferTripsData.insert(0, updatedTrip);
+      emit(state.copyWith(status: ClientTripsStates.success));
+    });
+  }
   void listenToUpdateOfferTripNonSocket() {
     CliLogger.info('Listen To New Trip');
 
@@ -202,15 +248,58 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     clientPastTripsData.clear();
     currentPageClientPastTrips = 1;
     hasMoreClientPastTrips = true;
+    isLoadingMoreClientPastTrips = false;
     await getClientPastTrips();
+    emit(state.copyWith(status: ClientTripsStates.success));
+  }
+  void loadInitialClientPastShippingTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    clientPastTripsData.clear();
+    currentPageClientPastTrips = 1;
+    hasMoreClientPastTrips = true;
+    isLoadingMoreClientPastTrips = false;
+    await getClientPastShippingTrips();
     emit(state.copyWith(status: ClientTripsStates.success));
   }
 
   Future<void> getClientPastTrips() async {
+    print("hasMoreClientPastTrips $hasMoreClientPastTrips");
+    print("isLoadingMoreClientPastTrips $isLoadingMoreClientPastTrips");
     if (!hasMoreClientPastTrips || isLoadingMoreClientPastTrips) return;
     isLoadingMoreClientPastTrips = true;
     emit(state.copyWith(status: ClientTripsStates.loading));
     final response = await getClientPastUntrackedTripsUseCase(
+        ClientPendingTripParams(page: currentPageClientPastTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMoreClientPastTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: ClientTripsStates.error));
+      },
+          (data) {
+        clientPastTripsData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreClientPastTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: ClientTripsStates.loading));
+
+        } else {
+          currentPageClientPastTrips++;
+        }
+
+        isLoadingMoreClientPastTrips = false;
+        emit(state.copyWith(clientPastTripData: data,));
+      },
+    );
+  }
+
+  Future<void> getClientPastShippingTrips() async {
+    if (!hasMoreClientPastTrips || isLoadingMoreClientPastTrips) return;
+    isLoadingMoreClientPastTrips = true;
+    emit(state.copyWith(status: ClientTripsStates.loading));
+    final response = await getClientPastShippingTripsUseCase(
         ClientPendingTripParams(page: currentPageClientPastTrips, limit: 5));
     response.fold(
           (failure) {
@@ -259,6 +348,28 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     );
   }
 
+  Future<void> cancelClientShippingTrip(String tripId) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+
+    final response = await cancelShippingTripUseCase(
+      CancelNonTrackTripParams(tripsIds: [tripId]),
+    );
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (cancelTrip) {
+        emit(state.copyWith(
+          createNonTrackTripEntity: cancelTrip,
+          status: ClientTripsStates.success,
+          showSnackbar: true,
+        ));
+        loadInitialClientPendingTrips();
+      },
+    );
+  }
+
 
   Future<void> acceptClientTrip(String tripId) async {
     emit(state.copyWith(status: ClientTripsStates.loading));
@@ -284,9 +395,10 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     );
   }
 
-  Future<void> refuseClientTrip(String tripId) async {
+  Future<void> acceptClientShippingTrip(String tripId) async {
     emit(state.copyWith(status: ClientTripsStates.loading));
-    final response = await refuseNonTrackTripUseCase(
+
+    final response = await acceptShippingTripUseCase(
       AcceptNonTrackTripParams(tripsId: tripId),
     );
 
@@ -295,6 +407,29 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
       },
           (cancelTrip) {
+            clientOfferTripsData.removeWhere((e)=>e.id==tripId);
+        emit(state.copyWith(
+          createNonTrackTripEntity: cancelTrip,
+          status: ClientTripsStates.success,
+          showSnackbar: true,
+        ));
+      },
+    );
+  }
+
+  Future<bool> refuseClientTrip(String tripId) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+    final response = await refuseNonTrackTripUseCase(
+      AcceptNonTrackTripParams(tripsId: tripId),
+    );
+    bool result = false;
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+        result= false;
+      },
+          (cancelTrip) {
+            result= true;
         emit(state.copyWith(
           createNonTrackTripEntity: cancelTrip,
           status: ClientTripsStates.success,
@@ -302,6 +437,30 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         ));
         loadInitialClientOfferTrips();
         loadInitialClientPendingTrips();
+      },
+    );
+    return result;
+  }
+  Future<void> refuseClientShippingTrip(String tripId,BuildContext context) async {
+    showLoadingDialog(context);
+    final response = await refuseShippingTripUseCase(
+      AcceptNonTrackTripParams(tripsId: tripId),
+    );
+    clientOfferTripsData.removeWhere((e)=>e.id==tripId);
+    emit(state.copyWith(status: ClientTripsStates.success));
+    response.fold(
+          (failure) {
+            context.pop();
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (cancelTrip) {
+            context.pop();
+            clientOfferTripsData.removeWhere((e)=>e.id==tripId);
+        emit(state.copyWith(
+          createNonTrackTripEntity: cancelTrip,
+          status: ClientTripsStates.success,
+          showSnackbar: true,
+        ));
       },
     );
   }
@@ -320,11 +479,50 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     emit(state.copyWith(status: ClientTripsStates.success));
   }
 
+  void loadInitialClientOfferShippingTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    clientOfferTripsData.clear();
+    currentPageClientOfferTrips = 1;
+    hasMoreClientOfferTrips = true;
+    await getClientOfferShippingTrips();
+    emit(state.copyWith(status: ClientTripsStates.success));
+  }
+
   Future<void> getClientOfferTrips() async {
     if (!hasMoreClientOfferTrips || isLoadingMoreClientOfferTrips) return;
     isLoadingMoreClientOfferTrips = true;
     emit(state.copyWith(status: ClientTripsStates.loading));
     final response = await getClientOfferUntrackedTripsUseCase(
+        ClientPendingTripParams(page: currentPageClientOfferTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMoreClientOfferTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: ClientTripsStates.error));
+      },
+          (data) {
+        clientOfferTripsData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreClientOfferTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: ClientTripsStates.loading));
+
+        } else {
+          currentPageClientOfferTrips++;
+        }
+
+        isLoadingMoreClientOfferTrips = false;
+        emit(state.copyWith(clientOfferTripData: data,));
+      },
+    );
+  }
+  Future<void> getClientOfferShippingTrips() async {
+    if (!hasMoreClientOfferTrips || isLoadingMoreClientOfferTrips) return;
+    isLoadingMoreClientOfferTrips = true;
+    emit(state.copyWith(status: ClientTripsStates.loading));
+    final response = await getClientOfferShippingTripsUseCase(
         ClientPendingTripParams(page: currentPageClientOfferTrips, limit: 5));
     response.fold(
           (failure) {
@@ -365,12 +563,50 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     await getClientPendingTrips();
     emit(state.copyWith(status: ClientTripsStates.success));
   }
+  void loadInitialClientPendingShippingTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    clientPendingTripsData.clear();
+    currentPageClientPendingTrips = 1;
+    hasMoreClientPendingTrips = true;
+    await getClientPendingShippingTrips();
+    emit(state.copyWith(status: ClientTripsStates.success));
+  }
 
   Future<void> getClientPendingTrips() async {
     if (!hasMoreClientPendingTrips || isLoadingMoreClientPendingTrips) return;
     isLoadingMoreClientPendingTrips = true;
     emit(state.copyWith(status: ClientTripsStates.loading));
     final response = await getClientPendingUntrackedTripsUseCase(
+         ClientPendingTripParams(page: currentPageClientPendingTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMoreClientPendingTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: ClientTripsStates.error));
+      },
+          (data) {
+            clientPendingTripsData.addAll(data);
+        if ((data.length) < 5) {
+          hasMoreClientPendingTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: ClientTripsStates.loading));
+
+        } else {
+          currentPageClientPendingTrips++;
+        }
+
+        isLoadingMoreClientPendingTrips = false;
+        emit(state.copyWith(clientPendingTripData: data,));
+      },
+    );
+  }
+  Future<void> getClientPendingShippingTrips() async {
+    if (!hasMoreClientPendingTrips || isLoadingMoreClientPendingTrips) return;
+    isLoadingMoreClientPendingTrips = true;
+    emit(state.copyWith(status: ClientTripsStates.loading));
+    final response = await getClientPendingShippingTripsUseCase(
          ClientPendingTripParams(page: currentPageClientPendingTrips, limit: 5));
     response.fold(
           (failure) {
@@ -411,12 +647,50 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     await getClientAcceptedTrips();
     emit(state.copyWith(status: ClientTripsStates.success));
   }
+  void loadInitialClientAcceptedShippingTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    clientAcceptedTripsData.clear();
+    currentPageClientAcceptedTrips = 1;
+    hasMoreClientAcceptedTrips = true;
+    await getClientAcceptedShippingTrips();
+    emit(state.copyWith(status: ClientTripsStates.success));
+  }
 
   Future<void> getClientAcceptedTrips() async {
     if (!hasMoreClientAcceptedTrips || isLoadingMoreClientAcceptedTrips) return;
     isLoadingMoreClientAcceptedTrips = true;
     emit(state.copyWith(status: ClientTripsStates.loading));
     final response = await getClientAcceptedUntrackedTripsUseCase(
+        ClientPendingTripParams(page: currentPageClientAcceptedTrips, limit: 5));
+    response.fold(
+          (failure) {
+        isLoadingMoreClientAcceptedTrips = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isLoadingMoreLogs: false,
+            status: ClientTripsStates.error));
+      },
+          (data) {
+        clientAcceptedTripsData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreClientAcceptedTrips = false;
+          // emit(state.copyWith(isLoadingMore: false));
+          emit(state.copyWith(status: ClientTripsStates.loading));
+
+        } else {
+          currentPageClientAcceptedTrips++;
+        }
+
+        isLoadingMoreClientAcceptedTrips = false;
+        emit(state.copyWith(clientAcceptedTripData: data,));
+      },
+    );
+  }
+  Future<void> getClientAcceptedShippingTrips() async {
+    if (!hasMoreClientAcceptedTrips || isLoadingMoreClientAcceptedTrips) return;
+    isLoadingMoreClientAcceptedTrips = true;
+    emit(state.copyWith(status: ClientTripsStates.loading));
+    final response = await getClientAcceptedShippingTripsUseCase(
         ClientPendingTripParams(page: currentPageClientAcceptedTrips, limit: 5));
     response.fold(
           (failure) {
@@ -464,7 +738,30 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         ));
 
         // ✅ Always navigate to the loading request screen
-        context.goNamed(Routes.rideOffer);
+        context.goNamed(Routes.rideOffer,extra: 'ride');
+      },
+    );
+  }
+
+  Future<void> createShippingTrip({
+    required CreateLoadingTripParams params,
+    required BuildContext context,
+  }) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+
+    final response = await createLoadingTripUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (trip) {
+        emit(state.copyWith(
+          status: ClientTripsStates.successCreateTrip,
+        ));
+
+        // ✅ Always navigate to the loading request screen
+        context.goNamed(Routes.rideOffer,extra: 'shipping');
       },
     );
   }

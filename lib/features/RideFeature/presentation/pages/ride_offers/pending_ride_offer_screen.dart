@@ -24,10 +24,10 @@ import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
 
 class PendingRideOfferScreen extends StatefulWidget {
-  // final bool isTruk;
+  final String type;
 
   const PendingRideOfferScreen({
-    super.key,
+    super.key, required this.type,
   });
 
   @override
@@ -40,6 +40,8 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
 
   @override
   void initState() {
+    // if(widget.type=='shipping')context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
+    // if(widget.type=='ride')context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
   }
@@ -47,7 +49,8 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientPendingTrips();
+      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientPendingTrips();
+      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientPendingShippingTrips();
     }
   }
 
@@ -70,6 +73,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("objectType ${widget.type}");
     return Scaffold(
       body: BlocListener<ClientTripsCubit, ClientTripsState>(
         listener: (context, state) {
@@ -114,8 +118,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                             text: LocaleKeys.errorHappen.localize,
                             style: const TextStyle(color: Colors.red)),
                       )
-                    : context.read<ClientTripsCubit>().clientPendingTripsData == null ||
-                            context.read<ClientTripsCubit>().clientPendingTripsData!.isEmpty
+                    :context.read<ClientTripsCubit>().clientPendingTripsData.isEmpty
                         ?  Center(
                             child: Label(
                                 text: LocaleKeys.youDontHavePendingOffer.localize,
@@ -131,6 +134,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                                 : ListView.separated(
                                     itemBuilder: (context, index) =>
                                         ClientPendingWidget(
+                                          modeType: widget.type,
                                           offers: state
                                               .clientPendingTripData?[index],
                                         ),
@@ -151,7 +155,7 @@ class ClientPendingWidget extends StatelessWidget {
   final String modeType;
   final ClientPendingTripEntity? offers;
 
-  const ClientPendingWidget({super.key, this.modeType = 'truk', this.offers});
+  const ClientPendingWidget({super.key,required this.modeType, this.offers});
 
   @override
   Widget build(BuildContext context) {
@@ -353,9 +357,15 @@ class ClientPendingWidget extends StatelessWidget {
                       color: AppColors.PRIMARY_COLOR_DARK,
                       label: LocaleKeys.cancel.tr(),
                       onPressed: () {
-                        context
-                            .read<ClientTripsCubit>()
-                            .cancelClientTrip(offers?.tripDetails?.id ?? "");
+                        if(modeType=='shipping'){
+                          context
+                              .read<ClientTripsCubit>()
+                              .cancelClientShippingTrip(offers?.tripDetails?.id ?? "");
+                        }else{
+                          context
+                              .read<ClientTripsCubit>()
+                              .cancelClientTrip(offers?.tripDetails?.id ?? "");
+                        }
                       },
                       backColor: AppColors.cD9D9D9),
                 ],

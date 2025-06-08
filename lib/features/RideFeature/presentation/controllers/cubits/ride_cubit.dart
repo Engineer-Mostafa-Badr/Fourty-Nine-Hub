@@ -448,7 +448,7 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.loading, currentLocation: currentLocation));
   }
 
-  void checkSelectedCategoryIsSocket(String selectedCategory) {
+  void checkSelectedCategoryIsSocket(String selectedCategory,String type) {
     if (socketCategories.containsValue(selectedCategory)) {
       selectedCategoryIsSocket = true;
     } else if (trukCategories.containsValue(selectedCategory)) {
@@ -459,7 +459,7 @@ class RideCubit extends Cubit<RideState> {
       selectedCategoryIsSocket = false;
     }
     log(selectedCategoryIsSocket.toString());
-    emit(state.copyWith(status: RideStates.success));
+    emit(state.copyWith(status: RideStates.success,selectedType:type));
   }
 
   Future<void> _fetchUserLocation() async {
@@ -2405,6 +2405,11 @@ class RideCubit extends Cubit<RideState> {
           idNumber: ridePersonalDocIdNumController.text,
           phone: ridePhoneNumberController.text,
           plateInfo: rideVehiclePlateNumberController.text,
+          vehicleBrand:  '',
+          vehicleColor:  '',
+          vehicleModel:  '',
+          vehicleYear: rideVehicleProductionYearController.text,
+
           // subcategoryId: "62c8baa08e28a58a3edf57ed",
           subcategoryId: (state.rideSubCategories ?? [])
               .firstWhere((e) => e.isEnabled == true)
@@ -2452,7 +2457,12 @@ class RideCubit extends Cubit<RideState> {
           categoryId: (state.shippingSubCategories ?? [])
               .firstWhere((e) => e.isEnabled == true)
               .subCategoryId,
-          carModel: rideCarModelController.text);
+        vehicleBrand:  '',
+        vehicleColor:  '',
+        vehicleModel:  '',
+        vehicleYear: rideVehicleProductionYearController.text,
+
+      );
       final Either<Failure, bool> result = await loadingRegisterUseCase(params);
 
       result.fold(

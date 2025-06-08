@@ -29,6 +29,7 @@ class CreateNonTrackTripParams {
   final num passengers;
   final bool isPremium;
   final String description;
+  final String desc;
 
 
   CreateNonTrackTripParams({
@@ -41,10 +42,12 @@ class CreateNonTrackTripParams {
     required this.passengers,
     required this.isPremium,
     required this.description,
+    required this.desc,
 
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    var json = {
     'subcategoryId': subcategoryId,
     'fromTitle': fromTitle,
     'toTitle': toTitle,
@@ -54,6 +57,10 @@ class CreateNonTrackTripParams {
     'passengers': passengers,
     'isPremium': isPremium,
     'description': description,
+    'desc': desc,
   };
+    json.removeWhere((key, value) => value == '');
+    return json;
+  }
 }
 

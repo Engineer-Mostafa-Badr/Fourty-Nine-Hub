@@ -1,14 +1,21 @@
 import 'package:fourtyninehub/features/RideFeature/data/repositories/ride_repository_imp.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/listen_to_offer_update_client_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_accepted_shipping_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_offer_shipping_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_past_shipping_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_shipping_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_cost_per_km_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_loading_info_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
@@ -19,11 +26,14 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_bran
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_car_colors_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_driver_information.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_models_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_non_tracking_models_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_shipping_models_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/listen_to_ride_offers_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/loading_register_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/refuse_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_not_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
@@ -172,6 +182,26 @@ class RideServiceLocatorUpdated {
         AddCarModelUseCase( serviceLocator()));
     serviceLocator.registerLazySingleton<AddCarBrandUseCase>(() =>
         AddCarBrandUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetRideNonTrackingModelsUseCase>(() =>
+        GetRideNonTrackingModelsUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetRideShippingModelsUseCase>(() =>
+        GetRideShippingModelsUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetClientPendingShippingTripsUseCase>(() =>
+        GetClientPendingShippingTripsUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<CancelShippingTripUseCase>(() =>
+        CancelShippingTripUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetClientAcceptedShippingTripsUseCase>(() =>
+        GetClientAcceptedShippingTripsUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetClientOfferShippingTripsUseCase>(() =>
+        GetClientOfferShippingTripsUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToOfferUpdateShippingTripUseCase>(() =>
+        ListenToOfferUpdateShippingTripUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<RefuseShippingTripUseCase>(() =>
+        RefuseShippingTripUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<AcceptShippingTripUseCase>(() =>
+        AcceptShippingTripUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetClientPastShippingTripsUseCase>(() =>
+        GetClientPastShippingTripsUseCase( serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
@@ -228,8 +258,19 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
     serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

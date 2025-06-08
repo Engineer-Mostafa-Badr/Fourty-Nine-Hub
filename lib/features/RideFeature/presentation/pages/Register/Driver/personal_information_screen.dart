@@ -116,7 +116,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   text: LocaleKeys.personalInformation.localize,
                                   style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 32),
                                 ),
-                                if (state.registerType == 'socket') ...[
+                                // if (state.registerType == 'socket') ...[
                                   const Sizer(),
                                   UploadFileWidget(
                                     title: LocaleKeys.personalPicture.localize,
@@ -124,8 +124,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       cubit.onUploadPersonalPicture(context);
                                     },
                                     imageUrl: state.personalPicture,
-                                  )
-                                ],
+                                  ),
+                                // ],
                                 const Sizer(),
                                 Label(
                                   text: LocaleKeys.firstName.localize,
@@ -241,7 +241,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                                   const Sizer()
                                 ],
-                                if (state.registerType == 'socket') ...[
                                   Label(
                                     text: LocaleKeys.vehicleColor.localize,
                                     style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
@@ -377,27 +376,12 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       if (state.brands?[i].id == 'other') {
                                         return;
                                       }
-                                      cubit.onSelectBrand(state.brands?[i].id ?? '', context);
+                                      cubit.onSelectBrand(state.brands?[i].id ?? '', context, type: widget.params.isSocket==true?'socket':widget.params.isShipping==true?'loading':'nonSocket');
                                     },
                                     length: state.brands?.length ?? 0,
                                     children: List.generate(state.brands?.length ?? 0,
                                         (index) => Label(text: context.isArabic ? (state.brands?[index].brandNameAr ?? '') : state.brands?[index].brandNameEn ?? '')),
                                   ),
-                                  // RegisterExpansionTile(
-                                  //   initialTitle: Label(
-                                  //       text: (state.selectedBrand != null || (state.selectedBrand?.isNotEmpty ?? false))
-                                  //           ? state.selectedBrand ?? (context.isArabic?'ماركة السيارة':'Vehicle Brand')
-                                  //           : context.isArabic?'ماركة السيارة':'Car Brand'),
-                                  //   title: Label(
-                                  //       text: (state.selectedBrand != null || (state.selectedBrand?.isNotEmpty ?? false))
-                                  //           ? state.selectedBrand ?? (context.isArabic?'ماركة السيارة':'Car Brand')
-                                  //           : context.isArabic?'ماركة السيارة':'Car Brand'),
-                                  //   onChange: (selectedItem) {
-                                  //     cubit.onSelectBrand((selectedItem as Label).text, context);
-                                  //   },
-                                  //   length: state.brands?.length ?? 0,
-                                  //   children: List.generate(state.brands?.length ?? 0, (index) => Label(text: context.isArabic? (state.brands?[index].brandNameAr ?? '') : state.brands?[index].brandNameEn ?? '')),
-                                  // ),
                                   const Sizer(),
                                   if (state.isLoadingModels) const Center(child: CircularProgressIndicator()) else Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -517,27 +501,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     },
                                   ),
                                   const Sizer(),
-                                ],
-                                if (state.registerType == 'noSocket') ...[
-                                  Label(
-                                    text: LocaleKeys.carModel.localize,
-                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
-                                  ),
-                                  DefaultTextFormField(
-                                    currentController: cubit.rideCarModelController,
-                                    hint: '',
-                                    // label: LocaleKeys.carModel.tr(),
-                                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
-                                    borderColor: Colors.transparent,
-                                    validator: (v) {
-                                      if (v == null || v.isEmpty) {
-                                        return LocaleKeys.required.localize;
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const Sizer()
-                                ],
                                 Label(
                                   text: LocaleKeys.plateInformation.localize,
                                   style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
@@ -545,7 +508,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 DefaultTextFormField(
                                   currentController: cubit.rideVehiclePlateNumberController,
                                   hint: '',
-                                  // label: LocaleKeys.plateInformation.tr(),
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
                                   validator: (v) {

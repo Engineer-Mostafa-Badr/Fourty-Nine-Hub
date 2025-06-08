@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:go_router/go_router.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -24,9 +25,10 @@ class PastTripsWidget extends StatefulWidget {
 class _PastTripsWidgetState extends State<PastTripsWidget> {
   @override
   initState() {
+  widget.tripEntity!.modeType =  widget.modeType;
     super.initState();
-    widget.tripEntity!.modeType =  widget.modeType;
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

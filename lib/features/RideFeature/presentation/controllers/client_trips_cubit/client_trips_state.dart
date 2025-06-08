@@ -52,6 +52,7 @@ class ClientTripsState {
   final List<ClientAcceptedTripEntity>? clientAcceptedTripData;
   final List<ClientOfferTripEntity> clientOfferTripData;
   final List<ClientPastTripEntity>? clientPastTripData;
+  final CreateLoadingTripEntity? createLoadingTripEntity;
   final String? message;
   final bool showSnackbar;
   const ClientTripsState({
@@ -61,6 +62,7 @@ class ClientTripsState {
     this.cities,
     this.governorates,
     this.createNonTrackTripEntity,
+    this.createLoadingTripEntity,
     this.clientPendingTripData,
     this.message,
     this.showSnackbar = false,
@@ -76,6 +78,7 @@ class ClientTripsState {
     List<CityEntity>? cities,
     List<GovernorateEntity>? governorates,
     CreateNonTrackTripEntity? createNonTrackTripEntity,
+    CreateLoadingTripEntity? createLoadingTripEntity,
     List<ClientPendingTripEntity>? clientPendingTripData,
     List<ClientAcceptedTripEntity>? clientAcceptedTripData,
     bool? showSnackbar,
@@ -95,6 +98,7 @@ class ClientTripsState {
       clientAcceptedTripData: clientAcceptedTripData ?? this.clientAcceptedTripData,
       clientOfferTripData: clientOfferTripData ?? this.clientOfferTripData,
       clientPastTripData: clientPastTripData ?? this.clientPastTripData,
+      createLoadingTripEntity: createLoadingTripEntity ?? this.createLoadingTripEntity,
     );
   }
 }

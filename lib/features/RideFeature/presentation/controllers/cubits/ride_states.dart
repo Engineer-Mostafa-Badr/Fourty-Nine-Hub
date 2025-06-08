@@ -101,6 +101,7 @@ class RideState {
   final bool? isShipping;
   final CostPerKmEntity? costPerKm;
   final List<TripEntity>? offers;
+  final String? selectedType;
 
   RideState({
     this.status = RideStates.initState,
@@ -162,6 +163,7 @@ class RideState {
     this.isUploadTechnicalExamination,
     this.isShipping,
     this.offers,
+    this.selectedType,
     required this.rideOffers,
   });
 
@@ -226,6 +228,7 @@ class RideState {
     bool? isUploadCriminalRecord,
     bool? isUploadTechnicalExamination,
     List<TripEntity>? offers,
+    String? selectedType,
     List<RideOfferEntity>? rideOffers,
   }) {
     return RideState(
@@ -289,6 +292,7 @@ class RideState {
       savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
       offers: offers ?? this.offers,
       rideOffers: rideOffers ?? this.rideOffers,
+      selectedType: selectedType ?? this.selectedType,
     );
   }
 }

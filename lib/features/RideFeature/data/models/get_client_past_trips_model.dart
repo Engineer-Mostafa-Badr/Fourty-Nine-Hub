@@ -48,7 +48,7 @@ class TripDetailsModel extends TripDetailsEntity {
           : null,
       category: json['category'] != null
           ? CategoryModel.fromJson(json['category'])
-          : null,
+          : json['subCategory'] != null?CategoryModel.fromJson(json['subCategory']):null,
       createdAt: json['createdAt'],
     );
   }
