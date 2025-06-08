@@ -397,17 +397,17 @@ class ClientPastWidget extends StatelessWidget {
                                 //     :
                                 ImageFromInternet(
                                     image:
-                                        offers?.tripDetails?.category?.picture??'',
+                                        offers?.subCategory?.pictureUrl??'',
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),
                                 Label(
                                     text: context.isArabic
                                         ? (offers
-                                                ?.tripDetails?.category?.nameAr ??
+                                                ?.subCategory?.nameAr ??
                                             '')
                                         : (offers
-                                                ?.tripDetails?.category?.nameEn ??
+                                                ?.subCategory?.nameEn ??
                                             ''),
                                     style: Styles.mediumText(fontSize: 25))
                               ],

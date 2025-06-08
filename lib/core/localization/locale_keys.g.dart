@@ -1613,5 +1613,7 @@ abstract class  LocaleKeys {
   static const ratingsCount = 'ratingsCount';
   static const averageRate = 'averageRate';
   static const time = 'time';
+  static const DidntReceiveOTP = 'DidntReceiveOTP';
+  static const resendOTP = 'resendOTP';
 
 }

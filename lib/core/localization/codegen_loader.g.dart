@@ -1636,7 +1636,9 @@ class CodegenLoader extends AssetLoader{
   "driverRateYou": "تقييم السائق لك",
   "ratingsCount": "عدد التقييمات",
   "averageRate": "متوسط التقييم",
-  "time": "الوقت"
+  "time": "الوقت",
+  "DidntReceiveOTP": "لم تستلم الكود؟",
+  "resendOTP": "اعادة ارسال الكود"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3275,7 +3277,9 @@ static const Map<String,dynamic> _en = {
   "driverRateYou": "Driver rate you",
   "ratingsCount": "Ratings Count",
   "averageRate": "Average Rate",
-  "time": "Time"
+  "time": "Time",
+  "DidntReceiveOTP": "Didn't receive OTP?",
+  "resendOTP": "Resend OTP"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

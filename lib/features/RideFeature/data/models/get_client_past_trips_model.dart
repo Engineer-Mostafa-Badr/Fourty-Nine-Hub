@@ -5,7 +5,7 @@ import '../../domain/entities/get_client_past_trips_entity.dart';
 class ClientPastTripModel extends ClientPastTripEntity {
   ClientPastTripModel({
     super.tripDetails,
-    super.yourDetails,
+    // super.yourDetails,
     super.subCategory,
     super.clientDetails,
     super.driverDetails,
@@ -16,9 +16,9 @@ class ClientPastTripModel extends ClientPastTripEntity {
       tripDetails: json['tripDetails'] != null
           ? TripDetailsModel.fromJson(json['tripDetails'])
           : null,
-      yourDetails: json['yourDetails'] != null
-          ? YourDetailsModel.fromJson(json['yourDetails'])
-          : null,
+      // yourDetails: json['yourDetails'] != null
+      //     ? YourDetailsModel.fromJson(json['yourDetails'])
+      //     : null,
       subCategory: json['subCategory'] != null
           ? SubCategoryModel.fromJson(json['subCategory'])
           : null,
@@ -65,9 +65,9 @@ class TripDetailsModel extends TripDetailsEntity {
       driverRateYou: json['driverRateYou'] != null
           ? RateModel.fromJson(json['driverRateYou'])
           : null,
-      category: json['category'] != null
-          ? CategoryModel.fromJson(json['category'])
-          : json['subCategory'] != null?CategoryModel.fromJson(json['subCategory']):null,
+      // category: json['category'] != null
+      //     ? CategoryModel.fromJson(json['category'])
+      //     : json['subCategory'] != null?CategoryModel.fromJson(json['subCategory']):null,
       createdAt: json['createdAt'],
     );
   }
