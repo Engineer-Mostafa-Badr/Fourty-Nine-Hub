@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_date_text_field_health.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -41,12 +43,12 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DatePickerField(
-              backgroundColor: const Color(0xFFD9D9D9),
+              backgroundColor: AppColors.getFindFillColor(context),
               isAuthentcation: isAuthentcation,
               borderWidth: borderWidth,
               borderColor:
-                  field.hasError ? Colors.red : const Color(0xFFD9D9D9),
-              icon: SvgPicture.asset(Assets.calendarIcon),
+                  field.hasError ? Colors.red :  AppColors.getFindFillColor(context),
+              icon: SvgPicture.asset(Assets.calendarIcon,color: context.isDarkMode?AppColors.getTextColor(context):null,),
               title: title ?? LocaleKeys.idExpiryDate.localize,
               // (context.isArabic ? 'تاريخ انتهاء الهوية' : 'ID Expiry Date'),
               initialDate: now,

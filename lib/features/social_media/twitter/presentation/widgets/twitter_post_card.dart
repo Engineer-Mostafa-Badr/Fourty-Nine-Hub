@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -179,7 +180,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           Expanded(
             child: _buildTwitterItem(
               icon: Icons.comment,
-              label: '${post.commentsCount}',
+              label: '${post.commentsCount}'.toArabicNumbers(context),
               onTap: () {
                 if (context.read<UserCubit>().isLoggedIn) {
                   return widget.showPostComments(widget.post.id);
@@ -194,7 +195,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           Expanded(
             child: _buildTwitterItem(
               icon: FontAwesomeIcons.retweet,
-              label: "${widget.post.sharesCount}",
+              label: "${widget.post.sharesCount}".toArabicNumbers(context),
               onTap: () {
                 if (context.read<UserCubit>().isLoggedIn) {
                   widget.onShare();
@@ -216,7 +217,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 icon: post.isReact == false
                     ? Icons.favorite_outline
                     : Icons.favorite,
-                label: "${post.loveCount}",
+                label: "${post.loveCount}".toArabicNumbers(context),
                 onTap: () {
                   if (context.read<UserCubit>().isLoggedIn) {
                     widget.onReact();
@@ -250,7 +251,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             color: iconColor ?? Colors.grey,
           ),
           const Sizer(),
-          Label(text: label, style: Styles.mediumText(color: Colors.grey)),
+          Label(text: label, style: Styles.mediumText(color: Colors.grey,fontSize: context.isArabic?32:28)),
         ],
       ),
     );
@@ -491,6 +492,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       children: [
         Expanded(
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               post.user?.image != '' && post.postShare == null
                   ? UserProfileImage(
@@ -521,26 +523,28 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
                             //     : "${post.user!.firstName} ${post.user!.lastName}",
                             style:
-                                Styles.mediumText(fontWeight: FontWeight.w500)),
+                                Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32)),
                         if (post.user?.isDocumented == true &&
                                 post.isShared == false ||
                             (post.user?.isDocumented == true &&
                                 post.isShared == true))
-                          Icon(
+                          ...[const Sizer(width: 8,),
+                            Icon(
                             Icons.verified,
                             color: Theme.of(context).primaryColor,
-                          ),
+                            size: 30.h,
+                          ),]
                       ],
                     ),
                     Label(
                         text:
-                            '@${(post.postShare == null ? post.user?.phoneNumber ?? '' : post.postShare?.user?.email ?? '')?.split('@')[0]}',
+                            '@${(post.postShare == null ? '' : post.postShare?.user?.email ?? '')?.split('@')[0]}',
                         maxLines: 1,
                         style: Styles.mediumText(color: Colors.grey)),
                   ],
                 ),
               ),
-              Label(text: date, maxLines: 1, style: Styles.mediumText()),
+              Label(text: date.toArabicNumbers(context), maxLines: 1, style: Styles.mediumText(fontSize: 32)),
 
               // Sizer(),
             ],

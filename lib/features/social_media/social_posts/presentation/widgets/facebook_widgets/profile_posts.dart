@@ -205,7 +205,7 @@ class ProfilePosts extends StatelessWidget {
                   id: "67ca35d096ca3293cc27deae",
                   firstName: "Mohamed",
                   lastName: "salama",
-                  createdAt:DateTime.now() ,
+                  createdAt:DateTime.parse("2024-12-21T13:41:21.979Z") ,
                   hasStory: false, email: '@dsda', isDocumented: false,
                 ),
                 likesCount: 0,
@@ -214,6 +214,7 @@ class ProfilePosts extends StatelessWidget {
                 sadCount: 0,
                 wowCount: 0,
                 angryCount: 0,
+                createdAt:DateTime.parse("2024-12-21T13:41:21.979Z") ,
                 images:[UIConst.socialImagePlaceHolder,UIConst.socialImagePlaceHolder] ,
                 content: 'Lorem ipsum dolor sit amet consectetur. Ac diam curabitur accumsan commodo a et sit neque nullam. Fermentum at viverra '
               )] ;

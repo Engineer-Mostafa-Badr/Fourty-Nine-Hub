@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/check_box_item.dart';
@@ -37,7 +38,7 @@ class _CreateDoctorOptionsCheckboxState
                 _clinic = value!;
                 context.read<CreateDoctorCubit>().toggleClinic(value);
               },
-              title: LocaleKeys.clinicVisit.tr(),
+              title:context.isArabic?'زيارة عيادة': LocaleKeys.clinicVisit.tr(),
             );
             // return Checkbox(
             //   value: _clinic,
@@ -63,7 +64,7 @@ class _CreateDoctorOptionsCheckboxState
                 _call = value!;
                 context.read<CreateDoctorCubit>().toggleCallCheck(value);
               },
-              title: LocaleKeys.call.tr(),
+              title: context.isArabic?"اتصال":LocaleKeys.call.tr(),
             );
             // return Checkbox(
             //   value: _call,
@@ -90,7 +91,7 @@ class _CreateDoctorOptionsCheckboxState
                 _homeVisit = value!;
                 context.read<CreateDoctorCubit>().toggleHomeVisit(value);
               },
-              title: LocaleKeys.homeVisit.tr(),
+              title: context.isArabic?'زيارة منزلة':LocaleKeys.homeVisit.tr(),
             );
             // return Checkbox(
             //   value: _homeVisit,

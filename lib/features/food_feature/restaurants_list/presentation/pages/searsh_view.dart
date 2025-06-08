@@ -92,7 +92,7 @@ class SearchRestaurantView extends StatelessWidget {
 
             /// data
             SizedBox(
-              height:MediaQuery.sizeOf(context).height * .8,
+              height:MediaQuery.sizeOf(context).height * .7,
               child: Builder(
                 builder: (context) {
                   if (state.status == SearchRestaurantStates.loading) {
@@ -228,10 +228,9 @@ class SearchRestaurantView extends StatelessWidget {
                   /// ------- search governorates
                   else if (state.status ==
                       SearchRestaurantStates.loadingGovernorates) {
-                    return ListView.builder(
+                    return ListView.separated(
                       shrinkWrap: true,
-
-                      itemCount: state.governorates?.length,
+                      itemCount: state.governorates?.length??0,
                       itemBuilder: (context, index) {
                         GovernorateEntity? governorate =
                         state.governorates?[index];
@@ -249,15 +248,15 @@ class SearchRestaurantView extends StatelessWidget {
                             ),
                           ),
                         );
-                      },
+                      }, separatorBuilder: (BuildContext context, int index)=>const Sizer(),
                     );
                   } else if (state.status ==
                       SearchRestaurantStates.loadingSearchGevnorates) {
                     return RefreshIndicator(
                       onRefresh: () async => searchCubit.refreshState(),
-                      child: ListView.builder(
+                      child: ListView.separated(
                         shrinkWrap: true,
-                        itemCount: state.searchGovernorates?.length,
+                        itemCount: state.searchGovernorates!.length,
                         itemBuilder: (context, index) {
                           GovernorateEntity? governorate =
                           state.searchGovernorates?[index];
@@ -274,7 +273,7 @@ class SearchRestaurantView extends StatelessWidget {
                               ),
                             ),
                           );
-                        },
+                        }, separatorBuilder: (BuildContext context, int index)=>const Sizer(),
                       ),
                     );
                   }
@@ -310,10 +309,10 @@ class SearchRestaurantView extends StatelessWidget {
                       SearchRestaurantStates.loadingSearchCities) {
                     return RefreshIndicator(
                       onRefresh: () async => searchCubit.refreshState(),
-                      child: ListView.builder(
+                      child: ListView.separated(
                         shrinkWrap: true,
 
-                        itemCount: state.searchCities?.length,
+                        itemCount: state.searchCities!.length,
                         itemBuilder: (context, index) {
                           CityEntity? city = state.searchCities?[index];
                           return GestureDetector(
@@ -328,7 +327,7 @@ class SearchRestaurantView extends StatelessWidget {
                               ),
                             ),
                           );
-                        },
+                        }, separatorBuilder: (BuildContext context, int index) =>const Sizer(),
                       ),
                     );
                   }

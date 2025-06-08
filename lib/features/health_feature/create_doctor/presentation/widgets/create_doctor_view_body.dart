@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
@@ -49,7 +50,7 @@ class CreateDoctorViewBody extends StatelessWidget {
               text: LocaleKeys.welcomeToDoctorRegistration.localize,
               style: Styles.headerText(
                 fontWeight: FontWeight.bold,
-                color: AppColors.cF33D49,
+                color: AppColors.getRedColor(context),
                 height: 1.60,
               ),
             ),
@@ -128,7 +129,7 @@ class CreateDoctorViewBody extends StatelessWidget {
             SizedBox(height: 20.h),
             AppInfoText(
                 text: context.isArabic
-                    ? 'سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا.'
+                    ? 'سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا.'.toArabicNumbers(context)
                     : 'You will get EGP 3,650 per year if you subscribe daily.'),
             SizedBox(height: 20.h),
             const CreateDoctorSubmitButton(),

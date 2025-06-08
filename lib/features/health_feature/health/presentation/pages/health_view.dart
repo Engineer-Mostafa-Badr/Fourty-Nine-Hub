@@ -21,7 +21,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/favourite_ads_view.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
