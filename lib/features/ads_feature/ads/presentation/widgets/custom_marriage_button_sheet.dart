@@ -51,6 +51,8 @@ class CustomMarriageButtonSheet extends StatelessWidget {
           RequestButton(
             adId: marriageAds.id,
             subscriptionStatus: marriageAds.subscriptionStatus ?? '',
+            errorRequest: (failure) {},
+            successRequest: () {},
           ),
           const SizedBox(
             height: 16,

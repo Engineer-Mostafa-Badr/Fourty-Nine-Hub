@@ -1636,7 +1636,9 @@
   "driverRateYou": "Driver rate you",
   "ratingsCount": "Ratings Count",
   "averageRate": "Average Rate",
-  "time": "Time"
+  "time": "Time",
+  "DidntReceiveOTP" : "Didn't receive OTP?",
+  "resendOTP" : "Resend OTP"
 
 
 }

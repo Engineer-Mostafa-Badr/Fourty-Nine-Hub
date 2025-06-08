@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
@@ -88,7 +89,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToAcceptOffer(context, widget.params),
               dashboardCubit.listenToNewTrip(),
               dashboardCubit.listenToRemoveTrip(),
-              dashboardCubit.listenToEndTrip(context),
+              dashboardCubit.listenToEndTrip(context, widget.params),
             ]
           : [
               widget.params.modeType == "ride"
@@ -104,8 +105,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
       widget.params.isSocket == true && widget.params.currentIndex == 0
           ? context.read<DashboardsCubit>().getAvailableRideTrips(context)
           : [
@@ -377,7 +377,6 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                             ))))
                               : const NotReadyAvailableTripsWidget(),
                         )
-
                       // running Trips
                       else if (cubit.state.currentIndex == 1)
                         Expanded(
@@ -589,46 +588,6 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                             : 'truk',
                                         settings: state.settings))
                       else if (cubit.state.currentIndex == 4)
-                        // Expanded(
-                        //   child: cubit.isLoadingMoreAcceptedNonSocketTrips
-                        //       ? const Center(child: CustomCircularProgressIndicator()):
-                        //   widget.params.modeType == "truck"
-                        //       ? cubit.isLoadingAvailableNonSocketLoading
-                        //       ? const Center(child: CustomCircularProgressIndicator())
-                        //       : cubit.acceptedLoadingNonSocketData.isEmpty
-                        //       ? Center(
-                        //     child: Text(
-                        //       LocaleKeys.youDontHaveAcceptedOffer.localize,
-                        //     ),
-                        //   )
-                        //       : ListView.separated(
-                        //     itemBuilder: (context, index) =>
-                        //         AcceptedNonSocketLoadingWidget(
-                        //             offers: cubit
-                        //                 .acceptedLoadingNonSocketData[index]),
-                        //     itemCount:
-                        //     cubit.acceptedLoadingNonSocketData.length,
-                        //     separatorBuilder: (context, index) =>
-                        //     const SizedBox(height: 15),
-                        //   )
-                        //       : cubit.acceptedRideNonSocketData.isEmpty
-                        //           ? Center(
-                        //               child: Text(LocaleKeys
-                        //                   .youDontHaveAcceptedOffer.localize))
-                        //           : ListView.builder(
-                        //               itemCount: cubit
-                        //                   .acceptedRideNonSocketData.length,
-                        //               itemBuilder: (context, index) => Padding(
-                        //                 padding:
-                        //                     const EdgeInsetsDirectional.only(
-                        //                         start: 16, end: 16, bottom: 16),
-                        //                 child: AcceptedNonSocketWidget(
-                        //                   offers: cubit
-                        //                       .acceptedRideNonSocketData[index],
-                        //                 ),
-                        //               ),
-                        //             ),
-                        // )
                         Expanded(
                           child: cubit.isLoadingMoreAcceptedNonSocketTrips
                               ? const Center(
@@ -733,8 +692,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 5),
           height: 30,
           decoration: BoxDecoration(
-            color:
-                selectedIndex == 3 ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
+            color: selectedIndex == 3 ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Image.asset(

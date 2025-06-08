@@ -33,10 +33,10 @@ import '../dashboards/widgets/client_offers_widget.dart';
 import '../ride_details_screen.dart';
 
 class PastRideOfferScreen extends StatefulWidget {
-  // final bool isTruk;
+  final String type;
 
   const PastRideOfferScreen({
-    super.key,
+    super.key,required this.type,
   });
 
   @override
@@ -48,14 +48,17 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
 
   @override
   void initState() {
-    super.initState();
+    // if(widget.type=='ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+    // if(widget.type=='shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
     _scrollController = ScrollController()..addListener(_onScroll);
+    super.initState();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientPastTrips();
+      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientPastTrips();
+      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientPastShippingTrips();
     }
   }
 
@@ -203,7 +206,6 @@ class ClientPastWidget extends StatelessWidget {
     // Format price with Arabic digits if needed
     final priceText = _formatNumber(
         "${offers?.tripDetails?.price?.toInt() ?? 300}", context);
-
     return ClickableWidget(
       onTap: () {
         Navigator.push(
@@ -386,24 +388,30 @@ class ClientPastWidget extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          flex: 3,
-                          child: Column(
-                            children: [
-                              ImageFromInternet(
-                                image: offers!.subCategory!.pictureUrl!,
-                                width: 40,
-                                height: 40,
-                                fit: BoxFit.contain,
-                              ),
-                              Label(
-                                text: isArabic
-                                    ? (offers?.subCategory?.nameAr ?? '')
-                                    : (offers?.subCategory?.nameEn ?? ''),
-                                style: Styles.mediumText(fontSize: 25),
-                              ),
-                            ],
-                          ),
-                        ),
+                            flex: 3,
+                            child: Column(
+                              children: [
+                                // offers?.category?.picture != null
+                                //     ? Image.asset(Assets.rideIcon,
+                                //     width: 40, height: 40, fit: BoxFit.cover)
+                                //     :
+                                ImageFromInternet(
+                                    image:
+                                        offers?.tripDetails?.category?.picture??'',
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.contain),
+                                Label(
+                                    text: context.isArabic
+                                        ? (offers
+                                                ?.tripDetails?.category?.nameAr ??
+                                            '')
+                                        : (offers
+                                                ?.tripDetails?.category?.nameEn ??
+                                            ''),
+                                    style: Styles.mediumText(fontSize: 25))
+                              ],
+                            )),
                       ],
                     ),
                     Row(
@@ -450,4 +458,3 @@ class ClientPastWidget extends StatelessWidget {
     );
   }
 }
-

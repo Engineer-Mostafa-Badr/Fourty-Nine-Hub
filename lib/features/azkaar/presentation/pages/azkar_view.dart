@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/azkaar/domain/entity/azkar_entity.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -71,8 +73,7 @@ class _AzkarViewState extends State<AzkarView> {
           return Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: TextField(
                   textDirection: TextDirection.rtl,
                   decoration: InputDecoration(
@@ -91,17 +92,26 @@ class _AzkarViewState extends State<AzkarView> {
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
                     hintText: LocaleKeys.search.localize,
-                    hintStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                    hintStyle: Styles.mediumText(
+                        color: AppColors.getTextColor(context)),
                   ),
                   controller: _cubit.searchController,
                   onSubmitted: (value) {
-                    _cubit.searchAzkar(search: value);
+                    // _cubit.searchAzkar(search: value);
                   },
                   onChanged: (value) {
-                    if (value.isEmpty) {
-                      _cubit.searchController.clear();
-                      _cubit.cleanSearchAzkar();
-                    }
+                    if (state.akar == null) return;
+                    // if (value.isNotEmpty) {
+                    // _cubit.searchController.clear();
+                    // _cubit.cleanSearchAzkar();
+                    _cubit.searchAzkar2(search: value);
+                    // state.akar = state.akar!
+                    //     .where((element) => element.name
+                    //         .toLowerCase()
+                    //         .contains(value.toLowerCase()))
+                    //     .toList();
+                    // setState(() {});
+                    // }
                   },
                 ),
               ),
@@ -136,12 +146,13 @@ class _AzkarViewState extends State<AzkarView> {
     );
   }
 
-  Widget _buildAzkarItem(BuildContext context, dynamic item, bool isSearch) {
+  Widget _buildAzkarItem(
+      BuildContext context, AzkarEntity item, bool isSearch) {
     return InkWell(
       onTap: () {
         context.push(
           Routes.AZKAARDETAILS,
-          extra: isSearch ? item.category : item.name,
+          extra: item.name,
         );
       },
       child: Container(
@@ -152,12 +163,15 @@ class _AzkarViewState extends State<AzkarView> {
         ),
         child: Row(
           children: [
-            Image.asset(Assets.azkarPrayer,color: context.isDarkMode?AppColors.PRIMARY_COLOR:null,),
+            Image.asset(
+              Assets.azkarPrayer,
+              color: context.isDarkMode ? AppColors.PRIMARY_COLOR : null,
+            ),
             Expanded(
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  isSearch ? item.zekr : item.name,
+                  item.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Amiri',

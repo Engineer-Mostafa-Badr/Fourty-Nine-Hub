@@ -95,7 +95,7 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      maxLines: widget.fieldType == FieldType.phone ? 1 : widget.maxLines ?? 1,
+      maxLines: widget.maxLines ?? (widget.fieldType == FieldType.phone ? 1 :  1),
       keyboardType: widget.fieldType == FieldType.phone
           ? TextInputType.phone
           : TextInputType.multiline,
@@ -188,8 +188,6 @@ class PickUpTextFormField extends StatelessWidget {
     this.controller,
     this.fieldType = FieldType.text,
     this.validator,
-    this.icon,
-    this.isArabic = false, // Add this parameter
   });
 
   final String hintText;
@@ -199,50 +197,19 @@ class PickUpTextFormField extends StatelessWidget {
   final Function(String)? onChanged;
   final FieldType fieldType;
   final String? Function(String?)? validator;
-  final Widget? icon;
-  final bool isArabic; // New parameter to control Arabic digits
-
-  // Helper methods for digit conversion
-  static String _convertToEnglishDigits(String input) {
-    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-    String output = input;
-    for (int i = 0; i < arabic.length; i++) {
-      output = output.replaceAll(arabic[i], english[i]);
-    }
-    return output;
-  }
-
-  static String _convertToArabicDigits(String input) {
-    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-    String output = input;
-    for (int i = 0; i < english.length; i++) {
-      output = output.replaceAll(english[i], arabic[i]);
-    }
-    return output;
-  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      maxLines: fieldType == FieldType.phone ? 1 : maxLines ?? 1,
+      maxLines: maxLines ?? (fieldType == FieldType.phone ? 1 :  1),
       keyboardType: fieldType == FieldType.phone
           ? TextInputType.phone
           : TextInputType.multiline,
-      validator: validator != null
-          ? (value) {
-        // Convert Arabic digits to English before validation
-        final englishValue = value != null ? _convertToEnglishDigits(value) : null;
-        return validator!(englishValue);
-      }
-          : null,
+      validator: validator,
       inputFormatters: fieldType == FieldType.phone
           ? [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')), // Allow both digit types
+        FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(11),
       ]
           : [],

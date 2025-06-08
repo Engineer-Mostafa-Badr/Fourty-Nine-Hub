@@ -1620,7 +1620,8 @@
   "driverRateYou": "تقييم السائق لك",
   "ratingsCount": "عدد التقييمات",
   "averageRate": "متوسط التقييم",
-  "time": "الوقت"
-
+  "time": "الوقت",
+  "DidntReceiveOTP" : "لم تستلم الكود؟",
+  "resendOTP" : "اعادة ارسال الكود"
 
 }

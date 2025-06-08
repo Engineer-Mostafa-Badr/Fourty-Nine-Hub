@@ -68,7 +68,7 @@ class AreYouSureDeleteAdWidget extends StatelessWidget {
                       ),
                       onPressed: () {
                         action();
-                        context.pop();
+                        // context.pop();
                       }),
                 ),
                 const SizedBox(

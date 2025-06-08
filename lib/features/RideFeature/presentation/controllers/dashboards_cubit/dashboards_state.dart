@@ -82,11 +82,17 @@ class DashboardsState
   final List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket;
   final List<GetLoadingAvailableEntity >? loadingAvailableNonSocket;
   final List<GetLoadingHistoryEntity>? loadingHistoryNonSocket;
+  final List<GovernorateEntity>? govs;
+  final GovernorateEntity? selectedGov;
+  final Duration? recordPosition;
+  final PlayerState? playerState;
+  final Duration? recordDuration;
 
   const DashboardsState(
       {this.failure,
       this.pastTrips,
       this.settings,
+      this.recordPosition,
       this.currentIndex=0,
       this.status = DashboardsStates.initState,
       this.availableTrips,
@@ -120,6 +126,10 @@ class DashboardsState
         this.vehicleFrontPicture,
         this.vehicleBackPicture,
         this.personalTechnicalExaminationPicture,
+        this.selectedGov,
+        this.govs,
+        this.playerState,
+        this.recordDuration,
         this.loadingAcceptedNonSocket,
         this.loadingAvailableNonSocket,
         this.loadingHistoryNonSocket,
@@ -157,11 +167,16 @@ class DashboardsState
         XFile? backOfDriverLicensePicture,
         XFile? selfieDriverLicensePicture,
         RateResponseEntity? rateResponseEntity,
+        List<GovernorateEntity>? govs,
+        GovernorateEntity? selectedGov,
 
         XFile? vehiclePicture,
         XFile? vehicleFrontPicture,
          XFile? vehicleBackPicture,
         XFile? personalTechnicalExaminationPicture,
+        Duration? recordPosition,
+        Duration? recordDuration,
+        PlayerState? playerState,
 
         List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket,
         List<GetLoadingAvailableEntity>? loadingAvailableNonSocket,
@@ -204,6 +219,11 @@ class DashboardsState
       vehicleFrontPicture: vehicleFrontPicture ?? this.vehicleFrontPicture,
       vehicleBackPicture: vehicleBackPicture ?? this.vehicleBackPicture,
       personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
+      govs: govs ?? this.govs,
+      selectedGov: selectedGov ?? this.selectedGov,
+      recordPosition: recordPosition ?? this.recordPosition,
+      recordDuration: recordDuration ?? this.recordDuration,
+      playerState: playerState ?? this.playerState,
       loadingAcceptedNonSocket: loadingAcceptedNonSocket ?? this.loadingAcceptedNonSocket,
       loadingAvailableNonSocket: loadingAvailableNonSocket ?? this.loadingAvailableNonSocket,
       loadingHistoryNonSocket: loadingHistoryNonSocket ?? this.loadingHistoryNonSocket,

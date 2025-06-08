@@ -30,10 +30,11 @@ import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
 
 class AcceptRideOfferScreen extends StatefulWidget {
-  // final bool isTruk;
+  final String type;
 
   const AcceptRideOfferScreen({
     super.key,
+    required this.type,
   });
 
   @override
@@ -50,9 +51,9 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientAcceptedTrips();
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      if (widget.type == 'ride') context.read<ClientTripsCubit>().getClientAcceptedTrips();
+      if (widget.type == 'shipping') context.read<ClientTripsCubit>().getClientAcceptedShippingTrips();
     }
   }
 
@@ -78,13 +79,10 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
     return Scaffold(
       body: BlocListener<ClientTripsCubit, ClientTripsState>(
         listener: (context, state) {
-          if (state.status == ClientTripsStates.success &&
-              state.showSnackbar &&
-              state.createNonTrackTripEntity?.message.isNotEmpty == true) {
+          if (state.status == ClientTripsStates.success && state.showSnackbar && state.createNonTrackTripEntity?.message.isNotEmpty == true) {
             showCustomSnackBar(
               context,
-              state.createNonTrackTripEntity?.message ??
-                  LocaleKeys.requestSentSuccess.localize,
+              state.createNonTrackTripEntity?.message ?? LocaleKeys.requestSentSuccess.localize,
               Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
             );
 
@@ -96,14 +94,11 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
 
           if (state.status == ClientTripsStates.error) {
             final failure = state.failure;
-            if (failure is ServerFailure &&
-                failure.errors != null &&
-                failure.errors!.isNotEmpty) {
+            if (failure is ServerFailure && failure.errors != null && failure.errors!.isNotEmpty) {
               showErrorMessage(context, failure.errors!.first);
               return;
             }
-            showErrorMessage(
-                context, getFailureMessage(state.failure!, context));
+            showErrorMessage(context, getFailureMessage(state.failure!, context));
           }
         },
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
@@ -116,48 +111,22 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                   )
                 : state.isError
                     ? Center(
-                        child: Label(
-                            text: LocaleKeys.errorHappen.localize,
-                            style: const TextStyle(color: Colors.red)),
+                        child: Label(text: LocaleKeys.errorHappen.localize, style: const TextStyle(color: Colors.red)),
                       )
-                    : context
-                                    .read<ClientTripsCubit>()
-                                    .clientAcceptedTripsData ==
-                                null ||
-                            context
-                                .read<ClientTripsCubit>()
-                                .clientAcceptedTripsData
-                                .isEmpty
+                    : context.read<ClientTripsCubit>().clientAcceptedTripsData == null || context.read<ClientTripsCubit>().clientAcceptedTripsData.isEmpty
                         ? Center(
-                            child: Label(
-                                text: LocaleKeys.youDontHaveAcceptedOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                            child: Label(text: LocaleKeys.youDontHaveAcceptedOffer.localize, style: TextStyle(color: Colors.red, fontSize: 18)),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: context
-                                            .read<ClientTripsCubit>()
-                                            .clientAcceptedTripsData ==
-                                        null ||
-                                    context
-                                        .read<ClientTripsCubit>()
-                                        .clientAcceptedTripsData
-                                        .isEmpty
+                            child: context.read<ClientTripsCubit>().clientAcceptedTripsData == null || context.read<ClientTripsCubit>().clientAcceptedTripsData.isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
-                                    itemBuilder: (context, index) =>
-                                        ClientAcceptWidget(
-                                          offers: state
-                                              .clientAcceptedTripData?[index],
+                                    itemBuilder: (context, index) => ClientAcceptWidget(
+                                          offers: state.clientAcceptedTripData?[index],
                                         ),
-                                    separatorBuilder: (context, index) =>
-                                        const SizedBox(height: 5),
-                                    itemCount: context
-                                            .read<ClientTripsCubit>()
-                                            .clientAcceptedTripsData
-                                            .length ??
-                                        0),
+                                    separatorBuilder: (context, index) => const SizedBox(height: 5),
+                                    itemCount: context.read<ClientTripsCubit>().clientAcceptedTripsData.length ?? 0),
                           );
           },
         ),
@@ -222,511 +191,195 @@ class ClientAcceptWidget extends StatelessWidget {
     // Format price
     final price = _formatNumber(
         "${offers?.tripDetails?.price ?? 300}", context);
-
-
     return Container(
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
+      decoration: BoxDecoration(color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5, borderRadius: BorderRadius.circular(20)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Driver Info Column
-              ClickableWidget(
-                onTap: () {
-                  // context.push(
-                  //   Routes.allDriverRatingScreen,
-                    // extra:offers?.driverDetails?.userId,
-                  // );
-                },
-                child: Column(
+          Expanded(
+              flex: 2,
+              child: Column(children: [
+                Stack(
                   children: [
-                    Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                          child: Container(
-                            width: 75,
-                            height: 75,
-                            decoration: const BoxDecoration(shape: BoxShape.circle),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: (offers?.driverDetails?.picture == null ||
-                                offers!.driverDetails!.picture!.isEmpty)
-                                ? Image.asset(
-                              Assets.maleImagePlaceholder,
-                              fit: BoxFit.cover,
-                            )
-                                : ImageFromInternet(
-                              fit: BoxFit.cover,
-                              image: offers!.driverDetails!.picture!,
-                            ),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
                         ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: offers?.driverDetails?.picture == null || offers!.driverDetails!.picture!.isEmpty
+                            ? Image.asset(
+                                Assets.maleImagePlaceholder,
+                                fit: BoxFit.cover,
+                              )
+                            : ImageFromInternet(
+                                fit: BoxFit.cover,
+                                image: offers!.driverDetails!.picture!,
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
                             decoration: BoxDecoration(
-                              color: AppColors.grey,
-                              // color: AppColors.cF5F5F5,
+                              color: AppColors.cF5F5F5,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    Assets.star2,
-                                    width: 8,
-                                    height: 8,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Label(
-                                    text: ratingCount,
-                                    style: Styles.smallText(
-                                      color: AppColors.PRIMARY_COLOR,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Label(
-                      text: offers?.driverDetails?.firstName ?? '',
-                      style: Styles.mediumText(),
-                    ),
-                    Label(
-                        text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.brandAr ?? '': offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
-                        style: Styles.mediumText()),
-                    Label(
-                        text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.modelAr ?? '':
-                        offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
-                        style: Styles.mediumText()),
-                    Label(
-                      text: '($ratingAverage)',
-                      style: Styles.smallText(),
-                    ),
+                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Row(children: [
+                                  SvgPicture.asset(Assets.star2, width: 8, height: 8),
+                                  const Sizer(width: 4),
+                                  Label(text: "${offers?.driverDetails?.rating?.count ?? 0}", style: Styles.smallText(color: AppColors.PRIMARY_COLOR))
+                                ]))))
                   ],
                 ),
-              ),
-              const SizedBox(width: 32),
-              // Trip Details Column
-              Expanded(
-                flex: 8,
-                child: IntrinsicWidth(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
+                Label(
+                  text: offers?.driverDetails?.firstName ?? '',
+                  style: Styles.mediumText(),
+                ),
+                Label(
+                  text: '(${offers?.driverDetails?.rating?.average ?? 0})',
+                  style: Styles.smallText(),
+                )
+              ])),
+          const Sizer(width: 32),
+          Expanded(
+            flex: 8,
+            child: IntrinsicWidth(
+              child: Column(
+                spacing: 4,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 7,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      Expanded(
+                        flex: 7,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              spacing: 5,
                               children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      Assets.rideFrom,
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: Label(
-                                        text: offers?.tripDetails?.location?.fromTitle ??
-                                            'Cairo International Airport',
-                                        style: Styles.headerText(),
-                                      ),
-                                    ),
-                                  ],
+                                Expanded(
+                                  flex: 1,
+                                  child: Image.asset(Assets.rideFrom, width: 24, height: 24),
                                 ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      Assets.rideTo,
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: Label(
-                                        text: offers?.tripDetails?.location?.toTitle ??
-                                            'Cairo International Airport',
-                                        style: Styles.mediumText(
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Label(
-                                  text: '${LocaleKeys.passenger.localize}  $passengersCount',
-                                  style: Styles.mediumText(),
-                                ),
+                                Expanded(flex: 8, child: Label(text: offers?.tripDetails?.location?.fromTitle ?? 'Cairo International Airport', style: Styles.headerText()))
                               ],
                             ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Column(
+                            Row(
+                              spacing: 5,
                               children: [
-                                ImageFromInternet(
-                                  image: offers!.tripDetails!.category!.picture!,
-                                  width: 40,
-                                  height: 40,
-                                  fit: BoxFit.contain,
-                                ),
-                                Label(
-                                  text: isArabic
-                                      ? (offers?.tripDetails?.category?.nameAr ?? '')
-                                      : (offers?.tripDetails?.category?.nameEn ?? ''),
-                                  style: Styles.mediumText(fontSize: 25),
-                                ),
+                                Expanded(flex: 1, child: Image.asset(Assets.rideTo, width: 24, height: 24)),
+                                Expanded(
+                                    flex: 8,
+                                    child:
+                                        Label(text: offers?.tripDetails?.location?.toTitle ?? 'Cairo International Airport', style: Styles.mediumText(fontWeight: FontWeight.w300)))
                               ],
                             ),
-                          ),
-                        ],
+                            Label(text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}', style: Styles.mediumText())
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Label(
-                            text: price,
-                            style: Styles.mediumText(fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(width: 4),
-                          Label(
-                            text: LocaleKeys.egp.tr(),
-                            style: Styles.mediumText(
-                              color: AppColors.SECONDARY_COLOR,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Label(
-                            text: formattedTime,
-                            style: Styles.mediumText(fontWeight: FontWeight.w700),
-                          ),
-                          Label(
-                            text: formattedDate,
-                            style: Styles.mediumText(fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-
+                      Expanded(
+                          flex: 3,
+                          child: Column(
+                            children: [
+                              // offers?.category?.picture != null
+                              //     ? Image.asset(Assets.rideIcon,
+                              //     width: 40, height: 40, fit: BoxFit.cover)
+                              //     :
+                              ImageFromInternet(image: offers!.tripDetails!.category!.picture!, width: 40, height: 40, fit: BoxFit.contain),
+                              Label(
+                                  text: context.isArabic ? (offers?.tripDetails?.category?.nameAr ?? '') : (offers?.tripDetails?.category?.nameEn ?? ''),
+                                  style: Styles.mediumText(fontSize: 25))
+                            ],
+                          )),
                     ],
                   ),
-                ),
+                  // Label(
+                  //   text: modeType == 'truk'
+                  //       ? "${LocaleKeys.cargoDescription.tr()} : Car"
+                  //       : '${LocaleKeys.passenger.tr()} : ${offers?.tripDetails?.passengers ?? 0}',
+                  //   style: Styles.mediumText(fontSize: 32),
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Label(text: "${offers?.tripDetails?.price ?? 300}", style: Styles.mediumText(fontWeight: FontWeight.w700)),
+                      const Sizer(width: 4),
+                      Label(text: LocaleKeys.egp.tr(), style: Styles.mediumText(color: AppColors.SECONDARY_COLOR, fontWeight: FontWeight.w700))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Label(
+                        text: formattedTime, //'10 AM',
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Label(
+                        text: formattedDate, //'20/2/2025',
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    spacing: 20,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: IconButton(
+                          icon: SvgPicture.asset(
+                            Assets.phoneIconRed,
+                            width: 30.w,
+                            height: 30.h,
+                            color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                            icon: SvgPicture.asset(
+                              Assets.mailIconRed,
+                              width: 25.w,
+                              height: 25.h,
+                              color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
+                            ),
+                            onPressed: () {}),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                          icon: SvgPicture.asset(
+                            Assets.reportRed,
+                            width: 25.w,
+                            height: 25.h,
+                            color: AppColors.PRIMARY_COLOR_DARK,
+                          ),
+                          onPressed: () {},
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: SvgPicture.asset(
-                  height: 30.h,
-                  Assets.phoneIconRed,
-                  color: context.isDarkMode
-                      ? AppColors.PRIMARY_COLOR_DARK
-                      : AppColors.PRIMARY_COLOR,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: SvgPicture.asset(
-                  Assets.mailIconRed,
-                  color: context.isDarkMode
-                      ? AppColors.PRIMARY_COLOR_DARK
-                      : AppColors.PRIMARY_COLOR,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: SvgPicture.asset(
-                  Assets.reportRed,
-                  color: AppColors.PRIMARY_COLOR_DARK,
-                ),
-                onPressed: () {},
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
-
   }
 }
-
-
-// class ClientAcceptWidget extends StatelessWidget {
-//   final String modeType;
-//   final ClientAcceptedTripEntity? offers;
-//
-//   const ClientAcceptWidget({super.key, this.modeType = 'truk', this.offers});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     DateTime dateTime = DateTime.parse(
-//         offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
-//     String formattedDate =
-//         "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-//     String formattedTime =
-//         "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
-//     return Container(
-//       padding: const EdgeInsets.all(8.0),
-//       decoration: BoxDecoration(
-//           color:
-//               context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-//           borderRadius: BorderRadius.circular(20)),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Expanded(
-//               flex: 2,
-//               child: Column(children: [
-//                 Stack(
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-//                       child: Container(
-//                         width: 50,
-//                         height: 50,
-//                         decoration: const BoxDecoration(
-//                           shape: BoxShape.circle,
-//                         ),
-//                         clipBehavior: Clip.antiAliasWithSaveLayer,
-//                         child: offers?.driverDetails?.picture == null ||
-//                             offers!.driverDetails!.picture!.isEmpty
-//                             ? Image.asset(
-//                           Assets.maleImagePlaceholder,
-//                           fit: BoxFit.cover,
-//                         )
-//                             : ImageFromInternet(
-//                           fit: BoxFit.cover,
-//                           image: offers!.driverDetails!.picture!,
-//                         ),
-//                       ),
-//                     ),
-//
-//                     Positioned(
-//                         top: 0,
-//                         right: 0,
-//                         child: Container(
-//                             decoration: BoxDecoration(
-//                               color: AppColors.cF5F5F5,
-//                               borderRadius: BorderRadius.circular(8),
-//                             ),
-//                             child: Padding(
-//                                 padding:
-//                                     const EdgeInsets.symmetric(horizontal: 4.0),
-//                                 child: Row(children: [
-//                                   SvgPicture.asset(Assets.star2,
-//                                       width: 8, height: 8),
-//                                   const Sizer(width: 4),
-//                                   Label(
-//                                       text: offers?.driverDetails?.rating?.count
-//                                               .toString() ??
-//                                           '0',
-//                                       style: Styles.smallText(
-//                                           color: AppColors.PRIMARY_COLOR))
-//                                 ]))))
-//                   ],
-//                 ),
-//                 Label(
-//                     text: offers?.driverDetails?.firstName ?? '',
-//                     style: Styles.mediumText()),
-//                 Label(
-//                     text: '(${offers?.driverDetails?.rating?.average ?? 0})',
-//                     style: Styles.smallText())
-//               ])),
-//           const Sizer(width: 32),
-//           Expanded(
-//             flex: 8,
-//             child: IntrinsicWidth(
-//               child: Column(
-//                 spacing: 4,
-//                 crossAxisAlignment: CrossAxisAlignment.stretch,
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.start,
-//                     crossAxisAlignment: CrossAxisAlignment.center,
-//                     children: [
-//                       Expanded(
-//                         flex: 7,
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Row(
-//                               spacing: 5,
-//                               children: [
-//                                 Expanded(
-//                                   flex: 1,
-//                                   child: Image.asset(Assets.rideFrom,
-//                                       width: 24, height: 24),
-//                                 ),
-//                                 Expanded(
-//                                     flex: 8,
-//                                     child: Label(
-//                                         text: offers?.tripDetails?.location
-//                                                 ?.fromTitle ??
-//                                             'Cairo International Airport',
-//                                         style: Styles.headerText()))
-//                               ],
-//                             ),
-//                             Row(
-//                               spacing: 5,
-//                               children: [
-//                                 Expanded(
-//                                     flex: 1,
-//                                     child: Image.asset(Assets.rideTo,
-//                                         width: 24, height: 24)),
-//                                 Expanded(
-//                                     flex: 8,
-//                                     child: Label(
-//                                         text: offers?.tripDetails?.location
-//                                                 ?.toTitle ??
-//                                             'Cairo International Airport',
-//                                         style: Styles.mediumText(
-//                                             fontWeight: FontWeight.w300)))
-//                               ],
-//                             ),
-//                             Label(
-//                                 text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
-//                                 style: Styles.mediumText())
-//                           ],
-//                         ),
-//                       ),
-//                       Expanded(
-//                           flex: 3,
-//                           child: Column(
-//                             children: [
-//                               // offers?.category?.picture != null
-//                               //     ? Image.asset(Assets.rideIcon,
-//                               //     width: 40, height: 40, fit: BoxFit.cover)
-//                               //     :
-//                               ImageFromInternet(
-//                                   image:
-//                                       offers!.tripDetails!.category!.picture!,
-//                                   width: 40,
-//                                   height: 40,
-//                                   fit: BoxFit.contain),
-//                               Label(
-//                                   text: context.isArabic
-//                                       ? (offers
-//                                               ?.tripDetails?.category?.nameAr ??
-//                                           '')
-//                                       : (offers
-//                                               ?.tripDetails?.category?.nameEn ??
-//                                           ''),
-//                                   style: Styles.mediumText(fontSize: 25))
-//                             ],
-//                           )),
-//                     ],
-//                   ),
-//                   // Label(
-//                   //   text: modeType == 'truk'
-//                   //       ? "${LocaleKeys.cargoDescription.tr()} : Car"
-//                   //       : '${LocaleKeys.passenger.tr()} : ${offers?.tripDetails?.passengers ?? 0}',
-//                   //   style: Styles.mediumText(fontSize: 32),
-//                   // ),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.end,
-//                     children: [
-//                       Label(
-//                           text: "${offers?.tripDetails?.price ?? 300}",
-//                           style:
-//                               Styles.mediumText(fontWeight: FontWeight.w700)),
-//                       const Sizer(width: 4),
-//                       Label(
-//                           text: LocaleKeys.egp.tr(),
-//                           style: Styles.mediumText(
-//                               color: AppColors.SECONDARY_COLOR,
-//                               fontWeight: FontWeight.w700))
-//                     ],
-//                   ),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Label(
-//                         text: formattedTime, //'10 AM',
-//                         style: Styles.mediumText(
-//                           fontWeight: FontWeight.w700,
-//                         ),
-//                       ),
-//                       Label(
-//                         text: formattedDate, //'20/2/2025',
-//                         style: Styles.mediumText(
-//                           fontWeight: FontWeight.w700,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   Row(
-//                     spacing: 20,
-//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: [
-//                       Expanded(
-//                         child: IconButton(
-//                           icon: SvgPicture.asset(
-//                             Assets.phoneIconRed,
-//                             width: 30.w,
-//                             height: 30.h,
-//                             color: context.isDarkMode
-//                                 ? AppColors.PRIMARY_COLOR_DARK
-//                                 : AppColors.PRIMARY_COLOR,
-//                           ),
-//                           onPressed: () {},
-//                         ),
-//                       ),
-//                       Expanded(
-//                         child: IconButton(
-//                             icon: SvgPicture.asset(
-//                               Assets.mailIconRed,
-//                               width: 25.w,
-//                               height: 25.h,
-//                               color: context.isDarkMode
-//                                   ? AppColors.PRIMARY_COLOR_DARK
-//                                   : AppColors.PRIMARY_COLOR,
-//                             ),
-//                             onPressed: () {}),
-//                       ),
-//                       Expanded(
-//                         child: IconButton(
-//                           icon: SvgPicture.asset(
-//                             Assets.reportRed,
-//                             width: 25.w,
-//                             height: 25.h,
-//                             color: AppColors.PRIMARY_COLOR_DARK,
-//                           ),
-//                           onPressed: () {},
-//                         ),
-//                       )
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

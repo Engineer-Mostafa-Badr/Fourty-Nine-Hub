@@ -18,7 +18,7 @@ class ClientOfferTripModel extends ClientOfferTripEntity {
       id: json['id'],
       status: json['status'],
       price: (json['price'] as num?),
-      newOfferPrice: (json['newOfferPrice'] as num?),
+      newOfferPrice: json['newOfferPrice']!=null?(json['newOfferPrice'] as num?):json['newPrice']!=null?(json['newPrice'] as num?):0,
       passengers: json['passengers']?.toInt(),
 
       driverDetails: json['driverDetails'] != null

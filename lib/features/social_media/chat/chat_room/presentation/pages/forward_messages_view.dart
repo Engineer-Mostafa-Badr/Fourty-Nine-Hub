@@ -184,7 +184,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                     );
                   } else {
                     return const Center(
-                      child: CircularProgressIndicator.adaptive(),
+                      child: CustomCircularProgressIndicator(),
                     );
                   }
                 }),
@@ -288,7 +288,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
         return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
           return state.chats == null || state.isLoading
               ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
+                  child: CustomCircularProgressIndicator(),
                 )
               : state.chats!.isEmpty
                   ? Center(

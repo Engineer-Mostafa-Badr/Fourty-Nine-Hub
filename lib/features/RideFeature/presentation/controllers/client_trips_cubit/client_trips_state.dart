@@ -53,6 +53,7 @@ class ClientTripsState {
   final List<ClientOfferTripEntity> clientOfferTripData;
   final List<ClientPastTripEntity>? clientPastTripData;
    int newOfferCount;
+  final CreateLoadingTripEntity? createLoadingTripEntity;
   final String? message;
   final bool showSnackbar;
   final RateResponseEntity? rateResponseEntity;
@@ -65,6 +66,7 @@ class ClientTripsState {
     this.cities,
     this.governorates,
     this.createNonTrackTripEntity,
+    this.createLoadingTripEntity,
     this.clientPendingTripData,
     this.message,
     this.showSnackbar = false,
@@ -84,6 +86,7 @@ class ClientTripsState {
     List<CityEntity>? cities,
     List<GovernorateEntity>? governorates,
     CreateNonTrackTripEntity? createNonTrackTripEntity,
+    CreateLoadingTripEntity? createLoadingTripEntity,
     List<ClientPendingTripEntity>? clientPendingTripData,
     List<ClientAcceptedTripEntity>? clientAcceptedTripData,
     bool? showSnackbar,
@@ -107,6 +110,7 @@ class ClientTripsState {
       clientAcceptedTripData: clientAcceptedTripData ?? this.clientAcceptedTripData,
       clientOfferTripData: clientOfferTripData ?? this.clientOfferTripData,
       clientPastTripData: clientPastTripData ?? this.clientPastTripData,
+      createLoadingTripEntity: createLoadingTripEntity ?? this.createLoadingTripEntity,
       rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
       driverAllRating: driverAllRating ?? this.driverAllRating,
       clientAllRating: clientAllRating ?? this.clientAllRating,

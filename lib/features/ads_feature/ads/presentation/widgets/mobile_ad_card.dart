@@ -236,9 +236,10 @@ class _MobileAdCardState extends State<MobileAdCard> {
                     children: [
                       AvaialbleTripsButton(
                         title: LocaleKeys.request.localize,
-                        color:AppColors.SECONDARY_COLOR,
-                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-                        onTap: (){
+                        color: AppColors.SECONDARY_COLOR,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        onTap: () {
                           showModalBottomSheet(
                             backgroundColor: context.isDarkMode
                                 ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
@@ -265,16 +266,18 @@ class _MobileAdCardState extends State<MobileAdCard> {
                                       horizontal: 10,
                                     ),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           flex: 3,
                                           child: PremiumRequestButton(
                                             adId: widget.item.id,
                                             subCategoryId:
-                                            widget.item.subCategoryId ?? '',
-                                            subscriptionStatus:
-                                            widget.item.subscriptionStatus ?? '',
+                                                widget.item.subCategoryId ?? '',
+                                            subscriptionStatus: widget
+                                                    .item.subscriptionStatus ??
+                                                '',
                                           ),
                                         ),
                                         const Sizer(width: 5),
@@ -282,8 +285,11 @@ class _MobileAdCardState extends State<MobileAdCard> {
                                           flex: 3,
                                           child: RequestButton(
                                             adId: widget.item.id,
-                                            subscriptionStatus:
-                                            widget.item.subscriptionStatus ?? '',
+                                            subscriptionStatus: widget
+                                                    .item.subscriptionStatus ??
+                                                '',
+                                            errorRequest: (failure) {},
+                                            successRequest: () {},
                                           ),
                                         )
                                       ],
@@ -293,7 +299,8 @@ class _MobileAdCardState extends State<MobileAdCard> {
                               );
                             },
                           );
-                        },),
+                        },
+                      ),
                       Expanded(
                         child: CallMessageButtons(
                           otherUserId: widget.item.userId ?? '',
@@ -305,7 +312,6 @@ class _MobileAdCardState extends State<MobileAdCard> {
                       ),
                     ],
                   ),
-
                 ],
               ),
             ),
@@ -322,19 +328,19 @@ class _MobileAdCardState extends State<MobileAdCard> {
       padding: EdgeInsets.all(10.w),
       color: status == SubscriptionStatus.premium.status
           ? Colors.amber
-          :Colors.grey,
+          : Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (status !=SubscriptionStatus.notSubscribed.status) ...[
+          if (status != SubscriptionStatus.notSubscribed.status) ...[
             Icon(
               Icons.workspace_premium_outlined,
               size: 55.w,
               color: status == SubscriptionStatus.premium.status
                   ? AppColors.SECONDARY_COLOR
                   : status == SubscriptionStatus.regular.status
-                  ? AppColors.PRIMARY_COLOR
-                  : null,
+                      ? AppColors.PRIMARY_COLOR
+                      : null,
             ),
             const Sizer(width: 5)
           ],
@@ -342,8 +348,8 @@ class _MobileAdCardState extends State<MobileAdCard> {
             text: status == SubscriptionStatus.premium.status
                 ? LocaleKeys.premiumSubscription.localize
                 : status == SubscriptionStatus.regular.status
-                ? LocaleKeys.regularRequest.localize
-                : LocaleKeys.notSubscribed.localize,
+                    ? LocaleKeys.regularRequest.localize
+                    : LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(
                 color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),
             maxLines: 1,

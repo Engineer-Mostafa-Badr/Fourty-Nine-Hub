@@ -36,6 +36,8 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
   Future<Either<Failure, bool>> toggleSubCategoryToFavorites(String id);
 
+  Future<Either<Failure, bool>> deleteAd(String id);
+
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
   Future<Either<Failure, BannerModel>> getBannerById({required String id});
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
@@ -202,25 +204,39 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   Future<Either<Failure, QuestionEntity>> getQuestion() async {
     final result = await _apiConsumer.get(EndPoints.getQuestion);
     return result.fold(
-          (failure) {
+      (failure) {
         return Left(failure);
       },
-          (data) {
+      (data) {
         return Right(QuestionModel.fromJson(data['data']));
       },
-    );  }
+    );
+  }
 
   @override
-  Future<Either<Failure, bool>> answerQuestion(AnswerQuestionParams params) async {
-    final result = await _apiConsumer.post(EndPoints.answerQuestion(params.id),data: {
-      "answer": params.answer
-    });
+  Future<Either<Failure, bool>> answerQuestion(
+      AnswerQuestionParams params) async {
+    final result = await _apiConsumer.post(EndPoints.answerQuestion(params.id),
+        data: {"answer": params.answer});
     return result.fold(
-          (failure) {
+      (failure) {
         return Left(failure);
       },
-          (data) {
+      (data) {
         return Right(data['status'] ?? (data['success'] ?? false));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAd(String id) async {
+    final result = await _apiConsumer.delete(EndPoints.deleteAd(id));
+    return result.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (data) {
+        return Right(data['status']);
       },
     );
   }

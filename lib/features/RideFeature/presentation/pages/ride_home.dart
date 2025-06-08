@@ -42,9 +42,12 @@ import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../core/messages/messages.dart';
 import '../../../../core/utils/format_numbers.dart';
+import '../../../../core/utils/validator.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
@@ -73,6 +76,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   final MapController _mapController = MapController();
 
+  final GlobalKey<FormState> _phoneNumberFormKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +87,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         rideCubit.initHome(context);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Widget buildPendingSheet() {
@@ -101,7 +112,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 color: context.isDarkMode ? AppColors.QUANTITY_COLOR : AppColors.whiteColor,
               ),
               child: BottomCardRequest(
-                driversCount: 3,
+                driversCount: serviceLocator<RideCubit>().tripViewers.length,
                 rideCubit: serviceLocator<RideCubit>(),
                 onCancel: () async {
                   await context.read<RideCubit>().cancelPendingTripByClient(
@@ -357,7 +368,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: cubit.loadingHomeData == true
-                  ? const Center(child: CustomCircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : Form(
                       key: _formKey,
                       child: SafeArea(
@@ -408,10 +419,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                             },
                                                           )
                                                         : const SizedBox(),
-                                context.read<RideCubit>().selectedCategoryIsSocket
-                                    && (state.requestedTrip == null
-                                ||state.requestedTrip?.status == TripState.completed.name
-                                ||state.requestedTrip?.status == TripState.canceled.name)
+                                context.read<RideCubit>().selectedCategoryIsSocket &&
+                                        (state.requestedTrip == null ||
+                                            state.requestedTrip?.status == TripState.completed.name ||
+                                            state.requestedTrip?.status == TripState.canceled.name)
                                     ? _carTruckBtn(
                                         driverInfo: state.driverInfo,
                                         loadingInfo: state.loaderInfo,
@@ -554,7 +565,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               return pleaseLoginDialog(context);
             }
             context.pop();
-            if (driverInfo == null) {
+            if (driverInfo == null || (driverInfo.driverType?.isEmpty ?? false)) {
               serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
             } else {
               if (driverInfo.status == RegistrationStatus.pending.status) {
@@ -626,7 +637,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               return pleaseLoginDialog(context);
             }
             context.pop();
-            if (loadingInfo == null) {
+            if (loadingInfo == null || (loadingInfo.status?.isEmpty ?? false)) {
               print("object");
               serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
             } else {
@@ -697,7 +708,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           onTap: () {
             if (context.isUserLoggedIn) {
               context.pop();
-              context.push(Routes.rideOffer, extra: false);
+              context.push(Routes.rideOffer, extra: (serviceLocator<RideCubit>().state.selectedType?.isNotEmpty??false)?serviceLocator<RideCubit>().state.selectedType:!context.read<RideCubit>().selectedCategoryIsSocket?'shipping':'ride');
             } else {
               context.pop();
               return pleaseLoginDialog(context);
@@ -766,6 +777,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo, required Function openDrawer}) {
+    print("loadingInfo?.status ${loadingInfo?.status}");
+    print("loadingInfo?.status ${loadingInfo?.status}");
+    print("loadingInfo?.status ${driverInfo?.driverType}");
+    print("loadingInfo?.status ${driverInfo?.driverType}");
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       width: double.infinity,
@@ -794,14 +809,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               height: 50,
               child: GestureDetector(
                 onTap: () {
-                  if (driverInfo == null && loadingInfo == null) {
+                  if ((driverInfo == null || (driverInfo.status != RegistrationStatus.approved.status)) &&
+                      (loadingInfo == null || (loadingInfo.status != RegistrationStatus.approved.status))) {
                     openDrawer();
-                  } else if (driverInfo != null && loadingInfo != null) {
+                  } else if ((driverInfo != null && (driverInfo.status == RegistrationStatus.approved.status)) &&
+                      (loadingInfo != null && (loadingInfo.status == RegistrationStatus.approved.status))) {
                     openDrawer();
                   } else {
-                    if (driverInfo != null && loadingInfo == null) {
+                    if ((driverInfo != null && (driverInfo.status == RegistrationStatus.approved.status)) &&
+                        (loadingInfo == null || (loadingInfo.status != RegistrationStatus.approved.status))) {
                       context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo.driverType == 'socket' ? true : false));
-                    } else if (driverInfo == null && loadingInfo != null) {
+                    } else if ((driverInfo == null || (driverInfo.status != RegistrationStatus.approved.status)) &&
+                        (loadingInfo != null && (loadingInfo.status == RegistrationStatus.approved.status))) {
                       context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'truk', isSocket: driverInfo?.driverType == 'socket' ? true : false));
                     }
                   }
@@ -812,7 +831,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   height: 50,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: (driverInfo != null || loadingInfo != null)
+                      colors: ((driverInfo != null && (driverInfo.status == RegistrationStatus.approved.status)) ||
+                              (loadingInfo != null && (loadingInfo.status == RegistrationStatus.approved.status)))
                           ? [
                               AppColors.cF33D49,
                               AppColors.cC0303A,
@@ -832,7 +852,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   ),
                   child: Center(
                     child: Text(
-                      (driverInfo != null || loadingInfo != null)
+                      ((driverInfo != null && (driverInfo.status == RegistrationStatus.approved.status)) ||
+                              (loadingInfo != null && (loadingInfo.status == RegistrationStatus.approved.status)))
                           ? context.isArabic
                               ? 'وضع السائق'
                               : 'Driver Mode'
@@ -935,12 +956,27 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   child: Column(
                     spacing: 8,
                     children: [
+                      if (!context.read<RideCubit>().selectedCategoryIsSocket || state.selectedType == 'shipping')
+                        _carTruckBtn(
+                            driverInfo: state.driverInfo,
+                            loadingInfo: state.loaderInfo,
+                            openDrawer: () {
+                              showModalBottomSheet(
+                                backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                                context: context,
+                                builder: (context) => _buttonsWidget(
+                                  driverInfo: state.driverInfo,
+                                  loadingInfo: state.loaderInfo,
+                                ),
+                              );
+                            }),
                       _buildCategoryList("ride", state.rideCategory?.subCategories ?? []),
                       _buildCategoryList("shipping", state.shippingCategory?.subCategories ?? []),
                       if (!context.read<RideCubit>().selectedCategoryIsSocket)
                         RidePersonalMoreInfoScreen(
                           isTruk: context.read<RideCubit>().isTruk,
                           subCategoryId: context.read<RideCubit>().subCategoryId,
+                            type: context.read<RideCubit>().state.selectedType??'ride'
                         ),
                       context.read<RideCubit>().selectedCategoryIsSocket
                           ? _customLocationField(
@@ -952,6 +988,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   context.push(
                                     Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                                     extra: RideOpenStreetMapSearchAndPickParams(
+                                      minDistanceReferencePoint: state.toLocation == null ? null : LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                                       onPicked: (pickedData) async {
                                         serviceLocator<RideCubit>().updateFromLocation(
                                           lat: pickedData.latLong.latitude,
@@ -979,6 +1016,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   context.push(
                                     Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                                     extra: RideOpenStreetMapSearchAndPickParams(
+                                      minDistanceReferencePoint: state.currentLocation == null ? null : LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
                                       onPicked: (pickedData) async {
                                         serviceLocator<RideCubit>().updateToLocation(
                                           lat: pickedData.latLong.latitude,
@@ -1008,12 +1046,99 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                       child: AppButton(
                                           radius: 15,
                                           label: LocaleKeys.premiumRequest.tr(),
+                                          // onPressed: () async {
+                                          //   if (context.isUserLoggedIn) {
+                                          //     if (state.toLocation != null &&
+                                          //         state.currentLocation !=
+                                          //             null) {
+                                          //       bool isSubscribed = await context
+                                          //           .read<RideCubit>()
+                                          //           .isSubscribed(
+                                          //           userId: UserCubit
+                                          //               .to
+                                          //               .state
+                                          //               .data
+                                          //               ?.id ??
+                                          //               '',
+                                          //           subcategoryId: state
+                                          //               .rideCategory
+                                          //               ?.subCategories[context
+                                          //               .read<
+                                          //               RideCubit>()
+                                          //               .selectedCategoryIndex!]
+                                          //               .subCategoryId ??
+                                          //               '');
+                                          //       if (!isSubscribed) {
+                                          //         SubscriptionMethod()
+                                          //             .subscribe(
+                                          //             subscribeId: state
+                                          //                 .rideCategory
+                                          //                 ?.subCategories[context
+                                          //                 .read<
+                                          //                 RideCubit>()
+                                          //                 .selectedCategoryIndex!]
+                                          //                 .subCategoryId ??
+                                          //                 '',
+                                          //             onSubscribe: () {
+                                          //               context.pop();
+                                          //               context.pop();
+                                          //             },
+                                          //             showRegular: false,
+                                          //             title: LocaleKeys
+                                          //                 .premiumRequest
+                                          //                 .localize);
+                                          //       } else {
+                                          //         showModalBottomSheet(
+                                          //           context: context,
+                                          //           isScrollControlled: true,
+                                          //           backgroundColor:
+                                          //           Colors.transparent,
+                                          //           builder: (context) =>
+                                          //               CustomReserveRideBottomSheet(
+                                          //                 rideCubit: serviceLocator<
+                                          //                     RideCubit>(),
+                                          //                 selectedCategoryId: state
+                                          //                     .rideCategory
+                                          //                     ?.subCategories[
+                                          //                 serviceLocator<
+                                          //                     RideCubit>()
+                                          //                     .selectedCategoryIndex!]
+                                          //                     .subCategoryId ??
+                                          //                     '',
+                                          //                 isPremium: true,
+                                          //               ),
+                                          //         );
+                                          //       }
+                                          //     } else {
+                                          //       ScaffoldMessenger.of(context)
+                                          //           .showSnackBar(
+                                          //         SnackBar(
+                                          //           content: Text(
+                                          //             context.isArabic
+                                          //                 ? "يرجى تحديد الموقع"
+                                          //                 : "Please select location", // Ensure you define this key in your localization file
+                                          //             textAlign:
+                                          //             TextAlign.center,
+                                          //             style: const TextStyle(
+                                          //                 color: Colors.white),
+                                          //           ),
+                                          //           backgroundColor: Colors.red,
+                                          //           duration: const Duration(
+                                          //               seconds: 2),
+                                          //         ),
+                                          //       );
+                                          //     }
+                                          //   } else {
+                                          //     context.push(Routes.LOGIN);
+                                          //   }
+                                          // },
                                           onPressed: () async {
                                             if (context.isUserLoggedIn) {
                                               if (state.toLocation != null && state.currentLocation != null) {
                                                 bool isSubscribed = await context.read<RideCubit>().isSubscribed(
-                                                    userId: UserCubit.to.state.data?.id ?? '',
-                                                    subcategoryId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '');
+                                                      userId: UserCubit.to.state.data?.id ?? '',
+                                                      subcategoryId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
+                                                    );
                                                 if (!isSubscribed) {
                                                   SubscriptionMethod().subscribe(
                                                       subscribeId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
@@ -1024,22 +1149,122 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                       showRegular: false,
                                                       title: LocaleKeys.premiumRequest.localize);
                                                 } else {
-                                                  showModalBottomSheet(
+                                                  // Reset the controller and form state before showing the sheet
+                                                  serviceLocator<RideCubit>().phoneNumberController.clear(); // Clear any previous input
+                                                  _phoneNumberFormKey.currentState?.reset(); // Reset validation state
+
+                                                  // Show the phone number input bottom sheet
+                                                  final bool? isPhoneNumberValid = await showModalBottomSheet<bool>(
                                                     context: context,
                                                     isScrollControlled: true,
                                                     backgroundColor: Colors.transparent,
-                                                    builder: (context) => CustomReserveRideBottomSheet(
-                                                      rideCubit: serviceLocator<RideCubit>(),
-                                                      selectedCategoryId: state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
-                                                      isPremium: true,
-                                                    ),
+                                                    builder: (BuildContext context) {
+                                                      return Padding(
+                                                        padding: EdgeInsets.only(
+                                                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                                                        ),
+                                                        child: Container(
+                                                          padding: const EdgeInsets.all(20.0),
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                                                          ),
+                                                          child: Form(
+                                                            key: _phoneNumberFormKey, // Use the class-level key
+                                                            child: Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                  children: [
+                                                                    const SizedBox(width: 24),
+                                                                    Text(
+                                                                      LocaleKeys.phoneNumber.localize,
+                                                                      style: const TextStyle(
+                                                                        fontSize: 18,
+                                                                        fontWeight: FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                    IconButton(
+                                                                      icon: const Icon(Icons.close),
+                                                                      onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(height: 20),
+                                                                NewPhoneNumberTextFormField(
+                                                                  currentController: serviceLocator<RideCubit>().phoneNumberController, // Use the class-level controller
+                                                                  keyboardType: TextInputType.number,
+                                                                  isRequired: true,
+                                                                  validator: validatorEgyptPhone,
+                                                                ),
+                                                                const SizedBox(height: 20),
+                                                                SizedBox(
+                                                                  width: double.infinity,
+                                                                  child: ElevatedButton(
+                                                                    onPressed: () {
+                                                                      if (_phoneNumberFormKey.currentState!.validate()) {
+                                                                        Navigator.of(context).pop(true); // Pass true if validated
+                                                                      }
+                                                                    },
+                                                                    style: ElevatedButton.styleFrom(
+                                                                      backgroundColor: AppColors.PRIMARY_COLOR,
+                                                                      padding: const EdgeInsets.symmetric(vertical: 15),
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(10),
+                                                                      ),
+                                                                    ),
+                                                                    child: Text(
+                                                                      LocaleKeys.submit.localize,
+                                                                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
                                                   );
+
+                                                  // This block runs after the phone number bottom sheet is dismissed
+                                                  // isPhoneNumberValid will be true if validated, false if dismissed without validating
+                                                  if (isPhoneNumberValid == true) {
+                                                    // If valid, show the CustomReserveRideBottomSheet
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      backgroundColor: Colors.transparent,
+                                                      builder: (context) => CustomReserveRideBottomSheet(
+                                                        rideCubit: serviceLocator<RideCubit>(),
+                                                        selectedCategoryId:
+                                                            state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
+                                                        isPremium: true,
+                                                        // Pass the phone number here if CustomReserveRideBottomSheet needs it
+                                                        // phoneNumber: _phoneNumberController.text,
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    // If phone number is null or invalid, do nothing (sheet already closed)
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          context.isArabic ? "رقم الهاتف غير صالح أو لم يتم إدخاله." : "Phone number is invalid or not entered.",
+                                                          textAlign: TextAlign.center,
+                                                          style: const TextStyle(color: Colors.white),
+                                                        ),
+                                                        backgroundColor: Colors.red,
+                                                        duration: const Duration(seconds: 2),
+                                                      ),
+                                                    );
+                                                  }
                                                 }
                                               } else {
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
                                                     content: Text(
-                                                      context.isArabic ? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
+                                                      context.isArabic ? "يرجى تحديد الموقع" : "Please select location",
                                                       textAlign: TextAlign.center,
                                                       style: const TextStyle(color: Colors.white),
                                                     ),
@@ -1057,26 +1282,147 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   Expanded(
                                       flex: 2,
                                       child: state.isLoadingSubmit
-                                          ? const Center(child: CustomCircularProgressIndicator())
+                                          ? const Center(child: CircularProgressIndicator())
                                           : AppButton(
                                               radius: 15,
                                               label: LocaleKeys.request.tr(),
                                               onPressed: () async {
                                                 if (context.isUserLoggedIn) {
                                                   if (state.toLocation != null && state.currentLocation != null) {
-                                                    showModalBottomSheet(
+                                                    // showModalBottomSheet(
+                                                    //   context: context,
+                                                    //   isScrollControlled: true,
+                                                    //   backgroundColor:
+                                                    //   Colors.transparent,
+                                                    //   builder: (context) =>
+                                                    //       BlocProvider.value(
+                                                    //           value: serviceLocator<
+                                                    //               RideCubit>(),
+                                                    //           child:
+                                                    //           CustomReserveRideBottomSheet(
+                                                    //             rideCubit:
+                                                    //             serviceLocator<
+                                                    //                 RideCubit>(),
+                                                    //             selectedCategoryId: state
+                                                    //                 .rideCategory
+                                                    //                 ?.subCategories[
+                                                    //             serviceLocator<RideCubit>().selectedCategoryIndex!]
+                                                    //                 .subCategoryId ??
+                                                    //                 '',
+                                                    //             isPremium:
+                                                    //             false,
+                                                    //           )),
+                                                    // );
+                                                    // Reset the controller and form state before showing the sheet
+                                                    serviceLocator<RideCubit>().phoneNumberController.clear(); // Clear any previous input
+                                                    _phoneNumberFormKey.currentState?.reset(); // Reset validation state
+
+                                                    // Show the phone number input bottom sheet
+                                                    final bool? isPhoneNumberValid = await showModalBottomSheet<bool>(
                                                       context: context,
                                                       isScrollControlled: true,
                                                       backgroundColor: Colors.transparent,
-                                                      builder: (context) => BlocProvider.value(
-                                                          value: serviceLocator<RideCubit>(),
-                                                          child: CustomReserveRideBottomSheet(
-                                                            rideCubit: serviceLocator<RideCubit>(),
-                                                            selectedCategoryId:
-                                                                state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
-                                                            isPremium: false,
-                                                          )),
+                                                      builder: (BuildContext context) {
+                                                        return Padding(
+                                                          padding: EdgeInsets.only(
+                                                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                                                          ),
+                                                          child: Container(
+                                                            padding: const EdgeInsets.all(20.0),
+                                                            decoration: const BoxDecoration(
+                                                              color: Colors.white,
+                                                              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                                                            ),
+                                                            child: Form(
+                                                              key: _phoneNumberFormKey, // Use the class-level key
+                                                              child: Column(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    children: [
+                                                                      const SizedBox(width: 24),
+                                                                      Text(
+                                                                        LocaleKeys.phoneNumber.localize,
+                                                                        style: const TextStyle(
+                                                                          fontSize: 18,
+                                                                          fontWeight: FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      IconButton(
+                                                                        icon: const Icon(Icons.close),
+                                                                        onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  const SizedBox(height: 20),
+                                                                  NewPhoneNumberTextFormField(
+                                                                    currentController: serviceLocator<RideCubit>().phoneNumberController, // Use the class-level controller
+                                                                    keyboardType: TextInputType.number,
+                                                                    isRequired: true,
+                                                                    validator: validatorEgyptPhone,
+                                                                  ),
+                                                                  const SizedBox(height: 20),
+                                                                  SizedBox(
+                                                                    width: double.infinity,
+                                                                    child: ElevatedButton(
+                                                                      onPressed: () {
+                                                                        if (_phoneNumberFormKey.currentState!.validate()) {
+                                                                          Navigator.of(context).pop(true); // Pass true if validated
+                                                                        }
+                                                                      },
+                                                                      style: ElevatedButton.styleFrom(
+                                                                        backgroundColor: AppColors.PRIMARY_COLOR,
+                                                                        padding: const EdgeInsets.symmetric(vertical: 15),
+                                                                        shape: RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.circular(10),
+                                                                        ),
+                                                                      ),
+                                                                      child: Text(
+                                                                        LocaleKeys.submit.localize,
+                                                                        style: const TextStyle(fontSize: 18, color: Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
                                                     );
+
+                                                    // This block runs after the phone number bottom sheet is dismissed
+                                                    // isPhoneNumberValid will be true if validated, false if dismissed without validating
+                                                    if (isPhoneNumberValid == true) {
+                                                      // If valid, show the CustomReserveRideBottomSheet
+                                                      showModalBottomSheet(
+                                                        context: context,
+                                                        isScrollControlled: true,
+                                                        backgroundColor: Colors.transparent,
+                                                        builder: (context) => CustomReserveRideBottomSheet(
+                                                          rideCubit: serviceLocator<RideCubit>(),
+                                                          selectedCategoryId:
+                                                              state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
+                                                          isPremium: false,
+                                                          // Pass the phone number here if CustomReserveRideBottomSheet needs it
+                                                          // phoneNumber: _phoneNumberController.text,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      // If phone number is null or invalid, do nothing (sheet already closed)
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            context.isArabic ? "رقم الهاتف غير صالح أو لم يتم إدخاله." : "Phone number is invalid or not entered.",
+                                                            textAlign: TextAlign.center,
+                                                            style: const TextStyle(color: Colors.white),
+                                                          ),
+                                                          backgroundColor: Colors.red,
+                                                          duration: const Duration(seconds: 2),
+                                                        ),
+                                                      );
+                                                    }
                                                   } else {
                                                     ScaffoldMessenger.of(context).showSnackBar(
                                                       SnackBar(
@@ -1145,6 +1491,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
+                      if (context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null) {
+                        if (serviceLocator<UserCubit>().state.data?.gender == "male" && subCategory.subCategoryNameEn.trim().toLowerCase() == "lady") {
+                          showErrorMessage(context, context.isArabic ? "أنت رجل, لا يمكنك استخدام هذه الخدمة" : "You are a man, you can't use this service");
+                          return;
+                        }
+                      }
                       if (context.read<RideCubit>().selectedCategoryType == type && context.read<RideCubit>().selectedCategoryIndex == index) {
                         // context.read<RideCubit>().selectedCategoryType = null;
                         // context.read<RideCubit>().selectedCategoryIndex = null;
@@ -1154,7 +1506,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         subCategories.insert(0, subCategories.removeAt(index));
                       }
                       context.read<RideCubit>().subCategoryId = subCategory.subCategoryId;
-                      context.read<RideCubit>().checkSelectedCategoryIsSocket(subCategory.subCategoryId);
+                      context.read<RideCubit>().checkSelectedCategoryIsSocket(subCategory.subCategoryId, type);
                     });
                     _scrollToStart(type);
                   },

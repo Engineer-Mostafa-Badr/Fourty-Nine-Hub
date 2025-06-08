@@ -67,7 +67,7 @@ class PostModel extends PostEntity {
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
-    final user = TwitterUserModel.fromJson(json['user'] ?? {});
+    final user = TwitterUserModel.fromJson(json['owner'] ?? {});
 
     List<TwitterUserModel> parseUserList(dynamic data) {
       if (data is List) {

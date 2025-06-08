@@ -28,9 +28,10 @@ import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
 
 class OfferRideOfferScreen extends StatefulWidget {
+  final String type;
 
   const OfferRideOfferScreen({
-    super.key,
+    super.key,required this.type,
   });
 
   @override
@@ -44,28 +45,27 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
   @override
   void initState() {
     super.initState();
+    if(widget.type=='shipping') {
+      // context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+    context.read<ClientTripsCubit>().listenToUpdateOfferTripShipping();
+    }
+    if(widget.type=='ride') {
+      // context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+    context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
+    }
     _scrollController = ScrollController()..addListener(_onScroll);
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   final dashboardCubit = context.read<ClientTripsCubit>();
-    //   // if (!dashboardCubit.isClosed) {
-    //   dashboardCubit.listenToUpdateOfferTripNonSocket();
-    // });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   final dashboardCubit = context.read<ClientTripsCubit>();
-    //   // if (!dashboardCubit.isClosed) {
-    //   // dashboardCubit.listenToUpdateOfferTripNonSocket();
-    //   // // dashboardCubit.getAvailableNonSocketTrips(),
-    //   // dashboardCubit.listenToRemoveUntrackedTrip(),
-    //   // dashboardCubit.listenToNewTripNonSocket()
-    //   // // }
-    // });
+      // if (!dashboardCubit.isClosed) {
+      // // dashboardCubit.getAvailableNonSocketTrips(),
+      // dashboardCubit.listenToRemoveUntrackedTrip(),
+      // dashboardCubit.listenToNewTripNonSocket()
+      // // }
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientOfferTrips();
+      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientOfferTrips();
+      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientOfferShippingTrips();
     }
   }
 
@@ -121,7 +121,7 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                             text: LocaleKeys.errorHappen.localize,
                             style: const TextStyle(color: Colors.red)),
                       )
-                    : state.clientOfferTripData.isEmpty
+                    : context.read<ClientTripsCubit>().clientOfferTripsData.isEmpty
                         ?  Center(
                             child: Label(
                                 text: LocaleKeys.youDontHaveAvailableOffer.localize,
@@ -130,19 +130,24 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: state.clientOfferTripData!.isEmpty
+                            child: context.read<ClientTripsCubit>().clientOfferTripsData.isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
                                     itemBuilder: (context, index) =>
                                         ClientOfferWidget(
-                                          offers: state
-                                              .clientOfferTripData?[index],
+                                          offers: context.read<ClientTripsCubit>().clientOfferTripsData[index],
+                                          modeType: widget.type,
+                                          onRefuseOffer: (String id){
+                                            // context.read<ClientTripsCubit>().refuseClientShippingTrip(id,context);
+                                            setState(() {
+
+                                            });
+                                          },
                                         ),
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(height: 5),
                                     itemCount:
-                                        state.clientOfferTripData!.length ??
-                                            0),
+                                    context.read<ClientTripsCubit>().clientOfferTripsData.length),
                           );
           },
         ),
@@ -151,12 +156,12 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
   }
 }
 
-
 class ClientOfferWidget extends StatelessWidget {
   final String modeType;
   final ClientOfferTripEntity? offers;
+  final Function(String id) onRefuseOffer;
 
-  const ClientOfferWidget({super.key, this.modeType = 'truk', this.offers});
+  const ClientOfferWidget({super.key,required this.modeType, this.offers,required this.onRefuseOffer});
 
   // Helper method to convert digits based on locale
   String _formatNumber(String input, BuildContext context) {
@@ -209,7 +214,6 @@ class ClientOfferWidget extends StatelessWidget {
         ? offers?.newOfferPrice ?? offers?.price ?? 300
         : offers?.price ?? 300;
     final priceText = _formatNumber(price.toString(), context);
-
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -369,7 +373,7 @@ class ClientOfferWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                        text: priceText,
+                        text: "${offers?.isFromSocket == true ? offers?.newOfferPrice ?? offers?.newOfferPrice ?? 300 : offers?.newOfferPrice ?? 300}",
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const Sizer(width: 4),
@@ -406,9 +410,11 @@ class ClientOfferWidget extends StatelessWidget {
                             radius: 15,
                             label: LocaleKeys.Accept.tr(),
                             onPressed: () {
-                              context.read<ClientTripsCubit>().acceptClientTrip(offers?.id ?? "");
+                              modeType=='ride'?context.read<ClientTripsCubit>().acceptClientTrip(offers?.id ?? ""):context.read<ClientTripsCubit>().acceptClientShippingTrip(offers?.id ?? "");
+                              onRefuseOffer(offers?.id??"");
                             },
-                            backColor: AppColors.PRIMARY_COLOR),
+                            backColor: AppColors.PRIMARY_COLOR
+                        ),
                       ),
                       const Sizer(),
                       Expanded(
@@ -418,10 +424,14 @@ class ClientOfferWidget extends StatelessWidget {
                             label: LocaleKeys.refuse.tr(),
                             style: Styles.mediumText(
                                 color: Colors.white, fontSize: 23),
-                            onPressed: () {
-                              context.read<ClientTripsCubit>().refuseClientTrip(offers?.id ?? "");
+                            onPressed: () async{
+                              modeType=='ride'?await context.read<ClientTripsCubit>().refuseClientTrip(offers?.id ?? ""):await context.read<ClientTripsCubit>().refuseClientShippingTrip(offers?.id ?? "",context);
+                                onRefuseOffer(offers?.id??"");
+
                             },
-                            backColor: AppColors.SECONDARY_COLOR_DARK2),
+                            backColor: AppColors.SECONDARY_COLOR_DARK2
+
+                        ),
                       ),
                     ],
                   ),
@@ -434,4 +444,3 @@ class ClientOfferWidget extends StatelessWidget {
     );
   }
 }
-

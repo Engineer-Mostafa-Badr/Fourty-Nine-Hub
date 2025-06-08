@@ -19,7 +19,7 @@ import '../widgets/upload_file_widget.dart';
 
 class PersonalDocumentsScreen extends StatelessWidget {
   const PersonalDocumentsScreen({super.key, required this.params});
-  final UploadRiderImagesParams params;
+    final UploadRiderImagesParams params;
 
   @override
   Widget build(BuildContext context) {

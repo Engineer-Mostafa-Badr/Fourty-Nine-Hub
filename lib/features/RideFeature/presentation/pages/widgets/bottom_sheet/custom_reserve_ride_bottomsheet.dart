@@ -15,6 +15,7 @@ import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
 import '../../../../../../core/utils/format_numbers.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -105,7 +106,7 @@ class _CustomReserveRideBottomSheetState
                                     itemCount: (state.rideExpectedPrice
                                                 ?.subcategoryModel.length ??
                                             0) +
-                                        3, // +3 لإضافة الـ ImageTextRow
+                                        3,
                                     itemBuilder: (context, index) {
                                       if (index <
                                           (state.rideExpectedPrice
@@ -114,6 +115,21 @@ class _CustomReserveRideBottomSheetState
                                         return GestureDetector(
                                           onTap: () {
                                             setState(() {
+
+                                              if(context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null){
+                                                if(serviceLocator<UserCubit>().state.data?.gender == "male"){
+                                                  if(state
+                                                      .rideExpectedPrice
+                                                      ?.subcategoryModel[index]
+                                                      .nameEn.trim().toLowerCase() == "lady") {
+                                                    showErrorMessage(context,
+                                                        context.isArabic
+                                                            ? "أنت رجل, لا يمكنك استخدام هذه الخدمة"
+                                                            : "You are a man, you can't use this service");
+                                                    return;
+                                                  }
+                                                }
+                                              }
                                               selectedCategoryId = state
                                                       .rideExpectedPrice
                                                       ?.subcategoryModel[index]

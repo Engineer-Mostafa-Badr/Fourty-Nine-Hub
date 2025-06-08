@@ -7,7 +7,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/requests_log_by_main_category_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -77,28 +79,32 @@ class _AdRequestsViewState extends State<AdRequestsView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.adRequests.localize,
-          backColor: AppColors.getTextColor(context),
-        ),
-      ),
+      appBar: BackAppBar(label: LocaleKeys.adRequests.localize),
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(30),
+      //   child: BackAppBar(
+      //     label: LocaleKeys.adRequests.localize,
+      //     backColor: AppColors.getTextColor(context),
+      //   ),
+      // ),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-            child: TextFormField(
-              controller: context.read<AdRequestsCubit>().searchController,
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                hintStyle: Styles.mediumText(),
-                hintText: LocaleKeys.searchWithName.localize,
-              ),
-            ),
+          const SizedBox(
+            height: 16,
           ),
-          const Sizer(),
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+          //   child: TextFormField(
+          //     controller: context.read<AdRequestsCubit>().searchController,
+          //     decoration: InputDecoration(
+          //       contentPadding:
+          //           EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+          //       hintStyle: Styles.mediumText(),
+          //       hintText: LocaleKeys.searchWithName.localize,
+          //     ),
+          //   ),
+          // ),
+          // const Sizer(),
           Expanded(
             child: BlocBuilder<AdRequestsCubit, AdRequestsState>(
               builder: (context, state) {
@@ -120,6 +126,27 @@ class _AdRequestsViewState extends State<AdRequestsView> {
 
                     final adRequest =
                         context.read<AdRequestsCubit>().adRequests[index];
+                    return AdsRequestLogCard(
+                      requestLog: adRequest,
+                      // requestLog: RequestsLogByMainCategoryEntity(
+                      //   adDesc: adRequest.adDesc,
+                      //   adId: adRequest.adId,
+                      //   adTitle: adRequest.adTitle,
+                      //   createdAt: adRequest.createdAt,
+                      //   gender: adRequest.gender,
+                      //   firstName: adRequest.firstName,
+                      //   lastName: adRequest.lastName,
+                      //   userId: adRequest.userId,
+                      //   userName: adRequest.userName,
+                      //   isPremium: adRequest.isPremium,
+                      //   phone: adRequest.phone,
+                      //   profilePictureUrl: adRequest.profilePictureUrl,
+                      //   subCategoryId: adRequest.subCategoryId,
+                      //   subCategoryNameAr: adRequest.subCategoryNameAr,
+                      //   subCategoryNameEn: adRequest.subCategoryNameEn,
+                      //   views: adRequest.views,
+                      // ),
+                    );
                     return Container(
                       margin: EdgeInsetsDirectional.all(10.w),
                       padding: EdgeInsetsDirectional.symmetric(
@@ -164,14 +191,14 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                             ],
                           ),
                           Sizer(height: 50.h),
-                          CallMessageButtons(
-                            otherUserId: adRequest.adUserId,
-                            clientId: adRequest.requestId,
-                            subcategoryId: adRequest.subCategoryId,
-                            phone: adRequest.phone,
-                            id: adRequest.requestUserId,
-                            hasReport: true,
-                          ),
+                          // CallMessageButtons(
+                          //   otherUserId: adRequest.adUserId,
+                          //   clientId: adRequest.requestId,
+                          //   subcategoryId: adRequest.subCategoryId,
+                          //   phone: adRequest.phone,
+                          //   id: adRequest.requestUserId,
+                          //   hasReport: true,
+                          // ),
                         ],
                       ),
                     );

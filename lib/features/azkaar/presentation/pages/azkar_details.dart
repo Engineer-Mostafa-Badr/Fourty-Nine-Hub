@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -71,7 +71,7 @@ class _AzkarDetailsState extends State<AzkarDetails> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text.rich(
                         textDirection: TextDirection.rtl,
@@ -82,8 +82,9 @@ class _AzkarDetailsState extends State<AzkarDetails> {
                               style: TextStyle(
                                 fontFamily: 'Amiri',
                                 fontSize: 40.sp,
-                                color:
-                                    context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.PRIMARY_COLOR,
                               ),
                             ),
                             TextSpan(

@@ -2,7 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
@@ -45,14 +50,26 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       ))
       ..layout = ZegoLayout.gallery();
 
-    final userId = context.read<UserCubit>().state.data!.id;
+    final userId = context.read<UserCubit>().state.data?.id ?? '';
     print('live id is ${widget.liveID}');
+    if (userId.isEmpty ||
+        context.read<SecretsCubit>().state.secrets?.zegoAppId == null ||
+        context.read<SecretsCubit>().state.secrets?.zegoAppSign == null) {
+      return CustomScaffold(
+        body: Center(
+          child: Label(
+            text: context.isArabic ? 'حدث خطأ ما' : 'Something went wrong',
+            style: Styles.headerText(),
+          ),
+        ),
+      );
+    }
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
           appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
           appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
           userID: userId,
-          userName: context.read<UserCubit>().state.data!.fullName,
+          userName: context.read<UserCubit>().state.data?.fullName ?? '',
           liveID: widget.liveID,
           isLiveStream: true,
           config: widget.isHost ? hostConfig : audienceConfig

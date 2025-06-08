@@ -83,6 +83,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
+import '../../../domain/entities/trip_viewer_entity.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
 
@@ -109,6 +110,10 @@ class RideCubit extends Cubit<RideState> {
 
   bool selectedCategoryIsSocket = true;
   String subCategoryId = '';
+
+  List<TripViewerEntity> tripViewers = [];
+
+  final TextEditingController phoneNumberController = TextEditingController();
 
   Map<String, String> socketCategories = {
     'captain': '62c8ba9f8e28a58a3edf57eb',
@@ -237,10 +242,29 @@ class RideCubit extends Cubit<RideState> {
       });
 
       // near by driver
-      SharedWebSocket.socket!.on("subcategory:driver", (data) {
-        CliLogger.info("nearbyDriversAvailable:  $data");
-        emit(state.copyWith(status: RideStates.success));
+      SharedWebSocket.socket!.on("RIDE:VIEWER_TRIPS", (data) {
+        CliLogger.info("RIDE:VIEWER_TRIPS:  $data");
+
+        if (data != null && data is Map<String, dynamic>) {
+          final TripViewerEntity newViewer = TripViewerEntity.fromJson(data);
+
+          final bool alreadyExists = tripViewers.any(
+                (viewer) => viewer.driverUserId == newViewer.driverUserId,
+          );
+
+          if (!alreadyExists) {
+            tripViewers.add(newViewer);
+            CliLogger.info("✅ Driver added: ${newViewer.driverUserId}");
+          } else {
+            CliLogger.info("ℹ️ Driver already in list: ${newViewer.driverUserId}");
+          }
+
+          emit(state.copyWith(status: RideStates.success));
+        } else {
+          CliLogger.error("❌ Invalid data format in RIDE:VIEWER_TRIPS: $data");
+        }
       });
+
 
       // trip started socket event
       SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
@@ -424,7 +448,7 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.loading, currentLocation: currentLocation));
   }
 
-  void checkSelectedCategoryIsSocket(String selectedCategory) {
+  void checkSelectedCategoryIsSocket(String selectedCategory,String type) {
     if (socketCategories.containsValue(selectedCategory)) {
       selectedCategoryIsSocket = true;
     } else if (trukCategories.containsValue(selectedCategory)) {
@@ -435,7 +459,7 @@ class RideCubit extends Cubit<RideState> {
       selectedCategoryIsSocket = false;
     }
     log(selectedCategoryIsSocket.toString());
-    emit(state.copyWith(status: RideStates.success));
+    emit(state.copyWith(status: RideStates.success,selectedType:type));
   }
 
   Future<void> _fetchUserLocation() async {
@@ -669,9 +693,11 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        DriverInfoEntity? driverInfo = DriverInfoEntity(driverType: '');
+        emit(state.copyWith(status: RideStates.error,driverInfo:driverInfo, failure: failure));
       },
       (info) {
+        log("info.toJson()${info.toJson()}");
         emit(state.copyWith(
             status: RideStates.success,
             driverInfo: info,
@@ -703,7 +729,8 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+        LoadingInfoEntity? loaderInfo = LoadingInfoEntity(status: '');
+        emit(state.copyWith(status: RideStates.error,loaderInfo: loaderInfo, failure: failure));
       },
       (info) {
         emit(state.copyWith(
@@ -894,7 +921,7 @@ class RideCubit extends Cubit<RideState> {
         polyline: polyline,
         wayPointOneTitle: wayPointOneTitle,
         wayPointTwoTitle: wayPointTwoTitle,
-        phoneNumber: "01211972375"
+        phoneNumber: phoneNumberController.text,
       ),
     );
 
@@ -2378,6 +2405,11 @@ class RideCubit extends Cubit<RideState> {
           idNumber: ridePersonalDocIdNumController.text,
           phone: ridePhoneNumberController.text,
           plateInfo: rideVehiclePlateNumberController.text,
+          vehicleBrand:  '',
+          vehicleColor:  '',
+          vehicleModel:  '',
+          vehicleYear: rideVehicleProductionYearController.text,
+
           // subcategoryId: "62c8baa08e28a58a3edf57ed",
           subcategoryId: (state.rideSubCategories ?? [])
               .firstWhere((e) => e.isEnabled == true)
@@ -2425,7 +2457,12 @@ class RideCubit extends Cubit<RideState> {
           categoryId: (state.shippingSubCategories ?? [])
               .firstWhere((e) => e.isEnabled == true)
               .subCategoryId,
-          carModel: rideCarModelController.text);
+        vehicleBrand:  '',
+        vehicleColor:  '',
+        vehicleModel:  '',
+        vehicleYear: rideVehicleProductionYearController.text,
+
+      );
       final Either<Failure, bool> result = await loadingRegisterUseCase(params);
 
       result.fold(

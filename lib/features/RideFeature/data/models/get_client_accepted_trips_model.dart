@@ -81,9 +81,9 @@ class CategoryModel extends CategoryEntity {
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      nameAr: json['nameAr'],
-      nameEn: json['nameEn'],
-      picture: json['picture'],
+      nameAr: json['nameAr']??'',
+      nameEn: json['nameEn']??'',
+      picture: json['picture']??json['pictureUrl']??'',
     );
   }
 }
@@ -147,7 +147,7 @@ class RatingModel extends RatingEntity {
       average: json['average'] != null
           ? (json['average'] as num).toDouble()
           : null,
-      count: json['count'],
+      count: json['count']??json['total']??0,
     );
   }
 }

@@ -149,7 +149,7 @@ class _ReportViewState extends State<ReportView> {
           border: Border.all(
             color: selectedReport == report
                 ? AppColors.SECONDARY_COLOR
-                : Colors.grey[300]!,
+                : context.isDarkMode?Colors.grey[300]!:Colors.grey[500]!,
             width: 1,
           ),
         ),
@@ -195,9 +195,9 @@ class _ReportViewState extends State<ReportView> {
             data: MediaQuery.of(context)
                 .copyWith(textScaler: const TextScaler.linear(1.0)),
             // Disable scaling
-
             child: Container(
               constraints: BoxConstraints(maxHeight: 150.h),
+              padding: EdgeInsetsDirectional.only(start: 8),
               child: TextField(
                 maxLines: null,
                 style: TextStyle(
@@ -256,9 +256,10 @@ class _ReportViewState extends State<ReportView> {
           opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),
           child: IconButton(
-            color: AppColors.getRedColor(context),
-            icon: const Icon(
+            color: AppColors.getButtonPrimaryWhiteColor(context),
+            icon: Icon(
               Icons.send,
+              color: AppColors.getButtonPrimaryWhiteColor(context),
             ),
             onPressed: reportTextController.text.isNotEmpty
                 ? () async {

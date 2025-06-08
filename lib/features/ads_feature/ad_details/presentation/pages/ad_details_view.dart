@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -25,13 +26,16 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/prem
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/are_you_sure_delete_ad_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/build_tag_ads_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/image_ads_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
@@ -99,7 +103,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         }, builder: (context, state) {
           if (state.ad == null) {
             return const Center(
-              child: CircularProgressIndicator.adaptive(),
+              child: CustomCircularProgressIndicator(),
             );
           }
           List<AdDetailsPropEntity>? details = state.ad?.details
@@ -139,7 +143,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     ),
                   ),
                   userId == state.ad?.userId
-                      ? _buildRequestsButton()
+                      ? _buildRequestsButton(state.ad?.id ?? '')
                       : _buildActionsWidget(),
                 ],
               ),
@@ -186,7 +190,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     });
   }
 
-  Widget _buildRequestsButton() {
+  Widget _buildRequestsButton(String adId) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 8),
       child: Row(
@@ -196,8 +200,53 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               label: LocaleKeys.deleteRequest.localize,
               height: 38,
               backColor: AppColors.SECONDARY_COLOR_DARK2,
-              onPressed: () async {
-                // TODO: delete request
+              onPressed: () {
+                bottomSheet(
+                    context: context,
+                    isFloating: true,
+                    asAlertDialog: true,
+                    widget: AreYouSureDeleteAdWidget(
+                      title: LocaleKeys.alert.localize,
+                      subTitle:
+                          LocaleKeys.areYouSureAboutDeletingTheAD.localize,
+                      action: () async {
+                        showLoadingDialog(context);
+                        await context.read<SubcategoriesCubit>().deleteAd(adId);
+                        if (!mounted) return;
+                        context.pop();
+                        context.pop();
+                        if (context
+                                .read<SubcategoriesCubit>()
+                                .state
+                                .deleteAdStatus ==
+                            SubcategoriesStates.adsSuccess) {
+                          context
+                              .read<SubcategoriesCubit>()
+                              .loadMyAds(id: widget.id);
+                          showSuccessMessage(
+                              context,
+                              context.isArabic
+                                  ? 'تم حذف اعلانك'
+                                  : 'Your ad has been deleted');
+                          context.pop();
+                        }
+                        if (context
+                                .read<SubcategoriesCubit>()
+                                .state
+                                .deleteAdStatus ==
+                            SubcategoriesStates.error) {
+                          showErrorMessage(
+                              context,
+                              getFailureMessage(
+                                  context
+                                          .read<SubcategoriesCubit>()
+                                          .state
+                                          .failure ??
+                                      UnknownFailure(''),
+                                  context));
+                        }
+                      },
+                    ));
               },
               style: Styles.headerText(
                 fontWeight: FontWeight.w500,
@@ -298,6 +347,24 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                           subscriptionStatus:
                               state.ad?.userSubscriptionStatus ?? '',
                           dontPop: true,
+                          successRequest: () {
+                            context.pop();
+                            showSuccessMessage(
+                                context,
+                                context.isArabic
+                                    ? 'تم ارسال طلب التواصل'
+                                    : 'Request Sent Successfully');
+                            context.read<AdvertisementCubit>().resetRequest();
+                          },
+                          errorRequest: (failure) {
+                            context.pop();
+                            showSuccessMessage(
+                                context,
+                                context.isArabic
+                                    ? 'تم ارسال طلب التواصل'
+                                    : 'Request Sent Successfully');
+                            context.read<AdvertisementCubit>().resetRequest();
+                          },
                         ),
                       ),
                     ],
@@ -486,7 +553,22 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         ImageAdsWidget(
           images: ad.images,
           isFavourite: ad.isFavourite ?? false,
+          isVerified: true, // ad.isVerified ?? false,
           onPressedFavorite: () async {
+            if (ad.isFavourite == false) {
+              bool result =
+                  await context.read<AdvertisementCubit>().favouriteAd(ad.id);
+              if (result == true) {
+                ad.isFavourite = true;
+              }
+            } else if (ad.isFavourite == true) {
+              bool result =
+                  await context.read<AdvertisementCubit>().unFavouriteAd(ad.id);
+              if (result == true) {
+                ad.isFavourite = false;
+              }
+            }
+            setState(() {});
             // if (ad.isFavourite == false) {
             //   var result = await widget.onFav(ad.id);
             //   if (result == true) {
@@ -500,6 +582,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             // }
           },
         ),
+        // اذا كان الاعلان ليس من نوع زواج
         if (ad.mainCategoryId != '62c8b5b09332225799fe335e')
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -724,70 +807,172 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 height: 8,
               ),
               // اذا كان الاعلان ليس من نوع الزواج
-              if (ad.mainCategoryId != '62c8b5b09332225799fe335e')
-                Column(
-                  children: ad.details.map(
-                    (e) {
-                      return Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: ShapeDecoration(
-                          color: ad.details.indexOf(e) % 2 == 0
-                              ? const Color(0x66D9D9D9)
-                              : const Color(0xCCD9D9D9),
-                          //  const Color(0xCCD9D9D9),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            ImageFromInternet(
-                                image: e.imageUrl, width: 24, height: 24),
-                            // SvgPicture.asset(
-                            //   Assets.adsBagIcon,
-                            //   height: 24,
-                            //   width: 24,
-                            //   colorFilter: ColorFilter.mode(
-                            //     AppColors.SECONDARY_COLOR_DARK2,
-                            //     BlendMode.srcIn,
-                            //   ),
-                            // ),
-                            const SizedBox(
-                              width: 8,
+              if (ad.mainCategoryId != '62c8b5b09332225799fe335e') ...[
+                // اذا كان الاعلان من نوع عقارات
+                if (ad.mainCategoryId == '62c8b5849332225799fe3310') ...[
+                  realStatePropsSection(ad),
+                  // اذا كان الاعلان من نوع السيارات
+                ] else if (ad.mainCategoryId == '62c8b5889332225799fe3316') ...[
+                  carsPropsSection(ad)
+                  // اذا كان الاعلان من نوع الآلات الموسيقية
+                ] else if (ad.mainCategoryId == '62c8b59f9332225799fe333e') ...[
+                  Column(
+                    children: ad.details.map(
+                      (e) {
+                        return Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: ShapeDecoration(
+                            color: ad.details.indexOf(e) % 2 == 0
+                                ? const Color(0x66D9D9D9)
+                                : const Color(0xCCD9D9D9),
+                            //  const Color(0xCCD9D9D9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            Row(
-                              children: [
-                                Label(
-                                  text:
-                                      '${context.isArabic ? e.nameAr : e.nameEn}: ',
-                                  style: Styles.mediumText(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.60,
-                                    color: AppColors.SECONDARY_COLOR_DARK2,
-                                  ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text:
+                                    '${context.isArabic ? e.nameAr : e.nameEn}: ',
+                                style: Styles.mediumText(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.60,
                                 ),
-                                Label(
-                                  text:
-                                      context.isArabic ? e.valueAr : e.valueEn,
-                                  style: Styles.mediumText(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w600,
-                                    height: 1.60,
-                                  ),
+                              ),
+                              Label(
+                                text: context.isArabic ? e.valueAr : e.valueEn,
+                                style: Styles.mediumText(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.60,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ] else if (ad.mainCategoryId == '62c8b5949332225799fe3328') ...[
+                  Column(
+                    children: ad.details.map(
+                      (e) {
+                        return Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: ShapeDecoration(
+                            color: ad.details.indexOf(e) % 2 == 0
+                                ? const Color(0x66D9D9D9)
+                                : const Color(0xCCD9D9D9),
+                            //  const Color(0xCCD9D9D9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text:
+                                    '${context.isArabic ? e.nameAr : e.nameEn}: ',
+                                style: Styles.mediumText(
+                                  color: const Color(0xffF33D49),
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.60,
+                                ),
+                              ),
+                              Label(
+                                text: context.isArabic ? e.valueAr : e.valueEn,
+                                style: Styles.mediumText(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.60,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ] else
+                  Column(
+                    children: ad.details.map(
+                      (e) {
+                        return Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: ShapeDecoration(
+                            color: ad.details.indexOf(e) % 2 == 0
+                                ? const Color(0x66D9D9D9)
+                                : const Color(0xCCD9D9D9),
+                            //  const Color(0xCCD9D9D9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              // اذا كان الاعلان ليس من نوع كمبيوتر\محمول
+                              // او يحوانات
+                              // او صناعة
+                              // او لياقة
+                              if (ad.mainCategoryId != '62c8b5979332225799fe3330' &&
+                                  ad.mainCategoryId !=
+                                      '62c8b5af9332225799fe335a' &&
+                                  ad.mainCategoryId !=
+                                      '62c8b5879332225799fe3312' &&
+                                  ad.mainCategoryId !=
+                                      '62c8b5a29332225799fe3348') ...[
+                                ImageFromInternet(
+                                    image: e.imageUrl, width: 24, height: 24),
+                                const SizedBox(
+                                  width: 8,
                                 ),
                               ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ).toList(),
-                ),
 
+                              Row(
+                                children: [
+                                  Label(
+                                    text:
+                                        '${context.isArabic ? e.nameAr : e.nameEn}: ',
+                                    style: Styles.mediumText(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w500,
+                                      height: 1.60,
+                                      color: AppColors.SECONDARY_COLOR_DARK2,
+                                    ),
+                                  ),
+                                  Label(
+                                    text: context.isArabic
+                                        ? e.valueAr
+                                        : e.valueEn,
+                                    style: Styles.mediumText(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.60,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+              ]
               // Container(
               //   width: double.infinity,
               //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -987,28 +1172,386 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   ),
                 ],
               ),
-              Row(
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${LocaleKeys.desc.localize}: ',
+                      style: Styles.headerText(
+                        color: const Color(0xFFF33D49),
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                        height: 1.60,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ad.description,
+                      style: Styles.headerText(
+                        fontSize: 32,
+                        height: 1.60,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget carsPropsSection(AddDetailsModel ad) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: ShapeDecoration(
+            color: const Color(0x66D9D9D9),
+            //  const Color(0xCCD9D9D9),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: ad.details
+                .where((p) =>
+                    p.id ==
+                        '66ec666f12cfcdf9779dfcc6' /* ده بتاع نوع الوقود*/ ||
+                    p.id ==
+                        '66ec666f12cfcdf9779dfd05' /* ده بتاع الكيلومترات*/ ||
+                    p.id == '66ec666f12cfcdf9779dfcc5' /* ده بتاع السنة*/)
+                .map((p) {
+              return Expanded(
+                child: Row(
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ImageFromInternet(
+                      image: p.imageUrl,
+                      width: 24,
+                      height: 24,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    SizedBox(
+                      width: (MediaQuery.sizeOf(context).width - 132) / 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Label(
+                              text: context.isArabic ? p.nameAr : p.nameEn,
+                              style: Styles.mediumText(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w600,
+                                height: 1.60,
+                              ),
+                            ),
+                          ),
+                          Label(
+                            text: context.isArabic ? p.valueAr : p.valueEn,
+                            style: Styles.mediumText(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                              height: 1.60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: ShapeDecoration(
+            color: const Color(0xCCD9D9D9),
+            //  const Color(0x66D9D9D9),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: ad.details
+                .where((p) =>
+                    p.id ==
+                        '66ec666f12cfcdf9779dfccc' /* ده بتاع نوع ناقل الحركة*/ ||
+                    p.id == '66ec666f12cfcdf9779dfcc1' /* ده بتاع الحالة*/ ||
+                    p.id == '66ec666f12cfcdf9779dfcc0' /* ده بتاع الاصدار*/)
+                .map((p) {
+              return Expanded(
+                child: Row(
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ImageFromInternet(
+                      image: p.imageUrl,
+                      width: 24,
+                      height: 24,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    SizedBox(
+                      width: (MediaQuery.sizeOf(context).width - 132) / 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Label(
+                              text: context.isArabic ? p.nameAr : p.nameEn,
+                              style: Styles.mediumText(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w600,
+                                height: 1.60,
+                              ),
+                            ),
+                          ),
+                          Label(
+                            text: context.isArabic ? p.valueAr : p.valueEn,
+                            style: Styles.mediumText(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                              height: 1.60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        Column(
+          children: ad.details
+              .where((p) => ![
+                    '66ec666f12cfcdf9779dfcc6',
+                    '66ec666f12cfcdf9779dfd05',
+                    '66ec666f12cfcdf9779dfcc5',
+                    '66ec666f12cfcdf9779dfccc',
+                    '66ec666f12cfcdf9779dfcc1',
+                    '66ec666f12cfcdf9779dfcc0',
+                  ].contains(p.id))
+              .toList()
+              .asMap()
+              .entries
+              .map((entry) {
+            final i = entry.key;
+            final e = entry.value;
+            return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: ShapeDecoration(
+                color: i % 2 == 0
+                    ? const Color(0x66D9D9D9)
+                    : const Color(0xCCD9D9D9),
+                //  const Color(0xCCD9D9D9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Row(
                 children: [
                   Label(
-                    text: '${LocaleKeys.desc.localize}: ',
-                    style: Styles.headerText(
-                      color: const Color(0xFFF33D49),
-                      fontSize: 32,
+                    text: '${context.isArabic ? e.nameAr : e.nameEn}: ',
+                    style: Styles.mediumText(
                       fontWeight: FontWeight.w500,
                       height: 1.60,
                     ),
                   ),
+                  Spacer(),
                   Label(
-                    text: context.isArabic ? ad.description : ad.description,
-                    style: Styles.headerText(
-                      fontSize: 32,
+                    text: context.isArabic ? e.valueAr : e.valueEn,
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w600,
                       height: 1.60,
                     ),
                   ),
                 ],
               ),
-            ],
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Column realStatePropsSection(AddDetailsModel ad) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: ShapeDecoration(
+            color: const Color(0x66D9D9D9),
+            //  const Color(0xCCD9D9D9),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: ad.details
+                .where((p) =>
+                    p.id == '62c8b5849332225799fe3310' /* ده بتاع المساحة*/)
+                .map((p) {
+              return Expanded(
+                child: Row(
+                  children: [
+                    ImageFromInternet(
+                      image: p.imageUrl,
+                      width: 24,
+                      height: 24,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Label(
+                              text: context.isArabic ? p.nameAr : p.nameEn,
+                              style: Styles.mediumText(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w600,
+                                height: 1.60,
+                              ),
+                            ),
+                          ),
+                          Label(
+                            text: context.isArabic ? p.valueAr : p.valueEn,
+                            style: Styles.mediumText(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                              height: 1.60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: ShapeDecoration(
+            color: const Color(0xCCD9D9D9),
+            //  const Color(0xCCD9D9D9),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: ad.details
+                .where((p) =>
+                    p.id == '62c8b5849332225799fe3311' /* ده بتاع الملكية*/)
+                .map((p) {
+              return Expanded(
+                child: Row(
+                  children: [
+                    ImageFromInternet(
+                      image: p.imageUrl,
+                      width: 24,
+                      height: 24,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Label(
+                              text: context.isArabic ? p.nameAr : p.nameEn,
+                              style: Styles.mediumText(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w600,
+                                height: 1.60,
+                              ),
+                            ),
+                          ),
+                          Label(
+                            text: context.isArabic ? p.valueAr : p.valueEn,
+                            style: Styles.mediumText(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                              height: 1.60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        Column(
+          children: ad.details
+              .where((p) => ![
+                    '62c8b5849332225799fe3310',
+                    '62c8b5849332225799fe3311'
+                  ].contains(p.id))
+              .map((e) {
+            return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: ShapeDecoration(
+                color: ad.details.indexOf(e) % 2 == 0
+                    ? const Color(0x66D9D9D9)
+                    : const Color(0xCCD9D9D9),
+                //  const Color(0xCCD9D9D9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Label(
+                    text: '${context.isArabic ? e.nameAr : e.nameEn}: ',
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w500,
+                      height: 1.60,
+                    ),
+                  ),
+                  Spacer(),
+                  Label(
+                    text: context.isArabic ? e.valueAr : e.valueEn,
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w600,
+                      height: 1.60,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
       ],
     );
   }

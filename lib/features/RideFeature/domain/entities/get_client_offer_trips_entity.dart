@@ -8,7 +8,7 @@ class ClientOfferTripEntity {
   final num? newOfferPrice;
   final DriverDetailsEntity? driverDetails;
   final TripDetailsEntity? tripDetails;
-  final bool isFromSocket; // <-- Add this
+  final bool isFromSocket;
   ClientOfferTripEntity({
     this.id,
     this.status,
@@ -17,7 +17,7 @@ class ClientOfferTripEntity {
     this.newOfferPrice,
     this.driverDetails,
     this.tripDetails,
-    this.isFromSocket = false, // <-- Default to false
+    this.isFromSocket = false,
   });
 }
 

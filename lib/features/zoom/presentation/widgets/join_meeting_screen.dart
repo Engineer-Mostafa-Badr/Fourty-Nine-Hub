@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -195,7 +196,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                 } else if (state.isFailure) {}
               }, builder: (context, state) {
                 if (state.isLoading) {
-                  return const CircularProgressIndicator.adaptive();
+                  return const CustomCircularProgressIndicator();
                 }
                 return Padding(
                   padding: const EdgeInsets.all(8.0),

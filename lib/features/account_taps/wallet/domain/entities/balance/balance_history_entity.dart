@@ -8,6 +8,7 @@ class BalanceHistoryEntity {
   final String internalPayment;
   final String currency;
   final bool isPaid;
+  final bool received;
   final String status;
   final String createdAt;
 
@@ -21,6 +22,7 @@ class BalanceHistoryEntity {
       required this.internalPayment,
       required this.currency,
       required this.isPaid,
+      required this.received,
       required this.status,
       required this.createdAt});
 }
