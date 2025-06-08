@@ -41,7 +41,17 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabTitles.length, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.index == 0) {
+        // context.read<ClientTripsCubit>().resetCounter();
+      }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final dashboardCubit = context.read<ClientTripsCubit>();
+      dashboardCubit.listenToUpdateOfferTripNonSocket();
+    });
   }
+
 
   void _loadInitialClientPendingTrips() {
     print("✅ loadInitialClientPendingTrips called");
@@ -142,59 +152,83 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
   }
 
   Widget _buildTabBar() {
-    return Container(
-      margin: EdgeInsetsDirectional.only(start: 16),
-      height: 40,
-      child: TabBar(
-        tabAlignment: TabAlignment.start,
-        dividerColor: Colors.transparent,
-        controller: _tabController,
-        isScrollable: true,
-        indicator: const BoxDecoration(color: Colors.transparent),
-        // No underline
-        labelPadding: EdgeInsets.zero,
-        onTap: (index) {
-          if (index == 1) {
-            _loadInitialClientPendingTrips();
-          }
-          if (index == 0) {
-            _loadInitialClientOfferTrips();
-          }
-          if (index == 2) {
-            _loadInitialClientAcceptedTrips();
-          }
-          if (index == 3) {
-            _loadInitialClientPastTrips();
-          }
-          setState(() {});
-        },
-        tabs: List.generate(_tabTitles.length, (index) {
-          final isSelected = _tabController.index == index;
-          return Padding(
-            padding: const EdgeInsetsDirectional.only(end: 16),
-            child: Tab(
-              child: Container(
-                width: 200.w,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.PRIMARY_COLOR
-                      : const Color(0xFFE0E0E0),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  _tabTitles[index],
-                  style: Styles.mediumText(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.w600,
+    return BlocBuilder<ClientTripsCubit, ClientTripsState>(
+      builder: (context, state) {
+        return Container(
+          // height: 60,
+          margin: EdgeInsetsDirectional.only(start: 16),
+          child: TabBar(
+            tabAlignment: TabAlignment.start,
+            dividerColor: Colors.transparent,
+            controller: _tabController,
+            isScrollable: true,
+            indicator: const BoxDecoration(color: Colors.transparent),
+            labelPadding: EdgeInsets.zero,
+            onTap: (index) {
+              if (index == 1) _loadInitialClientPendingTrips();
+              if (index == 0) {
+                context.read<ClientTripsCubit>().resetCounter();
+                _loadInitialClientOfferTrips();
+              }
+              if (index == 2) _loadInitialClientAcceptedTrips();
+              if (index == 3) _loadInitialClientPastTrips();
+              setState(() {});
+            },
+            tabs: List.generate(_tabTitles.length, (index) {
+              final isSelected = _tabController.index == index;
+              return Tab(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 16, top: 10, bottom: 0),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: 200.w,
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: isSelected ? AppColors.PRIMARY_COLOR : const Color(0xFFE0E0E0),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          _tabTitles[index],
+                          style: Styles.mediumText(
+                            color: isSelected ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      if (index == 0 && state.newOfferCount > 0)
+                        PositionedDirectional(
+                          end: -5,
+                          top: -10, // Keep badge within visible bounds
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "${state.newOfferCount}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-          );
-        }),
-      ),
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 

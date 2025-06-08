@@ -1,5 +1,7 @@
 import 'dart:io';
-
+import 'package:fourtyninehub/helpers/responsive/responsive.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,63 +10,53 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/support_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
+import '../../../domain/entities/dashboards/support_details_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
-import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
-import 'widgets/problem_and_client_details.dart';
-import 'widgets/ride_details_rating_widget.dart';
-import 'package:pdf/widgets.dart' as pw;
+
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
-class RideDashboardNonSocketDetailsScreen extends StatefulWidget {
-  const RideDashboardNonSocketDetailsScreen({super.key, required this.tripEntity,});
-final HistoryTripEntity tripEntity;
+import '../../../domain/entities/loading/get_loading_history_entity.dart';
+import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../dashboards/widgets/ride_details_rating_widget.dart';
+import '../support_screen/support_ride_screen.dart';
+import '../support_screen/support_widget/custom_support_text_form_field.dart';
+import '../widgets/custom_color_circle_widget.dart';
+
+class LoadingDashboardDetailsScreen extends StatefulWidget {
+  final GetLoadingHistoryEntity tripEntity;
+  const LoadingDashboardDetailsScreen({super.key, required this.tripEntity});
+
   @override
-  State<RideDashboardNonSocketDetailsScreen> createState() =>
-      _RideDashboardNonSocketDetailsScreenState();
+  State<LoadingDashboardDetailsScreen> createState() =>
+      _LoadingDashboardDetailsScreenState();
 }
 
-class _RideDashboardNonSocketDetailsScreenState
-    extends State<RideDashboardNonSocketDetailsScreen> {
+class _LoadingDashboardDetailsScreenState
+    extends State<LoadingDashboardDetailsScreen> {
+
   bool isYourRate = false;
+  bool hasRequest = false;
   double yourRate = 3.0;
   bool isClientRate = true;
   double clientRate = 4.0;
   var form = GlobalKey<FormState>();
   bool isLoading = false;
   String? pdfPath;
-  double? currentTripRating;
-
+  @override
   initState(){
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
-        clientId: 'widget.tripEntity.clientDetails?.id??''',
-        // clientId: 'widget.tripEntity.clientDetails?.id??''',
-        driverId: 'widget.tripEntity.driverDetails?.id??''',
-        tripId: widget.tripEntity.tripDetails?.id??'',
-        tripType: 'notSpecial',
-        userType: 'driver'
+      clientId: widget.tripEntity.clientDetails?.id??'',
+      driverId: widget.tripEntity.driverDetails?.id??'',
+      tripId: widget.tripEntity.tripDetails?.id??'',
+      tripType: 'tracking',
+      userType: 'driver'
     ));
-    currentTripRating = widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble();
-    // currentTripRating = widget.tripEntity.clientDetails?.rating?.average?.toDouble();
-
-    // tripEntity.tripDetails?.yourRateClient?.rate
     super.initState();
   }
 
@@ -197,36 +189,15 @@ class _RideDashboardNonSocketDetailsScreenState
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.parse(
-        widget.tripEntity?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
-    String formattedDate =
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-    // String formattedTime =
-    //     "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
-    String formattedTime =
-        "${(dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12)}:${dateTime.minute.toString().padLeft(2, '0')} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
-
-    DateTime dateTimePickUp = DateTime.parse(
-        widget.tripEntity?.tripDetails?.pickupTime ?? '2025-03-11T21:50:21.998Z');
-    String formattedDatePickUp =
-        "${dateTimePickUp.day.toString().padLeft(2, '0')}/${dateTimePickUp.month.toString().padLeft(2, '0')}/${dateTimePickUp.year}";
-    // String formattedTimePickUp =
-    //     "${dateTimePickUp.hour % 12 == 0 ? 12 : dateTimePickUp.hour % 12} ${dateTimePickUp.hour < 12 ? 'AM' : 'PM'}";
-    String formattedTimePickUp =
-        "${(dateTimePickUp.hour % 12 == 0 ? 12 : dateTimePickUp.hour % 12)}:${dateTimePickUp.minute.toString().padLeft(2, '0')} ${dateTimePickUp.hour < 12 ? 'AM' : 'PM'}";
-
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
           scrolledUnderElevation: 0,
           leadingWidth: 30,
           title: Label(
-              text:
-                  LocaleKeys.rideDetails.tr(),
-
+              text: LocaleKeys.trukDetails.tr(),
               style:
                   const TextStyle(fontWeight: FontWeight.w600, fontSize: 20))),
       body: SingleChildScrollView(
@@ -236,7 +207,6 @@ class _RideDashboardNonSocketDetailsScreenState
             if(state.isLoading){
               return const Center(child: CircularProgressIndicator());
             }
-
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -244,7 +214,7 @@ class _RideDashboardNonSocketDetailsScreenState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -256,32 +226,17 @@ class _RideDashboardNonSocketDetailsScreenState
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Label(
-                                    text:( context.isArabic ? widget.tripEntity.subCategory?.nameAr  :  widget.tripEntity.subCategory?.nameEn ) ?? LocaleKeys.captainWithYou.tr() ,
+                                    text:LocaleKeys.trukWithYou, //"Bus ride with You",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w700, fontSize: 20),
                                     maxLines: 3),
                                 const SizedBox(height: 8),
-                                Row(
-                                  spacing: 5,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Label(
-                                      text: formattedDate, //'20/2/2025',
-                                      style: Styles.mediumText(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text("-", style: Styles.mediumText(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 50.sp
-                                    ),),
-                                    Label(
-                                      text: formattedTime, //'10 AM',
-                                      style: Styles.mediumText(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
+                                const Label(
+                                  text: "Feb 13 - 12:41 PM",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 Label(
                                     text: "${widget.tripEntity.tripDetails!.price} ${LocaleKeys.egp.tr()}",
@@ -292,8 +247,8 @@ class _RideDashboardNonSocketDetailsScreenState
                         Expanded(
                           child: Align(
                             alignment: Alignment.bottomRight,
-                            child: ImageFromInternet(
-                             image: widget.tripEntity.subCategory?.pictureUrl ?? "",
+                            child: Image.asset(
+                              Assets.greyCar,
                               width: 80,
                               height: 33,
                               fit: BoxFit.contain,
@@ -303,10 +258,8 @@ class _RideDashboardNonSocketDetailsScreenState
                       ],
                     ),
                   ),
-                  // if (widget.tripEntity.modeType != 'ride')
                     Label(
-                        text: "${LocaleKeys.passenger.tr()} : ${widget.tripEntity.tripDetails?.passengers ?? 0}"
-                          ,
+                        text: "${LocaleKeys.cargoDescription.tr()} : Car",
                         style: const TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 16)),
                    Row(
@@ -339,8 +292,8 @@ class _RideDashboardNonSocketDetailsScreenState
                           ],
                         ),
                       ),
-                       Label(
-                        text: formattedTime,
+                      const Label(
+                        text: "12:10 PM",
                         style: TextStyle(
                             color: AppColors.c5A5A5A,
                             fontSize: 14,
@@ -358,8 +311,18 @@ class _RideDashboardNonSocketDetailsScreenState
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
+                            // Label(
+                            //   text: "Cairo International Airport",
+                            //   style: TextStyle(
+                            //     fontWeight: FontWeight.w600,
+                            //     fontSize: 14,
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 2,
+                            // ),
                             Label(
-                              text: widget.tripEntity.tripDetails?.targetLocation?.title ?? "",
+                              text: widget.tripEntity.tripDetails?.targetLocation?.title ??"",
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
@@ -368,8 +331,8 @@ class _RideDashboardNonSocketDetailsScreenState
                           ],
                         ),
                       ),
-                       Label(
-                        text: formattedTimePickUp,
+                      const Label(
+                        text: "12:10 PM",
                         style: TextStyle(
                             color: AppColors.c5A5A5A,
                             fontSize: 14,
@@ -378,33 +341,14 @@ class _RideDashboardNonSocketDetailsScreenState
                     ],
                   ),
                   const SizedBox(height: 30),
-                  // Text("${widget.tripEntity.tripDetails?.yourRating?.average}"),
-                  RideDetailsRatingNonSocketWidget(
-                    // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
-                    // rate: 1,
-                    rate: currentTripRating ?? 0.0,
-                    title: LocaleKeys.youRateClient.tr(),
-                    tripId: widget.tripEntity.tripDetails?.id ?? '',
-                    cubit: context.read<DashboardsCubit>(),
-                    onRatingUpdated: (newRating) {
-                      setState(() {
-                        currentTripRating = newRating;
-                      });
-                    },
-                  ),
-                  RideDetailsRatingNonSocketWidget(
-                    // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
-                    // rate: 2,
-                    rate: widget.tripEntity.tripDetails?.clientRateYou?.rate?.toDouble() ?? 0.0,
-                    title: LocaleKeys.clientRateYou.tr(),
-                    tripId: widget.tripEntity.tripDetails?.id ?? '',
-                    cubit: context.read<DashboardsCubit>(),
-                    isClient: true,
-                  ),
-                  // RideDetailsRatingWidget(
-                  //     isRate: isClientRate,
-                  //     rate: clientRate,
-                  //     title: LocaleKeys.clientRateYou.tr()),
+                  RideDetailsRatingWidget(
+                      isRate: isYourRate,
+                      rate: yourRate,
+                      title: LocaleKeys.youRateClient.tr()),
+                  RideDetailsRatingWidget(
+                      isRate: isClientRate,
+                      rate: clientRate,
+                      title: LocaleKeys.clientRateYou.tr()),
                   if(!(state.supportStatus == RequestEmergencyStatus.approved.status))Form(
                     key: form,
                     child: Column(
@@ -511,7 +455,7 @@ class _RideDashboardNonSocketDetailsScreenState
                             if (path != null) {
                               _showPdfPreview(context, path);
                             }
-                            context.push(Routes.emergencyContactsScreen);
+                            // context.push(Routes.emergencyContactsScreen);
                           },
                           icon: const Icon(Icons.download, color: Colors.white),
                           label: Text(LocaleKeys.locationLog.localize),

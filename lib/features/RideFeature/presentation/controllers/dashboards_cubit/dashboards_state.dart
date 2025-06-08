@@ -79,6 +79,9 @@ class DashboardsState
   final XFile? vehicleFrontPicture;
   final XFile? vehicleBackPicture;
   final XFile? personalTechnicalExaminationPicture;
+  final List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket;
+  final List<GetLoadingAvailableEntity >? loadingAvailableNonSocket;
+  final List<GetLoadingHistoryEntity>? loadingHistoryNonSocket;
 
   const DashboardsState(
       {this.failure,
@@ -117,6 +120,9 @@ class DashboardsState
         this.vehicleFrontPicture,
         this.vehicleBackPicture,
         this.personalTechnicalExaminationPicture,
+        this.loadingAcceptedNonSocket,
+        this.loadingAvailableNonSocket,
+        this.loadingHistoryNonSocket,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -156,6 +162,10 @@ class DashboardsState
         XFile? vehicleFrontPicture,
          XFile? vehicleBackPicture,
         XFile? personalTechnicalExaminationPicture,
+
+        List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket,
+        List<GetLoadingAvailableEntity>? loadingAvailableNonSocket,
+        List<GetLoadingHistoryEntity>? loadingHistoryNonSocket,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -194,6 +204,9 @@ class DashboardsState
       vehicleFrontPicture: vehicleFrontPicture ?? this.vehicleFrontPicture,
       vehicleBackPicture: vehicleBackPicture ?? this.vehicleBackPicture,
       personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
+      loadingAcceptedNonSocket: loadingAcceptedNonSocket ?? this.loadingAcceptedNonSocket,
+      loadingAvailableNonSocket: loadingAvailableNonSocket ?? this.loadingAvailableNonSocket,
+      loadingHistoryNonSocket: loadingHistoryNonSocket ?? this.loadingHistoryNonSocket,
     );
   }
 

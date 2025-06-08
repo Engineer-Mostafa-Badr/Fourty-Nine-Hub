@@ -52,12 +52,13 @@ class ClientTripsState {
   final List<ClientAcceptedTripEntity>? clientAcceptedTripData;
   final List<ClientOfferTripEntity> clientOfferTripData;
   final List<ClientPastTripEntity>? clientPastTripData;
+   int newOfferCount;
   final String? message;
   final bool showSnackbar;
   final RateResponseEntity? rateResponseEntity;
   final DriverAllRatingEntity? driverAllRating;
   final ClientAllRatingEntity? clientAllRating;
-  const ClientTripsState({
+   ClientTripsState({
     this.status = ClientTripsStates.initState,
     this.failure,
     this.offers,
@@ -73,6 +74,7 @@ class ClientTripsState {
     this.rateResponseEntity,
     this.driverAllRating,
     this.clientAllRating,
+    this.newOfferCount =0 ,
   });
   ClientTripsState copyWith({
     ClientTripsStates? status,
@@ -90,6 +92,7 @@ class ClientTripsState {
     RateResponseEntity? rateResponseEntity,
     DriverAllRatingEntity? driverAllRating,
     ClientAllRatingEntity? clientAllRating,
+    int? newOfferCount,
   }) {
     return ClientTripsState(
       status: status ?? this.status,
@@ -107,6 +110,7 @@ class ClientTripsState {
       rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
       driverAllRating: driverAllRating ?? this.driverAllRating,
       clientAllRating: clientAllRating ?? this.clientAllRating,
+      newOfferCount: newOfferCount ?? this.newOfferCount,
     );
   }
 }

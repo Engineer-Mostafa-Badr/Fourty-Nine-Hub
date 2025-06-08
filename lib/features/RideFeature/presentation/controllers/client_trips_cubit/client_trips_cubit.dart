@@ -77,7 +77,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     this._getGovernoratesUseCase,
     this.makeLoadingRequestTripUsecase,
     this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase, this.listenToOfferUpdateUntrackedTripUseCase, this.addRateWithClientUseCase, this.updateClientRateNonSocketUseCase, this.getDriverAllRatingUseCase, this.getClientAllRatingUseCase,
-  ) : super(const ClientTripsState());
+  ) : super( ClientTripsState());
 
   Future<void> getClientAllRating(
       {required String params,}) async {
@@ -163,6 +163,111 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
   }
 
 
+  // void listenToUpdateOfferTripNonSocket() {
+  //   CliLogger.info('Listen To New Trip');
+  //
+  //   listenToOfferUpdateUntrackedTripUseCase((trip) {
+  //     if (isClosed) return;
+  //
+  //     final updatedTrip = ClientOfferTripEntity(
+  //       id: trip.id,
+  //       status: trip.status,
+  //       price: trip.price,
+  //       passengers: trip.passengers,
+  //       newOfferPrice: trip.newOfferPrice,
+  //       driverDetails: trip.driverDetails,
+  //       tripDetails: trip.tripDetails,
+  //       isFromSocket: true,
+  //     );
+  //
+  //     List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
+  //
+  //     // Debug: Log current state
+  //     CliLogger.info('Current list length: ${list.length}');
+  //     CliLogger.info('Current list IDs: ${list.map((e) => e.id).toList()}');
+  //     CliLogger.info('New trip ID: ${updatedTrip.id}');
+  //
+  //     // Check if trip already exists in the list
+  //     final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
+  //
+  //     if (existingIndex != -1) {
+  //       // Item exists - replace it at the same position
+  //       list[existingIndex] = updatedTrip;
+  //       CliLogger.info('Replaced existing offer at index $existingIndex');
+  //     } else {
+  //       // Item doesn't exist - add it as new item
+  //       list.add(updatedTrip);
+  //       CliLogger.info('Added new offer to list. New length: ${list.length}');
+  //     }
+  //
+  //     // Debug: Log state before emitting
+  //     CliLogger.info('About to emit state with list length: ${list.length}');
+  //     CliLogger.info('List IDs after update: ${list.map((e) => e.id).toList()}');
+  //     _newOffer++;
+  //     emit(state.copyWith(clientOfferTripData: list,newOfferCount: _newOffer));
+  //     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${_newOffer}");
+  //     // Debug: Log state after emitting
+  //     CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData?.length}');
+  //     log('Final list count: ${list.length}');
+  //     log(updatedTrip.toString());
+  //   });
+  // }
+
+  void listenToUpdateOfferTripNonSocketx() {
+    CliLogger.info('Listen To New Trip');
+
+    listenToOfferUpdateUntrackedTripUseCase((trip) {
+      if (isClosed) return;
+
+      final updatedTrip = ClientOfferTripEntity(
+        id: trip.id,
+        status: trip.status,
+        price: trip.price,
+        passengers: trip.passengers,
+        newOfferPrice: trip.newOfferPrice,
+        driverDetails: trip.driverDetails,
+        tripDetails: trip.tripDetails,
+        isFromSocket: true,
+      );
+
+      // Make a copy of current list or initialize if null
+      List<ClientOfferTripEntity> list = List.from(clientOfferTripsData);
+
+      // Debug: Log current state
+      CliLogger.info('Current list length: ${list.length}');
+      CliLogger.info('Current list IDs: ${list.map((e) => e.id).toList()}');
+      CliLogger.info('New trip ID: ${updatedTrip.id}');
+
+      // Check if trip already exists in the list
+      final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
+
+      if (existingIndex != -1) {
+        // Item exists - replace it at the same position (no increment)
+        list[existingIndex] = updatedTrip;
+        CliLogger.info('Replaced existing offer at index $existingIndex');
+        emit(state.copyWith(clientOfferTripData: list));
+      } else {
+        // Item doesn't exist - add it as new item and increment counter
+        list.add(updatedTrip);
+        // _newOffer = 0;
+
+        emit(state.copyWith(clientOfferTripData: list, newOfferCount: _newOffer));
+        CliLogger.info('Added new offer to list. New length: ${list.length}');
+        print("New offer count: $_newOffer");
+      }
+
+      // Update local copy for next calls
+      clientOfferTripsData = list;
+
+      // Debug: Log state after emitting
+      CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData?.length}');
+      log('Final list count: ${list.length}');
+      log(updatedTrip.toString());
+    });
+  }
+
+  int _newOffer = 0; // Must be defined in the class
+
   void listenToUpdateOfferTripNonSocket() {
     CliLogger.info('Listen To New Trip');
 
@@ -180,38 +285,85 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         isFromSocket: true,
       );
 
+      // Defensive: ensure the list is not null
       List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
 
-      // Debug: Log current state
-      CliLogger.info('Current list length: ${list.length}');
-      CliLogger.info('Current list IDs: ${list.map((e) => e.id).toList()}');
-      CliLogger.info('New trip ID: ${updatedTrip.id}');
-
-      // Check if trip already exists in the list
+      // Check if this trip already exists
       final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
 
       if (existingIndex != -1) {
-        // Item exists - replace it at the same position
+        // Exists -> update only
         list[existingIndex] = updatedTrip;
-        CliLogger.info('Replaced existing offer at index $existingIndex');
+        CliLogger.info('Updated existing trip at index $existingIndex');
+        _newOffer++; // ✅ This must run
+        emit(state.copyWith(clientOfferTripData: list ,newOfferCount: _newOffer));
       } else {
-        // Item doesn't exist - add it as new item
+        // New trip -> add and increase counter
         list.add(updatedTrip);
-        CliLogger.info('Added new offer to list. New length: ${list.length}');
+        // _newOffer++; // ✅ This must run
+        CliLogger.info('New offer received. Counter incremented: $_newOffer');
+        emit(state.copyWith(clientOfferTripData: list,));
       }
 
-      // Debug: Log state before emitting
-      CliLogger.info('About to emit state with list length: ${list.length}');
-      CliLogger.info('List IDs after update: ${list.map((e) => e.id).toList()}');
+      clientOfferTripsData = list; // Save back
 
-      emit(state.copyWith(clientOfferTripData: list));
-
-      // Debug: Log state after emitting
-      CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData?.length}');
-      log('Final list count: ${list.length}');
-      log(updatedTrip.toString());
+      // Debug logs
+      print("Updated new offer count: $_newOffer");
+      CliLogger.info('State emitted. Length: ${list.length}');
     });
   }
+/*
+  void listenToUpdateOfferTripNonSocketnew() {
+    CliLogger.info('Listen To New Trip');
+    listenToOfferUpdateUntrackedTripUseCase((trip) {
+      if (isClosed) return;
+
+      final updatedTrip = ClientOfferTripEntity(
+        id: trip.id,
+        status: trip.status,
+        price: trip.price,
+        passengers: trip.passengers,
+        newOfferPrice: trip.newOfferPrice,
+        driverDetails: trip.driverDetails,
+        tripDetails: trip.tripDetails,
+        isFromSocket: true,
+      );
+
+      // Defensive: ensure the list is not null
+      List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
+
+      // Check if this trip already exists
+      final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
+
+      if (existingIndex != -1) {
+        // Exists -> update only (NO counter increment)
+        list[existingIndex] = updatedTrip;
+        CliLogger.info('Updated existing trip at index $existingIndex');
+        emit(state.copyWith(clientOfferTripData: list, newOfferCount: _newOffer));
+      } else {
+        // New trip -> add and increase counter
+        list.add(updatedTrip);
+        // _newOffer++; // ✅ Only increment for NEW trips
+        CliLogger.info('New offer received. Counter incremented: $_newOffer');
+        emit(state.copyWith(clientOfferTripData: list,));
+      }
+
+      clientOfferTripsData = list; // Save back
+
+      // Debug logs
+      print("Updated new offer count: $_newOffer");
+      CliLogger.info('State emitted. Length: ${list.length}');
+    });
+  }
+*/
+
+  void resetCounter() {
+    print("resetCounter called");
+    _newOffer = 0;
+    clientOfferTripsData.clear(); // Clear the local list so no old trips remain
+    emit(state.copyWith(newOfferCount: 0, clientOfferTripData: []));
+  }
+
 
 
   void listenToUpdateOfferTripNonSocket2() {

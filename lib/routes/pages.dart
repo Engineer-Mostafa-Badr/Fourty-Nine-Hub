@@ -306,6 +306,7 @@ import 'package:go_router/go_router.dart';
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
+import '../features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
 import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
@@ -327,6 +328,7 @@ import '../features/RideFeature/presentation/pages/create_loading_trip_screen.da
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
 
+import '../features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
@@ -3775,6 +3777,19 @@ class AppPages {
                     child: AllClientRatingScreen(
                     )),
               ),
+              GoRoute(
+                  path: Paths.loadingDashboardDetailsScreen,
+                  name: Routes.loadingDashboardDetailsScreen,
+                  builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<DashboardsCubit>(),
+                      ),
+                    ],
+                    child: LoadingDashboardDetailsScreen(
+                        tripEntity: state.extra as GetLoadingHistoryEntity),
+                  )),
             ],
           ),
         ]);

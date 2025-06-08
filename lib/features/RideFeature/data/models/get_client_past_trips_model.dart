@@ -122,20 +122,62 @@ class ClientDetailsModel extends ClientDetailsEntity {
 
 class DriverDetailsModel extends DriverDetailsEntity {
   DriverDetailsModel({
-    super.id,
-    super.firstName,
-    super.pictureUrl,
-    super.rating,
-  });
+    String? id,
+    String? userId,
+    String? firstName,
+    String? pictureUrl,
+    RatingModel? rating,
+    VehicleDetailsModel? vehicleDetails, // ✅ NEW
+  }) : super(
+    id: id,
+    userId: userId,
+    firstName: firstName,
+    pictureUrl: pictureUrl,
+    rating: rating,
+    vehicleDetails: vehicleDetails, // ✅ NEW
+  );
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
       id: json['id'],
+      userId: json['userId'],
       firstName: json['firstName'],
       pictureUrl: json['pictureUrl'],
       rating: json['rating'] != null
           ? RatingModel.fromJson(json['rating'])
           : null,
+      vehicleDetails: json['vehicleDetails'] != null
+          ? VehicleDetailsModel.fromJson(json['vehicleDetails'])
+          : null, // ✅ PARSE
+    );
+  }
+}
+
+class VehicleDetailsModel extends VehicleDetailsEntity {
+  VehicleDetailsModel({
+    String? brandAr,
+    String? brandEn,
+    String? modelAr,
+    String? modelEn,
+    String? color,
+    int? year,
+  }) : super(
+    brandAr: brandAr,
+    brandEn: brandEn,
+    modelAr: modelAr,
+    modelEn: modelEn,
+    color: color,
+    year: year,
+  );
+
+  factory VehicleDetailsModel.fromJson(Map<String, dynamic> json) {
+    return VehicleDetailsModel(
+      brandAr: json['brandAr'],
+      brandEn: json['brandEn'],
+      modelAr: json['modelAr'],
+      modelEn: json['modelEn'],
+      color: json['color'],
+      year: json['year'],
     );
   }
 }

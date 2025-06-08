@@ -82,15 +82,37 @@ class ClientDetailsEntity {
 
 class DriverDetailsEntity {
   final String? id;
+  final String? userId;
   final String? firstName;
   final String? pictureUrl;
   final RatingEntity? rating;
+  final VehicleDetailsEntity? vehicleDetails; // ✅ NEW
 
   DriverDetailsEntity({
     this.id,
+    this.userId,
     this.firstName,
     this.pictureUrl,
     this.rating,
+    this.vehicleDetails, // ✅ NEW
+  });
+}
+
+class VehicleDetailsEntity {
+  final String? brandAr;
+  final String? brandEn;
+  final String? modelAr;
+  final String? modelEn;
+  final String? color;
+  final int? year;
+
+  VehicleDetailsEntity({
+    this.brandAr,
+    this.brandEn,
+    this.modelAr,
+    this.modelEn,
+    this.color,
+    this.year,
   });
 }
 

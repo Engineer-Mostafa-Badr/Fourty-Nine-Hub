@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -171,17 +172,57 @@ class ClientAcceptWidget extends StatelessWidget {
 
   const ClientAcceptWidget({super.key, this.modeType = 'truk', this.offers});
 
+  // Helper method to convert digits based on locale
+  String _formatNumber(String input, BuildContext context) {
+    if (Localizations.localeOf(context).languageCode != 'ar') {
+      return input;
+    }
+
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String output = input;
+    for (int i = 0; i < english.length; i++) {
+      output = output.replaceAll(english[i], arabic[i]);
+    }
+    return output;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
     DateTime dateTime = DateTime.parse(
       offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z',
     );
 
-    String formattedDate =
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+    // Format date with Arabic digits if needed
+    final formattedDate = isArabic
+        ? _formatNumber(
+        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
+        context)
+        : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
 
-    String formattedTime =
-        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
+    // Format time with Arabic digits if needed
+    final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+    final period = dateTime.hour < 12 ? 'AM' : 'PM';
+    final formattedTime =
+        "${_formatNumber(hour.toString(), context)} ${isArabic ? (period == 'AM' ? 'ص' : 'م') : period}";
+
+    // Format rating count and average
+    final ratingCount = _formatNumber(
+        offers?.driverDetails?.rating?.count?.toString() ?? '0', context);
+    final ratingAverage = _formatNumber(
+        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1), context);
+
+    // Format passengers count
+    final passengersCount = _formatNumber(
+        (offers?.tripDetails?.passengers ?? 0).toString(), context);
+
+    // Format price
+    final price = _formatNumber(
+        "${offers?.tripDetails?.price ?? 300}", context);
+
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -189,237 +230,248 @@ class ClientAcceptWidget extends StatelessWidget {
         color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
         children: [
-          // Driver Info Column
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                Stack(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Driver Info Column
+              ClickableWidget(
+                onTap: () {
+                  // context.push(
+                  //   Routes.allDriverRatingScreen,
+                    // extra:offers?.driverDetails?.userId,
+                  // );
+                },
+                child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: (offers?.driverDetails?.picture == null ||
-                            offers!.driverDetails!.picture!.isEmpty)
-                            ? Image.asset(
-                          Assets.maleImagePlaceholder,
-                          fit: BoxFit.cover,
-                        )
-                            : ImageFromInternet(
-                          fit: BoxFit.cover,
-                          image: offers!.driverDetails!.picture!,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.cF5F5F5,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                Assets.star2,
-                                width: 8,
-                                height: 8,
-                              ),
-                              const SizedBox(width: 4),
-                              Label(
-                                text: offers?.driverDetails?.rating?.count
-                                    .toString() ??
-                                    '0',
-                                style: Styles.smallText(
-                                  color: AppColors.PRIMARY_COLOR,
-                                ),
-                              )
-                            ],
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                          child: Container(
+                            width: 75,
+                            height: 75,
+                            decoration: const BoxDecoration(shape: BoxShape.circle),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            child: (offers?.driverDetails?.picture == null ||
+                                offers!.driverDetails!.picture!.isEmpty)
+                                ? Image.asset(
+                              Assets.maleImagePlaceholder,
+                              fit: BoxFit.cover,
+                            )
+                                : ImageFromInternet(
+                              fit: BoxFit.cover,
+                              image: offers!.driverDetails!.picture!,
+                            ),
                           ),
                         ),
-                      ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.grey,
+                              // color: AppColors.cF5F5F5,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    Assets.star2,
+                                    width: 8,
+                                    height: 8,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Label(
+                                    text: ratingCount,
+                                    style: Styles.smallText(
+                                      color: AppColors.PRIMARY_COLOR,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Label(
+                      text: offers?.driverDetails?.firstName ?? '',
+                      style: Styles.mediumText(),
+                    ),
+                    Label(
+                        text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.brandAr ?? '': offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
+                        style: Styles.mediumText()),
+                    Label(
+                        text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.modelAr ?? '':
+                        offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
+                        style: Styles.mediumText()),
+                    Label(
+                      text: '($ratingAverage)',
+                      style: Styles.smallText(),
                     ),
                   ],
                 ),
-                Label(
-                  text: offers?.driverDetails?.firstName ?? '',
-                  style: Styles.mediumText(),
-                ),
-                Label(
-                  text: '(${offers?.driverDetails?.rating?.average ?? 0})',
-                  style: Styles.smallText(),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 32),
-          // Trip Details Column
-          Expanded(
-            flex: 8,
-            child: IntrinsicWidth(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset(
-                                  Assets.rideFrom,
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Label(
-                                    text: offers?.tripDetails?.location?.fromTitle ??
-                                        'Cairo International Airport',
-                                    style: Styles.headerText(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  Assets.rideTo,
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Label(
-                                    text: offers?.tripDetails?.location?.toTitle ??
-                                        'Cairo International Airport',
-                                    style: Styles.mediumText(
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Label(
-                              text:
-                              '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
-                              style: Styles.mediumText(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          children: [
-                            ImageFromInternet(
-                              image: offers!.tripDetails!.category!.picture!,
-                              width: 40,
-                              height: 40,
-                              fit: BoxFit.contain,
-                            ),
-                            Label(
-                              text: context.isArabic
-                                  ? (offers?.tripDetails?.category?.nameAr ?? '')
-                                  : (offers?.tripDetails?.category?.nameEn ?? ''),
-                              style: Styles.mediumText(fontSize: 25),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Label(
-                        text: "${offers?.tripDetails?.price ?? 300}",
-                        style: Styles.mediumText(fontWeight: FontWeight.w700),
-                      ),
-                      const SizedBox(width: 4),
-                      Label(
-                        text: LocaleKeys.egp.tr(),
-                        style: Styles.mediumText(
-                          color: AppColors.SECONDARY_COLOR,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Label(
-                        text: formattedTime,
-                        style: Styles.mediumText(fontWeight: FontWeight.w700),
-                      ),
-                      Label(
-                        text: formattedDate,
-                        style: Styles.mediumText(fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          Assets.phoneIconRed,
-                          width: 30,
-                          height: 30,
-                          color: context.isDarkMode
-                              ? AppColors.PRIMARY_COLOR_DARK
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          Assets.mailIconRed,
-                          width: 25,
-                          height: 25,
-                          color: context.isDarkMode
-                              ? AppColors.PRIMARY_COLOR_DARK
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          Assets.reportRed,
-                          width: 25,
-                          height: 25,
-                          color: AppColors.PRIMARY_COLOR_DARK,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
               ),
-            ),
+              const SizedBox(width: 32),
+              // Trip Details Column
+              Expanded(
+                flex: 8,
+                child: IntrinsicWidth(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 7,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      Assets.rideFrom,
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Label(
+                                        text: offers?.tripDetails?.location?.fromTitle ??
+                                            'Cairo International Airport',
+                                        style: Styles.headerText(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      Assets.rideTo,
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Label(
+                                        text: offers?.tripDetails?.location?.toTitle ??
+                                            'Cairo International Airport',
+                                        style: Styles.mediumText(
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Label(
+                                  text: '${LocaleKeys.passenger.localize}  $passengersCount',
+                                  style: Styles.mediumText(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              children: [
+                                ImageFromInternet(
+                                  image: offers!.tripDetails!.category!.picture!,
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.contain,
+                                ),
+                                Label(
+                                  text: isArabic
+                                      ? (offers?.tripDetails?.category?.nameAr ?? '')
+                                      : (offers?.tripDetails?.category?.nameEn ?? ''),
+                                  style: Styles.mediumText(fontSize: 25),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Label(
+                            text: price,
+                            style: Styles.mediumText(fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(width: 4),
+                          Label(
+                            text: LocaleKeys.egp.tr(),
+                            style: Styles.mediumText(
+                              color: AppColors.SECONDARY_COLOR,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Label(
+                            text: formattedTime,
+                            style: Styles.mediumText(fontWeight: FontWeight.w700),
+                          ),
+                          Label(
+                            text: formattedDate,
+                            style: Styles.mediumText(fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: SvgPicture.asset(
+                  height: 30.h,
+                  Assets.phoneIconRed,
+                  color: context.isDarkMode
+                      ? AppColors.PRIMARY_COLOR_DARK
+                      : AppColors.PRIMARY_COLOR,
+                ),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: SvgPicture.asset(
+                  Assets.mailIconRed,
+                  color: context.isDarkMode
+                      ? AppColors.PRIMARY_COLOR_DARK
+                      : AppColors.PRIMARY_COLOR,
+                ),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: SvgPicture.asset(
+                  Assets.reportRed,
+                  color: AppColors.PRIMARY_COLOR_DARK,
+                ),
+                onPressed: () {},
+              ),
+            ],
           ),
         ],
       ),
     );
+
   }
 }
 

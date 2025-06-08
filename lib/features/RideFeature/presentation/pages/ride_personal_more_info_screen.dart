@@ -624,12 +624,10 @@ class _RidePersonalMoreInfoScreenState
                                 context.push(Routes.LOGIN);
                                 return;
                               }
-
                               final price = double.tryParse(offerPrice) ?? 0.0;
                               final passengerText = passengerController.text;
                               final passengerCount =
                                   int.tryParse(passengerText) ?? 0;
-
                               if (passengerCount > 1000) {
                                 showErrorMessage(
                                   context,
@@ -639,7 +637,6 @@ class _RidePersonalMoreInfoScreenState
                                 );
                                 return;
                               }
-
                               if (widget.isTruk) {
                                 cubit.makeLoadingTripParam
                                   ..isPremium = false

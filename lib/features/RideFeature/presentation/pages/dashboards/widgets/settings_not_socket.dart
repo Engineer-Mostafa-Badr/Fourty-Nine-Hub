@@ -39,8 +39,11 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
   void initState() {
     super.initState();
+    // enableSound =  widget.settings?.enableNotificationSound ?? false;
+    enableSound =  true;
 
   }
+  late bool enableSound;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,18 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                   context.read<DashboardsCubit>().updateDriverSettings(value);
                 });
               }),
+
+          switchWidget(
+              title: context.isArabic?'اشعارات صوتية':'Voice notify',
+              subText: enableSound ? context.isArabic?'تفعيل':'Enabled' : context.isArabic?'تعطيل':'Disabled', //'Disable',
+              valuee: enableSound,
+              onChanged: (value) {
+                setState(() {
+                  enableSound = value;
+                });
+              }),
+
+
           Padding(
             padding: const EdgeInsetsDirectional.all(8),
             child: Row(

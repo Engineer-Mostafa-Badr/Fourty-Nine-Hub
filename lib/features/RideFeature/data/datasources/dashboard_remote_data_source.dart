@@ -34,23 +34,35 @@ import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
 import '../../../food_feature/restaurants_list/data/models/rate_response_model.dart';
 import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
+import '../../domain/entities/create_no_track_trip_entity.dart';
+import '../../domain/entities/dashboards/create_non_track_offer_entity.dart';
 import '../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
+import '../../domain/entities/loading/get_loading_accepted_entity.dart';
+import '../../domain/entities/loading/get_loading_avaliable_entity.dart';
+import '../../domain/entities/loading/get_loading_history_entity.dart';
+import '../../domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../../domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import '../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import '../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
+import '../models/create_no_track_trip_model.dart';
+import '../models/dashboards/create_non_track_offer_model.dart';
 import '../models/dashboards/driver_settings_model.dart';
 import '../models/dashboards/get_accepted_ride_non_socket_trip_model.dart';
 import '../models/dashboards/get_available_ride_non_socket_trip_model.dart';
 import '../models/dashboards/get_past_ride_non_socket_trip_model.dart';
 import '../models/dashboards/settings_dashboard_model.dart';
 import '../models/dashboards/trips_response_model.dart';
+import '../models/loading/get_loading_accepted_model.dart';
+import '../models/loading/get_loading_avaliable_model.dart';
+import '../models/loading/get_loading_history_model.dart';
 
 abstract class TripRemoteDataSource {
   Future<Either<Failure, TripsResponseModel>> getAvailableTrips(AvailableRideTripsUseCaseParams params);
@@ -107,6 +119,13 @@ abstract class TripRemoteDataSource {
 
   void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
   Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
+
+  Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params);
+
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createOfferLoading(CreateNonTrackOfferParams params);
+  Future<Either<Failure, List<GetLoadingAvailableEntity>>> getAvailableNonSocketLoading(ClientPendingTripParams params);
+  Future<Either<Failure, List<GetLoadingHistoryEntity>>> getHistoryNonSocketLoading(ClientPendingTripParams params);
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateNonSocket(UpdateClientRateParams params);
 
 }
 
@@ -646,4 +665,90 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       },
     );
   }
+
+  @override
+  Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params) async{
+    final url = "${EndPoints.getAcceptedRideNonSocketLoading}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['acceptedTrips'] as List).map((e) => GetLoadingAcceptedModel.fromJson(e as Map<String, dynamic>)).toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createOfferLoading(CreateNonTrackOfferParams params)async {
+    final url = "${EndPoints.createOfferLoading}${params.tripId}";
+    final response = await _apiConsumer.post(
+        url,
+        data: params.toJson()
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final createOffer = CreateNonTrackOfferModel.fromJson(data);
+        return Right(createOffer);
+      },
+    );
+  }
+
+  @override
+
+
+  @override
+  Future<Either<Failure, List<GetLoadingAvailableEntity>>> getAvailableNonSocketLoading(ClientPendingTripParams params) async {
+    final url = "${EndPoints.getAvailableRideNonSocketLoading}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsList = (data['data']['trips'] ?? []) as List;
+        final tripsData = tripsList
+            .map((e) => GetLoadingAvailableModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GetLoadingHistoryEntity>>> getHistoryNonSocketLoading(ClientPendingTripParams params)async {
+    final url = "${EndPoints.getHistoryRideNonSocketLoading}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsList = (data['data']['historyTrips'] ?? []) as List;
+        final tripsData = tripsList
+            .map((e) => GetLoadingHistoryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateNonSocket(UpdateClientRateParams params) async{
+    final url = "${EndPoints.updateDriverRatingNonSocket}";
+
+    final response = await _apiConsumer.put(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = CreateNonTrackOfferModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
+  }
+
 }

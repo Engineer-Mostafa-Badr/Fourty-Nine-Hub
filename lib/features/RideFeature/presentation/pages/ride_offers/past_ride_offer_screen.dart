@@ -230,84 +230,89 @@ class ClientPastWidget extends StatelessWidget {
               onTap: () {
                 context.push(
                   Routes.allDriverRatingScreen,
-                  extra: "67f45b25fb54342ebf6711f8",
+                  extra:offers?.driverDetails?.userId,
                 );
               },
-              child: Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: offers?.driverDetails?.pictureUrl == null ||
-                                offers!.driverDetails!.pictureUrl!.isEmpty
-                                ? Image.asset(
-                              Assets.maleImagePlaceholder,
-                              fit: BoxFit.cover,
-                            )
-                                : ImageFromInternet(
-                              fit: BoxFit.cover,
-                              image: offers!.driverDetails!.pictureUrl!,
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        child: Container(
+                          width: 75,
+                          height: 75,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: offers?.driverDetails?.pictureUrl == null ||
+                              offers!.driverDetails!.pictureUrl!.isEmpty
+                              ? Image.asset(
+                            Assets.maleImagePlaceholder,
+                            fit: BoxFit.cover,
+                          )
+                              : ImageFromInternet(
+                            fit: BoxFit.cover,
+                            image: offers!.driverDetails!.pictureUrl!,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.grey,
+                            // color: AppColors.cF5F5F5,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.star2,
+                                  width: 8,
+                                  height: 8,
+                                ),
+                                const Sizer(width: 4),
+                                Label(
+                                  text: _formatNumber(
+                                      offers?.driverDetails?.rating?.count
+                                          .toString() ??
+                                          '0',
+                                      context),
+                                  style: Styles.smallText(
+                                      color: AppColors.PRIMARY_COLOR),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.cF5F5F5,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    Assets.star2,
-                                    width: 8,
-                                    height: 8,
-                                  ),
-                                  const Sizer(width: 4),
-                                  Label(
-                                    text: _formatNumber(
-                                        offers?.driverDetails?.rating?.count
-                                            .toString() ??
-                                            '0',
-                                        context),
-                                    style: Styles.smallText(
-                                        color: AppColors.PRIMARY_COLOR),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Label(
-                      text: offers?.driverDetails?.firstName ?? '',
-                      style: Styles.mediumText(),
-                    ),
-                    Label(
-                      text: '(${_formatNumber(
-                          offers?.driverDetails?.rating?.average
-                              ?.toStringAsFixed(1) ??
-                              '0',
-                          context)})',
-                      style: Styles.smallText(),
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  Label(
+                    text: offers?.driverDetails?.firstName ?? '',
+                    style: Styles.mediumText(),
+                  ),
+                  Label(
+                      text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.brandAr ?? '': offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
+                      style: Styles.mediumText()),
+                  Label(
+                      text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.modelAr ?? '':
+                      offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
+                      style: Styles.mediumText()),
+                  Label(
+                    text: '(${_formatNumber(
+                        offers?.driverDetails?.rating?.average
+                            ?.toStringAsFixed(1) ??
+                            '0',
+                        context)})',
+                    style: Styles.smallText(),
+                  ),
+                ],
               ),
             ),
             const Sizer(width: 32),

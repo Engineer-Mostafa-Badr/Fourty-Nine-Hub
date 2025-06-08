@@ -10,12 +10,16 @@ class AvailableRideNonSocketTripEntity {
 }
 
 class ClientDetailsEntity {
+  final String? id;
   final String? firstName;
   final String? profilePictureUrl;
   final String? gender;
   final RatingEntity? rating;
 
-  ClientDetailsEntity({this.firstName, this.profilePictureUrl, this.gender, this.rating});
+  ClientDetailsEntity({
+    this.id,
+    this.firstName,
+    this.profilePictureUrl, this.gender, this.rating});
 }
 
 class RatingEntity {

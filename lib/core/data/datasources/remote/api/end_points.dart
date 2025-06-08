@@ -59,6 +59,7 @@ class EndPoints {
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  // static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
   static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
@@ -1549,6 +1550,14 @@ class EndPoints {
   static const addRateToClientWithDriverNonSocket = '/ride/untracked/ratings/driver';
   static const addRateToDriverWithClientNonSocket = '/ride/untracked/ratings/client';
   static const updateClientRating = '/ride/untracked/ratings/client';
+  static const updateDriverRatingNonSocket = '/ride/untracked/ratings/driver';
   static const getDriverAllRating = '/ride/untracked/ratings/driver';
   static const getClientAllRating = '/ride/untracked/ratings/client';
+
+  static const getAcceptedRideNonSocketLoading = '/loading/driver/trips';
+  static const getAvailableRideNonSocketLoading = '/loading/trip/driver/subcategory';
+  static const getHistoryRideNonSocketLoading = '/loading/driver/trips/history';
+  static const createOfferLoading = '/loading/driver/trips/offers/';
+
+
 }

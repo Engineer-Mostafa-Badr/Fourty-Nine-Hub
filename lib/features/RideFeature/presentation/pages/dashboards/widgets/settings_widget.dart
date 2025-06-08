@@ -92,6 +92,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     enableSound = value;
                   });
                 }),
+
             switchWidget(
                 title: LocaleKeys.captainShare.tr(), //'Captain share',
                 subText:
@@ -317,22 +318,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
                                   isActive: isCaptain))
-
-                              // [
-                              //   SubCategoriesActive(
-                              //       subcategoryId:
-                              //           widget.settings!.categoryIds[0].id,
-                              //       isActive: isCaptain),
-                              //   SubCategoriesActive(
-                              //       subcategoryId:
-                              //           widget.settings!.categoryIds[1].id,
-                              //       isActive: isIntercity),
-                              //   SubCategoriesActive(
-                              //       subcategoryId:
-                              //           widget.settings!.categoryIds[2].id,
-                              //       isActive: isPremium),
-                              // ]
-
                           ));
                     }),
               ),
