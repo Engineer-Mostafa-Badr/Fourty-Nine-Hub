@@ -743,6 +743,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                     child: CustomVideoPlayer(
                       videoUrl: widget.videoUrl,
                       title: widget.talent.title,
+                      inFocus: true,
                     ),
                   ),
                   Sizer(),

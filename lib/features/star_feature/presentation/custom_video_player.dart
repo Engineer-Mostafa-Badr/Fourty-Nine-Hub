@@ -7,14 +7,17 @@ import '../../../main.dart';
 import '../../../res/style/app_colors.dart';
 
 class CustomVideoPlayer extends StatefulWidget {
-  const CustomVideoPlayer(
-      {super.key,
-      required this.videoUrl,
-      this.onDurationLoaded,
-      required this.title});
+  const CustomVideoPlayer({
+    super.key,
+    required this.videoUrl,
+    this.onDurationLoaded,
+    required this.title,
+    this.inFocus = false,
+  });
 
   final String videoUrl;
   final String title;
+  final bool inFocus;
   final Function(Duration)? onDurationLoaded;
 
   @override
@@ -377,58 +380,60 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
           ),
 
         // Full-screen button
-        if (!isFloating)
-          Positioned(
-            bottom: 20,
-            right: 10,
-            child: GestureDetector(
-              onTap: () {
-                _toggleFullScreen('Full-screen button');
-              },
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Icon(
-                  MediaQuery.of(context).orientation == Orientation.portrait
-                      ? Icons.fullscreen
-                      : Icons.fullscreen_exit,
-                  color: Colors.white,
-                  size: 20,
+        if (widget.inFocus)
+          if (!isFloating)
+            Positioned(
+              bottom: 20,
+              right: 10,
+              child: GestureDetector(
+                onTap: () {
+                  _toggleFullScreen('Full-screen button');
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Icon(
+                    MediaQuery.of(context).orientation == Orientation.portrait
+                        ? Icons.fullscreen
+                        : Icons.fullscreen_exit,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
-          ),
 
         // Floating mode button
-        if (!isFullScreen)
-          Positioned(
-            top: 10,
-            right: 50,
-            child: GestureDetector(
-              onTap: () {
-                FloatingVideoManager.showFloatingPlayer(
-                  context: context,
-                  videoUrl: widget.videoUrl,
-                  title: widget.title,
-                  controller: _controller,
-                  isPlaying: _isPlaying,
-                );
-                Navigator.pop(context); // Go back to previous screen
-              },
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(20),
+        if (widget.inFocus)
+          if (!isFullScreen)
+            Positioned(
+              top: 10,
+              right: 50,
+              child: GestureDetector(
+                onTap: () {
+                  FloatingVideoManager.showFloatingPlayer(
+                    context: context,
+                    videoUrl: widget.videoUrl,
+                    title: widget.title,
+                    controller: _controller,
+                    isPlaying: _isPlaying,
+                  );
+                  Navigator.pop(context); // Go back to previous screen
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(Icons.picture_in_picture,
+                      color: Colors.white, size: 20),
                 ),
-                child: const Icon(Icons.picture_in_picture,
-                    color: Colors.white, size: 20),
               ),
             ),
-          ),
       ],
     );
   }

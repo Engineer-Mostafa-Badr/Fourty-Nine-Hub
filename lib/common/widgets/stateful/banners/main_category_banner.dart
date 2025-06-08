@@ -185,7 +185,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     PositionedDirectional(
                         end: 0, child: _buildRegisterButton()),
                     Label(
-                      text: widget.category.name ?? "",
+                      text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -260,7 +260,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                       ],
                     ),
                     child: Label(
-                      text: widget.category.name ?? "",
+                      text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
                       style: Styles.headerText(
                         fontSize: 48,
                         color: Colors.white,
@@ -293,7 +293,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 children: [
                   PositionedDirectional(end: 0, child: _buildRegisterButton()),
                   Label(
-                    text: widget.category.name ?? '',
+                    text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
