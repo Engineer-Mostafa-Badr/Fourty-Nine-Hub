@@ -77,6 +77,28 @@ class LoadingMethodHelper {
    return isSuccess;
   }
 
+  uploadDriverImage({
+    required XFile driverImage,
+    required Function(bool isSuccess) onSuccessUploaded
+  }) async {
+    getSignUrl(
+      data: {
+        // "document": {
+          "type": await getFileExtension(File(driverImage.path)),
+          "size": await getFileSize(File(driverImage.path))
+        // }
+      },
+      url: "${EndPoints.developmentBaseUrl}/truck/driver/request-upload-image",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(driverImage.path),
+            signedUrl: data['data']['signedUrl']);
+        bool response = await successUploadImage(url: "${EndPoints.developmentBaseUrl}/truck/driver/confirm-upload-image");
+        onSuccessUploaded(response);
+      },
+    );
+  }
+
   Future<bool> uploadDriverId(
       {required XFile idImageInFront,
       required XFile idImageInBehind,

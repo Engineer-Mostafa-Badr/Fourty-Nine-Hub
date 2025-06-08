@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:pdf/pdf.dart';
@@ -48,6 +49,7 @@ class _RideDashboardDetailsScreenState
   String? pdfPath;
   @override
   initState(){
+    context.read<DashboardsCubit>().initRecode(widget.tripEntity.tripDetails?.recordUrl ?? '');
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
       clientId: widget.tripEntity.clientDetails?.id??'',
       driverId: widget.tripEntity.driverDetails?.id??'',
@@ -186,6 +188,9 @@ class _RideDashboardDetailsScreenState
       ),
     );
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -348,6 +353,62 @@ class _RideDashboardDetailsScreenState
                             color: AppColors.c5A5A5A,
                             fontSize: 14,
                             fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  if(widget.tripEntity.tripDetails?.recordUrl.isNotEmpty??false)Column(
+                    children: [
+                      // Progress bar
+                      Slider(
+                        min: 0,
+                        max: state.recordDuration?.inSeconds.toDouble()??0,
+                        value: state.recordPosition?.inSeconds.toDouble()??0,
+                        onChanged: (value) async {
+                          await cubit.audioPlayer.seek(Duration(seconds: value.toInt()));
+                        },
+                      ),
+
+                      // Time indicators
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(cubit.formatDuration(state.recordPosition!)),
+                            Text(cubit.formatDuration((state.recordDuration!) - (state.recordPosition!)),)
+                          ],
+                        ),
+                      ),
+
+                      // Control buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.play_arrow, size: 36),
+                            onPressed: state.playerState == PlayerState.playing ? null : ()=>cubit.play(widget.tripEntity.tripDetails?.recordUrl??''),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.pause, size: 36),
+                            onPressed: state.playerState != PlayerState.playing ? null : ()=>cubit.pause(),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.stop, size: 36),
+                            onPressed: state.playerState == PlayerState.stopped ? null : ()=>cubit.stop(),
+                          ),
+                        ],
+                      ),
+
+                      // Display the URL (optional)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Playing: ${widget.tripEntity.tripDetails?.recordUrl??''}',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
                     ],
                   ),

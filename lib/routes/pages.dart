@@ -3568,16 +3568,14 @@ class AppPages {
                   builder: (context, state) => BlocProvider(
                         create: (context) => serviceLocator<ClientTripsCubit>()
                           ..loadInitialClientPendingTrips(),
-                        child: PendingRideOfferScreen(),
+                        child: PendingRideOfferScreen(type: state.extra as String,),
                       )),
               GoRoute(
                   path: Paths.rideOffer,
                   name: Routes.rideOffer,
                   builder: (context, state) => BlocProvider(
-                        create: (context) => serviceLocator<ClientTripsCubit>()
-                          ..loadInitialClientPendingTrips()
-                          ..loadInitialClientOfferTrips(),
-                        child: MainTabsRideOffer(),
+                        create: (context) => serviceLocator<ClientTripsCubit>(),
+                        child: MainTabsRideOffer(type: state.extra as String,),
                       )),
               GoRoute(
                 path: Paths.supportRideScreen,

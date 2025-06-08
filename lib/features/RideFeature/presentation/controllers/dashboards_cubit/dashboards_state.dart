@@ -81,11 +81,15 @@ class DashboardsState
   final XFile? personalTechnicalExaminationPicture;
   final List<GovernorateEntity>? govs;
   final GovernorateEntity? selectedGov;
+  final Duration? recordPosition;
+  final PlayerState? playerState;
+  final Duration? recordDuration;
 
   const DashboardsState(
       {this.failure,
       this.pastTrips,
       this.settings,
+      this.recordPosition,
       this.currentIndex=0,
       this.status = DashboardsStates.initState,
       this.availableTrips,
@@ -121,6 +125,8 @@ class DashboardsState
         this.personalTechnicalExaminationPicture,
         this.selectedGov,
         this.govs,
+        this.playerState,
+        this.recordDuration,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -162,6 +168,9 @@ class DashboardsState
         XFile? vehicleFrontPicture,
          XFile? vehicleBackPicture,
         XFile? personalTechnicalExaminationPicture,
+        Duration? recordPosition,
+        Duration? recordDuration,
+        PlayerState? playerState,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -202,6 +211,9 @@ class DashboardsState
       personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
       govs: govs ?? this.govs,
       selectedGov: selectedGov ?? this.selectedGov,
+      recordPosition: recordPosition ?? this.recordPosition,
+      recordDuration: recordDuration ?? this.recordDuration,
+      playerState: playerState ?? this.playerState,
     );
   }
 

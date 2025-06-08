@@ -64,9 +64,9 @@ class DefaultFirebaseOptions {
     projectId: 'app-af0a7',
     storageBucket: 'app-af0a7.firebasestorage.app',
     androidClientId:
-        '872417805780-16bqk61d1vspkehfatdogbqaqpvhco3i.apps.googleusercontent.com',
+    '872417805780-16bqk61d1vspkehfatdogbqaqpvhco3i.apps.googleusercontent.com',
     iosClientId:
-        '872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com',
+    '872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com',
     iosBundleId: 'com.fourtyninehub.fourtynine',
   );
 }

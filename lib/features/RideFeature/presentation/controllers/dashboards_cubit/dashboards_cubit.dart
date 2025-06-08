@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -208,6 +209,53 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final drugAnalysisFormKey = GlobalKey<FormState>();
   TextEditingController rideDragAnalysisExpireDateController = TextEditingController();
 
+
+
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  void initRecode(String recordUrl) {
+    log("messagerecordUrl$recordUrl");
+
+    audioPlayer.onPlayerStateChanged.listen((data) {
+      emit(state.copyWith(status: DashboardsStates.success,playerState: data));
+    });
+
+    audioPlayer.onDurationChanged.listen((duration) {
+      emit(state.copyWith(status: DashboardsStates.success,recordDuration: duration));
+    });
+
+    audioPlayer.onPositionChanged.listen((position) {
+      emit(state.copyWith(status: DashboardsStates.success,recordPosition: position));
+    });
+  }
+
+
+
+  Future<void> play(String recordUrl) async {
+    await audioPlayer.play(UrlSource(recordUrl));
+  }
+
+  Future<void> pause() async {
+    await audioPlayer.pause();
+  }
+
+  Future<void> stop() async {
+    await audioPlayer.stop();
+    emit(state.copyWith(status: DashboardsStates.success,recordPosition: Duration.zero));
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return [
+      if (duration.inHours > 0) hours,
+      minutes,
+      seconds,
+    ].join(':');
+  }
   onSubmitUploadingTechnicalExamination(BuildContext context) async {
     if (terminalExaminationFormKey.currentState!.validate()) {
       emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
@@ -904,7 +952,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     });
   }
 
-  void listenToEndTrip(BuildContext context) {
+  void listenToEndTrip(BuildContext context,RideModeParams params) {
     CliLogger.info('End Trip');
     // TripsResponseEntity
     listenToEndTripUseCase((tripId) {
@@ -914,6 +962,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           context.isArabic
               ? 'تم إلغاء الرحلة من قبل العميل'
               : 'Trip has been canceled by the customer');
+      changeIndex(0, context, params);
       emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
     });
   }

@@ -486,7 +486,7 @@ class EndPoints {
   static String favoriteSubCategory =
       "$developmentBaseUrl/favorite-sub-category";
   static String createLoadingTrip =
-      "$developmentBaseUrl/loading/trip/createLoadingTrip";
+      "$developmentBaseUrl/loading/client/trips";
 
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =
@@ -1420,6 +1420,8 @@ class EndPoints {
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/cars/brands?page=1&limit=100';
   static String getRideModels(String brandId) => '/ride/cars/$brandId/models?page=1&limit=100';
+  static String getRideShippingModels(String brandId) => '/loading/cars/$brandId/models?page=1&limit=100';
+  static String getRideNonTrackingModels(String brandId) => '/ride/cars/buses/$brandId/models?page=1&limit=100';
   static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
   static String getRideCarColors = '/ride/riders/colors';
   static String getAllUserTrips = '/loading/trip/allUserTrips';
@@ -1539,14 +1541,25 @@ class EndPoints {
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
       '/ride/non-tracking/trips/client/pending';
+  static const getClientPendingShippingTrips =
+      '/loading/client/trips';
   static const getClientAcceptedUntrackedTrips =
       '/ride/non-tracking/trips/client';
+  static const getClientAcceptedShippingTrips =
+      '/loading/client/trips/accepted';
   static const getClientPastUntrackedTrips =
       '/ride/non-tracking/trips/client/history';
+  static const getClientPastShippingTrips =
+      '/loading/client/trips/history';
   static const getClientOfferUntrackedTrips = '/ride/non-tracking/offers';
+  static const getClientOfferShippingTrips = '/loading/client/trips/offers';
   static const cancelClientUntrackedTrips = '/ride/non-tracking/trips/client';
+  static cancelShippingTrip(String tripId) => '/loading/client/trips/$tripId';
   static const acceptClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const acceptClientShippingTrips = '/loading/client/trips/offers/';
+  static const acceptShippingTrip = '/loading/client/trips/accepted/';
   static const refuseClientUntrackedTrips = '/ride/non-tracking/offers/';
+  static const refuseClientShippingTrips = '/loading/client/trips/offers/';
   static const createOfferNonTrackedTrips = '/ride/non-tracking/offers/trip/';
   static const updateDriverSettingsNonTrack = '/ride/driver/untracked/settings';
 

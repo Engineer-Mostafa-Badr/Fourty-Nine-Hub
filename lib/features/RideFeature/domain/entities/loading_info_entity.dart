@@ -5,6 +5,7 @@ class LoadingInfoEntity{
   bool? isUploadDriverLicense;
   bool? isUploadCarImage;
   bool? isUploadCarLicense;
+  bool? isUploadDriverImage;
 
   LoadingInfoEntity({
     this.isApproved=false,
@@ -13,6 +14,7 @@ class LoadingInfoEntity{
     this.isUploadDriverLicense=false,
     this.isUploadCarImage=false,
     this.isUploadCarLicense=false,
+    this.isUploadDriverImage=false,
   });
 
   //toJson
@@ -23,5 +25,6 @@ class LoadingInfoEntity{
     'isUploadDriverLicense': isUploadDriverLicense,
     'isUploadCarImage': isUploadCarImage,
     'isUploadCarLicense': isUploadCarLicense,
+    'isUploadDriverImage': isUploadDriverImage,
   };
 }
