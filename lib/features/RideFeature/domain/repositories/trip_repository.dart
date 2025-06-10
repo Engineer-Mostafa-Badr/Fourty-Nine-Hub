@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/su
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
@@ -51,10 +52,12 @@ abstract class TripRepository {
    Future<Either<Failure, RunningTripEntity>> getRunningTrip();
    Future<Either<Failure, bool>> goingToClient(String id);
    Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams id);
+   Future<Either<Failure, bool>> updateDriverRateClient(DriverRateClientParams id);
    Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
    Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
    Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
+   Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);

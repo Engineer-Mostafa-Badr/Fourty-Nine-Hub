@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/update_fare_bottom_sheet_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -209,9 +210,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         customBottomSheet2(context,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: FareBottomSheetWidget(
-                                rideCubit: context.read<RideCubit>(),
-                                selectedCategoryPrice: 44,
+                              child: UpdateFareBottomSheetWidget(
+                                selectedCategoryPrice: widget.settings?.pricingPerKm ?? 0,
                                 selectedCategoryName: 'aaa',
                               ),
                             ),

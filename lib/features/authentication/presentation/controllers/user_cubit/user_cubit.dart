@@ -249,6 +249,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
   uploadPhoto({bool isGallery = true, required BuildContext context}) async {
     emit(state.copyWith(status: StateStatus.loading));
+    Navigator.pop(context);
     final UploadFile upload = UploadFile();
     await upload.uploadImage(
         isGallery: isGallery,

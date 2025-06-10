@@ -14,18 +14,15 @@ import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.d
 import '../../controllers/cubits/ride_states.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 
-class FareBottomSheetWidget extends StatelessWidget {
-  FareBottomSheetWidget({
+class UpdateFareBottomSheetWidget extends StatelessWidget {
+  UpdateFareBottomSheetWidget({
     super.key,
-    required this.rideCubit,
     required this.selectedCategoryPrice,
     required this.selectedCategoryName,
   }) : _controller = TextEditingController(
           text:
               selectedCategoryPrice > 0 ? selectedCategoryPrice.toInt().toString() : '',
         );
-
-  final RideCubit rideCubit;
   final double selectedCategoryPrice;
   final String selectedCategoryName;
   final TextEditingController _controller;
