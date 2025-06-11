@@ -14,24 +14,37 @@ import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.d
 import '../../controllers/cubits/ride_states.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 
-class UpdateFareBottomSheetWidget extends StatelessWidget {
+class UpdateFareBottomSheetWidget extends StatefulWidget {
   UpdateFareBottomSheetWidget({
     super.key,
     required this.selectedCategoryPrice,
+    required this.onChange,
     required this.selectedCategoryName,
+    required this.highCostPerKm,
+    required this.lowCostPerKm,
   }) : _controller = TextEditingController(
-          text:
-              selectedCategoryPrice > 0 ? selectedCategoryPrice.toInt().toString() : '',
+          text: selectedCategoryPrice > 0
+              ? selectedCategoryPrice.toInt().toString()
+              : '',
         );
-  final double selectedCategoryPrice;
+  final num selectedCategoryPrice;
+  final Function(num price) onChange;
+  final num highCostPerKm;
+  final num lowCostPerKm;
   final String selectedCategoryName;
   final TextEditingController _controller;
+
+  @override
+  State<UpdateFareBottomSheetWidget> createState() => _UpdateFareBottomSheetWidgetState();
+}
+
+class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidget> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context)=>serviceLocator<RideCubit>(),
+      create: (context) => serviceLocator<RideCubit>(),
       child: BlocBuilder<RideCubit, RideState>(
         builder: (context, state) {
           var cubit = context.read<RideCubit>();
@@ -42,9 +55,11 @@ class UpdateFareBottomSheetWidget extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
-                  controller: _controller,
+                  controller: widget._controller,
                   autofocus: true,
-                  cursorColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  cursorColor: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
                   cursorHeight: 50,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
@@ -58,9 +73,10 @@ class UpdateFareBottomSheetWidget extends StatelessWidget {
                       return newValue;
                     }),
                   ],
-
-                  style:  TextStyle(
-                    color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  style: TextStyle(
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w500,
                     fontSize: 40,
                   ),
@@ -68,12 +84,14 @@ class UpdateFareBottomSheetWidget extends StatelessWidget {
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     hintText: context.isArabic ? 'ج.م' : 'EGP',
-                    hintStyle:  const TextStyle(
-                      color:  Color(0xff96979B),
+                    hintStyle: const TextStyle(
+                      color: Color(0xff96979B),
                       fontWeight: FontWeight.w500,
                       fontSize: 40,
                     ),
-                    fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                    fillColor: context.isDarkMode
+                        ? AppColors.QUANTITY_COLOR
+                        : Colors.white,
                     filled: true,
                     border: const UnderlineInputBorder(),
                     focusedBorder: const UnderlineInputBorder(),
@@ -82,11 +100,24 @@ class UpdateFareBottomSheetWidget extends StatelessWidget {
                     disabledBorder: const UnderlineInputBorder(),
                     focusedErrorBorder: const UnderlineInputBorder(),
                   ),
+                  onChanged: (v){
+                    _formKey.currentState!.validate();
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return context.isArabic
                           ? 'يرجى إدخال مبلغ'
                           : 'Please enter an amount';
+                    }
+                    if ((double.tryParse(value) ?? 0) < widget.lowCostPerKm) {
+                      return context.isArabic
+                          ? 'يجب ان يكون السعر اكبر من او يساوي ${widget.lowCostPerKm}'
+                          : 'The price must be greater than or equal to ${widget.lowCostPerKm}';
+                    }
+                    if ((double.tryParse(value) ?? 0) > widget.highCostPerKm) {
+                      return context.isArabic
+                          ? 'يجب ان يكون السعر اقل من او يساوي ${widget.highCostPerKm}'
+                          : 'The price must be less than or equal to ${widget.highCostPerKm}';
                     }
 
                     final double? amount = double.tryParse(value);
@@ -112,30 +143,37 @@ class UpdateFareBottomSheetWidget extends StatelessWidget {
                   label: LocaleKeys.done.tr(),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      if (selectedCategoryName.trim().toLowerCase() == "Captain".toLowerCase()) {
+                      if (widget.selectedCategoryName.trim().toLowerCase() ==
+                          "Captain".toLowerCase()) {
                         state.rideExpectedPrice?.priceForCaptain =
-                            double.parse(_controller.text);
-                      } else if (selectedCategoryName.trim().toLowerCase() == "Scooter".toLowerCase()) {
+                            double.parse(widget._controller.text);
+                      } else if (widget.selectedCategoryName.trim().toLowerCase() ==
+                          "Scooter".toLowerCase()) {
                         state.rideExpectedPrice?.priceForScooter =
-                            double.parse(_controller.text);
-                      } else if (selectedCategoryName.trim().toLowerCase() == "Taxi".toLowerCase()) {
+                            double.parse(widget._controller.text);
+                      } else if (widget.selectedCategoryName.trim().toLowerCase() ==
+                          "Taxi".toLowerCase()) {
                         state.rideExpectedPrice?.priceForTaxi =
-                            double.parse(_controller.text);
-                      } else if (selectedCategoryName.trim().toLowerCase() == "Suv".toLowerCase()) {
+                            double.parse(widget._controller.text);
+                      } else if (widget.selectedCategoryName.trim().toLowerCase() ==
+                          "Suv".toLowerCase()) {
                         state.rideExpectedPrice?.priceForSUV =
-                            double.parse(_controller.text);
-                      } else if (selectedCategoryName.trim().toLowerCase() == "Lady".toLowerCase()) {
+                            double.parse(widget._controller.text);
+                      } else if (widget.selectedCategoryName.trim().toLowerCase() ==
+                          "Lady".toLowerCase()) {
                         state.rideExpectedPrice?.priceForWomen =
-                            double.parse(_controller.text);
-                      } else if (selectedCategoryName.trim().toLowerCase() == "Premium".toLowerCase()) {
+                            double.parse(widget._controller.text);
+                      } else if (widget.selectedCategoryName.trim().toLowerCase() ==
+                          "Premium".toLowerCase()) {
                         state.rideExpectedPrice?.priceForPremium =
-                            double.parse(_controller.text);
-                      } else if (selectedCategoryName.trim().toLowerCase() == "Intercity".toLowerCase()) {
+                            double.parse(widget._controller.text);
+                      } else if (widget.selectedCategoryName.trim().toLowerCase() ==
+                          "Intercity".toLowerCase()) {
                         state.rideExpectedPrice?.priceForIntercity =
-                            double.parse(_controller.text);
+                            double.parse(widget._controller.text);
                       }
-                      cubit.emitRefreshState();
                       Navigator.pop(context);
+                      widget.onChange(num.tryParse(widget._controller.text)??0);
                     }
                   },
                   backColor: AppColors.PRIMARY_COLOR,
@@ -229,24 +267,26 @@ class FareBottomSheetWidget2 extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               AppButton(
-                      // iconWidget: state.isLoadingCreateOffer
-                      //     ? const CustomCircularProgressIndicator()
-                      //     : null,
-                      width: double.infinity,
-                      label: LocaleKeys.done.tr(),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                           Navigator.pop(context);
-                          BlocProvider.of<DashboardsCubit>(context)
-                              .createNewOfferNonSocket(
-                                  contextScreen,
-                                  CreateNewOfferDashboardUsecaseParam(
-                                      priceOffer: double.parse(_controller.text).toInt(),
-                                      tripId: id),subCategoryId);
-                        }
-                      },
-                      backColor: AppColors.PRIMARY_COLOR,
-                    ),
+                // iconWidget: state.isLoadingCreateOffer
+                //     ? const CustomCircularProgressIndicator()
+                //     : null,
+                width: double.infinity,
+                label: LocaleKeys.done.tr(),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.pop(context);
+                    BlocProvider.of<DashboardsCubit>(context)
+                        .createNewOfferNonSocket(
+                            contextScreen,
+                            CreateNewOfferDashboardUsecaseParam(
+                                priceOffer:
+                                    double.parse(_controller.text).toInt(),
+                                tripId: id),
+                            subCategoryId);
+                  }
+                },
+                backColor: AppColors.PRIMARY_COLOR,
+              ),
             ],
           ),
         );

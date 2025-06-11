@@ -44,6 +44,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   late bool isCaptain;
   late bool isIntercity;
   late bool isPremium;
+  late num perKm;
   var planController = ExpansionTileController();
   var cityController = ExpansionTileController();
   List<String> subscriptionPlans = [
@@ -69,6 +70,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     super.initState();
     planTrailing = widget.settings?.subscriptionType ?? '';
     cityTrailing = widget.settings?.city ?? '';
+    perKm = widget.settings?.pricingPerKm ?? 0;
     isReady = widget.settings?.isReady ?? false;
     enableSound =  widget.settings?.enableNotificationSound ?? false;
     isCaptainShare = false;
@@ -212,7 +214,24 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               padding: const EdgeInsets.all(12.0),
                               child: UpdateFareBottomSheetWidget(
                                 selectedCategoryPrice: widget.settings?.pricingPerKm ?? 0,
+                                highCostPerKm: widget.settings?.highCostPerKm ?? 0,
+                                lowCostPerKm: widget.settings?.lowCostPerKm ?? 0,
                                 selectedCategoryName: 'aaa',
+                                onChange: (price){
+                                  context.read<DashboardsCubit>().updateSettings(
+                                      context,
+                                      UpdateSettingsDashboardUsecaseParam(
+                                          isReady: isReady,
+                                          enableSound: enableSound,
+                                          subscriptionPlan: planTrailing,
+                                          perKm:price,
+                                          favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
+                                          subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
+                                              subcategoryId:
+                                              widget.settings!.categoryIds[index].id,
+                                              isActive: isCaptain))
+                                      ));
+                                },
                               ),
                             ),
                             title: LocaleKeys.acceptAnothePrice.tr());
@@ -367,27 +386,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               isReady: isReady,
                               enableSound: enableSound,
                               subscriptionPlan: planTrailing,
+                              perKm:perKm,
                               favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
                               subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
                                   isActive: isCaptain))
-
-                              // [
-                              //   SubCategoriesActive(
-                              //       subcategoryId:
-                              //           widget.settings!.categoryIds[0].id,
-                              //       isActive: isCaptain),
-                              //   SubCategoriesActive(
-                              //       subcategoryId:
-                              //           widget.settings!.categoryIds[1].id,
-                              //       isActive: isIntercity),
-                              //   SubCategoriesActive(
-                              //       subcategoryId:
-                              //           widget.settings!.categoryIds[2].id,
-                              //       isActive: isPremium),
-                              // ]
-
                           ));
                     }),
               ),

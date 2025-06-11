@@ -636,7 +636,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         });
   }
 
-  Future<void> getDriverSettings() async {
+  Future<void> getDriverSettings(BuildContext context) async {
     if (isClosed) {
       return;
     }
@@ -647,7 +647,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     response.fold(
       (failure) {
-        // log("Failure ${getFailureMessage(failure, context)}");
+        log("Failure getDriverSettings ${getFailureMessage(failure, context)}");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (data) {
@@ -660,7 +660,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> updateDriverSettings(bool isReady) async {
+  Future<void> updateDriverSettings(bool isReady,BuildContext context) async {
     if (isClosed) {
       return;
     }
@@ -682,7 +682,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           updateDriverSettingsEntity: data,
           offerCreatedShown: false, // freshly created
         ));
-        getDriverSettings();
+        getDriverSettings(context);
       },
     );
   }
@@ -925,7 +925,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
     // Index 3: Settings
     if (index == 3 && params.isSocket == false && params.modeType == "ride") {
-      getDriverSettings();
+      getDriverSettings(context);
     }
 
     // Index 4: Accepted Trips
