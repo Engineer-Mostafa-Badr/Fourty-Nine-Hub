@@ -88,7 +88,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToRemoveUntrackedTrip(),
               dashboardCubit.listenToNewTripNonSocket(),
               dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params),
-              dashboardCubit.getDriverSettings(),
+              dashboardCubit.getDriverSettings(context),
             ];
     });
   }
@@ -102,7 +102,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
   }
 
   void _onScrollPastTrips() {
-    if (widget.params.isSocket == true && widget.params.currentIndex == 2) {
+    if (widget.params.isSocket == true && context.read<DashboardsCubit>().state.currentIndex == 2) {
+      print("object");
       if (_pastTripsScrollController.position.pixels >= _pastTripsScrollController.position.maxScrollExtent) {
         context.read<DashboardsCubit>().getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
       }
@@ -366,6 +367,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 onCompleteRide: () {
                                   cubit.completeDriverTrip(context, state.activeTrip?.tripId ?? '', '');
                                 },
+                                onCompleteRideWithPrice: (String price) {
+                                  cubit.completeDriverTripWithPrice(context, state.activeTrip?.tripId ?? '', price);
+                                },
                                 tripId: state.activeTrip?.tripId ?? '',
                               ),
                             if (state.tripStatus == TripState.completed.name)
@@ -400,7 +404,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                     : cubit.pastRideNonSocketData.isEmpty
                                         ? Center(child: Text(LocaleKeys.youDontHaveAcceptedOffer.localize))
                                         : ListView.builder(
-                                            itemCount: cubit.pastRideNonSocketData.length,
+                                            itemCount: 0,
                                             itemBuilder: (context, index) {
                                               return ClickableWidget(
                                                 onTap: () {
