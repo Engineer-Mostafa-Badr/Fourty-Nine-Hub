@@ -189,7 +189,9 @@ class _AddressPickerWidgetState extends State<AddressPickerWidget> {
                           ),
                           children: [
                             TileLayer(
-                              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              urlTemplate: context.isDarkMode
+                                  ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+                                  : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
                               userAgentPackageName: 'com.example.app',
                             ),
                             if (_markerPosition != null)

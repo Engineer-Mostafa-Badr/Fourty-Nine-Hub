@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
@@ -10,8 +11,10 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_t
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_history_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/emergency_contacts_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_client_details_screen.dart';
@@ -585,6 +588,27 @@ class AppPages {
                 name: Routes.RIDEEXPIREDTRIPE,
                 builder: (context, state) => ExpiredTripsScreen(
                   params: state.extra as ExpiredTripsScreenParams,
+                ),
+              ),
+              GoRoute(
+                path: Paths.RIDEDETAILSTRIPS,
+                name: Routes.RIDEDETAILSTRIPS,
+                builder: (context, state) => RideHistoryDetailsScreen(
+                  params: state.extra as RideHistoryDetailsScreenParams,
+                ),
+              ),
+              GoRoute(
+                path: Paths.TripReceiptScreen,
+                name: Routes.TripReceiptScreen,
+                builder: (context, state) => TripReceiptScreen(
+                  params: state.extra as TripReceiptScreenParams,
+                ),
+              ),
+              GoRoute(
+                path: Paths.RIDEHISTORYTRIPS,
+                name: Routes.RIDEHISTORYTRIPS,
+                builder: (context, state) => HistoryTripsScreen(
+                  params: state.extra as HistoryTripsScreenParams,
                 ),
               ),
               GoRoute(

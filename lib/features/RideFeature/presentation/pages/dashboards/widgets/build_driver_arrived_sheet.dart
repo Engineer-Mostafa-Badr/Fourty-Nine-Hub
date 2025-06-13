@@ -97,8 +97,8 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                   // PaymentInfoWidget(price: price),
                   //
                   LocationInfoWidget(
-                    from: widget.activeTrip?.startLocation?.title??'',
-                    to: widget.activeTrip?.targetLocation?.title??'',
+                    from: widget.activeTrip?.from??'',
+                    to: widget.activeTrip?.to??'',
                   ),
                   CustomRideButton(text: "I've Arrived",onPressed: (){
                     widget.onPressed('iveArrived');

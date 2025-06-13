@@ -23,15 +23,19 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/D
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/client_rate_driver_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_button_ride_status_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_card_request.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_sheet/custom_reserve_ride_bottomsheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_header_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/feedback_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/payment_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/top_card_request.dart';
@@ -42,6 +46,7 @@ import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -55,6 +60,7 @@ import '../../../authentication/presentation/controllers/user_cubit/user_cubit.d
 import '../../domain/entities/get_location_from_address_entity.dart';
 import '../../domain/usecases/rating_driver_by_client.dart';
 import '../controllers/cubits/car_location_cubit.dart';
+import 'dashboards/widgets/build_safety_sheet.dart';
 import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
@@ -94,6 +100,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     _scrollController.dispose();
     super.dispose();
   }
+
+
 
   Widget buildPendingSheet() {
     return Positioned(
@@ -178,6 +186,173 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
   }
 
+  showCancelTripDialog({
+    required BuildContext context,
+  }) {
+    showCustomDialogTrip(
+        context,
+        BlocProvider.value(
+          value: serviceLocator<RideCubit>(),
+          child: BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+            var cubit = context.read<RideCubit>();
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  LocaleKeys.alert.localize,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                    context.isArabic?'لماذا تريد الغاء الرحلة':'Why do you want to cancel ?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: FontSize.s16,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    )),
+                const SizedBox(height: 20),
+                ClickableWidget(
+                  onTap: () {
+                    cubit.changeReasonSelection(isClientNotShown: true);
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                      border: state.isClientNotShownReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.black54),
+                        SizedBox(width: 5),
+                        Text(
+                          context.isArabic ? "لم يظهر السائق" : "The Driver did not show up",
+                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ClickableWidget(
+                  onTap: () {
+                    cubit.changeReasonSelection(isChangedMind: true);
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                      border: state.isChangedMindReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.black54),
+                        SizedBox(width: 5),
+                        Text(
+                          context.isArabic ? "لقد قمت بتغيير رأيي" : "I changed my mind",
+                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ClickableWidget(
+                  onTap: () {
+                    cubit.changeReasonSelection(isOther: true);
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(color: state.isOtherReason == true ? Colors.transparent : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.black54),
+                        SizedBox(width: 5),
+                        Text(
+                          context.isArabic ? "أخري" : "Other",
+                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (state.isOtherReason == true) ...[
+                  const SizedBox(height: 20),
+                  DefaultTextFormField(
+                    currentController: cubit.reasonController,
+                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                    borderColor: Colors.transparent,
+                    hint: context.isArabic ? 'اكتب السبب هنا' : 'Write the reason here',
+                    // label: LocaleKeys.firstName.localize,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return LocaleKeys.required.localize;
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+                const SizedBox(height: 12),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppButton(
+                        width: context.screenWidth / 3.4,
+                        label: context.isArabic ? 'الغاء' : 'Close',
+                        backColor: AppColors.SECONDARY_COLOR_DARK2,
+                        onPressed: () {
+                          context.pop();
+                          // cubit
+                        }),
+                    const SizedBox(width: 16),
+                    AppButton(
+                        width: context.screenWidth / 3.4,
+                        label: context.isArabic ? 'تأكيد' : 'Confirm',
+                        backColor: AppColors.PRIMARY_COLOR,
+                        onPressed: () {
+                          context.pop();
+                          if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
+                            cubit.cancleNonPendingTripByClient(
+                              context: context,
+                              tripId: state.requestedTrip?.id ?? '',
+                              note: state.isOtherReason == true
+                                  ? cubit.reasonController.text
+                                  : state.isClientNotShownReason == true
+                                  ? 'client-no-show'
+                                  : state.isChangedMindReason == true
+                                  ? 'change-my-mind'
+                                  : '',
+                              reasonId: state.isOtherReason == true
+                                  ? '6693d4723aa4a25077cdbc7b'
+                                  : state.isClientNotShownReason == true
+                                  ? '665eec12ce3725d6bc6f40ca'
+                                  : state.isChangedMindReason == true
+                                  ? '665ef7118e67e46ce6498fef'
+                                  : '',
+                            );
+                          } else {
+                            showErrorMessage(context, context.isArabic ? "يرجى تحديد سبب" : 'Please select a reason');
+                          }
+                        }),
+                  ],
+                ),
+                const SizedBox(height: 16),
+              ],
+            );
+          }),
+        ));
+  }
+
   Widget acceptedTripButtonSheet() {
     return Positioned(
       bottom: 0,
@@ -216,7 +391,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         print(
                             "state.requestedTrip?.status ${state.requestedTrip?.status}");
                         return DriverHeaderWidget(
-                          carModel: state.requestedTrip?.vehicleModel,
+                          carModel: state.requestedTrip?.vehicleModelAr,
                           carColor: state.requestedTrip?.vehicleColor,
                           rideStatusWidget: state.requestedTrip?.status ==
                                   TripState.started.name
@@ -240,7 +415,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 ),
                           carImageUrl: state.requestedTrip?.vehiclePicture ??
                               "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
-                          carName: state.requestedTrip?.vehicleBrand,
+                          carName: state.requestedTrip?.vehicleBrandAr,
                           carNumber:
                               state.requestedTrip?.vehiclePlateNumber ?? "",
                         );
@@ -318,6 +493,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         },
                         onSafety: () {
                           // context.push(Routes.rideArrivedScreen);
+                          context.read<RideCubit>().changeTripStatus(tripState: TripState.support);
                         },
                         is_show_message: true,
                         onMessage: () {},
@@ -350,7 +526,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         onGoogleMap: () {},
                         onPartialPayment: () {},
                         onCallEmergency: () {},
-                        onCancelRide: () {},
+                        onCancelRide: () {
+                          showCancelTripDialog(context: context,);
+                        },
                         isRecording: state.requestedTrip?.status ==
                             TripState.started.name,
                         audioDuration: '',
@@ -502,7 +680,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               );
                                                             },
                                                           )
-                                                        : const SizedBox(),
+                                                        : state.requestedTrip!.status == TripState.support.name ? BuildSafetySheet(params: SupportRideParams(tripId: state.requestedTrip?.id??'', tripType: 'tracking', userType: 'client', driverId: state.requestedTrip?.driverId??'',clientId: UserCubit.to.state.data?.id??''),onClose: (){
+                                  context.read<RideCubit>().closeSafetySheet();
+                                }, supportRideScreen: () {
+                                  context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.requestedTrip?.id??'', tripType: 'tracking', userType: 'client', driverId: state.requestedTrip?.driverId??'',clientId: UserCubit.to.state.data?.id??''));
+                                },
+                                  emergencyContactsScreen: (){
+                                    context.push(Routes.emergencyContactsScreen);
+                                  },
+                                  rideFindingScreen: (){
+                                    context.push(Routes.rideFindingScreen);
+                                  },
+                                ) : const SizedBox(),
                                 context.read<RideCubit>().selectedCategoryIsSocket
                                     && (state.requestedTrip == null
                                     ||state.requestedTrip?.status == TripState.completed.name
@@ -839,7 +1028,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           onTap: () {
             if (context.isUserLoggedIn) {
               context.pop();
-              context.push(Routes.RIDEACTIVITY);
+              context.push(Routes.RIDEHISTORYTRIPS,
+                  extra: HistoryTripsScreenParams(
+                    rideCubit: serviceLocator<RideCubit>(),
+                  ));
             } else {
               context.pop();
               pleaseLoginDialog(context);
@@ -863,7 +1055,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             ),
             child: Center(
               child: Text(
-                context.isArabic ? 'سجل الرحلات' : 'Ride Log',
+                context.isArabic ? 'تاريخ الرحلات' : 'Ride History',
                 style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
@@ -1888,7 +2080,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.network(imageUrl,
-                width: 50, height: 20, fit: BoxFit.fitWidth),
+                width: 50, height: 20, fit: BoxFit.fill),
             const SizedBox(height: 5),
             Text(title,
                 style:
@@ -2168,8 +2360,8 @@ class _CarMarkerWidgetState extends State<CarMarkerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CarLocationCubit(),
+    return BlocProvider.value(
+      value: CarLocationCubit(),
       child: BlocBuilder<CarLocationCubit, GetLocationFromAddressEntity?>(
         builder: (context, state) {
           if (state == null ||

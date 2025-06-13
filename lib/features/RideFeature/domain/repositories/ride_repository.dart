@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_pictur
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
@@ -37,6 +38,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/wa
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
@@ -105,6 +107,8 @@ abstract class RideRepository {
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
   Future<Either<Failure, bool>> updateDriverLocation(UpdateDriverLocationUseCaseParams params);
   Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(GetAllRunningTripsUseCaseParams params);
+  Future<Either<Failure, List<HistoryTripsEntity>> > getAllHistoryTrips(GetAllHistoryTripsUseCaseParams params);
+  Future<Either<Failure, String>> getAvailableMapCountry();
   Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(GetAllCompletedTripsUseCaseParams params);
   Future<Either<Failure, GetLocationFromAddressEntity>> getLocationFromAddress(GetLocationFromAddressUseCaseParams params);
   Future<Either<Failure, bool>> acceptTripByDriver(AcceptTripByDriverUseCaseParams params);

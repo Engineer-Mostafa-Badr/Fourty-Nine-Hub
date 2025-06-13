@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -16,11 +19,13 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_rate_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_go_to_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_safety_sheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_home.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -29,6 +34,7 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../ride_details_screen.dart';
@@ -325,7 +331,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         Expanded(
                             child: Stack(
                           children: [
-                            DynamicMapWithPolyline(url: getMapUrl(context, type: "mapBox"), apiKey: getApiKey(context, type: "mapBox")),
+                            _buildTopMap(context, state),
+                            // DynamicMapWithPolyline(url: getMapUrl(context, type: "mapBox"), apiKey: getApiKey(context, type: "mapBox")),
                             if(state.tripStatus==TripState.goToClient.name)
                             BuildDriverArrivedSheet(onPressed: (String message) {
                               cubit.arrivedToClient(context, state.activeTrip?.tripId??'',message);
@@ -371,7 +378,16 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             },),
                             if(state.tripStatus==TripState.support.name)BuildSafetySheet(params: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracking', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''),onClose: (){
                               cubit.closeSafety();
-                            },),
+                            }, supportRideScreen: () {
+                              context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracking', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''));
+                            },
+                            emergencyContactsScreen: (){
+                              context.push(Routes.emergencyContactsScreen);
+                            },
+                              rideFindingScreen: (){
+                                context.push(Routes.rideFindingScreen);
+                              },
+                            ),
                           ],
                         ))
                       // Past Trips
@@ -540,5 +556,124 @@ class _RideModeScreenState extends State<RideModeScreen> {
         ),
       ),
     );
+  }
+  final MapController _mapController = MapController();
+
+  Widget _buildTopMap(BuildContext context, DashboardsState state) {
+    List<LatLng> routePoints = [];
+    routePoints =
+        _convertPolylineToLatLng(state.activeTrip?.polyline ?? []);
+
+    if (state.activeTrip != null &&
+        state.activeTrip?.startCoordinates?[0] == null &&
+        state.activeTrip?.startCoordinates?[1] == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController.move(
+          LatLng(state.activeTrip!.startCoordinates![0], state.activeTrip!.startCoordinates![1]),
+          12.0,
+        );
+      });
+    }else{
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController.move(
+          LatLng( 30.033333, 31.233334),
+          12.0,
+        );
+      });
+    }
+
+    return SizedBox(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      child: FlutterMap(
+        mapController: _mapController,
+        options: (state.activeTrip != null &&
+            state.activeTrip?.startCoordinates?[0] == null &&
+            state.activeTrip?.startCoordinates?[1] == null &&
+            state.activeTrip?.startCoordinates?[0] != 0 &&
+            state.activeTrip?.startCoordinates?[1] != 0)? MapOptions(
+          initialCenter: LatLng(state.activeTrip!.startCoordinates![0], state.activeTrip!.startCoordinates![1]),
+          initialZoom: 12.0,
+        ) : MapOptions(
+          initialCenter: LatLng( 30.033333, 31.233334),
+          initialZoom: 12.0,
+        ),
+        children: [
+          TileLayer(
+            // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+            urlTemplate: context.isDarkMode
+                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+            subdomains: const ['a', 'b', 'c'],
+            userAgentPackageName: 'com.example.app',
+          ),
+          MarkerLayer(
+            markers: [
+              if (state.activeTrip != null &&
+                  state.activeTrip?.startCoordinates?[0] != null &&
+                  state.activeTrip?.startCoordinates?[1] != null &&
+                  state.activeTrip?.startCoordinates?[0] != 0 &&
+                  state.activeTrip?.startCoordinates?[1] != 0)
+                Marker(
+                  point: LatLng(state.activeTrip!.startCoordinates![0], state.activeTrip!.startCoordinates![1]),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.green, size: 40),
+                ),
+              if (state.activeTrip?.targetCoordinates != null && state.activeTrip?.targetCoordinates?[0] != null && state.activeTrip?.targetCoordinates?[1] != null && state.activeTrip?.targetCoordinates?[0] != 0 && state.activeTrip?.targetCoordinates?[1] != 0)
+                Marker(
+                  point: LatLng(state.activeTrip!.targetCoordinates![0], state.activeTrip!.targetCoordinates![1]),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.blue, size: 40),
+                ),
+              if (state.activeTrip?.wayPointOne != null && state.activeTrip?.wayPointOne?[0] != null && state.activeTrip?.wayPointOne?[1] != null && state.activeTrip?.wayPointOne?[0] != 0 && state.activeTrip?.wayPointOne?[1] != 0)
+                Marker(
+                  point:
+                  LatLng(state.activeTrip!.wayPointOne![0], state.activeTrip!.wayPointOne![1]),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
+                ),
+              if (state.activeTrip?.wayPointTwo != null && state.activeTrip?.wayPointTwo?[0] != null && state.activeTrip?.wayPointTwo?[1] != null && state.activeTrip?.wayPointTwo?[0] != 0 && state.activeTrip?.wayPointTwo?[1] != 0)
+                Marker(
+                  point:
+                  LatLng(state.activeTrip!.wayPointTwo![0], state.activeTrip!.wayPointTwo![1]),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
+                ),
+            ],
+          ),
+
+              BlocBuilder<DashboardsCubit, DashboardsState>(builder: (context, state) {
+                if (state.tripStatus == TripState.started.name) {
+                  return const CarMarkerWidget();
+                }
+                return const SizedBox.shrink();
+              }),
+          if (routePoints.isNotEmpty)
+            PolylineLayer(
+              polylines: [
+                Polyline(
+                  points: routePoints,
+                  color: context.isDarkMode ? Colors.blue :  Colors.black87,
+                  strokeWidth: 4.0,
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 }

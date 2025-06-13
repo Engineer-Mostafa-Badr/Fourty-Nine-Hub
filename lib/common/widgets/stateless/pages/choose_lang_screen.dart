@@ -47,17 +47,20 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                 ),
                 const Spacer(),
                 if (!isChooseLang)
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.asset(
-                      Assets.langGIF,
-                      fit: BoxFit.fitHeight,
-                      // width: double.infinity,
-                      height: 500,
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: Image.asset(
+                        Assets.langGIF,
+                        fit: BoxFit.fitHeight,
+                        // width: double.infinity,
+                        height: 500,
+                      ),
                     ),
                   )
                 else

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
 import '../../../../common/widgets/OpenStreetMapSearchAndPick/open_street_map_search_and_pick.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../controllers/cubits/ride_cubit.dart';
 class RideOpenStreetMapSearchAndPickParams{
   final void Function(PickedData) onPicked;
   final double minAllowedDistanceKm;
@@ -51,7 +53,7 @@ class _RideOpenStreetMapSearchAndPickState extends State<RideOpenStreetMapSearch
               zoomOutIcon: Icons.zoom_out,
               minAllowedDistanceKm: widget.params.minAllowedDistanceKm,
               minDistanceReferencePoint: widget.params.minDistanceReferencePoint,
-              allowedCountryCode: 'eg', // eg, us, my, ae, sa
+              allowedCountryCode: serviceLocator<RideCubit>().getAvailableMapCountryKey, // eg, us, my, ae, sa
             ),
           ),
         ),

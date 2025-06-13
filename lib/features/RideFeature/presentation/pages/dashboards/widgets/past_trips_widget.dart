@@ -48,7 +48,7 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
             ),
             const SizedBox(width: 16),
             PriceColumn(
-                title:
+                startAddressTitle:
                     widget.tripEntity?.tripDetails?.startLocation.title ?? '',
                 date: "Feb 13 - 12:41 PM",
                 price:

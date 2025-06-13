@@ -218,8 +218,9 @@ class _CustomReserveRideBottomSheetState
                                                   price: state.rideExpectedPrice?.highestFare,
                                                 );
                                               }else{
-                                                context.pop();
+                                                // context.pop();
                                                 await widget.rideCubit.requestTrip(
+                                                  context: context,
                                                   price: widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price,),
                                                   comfort: widget.rideCubit.isComfort,
                                                   autoAccept: widget.rideCubit.isAutoAccept,
@@ -245,8 +246,9 @@ class _CustomReserveRideBottomSheetState
                                               }
                                             }
                                             else {
-                                              context.pop();
+                                              // context.pop();
                                               await widget.rideCubit.requestTrip(
+                                                context: context,
                                                 price: widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price,),
                                                 comfort: widget.rideCubit.isComfort,
                                                 autoAccept: widget.rideCubit.isAutoAccept,
@@ -294,9 +296,10 @@ class _CustomReserveRideBottomSheetState
                                                     ?.highestFare,
                                               );
                                             } else {
-                                              context.pop();
+                                              // context.pop();
                                               await widget.rideCubit
                                                   .requestTrip(
+                                                context: context,
                                                 price: widget.rideCubit
                                                     .getTotalPrice(
                                                   state.rideExpectedPrice!
@@ -387,8 +390,9 @@ class _CustomReserveRideBottomSheetState
                                               );
                                             }
                                           } else {
-                                            context.pop();
+                                            // context.pop();
                                             await widget.rideCubit.requestTrip(
+                                              context: context,
                                               price: widget.rideCubit
                                                   .getTotalPrice(
                                                 state.rideExpectedPrice!

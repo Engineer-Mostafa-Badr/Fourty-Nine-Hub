@@ -7,13 +7,13 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class PriceColumn extends StatelessWidget {
-  final String title;
+  final String startAddressTitle;
   final String date;
   final String price;
 
   const PriceColumn({
     super.key,
-    required this.title,
+    required this.startAddressTitle,
     required this.date,
     required this.price,
   });
@@ -26,7 +26,7 @@ class PriceColumn extends StatelessWidget {
         ConstrainedBox(
           constraints:  BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.4),
           child: Label(
-            text: title,
+            text: startAddressTitle,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 18,
