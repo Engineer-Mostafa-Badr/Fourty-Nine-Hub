@@ -365,23 +365,22 @@ class _RideDashboardDetailsScreenState
                     ],
                   ),
                   RideDetailsRatingWidget(
-                      isRate: widget.tripEntity.clientDetails?.rating?.average!=null,
-                      rate: (widget.tripEntity.clientDetails?.rating?.average??0.0).toDouble(),
+                      isRate: widget.tripEntity.tripDetails?.driverRateClient!=null,
+                      rate: (widget.tripEntity.tripDetails?.driverRateClient??0.0).toDouble(),
                       title: LocaleKeys.youRateClient.tr(),
                       onRating:(String comment , double rate) async {
                         Navigator.of(context).pop();
-                        if(widget.tripEntity.clientDetails?.rating?.average!=null){
+                        if(widget.tripEntity.tripDetails?.driverRateClient!=null){
                           bool result = await cubit.updateRateTheClient(context: context,comment: comment,rate: rate,tripId: widget.tripEntity.tripDetails?.id??'');
                           if(result == true){
-                            widget.tripEntity.clientDetails?.rating?.average=rate;
-                            widget.tripEntity.clientDetails?.rating?.count=(widget.tripEntity.driverDetails?.rating?.count??0)+1;
+                            widget.tripEntity.tripDetails?.driverRateClient=rate;
+                            // widget.tripEntity.tripDetails?.driverRateClient=(widget.tripEntity.tripDetails?.driverRateClient??0)+1;
                             setState(() {});
                           }
                         }else{
                           bool result = await cubit.rateTheClient(context: context,comment: comment,rate: rate,tripId: widget.tripEntity.tripDetails?.id??'');
                          if(result == true){
-                           widget.tripEntity.clientDetails?.rating?.average=rate;
-                           widget.tripEntity.clientDetails?.rating?.count=(widget.tripEntity.driverDetails?.rating?.count??0)+1;
+                           widget.tripEntity.tripDetails?.driverRateClient=rate;
                            setState(() {});
                          }
                         }
@@ -390,8 +389,8 @@ class _RideDashboardDetailsScreenState
                       }
                   ),
                   RideDetailsRatingWidget(
-                      isRate: widget.tripEntity.driverDetails?.rating?.average!=null,
-                      rate: (widget.tripEntity.driverDetails?.rating?.average??0.0).toDouble(),
+                      isRate: widget.tripEntity.tripDetails?.clientRateDriver!=null,
+                      rate: (widget.tripEntity.tripDetails?.clientRateDriver??0.0).toDouble(),
                       title: LocaleKeys.clientRateYou.tr()),
                   if(!(state.supportStatus == RequestEmergencyStatus.approved.status))Form(
                     key: form,

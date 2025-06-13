@@ -8,6 +8,8 @@ class TripDetailsEntity {
   final String recordUrl;
   final bool isPremium;
   final num passengers;
+  num? clientRateDriver;
+  num? driverRateClient;
   final String note;
   final LocationEntity startLocation;
   final LocationEntity targetLocation;
@@ -25,5 +27,7 @@ class TripDetailsEntity {
     required this.startLocation,
     required this.targetLocation,
     required this.createdAt,
+    required this.clientRateDriver,
+    required this.driverRateClient,
   });
 }
