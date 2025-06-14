@@ -63,7 +63,7 @@ class _CashbackHistoriesListViewState extends State<CashbackHistoriesListView> {
           if (index < widget.histories.length) {
             final history = widget.histories[index];
             return HistoryWalletListViewItem(
-              isReceived: history.isPaid,
+              isReceived: history.received,
               amount: history.transactionAmount.toString(),
               date: history.createdAt,
             );

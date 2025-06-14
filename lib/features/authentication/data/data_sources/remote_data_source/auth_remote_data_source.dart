@@ -116,7 +116,8 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
       VerifyPhoneOTPParams params);
 
-  Future<Either<Failure, UserTokensEntity>> loginWithPhone(LoginWithPhoneParams params);
+  Future<Either<Failure, UserTokensEntity>> loginWithPhone(
+      LoginWithPhoneParams params);
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -295,7 +296,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
     final result = await _apiConsumer.put(
-      EndPoints.resendVerificationOTP,
+      params.forVerification
+          ? EndPoints.resendVerificationOTP
+          : EndPoints.resendOTP,
       data: params.toJson(),
     );
     return result.fold(
@@ -563,14 +566,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserTokensEntity>> loginWithPhone(LoginWithPhoneParams params) async {
+  Future<Either<Failure, UserTokensEntity>> loginWithPhone(
+      LoginWithPhoneParams params) async {
     final result = await _apiConsumer.post(
       EndPoints.loginWithPhone,
       data: await params.toJson(),
     );
     return result.fold(
-          (failure) => Left(failure),
-          (response) async {
+      (failure) => Left(failure),
+      (response) async {
         _apiConsumer.attachToken(UserTokensModel.fromJson(
           response['data'],
         ));

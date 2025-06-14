@@ -6,7 +6,9 @@ class SettingsDashboardEntity {
   final bool enableNotificationSound;
   final List<SubCategoryEntity> categoryIds;
   final String subscriptionType;
-  final double pricingPerKm;
+  final num pricingPerKm;
+  final num highCostPerKm;
+  final num lowCostPerKm;
   final String city;
   final RatingSettingsEntity rating;
   final double profit;
@@ -30,6 +32,8 @@ class SettingsDashboardEntity {
     required this.categoryIds,
     required this.subscriptionType,
     required this.pricingPerKm,
+    required this.highCostPerKm,
+    required this.lowCostPerKm,
     required this.city,
     required this.rating,
     required this.profit,

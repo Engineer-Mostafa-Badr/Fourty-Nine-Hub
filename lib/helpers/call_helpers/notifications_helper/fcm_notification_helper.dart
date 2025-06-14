@@ -114,7 +114,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       debugPrint('+++++ FCM Message +++++++++ ${message.data}');
-      // await _handleNotification(message);
+      await _handleNotification(message);
     });
 
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);

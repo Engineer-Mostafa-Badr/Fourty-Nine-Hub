@@ -5,6 +5,7 @@ class TripDetailsEntity {
   final num price;
   final String status;
   final String pickupTime;
+  final String recordUrl;
   final bool isPremium;
   final num passengers;
   final String note;
@@ -17,6 +18,7 @@ class TripDetailsEntity {
     required this.price,
     required this.status,
     required this.pickupTime,
+    required this.recordUrl,
     required this.isPremium,
     required this.passengers,
     required this.note,

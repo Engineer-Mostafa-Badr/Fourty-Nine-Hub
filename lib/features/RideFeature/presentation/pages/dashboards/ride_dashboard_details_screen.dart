@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/driver_recode_widget.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:pdf/pdf.dart';
@@ -17,7 +20,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:printing/printing.dart';
+import 'package:printing/printing.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -37,17 +40,15 @@ class RideDashboardDetailsScreen extends StatefulWidget {
 
 class _RideDashboardDetailsScreenState
     extends State<RideDashboardDetailsScreen> {
-
-  bool isYourRate = false;
+  // bool isYourRate = false;
   bool hasRequest = false;
-  double yourRate = 3.0;
-  bool isClientRate = true;
-  double clientRate = 4.0;
+  // bool isClientRate = true;
   var form = GlobalKey<FormState>();
   bool isLoading = false;
   String? pdfPath;
   @override
   initState(){
+    context.read<DashboardsCubit>().initRecode(widget.tripEntity.tripDetails?.recordUrl ?? '');
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
       clientId: widget.tripEntity.clientDetails?.id??'',
       driverId: widget.tripEntity.driverDetails?.id??'',
@@ -176,9 +177,9 @@ class _RideDashboardDetailsScreenState
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // Printing.layoutPdf(
-              //   onLayout: (_) => File(path).readAsBytes(),
-              // );
+              Printing.layoutPdf(
+                onLayout: (_) => File(path).readAsBytes(),
+              );
             },
             child: Text(context.isArabic?'طباعة':'Print'),
           ),
@@ -186,6 +187,9 @@ class _RideDashboardDetailsScreenState
       ),
     );
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -351,14 +355,43 @@ class _RideDashboardDetailsScreenState
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  if(widget.tripEntity.tripDetails?.recordUrl!=null&&(widget.tripEntity.tripDetails?.recordUrl.isNotEmpty??false))Column(
+                    children: [
+                      const SizedBox(height: 15),
+                      DriverTripRecordWidget(
+                          mp3Path: '${widget.tripEntity.tripDetails?.recordUrl}', // Ensure this file is in assets
+                          ),
+                      const SizedBox(height: 15),
+                    ],
+                  ),
                   RideDetailsRatingWidget(
-                      isRate: isYourRate,
-                      rate: yourRate,
-                      title: LocaleKeys.youRateClient.tr()),
+                      isRate: widget.tripEntity.clientDetails?.rating?.average!=null,
+                      rate: (widget.tripEntity.clientDetails?.rating?.average??0.0).toDouble(),
+                      title: LocaleKeys.youRateClient.tr(),
+                      onRating:(String comment , double rate) async {
+                        Navigator.of(context).pop();
+                        if(widget.tripEntity.clientDetails?.rating?.average!=null){
+                          bool result = await cubit.updateRateTheClient(context: context,comment: comment,rate: rate,tripId: widget.tripEntity.tripDetails?.id??'');
+                          if(result == true){
+                            widget.tripEntity.clientDetails?.rating?.average=rate;
+                            widget.tripEntity.clientDetails?.rating?.count=(widget.tripEntity.driverDetails?.rating?.count??0)+1;
+                            setState(() {});
+                          }
+                        }else{
+                          bool result = await cubit.rateTheClient(context: context,comment: comment,rate: rate,tripId: widget.tripEntity.tripDetails?.id??'');
+                         if(result == true){
+                           widget.tripEntity.clientDetails?.rating?.average=rate;
+                           widget.tripEntity.clientDetails?.rating?.count=(widget.tripEntity.driverDetails?.rating?.count??0)+1;
+                           setState(() {});
+                         }
+                        }
+                        print("onRating $comment $rate");
+
+                      }
+                  ),
                   RideDetailsRatingWidget(
-                      isRate: isClientRate,
-                      rate: clientRate,
+                      isRate: widget.tripEntity.driverDetails?.rating?.average!=null,
+                      rate: (widget.tripEntity.driverDetails?.rating?.average??0.0).toDouble(),
                       title: LocaleKeys.clientRateYou.tr()),
                   if(!(state.supportStatus == RequestEmergencyStatus.approved.status))Form(
                     key: form,

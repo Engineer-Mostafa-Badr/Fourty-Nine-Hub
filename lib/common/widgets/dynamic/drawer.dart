@@ -16,6 +16,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
@@ -825,10 +827,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               ),
                             );
                           }
-                          return ImageFromInternet(
-                            isCircle: true,
-                            image: user?.profilePicture ??
-                                UIConst.profilePlaceHolder,
+                          return ClickableWidget(
+                            onTap:(){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ImageGalleryPage(
+                                    images: [
+                                      user?.profilePicture ??
+                                          UIConst.profilePlaceHolder
+                                    ],
+                                    initialIndex: 0,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ImageFromInternet(
+                              isCircle: true,
+                              image: user?.profilePicture ??
+                                  UIConst.profilePlaceHolder,
+                              fit: BoxFit.fill,
+                              border:Border.all(color: AppColors.GRAY_LIGHT_COLOR3),
+                            ),
                           );
                         },
                       ),
@@ -865,7 +885,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     text: LocaleKeys.gallery.localize,
                                   ),
                                   onTap: () async {
-                                    // Navigator.pop(context);
                                     await context.read<UserCubit>().uploadPhoto(
                                         isGallery: true, context: context);
                                     // Reload user data if needed
@@ -889,7 +908,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   title:
                                       Label(text: LocaleKeys.camera.localize),
                                   onTap: () async {
-                                    // Navigator.pop(context);
                                     await context.read<UserCubit>().uploadPhoto(
                                         isGallery: false, context: context);
                                     // Reload user data if needed
@@ -957,10 +975,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         //   },
                         // );
                       },
-                      child: Image.asset(
-                        Assets.cameraOutlined,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
-                        width: 40.w,
+                      child: Container(
+                        margin: EdgeInsetsDirectional.only(end: 5,bottom: 5),
+                        child: Image.asset(
+                          Assets.cameraOutlined,
+                          color: context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR,
+                          width: 40.w,
+                        ),
                       ),
                     )
                   ],

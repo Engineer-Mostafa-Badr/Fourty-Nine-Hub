@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
@@ -228,7 +229,7 @@ class _LoginViewState extends State<LoginView> {
         listener: (context, state) async {
           if (state is LoginError) {
             String isVerified =
-                getFailureMessage(state.failure, context).toString();
+            getFailureMessage(state.failure, context).toString();
             print("Print here $isVerified");
             if (isVerified == "Email not verified") {
               context.go(
@@ -236,7 +237,7 @@ class _LoginViewState extends State<LoginView> {
                 extra: loginCubit.emailTextController.text,
               );
               // Call the resendOTP method from VerifyOtpCubit
-              verifyOtpCubit.resendOTP(loginCubit.emailTextController.text);
+              verifyOtpCubit.resendOTP(loginCubit.emailTextController.text,true);
             }
             showErrorMessage(
               context,
@@ -312,13 +313,13 @@ class _LoginViewState extends State<LoginView> {
                             text: LocaleKeys.login.localize,
                             borderRadius: context.locale == Locales.english
                                 ? BorderRadius.only(
-                                    topLeft: Radius.circular(100.r),
-                                    bottomLeft: Radius.circular(100.r),
-                                  )
+                              topLeft: Radius.circular(100.r),
+                              bottomLeft: Radius.circular(100.r),
+                            )
                                 : BorderRadius.only(
-                                    topRight: Radius.circular(100.r),
-                                    bottomRight: Radius.circular(100.r),
-                                  ),
+                              topRight: Radius.circular(100.r),
+                              bottomRight: Radius.circular(100.r),
+                            ),
                           ),
                           chooseAuthWidget(
                             onTap: () {
@@ -330,13 +331,13 @@ class _LoginViewState extends State<LoginView> {
                             text: LocaleKeys.register.localize,
                             borderRadius: context.locale == Locales.english
                                 ? const BorderRadius.only(
-                                    topRight: Radius.circular(50),
-                                    bottomRight: Radius.circular(50),
-                                  )
+                              topRight: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                            )
                                 : const BorderRadius.only(
-                                    topLeft: Radius.circular(50),
-                                    bottomLeft: Radius.circular(50),
-                                  ),
+                              topLeft: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                            ),
                           ),
                         ],
                       ),
@@ -345,11 +346,11 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       widget.authType == AuthType.LOGIN
                           ? LoginWidget(
-                              loginCubit: loginCubit,
-                            )
+                        loginCubit: loginCubit,
+                      )
                           : RegisterWidget(
-                              formKeyRegister: formKeyRegister,
-                            ),
+                        formKeyRegister: formKeyRegister,
+                      ),
                       // SizedBox(
                       //   height: widget.authType == AuthType.LOGIN
                       //       ? MediaQuery.of(context).viewInsets.bottom != 0.0
@@ -362,39 +363,39 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
-                              labelStyle: TextStyle(
-                                  fontSize: 35.sp,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
-                              label: LocaleKeys.confirm.localize,
-                              width: double.infinity,
-                              onPressed: () {
-                                if (registerCubit.accept) {
-                                  if (formKeyRegister.currentState!
-                                      .validate()) {
-                                    registerCubit.register();
-                                  }
-                                } else {
-                                  showErrorMessage(
-                                      context,
-                                      getFailureMessage(
-                                          ServerFailure(
-                                              message:
-                                                  LocaleKeys.terms.localize),
-                                          context));
-                                }
-                              },
-                            )
+                        labelStyle: TextStyle(
+                            fontSize: 35.sp,
+                            color: AppColors.AUTH_CONTAINER_COLOR),
+                        label: LocaleKeys.confirm.localize,
+                        width: double.infinity,
+                        onPressed: () {
+                          if (registerCubit.accept) {
+                            if (formKeyRegister.currentState!
+                                .validate()) {
+                              registerCubit.register();
+                            }
+                          } else {
+                            showErrorMessage(
+                                context,
+                                getFailureMessage(
+                                    ServerFailure(
+                                        message:
+                                        LocaleKeys.terms.localize),
+                                    context));
+                          }
+                        },
+                      )
                           : DefaultButton(
-                              width: double.infinity,
-                              label: LocaleKeys.confirm.localize,
-                              labelStyle: TextStyle(
-                                  fontSize: 35.sp,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: () {
-                                log("message");
-                                loginCubit.login(formKeyLogin);
-                              },
-                            ),
+                        width: double.infinity,
+                        label: LocaleKeys.confirm.localize,
+                        labelStyle: TextStyle(
+                            fontSize: 35.sp,
+                            color: AppColors.AUTH_CONTAINER_COLOR),
+                        onPressed: () {
+                          log("message");
+                          loginCubit.login(formKeyLogin);
+                        },
+                      ),
                     ],
                   )),
             ),
@@ -406,9 +407,9 @@ class _LoginViewState extends State<LoginView> {
 
   chooseAuthWidget(
       {required bool active,
-      required String text,
-      required BorderRadius borderRadius,
-      void Function()? onTap}) {
+        required String text,
+        required BorderRadius borderRadius,
+        void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -422,7 +423,7 @@ class _LoginViewState extends State<LoginView> {
           child: Text(
             text,
             style:
-                Styles.mediumText(color: active ? Colors.white : Colors.black),
+            Styles.mediumText(color: active ? Colors.white : Colors.black),
           ),
         ),
       ),
@@ -454,11 +455,13 @@ class _LoginWidgetState extends State<LoginWidget> {
           currentController: loginCubit.emailTextController,
           borderColor: Colors.black,
           hint:
-              '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
-          prefixIcon: Icon(
-            Icons.email,
-            color: AppColors.GREY_DARK_COLOR,
-            size: 40.w,
+          '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: SvgPicture.asset(
+              Assets.aMailIcon,
+              color: AppColors.GREY_DARK_COLOR,
+            ),
           ),
           isRequired: true,
         ),
@@ -527,14 +530,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.message ?? "Something went wrong",
-                    )));
+                          error.message ?? "Something went wrong",
+                        )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.toString(),
-                    )));
+                          error.toString(),
+                        )));
                   }
                 },
               ),
@@ -683,11 +686,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderColor: Colors.black,
                   currentController: registerCubit.emailTextController,
                   hint:
-                      '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
-                  prefixIcon: Icon(
-                    Icons.email,
-                    color: AppColors.GREY_DARK_COLOR,
-                    size: 40.w,
+                  '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset(
+                      Assets.aMailIcon,
+                      color: AppColors.GREY_DARK_COLOR,
+                    ),
                   ),
                   isRequired: true,
                 ),
@@ -787,9 +792,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // fillColor: const Color(0xFFEEEEEE),
                   borderColor: Colors.black,
                   currentController:
-                      registerCubit.confirmPasswordTextController,
+                  registerCubit.confirmPasswordTextController,
                   hint:
-                      '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
+                  '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
                   obscureText: obsecure,
                   prefixIcon: GestureDetector(
                     onTap: () {

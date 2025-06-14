@@ -100,7 +100,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                     from: widget.activeTrip?.from??'',
                     to: widget.activeTrip?.to??'',
                   ),
-                  CustomRideButton(text: "I've Arrived",onPressed: (){
+                  CustomRideButton(text: context.isArabic?"انا وصلت":"I've Arrived",onPressed: (){
                     widget.onPressed('iveArrived');
                   },),
                   const SizedBox(height: 10),

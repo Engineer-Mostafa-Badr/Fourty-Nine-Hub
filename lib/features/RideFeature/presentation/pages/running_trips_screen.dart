@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pe
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
@@ -96,7 +97,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
-                  return const Center(child: CustomCircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 } else  {

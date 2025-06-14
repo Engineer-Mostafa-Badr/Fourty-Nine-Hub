@@ -40,8 +40,8 @@ class DriverRatingModel extends DriverRatingEntity {
 
   factory DriverRatingModel.fromJson(Map<String, dynamic> json) {
     return DriverRatingModel(
-      count: json['count']??0,
-      average: json['average']??0.0,
+      count: json['count'],
+      average: json['average'],
     );
   }
 }

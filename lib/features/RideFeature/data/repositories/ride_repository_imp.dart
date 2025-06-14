@@ -48,6 +48,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/wa
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
@@ -165,6 +168,16 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, List<RideModelEntity>>> getRideModels(String brand) async {
     return await rideRemoteDataSource.getRideModels(brand);
+  }
+
+  @override
+  Future<Either<Failure, List<RideModelEntity>>> getRideShippingModels(String brand) async {
+    return await rideRemoteDataSource.getRideShippingModels(brand);
+  }
+
+  @override
+  Future<Either<Failure, List<RideModelEntity>>> getRideNonTrackingModels(String brand) async {
+    return await rideRemoteDataSource.getRideNonTrackingModels(brand);
   }
 
   @override
@@ -406,6 +419,11 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
+  Future<Either<Failure, List<ClientPendingTripEntity>>> getClientPendingShippingTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientPendingShippingTrips(params: params);
+  }
+
+  @override
   Future<Either<Failure, CreateNonTrackTripEntity>> cancelNonTrackTrip(CancelNonTrackTripParams params) {
     return rideRemoteDataSource.cancelNonTrackTrip(params);
   }
@@ -416,8 +434,17 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
+  Future<Either<Failure, List<ClientAcceptedTripEntity>>> getClientAcceptedShippingTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientAcceptedShippingTrips(params: params);
+  }
+
+  @override
   Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferUntrackedTrips({required ClientPendingTripParams params}) {
     return rideRemoteDataSource.getClientOfferUntrackedTrips(params: params);
+  }
+  @override
+  Future<Either<Failure, List<ClientOfferTripEntity>>> getClientOfferShippingTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientOfferShippingTrips(params: params);
   }
 
   @override
@@ -426,13 +453,28 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> acceptShippingTrip(AcceptNonTrackTripParams params) {
+    return rideRemoteDataSource.acceptShippingTrip( params);
+  }
+
+  @override
   Future<Either<Failure, CreateNonTrackTripEntity>> refuseNonTrackTrip(AcceptNonTrackTripParams params) {
     return rideRemoteDataSource.refuseNonTrackTrip( params);
   }
 
   @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> refuseShippingTrip(AcceptNonTrackTripParams params) {
+    return rideRemoteDataSource.refuseShippingTrip( params);
+  }
+
+  @override
   Future<Either<Failure, List<ClientPastTripEntity>>> getClientPastUntrackedTrips({required ClientPendingTripParams params}) {
     return rideRemoteDataSource.getClientPastUntrackedTrips( params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<ClientPastTripEntity>>> getClientPastShippingTrips({required ClientPendingTripParams params}) {
+    return rideRemoteDataSource.getClientPastShippingTrips( params: params);
   }
 
   @override
@@ -468,6 +510,16 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
+  void listenToOfferUpdateShippingTrip(Function(ClientOfferTripEntity offer) params) {
+    return rideRemoteDataSource.listenToOfferUpdateShippingTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackTripEntity>> cancelShippingTrip(CancelNonTrackTripParams params) async {
+    final data = await rideRemoteDataSource.cancelShippingTrip(params);
+    return data;
+  }
+  @override
   Future<Either<Failure, List<HistoryTripsEntity>>> getAllHistoryTrips(GetAllHistoryTripsUseCaseParams params) async {
     return await rideRemoteDataSource.getAllHistoryTrips(params);
   }
@@ -476,4 +528,5 @@ class RideRepositoryImplementation extends RideRepository {
   Future<Either<Failure, String>> getAvailableMapCountry() async {
     return await rideRemoteDataSource.getAvailableMapCountry();
   }
+
 }

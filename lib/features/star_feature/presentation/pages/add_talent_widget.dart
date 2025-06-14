@@ -6,13 +6,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
 import '../../../../core/constants/constants.dart';
@@ -126,9 +126,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       }
       serviceLocator<SubscriptionController>().checkIfUserSubscribed(
         onSubscribed: () {
-          context
-              .read<StarCubit>()
-              .uploadStar(
+          context.read<StarCubit>().uploadStar(
                 params: StarParams(
                   title: _titleController.text,
                   mediaUrl: _mediaUrl ?? '',

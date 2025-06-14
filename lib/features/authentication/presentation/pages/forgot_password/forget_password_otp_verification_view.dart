@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -19,6 +18,8 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
+import '../../controllers/verify_otp_cubit/verify_otp_cubit.dart';
+import 'otp_timer.dart';
 
 class ForgetPasswordOtpVerificationView extends StatelessWidget {
   final String email;
@@ -30,6 +31,7 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final verifyOtpCubit = context.read<VerifyOtpCubit>();
     final cubit = context.read<VerifyForgotPasswordOtpCubit>();
     return BlocConsumer<VerifyForgotPasswordOtpCubit,
         VerifyForgotPasswordOtpState>(
@@ -46,10 +48,10 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
       builder: (context, state) {
         return CustomScaffold(
           enableCustomAppBar: true,
-          appBar: const PreferredSize(
+          appBar: PreferredSize(
             preferredSize: Size.fromHeight(30),
             child: BackAppBar(
-              label: 'OTP Verify For Email',
+              label:"${LocaleKeys.oTPVerifyFor.localize} ${LocaleKeys.email.localize}",
               enableCustomAppBar: true,
             ),
           ),
@@ -72,13 +74,14 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
                 Label(
                   text: LocaleKeys.checkVerification.localize,
                   style: Styles.headerText(),
+                  maxLines: 2,
                 ),
                 const Sizer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Label(
-                      text: 'We\'ve sent a code to ',
+                      text: LocaleKeys.weHaveSentACodeTo.localize,
                       style: Styles.mediumText(color: Colors.black87),
                     ),
                     Label(
@@ -93,7 +96,7 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
                   height: 32,
                 ),
                 Label(
-                  text: 'OTP Code',
+                  text: LocaleKeys.otpCode.localize,
                   style: Styles.headerText(),
                 ),
                 const Sizer(),
@@ -148,6 +151,12 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
                       return true;
                     },
                   ),
+                ),
+                const Sizer(),
+                OTPTimer(
+                  onResendPressed: () {
+                    verifyOtpCubit.resendOTP(email, false);
+                  },
                 ),
                 const Sizer(),
               ],

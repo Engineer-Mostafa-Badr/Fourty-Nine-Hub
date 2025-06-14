@@ -29,10 +29,11 @@ import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
 
 class AcceptRideOfferScreen extends StatefulWidget {
-  // final bool isTruk;
+  final String type;
 
   const AcceptRideOfferScreen({
     super.key,
+    required this.type,
   });
 
   @override
@@ -49,9 +50,9 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientAcceptedTrips();
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      if (widget.type == 'ride') context.read<ClientTripsCubit>().getClientAcceptedTrips();
+      if (widget.type == 'shipping') context.read<ClientTripsCubit>().getClientAcceptedShippingTrips();
     }
   }
 
@@ -77,13 +78,10 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
     return Scaffold(
       body: BlocListener<ClientTripsCubit, ClientTripsState>(
         listener: (context, state) {
-          if (state.status == ClientTripsStates.success &&
-              state.showSnackbar &&
-              state.createNonTrackTripEntity?.message.isNotEmpty == true) {
+          if (state.status == ClientTripsStates.success && state.showSnackbar && state.createNonTrackTripEntity?.message.isNotEmpty == true) {
             showCustomSnackBar(
               context,
-              state.createNonTrackTripEntity?.message ??
-                  LocaleKeys.requestSentSuccess.localize,
+              state.createNonTrackTripEntity?.message ?? LocaleKeys.requestSentSuccess.localize,
               Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
             );
 
@@ -95,14 +93,11 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
 
           if (state.status == ClientTripsStates.error) {
             final failure = state.failure;
-            if (failure is ServerFailure &&
-                failure.errors != null &&
-                failure.errors!.isNotEmpty) {
+            if (failure is ServerFailure && failure.errors != null && failure.errors!.isNotEmpty) {
               showErrorMessage(context, failure.errors!.first);
               return;
             }
-            showErrorMessage(
-                context, getFailureMessage(state.failure!, context));
+            showErrorMessage(context, getFailureMessage(state.failure!, context));
           }
         },
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
@@ -115,48 +110,22 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                   )
                 : state.isError
                     ? Center(
-                        child: Label(
-                            text: LocaleKeys.errorHappen.localize,
-                            style: const TextStyle(color: Colors.red)),
+                        child: Label(text: LocaleKeys.errorHappen.localize, style: const TextStyle(color: Colors.red)),
                       )
-                    : context
-                                    .read<ClientTripsCubit>()
-                                    .clientAcceptedTripsData ==
-                                null ||
-                            context
-                                .read<ClientTripsCubit>()
-                                .clientAcceptedTripsData
-                                .isEmpty
+                    : context.read<ClientTripsCubit>().clientAcceptedTripsData == null || context.read<ClientTripsCubit>().clientAcceptedTripsData.isEmpty
                         ? Center(
-                            child: Label(
-                                text: LocaleKeys.youDontHaveAcceptedOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                            child: Label(text: LocaleKeys.youDontHaveAcceptedOffer.localize, style: TextStyle(color: Colors.red, fontSize: 18)),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: context
-                                            .read<ClientTripsCubit>()
-                                            .clientAcceptedTripsData ==
-                                        null ||
-                                    context
-                                        .read<ClientTripsCubit>()
-                                        .clientAcceptedTripsData
-                                        .isEmpty
+                            child: context.read<ClientTripsCubit>().clientAcceptedTripsData == null || context.read<ClientTripsCubit>().clientAcceptedTripsData.isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
-                                    itemBuilder: (context, index) =>
-                                        ClientAcceptWidget(
-                                          offers: state
-                                              .clientAcceptedTripData?[index],
+                                    itemBuilder: (context, index) => ClientAcceptWidget(
+                                          offers: state.clientAcceptedTripData?[index],
                                         ),
-                                    separatorBuilder: (context, index) =>
-                                        const SizedBox(height: 5),
-                                    itemCount: context
-                                            .read<ClientTripsCubit>()
-                                            .clientAcceptedTripsData
-                                            .length ??
-                                        0),
+                                    separatorBuilder: (context, index) => const SizedBox(height: 5),
+                                    itemCount: context.read<ClientTripsCubit>().clientAcceptedTripsData.length ?? 0),
                           );
           },
         ),
@@ -173,18 +142,12 @@ class ClientAcceptWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.parse(
-        offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
-    String formattedDate =
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-    String formattedTime =
-        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
+    DateTime dateTime = DateTime.parse(offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
+    String formattedDate = "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+    String formattedTime = "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return Container(
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-          color:
-              context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-          borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5, borderRadius: BorderRadius.circular(20)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -202,19 +165,17 @@ class ClientAcceptWidget extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: offers?.driverDetails?.picture == null ||
-                            offers!.driverDetails!.picture!.isEmpty
+                        child: offers?.driverDetails?.picture == null || offers!.driverDetails!.picture!.isEmpty
                             ? Image.asset(
-                          Assets.maleImagePlaceholder,
-                          fit: BoxFit.cover,
-                        )
+                                Assets.maleImagePlaceholder,
+                                fit: BoxFit.cover,
+                              )
                             : ImageFromInternet(
-                          fit: BoxFit.cover,
-                          image: offers!.driverDetails!.picture!,
-                        ),
+                                fit: BoxFit.cover,
+                                image: offers!.driverDetails!.picture!,
+                              ),
                       ),
                     ),
-
                     Positioned(
                         top: 0,
                         right: 0,
@@ -224,27 +185,22 @@ class ClientAcceptWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Row(children: [
-                                  SvgPicture.asset(Assets.star2,
-                                      width: 8, height: 8),
+                                  SvgPicture.asset(Assets.star2, width: 8, height: 8),
                                   const Sizer(width: 4),
-                                  Label(
-                                      text: offers?.driverDetails?.rating?.count
-                                              .toString() ??
-                                          '0',
-                                      style: Styles.smallText(
-                                          color: AppColors.PRIMARY_COLOR))
+                                  Label(text: "${offers?.driverDetails?.rating?.count ?? 0}", style: Styles.smallText(color: AppColors.PRIMARY_COLOR))
                                 ]))))
                   ],
                 ),
                 Label(
-                    text: offers?.driverDetails?.firstName ?? '',
-                    style: Styles.mediumText()),
+                  text: offers?.driverDetails?.firstName ?? '',
+                  style: Styles.mediumText(),
+                ),
                 Label(
-                    text: '(${offers?.driverDetails?.rating?.average ?? 0})',
-                    style: Styles.smallText())
+                  text: '(${offers?.driverDetails?.rating?.average ?? 0})',
+                  style: Styles.smallText(),
+                )
               ])),
           const Sizer(width: 32),
           Expanded(
@@ -268,38 +224,22 @@ class ClientAcceptWidget extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 1,
-                                  child: Image.asset(Assets.rideFrom,
-                                      width: 24, height: 24),
+                                  child: Image.asset(Assets.rideFrom, width: 24, height: 24),
                                 ),
-                                Expanded(
-                                    flex: 8,
-                                    child: Label(
-                                        text: offers?.tripDetails?.location
-                                                ?.fromTitle ??
-                                            'Cairo International Airport',
-                                        style: Styles.headerText()))
+                                Expanded(flex: 8, child: Label(text: offers?.tripDetails?.location?.fromTitle ?? 'Cairo International Airport', style: Styles.headerText()))
                               ],
                             ),
                             Row(
                               spacing: 5,
                               children: [
-                                Expanded(
-                                    flex: 1,
-                                    child: Image.asset(Assets.rideTo,
-                                        width: 24, height: 24)),
+                                Expanded(flex: 1, child: Image.asset(Assets.rideTo, width: 24, height: 24)),
                                 Expanded(
                                     flex: 8,
-                                    child: Label(
-                                        text: offers?.tripDetails?.location
-                                                ?.toTitle ??
-                                            'Cairo International Airport',
-                                        style: Styles.mediumText(
-                                            fontWeight: FontWeight.w300)))
+                                    child:
+                                        Label(text: offers?.tripDetails?.location?.toTitle ?? 'Cairo International Airport', style: Styles.mediumText(fontWeight: FontWeight.w300)))
                               ],
                             ),
-                            Label(
-                                text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
-                                style: Styles.mediumText())
+                            Label(text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}', style: Styles.mediumText())
                           ],
                         ),
                       ),
@@ -311,20 +251,9 @@ class ClientAcceptWidget extends StatelessWidget {
                               //     ? Image.asset(Assets.rideIcon,
                               //     width: 40, height: 40, fit: BoxFit.cover)
                               //     :
-                              ImageFromInternet(
-                                  image:
-                                      offers!.tripDetails!.category!.picture!,
-                                  width: 40,
-                                  height: 40,
-                                  fit: BoxFit.contain),
+                              ImageFromInternet(image: offers!.tripDetails!.category!.picture!, width: 40, height: 40, fit: BoxFit.contain),
                               Label(
-                                  text: context.isArabic
-                                      ? (offers
-                                              ?.tripDetails?.category?.nameAr ??
-                                          '')
-                                      : (offers
-                                              ?.tripDetails?.category?.nameEn ??
-                                          ''),
+                                  text: context.isArabic ? (offers?.tripDetails?.category?.nameAr ?? '') : (offers?.tripDetails?.category?.nameEn ?? ''),
                                   style: Styles.mediumText(fontSize: 25))
                             ],
                           )),
@@ -339,16 +268,9 @@ class ClientAcceptWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Label(
-                          text: "${offers?.tripDetails?.price ?? 300}",
-                          style:
-                              Styles.mediumText(fontWeight: FontWeight.w700)),
+                      Label(text: "${offers?.tripDetails?.price ?? 300}", style: Styles.mediumText(fontWeight: FontWeight.w700)),
                       const Sizer(width: 4),
-                      Label(
-                          text: LocaleKeys.egp.tr(),
-                          style: Styles.mediumText(
-                              color: AppColors.SECONDARY_COLOR,
-                              fontWeight: FontWeight.w700))
+                      Label(text: LocaleKeys.egp.tr(), style: Styles.mediumText(color: AppColors.SECONDARY_COLOR, fontWeight: FontWeight.w700))
                     ],
                   ),
                   Row(
@@ -378,9 +300,7 @@ class ClientAcceptWidget extends StatelessWidget {
                             Assets.phoneIconRed,
                             width: 30.w,
                             height: 30.h,
-                            color: context.isDarkMode
-                                ? AppColors.PRIMARY_COLOR_DARK
-                                : AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
                           ),
                           onPressed: () {},
                         ),
@@ -391,9 +311,7 @@ class ClientAcceptWidget extends StatelessWidget {
                               Assets.mailIconRed,
                               width: 25.w,
                               height: 25.h,
-                              color: context.isDarkMode
-                                  ? AppColors.PRIMARY_COLOR_DARK
-                                  : AppColors.PRIMARY_COLOR,
+                              color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
                             ),
                             onPressed: () {}),
                       ),

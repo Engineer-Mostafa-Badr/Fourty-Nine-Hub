@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/app
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -31,10 +32,10 @@ class HealthBookingCard extends StatelessWidget {
         serviceLocator<HealthSharedData>().doctorSearchParams.bookingType =
             appointment.bookingType;
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
-            appointment.doctor.subCategory;
+            appointment.doctor!.subCategory;
         context.push(Routes.VISITADOCTORDETAILS,
             extra: DoctorDetailsParams(
-                doctorId: appointment.doctor.id, fromSearch: false));
+                doctorId: appointment.doctor!.id, fromSearch: false));
 
         // context.push(Routes.VISITADOCTORDETAILS, extra: DoctorDetailsParams(fromSearch: true, doctorId: appointment.doctor.id,type: appointment.bookingType.name,subCategoryId:appointment.doctor.subCategory.id));
       },
@@ -66,7 +67,7 @@ class HealthBookingCard extends StatelessWidget {
                   radius: 10,
                   height: kToolbarHeight,
                   width: kToolbarHeight,
-                  url: appointment.doctor.image,
+                  url: appointment.doctor?.image??UIConst.profilePlaceHolder,
                 ),
                 const Sizer(),
                 Expanded(
@@ -74,11 +75,13 @@ class HealthBookingCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                          text: appointment.doctor.fullName,
+                        //TODO:delete
+                          text: appointment.doctor?.fullName??'Ahmed Mohemd',
                           style: Styles.mediumText(
                               color: Theme.of(context).primaryColor)),
                       Label(
-                          text: appointment.doctor.description,
+                        //TODO:delete
+                          text: appointment.doctor?.description??'sfsdaf fsdafsfa fdsaf asfasdfsaf sdaff dsaf ',
                           style: Styles.mediumText(
                               color: AppColors.DARK_GRAY_COLOR)),
                     ],

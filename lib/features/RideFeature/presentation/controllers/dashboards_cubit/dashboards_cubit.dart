@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/ru
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/delete_emergency_contact_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
@@ -43,6 +45,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_governorates.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
@@ -128,9 +131,11 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ArrivedToClientUseCase arrivedToClientUseCase;
   final StartDriverTripUseCase startDriverTripUseCase;
   final CompleteDriverTripUseCase completeDriverTripUseCase;
+  final CompleteRideTripWithPriceUseCase completeRideTripWithPriceUseCase;
   final RecordingTripUseCase recordingTripUseCase;
   final CancelTripByRiderUseCase cancelTripByRiderUseCase;
   final DriverRateClientUseCase driverRateClientUseCase;
+  final UpdateDriverRateClientUseCase updateDriverRateClientUseCase;
   final GetSupportDetailsUseCase getSupportDetailsUseCase;
   final EmergencySupportUseCase emergencySupportUseCase;
   final GetAvailableNonSocketTripsUseCase getAvailableNonSocketTripsUseCase;
@@ -179,9 +184,11 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.arrivedToClientUseCase,
       this.startDriverTripUseCase,
       this.completeDriverTripUseCase,
+      this.completeRideTripWithPriceUseCase,
       this.recordingTripUseCase,
       this.cancelTripByRiderUseCase,
       this.driverRateClientUseCase,
+      this.updateDriverRateClientUseCase,
       this.getSupportDetailsUseCase,
       this.emergencySupportUseCase,
       this.getEmergencyContactsUseCase,
@@ -208,6 +215,53 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final drugAnalysisFormKey = GlobalKey<FormState>();
   TextEditingController rideDragAnalysisExpireDateController = TextEditingController();
 
+
+
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  void initRecode(String recordUrl) {
+    log("messagerecordUrl$recordUrl");
+
+    audioPlayer.onPlayerStateChanged.listen((data) {
+      emit(state.copyWith(status: DashboardsStates.success,playerState: data));
+    });
+
+    audioPlayer.onDurationChanged.listen((duration) {
+      emit(state.copyWith(status: DashboardsStates.success,recordDuration: duration));
+    });
+
+    audioPlayer.onPositionChanged.listen((position) {
+      emit(state.copyWith(status: DashboardsStates.success,recordPosition: position));
+    });
+  }
+
+
+
+  Future<void> play(String recordUrl) async {
+    await audioPlayer.play(UrlSource(recordUrl));
+  }
+
+  Future<void> pause() async {
+    await audioPlayer.pause();
+  }
+
+  Future<void> stop() async {
+    await audioPlayer.stop();
+    emit(state.copyWith(status: DashboardsStates.success,recordPosition: Duration.zero));
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return [
+      if (duration.inHours > 0) hours,
+      minutes,
+      seconds,
+    ].join(':');
+  }
   onSubmitUploadingTechnicalExamination(BuildContext context) async {
     if (terminalExaminationFormKey.currentState!.validate()) {
       emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
@@ -582,7 +636,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         });
   }
 
-  Future<void> getDriverSettings() async {
+  Future<void> getDriverSettings(BuildContext context) async {
     if (isClosed) {
       return;
     }
@@ -593,7 +647,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     response.fold(
       (failure) {
-        // log("Failure ${getFailureMessage(failure, context)}");
+        log("Failure getDriverSettings ${getFailureMessage(failure, context)}");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (data) {
@@ -606,7 +660,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> updateDriverSettings(bool isReady) async {
+  Future<void> updateDriverSettings(bool isReady,BuildContext context) async {
     if (isClosed) {
       return;
     }
@@ -628,7 +682,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           updateDriverSettingsEntity: data,
           offerCreatedShown: false, // freshly created
         ));
-        getDriverSettings();
+        getDriverSettings(context);
       },
     );
   }
@@ -871,7 +925,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
     // Index 3: Settings
     if (index == 3 && params.isSocket == false && params.modeType == "ride") {
-      getDriverSettings();
+      getDriverSettings(context);
     }
 
     // Index 4: Accepted Trips
@@ -904,7 +958,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     });
   }
 
-  void listenToEndTrip(BuildContext context) {
+  void listenToEndTrip(BuildContext context,RideModeParams params) {
     CliLogger.info('End Trip');
     // TripsResponseEntity
     listenToEndTripUseCase((tripId) {
@@ -914,6 +968,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           context.isArabic
               ? 'تم إلغاء الرحلة من قبل العميل'
               : 'Trip has been canceled by the customer');
+      changeIndex(0, context, params);
       emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
     });
   }
@@ -1107,7 +1162,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   Future<void> getPastTrips(BuildContext context, String type) async {
     if (!hasMorePastTripData || isLoadingPastTripMore) return;
     emit(state.copyWith(status: DashboardsStates.loadingPast));
-    isLoadingPastRideTrips = true;
+    isLoadingPastTripMore = true;
     final Either<Failure, TripsResponseEntity> result =
         await getPastTripsUsecase(GetPastTripsParams(
             type: type, limit: pageSize, page: currentPastTripPage));
@@ -1125,7 +1180,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         } else {
           currentPastTripPage++;
         }
-        isLoadingPastRideTrips = false;
+        isLoadingPastTripMore = false;
         emit(state.copyWith(
             status: DashboardsStates.success, pastTrips: pastTrips.data.trips));
       },
@@ -1298,6 +1353,32 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
+  Future<void> completeDriverTripWithPrice(
+      BuildContext context, String id, String price) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await completeRideTripWithPriceUseCase(
+        CompleteDriverTripWithRemainingMoneyParams(tripId: id, remainingMoney: price));
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        context.pop();
+        emit(state.copyWith(
+            status: DashboardsStates.success,
+            tripStatus: TripState.completed.name));
+      },
+    );
+  }
+
   Future<void> cancelDriverTrip(
       {required BuildContext context,
       required String tripId,
@@ -1347,20 +1428,21 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> rateTheClient(
+  Future<bool> rateTheClient(
       {required BuildContext context,
       required String tripId,
       required String comment,
       required double rate}) async {
     showLoadingDialog(context);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
+    bool value = true;
 
     final Either<Failure, bool> result = await driverRateClientUseCase(
         DriverRateClientParams(tripId: tripId, comment: comment, rate: rate));
 
-    if (isClosed) return;
     result.fold(
       (failure) {
+        value=false;
         context.pop();
         log("Failure ${getFailureMessage(failure, context)}");
         showErrorMessage(context, getFailureMessage(failure, context));
@@ -1369,9 +1451,41 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (activeTrip) {
         log("Suzccess");
         context.pop();
+        value=true;
         emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
       },
     );
+    return value;
+  }
+
+  Future<bool> updateRateTheClient(
+      {required BuildContext context,
+      required String tripId,
+      required String comment,
+      required double rate}) async {
+    showLoadingDialog(context);
+    bool value = true;
+    emit(state.copyWith(status: DashboardsStates.loadingPast));
+
+    final Either<Failure, bool> result = await updateDriverRateClientUseCase(
+        DriverRateClientParams(tripId: tripId, comment: comment, rate: rate));
+
+    result.fold(
+      (failure) {
+        value=false;
+        context.pop();
+        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (activeTrip) {
+        log("Suzccess");
+        value=true;
+        context.pop();
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+      },
+    );
+    return value;
   }
 
   Future<void> getSettings(BuildContext context) async {
@@ -1379,7 +1493,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       return;
     }
     emit(state.copyWith(status: DashboardsStates.loadingSettings));
-
     final Either<Failure, SettingsDashboardEntityResponse> result =
         await getSettingsDashboardUsecase(const NoParams());
 

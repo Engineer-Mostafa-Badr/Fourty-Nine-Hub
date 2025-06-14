@@ -6,6 +6,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
@@ -103,6 +105,7 @@ class RideState {
   final bool? isShipping;
   final CostPerKmEntity? costPerKm;
   final List<TripEntity>? offers;
+  final String? selectedType;
   final bool? isChangedMindReason;
   final bool? isOtherReason;
   final bool? isClientNotShownReason;
@@ -167,6 +170,7 @@ class RideState {
     this.isUploadTechnicalExamination,
     this.isShipping,
     this.offers,
+    this.selectedType,
     required this.rideOffers,
     this.isChangedMindReason=false,
     this.isOtherReason=false,
@@ -236,6 +240,7 @@ class RideState {
     bool? isUploadCriminalRecord,
     bool? isUploadTechnicalExamination,
     List<TripEntity>? offers,
+    String? selectedType,
     List<RideOfferEntity>? rideOffers,
     bool? isChangedMindReason,
     bool? isOtherReason,
@@ -302,6 +307,7 @@ class RideState {
       savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
       offers: offers ?? this.offers,
       rideOffers: rideOffers ?? this.rideOffers,
+      selectedType: selectedType ?? this.selectedType,
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
       isOtherReason: isOtherReason ?? this.isOtherReason,
       isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,

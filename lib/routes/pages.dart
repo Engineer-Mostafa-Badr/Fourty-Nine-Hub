@@ -227,7 +227,6 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event_sub_categories.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/get_posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/follow_requests_instagram_cubit/follow_requests_instagram_cubit.dart';
@@ -266,8 +265,8 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
@@ -288,7 +287,6 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/publish_trip_join/publish_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
-
 import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/data/models/get_requests_pick_me_model.dart';
 import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/presentation/cubits/cubit/get_requests_pick_me_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/presentation/views/get_requests_pick_me_view.dart';
@@ -306,6 +304,8 @@ import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
+
+import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
@@ -329,15 +329,12 @@ import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
 import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
-
 import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
-import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_offers/main_tabs_ride_offer_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
-import '../features/RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_request_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_status_screen.dart';
 import '../features/RideFeature/presentation/pages/safety_ride_screen.dart';
@@ -652,7 +649,8 @@ class AppPages {
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<MainCategoriesCubit>(),
                   child: MainCategoriesFlipCardsView(
-                    mainCategoriesCardsParams: state.extra as MainCategoriesCardsParams,
+                    mainCategoriesCardsParams:
+                        state.extra as MainCategoriesCardsParams,
                   ),
                 ),
               ),
@@ -826,6 +824,12 @@ class AppPages {
                           path: Paths.CREATECOMPANYPOSTAD,
                           name: Routes.CREATECOMPANYPOSTAD,
                           builder: (context, state) =>
+                              const CreateCompanyAdView(),
+                        ),
+                        GoRoute(
+                          path: Paths.CREATECOMPANYPOSTAD,
+                          name: Routes.CREATECOMPANYPOSTAD,
+                          builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
                                   child: CreatePostCompany(
@@ -853,7 +857,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider.value(
                   value: serviceLocator<SubcategoriesCubit>(),
                   child: CustomPageSubCategoriesView(
-                    params: state.extra  as CustomPageSubCategoriesParams,
+                    params: state.extra as CustomPageSubCategoriesParams,
                   ),
                 ),
               ),
@@ -917,9 +921,15 @@ class AppPages {
               GoRoute(
                 path: Paths.FORGOTPASSWORDOTP,
                 name: Routes.FORGOTPASSWORDOTP,
-                builder: (context, state) =>
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
                     BlocProvider<VerifyForgotPasswordOtpCubit>(
-                  create: (_) => serviceLocator(),
+                      create: (_) => serviceLocator(),
+                    ),
+                    BlocProvider(
+                      create: (_) => serviceLocator<VerifyOtpCubit>(),
+                    ),
+                  ],
                   child: ForgetPasswordOtpVerificationView(
                     email: state.extra as String,
                   ),
@@ -3578,16 +3588,14 @@ class AppPages {
                   builder: (context, state) => BlocProvider(
                         create: (context) => serviceLocator<ClientTripsCubit>()
                           ..loadInitialClientPendingTrips(),
-                        child: PendingRideOfferScreen(),
+                        child: PendingRideOfferScreen(type: state.extra as String,),
                       )),
               GoRoute(
                   path: Paths.rideOffer,
                   name: Routes.rideOffer,
                   builder: (context, state) => BlocProvider(
-                        create: (context) => serviceLocator<ClientTripsCubit>()
-                          ..loadInitialClientPendingTrips()
-                          ..loadInitialClientOfferTrips(),
-                        child: MainTabsRideOffer(),
+                        create: (context) => serviceLocator<ClientTripsCubit>(),
+                        child: MainTabsRideOffer(type: state.extra as String,),
                       )),
               GoRoute(
                 path: Paths.supportRideScreen,
@@ -3598,7 +3606,6 @@ class AppPages {
                       params: state.extra as SupportRideParams,
                     )),
               ),
-
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
                 name: Routes.supportClientDetailsScreen,

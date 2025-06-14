@@ -39,11 +39,13 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
             child: Column(
               children: [
                 const Spacer(),
-                Image.asset(
-                  themeCubit.isDarkTheme
-                      ? Assets.logo
-                      : Assets.logoWithBlackText,
-                  height: 200,
+                Expanded(
+                  flex: 2,
+                  child: Image.asset(
+                    themeCubit.isDarkTheme
+                        ? Assets.logo
+                        : Assets.logoWithBlackText,
+                  ),
                 ),
                 const Spacer(),
                 if (!isChooseLang)
@@ -64,17 +66,20 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                     ),
                   )
                 else
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.asset(
-                      Assets.themeModeGIF,
-                      height: 500,
-                      width: double.infinity,
-                      fit: BoxFit.fitWidth,
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: Image.asset(
+                        Assets.themeModeGIF,
+                        height: 500,
+                        width: double.infinity,
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   ),
                 const Spacer(),
@@ -98,7 +103,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                             ),
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * .4,
-                              height: 64,
+                              height: 50,
                               child: DefaultButton(
                                 width: double.infinity,
                                 label: 'عربي',
@@ -134,7 +139,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: 64,
+                              height: 50,
                               width: MediaQuery.sizeOf(context).width * .4,
                               child: DefaultButton(
                                 width: double.infinity,
@@ -209,7 +214,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                 const Spacer(),
                 if (isChooseLang)
                   SizedBox(
-                    height: 64,
+                    height: 50,
                     width: MediaQuery.sizeOf(context).width * .9,
                     child: DefaultButton(
                       label: LocaleKeys.next.localize,

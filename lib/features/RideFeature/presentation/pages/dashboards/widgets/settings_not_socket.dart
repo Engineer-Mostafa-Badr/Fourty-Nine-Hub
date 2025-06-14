@@ -54,7 +54,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
               valuee: widget.settings?.isReady,
               onChanged: (value) {
                 setState(() {
-                  context.read<DashboardsCubit>().updateDriverSettings(value);
+                  context.read<DashboardsCubit>().updateDriverSettings(value,context);
                 });
               }),
           Padding(

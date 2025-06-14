@@ -2,8 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -14,60 +17,281 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 
-class RideDetailsRatingWidget extends StatelessWidget {
+class RideDetailsRatingWidget extends StatefulWidget {
   final bool isRate;
   final double rate;
+  final Function(String comment, double rate)? onRating;
   final String title;
   const RideDetailsRatingWidget(
       {super.key,
+       this.onRating,
       required this.isRate,
       required this.rate,
       required this.title});
 
   @override
+  State<RideDetailsRatingWidget> createState() => _RideDetailsRatingWidgetState();
+}
+
+class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
+  double _rating = 4.0;
+  TextEditingController rateController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    setState(() {
+      _rating = widget.rate;
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("widget.tripEntity.driverDetails?.rating?.average ${widget.isRate}");
+    print("widget.tripEntity.driverDetails?.rating?.average ${widget.rate}");
     return Row(
       children: [
         Label(
-            text: title, //LocaleKeys.noRating.localize,
+            text: widget.title, //LocaleKeys.noRating.localize,
             style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
         const Spacer(),
-        if (isRate) ...[
-           Text(LocaleKeys.good.tr(),
+        if (widget.isRate) ...[
+           Text(getRatingText(widget.rate),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
           const SizedBox(width: 5),
-          RatingBar(
-            initialRating: rate,
-            ignoreGestures: true,
-            itemPadding: const EdgeInsets.symmetric(horizontal: 3),
-            ratingWidget: RatingWidget(
-              full: SvgPicture.asset(Assets.star1),
-              half: SvgPicture.asset(Assets.star1),
-              empty: SvgPicture.asset(Assets.starEmpty),
+          GestureDetector(
+            onTap: (){
+              showModalBottomSheet(
+                context: context,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
+                ),
+                backgroundColor: context.isDarkMode
+                    ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                    : AppColors.LIGHT_COLOR,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(32.0),
+                    topRight: Radius.circular(32.0),
+                  ),
+                ),
+                enableDrag: true,
+                useSafeArea: true,
+                isDismissible: true,
+                isScrollControlled: true,
+                builder: (context) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: SingleChildScrollView(
+                    child: rateWidget(),
+                  ),
+                ),
+              );
+            },
+            child: RatingBar(
+              initialRating: widget.rate,
+              ignoreGestures: true,
+              itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+              ratingWidget: RatingWidget(
+                full: SvgPicture.asset(Assets.star1),
+                half: SvgPicture.asset(Assets.star1),
+                empty: SvgPicture.asset(Assets.starEmpty),
+              ),
+              itemSize: 13,
+              onRatingUpdate: (double value) {
+                showModalBottomSheet(
+                  context: context,
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.9,
+                  ),
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                      : AppColors.LIGHT_COLOR,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0),
+                    ),
+                  ),
+                  enableDrag: true,
+                  useSafeArea: true,
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  builder: (context) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: SingleChildScrollView(
+                      child: rateWidget(),
+                    ),
+                  ),
+                );
+              },
             ),
-            itemSize: 13,
-            onRatingUpdate: (double value) {},
           ),
         ] else
-          noRateWidget(),
+          noRateWidget(widget.onRating),
       ],
     );
   }
 
-  Widget noRateWidget() => Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.cF3F3F3,
-          borderRadius: BorderRadius.circular(15),
+
+  Widget rateWidget(){
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(16),
         ),
-        child: Label(
-          text: LocaleKeys.noRating.localize,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(children: [
+                  const  SizedBox(width: 25,),
+                  const  Spacer(),
+                  Text(
+                    LocaleKeys.rateTheClient.localize,
+                    style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey.shade200,
+                    ),
+                    child: const Icon(Icons.close,color: Colors.black,),
+                  ),
+                ],),
+                const SizedBox(height: 16,),
+                // Text(
+                //     _rating >= 5.0?LocaleKeys.excellent.localize:_rating >= 4.0? LocaleKeys.veryGood.localize:_rating >= 3.0 ?LocaleKeys.good.localize:_rating >= 2.0? LocaleKeys.poor2.localize:_rating >= 1.0? LocaleKeys.bad.localize:LocaleKeys.noRating.localize,
+                //   style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+                // ),
+                // const SizedBox(height: 8),
+                RatingBar.builder(
+                  initialRating: _rating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemSize: 26,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      _rating = rating;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                DefaultTextFormField(
+                  currentController: rateController,
+                  fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                  borderColor: Colors.transparent,
+                  hint: context.isArabic ? 'اكتب رسالة شكر' : 'Write a thank-you message',
+                  // label: LocaleKeys.firstName.localize,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      return LocaleKeys.required.localize;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.PRIMARY_COLOR,
+                      foregroundColor: Colors.white,
+                      padding:const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      if(formKey.currentState!.validate()){
+                        widget.onRating!=null?widget.onRating!(rateController.text, _rating):null;
+                      }
+                      // context.push(Routes.connectionCallScreen);
+                    },
+                    child: Text(LocaleKeys.send.localize),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      );
+      ),
+    );
+  }
+
+  String getRatingText(double rating) {
+    print(rating);
+    if (_rating >= 5.0) return LocaleKeys.excellent.localize;
+    if (_rating >= 4.0) return LocaleKeys.veryGood.localize;
+    if (_rating >= 3.0) return LocaleKeys.good.localize;
+    if (_rating >= 2.0) return LocaleKeys.poor2.localize;
+    if (_rating >= 1.0) return LocaleKeys.bad.localize;
+    return LocaleKeys.noRating.localize;
+  }
+
+  Widget noRateWidget(Function(String comment, double rate)? onRating) => ClickableWidget(
+    onTap: onRating!=null?()=> showModalBottomSheet(
+      context: context,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.9,
+      ),
+      backgroundColor: context.isDarkMode
+          ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+          : AppColors.LIGHT_COLOR,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(32.0),
+          topRight: Radius.circular(32.0),
+        ),
+      ),
+      enableDrag: true,
+      useSafeArea: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          child: rateWidget(),
+        ),
+      ),
+    ):null,
+    child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.cF3F3F3,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Label(
+            text: LocaleKeys.noRating.localize,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+  );
 }
 
 

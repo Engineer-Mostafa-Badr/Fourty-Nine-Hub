@@ -32,10 +32,10 @@ import '../dashboards/widgets/client_offers_widget.dart';
 import '../ride_details_screen.dart';
 
 class PastRideOfferScreen extends StatefulWidget {
-  // final bool isTruk;
+  final String type;
 
   const PastRideOfferScreen({
-    super.key,
+    super.key,required this.type,
   });
 
   @override
@@ -47,14 +47,17 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
 
   @override
   void initState() {
-    super.initState();
+    // if(widget.type=='ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+    // if(widget.type=='shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
     _scrollController = ScrollController()..addListener(_onScroll);
+    super.initState();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientPastTrips();
+      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientPastTrips();
+      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientPastShippingTrips();
     }
   }
 
@@ -312,7 +315,7 @@ class ClientPastWidget extends StatelessWidget {
                                 //     :
                                 ImageFromInternet(
                                     image:
-                                        offers!.tripDetails!.category!.picture!,
+                                        offers?.tripDetails?.category?.picture??'',
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),

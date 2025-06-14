@@ -18,7 +18,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
-// import 'package:printing/printing.dart';
+import 'package:printing/printing.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -181,9 +181,9 @@ class _RideDashboardNonSocketDetailsScreenState
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // Printing.layoutPdf(
-              //   onLayout: (_) => File(path).readAsBytes(),
-              // );
+              Printing.layoutPdf(
+                onLayout: (_) => File(path).readAsBytes(),
+              );
             },
             child: Text(context.isArabic?'طباعة':'Print'),
           ),

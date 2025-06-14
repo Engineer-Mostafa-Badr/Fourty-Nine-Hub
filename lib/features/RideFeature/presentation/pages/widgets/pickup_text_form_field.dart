@@ -29,7 +29,7 @@ class PickUpTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      maxLines: fieldType == FieldType.phone ? 1 : maxLines ?? 1,
+      maxLines: maxLines ?? (fieldType == FieldType.phone ? 1 :  1),
       keyboardType: fieldType == FieldType.phone
           ? TextInputType.phone
           : TextInputType.multiline,

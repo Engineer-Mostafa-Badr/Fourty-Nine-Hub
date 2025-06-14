@@ -67,9 +67,9 @@ void main() async {
   timeago.setLocaleMessages('en', timeago.EnMessages());
   timeago.setLocaleMessages('ar', timeago.ArMessages());
 //  await  initPickMeFeature();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
   // final locationService = LocationService();
   //
   // locationService.startLocationTracking();

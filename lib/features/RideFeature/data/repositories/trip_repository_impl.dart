@@ -15,6 +15,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/tr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
@@ -143,8 +145,18 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params) async{
+    return await remoteDataSource.completeDriverTripWithRemainingMoney(params);
+  }
+
+  @override
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params) async {
     return await remoteDataSource.driverRateClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateDriverRateClient(DriverRateClientParams params) async {
+    return await remoteDataSource.updateDriverRateClient(params);
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -16,6 +17,7 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/contact_us_cubit.dart';
 
@@ -163,6 +165,15 @@ class _ContactUsViewState extends State<ContactUsView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            if (icon == Icons.email_outlined)
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: SvgPicture.asset(
+                  Assets.aMailIcon,
+                  color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                ),
+              )
+            else
             Icon(
               icon,
               color:
