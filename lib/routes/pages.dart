@@ -824,20 +824,13 @@ class AppPages {
                           path: Paths.CREATECOMPANYPOSTAD,
                           name: Routes.CREATECOMPANYPOSTAD,
                           builder: (context, state) =>
-                              const CreateCompanyAdView(),
-                        ),
-                        GoRoute(
-                          path: Paths.CREATECOMPANYPOSTAD,
-                          name: Routes.CREATECOMPANYPOSTAD,
-                          builder: (context, state) =>
                               BlocProvider<CreateCompanyAdCubit>(
                                   create: (_) => serviceLocator(),
                                   child: CreatePostCompany(
                                     params:
-                                        state.extra as CreatePostCompanyParams,
+                                    state.extra as CreatePostCompanyParams,
                                   )),
                         ),
-
                         GoRoute(
                           path: Paths.CREATECOMPANYPOSTREALAD,
                           name: Routes.CREATECOMPANYPOSTREALAD,
