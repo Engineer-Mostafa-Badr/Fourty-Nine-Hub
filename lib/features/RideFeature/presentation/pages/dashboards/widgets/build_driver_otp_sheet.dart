@@ -287,8 +287,8 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       height: 10,
                     ),
                     LocationInfoWidget(
-                      from: widget.activeTrip?.startLocation?.title??'',
-                      to: widget.activeTrip?.targetLocation?.title??'',
+                      from: widget.activeTrip?.from??'',
+                      to: widget.activeTrip?.to??'',
                     ),
                     const SizedBox(
                       height: 16,

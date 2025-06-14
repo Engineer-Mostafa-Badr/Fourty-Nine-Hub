@@ -14,11 +14,11 @@ class CancelTripByClientUseCase {
 class CancelTripByClientUseCaseParams {
   final String tripId;
   final String reasonId;
-  final String note;
-  final double lat;
-  final double lng;
+  final String? note;
+  final double? lat;
+  final double? lng;
 
   CancelTripByClientUseCaseParams(this.tripId, this.reasonId, this.note, this.lat, this.lng);
 
-  toJson() => {'reasonId': reasonId, 'note': note, 'riderLocation': [lat, lng]};
+  toJson() => {'reasonId': reasonId, if (note != null) 'note': note}; // if (lat != null && lng != null) 'riderLocation': [lat, lng]
 }

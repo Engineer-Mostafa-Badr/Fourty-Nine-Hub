@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';

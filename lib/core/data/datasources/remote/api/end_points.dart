@@ -625,6 +625,8 @@ class EndPoints {
     return '/ride/come-with-you/$id/reject';
   }
 
+  static const String getAvailableMapCountry = '/map-settings/available';
+
   static const sendRideRequest = '/ride/trips/new';
   static const checkDriverType = '/ride/riders/checkDriver/type';
   static const getDriverStatistics = '/ride/riders/driverStatistics';
@@ -1447,11 +1449,15 @@ class EndPoints {
   }
 
   static String getAllRunningTrips({required int limit, required int page}) {
-    return '/ride/trips/all?limit=$limit&page=$page&status=started';
+    return '/ride/trips/running?limit=$limit&page=$page';
+  }
+
+  static String getAllHistoryTrips({required int limit, required int page}) {
+    return '/ride/trips/actives?limit=$limit&page=$page';
   }
 
   static String getAllCompletedTrips({required int limit, required int page}) {
-    return '/ride/trips/all?limit=$limit&page=$page&status=completed';
+    return '/ride/trips/expired?limit=$limit&page=$page';
   }
 
   static String getAllActivityTrips({required int limit, required int page}) {

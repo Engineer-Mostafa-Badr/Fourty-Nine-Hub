@@ -242,7 +242,7 @@ class ActivityTripScreen extends StatelessWidget {
                       const SizedBox(
                         width: 16,
                       ),
-                      PriceColumn(title: columnTitle[index], date: columnDate[index],price: columnPrice[index]),
+                      PriceColumn(startAddressTitle: columnTitle[index], date: columnDate[index],price: columnPrice[index]),
                       const Spacer(),
                       const RebookWidget(),
                     ],

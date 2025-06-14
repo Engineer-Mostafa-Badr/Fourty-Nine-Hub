@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_history_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/person_trip_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
@@ -19,22 +22,24 @@ import '../../../../res/assets/assets.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../res/style/app_colors.dart';
+import '../../../../routes/routes.dart';
+import '../../../../service_locator/service_locator.dart';
 import '../../domain/entities/completed_trips_entity.dart';
 
-class ExpiredTripsScreenParams {
+class HistoryTripsScreenParams {
   final RideCubit rideCubit;
-  ExpiredTripsScreenParams({required this.rideCubit});
+  HistoryTripsScreenParams({required this.rideCubit});
 }
 
-class ExpiredTripsScreen extends StatefulWidget {
-  final ExpiredTripsScreenParams params;
-  const ExpiredTripsScreen({super.key, required this.params});
+class HistoryTripsScreen extends StatefulWidget {
+  final HistoryTripsScreenParams params;
+  const HistoryTripsScreen({super.key, required this.params});
 
   @override
-  _ExpiredTripsScreenState createState() => _ExpiredTripsScreenState();
+  _HistoryTripsScreenState createState() => _HistoryTripsScreenState();
 }
 
-class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
+class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
   late ScrollController _scrollController;
   int page = 1;
   final int limit = 10;
@@ -45,7 +50,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.params.rideCubit.fetchAllCompletedTrips(limit: limit, page: page);
+      widget.params.rideCubit.fetchAllHistoryTrips(limit: limit, page: page);
     });
   }
 
@@ -58,7 +63,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
   void _fetchMoreTrips() {
     if (isFetching) return;
     setState(() => isFetching = true);
-    widget.params.rideCubit.fetchAllCompletedTrips(limit: limit, page: ++page).then((_) {
+    widget.params.rideCubit.fetchAllHistoryTrips(limit: limit, page: ++page).then((_) {
       if (mounted) setState(() => isFetching = false);
     }).catchError((_) {
       if (mounted) setState(() => isFetching = false);
@@ -84,7 +89,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
               title: Transform(
                 transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
                 child: Text(
-                  LocaleKeys.expiredTrips.localize,
+                  context.isArabic? "الرحلات السابقة": "Your Past Trips",
                   style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
                 ),
               ),
@@ -99,17 +104,17 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
                   return const SizedBox();
                 } {
 
-                  if(state.completedTrips?.isEmpty??true) {
-                    return Center(child: Text(context.isArabic ? "لا يوجد رحلات مكتملة" : "No completed trips"));
+                  if(state.historyTrips?.isEmpty??true) {
+                    return Center(child: Text(context.isArabic ? "لا يوجد رحلات سابقة" : "No past trips"));
                   }
                   return ListView.builder(
                     controller: _scrollController,
-                    itemCount: (state.completedTrips?.length ?? 0) + (isFetching ? 1 : 0),
+                    itemCount: (state.historyTrips?.length ?? 0) + (isFetching ? 1 : 0),
                     itemBuilder: (context, index) {
-                      if (index == state.completedTrips?.length) {
+                      if (index == state.historyTrips?.length) {
                         return const Center(child: CustomCircularProgressIndicator());
                       }
-                      final trip = state.completedTrips?[index];
+                      final trip = state.historyTrips?[index];
                       if (trip == null) return const SizedBox.shrink();
                       // return Padding(
                       //   padding: const EdgeInsets.all(16),
@@ -249,7 +254,7 @@ class PriceColumn extends StatelessWidget {
 
 
 class TripCard extends StatelessWidget {
-  final CompletedTripsEntity trip;
+  final HistoryTripsEntity trip;
 
   const TripCard({super.key, required this.trip});
 
@@ -259,81 +264,90 @@ class TripCard extends StatelessWidget {
     final dateFormat = DateFormat('hh:mm a', isArabic ? 'ar' : 'en');
     final numberFormat = NumberFormat('#,##0', isArabic ? 'ar' : 'en');
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-      ),
-      child: Column(
-        children: [
-          // Flutter Map with two markers
-          if(trip.startLocationLat != null && trip.startLocationLng != null && trip.targetLocationLat != null && trip.targetLocationLng != null)
-            ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-              child: SizedBox(
-                height: 130,
-                child: FlutterMap(
-                  options: MapOptions(
-                    center: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
-                    zoom: 10.0,
+    return GestureDetector(
+      onTap: () {
+        context.push(Routes.RIDEDETAILSTRIPS,
+            extra: RideHistoryDetailsScreenParams(
+              rideCubit: serviceLocator<RideCubit>(),
+              historyTripEntity: trip,
+            ));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+        ),
+        child: Column(
+          children: [
+            // Flutter Map with two markers
+            if(trip.startLocationLat != null && trip.startLocationLng != null && trip.targetLocationLat != null && trip.targetLocationLng != null)
+              ClipRRect(
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                child: SizedBox(
+                  height: 130,
+                  child: FlutterMap(
+                    options: MapOptions(
+                      center: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
+                      zoom: 10.0,
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate: context.isDarkMode
+                            ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+                            : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+                        userAgentPackageName: 'com.example.app',
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
+                            width: 40,
+                            height: 40,
+                            child: const Icon(Icons.location_on, color: Colors.blue),
+                          ),
+                          Marker(
+                            point: LatLng(trip.targetLocationLat?? 0, trip.targetLocationLng?? 0),
+                            width: 40,
+                            height: 40,
+                            child: const Icon(Icons.location_on, color: AppColors.c19D176),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  children: [
-                    TileLayer(
-                      urlTemplate: context.isDarkMode
-                          ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                          : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
-                      userAgentPackageName: 'com.example.app',
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.location_on, color: Colors.blue),
-                        ),
-                        Marker(
-                          point: LatLng(trip.targetLocationLat?? 0, trip.targetLocationLng?? 0),
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.location_on, color: AppColors.c19D176),
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
               ),
-            ),
 
-          // Trip Details
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CarContainer(
-                  title: isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn,
-                  image: trip.subCategoryPicture,
-                ),
-                const SizedBox(width: 16),
-                PriceColumn(
-                  startAddressTitle: trip.startLocationAddressTitle,
-                  targetAddressTitle: trip.targetLocationAddressTitle,
-                  date: dateFormat.format(trip.createdAt!),
-                  price: '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
-                ),
-                const Spacer(),
-                PersonTripWidget(
-                  image: trip.driverProfileUrl,
-                  name: trip.driverFirstName?.split(' ').first,
-                  rate: trip.driverAverageRating?.toString(),
-                ),
-              ],
+            // Trip Details
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CarContainer(
+                    title: isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn,
+                    image: trip.subCategoryPicture,
+                  ),
+                  const SizedBox(width: 16),
+                  PriceColumn(
+                    startAddressTitle: trip.startLocationAddressTitle,
+                    targetAddressTitle: trip.targetLocationAddressTitle,
+                    date: dateFormat.format(trip.createdAt!),
+                    price: '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
+                  ),
+                  const Spacer(),
+                  PersonTripWidget(
+                    image: trip.driverProfileUrl,
+                    name: trip.driverFirstName?.split(' ').first,
+                    rate: trip.driverAverageRating?.toString(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

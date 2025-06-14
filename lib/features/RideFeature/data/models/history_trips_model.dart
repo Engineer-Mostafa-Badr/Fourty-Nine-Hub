@@ -1,55 +1,7 @@
-import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
 
-// class RunningTripsModel extends RunningTripsEntity {
-//   RunningTripsModel({
-//     required super.id,
-//     required super.to,
-//     required super.from,
-//     required super.categoryPicture,
-//     required super.categoryNameEn,
-//     required super.categoryNameAr,
-//     required super.carPicture,
-//     required super.address,
-//     required super.createdAt,
-//     required super.price,
-//     required super.status,
-//     required super.currencyEn,
-//     required super.currencyAr,
-//     required super.rating,
-//     required super.car,
-//     required super.gender,
-//     required super.clientFirstName,
-//     required super.clientLastName,
-//     required super.clientGender,
-//   });
-//
-//   factory RunningTripsModel.fromJson(Map<String, dynamic> json) {
-//     return RunningTripsModel(
-//       id: json['id'] ?? '',
-//       from: json['from'] ?? '',
-//       to: json['to'] ?? '',
-//       categoryPicture: json['categoryPicture'] ?? '',
-//       categoryNameEn: json['categoryNameEn'] ?? '',
-//       categoryNameAr: json['categoryNameAr'] ?? '',
-//       carPicture: json['carPicture'] ?? '', // Handle null as empty string
-//       address: json['address'] ?? '',
-//       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(), // Fallback to current time
-//       price: json['price'] ?? 0,
-//       status: json['status'] ?? '',
-//       currencyEn: json['currency']?['currencyEn'] ?? 'Unknown',
-//       currencyAr: json['currency']?['currencyAr'] ?? 'Unknown',
-//       rating: json['rating']?.toString(), // Convert double to string safely
-//       car: json['car'] ?? 'Unknown', // Provide fallback values
-//       gender: json['gender'] ?? 'Unknown', // Handle null gender
-//       clientFirstName: json['client']['firstName'] ?? 'Unknown',
-//       clientLastName: json['client']['lastName'] ?? 'Unknown',
-//       clientGender: json['client']['gender'] ?? 'male',
-//     );
-//   }
-// }
-
-class RunningTripsModel extends RunningTripsEntity {
-  RunningTripsModel({
+class HistoryTripsModel extends HistoryTripsEntity {
+  HistoryTripsModel({
     required super.tripId,
     required super.tripStatus,
     required super.isAutoAccept,
@@ -72,15 +24,17 @@ class RunningTripsModel extends RunningTripsEntity {
     required super.driverProfileUrl,
     required super.driverAverageRating,
     required super.driverRatingCount,
+    required super.recordUrl,
   });
 
-  factory RunningTripsModel.fromJson(Map<String, dynamic> json) {
-    return RunningTripsModel(
+  factory HistoryTripsModel.fromJson(Map<String, dynamic> json) {
+    return HistoryTripsModel(
       tripId: json['tripDetails']?['id'],
       tripStatus: json['tripDetails']?['status'],
       isAutoAccept: json['tripDetails']?['isAutoAccept'] ?? false,
       isPremium: json['tripDetails']?['isPremium'] ?? false,
       price: json['tripDetails']?['price']?.toDouble() ?? 0.0,
+      recordUrl: json['tripDetails']?['recordUrl'],
       createdAt: DateTime.tryParse(json['tripDetails']?['createdAt']) ?? DateTime.now(),
       startLocationAddressTitle: json ['tripDetails']? ['location']?['start']?['addressTitle'],
       startLocationLat: json ['tripDetails']? ['location']?['start']?['coordinates']?['coordinates']?[0],
