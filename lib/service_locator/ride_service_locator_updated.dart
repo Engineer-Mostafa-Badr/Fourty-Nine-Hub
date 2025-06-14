@@ -274,11 +274,8 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
         ));
     serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
-          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

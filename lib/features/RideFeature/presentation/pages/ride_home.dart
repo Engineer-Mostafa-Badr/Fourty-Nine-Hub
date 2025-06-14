@@ -1246,6 +1246,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           isTruk: context.read<RideCubit>().isTruk,
                           subCategoryId:
                               context.read<RideCubit>().subCategoryId,
+                            type: context.read<RideCubit>().state.selectedType??'ride'
                         ),
                       context.read<RideCubit>().selectedCategoryIsSocket
                           ? _customLocationField(
