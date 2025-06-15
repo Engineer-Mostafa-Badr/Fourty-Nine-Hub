@@ -502,74 +502,74 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
         ),
-        const Sizer(),
-        Label(
-          text: LocaleKeys.orContinueWith.localize,
-          style: Styles.mediumText(color: Colors.grey),
-        ),
-        const Sizer(),
-        Row(
-          children: [
-            Expanded(
-              child: AppButton(
-                label: LocaleKeys.google.localize,
-                backColor: AppColors.LIGHT_GRAY_COLOR,
-                textColor: Colors.black,
-                color: AppColors.PRIMARY_COLOR,
-                icon: FontAwesomeIcons.google,
-                onPressed: () async {
-                  // await  loginCubit.handleGoogleSignIn();
-                  print('@@@@@@@@@@@@@@@@@@@@@@@@@');
-                  print(loginCubit.user!.uid);
-                  try {
-                    final user = await loginCubit.loginWithGoogle();
-                    if (user != null && mounted) {
-                      context.push(Routes.HOME);
-                    }
-                  } on FirebaseAuthException catch (error) {
-                    print(error.message);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          error.message ?? "Something went wrong",
-                        )));
-                  } catch (error) {
-                    print(error);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          error.toString(),
-                        )));
-                  }
-                },
-              ),
-            ),
-            const Sizer(),
-            Expanded(
-              child: AppButton(
-                label: LocaleKeys.facebook.localize,
-                backColor: AppColors.LIGHT_GRAY_COLOR,
-                textColor: Colors.black,
-                icon: FontAwesomeIcons.facebook,
-                color: AppColors.PRIMARY_COLOR,
-                onPressed: () async {
-                  await loginCubit.signInWithFacebook();
-                },
-              ),
-            ),
-            if (Platform.isIOS) const Sizer(),
-            if (Platform.isIOS)
-              Expanded(
-                child: AppButton(
-                  label: 'Apple',
-                  backColor: AppColors.LIGHT_GRAY_COLOR,
-                  textColor: Colors.black,
-                  icon: FontAwesomeIcons.apple,
-                  onPressed: () {
-                    loginCubit.signInWithApple();
-                  },
-                ),
-              ),
-          ],
-        ),
+        // const Sizer(),
+        // Label(
+        //   text: LocaleKeys.orContinueWith.localize,
+        //   style: Styles.mediumText(color: Colors.grey),
+        // ),
+        // const Sizer(),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.google.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         icon: FontAwesomeIcons.google,
+        //         onPressed: () async {
+        //           // await  loginCubit.handleGoogleSignIn();
+        //           print('@@@@@@@@@@@@@@@@@@@@@@@@@');
+        //           print(loginCubit.user!.uid);
+        //           try {
+        //             final user = await loginCubit.loginWithGoogle();
+        //             if (user != null && mounted) {
+        //               context.push(Routes.HOME);
+        //             }
+        //           } on FirebaseAuthException catch (error) {
+        //             print(error.message);
+        //             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //                 content: Text(
+        //                   error.message ?? "Something went wrong",
+        //                 )));
+        //           } catch (error) {
+        //             print(error);
+        //             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //                 content: Text(
+        //                   error.toString(),
+        //                 )));
+        //           }
+        //         },
+        //       ),
+        //     ),
+        //     const Sizer(),
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.facebook.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         icon: FontAwesomeIcons.facebook,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         onPressed: () async {
+        //           await loginCubit.signInWithFacebook();
+        //         },
+        //       ),
+        //     ),
+        //     if (Platform.isIOS) const Sizer(),
+        //     if (Platform.isIOS)
+        //       Expanded(
+        //         child: AppButton(
+        //           label: 'Apple',
+        //           backColor: AppColors.LIGHT_GRAY_COLOR,
+        //           textColor: Colors.black,
+        //           icon: FontAwesomeIcons.apple,
+        //           onPressed: () {
+        //             loginCubit.signInWithApple();
+        //           },
+        //         ),
+        //       ),
+        //   ],
+        // ),
       ],
     );
   }

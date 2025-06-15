@@ -103,8 +103,10 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                             ),
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * .4,
-                              height: 50,
+                              height: 60.h,
                               child: DefaultButton(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
                                 width: double.infinity,
                                 label: 'عربي',
                                 labelStyle: TextStyle(
@@ -139,13 +141,15 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: 50,
+                              height: 60.h,
                               width: MediaQuery.sizeOf(context).width * .4,
                               child: DefaultButton(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
                                 width: double.infinity,
                                 label: 'English',
                                 labelStyle: TextStyle(
-                                    fontSize: 35.sp,
+                                    fontSize: 32.sp,
                                     color: AppColors.AUTH_CONTAINER_COLOR),
                                 onPressed: () {
                                   changeLang(
@@ -185,7 +189,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                           ? Label(
                               text: LocaleKeys.lightMode.localize,
                               style: Styles.mediumText(
-                                fontSize: 65.sp,
+                                // fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.white,
                               ),
@@ -214,12 +218,15 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                 const Spacer(),
                 if (isChooseLang)
                   SizedBox(
-                    height: 50,
+                    height: 60.h,
                     width: MediaQuery.sizeOf(context).width * .9,
                     child: DefaultButton(
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 8),
                       label: LocaleKeys.next.localize,
                       labelStyle: TextStyle(
-                          fontSize: 35.sp, color: AppColors.AUTH_CONTAINER_COLOR),
+                          fontSize: 35.sp,
+                          color: AppColors.AUTH_CONTAINER_COLOR),
                       width: double.infinity,
                       onPressed: () {
                         context.go(Routes.onBoardingScreen);
