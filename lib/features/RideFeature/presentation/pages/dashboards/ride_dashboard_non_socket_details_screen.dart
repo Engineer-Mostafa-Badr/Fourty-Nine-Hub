@@ -57,7 +57,7 @@ class _RideDashboardNonSocketDetailsScreenState
         // clientId: 'widget.tripEntity.clientDetails?.id??''',
         driverId: 'widget.tripEntity.driverDetails?.id??''',
         tripId: widget.tripEntity.tripDetails?.id??'',
-        tripType: 'notSpecial',
+        tripType: 'nonTracking',
         userType: 'driver'
     ));
     super.initState();
@@ -430,7 +430,7 @@ class _RideDashboardNonSocketDetailsScreenState
                             onPressed: () {
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
-                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'');
+                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'', userType: 'driver',tripType: 'nonTracking');
                                 }
                               }
                             },

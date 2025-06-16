@@ -680,10 +680,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               );
                                                             },
                                                           )
-                                                        : state.requestedTrip!.status == TripState.support.name ? BuildSafetySheet(params: SupportRideParams(tripId: state.requestedTrip?.id??'', tripType: 'tracking', userType: 'client', driverId: state.requestedTrip?.driverId??'',clientId: UserCubit.to.state.data?.id??''),onClose: (){
+                                                        : state.requestedTrip!.status == TripState.support.name ? BuildSafetySheet(params: SupportRideParams(tripId: state.requestedTrip?.id??'', tripType: 'tracing', userType: 'client', driverId: state.requestedTrip?.driverId??'',clientId: UserCubit.to.state.data?.id??''),onClose: (){
                                   context.read<RideCubit>().closeSafetySheet();
                                 }, supportRideScreen: () {
-                                  context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.requestedTrip?.id??'', tripType: 'tracking', userType: 'client', driverId: state.requestedTrip?.driverId??'',clientId: UserCubit.to.state.data?.id??''));
+                                  context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.requestedTrip?.id??'', tripType: 'tracing', userType: 'client', driverId: state.requestedTrip?.driverId??'',clientId: UserCubit.to.state.data?.id??''));
                                 },
                                   emergencyContactsScreen: (){
                                     context.push(Routes.emergencyContactsScreen);

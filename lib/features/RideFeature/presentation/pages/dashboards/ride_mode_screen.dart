@@ -249,7 +249,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                         Expanded(
                                                           child: ListView.separated(
                                                               controller: _availableTripsScrollController,
-                                                              itemBuilder: (context, index) => AvailableRideTripItem(tripEntity: cubit.availableRideTrips[index]),
+                                                              itemBuilder: (context, index) => AvailableRideTripItem(tripEntity: cubit.availableRideTrips[index], onRefuseTrip: (String id) {
+                                                                cubit.refuseTripOffer(id);
+                                                              },),
                                                               itemCount: cubit.availableRideTrips.length,
                                                               separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15)),
                                                         ),
@@ -389,10 +391,15 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 },
                               ),
                             if (state.tripStatus == TripState.support.name)
-                              BuildSafetySheet(params: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracking', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''),onClose: (){
+                              BuildSafetySheet(params: SupportRideParams(
+                                  tripId: state.activeTrip?.tripId ?? '',
+                                  tripType: 'tracing',
+                                  userType: 'driver',
+                                  driverId: state.activeTrip?.driverId ?? '',
+                                  clientId: state.activeTrip?.clientId ?? ''),onClose: (){
                                 cubit.closeSafety();
                               }, supportRideScreen: () {
-                                context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracking', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''));
+                                context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracing', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''));
                               },
                                 emergencyContactsScreen: (){
                                   context.push(Routes.emergencyContactsScreen);

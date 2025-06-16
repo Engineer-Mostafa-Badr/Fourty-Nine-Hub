@@ -16,7 +16,9 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/upload_record.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/refuse_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
@@ -1122,11 +1124,18 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
         emit(state.copyWith(failure: failure, status: DashboardsStates.error));
       },
-      (data) {
+      (data) async {
         List<String> tripIds = data.map((e) => e.id).toList();
         if (tripIds.isNotEmpty) emitWatchingTrips(tripIds);
         // availableRideTrips.addAll(state.availableRideTrips ?? []);
         availableRideTrips.addAll(data);
+        List<RefuseModel> refuseModels = await Storage().getValidModels();
+        if (refuseModels.isNotEmpty) {
+          availableRideTrips = availableRideTrips
+              .where((element) => !refuseModels
+                  .any((e) => e.id == element.id))
+              .toList();
+        }
         if (data.length < pageSize) {
           hasMoreData = false;
         } else {
@@ -1138,6 +1147,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
             availableRideTrips: availableRideTrips));
       },
     );
+  }
+
+  refuseTripOffer(String tripId){
+    RefuseModel refuseModel = RefuseModel(id: tripId, createdAt: DateTime.now());
+    Storage().addRefuseModel(refuseModel);
+    availableRideTrips.removeWhere((element) => element.id == tripId);
+    emit(state.copyWith(
+        status: DashboardsStates.success,
+        availableRideTrips: availableRideTrips));
   }
 
   bool isLoadingPastRideTrips = false;
@@ -2188,6 +2206,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     required BuildContext context,
     required String driverId,
     required String tripId,
+    required String userType,
+    required String tripType,
     required String clientId,
   }) async {
     FocusScope.of(context).requestFocus(FocusNode());
@@ -2207,10 +2227,11 @@ class DashboardsCubit extends Cubit<DashboardsState> {
             driverId: driverId,
             description: supportDescriptionController.text,
             phone: supportPhoneController.text,
-            type: 'driver',
+            type: userType,
             clientId: clientId,
             latitude: currentPosition?.latitude,
             tripId: tripId,
+            source: tripType,
             longitude: currentPosition?.longitude));
 
     result.fold(
