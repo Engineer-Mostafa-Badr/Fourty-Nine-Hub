@@ -225,9 +225,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
-                      border: state.isClientNotShownReason == true
-                          ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2)
-                          : null,
+                      border: state.isClientNotShownReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -734,7 +732,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                             ?.id ??
                                                                         '',
                                                                     tripType:
-                                                                        'tracking',
+                                                                        'tracing',
                                                                     userType:
                                                                         'client',
                                                                     driverId: state
@@ -762,7 +760,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                           tripId: state.requestedTrip?.id ??
                                                                               '',
                                                                           tripType:
-                                                                              'tracking',
+                                                                              'tracing',
                                                                           userType:
                                                                               'client',
                                                                           driverId: state.requestedTrip?.driverId ??

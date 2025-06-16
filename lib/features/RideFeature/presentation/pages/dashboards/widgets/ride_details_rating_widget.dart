@@ -35,6 +35,7 @@ class RideDetailsRatingWidget extends StatefulWidget {
 
 class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
   double _rating = 4.0;
+  double finalRate = 4.0;
   TextEditingController rateController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
@@ -42,6 +43,7 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
   void initState() {
     setState(() {
       _rating = widget.rate;
+      finalRate = _rating;
     });
     super.initState();
   }
@@ -57,7 +59,7 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
             style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
         const Spacer(),
         if (widget.isRate) ...[
-           Text(getRatingText(widget.rate),
+           Text(getRatingText(finalRate),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
           const SizedBox(width: 5),
           GestureDetector(
@@ -191,9 +193,9 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
                     color: Colors.amber,
                   ),
                   onRatingUpdate: (rating) {
-                    setState(() {
+                    // setState(() {
                       _rating = rating;
-                    });
+                    // });
                   },
                 ),
                 const SizedBox(height: 12),
