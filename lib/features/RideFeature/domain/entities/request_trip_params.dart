@@ -67,6 +67,10 @@ class RequestTripUseCaseParams {
     "isPremium" : isPremium,
     "polyline" : polyline,
     "riderPhone": phoneNumber,
+    "clientCurrentLocation": {
+      "latitude": startLocation[0],
+      "longitude": startLocation[1],
+    }
   };
 
 }
