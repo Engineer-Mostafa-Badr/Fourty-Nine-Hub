@@ -25,7 +25,8 @@ import 'edit_price_widget.dart';
 
 class AvailableRideTripItem extends StatelessWidget {
   final AvailableRideTripEntity tripEntity;
-  const AvailableRideTripItem({super.key, required this.tripEntity});
+  final Function(String id) onRefuseTrip;
+  const AvailableRideTripItem({super.key, required this.tripEntity,required this.onRefuseTrip});
 
   @override
   Widget build(BuildContext context) {
@@ -239,20 +240,37 @@ class AvailableRideTripItem extends StatelessWidget {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              Text('You have got a free trip today from 49',
+                                              Text(context.isArabic?'هل أنت متأكد من أنك تريد رفض الرحلة؟':'Are you sure you want to refuse the trip?',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 16,
                                                     color: context.isDarkMode ? Colors.white : Colors.black,
                                                   )),
-                                              AppButton(
-                                                  width: context.screenWidth / 1.9,
-                                                  label: 'Go to Ride',
-                                                  backColor: AppColors.SECONDARY_COLOR_DARK2,
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  }),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: AppButton(
+                                                        width: context.screenWidth / 1.9,
+                                                        label: context.isArabic?'رجوع':'Back',
+                                                        backColor: AppColors.PRIMARY_COLOR,
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        }),
+                                                  ),
+                                                  SizedBox(width: 15,),
+                                                  Expanded(
+                                                    child: AppButton(
+                                                        width: context.screenWidth / 1.9,
+                                                        label: context.isArabic?'نعم':'Yes',
+                                                        backColor: AppColors.SECONDARY_COLOR_DARK2,
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          onRefuseTrip(tripEntity.id);
+                                                        }),
+                                                  ),
+                                                ],
+                                              ),
                                               const SizedBox(height: 16),
                                             ],
                                           ));
