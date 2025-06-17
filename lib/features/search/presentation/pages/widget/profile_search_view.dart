@@ -48,7 +48,7 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
         !_cubit.isLoadingUsersSearchMore &&
         _cubit.hasMoreUsersSearchData) {
       final prefs = await SharedPreferences.getInstance();
-      final filter = prefs.getString('filter') ?? 'totalUsers';
+      final filter = prefs.getString('filter') ?? 'users';
       final params = SearchParams(
         search: _cubit.searchController.text.trim(),
         filter: filter,
