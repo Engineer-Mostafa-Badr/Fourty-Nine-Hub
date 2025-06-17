@@ -10,6 +10,8 @@ class TripDetailsModel extends TripDetailsEntity {
     required super.isPremium,
     required super.recordUrl,
     required super.passengers,
+    super.clientRateDriver,
+    super.driverRateClient,
     required LocationModel super.startLocation,
     required LocationModel super.targetLocation, required super.pickupTime, required super.note, required super.createdAt,
   });
@@ -23,6 +25,8 @@ class TripDetailsModel extends TripDetailsEntity {
       recordUrl: json['recordUrl']??'',
       isPremium: json['isPremium']??false,
       passengers: json['passengers']??0,
+      driverRateClient: json['yourRateClient']!=null?json['yourRateClient']['rate']:null,
+      clientRateDriver: json['clientRateYou']!=null?json['clientRateYou']['rate']:null,
       note: json['note']??'',
       startLocation: LocationModel.fromJson(json['startLocation']),
       targetLocation: LocationModel.fromJson(json['targetLocation']),
