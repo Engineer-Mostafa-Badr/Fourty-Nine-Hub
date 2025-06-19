@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/expected_price_mo
 import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from_address_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_user_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/history_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/loading_info_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_model.dart';
@@ -38,6 +39,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_pric
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
@@ -61,6 +63,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/wa
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
@@ -169,6 +172,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(
       GetAllRunningTripsUseCaseParams params);
 
+  Future<Either<Failure, List<HistoryTripsEntity>> > getAllHistoryTrips(GetAllHistoryTripsUseCaseParams params);
+
   Future<Either<Failure, bool>> updateTripAutoAcceptByClient(
       UpdateTripAutoAcceptByClientUseCaseParams params);
 
@@ -212,6 +217,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params);
 
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
+
+  Future<Either<Failure, String>> getAvailableMapCountry();
 
 
   Future<Either<Failure, List<HistoryTripForUserEntity>>>
@@ -277,6 +284,7 @@ abstract class RideRemoteDataSource {
 
 
   Future<Either<Failure, ClientAllRatingEntity>> getClientAllRating(DriverAllRatingParams params);
+
 
 
 }
@@ -674,12 +682,33 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       return response.fold((failure) => Left(failure), (data) {
         List<RunningTripsModel> runningTrips = [];
         for (Map<String, dynamic> trip in data['data']['trips']) {
-          log('Running Trip gender: ${trip['gender']}');
+          log('Running Trip trip id: ${trip['tripDetails']?['id']}');
           runningTrips.add(RunningTripsModel.fromJson(trip));
           log('Running Trip length: ${runningTrips.length}');
-          log('Running Trip 1 gender: ${runningTrips[0].gender}');
         }
         return Right(runningTrips);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<HistoryTripsEntity>>> getAllHistoryTrips(
+      GetAllHistoryTripsUseCaseParams params) async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getAllHistoryTrips(limit: params.limit, page: params.page),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        List<HistoryTripsModel> historyTrips = [];
+        for (Map<String, dynamic> trip in data['data']['trips']) {
+          log('History Trip trip id: ${trip['tripDetails']?['id']}');
+          historyTrips.add(HistoryTripsModel.fromJson(trip));
+          log('History Trip length: ${historyTrips.length}');
+        }
+        return Right(historyTrips);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -697,10 +726,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       return response.fold((failure) => Left(failure), (data) {
         List<CompletedTripsModel> completedTrips = [];
         for (var trip in data['data']['trips']) {
-          log('Completed Trip gender: ${trip['gender']}');
+          log('Completed Trip trip id: ${trip['tripDetails']?['id']}');
           completedTrips.add(CompletedTripsModel.fromJson(trip));
           log('Completed Trip length: ${completedTrips.length}');
-          log('Completed Trip 1 gender: ${completedTrips[0].gender}');
         }
         return Right(completedTrips);
       });
@@ -1648,6 +1676,19 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
           (data) {
         final rateData = ClientAllRatingModel.fromJson(data);
         return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> getAvailableMapCountry() async {
+    final response = await _apiConsumer.get(
+      EndPoints.getAvailableMapCountry,
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['data']?['availableMap']?['code']?.toString().toLowerCase()??'eg');
       },
     );
   }

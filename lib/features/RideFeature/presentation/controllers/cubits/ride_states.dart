@@ -3,6 +3,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
@@ -67,6 +70,7 @@ class RideState {
   final List<CompletedTripsEntity>? completedTrips;
   List<RideOfferEntity> rideOffers;
   final List<RunningTripsEntity>? runningTrips;
+  final List<HistoryTripsEntity>? historyTrips;
   final ActivityTripEntity ? activityTrips;
   final List<SubCategoryEntityUpdated>? rideSubCategories;
   final List<SubCategoryEntityUpdated>? shippingSubCategories;
@@ -102,6 +106,9 @@ class RideState {
   final CostPerKmEntity? costPerKm;
   final List<TripEntity>? offers;
   final String? selectedType;
+  final bool? isChangedMindReason;
+  final bool? isOtherReason;
+  final bool? isClientNotShownReason;
 
   RideState({
     this.status = RideStates.initState,
@@ -165,6 +172,10 @@ class RideState {
     this.offers,
     this.selectedType,
     required this.rideOffers,
+    this.isChangedMindReason=false,
+    this.isOtherReason=false,
+    this.isClientNotShownReason=false,
+    this.historyTrips,
   });
 
   RideState copyWith({
@@ -212,6 +223,7 @@ class RideState {
     String? selectedBrand,
     bool? isSmoking,
     String? registerType,
+    List<HistoryTripsEntity>? historyTrips,
     bool? isShipping,
     bool? hasAirCondition,
     RideColorEntity? selectedColors,
@@ -230,6 +242,9 @@ class RideState {
     List<TripEntity>? offers,
     String? selectedType,
     List<RideOfferEntity>? rideOffers,
+    bool? isChangedMindReason,
+    bool? isOtherReason,
+    bool? isClientNotShownReason
   }) {
     return RideState(
       status: status ?? this.status,
@@ -293,6 +308,10 @@ class RideState {
       offers: offers ?? this.offers,
       rideOffers: rideOffers ?? this.rideOffers,
       selectedType: selectedType ?? this.selectedType,
+      isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
+      isOtherReason: isOtherReason ?? this.isOtherReason,
+      isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,
+      historyTrips: historyTrips ?? this.historyTrips
     );
   }
 }

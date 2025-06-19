@@ -488,6 +488,11 @@ class EndPoints {
       "$developmentBaseUrl/favorite-sub-category";
   static String createLoadingTrip =
       "$developmentBaseUrl/loading/client/trips";
+  static String captainSharePrice =
+      "$developmentBaseUrl/captain-share/price";
+
+  static String captainShareCreateRoute =
+      "$developmentBaseUrl/captain-share";
 
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =
@@ -625,6 +630,8 @@ class EndPoints {
   static String rejectComeWithYouRequest(String id) {
     return '/ride/come-with-you/$id/reject';
   }
+
+  static const String getAvailableMapCountry = '/map-settings/available';
 
   static const sendRideRequest = '/ride/trips/new';
   static const checkDriverType = '/ride/riders/checkDriver/type';
@@ -1414,7 +1421,7 @@ class EndPoints {
     return '/ride/trip/rating/$id/client';
   }
 
-  static String createDriverRating = '/ride/trip/ratings/client';
+  static String createDriverRating = '/ride/trip/ratings/driver';
   static String emergencySupport = '/users/emergencySupport';
   static String supportDetails = '/emergency-support/trip';
   static String getSettingsDashboard = '/ride/driver/info/settings';
@@ -1448,11 +1455,15 @@ class EndPoints {
   }
 
   static String getAllRunningTrips({required int limit, required int page}) {
-    return '/ride/trips/all?limit=$limit&page=$page&status=started';
+    return '/ride/trips/running?limit=$limit&page=$page';
+  }
+
+  static String getAllHistoryTrips({required int limit, required int page}) {
+    return '/ride/trips/actives?limit=$limit&page=$page';
   }
 
   static String getAllCompletedTrips({required int limit, required int page}) {
-    return '/ride/trips/all?limit=$limit&page=$page&status=completed';
+    return '/ride/trips/expired?limit=$limit&page=$page';
   }
 
   static String getAllActivityTrips({required int limit, required int page}) {

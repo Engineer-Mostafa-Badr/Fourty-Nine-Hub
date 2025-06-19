@@ -30,8 +30,10 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.driverRating,
     required super.driverRatingCount,
     required super.driverUserId,
-    required super.vehicleBrand,
-    required super.vehicleModel,
+    required super.vehicleBrandAr,
+    required super.vehicleBrandEn,
+    required super.vehicleModelAr,
+    required super.vehicleModelEn,
     required super.vehicleColor,
     required super.vehiclePicture,
     required super.vehiclePlateNumber,
@@ -86,7 +88,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
           .toList() ??
           [0.0, 0.0],
       distance: (json['distance'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
-      duration: json['duration'] ?? 0, // Default to 0
+      duration: (json['duration'] as num?)?.toInt() ?? 0, // Default to 0
       price: (json['price'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
       otp: json['OTP'],
       lowestFare: (json['lowestFare'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
@@ -101,13 +103,15 @@ class RideRequestTripModel extends RideRequestTripEntity {
       driverId: json['driverDetails']?['driverId'],
       driverUserId: json['driverDetails']?['driverUserId'],
       driverFirstName: json['driverDetails']?['driverFirstName'],
-      driverIsArrivingIn: (json['driverDetails']?['driverIsArrivingIn'] as num?)?.toDouble() ?? 0,
+      driverIsArrivingIn: (json['driverDetails']?['driverIsArrivingIn'] as num?)?.toDouble() ?? 0.0,
       driverPhoneNumber: json['driverDetails']?['driverPhoneNumber'] ?? '',
       driverProfilePicture: json['driverDetails']?['driverProfilePictureUrl'],
       driverRating: (json['driverDetails']?['rating']?['averageRating'] as num?)?.toDouble() ?? 0.0,
       driverRatingCount: (json['driverDetails']?['rating']?['totalRating'] as num?)?.toInt() ?? 0,
-      vehicleBrand: json['driverDetails']?['vehicleDetails']?['brand'],
-      vehicleModel: json['driverDetails']?['vehicleDetails']?['model'],
+      vehicleBrandAr: json['driverDetails']?['vehicleDetails']?['brandAr'],
+      vehicleBrandEn: json['driverDetails']?['vehicleDetails']?['brandEn'],
+      vehicleModelAr: json['driverDetails']?['vehicleDetails']?['modelAr'],
+      vehicleModelEn: json['driverDetails']?['vehicleDetails']?['modelEn'],
       vehicleColor: json['driverDetails']?['vehicleDetails']?['color'],
       vehiclePlateNumber: json['driverDetails']?['vehicleDetails']?['plateInfo'],
       vehiclePicture: (json['driverDetails']?['vehicleDetails']?['carPictureUrl'] as List<dynamic>?)?[0],

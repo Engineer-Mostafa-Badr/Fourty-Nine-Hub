@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_pe
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
@@ -48,6 +49,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
@@ -521,6 +526,16 @@ class RideRepositoryImplementation extends RideRepository {
     final data = await rideRemoteDataSource.cancelShippingTrip(params);
     return data;
   }
+  @override
+  Future<Either<Failure, List<HistoryTripsEntity>>> getAllHistoryTrips(GetAllHistoryTripsUseCaseParams params) async {
+    return await rideRemoteDataSource.getAllHistoryTrips(params);
+  }
+
+  @override
+  Future<Either<Failure, String>> getAvailableMapCountry() async {
+    return await rideRemoteDataSource.getAvailableMapCountry();
+  }
+
 
   @override
   Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params) {

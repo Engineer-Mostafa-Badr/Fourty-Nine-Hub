@@ -139,7 +139,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                     onPressed: () {
                       if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                         if(form.currentState!.validate()){
-                          cubit.requestEmergencySupport(context: context, clientId: widget.params.clientId, driverId: widget.params.driverId, tripId: widget.params.tripId);
+                          cubit.requestEmergencySupport(context: context, clientId: widget.params.clientId, driverId: widget.params.driverId, tripId: widget.params.tripId,userType: widget.params.userType, tripType: widget.params.tripType);
                         }
                       }
                     },

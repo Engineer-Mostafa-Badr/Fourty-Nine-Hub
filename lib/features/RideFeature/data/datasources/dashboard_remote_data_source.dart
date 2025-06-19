@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/tr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
@@ -86,7 +87,9 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params);
   Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
+  Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params);
+  Future<Either<Failure, bool>> updateDriverRateClient(DriverRateClientParams params);
   Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
   Future<Either<Failure, SupportDetailsEntity>> getSupportDetails(GetSupportDetailsParams params);
   Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params);
@@ -518,10 +521,37 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     }
   }
 
+
+  @override
+  Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params) async {
+    try {
+      final response = await _apiConsumer.put(EndPoints.completeDriverTrip(params.tripId),data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   @override
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params) async {
     try {
       final response = await _apiConsumer.post(EndPoints.createDriverRating, data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateDriverRateClient(DriverRateClientParams params) async {
+    try {
+      final response = await _apiConsumer.put(EndPoints.createDriverRating, data: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);

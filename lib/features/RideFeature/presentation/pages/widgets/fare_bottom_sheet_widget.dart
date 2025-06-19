@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -32,10 +33,11 @@ class FareBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: rideCubit,
+    return BlocProvider(
+      create: (context)=>serviceLocator<RideCubit>(),
       child: BlocBuilder<RideCubit, RideState>(
         builder: (context, state) {
+          var cubit = context.read<RideCubit>();
           return Form(
             // Wrap in a Form widget
 
@@ -135,7 +137,7 @@ class FareBottomSheetWidget extends StatelessWidget {
                         state.rideExpectedPrice?.priceForIntercity =
                             double.parse(_controller.text);
                       }
-                      rideCubit.emitRefreshState();
+                      cubit.emitRefreshState();
                       Navigator.pop(context);
                     }
                   },

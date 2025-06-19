@@ -54,11 +54,10 @@ class _RideDashboardNonSocketDetailsScreenState
 
   initState(){
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
-        clientId: 'widget.tripEntity.clientDetails?.id??''',
-        // clientId: 'widget.tripEntity.clientDetails?.id??''',
-        driverId: 'widget.tripEntity.driverDetails?.id??''',
+        clientId: widget.tripEntity.clientDetails?.id??'',
+        driverId: widget.tripEntity.driverDetails?.id??'',
         tripId: widget.tripEntity.tripDetails?.id??'',
-        tripType: 'notSpecial',
+        tripType: 'nonTracking',
         userType: 'driver'
     ));
     currentTripRating = widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble();
@@ -440,7 +439,7 @@ class _RideDashboardNonSocketDetailsScreenState
                             onPressed: () {
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
-                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'');
+                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'', userType: 'driver',tripType: 'nonTracking');
                                 }
                               }
                             },

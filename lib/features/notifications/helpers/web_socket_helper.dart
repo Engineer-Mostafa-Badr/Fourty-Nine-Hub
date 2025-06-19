@@ -57,7 +57,7 @@ class WebSocketHelper {
         pr(data);
         Map<String, dynamic> json = jsonDecode(data);
         AudioPlayer player = AudioPlayer();
-        if (json['metadata']['newTrip'] ?? false) {
+        // if (json['metadata']['newTrip'] ?? false) {
           // log(json['metadata']['newTrip'].toString(),
           //     name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
           Future.delayed(
@@ -66,7 +66,7 @@ class WebSocketHelper {
               player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
             },
           );
-        }
+        // }
         notificationCallback(jsonDecode(data));
       });
 

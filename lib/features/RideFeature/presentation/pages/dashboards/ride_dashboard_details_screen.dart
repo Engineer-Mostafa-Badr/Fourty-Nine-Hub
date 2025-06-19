@@ -1,5 +1,7 @@
 import 'dart:io';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/driver_recode_widget.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:pdf/pdf.dart';
@@ -38,12 +40,9 @@ class RideDashboardDetailsScreen extends StatefulWidget {
 
 class _RideDashboardDetailsScreenState
     extends State<RideDashboardDetailsScreen> {
-
-  bool isYourRate = false;
+  // bool isYourRate = false;
   bool hasRequest = false;
-  double yourRate = 3.0;
-  bool isClientRate = true;
-  double clientRate = 4.0;
+  // bool isClientRate = true;
   var form = GlobalKey<FormState>();
   bool isLoading = false;
   String? pdfPath;
@@ -54,7 +53,7 @@ class _RideDashboardDetailsScreenState
       clientId: widget.tripEntity.clientDetails?.id??'',
       driverId: widget.tripEntity.driverDetails?.id??'',
       tripId: widget.tripEntity.tripDetails?.id??'',
-      tripType: 'tracking',
+      tripType: 'tracing',
       userType: 'driver'
     ));
     super.initState();
@@ -356,70 +355,42 @@ class _RideDashboardDetailsScreenState
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
-                  if(widget.tripEntity.tripDetails?.recordUrl.isNotEmpty??false)Column(
+                  if(widget.tripEntity.tripDetails?.recordUrl!=null&&(widget.tripEntity.tripDetails?.recordUrl.isNotEmpty??false))Column(
                     children: [
-                      // Progress bar
-                      Slider(
-                        min: 0,
-                        max: state.recordDuration?.inSeconds.toDouble()??0,
-                        value: state.recordPosition?.inSeconds.toDouble()??0,
-                        onChanged: (value) async {
-                          await cubit.audioPlayer.seek(Duration(seconds: value.toInt()));
-                        },
-                      ),
-
-                      // Time indicators
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(cubit.formatDuration(state.recordPosition!)),
-                            Text(cubit.formatDuration((state.recordDuration!) - (state.recordPosition!)),)
-                          ],
-                        ),
-                      ),
-
-                      // Control buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.play_arrow, size: 36),
-                            onPressed: state.playerState == PlayerState.playing ? null : ()=>cubit.play(widget.tripEntity.tripDetails?.recordUrl??''),
+                      const SizedBox(height: 15),
+                      DriverTripRecordWidget(
+                          mp3Path: '${widget.tripEntity.tripDetails?.recordUrl}', // Ensure this file is in assets
                           ),
-                          IconButton(
-                            icon: Icon(Icons.pause, size: 36),
-                            onPressed: state.playerState != PlayerState.playing ? null : ()=>cubit.pause(),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.stop, size: 36),
-                            onPressed: state.playerState == PlayerState.stopped ? null : ()=>cubit.stop(),
-                          ),
-                        ],
-                      ),
-
-                      // Display the URL (optional)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Playing: ${widget.tripEntity.tripDetails?.recordUrl??''}',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
+                      const SizedBox(height: 15),
                     ],
                   ),
-                  const SizedBox(height: 30),
                   RideDetailsRatingWidget(
-                      isRate: isYourRate,
-                      rate: yourRate,
-                      title: LocaleKeys.youRateClient.tr()),
+                      isRate: widget.tripEntity.tripDetails?.driverRateClient!=null,
+                      rate: (widget.tripEntity.tripDetails?.driverRateClient??0.0).toDouble(),
+                      title: LocaleKeys.youRateClient.tr(),
+                      onRating:(String comment , double rate) async {
+                        Navigator.of(context).pop();
+                        if(widget.tripEntity.tripDetails?.driverRateClient!=null){
+                          bool result = await cubit.updateRateTheClient(context: context,comment: comment,rate: rate,tripId: widget.tripEntity.tripDetails?.id??'');
+                          if(result == true){
+                            widget.tripEntity.tripDetails?.driverRateClient=rate;
+                            // widget.tripEntity.tripDetails?.driverRateClient=(widget.tripEntity.tripDetails?.driverRateClient??0)+1;
+                            setState(() {});
+                          }
+                        }else{
+                          bool result = await cubit.rateTheClient(context: context,comment: comment,rate: rate,tripId: widget.tripEntity.tripDetails?.id??'');
+                         if(result == true){
+                           widget.tripEntity.tripDetails?.driverRateClient=rate;
+                           setState(() {});
+                         }
+                        }
+                        print("onRating $comment $rate");
+
+                      }
+                  ),
                   RideDetailsRatingWidget(
-                      isRate: isClientRate,
-                      rate: clientRate,
+                      isRate: widget.tripEntity.tripDetails?.clientRateDriver!=null,
+                      rate: (widget.tripEntity.tripDetails?.clientRateDriver??0.0).toDouble(),
                       title: LocaleKeys.clientRateYou.tr()),
                   if(!(state.supportStatus == RequestEmergencyStatus.approved.status))Form(
                     key: form,
@@ -456,7 +427,7 @@ class _RideDashboardDetailsScreenState
                             onPressed: () {
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
-                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'');
+                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'', userType: 'driver', tripType: 'tracing');
                                 }
                               }
                             },

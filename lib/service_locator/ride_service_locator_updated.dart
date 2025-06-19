@@ -1,16 +1,20 @@
 import 'package:fourtyninehub/features/RideFeature/data/repositories/ride_repository_imp.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/listen_to_offer_update_client_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_accepted_shipping_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_offer_shipping_trips_use_case.dart';
@@ -59,6 +63,7 @@ import '../features/RideFeature/domain/usecases/client_trips/listen_to_offer_upd
 import '../features/RideFeature/domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/get_available_map_country_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_client_accepted_untracked_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_client_offer_untracked_trips_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_client_offers_usecase.dart';
@@ -122,6 +127,8 @@ class RideServiceLocatorUpdated {
         GetAllRunningTripsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetAllActivityTripsUseCase>(() =>
         GetAllActivityTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetAllHistoryTripsUseCase>(() =>
+        GetAllHistoryTripsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<CheckRealAmountEnoughUseCase>(() =>
         CheckRealAmountEnoughUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RequestTripUseCase>(() => RequestTripUseCase(serviceLocator()));
@@ -214,10 +221,17 @@ class RideServiceLocatorUpdated {
         GetDriverAllRatingUseCase( serviceLocator()));
     serviceLocator.registerLazySingleton<GetClientAllRatingUseCase>(() =>
         GetClientAllRatingUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<CancelTripByClientUseCase>(() =>
+        CancelTripByClientUseCase ( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetAvailableMapCountryUseCase>(() =>
+        GetAvailableMapCountryUseCase( serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

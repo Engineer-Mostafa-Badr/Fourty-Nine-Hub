@@ -1,4 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
@@ -8,8 +11,10 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_t
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_history_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/emergency_contacts_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_client_details_screen.dart';
@@ -121,6 +126,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/married/presentation/pages/married_view.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/new_route_screen.dart';
@@ -300,6 +306,7 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_sc
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
+import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
@@ -588,6 +595,27 @@ class AppPages {
                 ),
               ),
               GoRoute(
+                path: Paths.RIDEDETAILSTRIPS,
+                name: Routes.RIDEDETAILSTRIPS,
+                builder: (context, state) => RideHistoryDetailsScreen(
+                  params: state.extra as RideHistoryDetailsScreenParams,
+                ),
+              ),
+              GoRoute(
+                path: Paths.TripReceiptScreen,
+                name: Routes.TripReceiptScreen,
+                builder: (context, state) => TripReceiptScreen(
+                  params: state.extra as TripReceiptScreenParams,
+                ),
+              ),
+              GoRoute(
+                path: Paths.RIDEHISTORYTRIPS,
+                name: Routes.RIDEHISTORYTRIPS,
+                builder: (context, state) => HistoryTripsScreen(
+                  params: state.extra as HistoryTripsScreenParams,
+                ),
+              ),
+              GoRoute(
                 path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
                 name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                 builder: (context, state) => RideOpenStreetMapSearchAndPick(
@@ -807,10 +835,9 @@ class AppPages {
                                   create: (_) => serviceLocator(),
                                   child: CreatePostCompany(
                                     params:
-                                        state.extra as CreatePostCompanyParams,
+                                    state.extra as CreatePostCompanyParams,
                                   )),
                         ),
-
                         GoRoute(
                           path: Paths.CREATECOMPANYPOSTREALAD,
                           name: Routes.CREATECOMPANYPOSTREALAD,
@@ -907,20 +934,7 @@ class AppPages {
                     email: state.extra as String,
                   ),
                 ),
-                // builder: (context, state) =>
-                //     BlocProvider<VerifyForgotPasswordOtpCubit>(
-                //   create: (_) => serviceLocator(),
-                //   child: ForgetPasswordOtpVerificationView(
-                //     email: state.extra as String,
-                //   ),
-                // ),
               ),
-              // builder: (context, state) => BlocProvider<VerifyOtpCubit>(
-              //   create: (context) => serviceLocator(),
-              //   child: RegisterVerifyPhoneOTP(
-              //     phoneNumber: state.extra as String,
-              //   ),
-              // ),
               GoRoute(
                 path: Paths.CREATENEWFORGOTPASSWORD,
                 name: Routes.CREATENEWFORGOTPASSWORD,
@@ -3600,7 +3614,6 @@ class AppPages {
                       params: state.extra as SupportRideParams,
                     )),
               ),
-
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
                 name: Routes.supportClientDetailsScreen,
@@ -3718,7 +3731,7 @@ class AppPages {
                               serviceLocator()),
                     ),
                     BlocProvider(
-                      create: (context) => serviceLocator<RideCubit>(),
+                      create: (context) => serviceLocator<CaptainShareCubit>(),
                     ),
                   ], child: const NewRouteScreen());
                 },

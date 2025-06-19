@@ -20,6 +20,7 @@ class ImageFromInternet extends StatelessWidget {
     this.defaultLogo = false,
     this.isSvg = false,
     this.fit,
+    this.border,
     this.isMale = true,
   });
   final String image;
@@ -31,6 +32,7 @@ class ImageFromInternet extends StatelessWidget {
   final bool? isSvg;
   final bool? defaultLogo;
   final BoxFit? fit;
+  final Border? border;
   final bool isMale;
   @override
   Widget build(BuildContext context) {
@@ -53,6 +55,7 @@ class ImageFromInternet extends StatelessWidget {
                   image: imageProvider,
                   fit: fit ?? BoxFit.fill,
                 ),
+                border: border,
               ),
             ),
       errorWidget: (context, url, error) => Container(
@@ -91,6 +94,7 @@ class ImageFromInternet extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: borderRadius,
           color: AppColors.PRIMARY_COLOR,
+          border: border,
           shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
           image: DecorationImage(
             image: AssetImage(Assets.logo),
