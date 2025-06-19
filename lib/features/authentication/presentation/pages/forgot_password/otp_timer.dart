@@ -71,7 +71,7 @@ class _OTPTimerState extends State<OTPTimer> {
           text: LocaleKeys.DidntReceiveOTP.localize,
           style: Styles.mediumText(),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         _isEnabled
             ? TextButton(
                 onPressed: _resendOTP,

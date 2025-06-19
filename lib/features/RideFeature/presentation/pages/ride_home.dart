@@ -935,7 +935,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               } else if (loadingInfo.status == RegistrationStatus.initial.status) {
                 context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
               } else {
-                context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'truk', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'truck', isSocket: driverInfo?.driverType == 'socket' ? true : false));
               }
             }
           },

@@ -43,6 +43,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
   }
 
 
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -109,6 +110,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                 Sizer(),
                 Expanded(
                   child: AppButton(
+                    color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.black,
                     radius: 15,
                     label: context.isArabic ? 'تحميله' : 'Shipping',
                     onPressed: () {
@@ -239,4 +241,6 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
       ),
     );
   }
+
+
 }

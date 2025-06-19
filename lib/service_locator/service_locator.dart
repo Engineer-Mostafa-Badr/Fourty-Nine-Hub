@@ -82,6 +82,7 @@ import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
 import 'live_service_locator.dart';
 import 'meeting_service_locator.dart';
+import 'new_trip_join_service_location.dart';
 import 'ride_dashboard_service_locator_updated.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
@@ -382,6 +383,7 @@ class DI {
     FollowServiceLocator.execute(serviceLocator: serviceLocator);
     TinderServiceLocator.execute(serviceLocator: serviceLocator);
     CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
+    NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

@@ -49,8 +49,9 @@ class _ViewAllTripJoinCardBuilderState
       // buildWhen: (previous, current) => !viewAllTripJoinCubit.noMoreDataInDatabase,
       builder: (context, state) {
         if (viewAllTripJoinCubit.tripJoinCards.isEmpty &&
-            (state is ViewAllTripJoinSuccess ||
-                state is ViewAllTripJoinFailed)) {
+            (state.status == ViewAllTripJoinStatus.success ||
+                state.status == ViewAllTripJoinStatus.failure)) {
+
           return Container(
             height: MediaQuery.of(context).size.height * 0.8,
             width: double.infinity,
@@ -180,10 +181,12 @@ class _ViewAllTripJoinCardBuilderState
                 },
               );
             }
-            return state is ViewAllTripJoinLoading &&
-                    !viewAllTripJoinCubit.noMoreDataInDatabase
+            return state.status == ViewAllTripJoinStatus.loading &&
+                !viewAllTripJoinCubit.noMoreDataInDatabase
                 ? const AvailableTripCardLoadingList()
                 : const SizedBox();
+
+
           },
         );
       },

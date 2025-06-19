@@ -39,8 +39,11 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
   void initState() {
     super.initState();
+    // enableSound =  widget.settings?.enableNotificationSound ?? false;
+    enableSound =  true;
 
   }
+  late bool enableSound;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,18 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                   context.read<DashboardsCubit>().updateDriverSettings(value,context);
                 });
               }),
+
+          switchWidget(
+              title: context.isArabic?'اشعارات صوتية':'Voice notify',
+              subText: enableSound ? context.isArabic?'تفعيل':'Enabled' : context.isArabic?'تعطيل':'Disabled', //'Disable',
+              valuee: enableSound,
+              onChanged: (value) {
+                setState(() {
+                  enableSound = value;
+                });
+              }),
+
+
           Padding(
             padding: const EdgeInsetsDirectional.all(8),
             child: Row(
@@ -140,7 +155,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 title: LocaleKeys.carLicense.tr(), exdIn: 6),
           ),
 
-          if(widget.settings?.isCriminalRecordEnabled == true)
+          // if(widget.settings?.isCriminalRecordEnabled == true)
           ClickableWidget(
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
@@ -150,7 +165,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
           ),
-          if(widget.settings?.isVehicleRecordEnabled == true)
+          // if(widget.settings?.isVehicleRecordEnabled == true)
             ClickableWidget(
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
@@ -160,7 +175,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.technicalExamination.tr(), exdIn: 6),
           ),
-          if(widget.settings?.isDrugAnalysisRecordEnabled == true)
+          // if(widget.settings?.isDrugAnalysisRecordEnabled == true)
 
             ClickableWidget(
             onTap: () async {

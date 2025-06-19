@@ -79,12 +79,15 @@ class DashboardsState
   final XFile? vehicleFrontPicture;
   final XFile? vehicleBackPicture;
   final XFile? personalTechnicalExaminationPicture;
+  final List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket;
+  final List<GetLoadingAvailableEntity >? loadingAvailableNonSocket;
+  final List<GetLoadingHistoryEntity>? loadingHistoryNonSocket;
   final List<GovernorateEntity>? govs;
   final GovernorateEntity? selectedGov;
   final Duration? recordPosition;
   final PlayerState? playerState;
   final Duration? recordDuration;
-
+  final DriverSettingLoadingEntity? driverSettingLoadingEntity;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -127,6 +130,10 @@ class DashboardsState
         this.govs,
         this.playerState,
         this.recordDuration,
+        this.loadingAcceptedNonSocket,
+        this.loadingAvailableNonSocket,
+        this.loadingHistoryNonSocket,
+        this.driverSettingLoadingEntity,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -171,6 +178,12 @@ class DashboardsState
         Duration? recordPosition,
         Duration? recordDuration,
         PlayerState? playerState,
+
+        List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket,
+        List<GetLoadingAvailableEntity>? loadingAvailableNonSocket,
+        List<GetLoadingHistoryEntity>? loadingHistoryNonSocket,
+
+        DriverSettingLoadingEntity? driverSettingLoadingEntity,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -214,6 +227,10 @@ class DashboardsState
       recordPosition: recordPosition ?? this.recordPosition,
       recordDuration: recordDuration ?? this.recordDuration,
       playerState: playerState ?? this.playerState,
+      loadingAcceptedNonSocket: loadingAcceptedNonSocket ?? this.loadingAcceptedNonSocket,
+      loadingAvailableNonSocket: loadingAvailableNonSocket ?? this.loadingAvailableNonSocket,
+      loadingHistoryNonSocket: loadingHistoryNonSocket ?? this.loadingHistoryNonSocket,
+      driverSettingLoadingEntity: driverSettingLoadingEntity ?? this.driverSettingLoadingEntity,
     );
   }
 

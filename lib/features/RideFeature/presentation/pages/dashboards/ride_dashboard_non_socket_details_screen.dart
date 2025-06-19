@@ -50,6 +50,7 @@ class _RideDashboardNonSocketDetailsScreenState
   var form = GlobalKey<FormState>();
   bool isLoading = false;
   String? pdfPath;
+  double? currentTripRating;
 
   initState(){
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
@@ -59,6 +60,10 @@ class _RideDashboardNonSocketDetailsScreenState
         tripType: 'nonTracking',
         userType: 'driver'
     ));
+    currentTripRating = widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble();
+    // currentTripRating = widget.tripEntity.clientDetails?.rating?.average?.toDouble();
+
+    // tripEntity.tripDetails?.yourRateClient?.rate
     super.initState();
   }
 
@@ -376,15 +381,20 @@ class _RideDashboardNonSocketDetailsScreenState
                   RideDetailsRatingNonSocketWidget(
                     // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
                     // rate: 1,
-                    rate: widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble() ?? 0.0,
+                    rate: currentTripRating ?? 0.0,
                     title: LocaleKeys.youRateClient.tr(),
                     tripId: widget.tripEntity.tripDetails?.id ?? '',
                     cubit: context.read<DashboardsCubit>(),
+                    onRatingUpdated: (newRating) {
+                      setState(() {
+                        currentTripRating = newRating;
+                      });
+                    },
                   ),
                   RideDetailsRatingNonSocketWidget(
                     // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
                     // rate: 2,
-                    rate: widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble() ?? 0.0,
+                    rate: widget.tripEntity.tripDetails?.clientRateYou?.rate?.toDouble() ?? 0.0,
                     title: LocaleKeys.clientRateYou.tr(),
                     tripId: widget.tripEntity.tripDetails?.id ?? '',
                     cubit: context.read<DashboardsCubit>(),

@@ -23,6 +23,7 @@ import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
+import '../../../../widget_record.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
@@ -85,6 +86,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
       child: ListView(
         children: [
+
           switchWidget(
               title: LocaleKeys.ready.tr(),
               subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
@@ -104,6 +106,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     enableSound = value;
                   });
                 }),
+
             switchWidget(
                 title: LocaleKeys.captainShare.tr(), //'Captain share',
                 subText:

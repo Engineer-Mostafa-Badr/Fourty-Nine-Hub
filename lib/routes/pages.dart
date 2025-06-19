@@ -310,6 +310,7 @@ import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
+import '../features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
 import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
@@ -330,10 +331,15 @@ import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
 import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
+
+import '../features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
+import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_offers/all_client_rating_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_offers/all_driver_rating_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_offers/main_tabs_ride_offer_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_request_screen.dart';
@@ -2884,6 +2890,7 @@ class AppPages {
                 name: Routes.TRIP_JOIN,
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
+
                     BlocProvider(
                       create: (_) => StartingLocationCubit(
                         fetchLocationCordinatesUseCase:
@@ -2942,6 +2949,9 @@ class AppPages {
                     BlocProvider(create: (_) => TripJoinViewCubit()),
                     BlocProvider(
                       create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (_) => serviceLocator<ViewAllTripJoinCubit>(),
                     ),
                   ],
                   child: const TripJoinCreateAdView(),
@@ -3026,10 +3036,12 @@ class AppPages {
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => ViewAllTripJoinCubit(
-                        viewAllTripJoinUseCase:
-                            serviceLocator<ViewAllTripJoinUseCase>(),
-                      ),
+                        create: (context) => serviceLocator<ViewAllTripJoinCubit>(),
+
+                      // create: (_) => ViewAllTripJoinCubit(
+                      //   viewAllTripJoinUseCase:
+                      //       serviceLocator<ViewAllTripJoinUseCase>(),
+                      // ),
                     ),
                     BlocProvider(
                       create: (_) => RequestTripJoinCubit(
@@ -3077,10 +3089,12 @@ class AppPages {
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => ViewAllTripJoinCubit(
-                        viewAllTripJoinUseCase:
-                            serviceLocator<ViewAllTripJoinUseCase>(),
-                      ),
+                      create: (context) => serviceLocator<ViewAllTripJoinCubit>(),
+
+                      // create: (_) => ViewAllTripJoinCubit(
+                      //   viewAllTripJoinUseCase:
+                      //       serviceLocator<ViewAllTripJoinUseCase>(),
+                      // ),
                     ),
                     BlocProvider(
                       create: (_) => RequestTripJoinCubit(
@@ -3802,6 +3816,36 @@ class AppPages {
                   );
                 },
               ),
+              GoRoute(
+                path: Paths.allDriverRatingScreen,
+                name: Routes.allDriverRatingScreen,
+                builder: (context, state) => BlocProvider(
+                    create: (context) => serviceLocator<ClientTripsCubit>()..getDriverAllRating(params: state.extra as String),
+                    child: AllDriverRatingScreen(
+
+                    )),
+              ),
+              GoRoute(
+                path: Paths.allClientRatingScreen,
+                name: Routes.allClientRatingScreen,
+                builder: (context, state) => BlocProvider(
+                    create: (context) => serviceLocator<ClientTripsCubit>()..getClientAllRating(params: state.extra as String),
+                    child: AllClientRatingScreen(
+                    )),
+              ),
+              GoRoute(
+                  path: Paths.loadingDashboardDetailsScreen,
+                  name: Routes.loadingDashboardDetailsScreen,
+                  builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<DashboardsCubit>(),
+                      ),
+                    ],
+                    child: LoadingDashboardDetailsScreen(
+                        tripEntity: state.extra as GetLoadingHistoryEntity),
+                  )),
             ],
           ),
         ]);
