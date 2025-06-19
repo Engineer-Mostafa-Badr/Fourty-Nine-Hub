@@ -396,10 +396,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   tripType: 'tracing',
                                   userType: 'driver',
                                   driverId: state.activeTrip?.driverId ?? '',
-                                  clientId: state.activeTrip?.clientId ?? ''),onClose: (){
+                                  clientId: state.activeTrip?.clientId ?? ''),
+                                onClose: (){
                                 cubit.closeSafety();
                               }, supportRideScreen: () {
-                                context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracing', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??''));
+                                context.push(Routes.supportRideScreen, extra: SupportRideParams(tripId: state.activeTrip?.tripId??'', tripType: 'tracing', userType: 'driver', driverId: state.activeTrip?.driverId??'',clientId: state.activeTrip?.clientId??'',),);
                               },
                                 emergencyContactsScreen: (){
                                   context.push(Routes.emergencyContactsScreen);

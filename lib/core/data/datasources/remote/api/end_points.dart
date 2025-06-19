@@ -487,6 +487,11 @@ class EndPoints {
       "$developmentBaseUrl/favorite-sub-category";
   static String createLoadingTrip =
       "$developmentBaseUrl/loading/client/trips";
+  static String captainSharePrice =
+      "$developmentBaseUrl/captain-share/price";
+
+  static String captainShareCreateRoute =
+      "$developmentBaseUrl/captain-share";
 
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =
