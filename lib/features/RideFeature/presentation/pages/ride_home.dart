@@ -994,7 +994,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           onTap: () {
             if (context.isUserLoggedIn) {
               context.pop();
-              context.push(Routes.rideOffer,extra: false);
+              context.push(Routes.rideOffer,extra: 'ride');
             } else {
               context.pop();
               return pleaseLoginDialog(context);

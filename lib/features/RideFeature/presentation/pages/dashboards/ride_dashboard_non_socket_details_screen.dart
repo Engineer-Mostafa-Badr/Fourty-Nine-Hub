@@ -53,9 +53,8 @@ class _RideDashboardNonSocketDetailsScreenState
 
   initState(){
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
-        clientId: 'widget.tripEntity.clientDetails?.id??''',
-        // clientId: 'widget.tripEntity.clientDetails?.id??''',
-        driverId: 'widget.tripEntity.driverDetails?.id??''',
+        clientId: widget.tripEntity.clientDetails?.id??'',
+        driverId: widget.tripEntity.driverDetails?.id??'',
         tripId: widget.tripEntity.tripDetails?.id??'',
         tripType: 'nonTracking',
         userType: 'driver'
