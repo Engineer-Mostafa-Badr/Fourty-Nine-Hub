@@ -1638,7 +1638,8 @@ class CodegenLoader extends AssetLoader{
   "averageRate": "متوسط التقييم",
   "time": "الوقت",
   "DidntReceiveOTP": "لم تستلم الكود؟",
-  "resendOTP": "اعادة ارسال الكود"
+  "resendOTP": "اعادة ارسال الكود",
+  "oneTime": "مرة واحدة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3279,7 +3280,8 @@ static const Map<String,dynamic> _en = {
   "averageRate": "Average Rate",
   "time": "Time",
   "DidntReceiveOTP": "Didn't receive OTP?",
-  "resendOTP": "Resend OTP"
+  "resendOTP": "Resend OTP",
+  "oneTime": "One Time"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

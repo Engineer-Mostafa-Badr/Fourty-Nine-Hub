@@ -2876,6 +2876,7 @@ class AppPages {
                 name: Routes.TRIP_JOIN,
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
+
                     BlocProvider(
                       create: (_) => StartingLocationCubit(
                         fetchLocationCordinatesUseCase:
@@ -2934,6 +2935,9 @@ class AppPages {
                     BlocProvider(create: (_) => TripJoinViewCubit()),
                     BlocProvider(
                       create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (_) => serviceLocator<ViewAllTripJoinCubit>(),
                     ),
                   ],
                   child: const TripJoinCreateAdView(),
@@ -3018,10 +3022,12 @@ class AppPages {
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => ViewAllTripJoinCubit(
-                        viewAllTripJoinUseCase:
-                            serviceLocator<ViewAllTripJoinUseCase>(),
-                      ),
+                        create: (context) => serviceLocator<ViewAllTripJoinCubit>(),
+
+                      // create: (_) => ViewAllTripJoinCubit(
+                      //   viewAllTripJoinUseCase:
+                      //       serviceLocator<ViewAllTripJoinUseCase>(),
+                      // ),
                     ),
                     BlocProvider(
                       create: (_) => RequestTripJoinCubit(
@@ -3069,10 +3075,12 @@ class AppPages {
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => ViewAllTripJoinCubit(
-                        viewAllTripJoinUseCase:
-                            serviceLocator<ViewAllTripJoinUseCase>(),
-                      ),
+                      create: (context) => serviceLocator<ViewAllTripJoinCubit>(),
+
+                      // create: (_) => ViewAllTripJoinCubit(
+                      //   viewAllTripJoinUseCase:
+                      //       serviceLocator<ViewAllTripJoinUseCase>(),
+                      // ),
                     ),
                     BlocProvider(
                       create: (_) => RequestTripJoinCubit(

@@ -1622,6 +1622,7 @@
   "averageRate": "متوسط التقييم",
   "time": "الوقت",
   "DidntReceiveOTP" : "لم تستلم الكود؟",
-  "resendOTP" : "اعادة ارسال الكود"
+  "resendOTP" : "اعادة ارسال الكود",
+  "oneTime": "مرة واحدة"
 
 }

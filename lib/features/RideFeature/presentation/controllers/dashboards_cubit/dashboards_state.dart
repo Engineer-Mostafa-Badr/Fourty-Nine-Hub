@@ -87,7 +87,7 @@ class DashboardsState
   final Duration? recordPosition;
   final PlayerState? playerState;
   final Duration? recordDuration;
-
+  final DriverSettingLoadingEntity? driverSettingLoadingEntity;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
@@ -133,6 +133,7 @@ class DashboardsState
         this.loadingAcceptedNonSocket,
         this.loadingAvailableNonSocket,
         this.loadingHistoryNonSocket,
+        this.driverSettingLoadingEntity,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -181,6 +182,8 @@ class DashboardsState
         List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket,
         List<GetLoadingAvailableEntity>? loadingAvailableNonSocket,
         List<GetLoadingHistoryEntity>? loadingHistoryNonSocket,
+
+        DriverSettingLoadingEntity? driverSettingLoadingEntity,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -227,6 +230,7 @@ class DashboardsState
       loadingAcceptedNonSocket: loadingAcceptedNonSocket ?? this.loadingAcceptedNonSocket,
       loadingAvailableNonSocket: loadingAvailableNonSocket ?? this.loadingAvailableNonSocket,
       loadingHistoryNonSocket: loadingHistoryNonSocket ?? this.loadingHistoryNonSocket,
+      driverSettingLoadingEntity: driverSettingLoadingEntity ?? this.driverSettingLoadingEntity,
     );
   }
 

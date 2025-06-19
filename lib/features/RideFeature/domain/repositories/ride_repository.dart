@@ -75,6 +75,7 @@ import '../usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../usecases/create_non_track_trip_use_case.dart';
 import '../usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../usecases/dashboards/create_non_track_offer_use_case.dart';
+import '../usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../usecases/dashboards/update_driver_settings_use_case.dart';
 import '../usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../usecases/make_loading_request_trip_usecase.dart';

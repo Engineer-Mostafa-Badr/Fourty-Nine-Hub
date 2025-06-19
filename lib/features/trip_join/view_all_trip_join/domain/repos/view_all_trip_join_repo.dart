@@ -2,6 +2,17 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import '../../../../RideFeature/domain/entities/ride_brand_entity.dart';
+import '../../../../RideFeature/domain/entities/ride_model_entity.dart';
+import '../entities/available_trip_join_entity.dart';
+import '../entities/delete_my_trip_join_entity.dart';
+import '../entities/expected_price_entity.dart';
+import '../entities/my_ads_trip_join_entity.dart';
+import '../entities/request_trip_join_entity.dart';
+import '../usecases/delete_my_trip_join_use_case.dart';
+import '../usecases/get_car_brand_use_case.dart';
+import '../usecases/get_expected_price_use_case.dart';
+
 
 abstract class ViewAllTripJoinRepo {
   Future<Either<Failure, List<TripJoinCardEntity>>> getAllTripJion({
@@ -15,4 +26,15 @@ abstract class ViewAllTripJoinRepo {
     required String url,
     bool premuimRequest = false,
   });
+
+  Future<Either<Failure, List<RideBrandEntity>>> getRideBrands(CarBrandParams params);
+  Future<Either<Failure, List<RideModelEntity>>> getRideModels(CarBrandParams params);
+  Future<Either<Failure, List<TripJoinEntity>>> getAvailableTripJoin(CarBrandParams params);
+  Future<Either<Failure, RequestTripJoinEntity>> getRequestTripJoin(CarBrandParams params);
+  Future<Either<Failure, ExpectedPriceTripEntity>> getExpectedPrice(ExpectedPriceTripParams params);
+  Future<Either<Failure, MyAdsTripJoinEntity>> getMyAdsTripJoin(CarBrandParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity >> deleteMyTripJoin(DeleteMyTripParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity >> applyViewTripJoin(DeleteMyTripParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity >> applyReadRequestTripJoin(DeleteMyTripParams params);
+
 }

@@ -1615,5 +1615,6 @@ abstract class  LocaleKeys {
   static const time = 'time';
   static const DidntReceiveOTP = 'DidntReceiveOTP';
   static const resendOTP = 'resendOTP';
+  static const oneTime = 'oneTime';
 
 }

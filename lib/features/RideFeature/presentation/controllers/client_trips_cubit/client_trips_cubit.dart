@@ -448,16 +448,6 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     await getClientPastTrips();
     emit(state.copyWith(status: ClientTripsStates.success));
   }
-  void loadInitialClientPastShippingTrips() async {
-    // emit(state.copyWith(status: RestaurantsListStates.loading));
-    clientPastTripsData.clear();
-    currentPageClientPastTrips = 1;
-    hasMoreClientPastTrips = true;
-    isLoadingMoreClientPastTrips = false;
-    await getClientPastShippingTrips();
-    emit(state.copyWith(status: ClientTripsStates.success));
-  }
-
   Future<void> getClientPastTrips() async {
     print("hasMoreClientPastTrips $hasMoreClientPastTrips");
     print("isLoadingMoreClientPastTrips $isLoadingMoreClientPastTrips");
@@ -490,6 +480,17 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       },
     );
   }
+
+  void loadInitialClientPastShippingTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    clientPastTripsData.clear();
+    currentPageClientPastTrips = 1;
+    hasMoreClientPastTrips = true;
+    isLoadingMoreClientPastTrips = false;
+    await getClientPastShippingTrips();
+    emit(state.copyWith(status: ClientTripsStates.success));
+  }
+
 
   Future<void> getClientPastShippingTrips() async {
     if (!hasMoreClientPastTrips || isLoadingMoreClientPastTrips) return;

@@ -27,12 +27,14 @@ import '../entities/dashboards/settings_dashboard_entity.dart';
 import '../entities/dashboards/trips_response_entity.dart';
 import '../entities/loading/get_loading_avaliable_entity.dart';
 import '../entities/loading/get_loading_history_entity.dart';
+import '../entities/loading/settings_driver_loading_entity.dart';
 import '../usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../usecases/dashboards/create_driver_rating_usecase.dart';
 import '../usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../usecases/dashboards/get_available_ride_trips_use_case.dart';
+import '../usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../usecases/get_client_pending_untracked_trips_use_case.dart';
 
@@ -70,14 +72,18 @@ abstract class TripRepository {
    void listenToClientComing(Function(String tripId) params);
    void listenToEndTrip(Function(String tripId) params);
    void listenToRemoveUntrackedTrip(Function(String tripId) params);
+   void listenToRemoveLoading(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
    void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
    void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
+   void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
    Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params);
    Future<Either<Failure, List<GetLoadingAvailableEntity>>> getAvailableNonSocketLoading(ClientPendingTripParams params);
    Future<Either<Failure, List<GetLoadingHistoryEntity>>> getHistoryNonSocketLoading(ClientPendingTripParams params);
    Future<Either<Failure, CreateNonTrackOfferEntity>> createOfferLoading(CreateNonTrackOfferParams params);
    Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateNonSocket(UpdateClientRateParams params);
+   Future<Either<Failure, DriverSettingLoadingEntity >> getDriverLoadingSettings();
+   Future<Either<Failure, CreateNonTrackOfferEntity >> updateDriverLoadingSettings(UpdateDriverSettingsLoadingParams params);
 
 
 }

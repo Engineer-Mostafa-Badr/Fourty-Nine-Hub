@@ -1581,6 +1581,7 @@ class EndPoints {
   static const addRateToDriverWithClientNonSocket = '/ride/untracked/ratings/client';
   static const updateClientRating = '/ride/untracked/ratings/client';
   static const updateDriverRatingNonSocket = '/ride/untracked/ratings/driver';
+  static const updateDriverLoadingSettings = '/loading/drivers/settings';
   static const getDriverAllRating = '/ride/untracked/ratings/driver';
   static const getClientAllRating = '/ride/untracked/ratings/client';
 
@@ -1588,6 +1589,17 @@ class EndPoints {
   static const getAvailableRideNonSocketLoading = '/loading/trip/driver/subcategory';
   static const getHistoryRideNonSocketLoading = '/loading/driver/trips/history';
   static const createOfferLoading = '/loading/driver/trips/offers/';
+  static const getDriverLoadingSettings = '/loading/drivers/settings';
+  static String getAllCarBrand = '/ride/cars/brands';
+  static String getAllCarModel = '/ride/cars/';
+  static String getTripExpectedPrice = '/ride/come-with-you/trip/expectedPrice';
+  static String getAvailableTripJoin = '/ride/come-with-you/get-all';
+  static String getRequestTripJoin = '/ride/come-with-you/trip/requests';
+  static String getMyAdsTripJoin = '/ride/come-with-you/my';
+  static String deleteMyAdsTripJoin = '/ride/come-with-you/Delete/';
+  static String applyViewTripJoin = '/ride/come-with-you/applyView/';
+  static String applyReadRequestTripJoin = '/ride/come-with-you/applyRead/';
+
 
 
 }

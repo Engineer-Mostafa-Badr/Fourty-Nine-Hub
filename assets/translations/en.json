@@ -1638,7 +1638,8 @@
   "averageRate": "Average Rate",
   "time": "Time",
   "DidntReceiveOTP" : "Didn't receive OTP?",
-  "resendOTP" : "Resend OTP"
+  "resendOTP" : "Resend OTP",
+  "oneTime": "One Time"
 
 
 }
