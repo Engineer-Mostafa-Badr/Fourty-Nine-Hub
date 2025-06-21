@@ -4,6 +4,8 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/in
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_post_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/widget/SmoothIndicator/scrollig_dots_effect.dart';
+import '../../../../../core/widget/SmoothIndicator/smooth_page_indicator.dart';
 import '../../../../../helpers/media_helper.dart';
 import 'header_post_instagram.dart';
 
@@ -13,6 +15,7 @@ class InstgramImagesPostWidget extends StatefulWidget {
     // required this.images,
     required this.instagramPostEntity,
   });
+
   // final List images;
   final InstagramPostEntity instagramPostEntity;
 
@@ -23,6 +26,7 @@ class InstgramImagesPostWidget extends StatefulWidget {
 
 class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   int currentIndex = 0;
+  final controller = PageController(viewportFraction: 0.8, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
@@ -97,32 +101,23 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
             ),
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ...List.generate(
-                widget.instagramPostEntity.medias.length,
-                (index) {
-                  return AnimatedContainer(
-                    margin: const EdgeInsets.symmetric(horizontal: 2),
-                    duration: const Duration(milliseconds: 300),
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: currentIndex == index
-                          ? (context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR)
-                          : (context.isDarkMode
-                              ? const Color(0x26FFFFFF)
-                              : Colors.grey),
-                    ),
-                  );
-                },
-              )
-            ],
-          )
+          AnimatedSmoothIndicator(
+            activeIndex: currentIndex,
+            count: widget.instagramPostEntity.medias.length,
+            effect: ScrollingDotsEffect(
+              activeStrokeWidth: 2.6,
+              activeDotScale: 1.3,
+              maxVisibleDots: 7,
+              radius: 8,
+              spacing: 5,
+              dotHeight: 8,
+              dotWidth: 8,
+              activeDotColor:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              dotColor:
+                  context.isDarkMode ? const Color(0x26FFFFFF) : Colors.grey,
+            ),
+          ),
         ],
       );
     }

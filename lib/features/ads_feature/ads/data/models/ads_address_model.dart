@@ -18,9 +18,9 @@ class AdsAddressModel extends AdsAddressEntity {
         cityAr: json['city']?['city_name_ar'] ?? '',
         cityEn: json['city']?['city_name_en'] ?? '',
         addressAr:
-            '${json['government']?['governorate_name_ar'] ?? 'N/A'}, ${json['city']?['city_name_ar'] ?? 'N/A'}',
+            '${json['city']?['city_name_ar'] ?? 'N/A'}, ${json['government']?['governorate_name_ar'] ?? 'N/A'}',
         addressEn:
-            '${json['government']?['governorate_name_en'] ?? 'N/A'}, ${json['city']?['city_name_en'] ?? 'N/A'}',
+            '${json['city']?['city_name_en'] ?? 'N/A'}, ${json['government']?['governorate_name_en'] ?? 'N/A'}',
         coordinates: json['coordinates'] != null
             ? json['coordinates'].cast<double>()
             : [],

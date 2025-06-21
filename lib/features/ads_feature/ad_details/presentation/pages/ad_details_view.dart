@@ -1,9 +1,7 @@
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -13,8 +11,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/widgets/lable_and_text_marriage_details.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
@@ -27,7 +25,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/requ
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/are_you_sure_delete_ad_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/build_tag_ads_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/image_ads_widget.dart';
@@ -35,7 +32,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
@@ -73,7 +69,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   @override
   Widget build(BuildContext context) {
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
-    print("userId#{$userId");
+    print("userId#{$userId}");
 
     return CustomScaffold(
         appBar: AppBar(
@@ -111,44 +107,62 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               .toList();
           print(
               "state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
+          print(
+              "state.ad!.images.length ${state.ad!.images.length}");
 
           return Stack(
             children: [
-              Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ListView(
-                        children: [
-                          BuildTagAdsWidget(
-                            status: state.ad?.subscriptionStatus ?? '',
-                            views: state.ad?.views ?? 0,
-                          ),
-                          _buildAdInfoWidget(ad: state.ad!),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          // اذا كانت الاعلان من نوع زواج
-                          if (details!.isNotEmpty &&
-                              state.ad?.mainCategoryId ==
-                                  '62c8b5b09332225799fe335e')
-                            _buildDetailsWidget(ad: state.ad!),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          _buildRelevantAdsWidget(),
-                        ],
-                      ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ListView.separated(
+                    itemBuilder: (context, index) => ImageFromInternet(
+                      width: double.infinity,
+                      height: 300.h,
+                      image: state.ad!.images[index],
+                      defaultLogo: true,
+                      fit: BoxFit.cover,
+                    ),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 16,
+                    ),
+                    itemCount: state.ad!.images.length ?? 0,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    height: 300.h,
+                    child: ListView(
+                      children: [
+                        BuildTagAdsWidget(
+                          status: state.ad?.subscriptionStatus ?? '',
+                          views: state.ad?.views ?? 0,
+                        ),
+                        // _buildAdInfoWidget(ad: state.ad!),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        // اذا كانت الاعلان من نوع زواج
+                        if (details!.isNotEmpty &&
+                            state.ad?.mainCategoryId ==
+                                '62c8b5b09332225799fe335e')
+                          _buildDetailsWidget(ad: state.ad!),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        _buildRelevantAdsWidget(),
+                      ],
                     ),
                   ),
-                  userId == state.ad?.userId
-                      ? _buildRequestsButton(state.ad?.id ?? '')
-                      : _buildActionsWidget(),
-                ],
+                ),
               ),
-              // if (context.read<UserCubit>().isLoggedIn)
-              //   _buildTag(status: state.ad?.subscriptionStatus ?? ''),
+              userId == state.ad?.userId
+                  ? _buildRequestsButton(state.ad?.id ?? '')
+                  : _buildActionsWidget(),
             ],
           );
         }));
