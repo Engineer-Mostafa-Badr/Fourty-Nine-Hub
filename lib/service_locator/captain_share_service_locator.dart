@@ -8,6 +8,10 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_availab
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_expired_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_my_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_running_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_join_available_routes_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
 import 'package:get_it/get_it.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
 
@@ -52,9 +56,29 @@ class CaptainShareServiceLocator {
         () => GetRunningBookingsUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<ListenToCancelRouteUseCase>(
+        () => ListenToCancelRouteUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToJoinAvailableRoutesUseCase>(
+        () => ListenToJoinAvailableRoutesUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToLeaveAvailableRoutesUseCase>(
+        () => ListenToLeaveAvailableRoutesUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToNewRouteUseCase>(
+        () => ListenToNewRouteUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

@@ -22,7 +22,7 @@ class _CaptainShareBodyState extends State<CaptainShareBody> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context)=>serviceLocator<CaptainShareCubit>()..loadInitialAvailableData(context),
+        create: (context)=>serviceLocator<CaptainShareCubit>()..initData(context),
         child: TabBarContentWidget(tabController: widget._tabController));
   }
 }

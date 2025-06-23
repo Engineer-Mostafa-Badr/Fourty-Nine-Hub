@@ -71,6 +71,8 @@ abstract class SocketIOListeners {
   static const String removeTrip = 'REMOVE_TRIP_FROM_LIST';
   static const String endTrip = 'Ride:endTrip';
   static const String listenToClientComing = 'RIDE:CLIENT_ABROACH_DRIVER';
+  static const String listenToCancelRoute = 'CAPTAIN-SHARE:ROUTE-CANCELLED';
+  static const String listenToNewRoute = 'captain-share:new-route-available';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
   static const String removeLoading = 'LOADING:REMOVE_TRIP';
   static const String newLoadingTrip = 'LOADING:NEW_TRIP';
@@ -96,6 +98,9 @@ abstract class SocketIOEvents {
   static const String sendPoint = 'Stream:SendPoint';
   static const String updateDriverLocation = 'ride:UPDATE_DRIVER_LOCATION';
   static const String watchingTrips = 'RIDE:UPDATE_VIEWER_TRIP';
+  static const String joinAvailableRoutes = 'CAPTAIN-SHARE:JOIN-AVAILABLE-ROUTES';
+  static const String leaveAvailableRoutes = 'CAPTAIN-SHARE:JOIN-AVAILABLE-ROUTES';
+
 }
 
 //

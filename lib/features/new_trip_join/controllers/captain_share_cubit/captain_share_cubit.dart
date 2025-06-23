@@ -15,7 +15,12 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_availab
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_expired_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_my_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_running_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_join_available_routes_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
 import 'package:go_router/go_router.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 part 'captain_share_state.dart';
 
@@ -27,8 +32,76 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final GetExpiredBookingsUseCase getExpiredBookingsUseCase;
   final CancelMyBookingUseCase cancelMyBookingUseCase;
   final CreateRouteUseCase createRouteUseCase;
-  CaptainShareCubit(this.createPricePerSeatUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
+  final ListenToCancelRouteUseCase listenToCancelRouteUseCase;
+  final ListenToJoinAvailableRoutesUseCase listenToJoinAvailableRoutesUseCase;
+  final ListenToLeaveAvailableRoutesUseCase listenToLeaveAvailableRoutesUseCase;
+  final ListenToNewRouteUseCase listenToNewRouteUseCase;
+  CaptainShareCubit(this.createPricePerSeatUseCase,this.listenToCancelRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
       : super(const CaptainShareState());
+
+
+  void initData(BuildContext context)async{
+    loadInitialAvailableData(context);
+    await listenToJoinRoute();
+    listenToNewRoute(context);
+    listenToCancelRoute(context);
+  }
+
+  void listenToCancelRoute(BuildContext context) {
+    CliLogger.info('listenToCancelRoute');
+    // TripsResponseEntity
+    listenToCancelRouteUseCase((routeId) {
+      if(state.tapIndex==0){
+        availableBookings.removeWhere((element) => element.id==routeId);
+        showSuccessMessage(context, context.isArabic?'تم الغاء الرحله بواسطة ناشئ الرحلة':'Route canceled by creator');
+      }
+      if(state.tapIndex==1){
+        myBookings.removeWhere((element) => element.id==routeId);
+        showSuccessMessage(context, context.isArabic?'تم الغاء الرحله بواسطة ناشئ الرحلة':'Route canceled by creator');
+      }
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToJoinRoute() {
+    CliLogger.info('listenToJoinRoute');
+    // TripsResponseEntity
+    listenToJoinAvailableRoutesUseCase((isJoined) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  void listenToLeaveRoute() {
+    CliLogger.info('listenToLeaveRoute');
+    // TripsResponseEntity
+    listenToLeaveAvailableRoutesUseCase((routeId) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  void listenToNewRoute(BuildContext context) {
+    CliLogger.info('listenToNewRoute');
+    // TripsResponseEntity
+    listenToNewRouteUseCase((route) {
+      if(state.tapIndex==0){
+        availableBookings.insert(0, route);
+        showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+      }else{
+        onChangeTapIndex(0,context);
+        loadInitialAvailableData(context);
+        showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+      }
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+
+  onChangeTapIndex(int index,BuildContext context){
+    if(index==0) listenToJoinRoute();
+    if(index!=0) listenToLeaveRoute();
+    print("state.tapIndex Cubit : $index");
+    emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index));
+  }
 
   Future<void> cancelMyBooking(
       {required String id, required BuildContext context, required String from}) async {

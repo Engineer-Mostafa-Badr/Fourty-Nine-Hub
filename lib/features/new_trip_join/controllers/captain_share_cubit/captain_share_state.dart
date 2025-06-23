@@ -17,10 +17,12 @@ extension CaptainShareStatex on CaptainShareState {
 class CaptainShareState {
   final CaptainShareStates status;
   final Failure? failure;
+  final int? tapIndex;
   final CreatePricePerSeatEntity? pricePerSeat;
 
   const CaptainShareState({
     this.failure,
+    this.tapIndex=0,
     this.status = CaptainShareStates.initState,
     this.pricePerSeat,
   });
@@ -28,10 +30,12 @@ class CaptainShareState {
     CaptainShareStates? status,
     CreatePricePerSeatEntity? pricePerSeat,
     Failure? failure,
+    int? tapIndex,
   }) {
     return CaptainShareState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
+      tapIndex: tapIndex ?? this.tapIndex,
       pricePerSeat: pricePerSeat ?? this.pricePerSeat,
     );
   }

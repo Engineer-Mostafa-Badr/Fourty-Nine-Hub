@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +13,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../driver/widget/available_ride_mode_widget.dart';
 import '../../presentation/view/widget/taps/tab_bar_row_widget.dart';
 import 'one_way_widget.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 
 class TabBarContentWidget extends StatefulWidget {
   const TabBarContentWidget({super.key, required TabController tabController})
@@ -45,51 +48,55 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 8),
-        const Center(child: HeaderTextWidget()),
-        const SizedBox(height: 16),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0.h),
-          child: TabBarRowWidget(
-            onTap: () {
-              setState(() {
-                _hasTappedTab = !_hasTappedTab; // ✅ يقلب الحالة
-              });
-            },
-            tabController: widget._tabController,
-          ),
-        ),
-        SizedBox(height: 10.h),
-        if (_hasTappedTab)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              decoration: BoxDecoration(
-                color: const Color(0xffD9D9D9),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: AnimatedBuilder(
-                animation: widget._tabController,
-                builder: (context, child) {
-                  int index = widget._tabController.index;
-                  return Text(
-                    context.isArabic ? hintsArabic[index] : hints[index],
-                    style: TextStyle(
-                      color: const Color(0xffFF0808),
-                      fontSize: 25.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
+    return BlocBuilder<CaptainShareCubit,CaptainShareState>(
+      builder: (context,state) {
+        var cubit = context.read<CaptainShareCubit>();
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            const Center(child: HeaderTextWidget()),
+            const SizedBox(height: 16),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0.h),
+              child: TabBarRowWidget(
+                onTap: (index) {
+                  cubit.onChangeTapIndex(index,context);
+                  log("state.tapIndex ${state.tapIndex}");
                 },
+                tabController: widget._tabController,
               ),
             ),
-          ),
-        Expanded(child: _buildCategory(controller: widget._tabController)),
-      ],
+            SizedBox(height: 10.h),
+            if (widget._tabController.index==(state.tapIndex))
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffD9D9D9),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: AnimatedBuilder(
+                    animation: widget._tabController,
+                    builder: (context, child) {
+                      int index = widget._tabController.index;
+                      return Text(
+                        context.isArabic ? hintsArabic[state.tapIndex??0] : hints[state.tapIndex??0],
+                        style: TextStyle(
+                          color: const Color(0xffFF0808),
+                          fontSize: 25.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            Expanded(child: _buildCategory(controller: widget._tabController)),
+          ],
+        );
+      }
     );
   }
 

@@ -274,14 +274,18 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
-                      style: TextStyle(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w900,
+                    Expanded(
+                      child: Text(
+                        widget.model?.startAddress??'',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines:2,
+                        style: TextStyle(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          fontSize: 28.sp,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                     ),
                   ],
@@ -301,18 +305,23 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
-                      style: TextStyle(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
+                    Expanded(
+                      child: Text(
+                        widget.model?.targetAddress??'',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines:2,
+                        style: TextStyle(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                     ),
                   ],
                 ),
+                SizedBox(height:8),
                 Center(
                   child: GestureDetector(
                     onTap: () {

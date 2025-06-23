@@ -1491,6 +1491,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   showPartialPaymentDialog(BuildContext context,num amountPaidCash) {
+    bool showRemaining = (state.activeTrip?.price??0)>(amountPaidCash);
+    num remaining = (state.activeTrip?.price??0)-(amountPaidCash);
     showCustomDialogTrip(
         context,
         Column(
@@ -1505,7 +1507,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(context.isArabic?'العميل سيدفع ($amountPaidCash جنيه مصري) فيزا , المتبقي ( جنيه مصري) نقدا':'the client will pay ($amountPaidCash EGP) visa , the rest ( EGP) cash',
+            Text(context.isArabic?'العميل سيدفع ($amountPaidCash جنيه مصري) فيزا  ${showRemaining?' ,المتبقي ($remaining جنيه مصري) نقدا':''}':'the client will pay ($amountPaidCash EGP) visa ${showRemaining?', the rest ($remaining EGP) cash':''}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,

@@ -35,6 +35,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/st
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../domain/entities/loading/get_loading_avaliable_entity.dart';
@@ -131,6 +132,26 @@ class TripRepositoryImpl implements TripRepository {
   @override
   void listenToClientComing(Function(String tripId) params) {
     remoteDataSource.listenToClientComing(params);
+  }
+
+  @override
+  void listenToCancelRoute(Function(String routeId) params) {
+    remoteDataSource.listenToCancelRoute(params);
+  }
+
+  @override
+  void listenToJoinAvailableRoutes(Function(bool isJoined) params) {
+    remoteDataSource.listenToJoinAvailableRoutes(params);
+  }
+
+  @override
+  void listenToLeaveAvailableRoutes(Function(String routeId) params) {
+    remoteDataSource.listenToLeaveAvailableRoutes(params);
+  }
+
+  @override
+  void listenToNewRoute(Function(MyBookingEntity newBooking) params) {
+    remoteDataSource.listenToNewRoute(params);
   }
 
   @override
