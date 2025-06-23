@@ -94,6 +94,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
           : errorName == 'SubscribeError'
           ? showSubscribeDialog(context, '62c8ba9f8e28a58a3edf57ee')
           : showErrorMessage(context, getFailureMessage(l, context));
+
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
       context.pop();
