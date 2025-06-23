@@ -101,6 +101,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, bool>> acceptTrip(String params);
 
   void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
+  void listenToPartialPaymentDriver(Function(num amountPaidCash) params);
 
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
 
@@ -303,6 +304,22 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         // params(RideOfferModel.fromJson(decodedData));
         CliLogger.info("trip data :  $data");
         params(UpdateTripAutoAcceptModel.fromJson(data['updatedTripAutoAccept']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to offer error $e");
+    }
+  }
+
+  @override
+  void listenToPartialPaymentDriver(Function(num amountPaidCash) params) {
+    try {
+      CliLogger.info("trip listenToPartialPaymentDriver ");
+      SharedWebSocket.socket!.on(SocketIOListeners.partialPaymentDriver, (data) {
+        // // final decodedData = jsonDecode(data);
+        // CliLogger.info("offer data :  $decodedData");
+        // params(RideOfferModel.fromJson(decodedData));
+        CliLogger.info("listenToPartialPaymentDriver data :  $data");
+        params(data['amountPaidCash']??0);
       });
     } catch (e) {
       CliLogger.info("can't listen to offer error $e");

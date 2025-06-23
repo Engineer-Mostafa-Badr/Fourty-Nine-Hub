@@ -43,6 +43,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
@@ -51,7 +52,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_governorates.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
@@ -67,16 +67,12 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../../common/functions/global/upload_image.dart';
 import '../../../../../core/error/failure.dart';
-
 import '../../../../../core/utils/loading_method_helper.dart';
 import '../../../../../core/utils/ride_method_helper.dart';
 import '../../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
-import '../../../../food_feature/restaurants_list/domain/usecases/add_rate_restaurant_use_case.dart';
 import '../../../data/models/loading/get_loading_accepted_model.dart';
 import '../../../domain/entities/dashboards/create_non_track_offer_entity.dart';
 import '../../../domain/entities/dashboards/driver_settings_entity.dart';
@@ -117,9 +113,7 @@ import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
-import '../../pages/Register/Driver/upload_rider_images.dart';
 import '../../pages/dashboards/ride_mode_screen.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:record/record.dart';
 
 part 'dashboards_state.dart';
@@ -171,6 +165,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToAcceptUntrackedTripOfferUseCase
       listenToAcceptUntrackedTripOfferUseCase;
   final ListenToEndTripUseCase listenToEndTripUseCase;
+  final ListenToPartialPaymentDriverUseCase listenToPartialPaymentDriverUseCase;
   final AddRateWithDriverUseCase addRateWithDriverUseCase;
   final terminalExaminationFormKey = GlobalKey<FormState>();
   final GetRideGovernoratesUseCase getRideGovernoratesUseCase;
@@ -234,6 +229,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.getDriverSettingsUseCase,
       this.listenToRemoveUntrackedTripUseCase,
       this.listenToAcceptUntrackedTripOfferUseCase,
+      this.listenToPartialPaymentDriverUseCase,
       this.getRideGovernoratesUseCase,
       this.addRateWithDriverUseCase, this.getAcceptedNonSocketLoadingUseCase, this.createOfferLoadingUseCase, this.getAvailableNonSocketLoadingUseCase, this.getHistoryNonSocketLoadingUseCase, this.updateDriverRateNonSocketUseCase, this.getDriverLoadingSettingsUseCase, this.updateDriverSettingsLoadingUseCase, this.listenToRemoveLoadingUseCase, this.listenToAvailableLoadingUseCase)
       : super(const DashboardsState());
@@ -1485,6 +1481,50 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     });
   }
 
+  void listenToPartialPaymentDriver(BuildContext context) {
+    CliLogger.info('PartialPaymentDriver');
+    // TripsResponseEntity
+    listenToPartialPaymentDriverUseCase((amountPaidCash) {
+      showPartialPaymentDialog(context,amountPaidCash);
+      emit(state.copyWith(status: DashboardsStates.success));
+    });
+  }
+
+  showPartialPaymentDialog(BuildContext context,num amountPaidCash) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(context.isArabic?'العميل سيدفع ($amountPaidCash جنيه مصري) فيزا , المتبقي ( جنيه مصري) نقدا':'the client will pay ($amountPaidCash EGP) visa , the rest ( EGP) cash',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontSize.s16,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                )),
+            AppButton(
+                width: context.screenWidth,
+                label: context.isArabic?'حسنا':'Ok',
+                backColor: AppColors.PRIMARY_COLOR,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+            const SizedBox(height: 16),
+          ],
+        ));
+  }
+
+
   void listenToNewTrip() {
     CliLogger.info('Listen To New Trip');
     // TripsResponseEntity
@@ -1737,7 +1777,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
             tripStatus: TripState.pending.name));
       },
       (activeTrip) {
-        log("Suzccess");
         context.pop();
         emit(state.copyWith(
             status: DashboardsStates.success,

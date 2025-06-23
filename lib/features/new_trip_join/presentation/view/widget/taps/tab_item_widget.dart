@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 
 class TabItemWidget extends StatelessWidget {
   final String text;
@@ -22,7 +24,14 @@ class TabItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isSelected = tabController.index == index;
     return GestureDetector(
-      onTap: () => tabController.animateTo(index),
+      onTap: () {
+        print("objectIndex $index");
+        if(index==1)context.read<CaptainShareCubit>().loadInitialData(context);
+        if(index==0)context.read<CaptainShareCubit>().loadInitialAvailableData(context);
+        if(index==2)context.read<CaptainShareCubit>().loadInitialRunningData(context);
+        if(index==3)context.read<CaptainShareCubit>().loadInitialExpiredData(context);
+        tabController.animateTo(index);
+      },
       child: Stack(
         clipBehavior: Clip.none,
         children: [

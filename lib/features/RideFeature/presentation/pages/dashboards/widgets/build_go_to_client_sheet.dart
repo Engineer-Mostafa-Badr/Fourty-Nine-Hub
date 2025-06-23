@@ -20,10 +20,11 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class BuildGoToClientSheet extends StatefulWidget {
-  const BuildGoToClientSheet({super.key, this.onGoingToClient, this.activeTrip, required this.onSafety});
+  const BuildGoToClientSheet({super.key, this.onGoingToClient, this.activeTrip, required this.onSafety, required this.onReport});
   final GestureTapCallback? onGoingToClient;
   final RunningTripEntity? activeTrip;
   final VoidCallback onSafety;
+  final VoidCallback onReport;
 
   @override
   State<BuildGoToClientSheet> createState() => _BuildGoToClientSheetState();

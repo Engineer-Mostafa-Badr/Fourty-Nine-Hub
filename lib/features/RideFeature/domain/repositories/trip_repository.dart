@@ -80,6 +80,7 @@ abstract class TripRepository {
    void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
    void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
    void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
+   void listenToPartialPaymentDriver(Function(num amountPaidCash) params);
    Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params);
    Future<Either<Failure, List<GetLoadingAvailableEntity>>> getAvailableNonSocketLoading(ClientPendingTripParams params);
    Future<Either<Failure, List<GetLoadingHistoryEntity>>> getHistoryNonSocketLoading(ClientPendingTripParams params);

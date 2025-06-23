@@ -493,6 +493,16 @@ class EndPoints {
 
   static String captainShareCreateRoute =
       "$developmentBaseUrl/captain-share";
+  static String cancelRoute(String id) =>
+      "$developmentBaseUrl/captain-share/routes/$id";
+  static String myBooking =
+      "$developmentBaseUrl/captain-share/routes/me";
+  static String availableBooking =
+      "$developmentBaseUrl/captain-share/routes/available";
+  static String expiredBooking =
+      "$developmentBaseUrl/captain-share/routes/expired";
+  static String runningBooking =
+      "$developmentBaseUrl/captain-share/routes/running";
 
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =

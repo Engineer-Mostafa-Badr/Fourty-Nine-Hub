@@ -1,25 +1,36 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
+  final bool? isMyBooking;
   final String? requestType;
+  final MyBookingEntity? model;
+  final Function? onCancelBooking;
 
   const OneWayWidget({
     super.key,
     this.statusDriver,
+    this.model,
     this.cancelButton,
+    this.isMyBooking,
     this.requestType,
+    this.onCancelBooking,
   });
 
   @override
@@ -35,8 +46,28 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     super.initState();
     _expandableController = ExpandableController(initialExpanded: false);
   }
+
+  String getBookingStatus(String status){
+    switch (status) {
+      case 'pending':
+        return LocaleKeys.pending.localize;
+      case 'accepted':
+        return LocaleKeys.accepted.localize;
+      case 'expired':
+        return LocaleKeys.expired.localize;
+      case 'cancelled':
+        return context.isArabic?'تم الغاء':'Canceled';
+      case 'done':
+        return LocaleKeys.done.localize;
+      default:
+        return LocaleKeys.pending.localize;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    print("isMyBooking ${widget.isMyBooking}");
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -67,7 +98,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: "50 ",
+                        text: "${widget.model?.pricePerSeat} ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -102,22 +133,34 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          SvgPicture.asset(Assets.bookedMan),
+                          if(widget.isMyBooking!=true)SvgPicture.asset(Assets.bookedMan),
+                          if(widget.isMyBooking==true)CircleAvatar(
+                            radius: 30.w,
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                                UserCubit.to.state.data?.profilePicture ?? UIConst.profilePlaceHolder),
+                          ),
                         ],
                       ),
                       Column(
                         children: [
                           Text(
-                            LocaleKeys.free.localize,
+                            ((widget.model?.availableSeats??0)>=2)?LocaleKeys.free.localize:LocaleKeys.booked.localize,
                             style: TextStyle(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          SvgPicture.asset(
+                          if(((widget.model?.availableSeats??0)>=2))SvgPicture.asset(
                             Assets.freeIcon,
                             color: AppColors.getTextColor(context),
+                          ),
+                          if(((widget.model?.availableSeats??0)<2))CircleAvatar(
+                            radius: 30.w,
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                                 UIConst.profilePlaceHolder),
                           ),
                         ],
                       ),
@@ -126,7 +169,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           Padding(
                             padding: const EdgeInsets.only(left: 13),
                             child: Text(
-                              LocaleKeys.free.localize,
+                              ((widget.model?.availableSeats??0)>=1)?LocaleKeys.free.localize:LocaleKeys.booked.localize,
                               style: TextStyle(
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.bold,
@@ -134,16 +177,22 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          SvgPicture.asset(
+                          if(((widget.model?.availableSeats??0)>=1))SvgPicture.asset(
                             Assets.freeIcon,
                             color: AppColors.getTextColor(context),
+                          ),
+                          if(((widget.model?.availableSeats??0)<1))CircleAvatar(
+                            radius: 30.w,
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                                UIConst.profilePlaceHolder),
                           ),
                         ],
                       ),
                       Column(
                         children: [
                           Text(
-                            LocaleKeys.seat.localize,
+                            '',
                             style: TextStyle(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.bold,
@@ -154,14 +203,18 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 15.h, left: 8.h),
-                            child: Text(
-                              widget.statusDriver ?? "",
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w900,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors.PRIMARY_COLOR,
+                            child: SizedBox(
+                              width: 55.w,
+                              child: Text(
+                                getBookingStatus(widget.statusDriver ?? ""),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w900,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.PRIMARY_COLOR,
+                                ),
                               ),
                             ),
                           ),
@@ -313,6 +366,11 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     const SizedBox(width: 5),
                     widget.cancelButton == true
                         ? GestureDetector(
+                      onTap: (){
+                        if(widget.onCancelBooking!=null){
+                          widget.onCancelBooking!();
+                        }
+                      },
                             child: Container(
                               width: 120.w,
                               height: 50.h,
@@ -472,4 +530,5 @@ class TextAddressWidget extends StatelessWidget {
       ],
     );
   }
+
 }

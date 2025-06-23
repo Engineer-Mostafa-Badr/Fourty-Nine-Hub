@@ -2,7 +2,12 @@ import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_c
 import 'package:fourtyninehub/features/new_trip_join/data/datasources/captain_share_remote_data_source.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/repositories/captain_share_repository_imp.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/repositories/captain_share_repository.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/cancel_my_booking_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_available_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_expired_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_my_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_running_bookings_use_case.dart';
 import 'package:get_it/get_it.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
 
@@ -27,9 +32,34 @@ class CaptainShareServiceLocator {
         () => CreateRouteUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<GetMyBookingsUseCase>(
+        () => GetMyBookingsUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<CancelMyBookingUseCase>(
+        () => CancelMyBookingUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetAvailableBookingsUseCase>(
+        () => GetAvailableBookingsUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetExpiredBookingsUseCase>(
+        () => GetExpiredBookingsUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetRunningBookingsUseCase>(
+        () => GetRunningBookingsUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
             ));

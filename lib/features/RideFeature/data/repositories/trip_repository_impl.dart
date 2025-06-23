@@ -99,6 +99,11 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToPartialPaymentDriver(Function(num amountPaidCash) params) {
+    remoteDataSource.listenToPartialPaymentDriver(params);
+  }
+
+  @override
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params) {
     remoteDataSource.listenToAcceptOffer(params);
   }

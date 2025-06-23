@@ -102,64 +102,64 @@ class _TripJoinViewState extends State<TripJoinView>
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.h),
-                child: Column(children: [
-                  const Sizer(height: 30,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(3, (index) {
-                      bool isSelected = selectedIndex == index;
-                      Widget child = TripOptionWidget(
-                        imagePath: Assets.locationTripIcon,
-                        title: getTitleForIndex(index),
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = index;
-                            _controller.forward(from: 0);
-                          });
-                        },
-                        icon: getIconForIndex(index),
-                        borderColor: index == selectedIndex ? Colors.red : null,
-                        containerColor:
-                            index == selectedIndex ? context.isDarkMode?AppColors.Scaffold_Color_DARK:Colors.white : null,
-                        iconColor: index == selectedIndex
-                            ? AppColors.getRedColor(context)
-                            : AppColors.getButtonPrimaryColor(context),
-                        textColor: index == selectedIndex
-                            ? AppColors.getRedColor(context)
-                            : null,
-                      );
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32.h),
+              child: Column(children: [
+                const Sizer(height: 30,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(3, (index) {
+                    bool isSelected = selectedIndex == index;
+                    Widget child = TripOptionWidget(
+                      imagePath: Assets.locationTripIcon,
+                      title: getTitleForIndex(index),
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                          _controller.forward(from: 0);
+                        });
+                      },
+                      icon: getIconForIndex(index),
+                      borderColor: index == selectedIndex ? Colors.red : null,
+                      containerColor:
+                          index == selectedIndex ? context.isDarkMode?AppColors.Scaffold_Color_DARK:Colors.white : null,
+                      iconColor: index == selectedIndex
+                          ? AppColors.getRedColor(context)
+                          : AppColors.getButtonPrimaryColor(context),
+                      textColor: index == selectedIndex
+                          ? AppColors.getRedColor(context)
+                          : null,
+                    );
 
-                      if (isSelected) {
-                        return AnimatedBuilder(
-                          animation: _controller,
-                          builder: (context, _) {
-                            return Transform.translate(
-                              offset: Offset(0, _positionAnimation.value),
-                              child: Transform.scale(
-                                scale: _scaleAnimation.value,
-                                child: child,
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return child;
-                      }
-                    }),
-                  ),
-                  const Sizer(
-                    height: 20,
-                  ),
-                  AnimatedSwitcher(
+                    if (isSelected) {
+                      return AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, _) {
+                          return Transform.translate(
+                            offset: Offset(0, _positionAnimation.value),
+                            child: Transform.scale(
+                              scale: _scaleAnimation.value,
+                              child: child,
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return child;
+                    }
+                  }),
+                ),
+                const Sizer(
+                  height: 20,
+                ),
+                Expanded(
+                  child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: getSelectedContent(selectedIndex),
                   ),
-                ]),
-              ),
+                ),
+              ]),
             ),
             Positioned.directional(
               bottom: 40.h,

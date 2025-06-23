@@ -25,13 +25,14 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BuildDriverOtpSheet extends StatefulWidget {
-  const BuildDriverOtpSheet({super.key, required this.onPressed, this.activeTrip, this.remainingTime, required this.onSafety, required this.onFinalizeTrip, this.onTick});
+  const BuildDriverOtpSheet({super.key, required this.onPressed,required this.onReport, this.activeTrip, this.remainingTime, required this.onSafety, required this.onFinalizeTrip, this.onTick});
   final Function(String) onPressed;
   final RunningTripEntity? activeTrip;
   final VoidCallback onSafety;
   final Function onFinalizeTrip;
   final Function(Duration)? onTick;
   final DateTime? remainingTime;
+  final VoidCallback onReport;
 
   @override
   State<BuildDriverOtpSheet> createState() => _BuildDriverOtpSheetState();
@@ -251,21 +252,24 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       ],
                     ),
 
-                    Container(
-                      width: double.infinity,
-                      height: 45,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.PRIMARY_COLOR)
-                      ),
-                      child: Text(
-                        context.isArabic ? "تقرير العميل" : "Report Client",
-                        style: const TextStyle(
-                          fontSize: FontSize.s16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.PRIMARY_COLOR,
+                    GestureDetector(
+                      onTap: ()=>widget.onReport(),
+                      child: Container(
+                        width: double.infinity,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColors.PRIMARY_COLOR)
+                        ),
+                        child: Text(
+                          context.isArabic ? "تقرير العميل" : "Report Client",
+                          style: const TextStyle(
+                            fontSize: FontSize.s16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.PRIMARY_COLOR,
+                          ),
                         ),
                       ),
                     ),
