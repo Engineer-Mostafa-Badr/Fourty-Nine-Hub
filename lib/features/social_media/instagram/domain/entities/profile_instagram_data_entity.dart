@@ -10,10 +10,11 @@ class ProfileInstagramDataEntity {
   final int friendsCount;
   final int followersCount;
   final int followingCount;
+  final int viewsCount;
   final List<InstagramProfilePostEntity> postsEntity;
   final PaginationEntity paginationEntity;
 
-  const ProfileInstagramDataEntity({
+  const ProfileInstagramDataEntity( {
     required this.username,
     required this.firstName,
     required this.lastName,
@@ -23,6 +24,7 @@ class ProfileInstagramDataEntity {
     required this.friendsCount,
     required this.followersCount,
     required this.followingCount,
+    required this.viewsCount,
     required this.postsEntity,
     required this.paginationEntity,
   });

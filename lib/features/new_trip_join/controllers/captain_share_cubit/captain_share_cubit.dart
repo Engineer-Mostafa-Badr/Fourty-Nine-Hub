@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
@@ -42,7 +43,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       context.pop();
       String errorName = getFailureName(l, context);
       errorName == 'DebtError'
-          ? showDebtDialog(context, 'subCategoryId')
+          ? showDebtDialog(context, 'subCategoryId', context.isArabic? "يجب ان يكون هناك رصيد في المحفظه للتمكن من انشاء رحلة": "You must have a balance in your wallet to create a trip")
           : errorName == 'SubscribeError'
           ? showSubscribeDialog(context, 'subCategoryId')
           : showErrorMessage(context, getFailureMessage(l, context));

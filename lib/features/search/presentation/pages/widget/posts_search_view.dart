@@ -1,39 +1,19 @@
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
-import 'package:fourtyninehub/features/search/presentation/pages/widget/build_item_post_search.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
-
-
-
 class PostsSearchView extends StatefulWidget {
   const PostsSearchView({Key? key}) : super(key: key);
-
 
   @override
   State<PostsSearchView> createState() => _PostsSearchViewState();
@@ -80,7 +60,6 @@ class _PostsSearchViewState extends State<PostsSearchView> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
-
         final posts = _cubit.postsSearch;
         if (_cubit.searchController.text.trim().isEmpty) {
           return CustomEmptyWidget(
@@ -100,16 +79,30 @@ class _PostsSearchViewState extends State<PostsSearchView> {
               label: LocaleKeys.noResultsFound.localize,
             );
           }
+          print("${posts.length}");
+          print("${posts.first}");
+          print("${posts.first.content}");
+          print("${posts.first.name}");
+          print(posts.first.user.firstName);
+          print("${posts.first.id}");
           return ListView.builder(
             controller: _scrollController, // Add this line
             itemCount: posts.length,
             itemBuilder: (context, index) {
+              return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  return NormalPostScreen(
+                    postEntity: posts[index],
+                  );
+                },
+              );
+
               return ListTile(
                 title: Text(posts[index].user.firstName),
               );
             },
           );
-
         }
 
         // Handle error state
@@ -123,12 +116,8 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         return const Center(child: Text('Something went wrong.'));
       },
     );
-
-
   }
 }
-
-
 
 /*
     return Padding(

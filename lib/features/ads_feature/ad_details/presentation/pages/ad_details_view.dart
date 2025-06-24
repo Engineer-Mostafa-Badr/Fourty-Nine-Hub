@@ -1,45 +1,35 @@
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/constants/subscription_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/widgets/lable_and_text_marriage_details.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_prop_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/are_you_sure_delete_ad_widget.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/build_tag_ads_widget.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/image_ads_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -73,88 +63,229 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   @override
   Widget build(BuildContext context) {
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
-    print("userId#{$userId");
+    print("userId#{$userId}");
 
-    return CustomScaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: AppColors.getTextColor(context),
-            ),
-            onPressed: () {
-              context.pop();
-            },
-          ),
-        ),
-        body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
-            listener: (contex, state) {
-          if (state.isError) {
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure!,
-                context,
+    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
+      builder: (context, state) {
+        if (state.ad == null) {
+          return const Center(
+            child: CustomCircularProgressIndicator(),
+          );
+        }
+        return CustomScaffold(
+          bottomSheet: Container(
+            // height: 300.h,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.getReversedTextColor(context),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.r),
+                topRight: Radius.circular(20.r),
               ),
-            );
-          } else if (state.isSuccess) {
-            showSuccessMessage(context, Labels.success);
-          }
-        }, builder: (context, state) {
-          if (state.ad == null) {
-            return const Center(
-              child: CustomCircularProgressIndicator(),
-            );
-          }
-          List<AdDetailsPropEntity>? details = state.ad?.details
-              .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
-              .toList();
-          print(
-              "state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Label(
+                      text: state.ad!.title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      color: AppColors.getTextColor(context),
+                    ),
+                    Label(
+                        text: '${LocaleKeys.currency.localize} ${state.ad!.price}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      color: AppColors.getTextColor(context),),
+                    Label(
+                        text: state.ad!.description,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      color: AppColors.getTextColor(context),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SvgPicture.asset(Assets.adsLocationIcon),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Label(
+                              text:
+                              context.isArabic ? '${state.ad!.cityAr}, ${state.ad!.governorateAr}' : '${state.ad!.cityEn}, ${state.ad!.governorateEn}',
+                              style: Styles.headerText(
+                                fontSize: 24,
+                                height: 1.60,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
 
-          return Stack(
-            children: [
-              Column(
+                      /*    Label(
+                            text: (context.isArabic
+                                ? state.ad!.subCategoryNameAr
+                                : widget.item.subCategoryNameEn) ??
+                                'N/A',
+                            style: Styles.smallText(
+                              color: const Color(0xFFF33D49),
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              height: 1.60,
+                            ),
+                          ),*/
+                      ],
+                    ),
+                  ],
+                ),
+                userId == state.ad?.userId
+                    ? _buildRequestsButton(state.ad?.id ?? '')
+                    : _buildActionsWidget(),
+              ],
+            ),
+          ),
+          body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
+            listener: (context, state) {
+              if (state.isError) {
+                showErrorMessage(
+                  context,
+                  getFailureMessage(
+                    state.failure!,
+                    context,
+                  ),
+                );
+              } else if (state.isSuccess) {
+                showSuccessMessage(context, Labels.success);
+              }
+            },
+            builder: (context, state) {
+              if (state.ad == null) {
+                return const Center(
+                  child: CustomCircularProgressIndicator(),
+                );
+              }
+              List<AdDetailsPropEntity>? details = state.ad?.details
+                  .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
+                  .toList();
+              print(
+                  "state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
+              print("state.ad!.images.length ${state.ad!.images.length}");
+
+              return Stack(
                 children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ListView(
-                        children: [
-                          BuildTagAdsWidget(
-                            status: state.ad?.subscriptionStatus ?? '',
-                            views: state.ad?.views ?? 0,
+                  ListView.separated(
+                    itemBuilder: (context, index) => ImageFromInternet(
+                      width: double.infinity,
+                      height: 300.h,
+                      image: state.ad!.images[index],
+                      defaultLogo: true,
+                      fit: BoxFit.cover,
+                    ),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 8,
+                    ),
+                    itemCount: state.ad!.images.length ?? 0,
+                    padding: EdgeInsets.zero,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top+8,
+                      left: 16,
+                      right: 16,
+                    ),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            context.pop();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.getReversedTextColor(context),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(
+                              Icons.arrow_back,
+                              size: 24,
+                            ),
                           ),
-                          _buildAdInfoWidget(ad: state.ad!),
-                          const SizedBox(
-                            height: 16,
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            if (state.ad!.isFavourite == true) {
+                              context.read<AdvertisementCubit>().unFavouriteAd(state.ad!.id);
+                            } else {
+                              context.read<AdvertisementCubit>().favouriteAd(state.ad!.id);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.getReversedTextColor(context),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: Icon(
+                              state.ad!.isFavourite == true?
+                              Icons.favorite:Icons.favorite_border,
+                              color: state.ad!.isFavourite == true?
+                                  Colors.red:AppColors.getTextColor(context),
+                              size: 24,
+                            ),
                           ),
-                          // اذا كانت الاعلان من نوع زواج
-                          if (details!.isNotEmpty &&
-                              state.ad?.mainCategoryId ==
-                                  '62c8b5b09332225799fe335e')
-                            _buildDetailsWidget(ad: state.ad!),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          _buildRelevantAdsWidget(),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  userId == state.ad?.userId
-                      ? _buildRequestsButton(state.ad?.id ?? '')
-                      : _buildActionsWidget(),
+                  // Positioned(
+                  //   bottom: 0,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
+                  //     child: SizedBox(
+                  //       height: 300.h,
+                  //       child: ListView(
+                  //         children: [
+                  //           BuildTagAdsWidget(
+                  //             status: state.ad?.subscriptionStatus ?? '',
+                  //             views: state.ad?.views ?? 0,
+                  //           ),
+                  //           // _buildAdInfoWidget(ad: state.ad!),
+                  //           const SizedBox(
+                  //             height: 16,
+                  //           ),
+                  //           // اذا كانت الاعلان من نوع زواج
+                  //           if (details!.isNotEmpty &&
+                  //               state.ad?.mainCategoryId ==
+                  //                   '62c8b5b09332225799fe335e')
+                  //             _buildDetailsWidget(ad: state.ad!),
+                  //           const SizedBox(
+                  //             height: 16,
+                  //           ),
+                  //           _buildRelevantAdsWidget(),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
-              ),
-              // if (context.read<UserCubit>().isLoggedIn)
-              //   _buildTag(status: state.ad?.subscriptionStatus ?? ''),
-            ],
-          );
-        }));
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
-  Widget _buildRelevantAdsWidget() {
+/*  Widget _buildRelevantAdsWidget() {
     return BlocBuilder<AdDetailsCubit, AdDetailsState>(
         builder: (context, state) {
       if (state.relevantAds?.isEmpty ?? true) {
@@ -188,88 +319,84 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         ],
       );
     });
-  }
+  }*/
 
   Widget _buildRequestsButton(String adId) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 8),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: AppButton(
-              label: LocaleKeys.deleteRequest.localize,
-              height: 38,
-              backColor: AppColors.SECONDARY_COLOR_DARK2,
-              onPressed: () {
-                bottomSheet(
-                    context: context,
-                    isFloating: true,
-                    asAlertDialog: true,
-                    widget: AreYouSureDeleteAdWidget(
-                      title: LocaleKeys.alert.localize,
-                      subTitle:
-                          LocaleKeys.areYouSureAboutDeletingTheAD.localize,
-                      action: () async {
-                        showLoadingDialog(context);
-                        await context.read<SubcategoriesCubit>().deleteAd(adId);
-                        if (!mounted) return;
-                        context.pop();
-                        context.pop();
-                        if (context
-                                .read<SubcategoriesCubit>()
-                                .state
-                                .deleteAdStatus ==
-                            SubcategoriesStates.adsSuccess) {
-                          context
-                              .read<SubcategoriesCubit>()
-                              .loadMyAds(id: widget.id);
-                          showSuccessMessage(
-                              context,
-                              context.isArabic
-                                  ? 'تم حذف اعلانك'
-                                  : 'Your ad has been deleted');
-                          context.pop();
-                        }
-                        if (context
-                                .read<SubcategoriesCubit>()
-                                .state
-                                .deleteAdStatus ==
-                            SubcategoriesStates.error) {
-                          showErrorMessage(
-                              context,
-                              getFailureMessage(
-                                  context
-                                          .read<SubcategoriesCubit>()
-                                          .state
-                                          .failure ??
-                                      UnknownFailure(''),
-                                  context));
-                        }
-                      },
-                    ));
-              },
-              style: Styles.headerText(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
+          AppButton(
+            height: 38,
+            backColor: AppColors.c0B1035,
+            onPressed: () async {
+              context.push(Routes.ADRequests,
+                  extra: AdRequestParams(id: widget.id, userName: ''));
+            },
+            label: LocaleKeys.showAdRequests.localize,
+            style: Styles.headerText(
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
             ),
           ),
           const SizedBox(
-            width: 8,
+            height: 8,
           ),
-          Expanded(
-            child: AppButton(
-              height: 38,
-              backColor: AppColors.c0B1035,
-              onPressed: () async {
-                context.push(Routes.ADRequests,
-                    extra: AdRequestParams(id: widget.id, userName: ''));
-              },
-              label: LocaleKeys.showAdRequests.localize,
-              style: Styles.headerText(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
+          AppButton(
+            label: LocaleKeys.deleteRequest.localize,
+            height: 38,
+            backColor: AppColors.SECONDARY_COLOR_DARK2,
+            onPressed: () {
+              bottomSheet(
+                  context: context,
+                  isFloating: true,
+                  asAlertDialog: true,
+                  widget: AreYouSureDeleteAdWidget(
+                    title: LocaleKeys.alert.localize,
+                    subTitle:
+                    LocaleKeys.areYouSureAboutDeletingTheAD.localize,
+                    action: () async {
+                      showLoadingDialog(context);
+                      await context.read<SubcategoriesCubit>().deleteAd(adId);
+                      if (!mounted) return;
+                      context.pop();
+                      context.pop();
+                      if (context
+                          .read<SubcategoriesCubit>()
+                          .state
+                          .deleteAdStatus ==
+                          SubcategoriesStates.adsSuccess) {
+                        context
+                            .read<SubcategoriesCubit>()
+                            .loadMyAds(id: widget.id);
+                        showSuccessMessage(
+                            context,
+                            context.isArabic
+                                ? 'تم حذف اعلانك'
+                                : 'Your ad has been deleted');
+                        context.pop();
+                      }
+                      if (context
+                          .read<SubcategoriesCubit>()
+                          .state
+                          .deleteAdStatus ==
+                          SubcategoriesStates.error) {
+                        showErrorMessage(
+                            context,
+                            getFailureMessage(
+                                context
+                                    .read<SubcategoriesCubit>()
+                                    .state
+                                    .failure ??
+                                    UnknownFailure(''),
+                                context));
+                      }
+                    },
+                  ));
+            },
+            style: Styles.headerText(
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
             ),
           ),
         ],
@@ -377,7 +504,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 //   onTap: () {
                 //     showModalBottomSheet(
                 //       backgroundColor: context.isDarkMode
-                //           ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                //           ? AppColors.DARK_BLUE_COLOR.withValues(alpha:0.95)
                 //           : AppColors.LIGHT_COLOR,
                 //       context: context,
                 //       shape: const RoundedRectangleBorder(
@@ -455,16 +582,16 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     });
   }
 
-  Widget _buildTag({required String status}) {
+/*  Widget _buildTag({required String status}) {
     // super premium
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10.w),
       color: status == 'premium'
-          ? Colors.amber.withOpacity(.8)
+          ? Colors.amber.withValues(alpha: .8)
           : status == 'regular'
-              ? Colors.grey.withOpacity(.8)
-              : Colors.grey.withOpacity(.8),
+              ? Colors.grey.withValues(alpha:.8)
+              : Colors.grey.withValues(alpha:.8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -487,7 +614,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     ? LocaleKeys.regularRequest.localize
                     : LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(
-                color: Colors.white.withOpacity(.8),
+                color: Colors.white.withValues(alpha:.8),
                 fontSize: 35,
                 fontWeight: FontWeight.bold),
             maxLines: 1,
@@ -497,9 +624,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     );
     // premium
     // Regular
-  }
+  }*/
 
-  Widget _buildAdInfoWidget({required AddDetailsModel ad}) {
+ /* Widget _buildAdInfoWidget({required AddDetailsModel ad}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1198,7 +1325,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           ),
       ],
     );
-  }
+  }*/
 
   Widget carsPropsSection(AddDetailsModel ad) {
     return Column(
@@ -1556,7 +1683,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     );
   }
 
-  Widget _buildDetailsWidget({required AddDetailsModel ad}) {
+  /*Widget _buildDetailsWidget({required AddDetailsModel ad}) {
     List<AdDetailsPropEntity>? details = ad.details
         .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
         .toList();
@@ -1691,5 +1818,5 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         //     }),
       ],
     );
-  }
+  }*/
 }

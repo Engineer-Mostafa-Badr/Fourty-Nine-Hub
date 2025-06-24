@@ -73,6 +73,7 @@ import '../features/RideFeature/domain/usecases/get_loading_offers_usecase.dart'
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import '../features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/partial_payment_in_trip.dart';
 import '../features/RideFeature/domain/usecases/rating_driver_by_client.dart';
 import '../features/RideFeature/domain/usecases/refuse_non_track_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/send_ok_iam_coming_message_usecase.dart';
@@ -225,10 +226,12 @@ class RideServiceLocatorUpdated {
         CancelTripByClientUseCase ( serviceLocator()));
     serviceLocator.registerLazySingleton<GetAvailableMapCountryUseCase>(() =>
         GetAvailableMapCountryUseCase( serviceLocator()));
-
+    serviceLocator.registerLazySingleton<PartialPaymentInTripUseCase>(() =>
+        PartialPaymentInTripUseCase( serviceLocator()));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

@@ -405,7 +405,7 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
           return Left(l);
         },
         (data) {
-          final responseData = ProfileInstagramDataModel.fromJson(data['data']);
+          final responseData = ProfileInstagramDataModel.fromJson(data['data']['profile']);
           return Right(responseData);
         },
       );
