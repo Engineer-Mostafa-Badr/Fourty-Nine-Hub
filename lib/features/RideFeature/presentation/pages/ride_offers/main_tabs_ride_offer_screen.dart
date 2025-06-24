@@ -19,8 +19,8 @@ import 'accept_ride_offer_screen.dart';
 import 'offer_ride_offer_screen.dart';
 
 class MainTabsRideOffer extends StatefulWidget {
-  const MainTabsRideOffer({super.key, required this.type});
-  final String type;
+  const MainTabsRideOffer({super.key, this.type = 'ride'});
+  final String? type;
 
   @override
   State<MainTabsRideOffer> createState() => _MainTabsRideOfferState();
@@ -35,12 +35,13 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
   @override
   void initState() {
     super.initState();
-    selectedTap = widget.type;
+    selectedTap = widget.type??'ride';
     if(widget.type=='ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
     if(widget.type=='ride')context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
     if(widget.type=='shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
     _tabController = TabController(length: _tabTitles.length, vsync: this);
   }
+
 
 
   @override
@@ -109,6 +110,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                 Sizer(),
                 Expanded(
                   child: AppButton(
+                    color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.black,
                     radius: 15,
                     label: context.isArabic ? 'تحميله' : 'Shipping',
                     onPressed: () {
@@ -239,4 +241,6 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
       ),
     );
   }
+
+
 }

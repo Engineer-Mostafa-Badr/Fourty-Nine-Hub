@@ -1633,8 +1633,13 @@ class CodegenLoader extends AssetLoader{
   "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
   "noInternetConnection": "لا يوجد اتصال بالإنترنت",
   "createAds": "انشاء اعلانات",
+  "driverRateYou": "تقييم السائق لك",
+  "ratingsCount": "عدد التقييمات",
+  "averageRate": "متوسط التقييم",
+  "time": "الوقت",
   "DidntReceiveOTP": "لم تستلم الكود؟",
-  "resendOTP": "اعادة ارسال الكود"
+  "resendOTP": "اعادة ارسال الكود",
+  "oneTime": "مرة واحدة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2057,7 +2062,7 @@ static const Map<String,dynamic> _en = {
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
-  "commentsRates": "comments/rates",
+  "commentsRates": "Comments/Rates",
   "comment": "Comment",
   "like": "Like",
   "sad": "Sad",
@@ -2588,7 +2593,7 @@ static const Map<String,dynamic> _en = {
   "entrance": "Entrance",
   "whatToDeliver": "What to deliver",
   "notes": "Notes",
-  "offerPrice": "Offer Price",
+  "offerPrice": "Price Offer",
   "premiumRequest": "Premium Request",
   "normalRequest": "Normal Request",
   "whereToPickUp": "Where to pick up",
@@ -2869,7 +2874,7 @@ static const Map<String,dynamic> _en = {
   "Year": "Year",
   "yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse": "Your request has been sent successfully, waiting for the driver's response",
   "startPoint": "Start Point",
-  "numberOfPassenger": "Number of Passenger",
+  "numberOfPassenger": "Number of Passengers",
   "record": "Record",
   "yourBalanceIsInsufficient": "Your balance is insufficient",
   "Cash": "Cash",
@@ -3270,8 +3275,13 @@ static const Map<String,dynamic> _en = {
   "youDontHaveAvailableOffer": "You don't Have Available Offers",
   "noInternetConnection": "No internet connection",
   "createAds": "Create Ads",
+  "driverRateYou": "Driver rate you",
+  "ratingsCount": "Ratings Count",
+  "averageRate": "Average Rate",
+  "time": "Time",
   "DidntReceiveOTP": "Didn't receive OTP?",
-  "resendOTP": "Resend OTP"
+  "resendOTP": "Resend OTP",
+  "oneTime": "One Time"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

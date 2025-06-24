@@ -71,6 +71,8 @@ abstract class SocketIOListeners {
   static const String endTrip = 'Ride:endTrip';
   static const String listenToClientComing = 'RIDE:CLIENT_ABROACH_DRIVER';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
+  static const String removeLoading = 'LOADING:REMOVE_TRIP';
+  static const String newLoadingTrip = 'LOADING:NEW_TRIP';
   static const String acceptUntrackedTripOffer = 'RIDE:ACCEPT_UNTRACKED_TRIP_OFFER_BY_CLIENT';
   static const String rideUpdateUntrackedTrip = 'RIDE:NON_TRACKING_TRIPS_UPDATED';
   static const String rideUpdateOfferUntrackedClientTrip = 'RIDE:NON_TRACKING_OFFERS_UPDATE';

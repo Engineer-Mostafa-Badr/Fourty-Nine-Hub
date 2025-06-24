@@ -23,10 +23,14 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import '../../../../health_feature/create_doctor/domain/entities/city.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_cities.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import '../../../data/models/client/driver_all_rating_model.dart';
+import '../../../domain/entities/client/client_all_rating_entity.dart';
+import '../../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../../domain/entities/create_no_track_trip_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/get_client_accepted_trips_entity.dart';
@@ -36,8 +40,13 @@ import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../../domain/entities/get_offers_entity.dart';
 import '../../../domain/usecases/accept_non_track_trip_use_case.dart';
 import '../../../domain/usecases/cancel_non_track_trip_use_case.dart';
+import '../../../domain/usecases/client_trips/add_rate_with_client_use_case.dart';
+import '../../../domain/usecases/client_trips/get_client_all_rating_use_case.dart';
+import '../../../domain/usecases/client_trips/get_driver_all_rating_use_case.dart';
 import '../../../domain/usecases/client_trips/listen_to_offer_update_client_untracked_trip_use_case.dart';
+import '../../../domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../../../domain/usecases/create_non_track_trip_use_case.dart';
+import '../../../domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../../../domain/usecases/get_client_accepted_untracked_trips_use_case.dart';
 import '../../../domain/usecases/get_client_offer_untracked_trips_use_case.dart';
 import '../../../domain/usecases/get_client_offers_usecase.dart';
@@ -74,8 +83,11 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
   final GetClientPastUntrackedTripsUseCase getClientPastUntrackedTripsUseCase;
   final GetClientPastShippingTripsUseCase getClientPastShippingTripsUseCase;
   final ListenToOfferUpdateUntrackedTripUseCase listenToOfferUpdateUntrackedTripUseCase;
+  final AddRateWithClientUseCase addRateWithClientUseCase;
+  final UpdateClientRateNonSocketUseCase updateClientRateNonSocketUseCase;
+  final GetDriverAllRatingUseCase getDriverAllRatingUseCase;
+  final GetClientAllRatingUseCase getClientAllRatingUseCase;
   final ListenToOfferUpdateShippingTripUseCase listenToOfferUpdateShippingTripUseCase;
-
   ClientTripsCubit(
     this.makeNonTrackingRequestTripUsecase,
     this.getClientOffersUseCase,
@@ -83,17 +95,17 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     this._getCitiesUseCase,
     this._getGovernoratesUseCase,
     this.makeLoadingRequestTripUsecase,
-    this.getClientAcceptedShippingTripsUseCase,
-    this.getClientOfferShippingTripsUseCase,
-    this.createLoadingTripUseCase,
-    this.cancelShippingTripUseCase,
-    this.listenToOfferUpdateShippingTripUseCase,
-    this.refuseShippingTripUseCase,
-    this.acceptShippingTripUseCase,
-    this.getClientPastShippingTripsUseCase,
-    this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase,this.getClientPendingShippingTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase, this.listenToOfferUpdateUntrackedTripUseCase,
-  ) : super(const ClientTripsState());
-
+      this.getClientAcceptedShippingTripsUseCase,
+      this.getClientOfferShippingTripsUseCase,
+      this.createLoadingTripUseCase,
+      this.cancelShippingTripUseCase,
+      this.listenToOfferUpdateShippingTripUseCase,
+      this.refuseShippingTripUseCase,
+      this.acceptShippingTripUseCase,
+      this.getClientPastShippingTripsUseCase,
+      this.getClientPendingShippingTripsUseCase,
+      this.createNonTrackTripUseCase, this.getClientPendingUntrackedTripsUseCase, this.cancelNonTrackTripUseCase, this.getClientAcceptedUntrackedTripsUseCase, this.getClientOfferUntrackedTripsUseCase, this.acceptNonTrackTripUseCase, this.refuseNonTrackTripUseCase, this.getClientPastUntrackedTripsUseCase, this.listenToOfferUpdateUntrackedTripUseCase, this.addRateWithClientUseCase, this.updateClientRateNonSocketUseCase, this.getDriverAllRatingUseCase, this.getClientAllRatingUseCase,
+  ) : super( ClientTripsState());
 
   void listenToUpdateOfferTripShipping() {
     CliLogger.info('Listen To New Offer Trip');
@@ -114,6 +126,143 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       emit(state.copyWith(status: ClientTripsStates.success));
     });
   }
+  
+  Future<void> getClientAllRating(
+      {required String params,}) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+
+    final response = await getClientAllRatingUseCase(DriverAllRatingParams(id: params));
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          clientAllRating: rateData,
+          status: ClientTripsStates.success,
+        ));
+
+      },
+    );
+  }
+  Future<void> getDriverAllRating(
+      {required String params,}) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+
+    final response = await getDriverAllRatingUseCase(DriverAllRatingParams(id: params));
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          driverAllRating: rateData,
+          status: ClientTripsStates.success,
+        ));
+
+      },
+    );
+  }
+
+
+  Future<void> updateRateClientNonSocket(
+      {required UpdateClientRateParams params,required BuildContext context}) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+
+    final response = await updateClientRateNonSocketUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          createNonTrackTripEntity: rateData,
+          status: ClientTripsStates.success,
+        ));
+        showSuccessMessage(context, rateData.message ?? LocaleKeys.successSubmit.localize);
+
+      },
+    );
+  }
+
+  Future<void> rateClientNonSocket(
+      {required AddRateWithDriverParams params, required BuildContext context}) async {
+    emit(state.copyWith(status: ClientTripsStates.loading));
+
+    final response = await addRateWithClientUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          rateResponseEntity: rateData,
+          status: ClientTripsStates.success,
+        ));
+        showSuccessMessage(context, rateData.data ?? LocaleKeys.successSubmit.localize);
+      },
+    );
+  }
+
+  void listenToUpdateOfferTripNonSocketx() {
+    CliLogger.info('Listen To New Trip');
+
+    listenToOfferUpdateUntrackedTripUseCase((trip) {
+      if (isClosed) return;
+
+      final updatedTrip = ClientOfferTripEntity(
+        id: trip.id,
+        status: trip.status,
+        price: trip.price,
+        passengers: trip.passengers,
+        newOfferPrice: trip.newOfferPrice,
+        driverDetails: trip.driverDetails,
+        tripDetails: trip.tripDetails,
+        isFromSocket: true,
+      );
+
+      // Make a copy of current list or initialize if null
+      List<ClientOfferTripEntity> list = List.from(clientOfferTripsData);
+
+      // Debug: Log current state
+      CliLogger.info('Current list length: ${list.length}');
+      CliLogger.info('Current list IDs: ${list.map((e) => e.id).toList()}');
+      CliLogger.info('New trip ID: ${updatedTrip.id}');
+
+      // Check if trip already exists in the list
+      final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
+
+      if (existingIndex != -1) {
+        // Item exists - replace it at the same position (no increment)
+        list[existingIndex] = updatedTrip;
+        CliLogger.info('Replaced existing offer at index $existingIndex');
+        emit(state.copyWith(clientOfferTripData: list));
+      } else {
+        // Item doesn't exist - add it as new item and increment counter
+        list.add(updatedTrip);
+        // _newOffer = 0;
+
+        emit(state.copyWith(clientOfferTripData: list, newOfferCount: _newOffer));
+        CliLogger.info('Added new offer to list. New length: ${list.length}');
+        print("New offer count: $_newOffer");
+      }
+
+      // Update local copy for next calls
+      clientOfferTripsData = list;
+
+      // Debug: Log state after emitting
+      CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData?.length}');
+      log('Final list count: ${list.length}');
+      log(updatedTrip.toString());
+    });
+  }
+
+  int _newOffer = 0; // Must be defined in the class
+
   void listenToUpdateOfferTripNonSocket() {
     CliLogger.info('Listen To New Trip');
 
@@ -131,38 +280,85 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         isFromSocket: true,
       );
 
+      // Defensive: ensure the list is not null
       List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
 
-      // Debug: Log current state
-      CliLogger.info('Current list length: ${list.length}');
-      CliLogger.info('Current list IDs: ${list.map((e) => e.id).toList()}');
-      CliLogger.info('New trip ID: ${updatedTrip.id}');
-
-      // Check if trip already exists in the list
+      // Check if this trip already exists
       final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
 
       if (existingIndex != -1) {
-        // Item exists - replace it at the same position
+        // Exists -> update only
         list[existingIndex] = updatedTrip;
-        CliLogger.info('Replaced existing offer at index $existingIndex');
+        CliLogger.info('Updated existing trip at index $existingIndex');
+        _newOffer++; // ✅ This must run
+        emit(state.copyWith(clientOfferTripData: list ,newOfferCount: _newOffer));
       } else {
-        // Item doesn't exist - add it as new item
+        // New trip -> add and increase counter
         list.add(updatedTrip);
-        CliLogger.info('Added new offer to list. New length: ${list.length}');
+        // _newOffer++; // ✅ This must run
+        CliLogger.info('New offer received. Counter incremented: $_newOffer');
+        emit(state.copyWith(clientOfferTripData: list,));
       }
 
-      // Debug: Log state before emitting
-      CliLogger.info('About to emit state with list length: ${list.length}');
-      CliLogger.info('List IDs after update: ${list.map((e) => e.id).toList()}');
+      clientOfferTripsData = list; // Save back
 
-      emit(state.copyWith(clientOfferTripData: list));
-
-      // Debug: Log state after emitting
-      CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData?.length}');
-      log('Final list count: ${list.length}');
-      log(updatedTrip.toString());
+      // Debug logs
+      print("Updated new offer count: $_newOffer");
+      CliLogger.info('State emitted. Length: ${list.length}');
     });
   }
+/*
+  void listenToUpdateOfferTripNonSocketnew() {
+    CliLogger.info('Listen To New Trip');
+    listenToOfferUpdateUntrackedTripUseCase((trip) {
+      if (isClosed) return;
+
+      final updatedTrip = ClientOfferTripEntity(
+        id: trip.id,
+        status: trip.status,
+        price: trip.price,
+        passengers: trip.passengers,
+        newOfferPrice: trip.newOfferPrice,
+        driverDetails: trip.driverDetails,
+        tripDetails: trip.tripDetails,
+        isFromSocket: true,
+      );
+
+      // Defensive: ensure the list is not null
+      List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
+
+      // Check if this trip already exists
+      final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
+
+      if (existingIndex != -1) {
+        // Exists -> update only (NO counter increment)
+        list[existingIndex] = updatedTrip;
+        CliLogger.info('Updated existing trip at index $existingIndex');
+        emit(state.copyWith(clientOfferTripData: list, newOfferCount: _newOffer));
+      } else {
+        // New trip -> add and increase counter
+        list.add(updatedTrip);
+        // _newOffer++; // ✅ Only increment for NEW trips
+        CliLogger.info('New offer received. Counter incremented: $_newOffer');
+        emit(state.copyWith(clientOfferTripData: list,));
+      }
+
+      clientOfferTripsData = list; // Save back
+
+      // Debug logs
+      print("Updated new offer count: $_newOffer");
+      CliLogger.info('State emitted. Length: ${list.length}');
+    });
+  }
+*/
+
+  void resetCounter() {
+    print("resetCounter called");
+    _newOffer = 0;
+    clientOfferTripsData.clear(); // Clear the local list so no old trips remain
+    emit(state.copyWith(newOfferCount: 0, clientOfferTripData: []));
+  }
+
 
 
   void listenToUpdateOfferTripNonSocket2() {
@@ -252,16 +448,6 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     await getClientPastTrips();
     emit(state.copyWith(status: ClientTripsStates.success));
   }
-  void loadInitialClientPastShippingTrips() async {
-    // emit(state.copyWith(status: RestaurantsListStates.loading));
-    clientPastTripsData.clear();
-    currentPageClientPastTrips = 1;
-    hasMoreClientPastTrips = true;
-    isLoadingMoreClientPastTrips = false;
-    await getClientPastShippingTrips();
-    emit(state.copyWith(status: ClientTripsStates.success));
-  }
-
   Future<void> getClientPastTrips() async {
     print("hasMoreClientPastTrips $hasMoreClientPastTrips");
     print("isLoadingMoreClientPastTrips $isLoadingMoreClientPastTrips");
@@ -294,6 +480,17 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       },
     );
   }
+
+  void loadInitialClientPastShippingTrips() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    clientPastTripsData.clear();
+    currentPageClientPastTrips = 1;
+    hasMoreClientPastTrips = true;
+    isLoadingMoreClientPastTrips = false;
+    await getClientPastShippingTrips();
+    emit(state.copyWith(status: ClientTripsStates.success));
+  }
+
 
   Future<void> getClientPastShippingTrips() async {
     if (!hasMoreClientPastTrips || isLoadingMoreClientPastTrips) return;

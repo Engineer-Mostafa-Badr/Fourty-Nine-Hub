@@ -205,6 +205,7 @@ class LoadingMethodHelper {
 
   confirmIdentity({
     required XFile verifyUserImage,
+     Function(bool isSuccess)? onSuccessUploaded
   }) async {
     getSignUrl(
       data: {
@@ -220,9 +221,11 @@ class LoadingMethodHelper {
         await sendBinaryFileData(
             file: XFile(File(verifyUserImage.path).path),
             signedUrl: data['data']['confirmIdentityData']['signedUrl']);
-        await successUploadImage(
+        bool response = await successUploadImage(
             url:
             "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['confirmIdentityData']['mediaId']}");
+        onSuccessUploaded?.call(response); // Safely invoke with null check
+
       },
     );
   }

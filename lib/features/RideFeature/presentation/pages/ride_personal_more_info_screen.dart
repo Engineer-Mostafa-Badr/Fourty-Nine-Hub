@@ -216,6 +216,19 @@ class _RidePersonalMoreInfoScreenState
   //     },
   //   );
   // }
+  String _formatToArabicDigitsIfNeeded(BuildContext context, String input) {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    if (!isArabic) return input;
+
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String output = input;
+    for (int i = 0; i < english.length; i++) {
+      output = output.replaceAll(english[i], arabic[i]);
+    }
+    return output;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1089,6 +1102,29 @@ class _RidePersonalMoreInfoScreenState
   void _showOfferFareBottomSheet(BuildContext context) {
     final TextEditingController offerPriceController = TextEditingController();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    String _convertToArabicDigits(String input) {
+      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+      String output = input;
+      for (int i = 0; i < english.length; i++) {
+        output = output.replaceAll(english[i], arabic[i]);
+      }
+      return output;
+    }
+
+    String _convertToEnglishDigits(String input) {
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+      String output = input;
+      for (int i = 0; i < arabic.length; i++) {
+        output = output.replaceAll(arabic[i], english[i]);
+      }
+      return output;
+    }
 
     showModalBottomSheet(
       context: context,
@@ -1130,8 +1166,8 @@ class _RidePersonalMoreInfoScreenState
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () {
-                              offerPriceController.clear(); // ✅ Clear input
-                              Navigator.pop(context); // ✅ Then close
+                              offerPriceController.clear();
+                              Navigator.pop(context);
                             },
                             child: Container(
                               width: 40,
@@ -1153,29 +1189,29 @@ class _RidePersonalMoreInfoScreenState
                     TextFormField(
                       cursorColor: AppColors.PRIMARY_COLOR,
                       controller: offerPriceController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        hintText: "EGP",
-                        hintStyle: TextStyle(
+                        hintText: isArabic ? _convertToArabicDigits("EGP") : "EGP",
+                        hintStyle: const TextStyle(
                           fontSize: 40,
                           color: AppColors.c96979B,
                         ),
-                        border: UnderlineInputBorder(),
-                        focusedBorder: UnderlineInputBorder(
+                        border: const UnderlineInputBorder(),
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue, width: 2),
                         ),
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
                       keyboardType: TextInputType.number,
                       enableInteractiveSelection: false,
                       contextMenuBuilder: (context, editableTextState) =>
-                          const SizedBox.shrink(),
+                      const SizedBox.shrink(),
                       inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(9), // ✅ Max 9 digits
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
+                        LengthLimitingTextInputFormatter(9),
                         NoPasteFormatter(),
                       ],
                       textAlign: TextAlign.center,
@@ -1184,27 +1220,44 @@ class _RidePersonalMoreInfoScreenState
                         fontWeight: FontWeight.bold,
                         color: AppColors.PRIMARY_COLOR,
                       ),
+                      onChanged: (value) {
+                        if (isArabic) {
+                          final englishValue = _convertToEnglishDigits(value);
+                          final arabicValue = _convertToArabicDigits(englishValue);
+                          if (arabicValue != value) {
+                            final cursorPos = offerPriceController.selection.base.offset;
+                            offerPriceController.value = offerPriceController.value.copyWith(
+                              text: arabicValue,
+                              selection: TextSelection.collapsed(
+                                offset: cursorPos == -1 ? arabicValue.length : cursorPos,
+                              ),
+                            );
+                          }
+                        }
+                      },
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return context.isArabic
+                        final englishValue = value != null ? _convertToEnglishDigits(value) : null;
+
+                        if (englishValue == null || englishValue.isEmpty) {
+                          return isArabic
                               ? 'هذا الحقل مطلوب'
                               : 'This field is required';
                         }
 
-                        final numValue = int.tryParse(value);
+                        final numValue = int.tryParse(englishValue);
                         if (numValue == null) {
-                          return context.isArabic
+                          return isArabic
                               ? 'الرجاء إدخال رقم صحيح'
                               : 'Please enter a valid number';
                         }
 
                         if (numValue < 100) {
-                          return context.isArabic
+                          return isArabic
                               ? 'الرقم يجب أن لا يقل عن 100'
                               : 'The number must be at least 100';
                         }
 
-                        return null; // Valid
+                        return null;
                       },
                     ),
                     const SizedBox(height: 50),
@@ -1215,7 +1268,7 @@ class _RidePersonalMoreInfoScreenState
                         if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
                           setState(() {
-                            offerPrice = offerPriceController.text;
+                            offerPrice = _convertToEnglishDigits(offerPriceController.text);
                           });
                         }
                       },

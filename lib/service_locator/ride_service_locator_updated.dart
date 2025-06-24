@@ -56,7 +56,11 @@ import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/shipping_repository.dart';
 import '../features/RideFeature/domain/usecases/accept_non_track_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/cancel_non_track_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/client_trips/add_rate_with_client_use_case.dart';
+import '../features/RideFeature/domain/usecases/client_trips/get_client_all_rating_use_case.dart';
+import '../features/RideFeature/domain/usecases/client_trips/get_driver_all_rating_use_case.dart';
 import '../features/RideFeature/domain/usecases/client_trips/listen_to_offer_update_client_untracked_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/get_available_map_country_usecase.dart';
@@ -210,6 +214,14 @@ class RideServiceLocatorUpdated {
         AcceptShippingTripUseCase( serviceLocator()));
     serviceLocator.registerLazySingleton<GetClientPastShippingTripsUseCase>(() =>
         GetClientPastShippingTripsUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<AddRateWithClientUseCase>(() =>
+        AddRateWithClientUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateClientRateNonSocketUseCase>(() =>
+        UpdateClientRateNonSocketUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDriverAllRatingUseCase>(() =>
+        GetDriverAllRatingUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetClientAllRatingUseCase>(() =>
+        GetClientAllRatingUseCase( serviceLocator()));
     serviceLocator.registerLazySingleton<CancelTripByClientUseCase>(() =>
         CancelTripByClientUseCase ( serviceLocator()));
     serviceLocator.registerLazySingleton<GetAvailableMapCountryUseCase>(() =>
@@ -279,6 +291,10 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

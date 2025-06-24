@@ -1617,7 +1617,12 @@
   "youDontHaveAvailableOffer": "ليس لديك أي عروض متاحة حتى الآن",
   "noInternetConnection": "لا يوجد اتصال بالإنترنت",
   "createAds": "انشاء اعلانات",
+  "driverRateYou": "تقييم السائق لك",
+  "ratingsCount": "عدد التقييمات",
+  "averageRate": "متوسط التقييم",
+  "time": "الوقت",
   "DidntReceiveOTP" : "لم تستلم الكود؟",
-  "resendOTP" : "اعادة ارسال الكود"
+  "resendOTP" : "اعادة ارسال الكود",
+  "oneTime": "مرة واحدة"
 
 }

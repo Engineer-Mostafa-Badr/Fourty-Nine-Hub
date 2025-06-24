@@ -8,9 +8,10 @@ import '../../../../../res/style/app_colors.dart';
 
 class PremiumAndRequestWidget extends StatelessWidget {
   const PremiumAndRequestWidget({
-    super.key,
+    super.key, required this.onPremiumRequest, required this.onRequest,
   });
-
+  final Function() onPremiumRequest;
+  final Function() onRequest;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +26,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () =>onPremiumRequest(),
               child: Text(
                 LocaleKeys.premiumRequest.localize,
                 style: TextStyle(
@@ -45,7 +46,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () =>onRequest(),
               child: Text(
                 LocaleKeys.request.localize,
                 style: TextStyle(

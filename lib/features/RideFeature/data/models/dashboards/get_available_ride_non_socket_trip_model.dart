@@ -22,11 +22,12 @@ class GetAvailableRideNonSocketTripModel extends AvailableRideNonSocketTripEntit
 }
 
 class ClientDetailsModel extends ClientDetailsEntity {
-  ClientDetailsModel({super.firstName, super.profilePictureUrl, super.gender, super.rating});
+  ClientDetailsModel({super.firstName, super.profilePictureUrl, super.gender, super.rating,super.id});
 
   factory ClientDetailsModel.fromJson(Map<String, dynamic> json) {
     return ClientDetailsModel(
       firstName: json['firstName'],
+      id: json['id'],
       profilePictureUrl: json['profilePictureUrl'],
       gender: json['gender'],
       rating: json['rating'] != null ? RatingModel.fromJson(json['rating']) : null,

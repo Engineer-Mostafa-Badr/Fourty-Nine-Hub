@@ -1609,7 +1609,12 @@ abstract class  LocaleKeys {
   static const youDontHaveAvailableOffer = 'youDontHaveAvailableOffer';
   static const noInternetConnection = 'noInternetConnection';
   static const createAds = 'createAds';
+  static const driverRateYou = 'driverRateYou';
+  static const ratingsCount = 'ratingsCount';
+  static const averageRate = 'averageRate';
+  static const time = 'time';
   static const DidntReceiveOTP = 'DidntReceiveOTP';
   static const resendOTP = 'resendOTP';
+  static const oneTime = 'oneTime';
 
 }

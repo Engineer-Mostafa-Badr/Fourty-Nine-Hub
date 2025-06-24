@@ -1315,11 +1315,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     extra: UploadRiderImagesParams(
                         isShipping: true, isSocket: false));
               } else {
-                context.push(Routes.rideModeScreen,
-                    extra: RideModeParams(
-                        modeType: 'truk',
-                        isSocket:
-                            driverInfo?.driverType == 'socket' ? true : false));
+                context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'truck', isSocket: driverInfo?.driverType == 'socket' ? true : false));
               }
             }
           },
@@ -1396,7 +1392,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           onTap: () {
             if (context.isUserLoggedIn) {
               context.pop();
-              context.push(Routes.rideOffer, extra: false);
+              context.push(Routes.rideOffer,extra: 'ride');
             } else {
               context.pop();
               return pleaseLoginDialog(context);

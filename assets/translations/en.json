@@ -420,7 +420,7 @@
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
-  "commentsRates": "comments/rates",
+  "commentsRates": "Comments/Rates",
   "comment": "Comment",
   "like": "Like",
   "sad": "Sad",
@@ -951,7 +951,7 @@
   "entrance": "Entrance",
   "whatToDeliver": "What to deliver",
   "notes": "Notes",
-  "offerPrice": "Offer Price",
+  "offerPrice": "Price Offer",
   "premiumRequest": "Premium Request",
   "normalRequest": "Normal Request",
   "whereToPickUp": "Where to pick up",
@@ -1232,7 +1232,7 @@
   "Year": "Year",
   "yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse": "Your request has been sent successfully, waiting for the driver's response",
   "startPoint": "Start Point",
-  "numberOfPassenger": "Number of Passenger",
+  "numberOfPassenger": "Number of Passengers",
   "record": "Record",
   "yourBalanceIsInsufficient": "Your balance is insufficient",
   "Cash": "Cash",
@@ -1633,8 +1633,13 @@
   "youDontHaveAvailableOffer": "You don't Have Available Offers",
   "noInternetConnection" : "No internet connection",
   "createAds" : "Create Ads",
+  "driverRateYou": "Driver rate you",
+  "ratingsCount": "Ratings Count",
+  "averageRate": "Average Rate",
+  "time": "Time",
   "DidntReceiveOTP" : "Didn't receive OTP?",
-  "resendOTP" : "Resend OTP"
+  "resendOTP" : "Resend OTP",
+  "oneTime": "One Time"
 
 
 }
