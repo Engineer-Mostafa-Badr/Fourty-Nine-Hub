@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_e
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
@@ -109,6 +110,8 @@ class RideState {
   final bool? isChangedMindReason;
   final bool? isOtherReason;
   final bool? isClientNotShownReason;
+  LatLng? driverLocation;
+  LatLng? previousDriverLocation;
 
   RideState({
     this.status = RideStates.initState,
@@ -176,6 +179,8 @@ class RideState {
     this.isOtherReason=false,
     this.isClientNotShownReason=false,
     this.historyTrips,
+    this.driverLocation,
+    this.previousDriverLocation
   });
 
   RideState copyWith({
@@ -244,7 +249,9 @@ class RideState {
     List<RideOfferEntity>? rideOffers,
     bool? isChangedMindReason,
     bool? isOtherReason,
-    bool? isClientNotShownReason
+    bool? isClientNotShownReason,
+    LatLng? driverLocation,
+    LatLng? previousDriverLocation
   }) {
     return RideState(
       status: status ?? this.status,
@@ -311,7 +318,9 @@ class RideState {
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
       isOtherReason: isOtherReason ?? this.isOtherReason,
       isClientNotShownReason: isClientNotShownReason ?? this.isClientNotShownReason,
-      historyTrips: historyTrips ?? this.historyTrips
+      historyTrips: historyTrips ?? this.historyTrips,
+      driverLocation: driverLocation ?? this.driverLocation,
+      previousDriverLocation: previousDriverLocation ?? this.previousDriverLocation,
     );
   }
 }

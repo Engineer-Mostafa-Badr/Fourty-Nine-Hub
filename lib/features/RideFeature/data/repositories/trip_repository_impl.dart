@@ -1,8 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/loading/get_loading_accepted_model.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/create_non_track_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
@@ -14,21 +17,27 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/tr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading/settings_driver_loading_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
+import '../../domain/entities/loading/get_loading_avaliable_entity.dart';
 import '../../domain/repositories/trip_repository.dart';
 import '../../domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import '../datasources/dashboard_remote_data_source.dart';
@@ -228,5 +237,52 @@ class TripRepositoryImpl implements TripRepository {
   Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params) {
     return  remoteDataSource.addRateWithDriver(params);
   }
+
+  @override
+  Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params) {
+    return  remoteDataSource.getAcceptedNonSocketLoading(params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> createOfferLoading(CreateNonTrackOfferParams params) {
+    return  remoteDataSource.createOfferLoading(params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetLoadingAvailableEntity>>> getAvailableNonSocketLoading(ClientPendingTripParams params) {
+    return  remoteDataSource.getAvailableNonSocketLoading(params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetLoadingHistoryEntity>>> getHistoryNonSocketLoading(ClientPendingTripParams params) {
+    return  remoteDataSource.getHistoryNonSocketLoading(params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateNonSocket(UpdateClientRateParams params) {
+    return  remoteDataSource.updateDriverRateNonSocket(params);
+  }
+
+  @override
+  Future<Either<Failure, DriverSettingLoadingEntity>> getDriverLoadingSettings() {
+    return  remoteDataSource.getDriverLoadingSettings();
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverLoadingSettings(UpdateDriverSettingsLoadingParams params) {
+    return  remoteDataSource.updateDriverLoadingSettings(params);
+  }
+
+  @override
+  void listenToRemoveLoading(Function(String tripId) params) {
+    remoteDataSource.listenToRemoveLoading(params);
+
+  }
+
+  @override
+  void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params) {
+    remoteDataSource.listenToAvailableLoading(params);
+  }
+
 
 }

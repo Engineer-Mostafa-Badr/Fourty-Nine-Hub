@@ -73,12 +73,14 @@ class YourDetailsModel extends YourDetailsEntity {
     String? firstName,
     String? lastName,
     String? pictureUrl,
+    bool? verifiedBadge, // ✅ NEW FIELD
     RatingModel? rating,
   }) : super(
     id: id,
     firstName: firstName,
     lastName: lastName,
     pictureUrl: pictureUrl,
+    verifiedBadge: verifiedBadge, // ✅ INCLUDE HERE
     rating: rating,
   );
 
@@ -88,12 +90,14 @@ class YourDetailsModel extends YourDetailsEntity {
       firstName: json['firstName'],
       lastName: json['lastName'],
       pictureUrl: json['pictureUrl'],
+      verifiedBadge: json['verifiedBadge'], // ✅ PARSE HERE
       rating: json['rating'] != null
           ? RatingModel.fromJson(json['rating'])
           : null,
     );
   }
 }
+
 
 class RatingModel extends RatingEntity {
   RatingModel({num? average, int? count})

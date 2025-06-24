@@ -31,6 +31,10 @@ class BottomRideStatusWidget extends StatefulWidget {
   final bool isRecording;
   final String audioDuration;
   final VoidCallback onMicTap;
+  final bool isStarted;
+
+  final Function onStartRecord;
+  final Function onStopRecord;
 
 
   const BottomRideStatusWidget({
@@ -49,6 +53,9 @@ class BottomRideStatusWidget extends StatefulWidget {
     required this.onMicTap,
     required this.paymentMethod,
     required this.otp,
+    required this.isStarted,
+    required this.onStartRecord,
+    required this.onStopRecord,
   });
 
   @override
@@ -106,6 +113,7 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
                 ),
               ),
               const SizedBox(width: 12),
+              if(widget.paymentMethod == 'cash' && widget.price >= 200 && widget.isStarted)
               Expanded(
                 child: ElevatedButton(
                   onPressed: widget.onPartialPayment,
@@ -233,34 +241,67 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
           ),
           const SizedBox(height: 16),
          if(widget.isRecording)
-          ClickableWidget(
-            onTap: () {
-              if (_isRecording) {
-                setState(() {
+           ClickableWidget(
+             onTap: () {
+               if (_isRecording) {
+                 setState(() {
+                   _isRecording = false;
+                   widget.onStopRecord();
+                 });
+               } else {
+                 setState(() {
+                   _isRecording = true;
+                   widget.onStartRecord();
+                 });
+               }
+             },
+             child: Container(
+               height: 40,
+               decoration: BoxDecoration(color: _isRecording ? Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
+               padding: EdgeInsets.all(20.w),
+               child: Row(
+                 children: [
+                   SvgPicture.asset(
+                     Assets.rideRecord,
+                     color: _isRecording ? null : Colors.black,
+                   ),
+                   SizedBox(width: 30.w),
+                   if (!_isRecording) Text(context.isArabic?'تسجيل صوتي':'Record', style: TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else Expanded(child: _buildWaveform()),
+                 ],
+               ),
+             ),
+           ),
+          Text(context.isArabic?'اخر تسجيل صوتي فقط سيم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
 
-                });
-              } else {
-                setState(() {
-
-                });
-              }
-            },
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(color: _isRecording ? Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
-              padding: EdgeInsets.all(20.w),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    Assets.rideRecord,
-                    color: _isRecording ? null : Colors.black,
-                  ),
-                  SizedBox(width: 30.w),
-                  if (!_isRecording)  Text(context.isArabic ? "تسجيل الصوت": 'Record', style: const TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else const Expanded(child: FakeRecordingWaveform())
-                ],
-              ),
-            ),
-          ),
+          // ClickableWidget(
+          //   onTap: () {
+          //     if (_isRecording) {
+          //       setState(() {
+          //
+          //       });
+          //     } else {
+          //       setState(() {
+          //
+          //       });
+          //     }
+          //   },
+          //   child: Container(
+          //     height: 40,
+          //     decoration: BoxDecoration(color: _isRecording ? Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
+          //     padding: EdgeInsets.all(20.w),
+          //     child: Row(
+          //       children: [
+          //         SvgPicture.asset(
+          //           Assets.rideRecord,
+          //           color: _isRecording ? null : Colors.black,
+          //         ),
+          //         SizedBox(width: 30.w),
+          //         // if (!_isRecording)  Text(context.isArabic ? "تسجيل الصوت": 'Record', style: const TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else const Expanded(child: FakeRecordingWaveform())
+          //
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
           const SizedBox(height: 16),
           // Cancel Button
@@ -319,6 +360,24 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildWaveform() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(20, (index) {
+        final height = (index % 5 + 1) * 4.0;
+        return Container(
+          width: 3,
+          height: height,
+          margin: EdgeInsets.symmetric(horizontal: 1),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        );
+      }),
     );
   }
 

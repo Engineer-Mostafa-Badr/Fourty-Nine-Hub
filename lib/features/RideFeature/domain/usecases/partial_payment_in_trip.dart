@@ -14,5 +14,5 @@ class PartialPaymentInTripUseCaseParams {
   final String paymentMethod;
   PartialPaymentInTripUseCaseParams({required this.tripId, required this.amount, required this.paymentMethod});
 
-  toJson() => {'amount': amount, 'paymentMethod': paymentMethod};
+  toJson() => {'amount': amount.toInt(), 'paymentMethod': 'wallet'};
 }

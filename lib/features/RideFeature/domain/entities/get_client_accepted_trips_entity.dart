@@ -51,12 +51,32 @@ class DriverDetailsEntity {
   final String? firstName;
   final String? picture;
   final RatingEntity? rating;
+  final VehicleDetailsEntity? vehicleDetails;
 
   DriverDetailsEntity({
     this.id,
     this.firstName,
     this.picture,
     this.rating,
+    this.vehicleDetails,
+
+  });
+}
+class VehicleDetailsEntity {
+  final String? brandAr;
+  final String? brandEn;
+  final String? modelAr;
+  final String? modelEn;
+  final String? color;
+  final int? year;
+
+  VehicleDetailsEntity({
+    this.brandAr,
+    this.brandEn,
+    this.modelAr,
+    this.modelEn,
+    this.color,
+    this.year,
   });
 }
 

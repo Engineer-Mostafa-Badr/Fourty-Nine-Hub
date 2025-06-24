@@ -80,10 +80,12 @@ import 'package:go_router/go_router.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../main.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
@@ -93,6 +95,7 @@ import '../../../domain/usecases/get_available_map_country_usecase.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
 
+import '../../../domain/usecases/partial_payment_in_trip.dart';
 import '../../../domain/usecases/rating_driver_by_client.dart';
 import '../../../domain/usecases/send_ok_iam_coming_message_usecase.dart';
 
@@ -186,6 +189,8 @@ class RideCubit extends Cubit<RideState> {
 
   final GetAvailableMapCountryUseCase getAvailableMapCountryUseCase;
 
+  final PartialPaymentInTripUseCase partialPaymentInTripUseCase;
+
   RideCubit(
     this.getRideCategories,
     this.getShippingCategoriesUsecase,
@@ -222,6 +227,7 @@ class RideCubit extends Cubit<RideState> {
     this.cancelTripByClientUseCase,
     this.getAllHistoryTripsUseCase,
     this.getAvailableMapCountryUseCase,
+    this.partialPaymentInTripUseCase,
   ) : super(RideState(
           rideOffers: [],
         )) {
@@ -373,18 +379,53 @@ class RideCubit extends Cubit<RideState> {
           print(
               "RIDE:RIDE:DRIVER_COMPLETED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
         }
-        emit(state.copyWith(status: RideStates.success));
+
+        emit(state.copyWith(status: RideStates.success, driverLocation: null, previousDriverLocation: null));
         // RIDE:DRIVER_COMPLETED_TRIP:  {driverCompletedTrip: true}
       });
 
       // tracking
+      // SharedWebSocket.socket!.on("RIDE:TRIP_LOCATION_UPDATED", (data) {
+      //   CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking:  $data");
+      //   emit(state.copyWith(status: RideStates.success));
+      //   //  RIDE:TRIP_LOCATION_UPDATED tracking:  {updateLocation: {tripId: 682a0ef3fe6c419d46b21cd0, driverId: 681fa7a42ad43c198641e0eb, location: {latitude: 31.2802515, longitude: 31.6776039, timestamp: null}}}
+      // });
       SharedWebSocket.socket!.on("RIDE:TRIP_LOCATION_UPDATED", (data) {
-        CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking:  $data");
-        emit(state.copyWith(status: RideStates.success));
-        //  RIDE:TRIP_LOCATION_UPDATED tracking:  {updateLocation: {tripId: 682a0ef3fe6c419d46b21cd0, driverId: 681fa7a42ad43c198641e0eb, location: {latitude: 31.2802515, longitude: 31.6776039, timestamp: null}}}
+        CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking: $data");
+
+        if (data is Map<String, dynamic> && data.containsKey('updateLocation')) {
+          final updateLocation = data['updateLocation'] as Map<String, dynamic>;
+
+          final String? incomingTripId = updateLocation['tripId'] as String?;
+          if (state.requestedTrip != null &&
+              state.requestedTrip!.status == TripState.started.name &&
+              incomingTripId == state.requestedTrip!.id) {
+
+            if (updateLocation.containsKey('location')) {
+              final locationData = updateLocation['location'] as Map<String, dynamic>;
+              final latitude = locationData['latitude'] as double?;
+              final longitude = locationData['longitude'] as double?;
+
+              if (latitude != null && longitude != null) {
+                final newDriverLocation = LatLng(latitude, longitude);
+
+                // IMPORTANT: Store the current driverLocation as the previousDriverLocation
+                // before updating to the new location.
+                final LatLng? oldDriverLocation = state.driverLocation;
+
+                emit(state.copyWith(
+                  driverLocation: newDriverLocation,
+                  previousDriverLocation: oldDriverLocation, // <-- Pass the old location here
+                  status: RideStates.success,
+                ));
+              }
+            }
+          }
+        }
       });
     }
   }
+
   String? lastState;
   void changeTripStatus({required TripState tripState}) {
     if (state.requestedTrip != null) {
@@ -460,6 +501,32 @@ class RideCubit extends Cubit<RideState> {
           isClientNotShownReason: true,
           status: RideStates.success));
     }
+  }
+
+  Future<void> partialPayment({required String tripId, required double amount, required BuildContext context, required String subCategoryId}) async {
+    emit(state.copyWith(status: RideStates.loading));
+    final Either<Failure, bool> result = await partialPaymentInTripUseCase(PartialPaymentInTripUseCaseParams(tripId: tripId, amount: amount, paymentMethod: 'wallet'));
+    result.fold(
+      (failure){
+        String errorName = getFailureName(failure, navigatorKey.currentContext!);
+        errorName == 'Insufficient Funds'
+            ? showDebtDialog(navigatorKey.currentContext!, subCategoryId, navigatorKey.currentContext!.isArabic? "الرصيد غير كافي": "Insufficient funds")
+            : errorName == 'SubscribeError'
+            ? showSubscribeDialog(navigatorKey.currentContext!, subCategoryId)
+            : showErrorMessage(navigatorKey.currentContext!, getFailureMessage(failure, navigatorKey.currentContext!));
+
+        emit(state.copyWith(status: RideStates.error));
+      },
+      (isCanceled) {
+        showSuccessMessage(
+            navigatorKey.currentContext!,
+            navigatorKey.currentContext!.isArabic
+                ? "تم الدفع بنجاح" : "Payment done successfully");
+        emit(state.copyWith(
+            status: RideStates.success, requestedTrip: state.requestedTrip));
+      },
+    );
+
   }
 
   bool loadingHomeData = false;
@@ -2621,18 +2688,17 @@ class RideCubit extends Cubit<RideState> {
     }
   }
 
-
-
-  uploadRecord(String tripId, String mediaId) async {
+  uploadRecord(BuildContext context, String tripId, String mediaId) async {
     final Either<Failure, bool> result =
-        await recordingTripUseCase(RecordingTripUseCaseParams(tripId, mediaId));
+    await recordingTripUseCase(RecordingTripUseCaseParams(tripId, mediaId));
 
     result.fold(
-      (failure) {
-        isLoadingSubmitRegister = false;
+          (failure) {
+        context.pop();
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (data) async {
+          (data) async {
+        context.pop();
         emit(state.copyWith(status: RideStates.success));
       },
     );
@@ -2664,8 +2730,11 @@ class RideCubit extends Cubit<RideState> {
   }
 
   Future<String?> stopRecord(
-      {required String subcategoryId, required String tripId}) async {
+      {required BuildContext context,
+        required String subcategoryId,
+        required String tripId}) async {
     try {
+      showLoadingDialog(context);
       log('stopRecord');
       String? path = await record.stop();
       await UploadRecord().mediaUrl(
@@ -2675,7 +2744,7 @@ class RideCubit extends Cubit<RideState> {
         onSuccess: (String mediaId, String tripId) async {
           log("tripId$tripId");
           log("mediaId$mediaId");
-          await uploadRecord(tripId, mediaId);
+          await uploadRecord(context, tripId, mediaId);
         },
       );
       // await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  'mediaId'));

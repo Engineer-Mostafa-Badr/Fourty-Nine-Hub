@@ -39,6 +39,7 @@ class YourDetailsEntity {
   final String? firstName;
   final String? lastName;
   final String? pictureUrl;
+  final bool? verifiedBadge; // ✅ NEW FIELD
   final RatingEntity? rating;
 
   YourDetailsEntity({
@@ -46,6 +47,7 @@ class YourDetailsEntity {
     this.firstName,
     this.lastName,
     this.pictureUrl,
+    this.verifiedBadge, // ✅ INCLUDE HERE
     this.rating,
   });
 }
