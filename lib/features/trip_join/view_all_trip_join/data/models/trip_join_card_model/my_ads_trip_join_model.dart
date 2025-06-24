@@ -1,10 +1,10 @@
+// my_ads_trip_join_model.dart
+
 import '../../../domain/entities/my_ads_trip_join_entity.dart';
 
 class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
   MyAdsTripJoinModel({
-    super.subscribedPremium,
-    super.subscriptionEndDate,
-    super.trips,
+    super.offers,
     super.pagination,
   });
 
@@ -12,12 +12,9 @@ class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
     final data = json['data'];
 
     return MyAdsTripJoinModel(
-      subscribedPremium: data['subscribedPremium'],
-      subscriptionEndDate: data['subscriptionEndDate'],
-      trips: data['trips'] != null
-          ? List<MyAdsTripDocModel>.from(
-          data['trips'].map((x) => MyAdsTripDocModel.fromJson(x)))
-          : null,
+      offers: (data['offers'] as List<dynamic>?)
+          ?.map((e) => MyAdsTripDocModel.fromJson(e))
+          .toList(),
       pagination: data['pagination'] != null
           ? PaginationModel.fromJson(data['pagination'])
           : null,
@@ -28,55 +25,81 @@ class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
 class MyAdsTripDocModel extends MyAdsTripDocEntity {
   MyAdsTripDocModel({
     super.id,
-    super.vehicle,
-    super.fromAr,
-    super.toAr,
-    super.fromEn,
-    super.toEn,
-    super.passengers,
-    super.price,
-    super.time,
-    super.countryCode,
-    super.isRepeat,
+    super.pricePerSeat,
     super.status,
-    super.createdAt,
     super.views,
+    super.isRepeat,
+    super.passengers,
+    super.startDate,
+    super.vehicleDetails,
+    super.location,
   });
 
   factory MyAdsTripDocModel.fromJson(Map<String, dynamic> json) {
     return MyAdsTripDocModel(
-      id: json['_id'],
-      vehicle: json['vehicleId'] != null
-          ? VehicleModel.fromJson(json['vehicleId'])
-          : null,
-      fromAr: json['fromAr'],
-      toAr: json['toAr'],
-      fromEn: json['fromEn'],
-      toEn: json['toEn'],
-      passengers: json['passengers'],
-      price: json['price'],
-      time: json['time'],
-      countryCode: json['countryCode'],
-      isRepeat: json['isRepeat'],
+      id: json['id'],
+      pricePerSeat: (json['pricePerSeat'] as num?)?.toDouble(),
       status: json['status'],
-      createdAt: json['createdAt'],
       views: json['views'],
+      isRepeat: json['isRepeat'],
+      passengers: json['passengers'],
+      startDate: json['startDate'],
+      vehicleDetails: json['vehicleDetails'] != null
+          ? VehicleDetailsModel.fromJson(json['vehicleDetails'])
+          : null,
+      location: json['location'] != null
+          ? LocationModel.fromJson(json['location'])
+          : null,
     );
   }
 }
 
-class VehicleModel extends VehicleEntity {
-  VehicleModel({
-    super.id,
-    super.brand,
-    super.model,
+class VehicleDetailsModel extends VehicleDetailsEntity {
+  VehicleDetailsModel({
+    super.brandAr,
+    super.brandEn,
+    super.modelAr,
+    super.modelEn,
   });
 
-  factory VehicleModel.fromJson(Map<String, dynamic> json) {
-    return VehicleModel(
-      id: json['_id'],
-      brand: json['Brand'],
-      model: json['Model'],
+  factory VehicleDetailsModel.fromJson(Map<String, dynamic> json) {
+    return VehicleDetailsModel(
+      brandAr: json['brandAr'],
+      brandEn: json['brandEn'],
+      modelAr: json['modelAr'],
+      modelEn: json['modelEn'],
+    );
+  }
+}
+
+class LocationModel extends LocationEntity {
+  LocationModel({
+    super.start,
+    super.target,
+  });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    return LocationModel(
+      start: json['start'] != null
+          ? CoordinatesModel.fromJson(json['start'])
+          : null,
+      target: json['target'] != null
+          ? CoordinatesModel.fromJson(json['target'])
+          : null,
+    );
+  }
+}
+
+class CoordinatesModel extends CoordinatesEntity {
+  CoordinatesModel({
+    super.coordinates,
+  });
+
+  factory CoordinatesModel.fromJson(Map<String, dynamic> json) {
+    return CoordinatesModel(
+      coordinates: (json['coordinates'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
     );
   }
 }

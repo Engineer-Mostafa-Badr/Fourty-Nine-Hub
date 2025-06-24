@@ -7,10 +7,12 @@ import "package:fourtyninehub/features/ride/RideRequest/domain/entity/expected_p
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/data/datasource/remote_datasource/view_all_trip_join_remote_datasource.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/delete_my_trip_join_entity.dart";
+import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/get_request_count_entity.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/my_ads_trip_join_entity.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/request_trip_join_entity.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/repos/view_all_trip_join_repo.dart";
+import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_trip_join_offer_use_case.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/delete_my_trip_join_use_case.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_car_brand_use_case.dart";
 
@@ -63,12 +65,12 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   }
 
   @override
-  Future<Either<Failure, List<TripJoinEntity>>> getAvailableTripJoin(CarBrandParams params) {
+  Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailableTripJoin(CarBrandParams params) {
     return viewripJoinRemoteDataSource.getAvailableTripJoin(params);
   }
 
   @override
-  Future<Either<Failure, RequestTripJoinEntity>> getRequestTripJoin(CarBrandParams params) {
+  Future<Either<Failure,  List<GetRequestTripJoinEntity>>> getRequestTripJoin(CarBrandParams params) {
     return viewripJoinRemoteDataSource.getRequestTripJoin(params);
   }
 
@@ -90,5 +92,15 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   @override
   Future<Either<Failure, DeleteMyTripJoinEntity>> applyReadRequestTripJoin(DeleteMyTripParams params) {
     return viewripJoinRemoteDataSource.applyReadRequestTripJoin(params);
+  }
+
+  @override
+  Future<Either<Failure, DeleteMyTripJoinEntity>> createTripJoinOffer(CreateTripJoinParams params) {
+    return viewripJoinRemoteDataSource.createTripJoinOffer(params);
+  }
+
+  @override
+  Future<Either<Failure, GetRequestCountEntity>> getRequestCountTripJoin() {
+    return viewripJoinRemoteDataSource.getRequestCountTripJoin();
   }
 }

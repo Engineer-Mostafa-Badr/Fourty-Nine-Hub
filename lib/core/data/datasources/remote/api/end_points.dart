@@ -1613,13 +1613,15 @@ class EndPoints {
   static const getDriverLoadingSettings = '/loading/drivers/settings';
   static String getAllCarBrand = '/ride/cars/brands';
   static String getAllCarModel = '/ride/cars/';
-  static String getTripExpectedPrice = '/ride/come-with-you/trip/expectedPrice';
-  static String getAvailableTripJoin = '/ride/come-with-you/get-all';
-  static String getRequestTripJoin = '/ride/come-with-you/trip/requests';
-  static String getMyAdsTripJoin = '/ride/come-with-you/my';
-  static String deleteMyAdsTripJoin = '/ride/come-with-you/Delete/';
-  static String applyViewTripJoin = '/ride/come-with-you/applyView/';
-  static String applyReadRequestTripJoin = '/ride/come-with-you/applyRead/';
+  static String getTripExpectedPrice = '/trip-join/offers/expected-price';
+  static String getAvailableTripJoin = '/trip-join/offers/available';
+  static String getRequestTripJoin = '/trip-join/requests';
+  static String getMyAdsTripJoin = '/trip-join/offers/me';
+  static String deleteMyAdsTripJoin = '/trip-join/offers/';
+  static String applyViewTripJoin = '/trip-join/offers/';
+  static String applyReadRequestTripJoin = '/trip-join/requests/';
+  static String createTripJoinOffer = '/trip-join/offers';
+  static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
 
 

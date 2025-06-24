@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_trip_join_offer_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
@@ -20,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../routes/routes.dart';
 import '../../domain/usecases/get_expected_price_use_case.dart';
@@ -758,6 +761,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   String? selectedBrand;
   String? selectedBrandId;
   String? selectedModel;
+  String? selectedModelId;
   int? selectedSeatNum;
   bool isChecked = false;
   TimeOfDay? time;
@@ -765,7 +769,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   var phoneController = TextEditingController();
   String? selectedCountry;
   final MapController _mapController = MapController();
-
+  final _formKey = GlobalKey<FormState>();
   List<double>? currentLocation;
   List<double>? toLocation;
   String? currentAddress;
@@ -786,14 +790,19 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   }
 
   String _calculateTotalPrice(ExpectedPriceTripEntity? entity) {
-    final pricePerSeat = entity?.price ?? 0;
+    final pricePerSeat = entity?.pricePerSeat ?? 0;
     final seatCount = selectedSeatNum ?? 1;
     final total = pricePerSeat * seatCount;
     return total % 1 == 0 ? total.toInt().toString() : total.toStringAsFixed(1);
   }
 
-  String _getTime() {
+  String _getTime2() {
     return time?.format(context) ?? TimeOfDay.now().format(context);
+  }
+  DateTime _getTime() {
+    final now = DateTime.now();
+    final selected = time ?? TimeOfDay.now();
+    return DateTime(now.year, now.month, now.day, selected.hour, selected.minute);
   }
 
   // New method to print all selected data
@@ -817,7 +826,27 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
+    return BlocListener<ViewAllTripJoinCubit, ViewAllTripJoinState>(
+  listener: (context, state) {
+    if (state.status == ViewAllTripJoinStatus.failure) {
+      String errorName = getFailureName(state.failure!, context);
+      final failure = state.failure;
+      if (failure is ServerFailure) {
+        // Try to get errors from the errors list first
+        if (failure.errors != null && failure.errors!.isNotEmpty) {
+          showErrorMessage(context, failure.errors!.first);
+          return;
+        }
+        errorName == 'DebtError'
+            ? showDebtDialog(context, "62c8ba9f8e28a58a3edf57ee",LocaleKeys.tripJoin.localize)
+            : errorName == 'SubscribeError'
+            ? showSubscribeDialog(context, "62c8ba9f8e28a58a3edf57ee")
+            : showErrorMessage(
+            context, getFailureMessage(state.failure!, context));
+      }
+    }
+  },
+  child: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
       builder: (context, state) {
         return SharedScaffold(
           mainCategoryId: 1,
@@ -872,6 +901,41 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                       context: context,
                       color: Colors.blue,
                       text: toAddress,
+                        onPressed: () async {
+                          context.push(
+                            Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                            extra: RideOpenStreetMapSearchAndPickParams(
+                              onPicked: (pickedData) async {
+                                toAddress = pickedData.addressName;
+                                toLocation = [
+                                  pickedData.latLong.latitude,
+                                  pickedData.latLong.longitude,
+                                ];
+
+                                context.pop();
+
+                                if (currentLocation != null && toLocation != null) {
+                                  final params = ExpectedPriceTripParams(
+                                    startLatitude: currentLocation![0],
+                                    startLongitude: currentLocation![1],
+                                    targetLatitude: toLocation![0],
+                                    targetLongitude: toLocation![1],
+                                  );
+
+                                  context.read<ViewAllTripJoinCubit>().getExpectedPrice(params: params);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Please select both locations')),
+                                  );
+                                }
+
+                                setState(() {});
+                              },
+                            ),
+                          );
+                        }
+
+                      /*
                       onPressed: () async {
                         context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                             extra: RideOpenStreetMapSearchAndPickParams(
@@ -897,6 +961,8 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                               },
                             ));
                       },
+
+                       */
                     ),
                   ),
                   // ElevatedButton(
@@ -917,28 +983,48 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                   // ),
 
                   const Sizer(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.h),
-                    child: FormTextField(
-                      textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
-                      type: TextInputType.phone,
-                      height: 76.h,
-                      style: Styles.mediumText(color: AppColors.getTextColor(context)),
-                      constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
-                      fillColor: AppColors.getFillColor(context),
-                      borderRadius: BorderRadius.circular(30.h),
-                      borderColor: AppColors.getFillColor(context),
-                      borderSide: AppColors.getFillColor(context),
-                      controller: phoneController,
-                      hint: LocaleKeys.phoneNumber.localize,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.please_enter_phone_number.localize;
-                        }
-                        return null;
-                      },
+                  Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.always, // 👈 enables live validation
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.h),
+                      child: FormTextField(
+                        textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                        type: TextInputType.phone,
+                        height: 76.h,
+                        style: Styles.mediumText(color: AppColors.getTextColor(context)),
+                        constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                        fillColor: AppColors.getFillColor(context),
+                        borderRadius: BorderRadius.circular(30.h),
+                        borderColor: AppColors.getFillColor(context),
+                        borderSide: AppColors.getFillColor(context),
+                        controller: phoneController,
+                        hint: LocaleKeys.phoneNumber.localize,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(11),
+                        ],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return LocaleKeys.please_enter_phone_number.localize;
+                          }
+
+                          if (!value.startsWith('01')) {
+                            return LocaleKeys.please_enter_phone_number.localize;
+                          }
+
+                          final egyptianPhoneRegExp = RegExp(r'^(010|011|012|015)\d{8}$');
+                          if (!egyptianPhoneRegExp.hasMatch(value)) {
+                            return LocaleKeys.please_enter_phone_number.localize;
+                          }
+
+                          return null;
+                        },
+                      ),
                     ),
                   ),
+
+
                   const Sizer(),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.h),
@@ -1004,9 +1090,13 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                               items: carModels,
                               selectedItem: selectedModel,
                               onSelected: (value) {
+                                final selectedModelEntity = context.read<ViewAllTripJoinCubit>().carModelData.firstWhere(
+                                      (e) => e.modelEn == value,
+                                );
                                 setState(() {
                                   selectedModel = value;
                                 });
+                                selectedModelId = selectedModelEntity.id;
                               },
                               isPaginated: true,
                               canOpen: selectedBrandId != null && carModels.isNotEmpty,
@@ -1041,42 +1131,96 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                       },
                       formatDistance: _formatDistance,
                       calculateTotalPrice: () => _calculateTotalPrice(state.expectedPriceEntity),
-                      getTime: _getTime,
+                      getTime: _getTime2,
                     ),
                   ),
                   const Sizer(),
                   // New button to print all data
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
-                    child: ElevatedButton(
-                      onPressed: () => _printAllData(state),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.PRIMARY_COLOR,
-                        minimumSize: Size(double.infinity, 48.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.h),
-                        ),
-                      ),
-                      child: Text(
-                        'Print All Data',
-                        style: Styles.mediumText(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h),
+                    child: PremiumAndRequestTripWidget(
+                      onPremiumPressed: () {
+                        if (phoneController.text.isEmpty ||
+                            selectedBrand == null ||
+                            selectedModel == null ||
+                            selectedSeatNum == null ||
+                            currentLocation == null ||
+                            toLocation == null ||
+                            selectedBrandId == null ||
+                            selectedModelId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(LocaleKeys.pleaseFillAllFields.localize),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        final params = CreateTripJoinParams(
+                          creatorPhoneNumber: phoneController.text,
+                          subcategoryId: "62c8ba9f8e28a58a3edf57ee",
+                          isPremium: true,
+                          isRepeat: isChecked,
+                          passengers: selectedSeatNum!,
+                          vehicleCarBrandId: selectedBrandId!,
+                          vehicleModelId: selectedModelId!,
+                          startDate: _getTime(),
+                          startLongitude: currentLocation![0],
+                          startLatitude: currentLocation![1],
+                          targetLongitude: toLocation![0],
+                          targetLatitude: toLocation![1],
+                        );
+
+                        context.read<ViewAllTripJoinCubit>().createTripJoinOffer(params, context);
+                      },
+                      onNormalPressed: () {
+                        if (phoneController.text.isEmpty ||
+                            selectedBrand == null ||
+                            selectedModel == null ||
+                            selectedSeatNum == null ||
+                            currentLocation == null ||
+                            toLocation == null ||
+                            selectedBrandId == null ||
+                            selectedModelId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(LocaleKeys.pleaseFillAllFields.localize),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        final params = CreateTripJoinParams(
+                          creatorPhoneNumber: phoneController.text,
+                          subcategoryId: "62c8ba9f8e28a58a3edf57ee",
+                          isPremium: false,
+                          isRepeat: isChecked,
+                          passengers: selectedSeatNum!,
+                          vehicleCarBrandId: selectedBrandId!,
+                          vehicleModelId: selectedModelId!,
+                          startDate: _getTime(),
+                          startLongitude: currentLocation![0],
+                          startLatitude: currentLocation![1],
+                          targetLongitude: toLocation![0],
+                          targetLatitude: toLocation![1],
+                        );
+
+                        context.read<ViewAllTripJoinCubit>().createTripJoinOffer(params, context);
+                      },
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h),
-                    child: const PremiumAndRequestWidget(),
-                  ),
+
+
                 ],
               ),
             ),
           ),
         );
       },
-    );
+    ),
+);
   }
 
   Widget _customLocationField({
@@ -1438,5 +1582,34 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
         );
       },
     );
+  }
+}
+
+class EgyptianPhoneFormatter extends TextInputFormatter {
+  static final _validPrefix = RegExp(r'^01[0125]');
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    final text = newValue.text;
+
+    // Allow empty input (so user can start typing)
+    if (text.isEmpty) return newValue;
+
+    // Only digits
+    if (!RegExp(r'^\d*$').hasMatch(text)) return oldValue;
+
+    // Limit to 11 digits (handled by LengthLimitingTextInputFormatter but just in case)
+    if (text.length > 11) return oldValue;
+
+    // Must start with 010, 011, 012, or 015
+    if (!_validPrefix.hasMatch(text)) {
+      if (text.length <= 3) return newValue; // let user finish typing prefix
+      return oldValue;
+    }
+
+    return newValue;
   }
 }
