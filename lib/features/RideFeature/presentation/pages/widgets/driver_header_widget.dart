@@ -14,6 +14,142 @@ class DriverHeaderWidget extends StatelessWidget {
   final String? carName;
   final String carNumber;
 
+
+   static List<ColorModel> colorList = [
+    ColorModel(
+      id: "677409f87167cb520348f4d5",
+      nameEnglish: "Black",
+      nameArabic: "أسود",
+      code: "#000000",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4d6",
+      nameEnglish: "White",
+      nameArabic: "أبيض",
+      code: "#FFFFFF",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4d7",
+      nameEnglish: "Silver",
+      nameArabic: "فضي",
+      code: "#C0C0C0",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4d8",
+      nameEnglish: "Gray",
+      nameArabic: "رمادي",
+      code: "#808080",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4d9",
+      nameEnglish: "Red",
+      nameArabic: "أحمر",
+      code: "#FF0000",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4da",
+      nameEnglish: "Blue",
+      nameArabic: "أزرق",
+      code: "#0000FF",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4db",
+      nameEnglish: "Green",
+      nameArabic: "أخضر",
+      code: "#008000",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4dc",
+      nameEnglish: "Yellow",
+      nameArabic: "أصفر",
+      code: "#FFFF00",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4dd",
+      nameEnglish: "Brown",
+      nameArabic: "بني",
+      code: "#A52A2A",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4de",
+      nameEnglish: "Beige",
+      nameArabic: "بيج",
+      code: "#F5F5DC",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4df",
+      nameEnglish: "Ivory",
+      nameArabic: "عاجي",
+      code: "#FFFFF0",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e0",
+      nameEnglish: "Orange",
+      nameArabic: "برتقالي",
+      code: "#FFA500",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e1",
+      nameEnglish: "Gold",
+      nameArabic: "ذهبي",
+      code: "#FFD700",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e2",
+      nameEnglish: "Purple",
+      nameArabic: "أرجواني",
+      code: "#800080",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e3",
+      nameEnglish: "Maroon",
+      nameArabic: "ماروني",
+      code: "#800000",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e4",
+      nameEnglish: "Turquoise",
+      nameArabic: "فيروزي",
+      code: "#40E0D0",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e5",
+      nameEnglish: "Pink",
+      nameArabic: "وردي",
+      code: "#FFC0CB",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e6",
+      nameEnglish: "Navy Blue",
+      nameArabic: "أزرق داكن",
+      code: "#000080",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e7",
+      nameEnglish: "Teal",
+      nameArabic: "أخضر مزرق",
+      code: "#008080",
+    ),
+    ColorModel(
+      id: "677409f87167cb520348f4e8",
+      nameEnglish: "Charcoal",
+      nameArabic: "فحمي",
+      code: "#36454F",
+    ),
+  ];
+
+  String? getColorNameById({
+    required String id,
+    required bool isArabic,
+  }) {
+    final color = colorList.firstWhere(
+          (color) => color.id == id,
+    );
+
+    return color == null ? null : (isArabic ? color.nameArabic : color.nameEnglish);
+  }
+
+
   const DriverHeaderWidget({
     super.key,
     required this.rideStatusWidget,
@@ -39,22 +175,8 @@ class DriverHeaderWidget extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    if (carColor != null)
-                      Text(
-                        '$carColor',
-                        style: const TextStyle(
-                          fontSize: FontSize.s12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    if (carColor != null && carName != null)
-                      const Text(
-                        ' - ',
-                        style: TextStyle(
-                          fontSize: FontSize.s12,
-                          color: Colors.grey,
-                        ),
-                    ),
+
+
                     if (carName != null)
                       Text(
                         '$carName',
@@ -74,6 +196,26 @@ class DriverHeaderWidget extends StatelessWidget {
                     if (carModel != null)
                       Text(
                         '$carModel',
+                        style: const TextStyle(
+                          fontSize: FontSize.s12,
+                          color: Colors.grey,
+                        ),
+                      ),
+
+                    if (carColor != null && carModel != null)
+                      const Text(
+                        ' - ',
+                        style: TextStyle(
+                          fontSize: FontSize.s12,
+                          color: Colors.grey,
+                        ),
+                      ),
+
+                    if (carColor != null)
+                      Text(
+                        // '$carColor',
+                        // '${HexColor(carColor!)}',
+                        '${getColorNameById(id: carColor!, isArabic: context.isArabic)}',
                         style: const TextStyle(
                           fontSize: FontSize.s12,
                           color: Colors.grey,
@@ -292,6 +434,29 @@ class _TripDurationCountdownState extends State<TripDurationCountdown> {
         fontSize: FontSize.s14,
         fontWeight: FontWeight.bold,
       ),
+    );
+  }
+}
+
+class ColorModel {
+  final String id;
+  final String nameEnglish;
+  final String nameArabic;
+  final String code;
+
+  ColorModel({
+    required this.id,
+    required this.nameEnglish,
+    required this.nameArabic,
+    required this.code,
+  });
+
+  factory ColorModel.fromJson(Map<String, dynamic> json) {
+    return ColorModel(
+      id: json['_id']['\$oid'],
+      nameEnglish: json['name_english'],
+      nameArabic: json['name_arabic'],
+      code: json['code'],
     );
   }
 }

@@ -460,7 +460,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
         ));
   }
 
-  showDebtDialog(BuildContext context, String subCategoryId) {
+  showDebtDialog(BuildContext context, String subCategoryId, String title) {
     showCustomDialogTrip(
         context,
         Column(
@@ -475,7 +475,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text('Please pay the Debt for more trips',
+            Text(title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -488,7 +488,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
               children: [
                 AppButton(
                     width: context.screenWidth / 3.4,
-                    label: 'Close',
+                    label: context.isArabic? 'اغلاق' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -496,7 +496,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
                 const SizedBox(width: 16),
                 AppButton(
                     width: context.screenWidth / 3.4,
-                    label: 'Pay',
+                    label: context.isArabic? 'دفع' : 'Pay',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       Navigator.of(context).pop();

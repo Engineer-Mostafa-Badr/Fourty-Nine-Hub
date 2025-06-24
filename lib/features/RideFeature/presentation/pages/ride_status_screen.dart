@@ -98,6 +98,13 @@ class RideStatusScreen extends StatelessWidget {
 
                             BottomRideStatusWidget(
                               price: 200,
+                              isStarted: true,
+                              onStartRecord: () {
+                                // cubit.startRecord();
+                              },
+                              onStopRecord: () {
+                                // cubit.stopRecord(context: context, subcategoryId: state.activeTrip?.subCategoryId ?? '', tripId: state.activeTrip?.tripId ?? '');
+                              },
                               fromLocation: 'أول العاشر من رمضان',
                               toLocation:
                               'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
