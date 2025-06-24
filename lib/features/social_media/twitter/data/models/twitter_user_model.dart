@@ -13,6 +13,7 @@ class TwitterUserModel extends TwitterUserEntity {
   });
 
   factory TwitterUserModel.fromJson(dynamic json) {
+    print('JSON: $json');
     // Handle case where json is just a user ID string
     if (json is String) {
       return TwitterUserModel(
@@ -67,10 +68,10 @@ class TwitterUserModel extends TwitterUserEntity {
 
     // Fallback for invalid data
     return TwitterUserModel(
-      id: '',
-      firstName: '',
-      lastName: '',
-      email: '',
+      id: json['id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      email: json['email'] ?? '',
       isDocumented: false,
       hasStory: false,
       createdAt: DateTime.now(),

@@ -22,6 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../../social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -125,7 +127,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 
       print('⚡ Executing search with filter: $filter');
       switch (filter) {
-        case 'totalUsers':
+        case 'users':
           await cubit.loadUsersSearchData(params: params);
           break;
         case 'reels':
@@ -302,7 +304,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 
                   final prefs = await SharedPreferences.getInstance();
                   final filters = [
-                    'totalUsers', 'reels', 'posts',
+                    'users', 'reels', 'posts',
                     'mainCategories', 'subCategories', 'ads'
                   ];
                   await prefs.setString('filter', filters[i]);
@@ -320,7 +322,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                   );
 
                   switch (filter) {
-                    case 'totalUsers': cubit.loadUsersSearchData(params: params); break;
+                    case 'users': cubit.loadUsersSearchData(params: params); break;
                     case 'reels': cubit.loadReelsSearchData(params: params); break;
                     case 'posts': cubit.loadPostsSearchData(params: params); break;
                     case 'mainCategories': cubit.loadPaginatedSearchData(params: params); break;
@@ -359,23 +361,26 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          ProfileSearchView(),
-          ReelSearchView(),
-          PostsSearchView(
+        children: [
+          const ProfileSearchView(),
+          const ReelSearchView(),
+          BlocProvider(
+    create: (context) => serviceLocator<SocialPostsCubit>(),
+  child: const PostsSearchView(
             // params: SearchParams(
             //   search: _searchController.text,
             //   params: PaginationParams(page: 1),
             // ),
           ),
-          MainCategorySearchView(
+),
+          const MainCategorySearchView(
             // params: SearchParams(
             //   search: _searchController.text,
             //   params: PaginationParams(page: 1),
             // ),
           ),
-          SubCategorySearchView(),
-          AdsSearchView(
+          const SubCategorySearchView(),
+          const AdsSearchView(
 
           ),
           // ComeWithMeSearchView(

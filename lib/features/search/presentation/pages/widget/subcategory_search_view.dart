@@ -116,12 +116,18 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
         }
 
         // List view with loader at bottom
-        return ListView.builder(
+        return GridView.builder(
           controller: _scrollController,
           physics: _cubit.searchController.text.trim().isEmpty
               ? const NeverScrollableScrollPhysics()
               : const AlwaysScrollableScrollPhysics(),
-
+          gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: .65,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+          ),
           itemCount: _cubit.subCategoriesSearch.length +
               (_cubit.isLoadingSubCategoriesSearchMore ? 1 : 0),
           itemBuilder: (context, index) {
@@ -132,9 +138,39 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
               );
             }
             final subCategory = _cubit.subCategoriesSearch[index];
-            return ListTile(
-              title: Text(subCategory.nameEn),
+            return SubCategoryCard(
+              mainCategory: MainCategoryEntity(id: 'id', nameEn: 'nameEn', image: 'image', banner: 'banner', cover: 'cover', total: 5),
+              item: subCategory,
+              onFav: () async {
+                // var result = await controller
+                //     .toggleSubCategoryToFavorites(data[index].id);
+                // return result;
+              },
             );
+            /*return GridView.builder(
+              padding: EdgeInsets.all(24.w),
+              itemCount: _cubit.subCategoriesSearch.length,
+              // controller: this.scrollController,
+              gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: .65,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+              ),
+              itemBuilder: (context, index) => SubCategoryCard(
+                mainCategory: MainCategoryEntity(id: 'id', nameEn: 'nameEn', image: 'image', banner: 'banner', cover: 'cover', total: 5),
+                item: _cubit.subCategoriesSearch[index],
+                onFav: () async {
+                  // var result = await controller
+                  //     .toggleSubCategoryToFavorites(data[index].id);
+                  // return result;
+                },
+              ),
+            );*/
+            // return ListTile(
+            //   title: Text(subCategory.nameEn),
+            // );
           },
         );
 

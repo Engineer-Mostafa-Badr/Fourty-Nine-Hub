@@ -1,16 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/build_item_ads_search.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
@@ -69,60 +64,59 @@ class _AdsSearchViewState extends State<AdsSearchView> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
-      child: BlocProvider<AdvertisementCubit>(
-        create: (_) => serviceLocator<AdvertisementCubit>(),
-        child: BlocBuilder<AdvertisementCubit, AdsState>(
-          builder: (context, advertise) {
-            final controllerAdvertise = context.read<AdvertisementCubit>();
-
-            return BlocBuilder<SearchCubit, SearchState>(
-              buildWhen: (prev, curr) =>
-                  prev.adsSearch != curr.adsSearch ||
-                  prev.status != curr.status,
-              builder: (context, state) {
-                final ads = _cubit.adsSearch;
-                if (_cubit.searchController.text.trim().isEmpty) {
-                  return CustomEmptyWidget(
-                    label: LocaleKeys.noData.localize,
-                  );
-                }
-                if (state.status == SearchStates.loading && ads.isEmpty) {
-                  return const Center(child: CupertinoActivityIndicator());
-                }
-
-                if (ads.isEmpty) {
-                  return CustomEmptyWidget(
-                    label: LocaleKeys.noResultsFound.localize,
-                  );
-                }
-
-                return ListView.builder(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: ads.length + (_cubit.isLoadingAdsMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index >= ads.length) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        child: Center(child: CupertinoActivityIndicator()),
-                      );
-                    }
-
-                    return BuildItemAdsSearch(
-                      item: ads[index],
-                      onFav: (String id) async {
-                        return await controllerAdvertise.favouriteAd(id);
-                      },
-                      onRemoveFav: (String id) async {
-                        return await controllerAdvertise.unFavouriteAd(id);
-                      },
-                    );
-                  },
-                );
-              },
+      child: BlocBuilder<SearchCubit, SearchState>(
+        buildWhen: (prev, curr) =>
+            prev.adsSearch != curr.adsSearch || prev.status != curr.status,
+        builder: (context, state) {
+          print('==> 0');
+          // final ads = _cubit.adsSearch;
+          if (_cubit.searchController.text.trim().isEmpty) {
+            print('==> 1');
+            return CustomEmptyWidget(
+              label: LocaleKeys.noData.localize,
             );
-          },
-        ),
+          }
+          if (state.status == SearchStates.loading) {
+            print('==> 2');
+
+            return const Center(child: CupertinoActivityIndicator());
+          }
+
+          // if (ads.isEmpty) {
+          //   print('==> 3');
+          //
+          //   return CustomEmptyWidget(
+          //     label: LocaleKeys.noResultsFound.localize,
+          //   );
+          // }
+          print('==> 4');
+          return ListView.builder(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount:
+                _cubit.adsSearch.length + (_cubit.isLoadingAdsMore ? 1 : 0),
+            itemBuilder: (context, index) {
+              print('==> 5');
+              if (index >= _cubit.adsSearch.length) {
+                print('==> 6');
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(child: CupertinoActivityIndicator()),
+                );
+              }
+              print('==> 7');
+              return BuildItemAdsSearch(
+                item: _cubit.adsSearch[index],
+                onFav: (String id) async {
+                  // return await controllerAdvertise.favouriteAd(id);
+                },
+                onRemoveFav: (String id) async {
+                  // return await controllerAdvertise.unFavouriteAd(id);
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }
