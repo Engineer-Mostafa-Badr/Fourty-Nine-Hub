@@ -114,10 +114,10 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                       const Divider(),
                       const Sizer(),
                       TripCardInfoWidget(
-                          title: widget.data.vehicle?.brand ?? "",
-                          model: widget.data.vehicle?.model ?? "",
+                          title: context.isArabic ?  widget.data.vehicleDetails?.brandAr ?? "" : widget.data.vehicleDetails?.brandEn ?? "",
+                          model:  context.isArabic ?  widget.data.vehicleDetails?.modelAr ?? "" : widget.data.vehicleDetails?.modelEn ?? "",
                           icon: Assets.tripJoinCarIcon,
-                          price: "${widget.data.price}",
+                          price: "${widget.data.pricePerSeat}",
                           seats: "${widget.data.passengers ?? 0}"
                         // icon: widget.iconCar
                         //     ? Assets.tripJoinCarIcon
@@ -129,17 +129,17 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                       const Sizer(
                         height: 30,
                       ),
-                      _locationWidget(
-                          title: context.isArabic
-                              ? widget.data?.fromAr ?? ""
-                              : widget.data?.fromEn ?? "",
-                          iconColor: AppColors.LIGHT_BLUE),
-                      const Sizer(),
-                      _locationWidget(
-                          title: context.isArabic
-                              ? widget.data?.toAr ?? ""
-                              : widget.data?.toEn ?? "",
-                          iconColor: AppColors.CHECK_MARK_COLOR),
+                      // _locationWidget(
+                      //     title: context.isArabic
+                      //         ? widget.data?.fromAr ?? ""
+                      //         : widget.data?.fromEn ?? "",
+                      //     iconColor: AppColors.LIGHT_BLUE),
+                      // const Sizer(),
+                      // _locationWidget(
+                      //     title: context.isArabic
+                      //         ? widget.data?.toAr ?? ""
+                      //         : widget.data?.toEn ?? "",
+                      //     iconColor: AppColors.CHECK_MARK_COLOR),
                       const Sizer(),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -149,7 +149,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              formatTimestamp(widget.data.time),
+                              formatTimestamp(widget.data.startDate),
                               style: Styles.headerText(
                                   fontSize: 32, fontWeight: FontWeight.bold),
                             ),

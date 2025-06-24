@@ -2,8 +2,57 @@
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import '../../../domain/entities/expected_price_entity.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import '../../../domain/entities/expected_price_entity.dart';
 
+class ExpectedPriceTripModel extends ExpectedPriceTripEntity {
+  ExpectedPriceTripModel({
+    required double pricePerSeat,
+    required double distance,
+    required double duration,
+    required String destinationAddress,
+    required String originAddress,
+    required List<List<double>> polyline,
+    required String type,
+  }) : super(
+    pricePerSeat: pricePerSeat,
+    distance: distance,
+    duration: duration,
+    destinationAddress: destinationAddress,
+    originAddress: originAddress,
+    polyline: polyline,
+    type: type,
+  );
 
+  factory ExpectedPriceTripModel.fromJson(Map<String, dynamic> json) {
+    List<List<double>> parsedPolyline = [];
+
+    final polylineData = json['polyline'];
+    if (polylineData is String) {
+      PolylinePoints polylinePoints = PolylinePoints();
+      final decoded = polylinePoints.decodePolyline(polylineData);
+      parsedPolyline =
+          decoded.map((point) => [point.latitude, point.longitude]).toList();
+    } else if (polylineData is List) {
+      parsedPolyline = polylineData
+          .map<List<double>>(
+              (point) => (point as List).map((e) => (e as num).toDouble()).toList())
+          .toList();
+    }
+
+    return ExpectedPriceTripModel(
+      pricePerSeat: (json['pricePerSeat'] ?? 0).toDouble(),
+      distance: (json['distance'] ?? 0).toDouble(),
+      duration: (json['duration'] ?? 0).toDouble(),
+      destinationAddress: json['destinationAddress'] ?? '',
+      originAddress: json['originAddress'] ?? '',
+      polyline: parsedPolyline,
+      type: json['type'] ?? '',
+    );
+  }
+}
+
+/*
 class ExpectedPriceTripModel extends ExpectedPriceTripEntity {
   ExpectedPriceTripModel({
     required double price,
@@ -86,3 +135,6 @@ class ExpectedPriceTripModel extends ExpectedPriceTripEntity {
   }
 }
 
+
+
+ */
