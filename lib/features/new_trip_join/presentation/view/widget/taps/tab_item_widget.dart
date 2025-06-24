@@ -11,6 +11,7 @@ class TabItemWidget extends StatelessWidget {
   final bool isSelected;
   final TabController tabController;
   final void Function() onTap;
+  final void Function() onShowHint;
 
   const TabItemWidget({
     super.key,
@@ -20,6 +21,7 @@ class TabItemWidget extends StatelessWidget {
     required this.isSelected,
     required this.tabController,
     required this.onTap,
+    required this.onShowHint,
   });
 
   @override
@@ -73,7 +75,7 @@ class TabItemWidget extends StatelessWidget {
                 top: -14,
                 right: -6,
                 child: GestureDetector(
-                  onTap: onTap,
+                  onTap: onShowHint,
                   child: SvgPicture.asset(icon),
                 ),
               ),

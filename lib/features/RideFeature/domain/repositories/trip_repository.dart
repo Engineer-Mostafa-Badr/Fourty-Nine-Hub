@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
@@ -82,7 +83,7 @@ abstract class TripRepository {
    void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
    void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
    void listenToPartialPaymentDriver(Function(num amountPaidCash) params);
-   void listenToCancelRoute(Function(String routeId) params);
+   void listenToCancelRoute(Function(ListenToCancelRouteParams params) params);
    void listenToNewRoute(Function(MyBookingEntity newBooking) params);
    void listenToJoinAvailableRoutes(Function(bool isJoined) params);
    void listenToLeaveAvailableRoutes(Function(String routeId) params);

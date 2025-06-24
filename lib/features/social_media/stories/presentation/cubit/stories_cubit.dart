@@ -124,7 +124,7 @@ class StoryCubit extends Cubit<StoryState> {
 
   // getMutedStories({userId, context, limit, page, bool? loadMore}) async {
   //   final response = await apiConsumer.get(
-  //       'https://49backend.com/api/v1/stories/mutedStories?limit=$limit&page=$page');
+  //       'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/stories/mutedStories?limit=$limit&page=$page');
   //   print('from getMutedStories ');
   //
   //   response.fold(
@@ -376,7 +376,7 @@ class StoryCubit extends Cubit<StoryState> {
 
     // Step 1: Generate Signed URL
     final response = await http.post(
-      Uri.parse('https://49backend.com/api/v1/stories'),
+      Uri.parse('https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/stories'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -427,7 +427,7 @@ class StoryCubit extends Cubit<StoryState> {
 
     final response = await http.put(
       Uri.parse(
-          'https://49backend.com/api/v1/stories/success-upload/$storyMediaId'),
+          'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/stories/success-upload/$storyMediaId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',

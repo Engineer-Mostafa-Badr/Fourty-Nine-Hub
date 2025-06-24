@@ -102,6 +102,12 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     print("state.tapIndex Cubit : $index");
     emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index));
   }
+  onShowHintTap(int index,BuildContext context){
+    if(index==0) listenToJoinRoute();
+    if(index!=0) listenToLeaveRoute();
+    print("state.tapIndex Cubit : $index");
+    emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index));
+  }
 
   Future<void> cancelMyBooking(
       {required String id, required BuildContext context, required String from}) async {
@@ -120,7 +126,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     }, (data) {
       context.pop();
       if(from=='available') {
-        availableBookings.firstWhere((e)=> e.id==id).status='cancelled';
+        availableBookings.removeWhere((e)=> e.id==id);
       }
       if(from=='myBookings') {
         myBookings.firstWhere((e)=> e.id==id).status='cancelled';

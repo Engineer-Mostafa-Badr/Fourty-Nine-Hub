@@ -64,6 +64,9 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
                   cubit.onChangeTapIndex(index,context);
                   log("state.tapIndex ${state.tapIndex}");
                 },
+                onShowHint: (index) {
+
+                },
                 tabController: widget._tabController,
               ),
             ),
@@ -103,7 +106,7 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
   _buildCategory({
     required TabController controller,
   }) {
-    switch (controller.index) {
+    switch (context.read<CaptainShareCubit>().state.tapIndex) {
       case 0:
         return AvailableTripsWidget(content: tabContents[0]);
       case 1:

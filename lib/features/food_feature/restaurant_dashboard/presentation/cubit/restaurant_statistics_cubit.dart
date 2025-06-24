@@ -32,7 +32,7 @@ class RestaurantStatisticsCubit extends Cubit<RestaurantStatisticsState> {
     emit(RestaurantStatisticsLoading());
 
     final Either<Failure, Map<String, dynamic>> result = await apiConsumer.get(
-      'https://49backend.com/api/v1/restaurants/statistics',
+      'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/restaurants/statistics',
     );
 
     result.fold(

@@ -31,7 +31,7 @@ class RequestHistoryRemoteDataSourceImpl
   //   print("hello == from ride \n");
 
   //   final response =
-  //       await _apiConsumer.get("https://49backend.com/api/v1/ride/trips/use");
+  //       await _apiConsumer.get("https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/ride/trips/use");
   //   print("response ==${response}\n");
 
   //   return response.fold(
@@ -56,7 +56,7 @@ class RequestHistoryRemoteDataSourceImpl
       getShippingRequests() async {
     print("hello == from shipping \n");
     final response = await _apiConsumer
-        .get("https://49backend.com/api/v1/loading/trip/allUserTrips");
+        .get("https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/loading/trip/allUserTrips");
     print("response ==$response\n");
     return response.fold(
         (failure) => Left(failure),

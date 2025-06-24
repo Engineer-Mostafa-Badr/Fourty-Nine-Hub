@@ -36,6 +36,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../domain/entities/loading/get_loading_avaliable_entity.dart';
@@ -135,7 +136,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  void listenToCancelRoute(Function(String routeId) params) {
+  void listenToCancelRoute(Function(ListenToCancelRouteParams params) params) {
     remoteDataSource.listenToCancelRoute(params);
   }
 

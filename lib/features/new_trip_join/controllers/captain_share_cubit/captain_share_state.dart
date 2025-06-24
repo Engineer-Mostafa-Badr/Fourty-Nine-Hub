@@ -18,11 +18,13 @@ class CaptainShareState {
   final CaptainShareStates status;
   final Failure? failure;
   final int? tapIndex;
+  final String? hintText;
   final CreatePricePerSeatEntity? pricePerSeat;
 
   const CaptainShareState({
     this.failure,
     this.tapIndex=0,
+    this.hintText='',
     this.status = CaptainShareStates.initState,
     this.pricePerSeat,
   });
@@ -31,12 +33,14 @@ class CaptainShareState {
     CreatePricePerSeatEntity? pricePerSeat,
     Failure? failure,
     int? tapIndex,
+    String? hintText,
   }) {
     return CaptainShareState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       tapIndex: tapIndex ?? this.tapIndex,
       pricePerSeat: pricePerSeat ?? this.pricePerSeat,
+      hintText: hintText ?? this.hintText,
     );
   }
 }

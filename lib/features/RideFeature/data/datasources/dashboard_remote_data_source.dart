@@ -29,6 +29,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -114,7 +115,7 @@ abstract class TripRemoteDataSource {
   void listenToRemoveTrip(Function(String tripId) params);
   void listenToEndTrip(Function(String tripId) params);
   void listenToClientComing(Function(String tripId) params);
-  void listenToCancelRoute(Function(String routeId) params);
+  void listenToCancelRoute(Function(ListenToCancelRouteParams params) params);
   void listenToJoinAvailableRoutes(Function(bool isJoined) params);
   Future<Either<Failure, bool>> listenToLeaveAvailableRoutes(Function(String routeId) params);
   void listenToNewRoute(Function(MyBookingEntity newBooking) params);
@@ -431,14 +432,14 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  void listenToCancelRoute(Function(String tripId) params) {
+  void listenToCancelRoute(Function(ListenToCancelRouteParams params) params) {
     try {
       CliLogger.info("Listen to Cancel Route ");
       log("Listen to Cancel Route ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToCancelRoute, (data) {
         CliLogger.info("Cancel Route data :  $data");
         log("Cancel Route data :  $data");
-        params(data['route']['_id']);
+        params(ListenToCancelRouteParams.fromJson(data['routeCancelled']));
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
@@ -472,7 +473,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     try {
       CliLogger.info("Leave Available Route ");
       log("Leave Available Route ");
-      SharedWebSocket.socket!.emit(SocketIOEvents.leaveAvailableRoutes, (data) {});
+      SharedWebSocket.socket!.emit(SocketIOEvents.leaveAvailableRoutes);
       CliLogger.info(
           "SocketIOEvents.leaveAvailableRoutes${SocketIOEvents.leaveAvailableRoutes}");
 
