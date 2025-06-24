@@ -95,10 +95,10 @@ class _MyAdCardState extends State<MyAdCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /*if (context.read<UserCubit>().isLoggedIn)
+              if (context.read<UserCubit>().isLoggedIn)
                 BuildTagAdsWidget(
                     status: widget.item.ownerSubscriptionStatus ?? '',
-                    views: widget.item.views ?? 0),*/
+                    views: widget.item.views ?? 0),
               Expanded(
                 child: ImageAdsWidget(
                   images: widget.item.images,

@@ -44,101 +44,149 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
-      child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
+      child: Column(
         children: [
-          // SizedBox(
-          //   height: kToolbarHeight * 4,
-          //   width: double.infinity,
-          //   child: Swiper(
-          //     itemCount: widget.images.length > 4 ? 4 : widget.images.length,
-          //     onIndexChanged: (i) {},
-          //     outer: false,
-          //     loop: false,
-          //     physics: widget.images.length > 1
-          //         ? null
-          //         : const NeverScrollableScrollPhysics(),
-          //     itemBuilder: (context, index) => Padding(
-          //       padding: EdgeInsets.only(bottom: 5.h),
-          //       child: Stack(
-          //         children: [
-          //           ImageFromInternet(
-          //             width: double.infinity,
-          //             image: widget.images[index],
-          //             defaultLogo: true,
-          //             fit: BoxFit.cover,
-          //             borderRadius: BorderRadius.only(
-          //                 topLeft: Radius.circular(5.r),
-          //                 topRight: Radius.circular(5.r)),
-          //           ),
-          //           if (index == 3)
-          //             Positioned.fill(
-          //                 child: Container(
-          //               color: Colors.black.withOpacity(0.8),
-          //               alignment: AlignmentDirectional.center,
-          //               child: Label(
-          //                 text: LocaleKeys.seeAll.localize,
-          //                 style: Styles.headerText(
-          //                     color: Colors.white,
-          //                     decoration: TextDecoration.underline),
-          //               ),
-          //             ))
-          //         ],
-          //       ),
-          //     ),
-          //     pagination: SwiperPagination(
-          //         builder: SwiperCustomPagination(builder: (context, config) {
-          //       return const DotSwiperPaginationBuilder(
-          //               color: AppColors.GREY_DARK_COLOR,
-          //               activeColor: AppColors.SECONDARY_COLOR,
-          //               size: 10.0,
-          //               activeSize: 10.0)
-          //           .build(context, config);
-          //     })),
-          //   ),
-          // ),
-          SizedBox(
-            height: kToolbarHeight * 4,
-            width: double.infinity,
-            child: PageView.builder(
-              onPageChanged: (value) {
-                print(value);
-                if (value < 3) {
-                  setState(() {
-                    currentIndex = value;
-                  });
-                }
-              },
-              itemCount: length,
-              itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.only(bottom: 5.h),
-                child: Stack(
-                  children: [
-                    ImageFromInternet(
-                      width: double.infinity,
-                      image: widget.images[index],
-                      defaultLogo: true,
-                      fit: BoxFit.cover,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5.r),
-                          topRight: Radius.circular(5.r)),
-                    ),
-                    if (index == 3)
-                      Positioned.fill(
-                          child: Container(
-                        color: Colors.black.withOpacity(0.8),
-                        alignment: AlignmentDirectional.center,
-                        child: Label(
-                          text: LocaleKeys.seeAll.localize,
-                          style: Styles.headerText(
-                              color: Colors.white,
-                              decoration: TextDecoration.underline),
+          Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              // SizedBox(
+              //   height: kToolbarHeight * 4,
+              //   width: double.infinity,
+              //   child: Swiper(
+              //     itemCount: widget.images.length > 4 ? 4 : widget.images.length,
+              //     onIndexChanged: (i) {},
+              //     outer: false,
+              //     loop: false,
+              //     physics: widget.images.length > 1
+              //         ? null
+              //         : const NeverScrollableScrollPhysics(),
+              //     itemBuilder: (context, index) => Padding(
+              //       padding: EdgeInsets.only(bottom: 5.h),
+              //       child: Stack(
+              //         children: [
+              //           ImageFromInternet(
+              //             width: double.infinity,
+              //             image: widget.images[index],
+              //             defaultLogo: true,
+              //             fit: BoxFit.cover,
+              //             borderRadius: BorderRadius.only(
+              //                 topLeft: Radius.circular(5.r),
+              //                 topRight: Radius.circular(5.r)),
+              //           ),
+              //           if (index == 3)
+              //             Positioned.fill(
+              //                 child: Container(
+              //               color: Colors.black.withOpacity(0.8),
+              //               alignment: AlignmentDirectional.center,
+              //               child: Label(
+              //                 text: LocaleKeys.seeAll.localize,
+              //                 style: Styles.headerText(
+              //                     color: Colors.white,
+              //                     decoration: TextDecoration.underline),
+              //               ),
+              //             ))
+              //         ],
+              //       ),
+              //     ),
+              //     pagination: SwiperPagination(
+              //         builder: SwiperCustomPagination(builder: (context, config) {
+              //       return const DotSwiperPaginationBuilder(
+              //               color: AppColors.GREY_DARK_COLOR,
+              //               activeColor: AppColors.SECONDARY_COLOR,
+              //               size: 10.0,
+              //               activeSize: 10.0)
+              //           .build(context, config);
+              //     })),
+              //   ),
+              // ),
+              SizedBox(
+                height: kToolbarHeight * 4,
+                width: double.infinity,
+                child: PageView.builder(
+                  onPageChanged: (value) {
+                    print(value);
+                    if (value < 3) {
+                      setState(() {
+                        currentIndex = value;
+                      });
+                    }
+                  },
+                  itemCount: length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.only(bottom: 5.h),
+                    child: Stack(
+                      children: [
+                        ImageFromInternet(
+                          width: double.infinity,
+                          image: widget.images[index],
+                          defaultLogo: true,
+                          fit: BoxFit.cover,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.r),
+                              topRight: Radius.circular(5.r)),
                         ),
-                      ))
-                  ],
+                        if (index == 3)
+                          Positioned.fill(
+                              child: Container(
+                            color: Colors.black.withOpacity(0.8),
+                            alignment: AlignmentDirectional.center,
+                            child: Label(
+                              text: LocaleKeys.seeAll.localize,
+                              style: Styles.headerText(
+                                  color: Colors.white,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ))
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+
+              if (widget.isVerified)
+                PositionedDirectional(
+                  start: 16,
+                  top: 16,
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          Assets.verified,
+                          height: 15,
+                          width: 15,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Label(
+                          text: context.isArabic ? 'موثق' : 'Verified',
+                          style: Styles.smallText(
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              PositionedDirectional(
+                end: 16,
+                bottom: 16,
+                child: IconAppButton(
+                  size: 32,
+                  icon: widget.isFavourite == false
+                      ? Icons.favorite_border
+                      : Icons.favorite,
+                  color: AppColors.SECONDARY_COLOR,
+                  onPressed: widget.onPressedFavorite,
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -157,51 +205,8 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                     ? Colors.white
                     : AppColors.SECONDARY_COLOR,
                 dotColor:
-                    context.isDarkMode ? const Color(0x26FFFFFF) : Colors.grey,
+                context.isDarkMode ? const Color(0x26FFFFFF) : Colors.grey,
               ),
-            ),
-          ),
-          if (widget.isVerified)
-            PositionedDirectional(
-              start: 16,
-              top: 16,
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      Assets.verified,
-                      height: 15,
-                      width: 15,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Label(
-                      text: context.isArabic ? 'موثق' : 'Verified',
-                      style: Styles.smallText(
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          PositionedDirectional(
-            end: 16,
-            bottom: 16,
-            child: IconAppButton(
-              size: 32,
-              icon: widget.isFavourite == false
-                  ? Icons.favorite_border
-                  : Icons.favorite,
-              color: AppColors.SECONDARY_COLOR,
-              onPressed: widget.onPressedFavorite,
             ),
           ),
         ],
