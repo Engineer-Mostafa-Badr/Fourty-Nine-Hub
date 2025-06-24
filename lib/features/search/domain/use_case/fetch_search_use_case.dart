@@ -20,11 +20,11 @@ class FetchSearchUseCase
 
 class SearchParams {
   final String search;
-  final String? filter;
+  final String filter;
   final PaginationParams params;
 
   SearchParams(
-      {required this.search, required this.params,  this.filter});
+      {required this.search, required this.params,  required this.filter});
 
   Map<String, dynamic> toJson() => {
         'search': search,

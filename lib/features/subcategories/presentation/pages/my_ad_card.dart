@@ -86,11 +86,11 @@ class _MyAdCardState extends State<MyAdCard> {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-                color: context.isDarkMode
-                    ? AppColors.LIGHT_COLOR
-                    : AppColors.GREY_DARK_COLOR,
-                width: 1),
+            // border: Border.all(
+            //     color: context.isDarkMode
+            //         ? AppColors.LIGHT_COLOR
+            //         : AppColors.GREY_DARK_COLOR,
+            //     width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,8 +127,24 @@ class _MyAdCardState extends State<MyAdCard> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    Label(
+                      text:
+                      '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
+                      style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.PRIMARY_COLOR),
+                      maxLines: 1,
+                    ),
+                    Label(
+                      text: widget.item.title,
+                      style: Styles.headerText(
+                        fontSize: 32,
+                        height: 1.6,
+                      ),
+                    ),
+                   /* Row(
                       children: [
                         Label(
                           text: widget.item.title,
@@ -149,7 +165,7 @@ class _MyAdCardState extends State<MyAdCard> {
                           maxLines: 1,
                         ),
                       ],
-                    ),
+                    ),*/
                     // اذا كان الاعلان من نوع المركبات
                     if (widget.item.mainCategoryId ==
                         '62c8b5889332225799fe3316') ...[
@@ -291,7 +307,7 @@ class _MyAdCardState extends State<MyAdCard> {
                   ],
                 ),
               ),
-              if (false)
+           /*   if (false)
                 Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
@@ -442,7 +458,7 @@ class _MyAdCardState extends State<MyAdCard> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
             ],
           ),
         ),

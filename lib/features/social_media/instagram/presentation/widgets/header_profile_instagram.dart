@@ -106,8 +106,8 @@ class HeaderProfileInstagram extends StatelessWidget {
           ),
           const Spacer(),
           ValueAndTitleHeaderProfileInstagram(
-            value: FormatNumbers().formatNumber(dataProfile.followingCount),
-            title: LocaleKeys.following.localize,
+            value: FormatNumbers().formatNumber(dataProfile.viewsCount),
+            title: LocaleKeys.views.localize,
             dataProfile: dataProfile,
             index: -1,
           ),

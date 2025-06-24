@@ -12,6 +12,7 @@ class ProfileInstagramDataModel extends ProfileInstagramDataEntity {
     required super.friendsCount,
     required super.followersCount,
     required super.followingCount,
+    required super.viewsCount,
     required super.postsEntity,
     required super.paginationEntity,
   });
@@ -23,10 +24,11 @@ class ProfileInstagramDataModel extends ProfileInstagramDataEntity {
       lastName: json['lastName'] ?? '',
       bio: json['bio'] ?? '',
       profilePictureUrl: json['profilePictureUrl'] ?? '',
-      postsCount: json['postsCount'] ?? 0,
-      friendsCount: json['friendsCount'] ?? 0,
-      followersCount: json['followersCount'] ?? 0,
-      followingCount: json['followingCount'] ?? 0,
+      postsCount: json['postsCounter'] ?? 0,
+      friendsCount: json['friendsCounter'] ?? 0,
+      followersCount: json['followersCounter'] ?? 0,
+      followingCount: json['followingCounter'] ?? 0,
+      viewsCount: json['viewsCounter'] ?? 0,
       postsEntity: List<InstagramProfilePostEntity>.from(
         (json['posts'] ?? []).map((e) => InstagramProfilePostModel.fromJson(e)),
       ),
