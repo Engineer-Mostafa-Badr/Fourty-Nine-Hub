@@ -63,143 +63,150 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
   Widget build(BuildContext context) {
     return BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
   builder: (context, state) {
-    return SizedBox(
-      height: MediaQuery.sizeOf(context).height,
-      child: ListView.builder(
+    if(context.read<ViewAllTripJoinCubit>().isLoadingTripJoin==true){
+      return const Center(child: CircularProgressIndicator(),);
+    }
+    if(context.read<ViewAllTripJoinCubit>().tripJoinData.isEmpty){
+      return  Center(child: Column(
+        children: [
+          Text(LocaleKeys.noData.localize),
+        ],
+      ));
+    }
+    return ListView.builder(
         controller: _scrollController,
         itemCount: context.read<ViewAllTripJoinCubit>().tripJoinData.length,
-          itemBuilder: (context,index){
-            var data = context.read<ViewAllTripJoinCubit>().tripJoinData[index];
-        return  Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 10.h,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: (){
-                  context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
-                },
-                child: Stack(
-                  children: [
-                    CustomCard(
-                      radius: 20,
-                      children: [
-                        const Sizer(
-                          height: 8,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 32.0.h),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.remove_red_eye_sharp,
-                                      color: AppColors.DARK_GRAY_COLOR,
-                                    ),
-                                    const Sizer(),
-                                    Label(
-                                      text: '${formatViews(data.viewerIds ?? 0, context)} ${LocaleKeys.views.localize}',
-                                      style: Styles.mediumText(
-                                        fontSize: 24,
+        itemBuilder: (context,index){
+          var data = context.read<ViewAllTripJoinCubit>().tripJoinData[index];
+          return  Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 10.h,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: (){
+                    context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
+                  },
+                  child: Stack(
+                    children: [
+                      CustomCard(
+                        radius: 20,
+                        children: [
+                          const Sizer(
+                            height: 8,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 32.0.h),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.remove_red_eye_sharp,
                                         color: AppColors.DARK_GRAY_COLOR,
                                       ),
-                                    ),
+                                      const Sizer(),
+                                      Label(
+                                        text: '${formatViews(data.viewerIds ?? 0, context)} ${LocaleKeys.views.localize}',
+                                        style: Styles.mediumText(
+                                          fontSize: 24,
+                                          color: AppColors.DARK_GRAY_COLOR,
+                                        ),
+                                      ),
 
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "${data.status ?? 0}",
-                                style: Styles.headerText(
-                                    color: AppColors.getRedColor(context), fontSize: 32),
-                              ),
-                            ],
+                                Text(
+                                  "${data.status ?? 0}",
+                                  style: Styles.headerText(
+                                      color: AppColors.getRedColor(context), fontSize: 32),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const Divider(),
-                        const Sizer(),
-                        TripCardInfoWidget(
-                            title:context.isArabic ?data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
-                            model:context.isArabic ?data.vehicleDetails?.modelAr ?? "" :  data.vehicleDetails?.modelEn ?? "",
-                            icon: Assets.tripJoinCarIcon,
-                            price: "${data.pricePerSeat}",
-                            seats: "${data.passengers ?? 0}"
-                          // icon: iconCar
-                          //     ? Assets.tripJoinCarIcon
-                          //     : isMale
-                          //     ? Assets.maleUser
-                          //     : Assets.femaleUser,
-                        ),
+                          const Divider(),
+                          const Sizer(),
+                          TripCardInfoWidget(
+                              title:context.isArabic ?data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
+                              model:context.isArabic ?data.vehicleDetails?.modelAr ?? "" :  data.vehicleDetails?.modelEn ?? "",
+                              icon: Assets.tripJoinCarIcon,
+                              price: "${data.pricePerSeat}",
+                              seats: "${data.passengers ?? 0}"
+                            // icon: iconCar
+                            //     ? Assets.tripJoinCarIcon
+                            //     : isMale
+                            //     ? Assets.maleUser
+                            //     : Assets.femaleUser,
+                          ),
 
-                        const Sizer(
-                          height: 30,
-                        ),
-                        _locationWidget(
-                            title: data.location?.start?.address ?? "",
-                            iconColor: AppColors.LIGHT_BLUE),
-                        const Sizer(),
-                        _locationWidget(
-                            title: data.location?.target?.address ?? "",
-                            iconColor: AppColors.CHECK_MARK_COLOR),
-                        const Sizer(),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 32.0.h,
+                          const Sizer(
+                            height: 30,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                formatTimestamp(data.startDate),
-                                style: Styles.headerText(
-                                    fontSize: 32, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                // data.passengers == 1
-                                //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
-                                //     : ''
-                                '${data.passengers} ${LocaleKeys.seat.localize}',
-                                style: Styles.headerText(
-                                    fontSize: 32, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                data.isRepeat  == true ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
-                                style: Styles.headerText(
-                                    fontSize: 32, fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                          _locationWidget(
+                              title: data.location?.start?.address ?? "",
+                              iconColor: AppColors.LIGHT_BLUE),
+                          const Sizer(),
+                          _locationWidget(
+                              title: data.location?.target?.address ?? "",
+                              iconColor: AppColors.CHECK_MARK_COLOR),
+                          const Sizer(),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 32.0.h,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  formatTimestamp(data.startDate),
+                                  style: Styles.headerText(
+                                      fontSize: 32, fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  // data.passengers == 1
+                                  //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
+                                  //     : ''
+                                  '${data.passengers} ${LocaleKeys.seat.localize}',
+                                  style: Styles.headerText(
+                                      fontSize: 32, fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  data.isRepeat  == true ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
+                                  style: Styles.headerText(
+                                      fontSize: 32, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const Divider(),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 32.0.h,
+                          const Divider(),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 32.0.h,
+                            ),
+                            child: TripJoinButtonsSection(
+                              isContactInfo: true,
+                              isRequestButton: true,
+                              buttonTitle:LocaleKeys.requests.localize,
+                              // buttonTitle:" buttonTitle",
+                              onTap: (){},
+                            ),
                           ),
-                          child: TripJoinButtonsSection(
-                            isContactInfo: true,
-                            isRequestButton: true,
-                            buttonTitle:LocaleKeys.requests.localize,
-                            // buttonTitle:" buttonTitle",
-                            onTap: (){},
-                          ),
-                        ),
-                        const Sizer(),
-                      ],
-                    ),
-                  ],
+                          const Sizer(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              TripCardSubscribeText(),
+                TripCardSubscribeText(),
 
-            ],
-          ),
-        );
-      }),
-    );
+              ],
+            ),
+          );
+        });
   },
 );
   }

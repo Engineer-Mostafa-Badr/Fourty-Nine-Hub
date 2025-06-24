@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -8,10 +9,12 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/trip_option_widget.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/all_pickme_view.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/trip_join_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
@@ -212,7 +215,9 @@ class _TripJoinViewState extends State<TripJoinView>
       case 1:
         return Container(
           key: const ValueKey(1),
-          child: const TripJoinContent(),
+          child: Expanded(child: BlocProvider(
+              create: (context)=>serviceLocator<ViewAllTripJoinCubit>(),
+              child: const TripJoinContent())),
         );
       case 2:
         return Container(

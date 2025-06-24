@@ -39,6 +39,7 @@ class _TripJoinContentState extends State<TripJoinContent>
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     _scrollController = ScrollController()..addListener(_onScroll);
+    context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
 
     tabController.addListener(() {
       setState(() {
@@ -59,7 +60,6 @@ class _TripJoinContentState extends State<TripJoinContent>
     });
 
     // Load initial data for the default tab (Available Trips)
-    context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
     context.read<ViewAllTripJoinCubit>().getRequestCount();
   }
 
@@ -94,64 +94,41 @@ class _TripJoinContentState extends State<TripJoinContent>
   Widget build(BuildContext context) {
     return BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
       builder: (context, state) {
-        return Stack(
+        return Column(
           children: [
-            Column(
-              children: [
-                _buildStatusCategories(),
-                Sizer(height: 10.h),
-                // SizedBox(
-                //   height: 900,
-                //   child: ListView.builder(
-                //     shrinkWrap: true,
-                //     controller: _scrollController,
-                //     physics: const AlwaysScrollableScrollPhysics(),
-                //     itemCount: _getItemCount(state) + (_isLoading(state) ? 1 : 0),
-                //     itemBuilder: (BuildContext context, int index) {
-                //       // Show loading indicator at the end
-                //       if (index == _getItemCount(state) && _isLoading(state)) {
-                //         return const Padding(
-                //           padding: EdgeInsets.all(16.0),
-                //           child: Center(child: CircularProgressIndicator()),
-                //         );
-                //       }
-                //
-                //       return _buildCardForCategory(index, state);
-                //     },
-                //   ),
-                // ),
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height,
-                  child: Builder(
-                    builder: (_) {
-                      final itemCount = _getItemCount(state);
-                      if (itemCount == 0 && !_isLoading(state)) {
-                        return const Center(child: Text("No data found"));
-                      }
+            _buildStatusCategories(),
+            Sizer(height: 10.h),
 
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        controller: _scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: itemCount + (_isLoading(state) ? 1 : 0),
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == itemCount && _isLoading(state)) {
-                            return const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
-                          }
-
-                          return _buildCardForCategory(index, state);
-                        },
-                      );
-                    },
-                  ),
-                ),
+            Expanded(child:_buildCardForCategory(state)),
+            // Expanded(
+            //   child: Builder(
+            //     builder: (_) {
+            //       final itemCount = _getItemCount(state);
+            //       if (itemCount == 0 && !_isLoading(state)) {
+            //         return const Center(child: Text("No data found"));
+            //       }
+            //       return _buildCardForCategory(0, state);
+            //       return ListView.builder(
+            //         shrinkWrap: true,
+            //         controller: _scrollController,
+            //         physics: const NeverScrollableScrollPhysics(),
+            //         itemCount: itemCount + (_isLoading(state) ? 1 : 0),
+            //         itemBuilder: (BuildContext context, int index) {
+            //           if (index == itemCount && _isLoading(state)) {
+            //             return const Padding(
+            //               padding: EdgeInsets.all(16.0),
+            //               child: Center(child: CircularProgressIndicator()),
+            //             );
+            //           }
+            //
+            //           return _buildCardForCategory(index, state);
+            //         },
+            //       );
+            //     },
+            //   ),
+            // ),
 
 
-              ],
-            ),
           ],
         );
       },
@@ -185,74 +162,14 @@ class _TripJoinContentState extends State<TripJoinContent>
     }
   }
 
-  Widget _buildCardForCategory(int index, ViewAllTripJoinState state) {
+  Widget _buildCardForCategory( ViewAllTripJoinState state) {
     switch (_displayedCategory) {
       case LocaleKeys.availableTrips:
-        final trip = state.availableTripJoinEntity?[index];
-        if (trip == null) return const SizedBox.shrink();
-
-        return AvailableTripsCard(
-         // data: trip,
-        );
+        return AvailableTripsCard();
       case LocaleKeys.requestLog:
-        final requestList = context.read<ViewAllTripJoinCubit>().requestTripJoinData;
-
-        if (requestList.isEmpty) {
-          return const Center(child: Column(
-            children: [
-              Text("Empty data"),
-            ],
-          ));
-        }
-
-        final request = requestList[index];
-
-        return RequestLogTripJoinWidget(
-          data: request,
-        );
-
-
-      // case LocaleKeys.requestLog:
-      //   final request = context.read<ViewAllTripJoinCubit>().requestTripJoinData?[index];
-      //   // if (request == null) return const SizedBox.shrink();
-      //   if(context.read<ViewAllTripJoinCubit>().requestTripJoinData.isEmpty && request == null){
-      //     return Center(child: Text("Empty data"),);
-      //   }
-      //   // return Column(
-      //   //   children: [
-      //   //     Text("${request.phone}"),
-      //   //     Text("${request.trip.toAr}"),
-      //   //   ],
-      //   // );
-      //   return RequestLogTripJoinWidget(
-      //    data: request!,
-      //     fullRequestData: state.fullRequestTripJoinData,
-      //   );
-
+        return RequestLogTripJoinWidget();
       case LocaleKeys.myAds:
-        final myAd = context.read<ViewAllTripJoinCubit>().myAdsData[index];
-        if (myAd == null) return const SizedBox.shrink();
-        return MyAdsTripWidget(data: myAd,);
-        // return TripJoinCard(
-        //   subscribtionPlan: LocaleKeys.premium.localize,
-        //   title: myAd.carModel ?? (context.isArabic ? 'كيا، سيراتو' : 'Kia, Cerato'),
-        //   isMale: true,
-        //   buttonTitle: LocaleKeys.deleteAd.localize,
-        //   time: myAd.departureTime ?? (context.isArabic ? '8:00 م' : '8:00 Pm'),
-        //   seats: myAd.availableSeats ?? 2,
-        //   status: myAd.tripType ?? (context.isArabic ? 'مرة واحدة' : 'One Time'),
-        //   isRequestButton: true,
-        //   isContactInfo: false,
-        //   iconCar: true,
-        //   onTab: () => showDialogTripJoin(
-        //     context,
-        //     DialogContent(
-        //       subTitle: LocaleKeys.areDeleteThisAd.localize,
-        //       leftButtonTitle: LocaleKeys.deleteAd.localize,
-        //       rightButtonTitle: LocaleKeys.close.localize,
-        //     ),
-        //   ),
-        // );
+        return MyAdsTripWidget();
 
       default:
         return const SizedBox.shrink();
@@ -295,6 +212,12 @@ class _TripJoinContentState extends State<TripJoinContent>
     return GestureDetector(
       onTap: () {
         tabController.animateTo(index);
+        if(index==0){
+          context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
+        }
+        if(index == 1){
+          context.read<ViewAllTripJoinCubit>().loadInitialRequestTripJoin();
+        }
         setState(() {
           _displayedCategory = title;
           selectedIndex = index;
@@ -304,10 +227,8 @@ class _TripJoinContentState extends State<TripJoinContent>
         final cubit = context.read<ViewAllTripJoinCubit>();
         switch (title) {
           case LocaleKeys.availableTrips:
-            cubit.loadInitialTripJoin(); // Reload data every time
             break;
           case LocaleKeys.requestLog:
-            cubit.loadInitialRequestTripJoin(); // Reload data every time
             break;
           case LocaleKeys.myAds:
           cubit.loadInitialMyAds(); // Uncomment and reload when implemented

@@ -48,88 +48,90 @@ class _AllPickMeViewState extends State<AllPickMeView>
           Sizer(
             height: 10.h,
           ),
-          ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) {
-                switch (_displayedCategory) {
-                  case LocaleKeys.availableTrips:
-                    return TripJoinCard(
-                      subscribtionPlan: LocaleKeys.notSubscribed.localize,
-                      title: context.isArabic
-                          ? index == 0
-                              ? 'Sara'
-                              : 'Ibrahim'
-                          : index == 0
-                              ? 'ساره'
-                              : 'ابراهيم',
-                      buttonTitle: LocaleKeys.request.localize,
-                      isMale: index == 0 ? false : true,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-                      seats: 2,
-                      status: context.isArabic ? 'مكرر' : 'Repeat',
-                      isRequestButton: true,
-                      isContactInfo: true,
-                      iconCar: false,
-                      onTab: () => JoinTripBottomSheet(context,
-                          topButtonColor: AppColors.getRedColor(context),
-                          topButtonTitle: LocaleKeys.premium_request.localize,
-                          bottomButtonColor:
-                              AppColors.getButtonPrimaryColor(context),
-                          bottomButtonTitle: LocaleKeys.request.localize,
-                          onTap: () => SubmitBottomSheet(
-                                context,
-                                buttonColor: AppColors.PRIMARY_COLOR,
-                                buttonTitle: LocaleKeys.submit.localize,
-                              ),
-                          topTextColor:
-                              context.isDarkMode ? Colors.black : Colors.white,
-                          bottomTextColor:
-                              context.isDarkMode ? Colors.black : Colors.white),
-                    );
-                  case LocaleKeys.requestLog:
-                    return TripJoinCard(
-                      subscribtionPlan: LocaleKeys.notSubscribed.localize,
-                      title: context.isArabic ? 'محمد' : 'Mohamed',
-                      isMale: true,
-                      buttonTitle: LocaleKeys.request.localize,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-                      seats: 2,
-                      status: context.isArabic ? 'انتهت' : 'Expired',
-                      isRequestButton: false,
-                      isContactInfo: true,
-                      iconCar: false,
-                      onTab: () {},
-                    );
-                  case LocaleKeys.myAds:
-                    return TripJoinCard(
-                      subscribtionPlan: LocaleKeys.notSubscribed.localize,
-                      title: context.isArabic
-                          ? index == 0
-                              ? 'Sara'
-                              : 'Ibrahim'
-                          : index == 0
-                              ? 'ساره'
-                              : 'ابراهيم',
-                      isMale: index == 0 ? false : true,
-                      buttonTitle: LocaleKeys.deleteAd.localize,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-                      seats: 2,
-                      status: context.isArabic ? 'مرة واحدة' : 'One Time',
-                      isRequestButton: true,
-                      isContactInfo: false,
-                      iconCar: false,
-                      onTab: () => showDialogTripJoin(
-                          context,
-                          DialogContent(
-                            subTitle: LocaleKeys.areDeleteThisAd.localize,
-                            leftButtonTitle: LocaleKeys.deleteAd.localize,
-                            rightButtonTitle: LocaleKeys.close.localize,
-                          )),
-                    );
-                }
-              }),
+          Expanded(
+            child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 3,
+                itemBuilder: (BuildContext context, int index) {
+                  switch (_displayedCategory) {
+                    case LocaleKeys.availableTrips:
+                      return TripJoinCard(
+                        subscribtionPlan: LocaleKeys.notSubscribed.localize,
+                        title: context.isArabic
+                            ? index == 0
+                                ? 'Sara'
+                                : 'Ibrahim'
+                            : index == 0
+                                ? 'ساره'
+                                : 'ابراهيم',
+                        buttonTitle: LocaleKeys.request.localize,
+                        isMale: index == 0 ? false : true,
+                        time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                        seats: 2,
+                        status: context.isArabic ? 'مكرر' : 'Repeat',
+                        isRequestButton: true,
+                        isContactInfo: true,
+                        iconCar: false,
+                        onTab: () => JoinTripBottomSheet(context,
+                            topButtonColor: AppColors.getRedColor(context),
+                            topButtonTitle: LocaleKeys.premium_request.localize,
+                            bottomButtonColor:
+                                AppColors.getButtonPrimaryColor(context),
+                            bottomButtonTitle: LocaleKeys.request.localize,
+                            onTap: () => SubmitBottomSheet(
+                                  context,
+                                  buttonColor: AppColors.PRIMARY_COLOR,
+                                  buttonTitle: LocaleKeys.submit.localize,
+                                ),
+                            topTextColor:
+                                context.isDarkMode ? Colors.black : Colors.white,
+                            bottomTextColor:
+                                context.isDarkMode ? Colors.black : Colors.white),
+                      );
+                    case LocaleKeys.requestLog:
+                      return TripJoinCard(
+                        subscribtionPlan: LocaleKeys.notSubscribed.localize,
+                        title: context.isArabic ? 'محمد' : 'Mohamed',
+                        isMale: true,
+                        buttonTitle: LocaleKeys.request.localize,
+                        time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                        seats: 2,
+                        status: context.isArabic ? 'انتهت' : 'Expired',
+                        isRequestButton: false,
+                        isContactInfo: true,
+                        iconCar: false,
+                        onTab: () {},
+                      );
+                    case LocaleKeys.myAds:
+                      return TripJoinCard(
+                        subscribtionPlan: LocaleKeys.notSubscribed.localize,
+                        title: context.isArabic
+                            ? index == 0
+                                ? 'Sara'
+                                : 'Ibrahim'
+                            : index == 0
+                                ? 'ساره'
+                                : 'ابراهيم',
+                        isMale: index == 0 ? false : true,
+                        buttonTitle: LocaleKeys.deleteAd.localize,
+                        time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                        seats: 2,
+                        status: context.isArabic ? 'مرة واحدة' : 'One Time',
+                        isRequestButton: true,
+                        isContactInfo: false,
+                        iconCar: false,
+                        onTab: () => showDialogTripJoin(
+                            context,
+                            DialogContent(
+                              subTitle: LocaleKeys.areDeleteThisAd.localize,
+                              leftButtonTitle: LocaleKeys.deleteAd.localize,
+                              rightButtonTitle: LocaleKeys.close.localize,
+                            )),
+                      );
+                  }
+                }),
+          ),
         ]),
       ],
     );
