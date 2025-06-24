@@ -196,7 +196,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       context.pop();
       String errorName = getFailureName(l, context);
       errorName == 'DebtError'||errorName == 'Insufficient Funds'
-          ? showDebtDialog(context, '62c8ba9f8e28a58a3edf57ee')
+          ? showDebtDialog(context, '62c8ba9f8e28a58a3edf57ee',context.isArabic?'يجب اين يكون لديك رصيد في المحفظه لانشاء رحله':'You must have a balance to create a route')
           : errorName == 'SubscribeError'
           ? showSubscribeDialog(context, '62c8ba9f8e28a58a3edf57ee')
           : showErrorMessage(context, getFailureMessage(l, context));
