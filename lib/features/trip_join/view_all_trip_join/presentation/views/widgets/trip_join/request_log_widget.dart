@@ -127,7 +127,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                       icon:   Assets.maleUser,
 
                           // : Assets.femaleUser,
-                        seats: "3"
+                        seats: "1"
                     ),
                     const Sizer(
                       height: 30,

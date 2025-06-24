@@ -983,9 +983,10 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                   // ),
 
                   const Sizer(),
+
                   Form(
                     key: _formKey,
-                    autovalidateMode: AutovalidateMode.always, // 👈 enables live validation
+                    autovalidateMode: AutovalidateMode.onUserInteraction, // 👈 enables live validation
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.h),
                       child: FormTextField(
