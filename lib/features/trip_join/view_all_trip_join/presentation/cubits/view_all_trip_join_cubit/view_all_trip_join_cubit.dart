@@ -133,8 +133,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   }
 
 
-
-  Future<void> deleteMyAdsTrip(String tripId,BuildContext context) async {
+  Future<void> deleteMyAdsTrip(String tripId, BuildContext context) async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
 
     final response = await deleteMyTripJoinUseCase(
@@ -154,10 +153,38 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
           myAdsTripJoinData: List.from(myAdsData), // emit new list
           status: ViewAllTripJoinStatus.success,
         ));
-        showSuccessMessage(context, tripData.message ?? "Success");
+
+        // ✅ Check if context is still mounted before using it
+        if (context.mounted) {
+          showSuccessMessage(context, tripData.message ?? "Success");
+        }
       },
     );
   }
+  // Future<void> deleteMyAdsTrip(String tripId,BuildContext context) async {
+  //   emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+  //
+  //   final response = await deleteMyTripJoinUseCase(
+  //     DeleteMyTripParams(tripId: tripId),
+  //   );
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(failure: failure, status: ViewAllTripJoinStatus.failure));
+  //     },
+  //         (tripData) {
+  //       // ✅ Remove from list
+  //       myAdsData.removeWhere((trip) => trip.id == tripId);
+  //
+  //       emit(state.copyWith(
+  //         deleteMyTripJoinEntity: tripData,
+  //         myAdsTripJoinData: List.from(myAdsData), // emit new list
+  //         status: ViewAllTripJoinStatus.success,
+  //       ));
+  //       showSuccessMessage(context, tripData.message ?? "Success");
+  //     },
+  //   );
+  // }
 
 
   List<MyAdsTripDocEntity> myAdsData = [];

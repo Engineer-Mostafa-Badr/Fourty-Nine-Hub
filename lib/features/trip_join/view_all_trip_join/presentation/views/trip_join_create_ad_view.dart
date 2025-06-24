@@ -838,7 +838,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
           return;
         }
         errorName == 'DebtError'
-            ? showDebtDialog(context, "62c8ba9f8e28a58a3edf57ee")
+            ? showDebtDialog(context, "62c8ba9f8e28a58a3edf57ee",LocaleKeys.tripJoin.localize)
             : errorName == 'SubscribeError'
             ? showSubscribeDialog(context, "62c8ba9f8e28a58a3edf57ee")
             : showErrorMessage(

@@ -230,7 +230,7 @@ class _TripJoinContentState extends State<TripJoinContent>
       //   );
 
       case LocaleKeys.myAds:
-        final myAd = context.read<ViewAllTripJoinCubit>().myAdsData?[index];
+        final myAd = context.read<ViewAllTripJoinCubit>().myAdsData[index];
         if (myAd == null) return const SizedBox.shrink();
         return MyAdsTripWidget(data: myAd,);
         // return TripJoinCard(
@@ -359,7 +359,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                 ),
                 child: Center(
                   child: Text(
-                   "${formatCount(context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 10)}",
+                   "${formatCount(context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 0)}",
                     style: Styles.smallText(
                       color: context.isDarkMode
                           ? Colors.black
