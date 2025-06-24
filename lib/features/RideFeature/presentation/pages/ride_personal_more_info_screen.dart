@@ -224,7 +224,7 @@ class _RidePersonalMoreInfoScreenState
         if (state.isErrorCreateTrip) {
           String errorName = getFailureName(state.failure!, context);
           errorName == 'DebtError'
-              ? showDebtDialog(context, '')
+              ? showDebtDialog(context, "", context.isArabic? "من فضلك ادفع الدين": 'Please pay the Debt for more trips')
               : errorName == 'SubscribeError'
                   ? showSubscribeDialog(context, widget.subCategoryId)
                   : showErrorMessage(
@@ -240,7 +240,7 @@ class _RidePersonalMoreInfoScreenState
               return;
             }
             errorName == 'DebtError'
-                ? showDebtDialog(context, widget.subCategoryId)
+                ? showDebtDialog(context, widget.subCategoryId, context.isArabic? "من فضلك ادفع الدين": 'Please pay the Debt for more trips')
                 : errorName == 'SubscribeError'
                     ? showSubscribeDialog(context, widget.subCategoryId)
                     : showErrorMessage(

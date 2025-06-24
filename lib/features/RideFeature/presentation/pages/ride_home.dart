@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,6 +33,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_button_ride_status_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_card_request.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_sheet/custom_reserve_ride_bottomsheet.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_header_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/feedback_widget.dart';
@@ -46,6 +48,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
@@ -58,6 +61,7 @@ import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../domain/entities/get_location_from_address_entity.dart';
 import '../../domain/usecases/rating_driver_by_client.dart';
 import '../controllers/cubits/car_location_cubit.dart';
@@ -84,6 +88,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final MapController _mapController = MapController();
 
   final GlobalKey<FormState> _phoneNumberFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _partialPaymentFormKey = GlobalKey<FormState>();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -412,7 +418,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         print(
                             "state.requestedTrip?.status ${state.requestedTrip?.status}");
                         return DriverHeaderWidget(
-                          carModel: state.requestedTrip?.vehicleModelAr,
+                          carModel: context.isArabic? state.requestedTrip?.vehicleModelAr : state.requestedTrip?.vehicleModelEn,
                           carColor: state.requestedTrip?.vehicleColor,
                           rideStatusWidget: state.requestedTrip?.status ==
                                   TripState.started.name
@@ -436,7 +442,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 ),
                           carImageUrl: state.requestedTrip?.vehiclePicture ??
                               "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
-                          carName: state.requestedTrip?.vehicleBrandAr,
+                          carName: context.isArabic ? state.requestedTrip?.vehicleBrandAr : state.requestedTrip?.vehicleBrandEn,
                           carNumber:
                               state.requestedTrip?.vehiclePlateNumber ?? "",
                         );
@@ -523,31 +529,253 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       ),
                       // const FeedbackWidget(),
                       // const Divider(height: 2),
-                      Container(
-                          decoration: BoxDecoration(
-                            color: context.isDarkMode
-                                ? AppColors.GREY_DARK_COLOR
-                                : AppColors.GREY_NORMAL_COLOR
-                                    .withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.PRIMARY_COLOR),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: Center(
-                                child: Text(context.isArabic
-                                    ? "الابلاغ عن السائق"
-                                    : "Report Driver")),
-                          )),
+                      GestureDetector(
+                        onTap: (){
+                          bottomSheet(
+                              context: context,
+                              widget: ReportView(
+                                id: state.requestedTrip?.id ?? "",
+                                categoryId: state.requestedTrip?.subCategoryId ?? "",
+                              ));
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: context.isDarkMode
+                                  ? AppColors.GREY_DARK_COLOR
+                                  : AppColors.GREY_NORMAL_COLOR
+                                      .withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: AppColors.PRIMARY_COLOR),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: Center(
+                                  child: Text(context.isArabic
+                                      ? "الابلاغ عن السائق"
+                                      : "Report Driver")),
+                            )),
+                      ),
 
                       BottomRideStatusWidget(
                         price: state.requestedTrip?.price?.toInt() ?? 0,
+                        isStarted: state.requestedTrip?.status == TripState.started.name,
                         fromLocation:
                             state.requestedTrip?.from ?? 'أول العاشر من رمضان',
                         toLocation: state.requestedTrip?.to ??
                             'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                         onGoogleMap: () {},
-                        onPartialPayment: () {},
+                        onPartialPayment: () {
+                          showModalBottomSheet<
+                              bool>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor:
+                            Colors.transparent,
+                            builder: (BuildContext
+                            context) {
+                              return Padding(
+                                padding:
+                                EdgeInsets.only(
+                                  bottom:
+                                  MediaQuery.of(
+                                      context)
+                                      .viewInsets
+                                      .bottom,
+                                ),
+                                child: Container(
+                                  padding:
+                                  const EdgeInsets
+                                      .all(20.0),
+                                  decoration:
+                                  const BoxDecoration(
+                                    color:
+                                    Colors.white,
+                                    borderRadius:
+                                    BorderRadius.vertical(
+                                        top: Radius
+                                            .circular(
+                                            20.0)),
+                                  ),
+                                  child: Form(
+                                    key:
+                                    _partialPaymentFormKey, // Use the class-level key
+                                    child: Column(
+                                      mainAxisSize:
+                                      MainAxisSize
+                                          .min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            const SizedBox(
+                                                width:
+                                                24),
+                                            Text(
+                                              context.isArabic? "دفع جزءي" : "Partial Payment",
+                                              style:
+                                              const TextStyle(
+                                                fontSize:
+                                                18,
+                                                fontWeight:
+                                                FontWeight.bold,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(
+                                                  Icons.close),
+                                              onPressed:
+                                                  () =>
+                                                  Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                            height:
+                                            20),
+
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.payments_outlined,
+                                              color: Colors.green,
+                                              size: 14,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text( context.isArabic? "بطاقة بنكية" : "Visa",
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            SizedBox(
+                                              width: 200,
+                                              height: 50,
+                                              child: TextFormField(
+                                                controller: _controller,
+                                                autofocus: true,
+                                                cursorColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                                cursorHeight: 30,
+                                                keyboardType: TextInputType.number,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                  TextInputFormatter.withFunction((oldValue, newValue) {
+                                                    if (newValue.text.isEmpty) return newValue;
+                                                    if (newValue.text == '0') return newValue;
+                                                    if (newValue.text.startsWith('0')) {
+                                                      return oldValue;
+                                                    }
+                                                    return newValue;
+                                                  }),
+                                                ],
+
+                                                style:  TextStyle(
+                                                  color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 30,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                                                  hintText: context.isArabic ? 'ج.م' : 'EGP',
+                                                  hintStyle:  const TextStyle(
+                                                    color:  Color(0xff96979B),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 30,
+                                                  ),
+                                                  fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                                                  filled: true,
+                                                  border: const UnderlineInputBorder(),
+                                                  focusedBorder: const UnderlineInputBorder(),
+                                                  enabledBorder: const UnderlineInputBorder(),
+                                                  errorBorder: const UnderlineInputBorder(),
+                                                  disabledBorder: const UnderlineInputBorder(),
+                                                  focusedErrorBorder: const UnderlineInputBorder(),
+                                                ),
+                                                validator: (value) {
+                                                  if (value == null || value.isEmpty) {
+                                                    return context.isArabic
+                                                        ? 'يرجى إدخال مبلغ'
+                                                        : 'Please enter an amount';
+                                                  }
+
+                                                  final int? amount = int.tryParse(value);
+
+                                                  if (amount == null ||
+                                                      amount < 100) {
+                                                    return context.isArabic
+                                                        ? 'يجب أن يكون المبلغ اكثر من ${FormatNumbers().convertNumberToLocalizedString('100', isArabic: context.isArabic)}'
+                                                        : 'Amount must be greater than ${FormatNumbers().convertNumberToLocalizedString('100', isArabic: context.isArabic)}';
+                                                  }
+
+                                                  return null;
+                                                },
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+
+                                        const SizedBox(
+                                            height:
+                                            20),
+                                        SizedBox(
+                                          width: double
+                                              .infinity,
+                                          child:
+                                          ElevatedButton(
+                                            onPressed:
+                                                () async {
+                                              if (_partialPaymentFormKey
+                                                  .currentState!
+                                                  .validate())  {
+                                                context.pop();
+                                                await serviceLocator<RideCubit>().partialPayment(tripId: state.requestedTrip?.id ?? '', amount: double.parse(_controller.text), context: context, subCategoryId: state.requestedTrip?.subCategoryId ?? '');
+                                              }
+                                            },
+                                            style: ElevatedButton
+                                                .styleFrom(
+                                              backgroundColor:
+                                              AppColors.PRIMARY_COLOR,
+                                              padding: const EdgeInsets
+                                                  .symmetric(
+                                                  vertical:
+                                                  15),
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            child:
+                                            Text(
+                                              context.isArabic? "تطبيق" : "Apply",
+                                              style: const TextStyle(
+                                                  fontSize:
+                                                  18,
+                                                  color:
+                                                  Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+
+                          );
+                        },
+                        onStartRecord: () {
+                          serviceLocator<RideCubit>().startRecord();
+                        },
+                        onStopRecord: () {
+                          serviceLocator<RideCubit>().stopRecord(context: context, subcategoryId: state.requestedTrip?.subCategoryId ?? '', tripId: state.requestedTrip?.id ?? '');
+                        },
                         onCallEmergency: () async {
                           final Uri launchUri = Uri(scheme: 'tel', path: '122');
                           if (await canLaunchUrl(launchUri)) {
@@ -919,7 +1147,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           if (state.requestedTrip != null)
             if (state.requestedTrip!.status == TripState.started.name)
               BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-                return const CarMarkerWidget();
+                return const CarMarkerOnClientSideWidget();
               }),
           if (routePoints.isNotEmpty)
             PolylineLayer(
