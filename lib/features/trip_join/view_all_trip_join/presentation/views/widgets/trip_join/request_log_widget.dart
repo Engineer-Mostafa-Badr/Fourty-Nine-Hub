@@ -52,6 +52,15 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
   // }
 
 
+  String formatDateTime(DateTime? dateTime) {
+    if (dateTime == null) return 'No date';
+
+    String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+    String formattedTime = DateFormat('h:mm a').format(dateTime);
+
+    return "$formattedDate\n$formattedTime";
+  }
+
 
 
 
@@ -141,10 +150,11 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            formatTimestamp(widget.data.startDate),
+                            formatDateTime(widget.data.startDate),
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
                           ),
+
                           Text(
                             // widget.data.trip.passengers == 1
                             //     ? '${widget.data.trip.passengers} ${LocaleKeys.seat.localize}'
@@ -303,6 +313,59 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
     );
   }
 }
+
+
+String formatTimestamp2(dynamic time) {
+  DateTime? date;
+
+  if (time is String) {
+    try {
+      // Parse the string and ensure UTC handling with toLocal()
+      date = DateTime.parse(time).toLocal();
+    } catch (e) {
+      print('Error parsing string timestamp: $e'); // Debug log
+      return "-";
+    }
+  } else if (time is int) {
+    try {
+      if (time.toString().length == 10) {
+        // Handle seconds-based timestamp
+        date = DateTime.fromMillisecondsSinceEpoch(time * 1000).toLocal();
+      } else if (time.toString().length == 13) {
+        // Handle milliseconds-based timestamp
+        date = DateTime.fromMillisecondsSinceEpoch(time).toLocal();
+      } else {
+        print('Invalid integer timestamp length: $time'); // Debug log
+        return "-";
+      }
+    } catch (e) {
+      print('Error parsing integer timestamp: $e'); // Debug log
+      return "-";
+    }
+  } else {
+    print('Invalid timestamp type: $time'); // Debug log
+    return "-";
+  }
+
+  // Ensure date is not null before formatting
+  if (date == null) {
+    print('Date is null'); // Debug log
+    return "-";
+  }
+
+  // Format hour for 12-hour clock
+  final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
+  final ampm = date.hour >= 12 ? "PM" : "AM";
+
+  // Format date and time
+  final formattedDate =
+      "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  final formattedTime =
+      "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
+
+  return "$formattedDate\n$formattedTime";
+}
+
 String formatTimestamp(dynamic time) {
   DateTime? date;
 
