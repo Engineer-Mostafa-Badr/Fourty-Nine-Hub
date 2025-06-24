@@ -59,10 +59,10 @@ class EndPoints {
 
 
   static const pageSize = 10;
-  static const developmentWebSocketBaseUrl = 'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app';
-  // static const developmentWebSocketBaseUrl = 'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app';
-  static const developmentBaseUrl = 'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1';
-  static const productionBaseUrl = 'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1';
+  static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  // static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  static const developmentBaseUrl = 'https://49backend.com/api/v1';
+  static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const loginWithPhone = '/auth/login/phone-number';

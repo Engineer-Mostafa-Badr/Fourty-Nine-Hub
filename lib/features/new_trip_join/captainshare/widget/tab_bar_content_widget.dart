@@ -65,13 +65,13 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
                   log("state.tapIndex ${state.tapIndex}");
                 },
                 onShowHint: (index) {
-
+                  cubit.onShowHintTap(index, context);
                 },
                 tabController: widget._tabController,
               ),
             ),
             SizedBox(height: 10.h),
-            if (widget._tabController.index==(state.tapIndex))
+            if (state.hintText !=null && (state.hintText?.isNotEmpty??false))
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -83,7 +83,6 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
                   child: AnimatedBuilder(
                     animation: widget._tabController,
                     builder: (context, child) {
-                      int index = widget._tabController.index;
                       return Text(
                         context.isArabic ? hintsArabic[state.tapIndex??0] : hints[state.tapIndex??0],
                         style: TextStyle(

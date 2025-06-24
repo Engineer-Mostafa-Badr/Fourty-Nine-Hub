@@ -100,13 +100,40 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     if(index==0) listenToJoinRoute();
     if(index!=0) listenToLeaveRoute();
     print("state.tapIndex Cubit : $index");
-    emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index));
+    emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index,hintText: ''));
   }
   onShowHintTap(int index,BuildContext context){
-    if(index==0) listenToJoinRoute();
-    if(index!=0) listenToLeaveRoute();
-    print("state.tapIndex Cubit : $index");
-    emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index));
+    String hintText = '';
+    if(index==0) {
+      if(state.hintText=='available'){
+        hintText = '';
+      }else{
+        hintText = 'available';
+      }
+    }
+    if(index==1) {
+      if(state.hintText=='myBooking'){
+        hintText = '';
+      }else{
+        hintText = 'myBooking';
+      }
+    }
+    if(index==2) {
+      if(state.hintText=='running'){
+        hintText = '';
+      }else{
+        hintText = 'running';
+      }
+    }
+    if(index==3) {
+      if(state.hintText=='expired'){
+        hintText = '';
+      }else{
+        hintText = 'expired';
+      }
+    }
+    emit(state.copyWith(status: CaptainShareStates.success,hintText: hintText));
+
   }
 
   Future<void> cancelMyBooking(

@@ -38,7 +38,7 @@ class HandleCashback {
   static postCashbackRequest() async {
     //
     // final Either<Failure, Map<String, dynamic>> result = await apiConsumer.post(
-    //   'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/cashback/any',
+    //   'https://49backend.com/api/v1/cashback/any',
     // );
 
     Dio dio = Dio();
@@ -48,7 +48,7 @@ class HandleCashback {
     dio.options.headers['Accept'] = 'application/json';
     try {
       final response = await dio.post(
-        'https://2e43-2a09-bac1-2220-10-00-3b7-1a.ngrok-free.app/api/v1/cashback/any',
+        'https://49backend.com/api/v1/cashback/any',
       );
       print('Response data: ${response.data}');
     } catch (error) {
