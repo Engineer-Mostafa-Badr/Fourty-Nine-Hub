@@ -23,11 +23,9 @@ class RequestLogTripJoinWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   const RequestLogTripJoinWidget({
     super.key, required this.data,
-    required this.fullRequestData,
   });
 
-  final RequestDocsEntity data;
-  final RequestTripJoinEntity? fullRequestData;
+  final GetRequestTripJoinEntity data;
   @override
   State<RequestLogTripJoinWidget> createState() => _RequestLogTripJoinWidgetState();
 }
@@ -70,10 +68,14 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
             children: [
               InkWell(
                 onTap: (){
-                  context.read<ViewAllTripJoinCubit>().applyReadRequestTrip(widget.data.id);
+                  context.read<ViewAllTripJoinCubit>().applyReadRequestTrip(widget.data.id!);
                 },
                 child: CustomCard(
-                  color: widget.data.read ? AppColors.whiteColor : AppColors.grey.shade300,
+                  // color: widget.data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
+                  color: widget.data.isRead == true
+                      ? (context.isDarkMode ? Colors.transparent : AppColors.whiteColor)
+                      : (context.isDarkMode ?AppColors.PRIMARY_COLOR_DARK : AppColors.grey.shade300),
+
                   radius: 20,
                   children: [
                     // Text("${widget.data.read}"),
@@ -91,7 +93,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                 ),
                                 const Sizer(),
                                 Label(
-                                  text: '${formatViews(widget.data.trip.views ?? 0, context)} ${LocaleKeys.views.localize}',
+                                  text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
                                   style: Styles.mediumText(
                                     fontSize: 24,
                                     color: AppColors.DARK_GRAY_COLOR,
@@ -101,36 +103,34 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                               ],
                             ),
                           ),
-                          Text(
-                            "${widget.data.trip.status ?? ""}",
-                            style: Styles.headerText(
-                                color: AppColors.getRedColor(context), fontSize: 32),
-                          ),
+                          // Text(
+                          //   "${widget.data.status ?? ""}",
+                          //   style: Styles.headerText(
+                          //       color: AppColors.getRedColor(context), fontSize: 32),
+                          // ),
                         ],
                       ),
                     ),
                     const Divider(),
                     TripCardInfoWidget(
-                      price: "${widget.data.trip.price}",
-                      title: widget.data.userId.firstName,
-                      icon: widget.data.userId.gender == "male"
-                          ? Assets.maleUser
-                          : Assets.femaleUser,
-                        seats: "${widget.data.trip.passengers ?? 0}"
+                      price: "${widget.data.pricePerSeat}",
+                      title: widget.data.firstName ?? "",
+                      icon:   Assets.maleUser,
+
+                          // : Assets.femaleUser,
+                        seats: "3"
                     ),
                     const Sizer(
                       height: 30,
                     ),
                     _locationWidget(
-                        title: context.isArabic
-                            ? widget.data?.trip.fromAr ?? ""
-                            : widget.data?.trip.fromEn ?? "",
+                        title:
+                             widget.data.location?.start?.address ?? ""
+                           ,
                         iconColor: AppColors.LIGHT_BLUE),
                     const Sizer(),
                     _locationWidget(
-                        title: context.isArabic
-                            ? widget.data?.trip.toAr ?? ""
-                            : widget.data?.trip.toEn ?? "",
+                        title:     widget.data.location?.target?.address ?? "",
                         iconColor: AppColors.CHECK_MARK_COLOR),
                     const Sizer(),
                     Padding(
@@ -141,7 +141,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            formatTimestamp(widget.data.trip.time),
+                            formatTimestamp(widget.data.startDate),
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
                           ),
@@ -149,13 +149,15 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                             // widget.data.trip.passengers == 1
                             //     ? '${widget.data.trip.passengers} ${LocaleKeys.seat.localize}'
                             //     :
-                            '${widget.data.trip.passengers} ${LocaleKeys.seat.localize}',
+                            // '${widget.data.passengers} ${LocaleKeys.seat.localize}',
+                            "${3}  ${LocaleKeys.seat.localize}",
 
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            widget.data.trip.isRepeat ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
+                            // widget.data.isRepeat ? LocaleKeys.repeated.localize :
+                            LocaleKeys.oneTime.localize,
                             // widget.status,
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
@@ -302,28 +304,32 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
   }
 }
 String formatTimestamp(dynamic time) {
-  int timestamp = 0;
+  DateTime? date;
 
-  // Parse input whether it's String or int
   if (time is String) {
-    timestamp = int.tryParse(time) ?? 0;
+    try {
+      date = DateTime.parse(time).toLocal(); // Convert from UTC to local time
+    } catch (e) {
+      return "-";
+    }
   } else if (time is int) {
-    timestamp = time;
+    // If it's a timestamp in seconds or milliseconds
+    if (time.toString().length == 10) {
+      date = DateTime.fromMillisecondsSinceEpoch(time * 1000).toLocal();
+    } else if (time.toString().length == 13) {
+      date = DateTime.fromMillisecondsSinceEpoch(time).toLocal();
+    } else {
+      return "-";
+    }
+  } else {
+    return "-";
   }
 
-  if (timestamp == 0) return "-";
+  final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
+  final ampm = date.hour >= 12 ? "PM" : "AM";
 
-  // Convert seconds to milliseconds
-  DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  final formattedDate = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  final formattedTime = "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
 
-  // Get 12-hour format hour
-  int hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
-  String ampm = date.hour >= 12 ? "PM" : "AM";
-
-  // Format date and time separately
-  String formattedDate = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  String formattedTime = "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
-
-  // Return with line break between date and time
   return "$formattedDate\n  $formattedTime";
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
@@ -15,16 +16,19 @@ import '../../../../../ride/RideRequest/domain/entity/expected_price_entity.dart
 import '../../../domain/entities/available_trip_join_entity.dart';
 import '../../../domain/entities/delete_my_trip_join_entity.dart';
 import '../../../domain/entities/expected_price_entity.dart';
+import '../../../domain/entities/get_request_count_entity.dart';
 import '../../../domain/entities/my_ads_trip_join_entity.dart';
 import '../../../domain/entities/request_trip_join_entity.dart';
 import '../../../domain/usecases/apply_read_request_trip_join_use_case.dart';
 import '../../../domain/usecases/apply_view_trip_join_use_case.dart';
+import '../../../domain/usecases/create_trip_join_offer_use_case.dart';
 import '../../../domain/usecases/delete_my_trip_join_use_case.dart';
 import '../../../domain/usecases/get_available_trip_join_use_case.dart';
 import '../../../domain/usecases/get_car_brand_use_case.dart';
 import '../../../domain/usecases/get_car_model_use_case.dart';
 import '../../../domain/usecases/get_expected_price_use_case.dart';
 import '../../../domain/usecases/get_my_ads_trip_join_use_case.dart';
+import '../../../domain/usecases/get_request_count_trip_join_use_case.dart';
 import '../../../domain/usecases/get_request_trip_join_use_case.dart';
 
 part 'view_all_trip_join_state.dart';
@@ -40,8 +44,48 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   final DeleteMyTripJoinUseCase deleteMyTripJoinUseCase;
   final ApplyViewTripJoinUseCase applyViewTripJoinUseCase;
   final ApplyReadRequestTripJoinUseCase applyReadRequestTripJoinUseCase;
-  ViewAllTripJoinCubit(this.getCarBrandUseCase,this.viewAllTripJoinUseCase, this.getCarModelUseCase, this.getExpectedPriceUseCase, this.getAvailableTripJoinUseCase, this.getRequestTripJoinUseCase, this.getMyAdsTripJoinUseCase, this.deleteMyTripJoinUseCase, this.applyViewTripJoinUseCase, this.applyReadRequestTripJoinUseCase): super(ViewAllTripJoinState());
+  final CreateTripJoinOfferUseCase createTripJoinOfferUseCase;
+  final GetRequestCountTripJoinUseCase getRequestCountTripJoinUseCase;
+  ViewAllTripJoinCubit(this.getCarBrandUseCase,this.viewAllTripJoinUseCase, this.getCarModelUseCase, this.getExpectedPriceUseCase, this.getAvailableTripJoinUseCase, this.getRequestTripJoinUseCase, this.getMyAdsTripJoinUseCase, this.deleteMyTripJoinUseCase, this.applyViewTripJoinUseCase, this.applyReadRequestTripJoinUseCase, this.createTripJoinOfferUseCase, this.getRequestCountTripJoinUseCase): super(ViewAllTripJoinState());
 
+  Future<void> createTripJoinOffer(CreateTripJoinParams params,BuildContext context) async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await createTripJoinOfferUseCase(params);
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+          (tripData) {
+        emit(state.copyWith(
+          deleteMyTripJoinEntity: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+        showSuccessMessage(context, tripData.message ?? "Success");
+
+          },
+    );
+  }
+
+
+
+  Future<void> getRequestCount() async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await getRequestCountTripJoinUseCase(NoParams());
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+          (tripData) async {
+        emit(state.copyWith(
+          requestCountData: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+      },
+    );
+  }
 
   Future<void> applyReadRequestTrip(String tripId) async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
@@ -61,6 +105,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         ));
 
         // ✅ Refresh the request trip join list after successful apply
+        await getRequestCount();
         await loadInitialRequestTripJoin();
       },
     );
@@ -153,7 +198,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         ));
       },
           (data) {
-        final trips = data.trips ?? [];
+        final trips = data.offers ?? [];
         myAdsData.addAll(trips);
 
         if (trips.length < 15) {
@@ -225,7 +270,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
  */
 
 
-  List<RequestDocsEntity > requestTripJoinData = [];
+  List<GetRequestTripJoinEntity > requestTripJoinData = [];
   bool hasMoreRequestTripJoin = true;
   int currentPageRequestTripJoin = 1;
   bool isLoadingMoreRequestTripJoin = false;
@@ -265,7 +310,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
           (data) {
         // you will receive AvailableRequestTripJoinEntity from usecase
-        final trips = data.requests.docs ?? [];
+        final trips = data ?? [];
+        // final trips = data.requests.docs ?? [];
         requestTripJoinData.addAll(trips);
 
         if (trips.length < 5) {
@@ -278,14 +324,13 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         isLoadingMoreRequestTripJoin = false;
         emit(state.copyWith(
           requestTripJoinEntity: requestTripJoinData,
-          fullRequestTripJoinData: data
         ));
       },
     );
   }
 
 
-  List<TripJoinEntity> tripJoinData = [];
+  List<AvailableTripJoinEntity > tripJoinData = [];
   bool hasMoreTripJoin = true;
   int currentPageTripJoin = 1;
   bool isLoadingMoreTripJoin = false;

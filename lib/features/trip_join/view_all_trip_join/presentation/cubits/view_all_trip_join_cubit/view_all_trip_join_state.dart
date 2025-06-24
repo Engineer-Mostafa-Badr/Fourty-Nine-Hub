@@ -8,11 +8,12 @@ class ViewAllTripJoinState {
   final List<RideBrandEntity>? rideBrandEntity;
   final List<RideModelEntity>? rideModelEntity;
   final ExpectedPriceTripEntity? expectedPriceEntity;
-  final List<TripJoinEntity>? availableTripJoinEntity;
-  final List<RequestDocsEntity>? requestTripJoinEntity;
-  final RequestTripJoinEntity? fullRequestTripJoinData;
+  final List<AvailableTripJoinEntity >? availableTripJoinEntity;
+  final List<GetRequestTripJoinEntity>? requestTripJoinEntity;
+  // final GetRequestTripJoinEntity? fullRequestTripJoinData;
   final List<MyAdsTripDocEntity>? myAdsTripJoinData;
   final DeleteMyTripJoinEntity? deleteMyTripJoinEntity;
+  final GetRequestCountEntity? requestCountData;
   const ViewAllTripJoinState({
     this.status = ViewAllTripJoinStatus.initial,
     this.errorMessage,
@@ -23,9 +24,10 @@ class ViewAllTripJoinState {
     this.expectedPriceEntity,
     this.availableTripJoinEntity,
     this.requestTripJoinEntity,
-    this.fullRequestTripJoinData,
+    // this.fullRequestTripJoinData,
     this.myAdsTripJoinData,
     this.deleteMyTripJoinEntity,
+    this.requestCountData,
   });
 
   ViewAllTripJoinState copyWith({
@@ -36,11 +38,12 @@ class ViewAllTripJoinState {
     List<RideBrandEntity>? rideBrandEntity,
     List<RideModelEntity>? rideModelEntity,
     ExpectedPriceTripEntity? expectedPriceEntity,
-    List<TripJoinEntity>? availableTripJoinEntity,
-    List<RequestDocsEntity>? requestTripJoinEntity,
-    RequestTripJoinEntity? fullRequestTripJoinData,
+    List<AvailableTripJoinEntity>? availableTripJoinEntity,
+    List<GetRequestTripJoinEntity>? requestTripJoinEntity,
+    // List<GetRequestTripJoinEntity>? fullRequestTripJoinData,
     List<MyAdsTripDocEntity>? myAdsTripJoinData,
     DeleteMyTripJoinEntity? deleteMyTripJoinEntity,
+    GetRequestCountEntity? requestCountData,
   }) {
     return ViewAllTripJoinState(
       status: status ?? this.status,
@@ -52,9 +55,10 @@ class ViewAllTripJoinState {
       expectedPriceEntity: expectedPriceEntity ?? this.expectedPriceEntity,
       availableTripJoinEntity: availableTripJoinEntity ?? this.availableTripJoinEntity,
       requestTripJoinEntity: requestTripJoinEntity ?? this.requestTripJoinEntity,
-      fullRequestTripJoinData: fullRequestTripJoinData ?? this.fullRequestTripJoinData,
+      // fullRequestTripJoinData: fullRequestTripJoinData ?? this.fullRequestTripJoinData,
       myAdsTripJoinData: myAdsTripJoinData ?? this.myAdsTripJoinData,
       deleteMyTripJoinEntity: deleteMyTripJoinEntity ?? this.deleteMyTripJoinEntity,
+      requestCountData: requestCountData ?? this.requestCountData,
     );
   }
 }

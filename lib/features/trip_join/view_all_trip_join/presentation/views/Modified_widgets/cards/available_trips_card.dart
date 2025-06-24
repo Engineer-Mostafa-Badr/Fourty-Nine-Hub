@@ -64,7 +64,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
     return BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
   builder: (context, state) {
     return SizedBox(
-      height: 900,
+      height: MediaQuery.sizeOf(context).height,
       child: ListView.builder(
         controller: _scrollController,
         itemCount: context.read<ViewAllTripJoinCubit>().tripJoinData.length,
@@ -77,121 +77,121 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Length ${index}"),
-              Stack(
-                children: [
-                  CustomCard(
-                    radius: 20,
-                    children: [
-                      const Sizer(
-                        height: 8,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32.0.h),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.remove_red_eye_sharp,
-                                    color: AppColors.DARK_GRAY_COLOR,
-                                  ),
-                                  const Sizer(),
-                                  Label(
-                                    text: '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
-                                    style: Styles.mediumText(
-                                      fontSize: 24,
+              InkWell(
+                onTap: (){
+                  context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
+                },
+                child: Stack(
+                  children: [
+                    CustomCard(
+                      radius: 20,
+                      children: [
+                        const Sizer(
+                          height: 8,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 32.0.h),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.remove_red_eye_sharp,
                                       color: AppColors.DARK_GRAY_COLOR,
                                     ),
-                                  ),
+                                    const Sizer(),
+                                    Label(
+                                      text: '${formatViews(data.viewerIds ?? 0, context)} ${LocaleKeys.views.localize}',
+                                      style: Styles.mediumText(
+                                        fontSize: 24,
+                                        color: AppColors.DARK_GRAY_COLOR,
+                                      ),
+                                    ),
 
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Text(
-                              "${data.status ?? 0}",
-                              style: Styles.headerText(
-                                  color: AppColors.getRedColor(context), fontSize: 32),
-                            ),
-                          ],
+                              Text(
+                                "${data.status ?? 0}",
+                                style: Styles.headerText(
+                                    color: AppColors.getRedColor(context), fontSize: 32),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Divider(),
-                      const Sizer(),
-                      TripCardInfoWidget(
-                          title: data.vehicle?.brand ?? "",
-                          model: data.vehicle?.model ?? "",
-                          icon: Assets.tripJoinCarIcon,
-                          price: "${data.price}",
-                          seats: "${data.passengers ?? 0}"
-                        // icon: iconCar
-                        //     ? Assets.tripJoinCarIcon
-                        //     : isMale
-                        //     ? Assets.maleUser
-                        //     : Assets.femaleUser,
-                      ),
+                        const Divider(),
+                        const Sizer(),
+                        TripCardInfoWidget(
+                            title:context.isArabic ?data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
+                            model:context.isArabic ?data.vehicleDetails?.modelAr ?? "" :  data.vehicleDetails?.modelEn ?? "",
+                            icon: Assets.tripJoinCarIcon,
+                            price: "${data.pricePerSeat}",
+                            seats: "${data.passengers ?? 0}"
+                          // icon: iconCar
+                          //     ? Assets.tripJoinCarIcon
+                          //     : isMale
+                          //     ? Assets.maleUser
+                          //     : Assets.femaleUser,
+                        ),
 
-                      const Sizer(
-                        height: 30,
-                      ),
-                      _locationWidget(
-                          title: context.isArabic
-                              ? data?.fromAr ?? ""
-                              : data?.fromEn ?? "",
-                          iconColor: AppColors.LIGHT_BLUE),
-                      const Sizer(),
-                      _locationWidget(
-                          title: context.isArabic
-                              ? data?.toAr ?? ""
-                              : data?.toEn ?? "",
-                          iconColor: AppColors.CHECK_MARK_COLOR),
-                      const Sizer(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 32.0.h,
+                        const Sizer(
+                          height: 30,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              formatTimestamp(data.time),
-                              style: Styles.headerText(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              // data.passengers == 1
-                              //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
-                              //     : ''
-                              '${data.passengers} ${LocaleKeys.seat.localize}',
-                              style: Styles.headerText(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              data.isRepeat  == true ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
-                              style: Styles.headerText(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                        _locationWidget(
+                            title: data.location?.start?.address ?? "",
+                            iconColor: AppColors.LIGHT_BLUE),
+                        const Sizer(),
+                        _locationWidget(
+                            title: data.location?.target?.address ?? "",
+                            iconColor: AppColors.CHECK_MARK_COLOR),
+                        const Sizer(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 32.0.h,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                formatTimestamp(data.startDate),
+                                style: Styles.headerText(
+                                    fontSize: 32, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                // data.passengers == 1
+                                //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
+                                //     : ''
+                                '${data.passengers} ${LocaleKeys.seat.localize}',
+                                style: Styles.headerText(
+                                    fontSize: 32, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                data.isRepeat  == true ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
+                                style: Styles.headerText(
+                                    fontSize: 32, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Divider(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 32.0.h,
+                        const Divider(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 32.0.h,
+                          ),
+                          child: TripJoinButtonsSection(
+                            isContactInfo: true,
+                            isRequestButton: true,
+                            buttonTitle:LocaleKeys.requests.localize,
+                            // buttonTitle:" buttonTitle",
+                            onTap: (){},
+                          ),
                         ),
-                        child: TripJoinButtonsSection(
-                          isContactInfo: true,
-                          isRequestButton: true,
-                          buttonTitle:LocaleKeys.requests.localize,
-                          // buttonTitle:" buttonTitle",
-                          onTap: (){},
-                        ),
-                      ),
-                      const Sizer(),
-                    ],
-                  ),
-                ],
+                        const Sizer(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               TripCardSubscribeText(),
 
@@ -334,7 +334,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
 }
 
 
-String formatViews(int views, BuildContext context) {
+String formatViews(num views, BuildContext context) {
   if (views < 1000) {
     return '$views';
   } else if (views < 1000000) {

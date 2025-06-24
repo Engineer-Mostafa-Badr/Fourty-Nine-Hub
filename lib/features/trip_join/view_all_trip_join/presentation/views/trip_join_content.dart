@@ -60,6 +60,7 @@ class _TripJoinContentState extends State<TripJoinContent>
 
     // Load initial data for the default tab (Available Trips)
     context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
+    context.read<ViewAllTripJoinCubit>().getRequestCount();
   }
 
   @override
@@ -208,7 +209,6 @@ class _TripJoinContentState extends State<TripJoinContent>
 
         return RequestLogTripJoinWidget(
           data: request,
-          fullRequestData: state.fullRequestTripJoinData,
         );
 
 
@@ -359,7 +359,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                 ),
                 child: Center(
                   child: Text(
-                   "${formatCount(context.read<ViewAllTripJoinCubit>().state.fullRequestTripJoinData?.countOfUnreadRequests ?? 1)}",
+                   "${formatCount(context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 10)}",
                     style: Styles.smallText(
                       color: context.isDarkMode
                           ? Colors.black
