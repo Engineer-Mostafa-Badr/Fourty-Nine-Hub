@@ -39,7 +39,7 @@ class InstagramPostModel extends InstagramPostEntity {
       id: json['postId']?.toString() ?? '',
       // Default to empty string if null
       content: json['content']?.toString() ?? '',
-      userId: json['owner']?['userId']?.toString() ?? '',
+      userId: json['owner']?['userId']?.toString() ?? '0',
       // Ensure userId is not null
       firstName: json['owner']?['firstName']?.toString() ?? '',
       lastName: json['owner']?['lastName']?.toString() ?? '',
