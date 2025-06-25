@@ -66,6 +66,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                         ? AppColors.PRIMARY_COLOR
                         : AppColors.DARK_GRAY_COLOR,
                 icon: Icon(
+                  size: 20,
                   Icons.call,
                   color: context.isDarkMode ? AppColors.grey : Colors.black,
                 ),
