@@ -379,7 +379,7 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
               onTap: () {
                 context.pushNamed(
                   Routes.SINGLEPOSTINSTAGRAM,
-                  extra: myPosts[index],
+                  extra: myPosts[index].id,
                 );
               },
               child: (MediaHelper.getMediaTypeFromExtension(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_search_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -22,15 +24,23 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/utils/debouncer.dart';
 import '../../../../core/widget/custom_notification_badge.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../service_locator/service_locator.dart';
+import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import '../../../ads_feature/ads/presentation/pages/marriage_ads_view.dart';
 import '../../../ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import '../../../ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../../subcategories/presentation/cubit/subcategories_cubit.dart';
+import '../../../subcategories/presentation/pages/ads_request_log_view.dart';
+import '../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
+import '../../../subcategories/presentation/pages/favourite_ads_view.dart';
+import '../../../subcategories/presentation/pages/my_ads_view.dart';
 import '../../../subcategories/presentation/widgets/floating_add_button.dart';
+import '../../../subcategories/presentation/widgets/search_bar_widget.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
   const MainCategoriesGridView({super.key, this.isAppBarShow = true});
@@ -47,9 +57,11 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   late ScrollController _scrollController;
   String labelName = "";
   bool isFloatingButtonVisible = true;
+  late Debouncer _debounce;
 
   @override
   void initState() {
+    _debounce = Debouncer();
     // context.read<MainCategoriesTapsCubit>().selectMainCategory(0);
     super.initState();
 
@@ -137,7 +149,8 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
 //     // }
 //   }
 
-  void _showDropdownMenu(BuildContext context, List<SubCategoryEntity>? subCategories) async {
+  void _showDropdownMenu(
+      BuildContext context, List<SubCategoryEntity>? subCategories) async {
     print(
         'selectedCategory in dropdown ${context.read<MainCategoriesTapsCubit>().selectedCategory.subcategories?.length}');
     print(subCategories);
@@ -339,11 +352,26 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.search,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
+                        IconButton(
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () {
+                            context
+                                .read<SubcategoriesCubit>()
+                                .toggleMyAds('isSearchAdsOpen');
+                            // setState(() {
+                            //   isSearchOpen = !isSearchOpen;
+                            // });
+                          },
+                          icon: SvgPicture.asset(
+                            Assets.searchIcon,
+                            colorFilter: ColorFilter.mode(
+                              context.read<SubcategoriesCubit>().isSearchAdsOpen
+                                  ? const Color(0xffF33D49)
+                                  : AppColors.PRIMARY_COLOR,
+                              BlendMode.srcIn,
+                            ),
+                            // color: context.isDarkMode ? Colors.white : null,
+                          ),
                         ),
                         const SizedBox(
                           width: 8,
@@ -362,9 +390,11 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                 } else {
                                   context
                                       .read<SubcategoriesCubit>()
-                                      .getRequestsLog(controller
-                                          .mainCategories[_tabController.index]
-                                          .id);
+                                      .loadMyFavouriteAds(
+                                          id: controller
+                                              .mainCategories[
+                                                  _tabController.index]
+                                              .id);
 
                                   context
                                       .read<SubcategoriesCubit>()
@@ -388,9 +418,11 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               onPressed: () {
                                 context
                                     .read<SubcategoriesCubit>()
-                                    .getRequestsLog(controller
-                                        .mainCategories[_tabController.index]
-                                        .id);
+                                    .loadRequestsLogByMainCategory(
+                                        mainCategoryId: controller
+                                            .mainCategories[
+                                                _tabController.index]
+                                            .id);
                                 context
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isRequestLogOpen');
@@ -413,10 +445,10 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               if (!context.isUserLoggedIn) {
                                 return pleaseLoginDialog(context);
                               } else {
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .getMarriageMyAds(
-                                        '62c8b5b09332225799fe335e');
+                                context.read<SubcategoriesCubit>().loadMyAds(
+                                    id: controller
+                                        .mainCategories[_tabController.index]
+                                        .id);
                                 context
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isMyAdsOpen');
@@ -431,12 +463,77 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                   const SizedBox(
                     height: 8,
                   ),
-                  if (subCategoriesCubit.isFavouriteAdsOpen) Container(),
-                  if (subCategoriesCubit.isRequestLogOpen) Container(),
-                  if (subCategoriesCubit.isMyAdsOpen) Container(),
+
+                  if (subCategoriesCubit.isFavouriteAdsOpen)
+                    Expanded(
+                        child: BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                      child: FavouriteAdsView(
+                        id: controller.mainCategories[_tabController.index].id,
+                        isFloatingButtonVisible: (value) {
+                          isFloatingButtonVisible = value;
+                          setState(() {});
+                        },
+                      ),
+                    )),
+                  if (subCategoriesCubit.isRequestLogOpen)
+                    Expanded(
+                        child: AdsRequestLogView(
+                            mainCategoryId: controller
+                                .mainCategories[_tabController.index].id,
+                            isFloatingButtonVisible: (value) {
+                              isFloatingButtonVisible = value;
+                              setState(() {});
+                            })),
+                  if (subCategoriesCubit.isMyAdsOpen)
+                    Expanded(
+                        child: BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                      child: MyAdsView(
+                        id: controller.mainCategories[_tabController.index].id,
+                        isFloatingButtonVisible: (value) {
+                          isFloatingButtonVisible = value;
+                          setState(() {});
+                        },
+                      ),
+                    )),
+                  if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+                    SearchBarWidget(
+                      onChanged: (value) {
+                        _debounce.run(() {
+                          context.read<SubcategoriesCubit>().searchAds(
+                                value: value,
+                                mainCategoryId: controller
+                                    .mainCategories[_tabController.index].id,
+                              );
+                        });
+                      },
+                    ),
+                  if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+                    //kslkfjslkfjslkfsldfkjlsfld
+                    Expanded(
+                      child: BlocProvider(
+                        create: (context) =>
+                            serviceLocator<AdvertisementCubit>(),
+                        child: AdsSearchView(
+                          mainCategoryNameAr: controller
+                                  .mainCategories[_tabController.index].name ??
+                              'N/A',
+                          mainCategoryNameEn: controller
+                                  .mainCategories[_tabController.index]
+                                  .nameEn ??
+                              'N/A',
+                          isFloatingButtonVisible: (value) {
+                            isFloatingButtonVisible = value;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ),
                   if (!subCategoriesCubit.isMyAdsOpen &&
                       !subCategoriesCubit.isFavouriteAdsOpen &&
-                      !subCategoriesCubit.isRequestLogOpen)
+                      !subCategoriesCubit.isRequestLogOpen &&
+                      !subCategoriesCubit.isSearchAdsOpen)
                     BlocBuilder<MainCategoriesTapsCubit,
                         MainCategoriesTapsState>(
                       builder: (context, state) {
@@ -499,7 +596,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                       final controller =
                           context.read<MainCategoriesTapsCubit>();
                       return buildFloatingAction(context, () {
-                        _showDropdownMenu(context,state.subCategories);
+                        _showDropdownMenu(context, state.subCategories);
                       });
                     },
                   )
@@ -528,9 +625,11 @@ class _MainCategoriesGridViewCustomPageState
   late ScrollController _scrollController;
   String labelName = "";
   bool isFloatingButtonVisible = true;
+  late Debouncer _debounce;
 
   @override
   void initState() {
+    _debounce = Debouncer();
     super.initState();
     _tabController = TabController(
         length: context.read<MainCategoriesTapsCubit>().mainCategories.length,
@@ -796,11 +895,26 @@ class _MainCategoriesGridViewCustomPageState
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.search,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
+                        IconButton(
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () {
+                            context
+                                .read<SubcategoriesCubit>()
+                                .toggleMyAds('isSearchAdsOpen');
+                            // setState(() {
+                            //   isSearchOpen = !isSearchOpen;
+                            // });
+                          },
+                          icon: SvgPicture.asset(
+                            Assets.searchIcon,
+                            colorFilter: ColorFilter.mode(
+                              context.read<SubcategoriesCubit>().isSearchAdsOpen
+                                  ? const Color(0xffF33D49)
+                                  : AppColors.PRIMARY_COLOR,
+                              BlendMode.srcIn,
+                            ),
+                            // color: context.isDarkMode ? Colors.white : null,
+                          ),
                         ),
                         const SizedBox(
                           width: 8,
@@ -819,9 +933,11 @@ class _MainCategoriesGridViewCustomPageState
                                 } else {
                                   context
                                       .read<SubcategoriesCubit>()
-                                      .getRequestsLog(controller
-                                          .mainCategories[_tabController.index]
-                                          .id);
+                                      .loadMyFavouriteAds(
+                                          id: controller
+                                              .mainCategories[
+                                                  _tabController.index]
+                                              .id);
 
                                   context
                                       .read<SubcategoriesCubit>()
@@ -845,9 +961,11 @@ class _MainCategoriesGridViewCustomPageState
                               onPressed: () {
                                 context
                                     .read<SubcategoriesCubit>()
-                                    .getRequestsLog(controller
-                                        .mainCategories[_tabController.index]
-                                        .id);
+                                    .loadRequestsLogByMainCategory(
+                                        mainCategoryId: controller
+                                            .mainCategories[
+                                                _tabController.index]
+                                            .id);
                                 context
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isRequestLogOpen');
@@ -870,10 +988,10 @@ class _MainCategoriesGridViewCustomPageState
                               if (!context.isUserLoggedIn) {
                                 return pleaseLoginDialog(context);
                               } else {
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .getMarriageMyAds(
-                                        '62c8b5b09332225799fe335e');
+                                context.read<SubcategoriesCubit>().loadMyAds(
+                                    id: controller
+                                        .mainCategories[_tabController.index]
+                                        .id);
                                 context
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isMyAdsOpen');
@@ -888,12 +1006,76 @@ class _MainCategoriesGridViewCustomPageState
                   const SizedBox(
                     height: 8,
                   ),
-                  if (subCategoriesCubit.isFavouriteAdsOpen) Container(),
-                  if (subCategoriesCubit.isRequestLogOpen) Container(),
-                  if (subCategoriesCubit.isMyAdsOpen) Container(),
+                  if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+                    SearchBarWidget(
+                      onChanged: (value) {
+                        _debounce.run(() {
+                          context.read<SubcategoriesCubit>().searchAds(
+                                value: value,
+                                mainCategoryId: controller
+                                    .mainCategories[_tabController.index].id,
+                              );
+                        });
+                      },
+                    ),
+                  if (subCategoriesCubit.isFavouriteAdsOpen)
+                    Expanded(
+                        child: BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                      child: FavouriteAdsView(
+                        id: controller.mainCategories[_tabController.index].id,
+                        isFloatingButtonVisible: (value) {
+                          isFloatingButtonVisible = value;
+                          setState(() {});
+                        },
+                      ),
+                    )),
+                  if (subCategoriesCubit.isRequestLogOpen)
+                    Expanded(
+                        child: AdsRequestLogView(
+                            mainCategoryId: controller
+                                .mainCategories[_tabController.index].id,
+                            isFloatingButtonVisible: (value) {
+                              isFloatingButtonVisible = value;
+                              setState(() {});
+                            })),
+                  if (subCategoriesCubit.isMyAdsOpen)
+                    Expanded(
+                        child: BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                      child: MyAdsView(
+                        id: controller.mainCategories[_tabController.index].id,
+                        isFloatingButtonVisible: (value) {
+                          isFloatingButtonVisible = value;
+                          setState(() {});
+                        },
+                      ),
+                    )),
+                  if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+                    //kslkfjslkfjslkfsldfkjlsfld
+                    Expanded(
+                      child: BlocProvider(
+                        create: (context) =>
+                            serviceLocator<AdvertisementCubit>(),
+                        child: AdsSearchView(
+                          mainCategoryNameAr: controller
+                                  .mainCategories[_tabController.index].name ??
+                              'N/A',
+                          mainCategoryNameEn: controller
+                                  .mainCategories[_tabController.index]
+                                  .nameEn ??
+                              'N/A',
+                          isFloatingButtonVisible: (value) {
+                            isFloatingButtonVisible = value;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ),
                   if (!subCategoriesCubit.isMyAdsOpen &&
                       !subCategoriesCubit.isFavouriteAdsOpen &&
-                      !subCategoriesCubit.isRequestLogOpen)
+                      !subCategoriesCubit.isRequestLogOpen &&
+                      !subCategoriesCubit.isSearchAdsOpen)
                     BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
                       builder: (context, state) {
                         // final controller =
@@ -1032,8 +1214,10 @@ class _MainCategoriesGrideViewSectionState
                           print(
                               'mainCategory.id ${widget.state.customPage![index].id} in gredview');
                           context.push(Routes.CustomPageSubCategoriesView,
-                              extra: widget.state.customPage?[index] ??
-                                  '62c8b5779332225799fe3304');
+                              extra: CustomPageSubCategoriesParams(
+                                mainCategory: widget.state.customPage![index],
+                                isCustomPage: true,
+                              ));
                         }
                       },
                       child: MainCategoryBanner(
