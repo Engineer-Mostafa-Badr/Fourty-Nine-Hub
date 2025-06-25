@@ -18,18 +18,28 @@ class GetExpectedPriceTripUseCase
 }
 
 class ExpectedPriceTripParams {
-  final List<double> startLocation;
-  final List<double> targetLocation;
+  final double startLongitude;
+  final double startLatitude;
+  final double targetLongitude;
+  final double targetLatitude;
 
   ExpectedPriceTripParams({
-    required this.startLocation,
-    required this.targetLocation,
+    required this.startLongitude,
+    required this.startLatitude,
+    required this.targetLongitude,
+    required this.targetLatitude,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'startLocation': startLocation,
-      'targetLocation': targetLocation,
+      "startLocation": {
+        "longitude": startLongitude,
+        "latitude": startLatitude,
+      },
+      "targetLocation": {
+        "longitude": targetLongitude,
+        "latitude": targetLatitude,
+      },
     };
   }
 }

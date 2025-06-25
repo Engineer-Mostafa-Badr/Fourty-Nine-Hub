@@ -43,22 +43,22 @@ class ProfileInstagramView extends StatelessWidget {
         }
 
         return CustomScaffold(
-          appBar: AppBar(
-            title: Label(
-              text:
-                  '${state.profileData!.firstName} ${state.profileData!.lastName}',
-              style: Styles.headerText(
-                fontSize: 40,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined),
-            ),
-          ),
+          // appBar: AppBar(
+          //   title: Label(
+          //     text:
+          //         '${state.profileData!.firstName} ${state.profileData!.lastName}',
+          //     style: Styles.headerText(
+          //       fontSize: 40,
+          //       fontWeight: FontWeight.w500,
+          //     ),
+          //   ),
+          //   leading: IconButton(
+          //     onPressed: () {
+          //       Navigator.pop(context);
+          //     },
+          //     icon: const Icon(Icons.arrow_back_ios_new_outlined),
+          //   ),
+          // ),
           body: const ProfileInstagramViewBody(),
         );
       },

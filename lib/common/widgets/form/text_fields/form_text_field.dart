@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -37,7 +38,7 @@ class FormTextField extends StatelessWidget {
   final TextStyle? textStyle;
   final Color? borderColor;
   final Color? borderSide;
-
+  final List<TextInputFormatter>? inputFormatters;
   FormTextField(
       {super.key,
         this.initialValue,
@@ -71,7 +72,10 @@ class FormTextField extends StatelessWidget {
         this.controller,
         this.textStyle,
         this.borderColor,
-        this.borderSide});
+        this.borderSide,
+        this.inputFormatters,
+
+      });
 
   bool validate = false;
 
@@ -123,6 +127,7 @@ class FormTextField extends StatelessWidget {
           initialValue: initialValue,
           obscureText: obsecure ?? false,
           onChanged: action,
+          inputFormatters: inputFormatters, // ✅ added here
           decoration: InputDecoration(
             errorStyle: const TextStyle(height: 0.1),
             constraints: constraints,

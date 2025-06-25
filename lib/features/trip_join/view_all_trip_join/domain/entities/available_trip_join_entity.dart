@@ -1,79 +1,58 @@
+
 class AvailableTripJoinEntity {
-  final bool? subscribedPremium;
-  final List<TripJoinEntity>? trips;
+  final String? id;
+  final double? pricePerSeat;
+  final String? status;
+  final num? viewerIds;
+  final bool? isRepeat;
+  final int? passengers;
+  final String? startDate;
+  final VehicleDetailsEntity? vehicleDetails;
+  final LocationEntity? location;
 
   AvailableTripJoinEntity({
-    this.subscribedPremium,
-    this.trips,
-  });
-}
-
-class TripJoinEntity {
-  final int? views;
-  final String? id;
-  final String? userId;
-  final String? categoryId;
-  final VehicleEntity? vehicle;  // تعديل هنا
-  final String? fromAr;
-  final String? toAr;
-  final String? fromEn;
-  final String? toEn;
-  final int? distance;
-  final int? duration;
-  final int? passengers;
-  final int? price;
-  final String? phone;
-  final int? time;
-  final String? countryCode;
-  final int? countRequests;
-  final bool? isRepeat;
-  final String? status;
-  final int? statusPriority;
-  final bool? adminIgnore;
-  final String? createdAt;
-  final String? updatedAt;
-  final bool? isOwner;
-  final String? allowStatus;
-  final String? paymentMethods;
-
-  TripJoinEntity({
-    this.views,
     this.id,
-    this.userId,
-    this.categoryId,
-    this.vehicle,  // تعديل هنا
-    this.fromAr,
-    this.toAr,
-    this.fromEn,
-    this.toEn,
-    this.distance,
-    this.duration,
-    this.passengers,
-    this.price,
-    this.phone,
-    this.time,
-    this.countryCode,
-    this.countRequests,
-    this.isRepeat,
+    this.pricePerSeat,
     this.status,
-    this.statusPriority,
-    this.adminIgnore,
-    this.createdAt,
-    this.updatedAt,
-    this.isOwner,
-    this.allowStatus,
-    this.paymentMethods,
+    this.viewerIds,
+    this.isRepeat,
+    this.passengers,
+    this.startDate,
+    this.vehicleDetails,
+    this.location,
   });
 }
 
-class VehicleEntity {
-  final String? id;
-  final String? brand;
-  final String? model;
+class VehicleDetailsEntity {
+  final String? brandAr;
+  final String? brandEn;
+  final String? modelAr;
+  final String? modelEn;
 
-  VehicleEntity({
-    this.id,
-    this.brand,
-    this.model,
+  VehicleDetailsEntity({
+    this.brandAr,
+    this.brandEn,
+    this.modelAr,
+    this.modelEn,
+  });
+}
+
+class LocationEntity {
+  final CoordinatesEntity? start;
+  final CoordinatesEntity? target;
+
+  LocationEntity({
+    this.start,
+    this.target,
+  });
+}
+
+class CoordinatesEntity {
+  final String? address;
+  final List<double>? coordinates;
+
+  CoordinatesEntity({
+    this.address,
+    this.coordinates,
   });
 }

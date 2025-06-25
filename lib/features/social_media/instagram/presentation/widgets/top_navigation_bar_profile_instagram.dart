@@ -17,53 +17,57 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TabBar(
-          controller: tabController,
-          onTap: onTap,
-          dividerHeight: 0,
-          indicatorColor: context.isDarkMode ? Colors.white : Colors.black,
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
-          indicatorWeight: 2,
-          padding: const EdgeInsets.only(bottom: 4),
-          tabs: [
-            Tab(
-              height: 44,
-              child: SvgPicture.asset(
-                tabController.index == 0
-                    ? (context.isDarkMode
-                        ? Assets.appsBlackIconDark
-                        : Assets.appsBlackIcon)
-                    : (context.isDarkMode
-                        ? Assets.appsGreyIconDark
-                        : Assets.appsGreyIcon),
+        Container(
+          color: Colors.white,
+          child: TabBar(
+            controller: tabController,
+            onTap: onTap,
+            dividerHeight: 0,
+            indicatorColor: context.isDarkMode ? Colors.white : Colors.black,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+            indicatorWeight: 2,
+            padding: const EdgeInsets.only(bottom: 4),
+            tabs: [
+              Tab(
+                height: 44,
+
+                child: SvgPicture.asset(
+                  tabController.index == 0
+                      ? (context.isDarkMode
+                          ? Assets.appsBlackIconDark
+                          : Assets.appsBlackIcon)
+                      : (context.isDarkMode
+                          ? Assets.appsGreyIconDark
+                          : Assets.appsGreyIcon),
+                ),
               ),
-            ),
-            Tab(
-              height: 44,
-              child: SvgPicture.asset(
-                tabController.index == 1
-                    ? (context.isDarkMode
-                        ? Assets.videoIconDark
-                        : Assets.videoIcon)
-                    : (context.isDarkMode
-                        ? Assets.videoGreyIconDark
-                        : Assets.videoGreyIcon),
+              Tab(
+                height: 44,
+                child: SvgPicture.asset(
+                  tabController.index == 1
+                      ? (context.isDarkMode
+                          ? Assets.videoIconDark
+                          : Assets.videoIcon)
+                      : (context.isDarkMode
+                          ? Assets.videoGreyIconDark
+                          : Assets.videoGreyIcon),
+                ),
               ),
-            ),
-            Tab(
-              height: 44,
-              child: SvgPicture.asset(
-                tabController.index == 2
-                    ? (context.isDarkMode
-                        ? Assets.profile2BlackIconDark
-                        : Assets.profile2BlackIcon)
-                    : (context.isDarkMode
-                        ? Assets.profile2GreyIconDark
-                        : Assets.profile2GreyIcon),
+              Tab(
+                height: 44,
+                child: SvgPicture.asset(
+                  tabController.index == 2
+                      ? (context.isDarkMode
+                          ? Assets.profile2BlackIconDark
+                          : Assets.profile2BlackIcon)
+                      : (context.isDarkMode
+                          ? Assets.profile2GreyIconDark
+                          : Assets.profile2GreyIcon),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

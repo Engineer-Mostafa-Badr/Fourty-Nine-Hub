@@ -1,15 +1,14 @@
-// expected_price_trip_entity.dart
 class ExpectedPriceTripEntity {
-  final double price;
+  final double pricePerSeat;
   final double distance;
   final double duration;
   final String destinationAddress;
   final String originAddress;
-  final  List<List<double>> polyline; // Can be List<Map> or String
+  final List<List<double>> polyline;
   final String type;
 
   ExpectedPriceTripEntity({
-    required this.price,
+    required this.pricePerSeat,
     required this.distance,
     required this.duration,
     required this.destinationAddress,
