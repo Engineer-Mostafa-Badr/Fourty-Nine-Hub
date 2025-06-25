@@ -163,12 +163,12 @@ class _NewChatCardState extends State<NewChatCard> {
             if (widget.chat!.isAdmin != "admin") {
               if (context.isUserLoggedIn) {
                 context.read<UserCubit>().updateProfileView(
-                      isProfile: false,
-                      userId: widget.chat!.userId,
-                    );
+                  isProfile: false,
+                  userId: widget.chat!.userId,
+                );
+                _onPressedImageDialog();
               }
             }
-            _onPressedImageDialog();
           },
           child: Stack(
             children: [
@@ -335,18 +335,18 @@ class _NewChatCardState extends State<NewChatCard> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 2.0),
                   child: Icon(
-                    Icons.volume_off,
+                    Icons.volume_off_outlined,
                     color: context.isDarkMode ? Colors.white54 : Colors.black45,
-                    size: 20,
+                    size: 18,
                   ),
                 ),
               if (widget.chat!.isPinned)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 2.0),
                   child: Icon(
-                    Icons.push_pin,
+                    Icons.push_pin_outlined,
                     color: context.isDarkMode ? Colors.white54 : Colors.black45,
-                    size: 20,
+                    size: 18,
                   ),
                 ),
               const Sizer(
@@ -368,17 +368,17 @@ class _NewChatCardState extends State<NewChatCard> {
                   if (widget.chat!.lastMessage?.delivered ?? false)
                     Image.asset(
                       Assets.doubleCheck,
-                      width: 20,
+                      width: 18,
                     )
                   else if (widget.chat!.lastMessage?.seen ?? false)
                     Image.asset(
                       Assets.doubleCheckSeen,
-                      width: 20,
+                      width: 18,
                     )
                   else
                     Image.asset(
                       Assets.check,
-                      width: 20,
+                      width: 18,
                     ),
               if (!widget.chat!.typing || !widget.chat!.recording)
                 Expanded(
@@ -506,6 +506,7 @@ class _NewChatCardState extends State<NewChatCard> {
             color: context.isDarkMode ? Colors.white : Colors.black,
           ),
         ),
+        SizedBox(height: 8),
         if (widget.chat?.lastSeenCount != null)
           if (widget.chat!.isAdmin != "admin")
             GestureDetector(
@@ -517,6 +518,7 @@ class _NewChatCardState extends State<NewChatCard> {
                     style: Styles.mediumText(
                       color:
                           context.isDarkMode ? Colors.white54 : Colors.black45,
+                      fontSize: 24,
                     ),
                   ),
                   // const SizedBox(width: 10),
@@ -541,7 +543,7 @@ class _NewChatCardState extends State<NewChatCard> {
                         color: context.isDarkMode
                             ? Colors.white54
                             : Colors.black45,
-                        size: 17,
+                        size: 16,
                       ),
                     ),
                   ),
@@ -607,7 +609,7 @@ class _NewChatCardState extends State<NewChatCard> {
                           const Icon(
                             Icons.verified,
                             color: Colors.blue,
-                            size: 20,
+                            size: 16,
                           ),
                         if (widget.chat!.lables.isNotEmpty)
                           Icon(
