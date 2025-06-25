@@ -589,7 +589,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                     )
                   : const SizedBox.shrink(),
             ),
-            const Divider(),
+            // const Divider(),
             _buildCategoryChats(),
             const MessagesAreEndToEndEncrypted(),
           ],
@@ -683,76 +683,81 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR
                       ),),
                 )
-              : Scrollbar(
-                  // isAlwaysShown: true,  // Ensures the scrollbar is always visible
-                  interactive: true,
-                  thumbVisibility: true,
-                  thickness: 3,
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    // Enable scrolling
-                    itemBuilder: (context, index) => (state
-                            .chats![index].archived)
-                        ? const SizedBox()
-                        : Slidable(
-                            key: ValueKey(index),
-                            closeOnScroll: false,
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              dismissible: DismissiblePane(onDismissed: () {}),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (value) {
-                                    // bottomSheet logic
-                                  },
-                                  backgroundColor: context.isDarkMode
-                                      ? AppColors.DARK_BLUE_COLOR
-                                      : const Color.fromARGB(
-                                          255, 191, 191, 191),
-                                  foregroundColor: context.isDarkMode
-                                      ? AppColors.DARK_BLUE_COLOR
-                                      : Colors.white,
-                                  icon: Icons.more_horiz,
-                                  label: LocaleKeys.more.localize,
-                                  padding: EdgeInsets.zero,
-                                ),
-                                SlidableAction(
-                                  onPressed: (value) async {
-                                    // Archive or unarchive logic
-                                  },
-                                  backgroundColor: context.isDarkMode
-                                      ? Colors.white
-                                      : AppColors.PRIMARY_COLOR,
-                                  foregroundColor: context.isDarkMode
-                                      ? AppColors.DARK_BLUE_COLOR
-                                      : Colors.white,
-                                  icon: Icons.delete_outlined,
-                                  label: state.chats![index].archived
-                                      ? LocaleKeys.unarchive.localize
-                                      : LocaleKeys.archive.localize,
-                                  padding: EdgeInsets.zero,
-                                ),
-                              ],
+              : Expanded(
+                child: Scrollbar(
+                    // isAlwaysShown: true,  // Ensures the scrollbar is always visible
+                    interactive: true,
+                    thumbVisibility: true,
+                    thickness: 3,
+                    child: ListView.separated(
+                      shrinkWrap: false,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      // Enable scrolling
+                      itemBuilder: (context, index) => (state
+                              .chats![index].archived)
+                          ? const SizedBox()
+                          : Slidable(
+                              key: ValueKey(index),
+                              closeOnScroll: false,
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                dismissible: DismissiblePane(onDismissed: () {}),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (value) {
+                                      // bottomSheet logic
+                                    },
+                                    backgroundColor: context.isDarkMode
+                                        ? AppColors.DARK_BLUE_COLOR
+                                        : const Color.fromARGB(
+                                            255, 191, 191, 191),
+                                    foregroundColor: context.isDarkMode
+                                        ? AppColors.DARK_BLUE_COLOR
+                                        : Colors.white,
+                                    icon: Icons.more_horiz,
+                                    label: LocaleKeys.more.localize,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (value) async {
+                                      // Archive or unarchive logic
+                                    },
+                                    backgroundColor: context.isDarkMode
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
+                                    foregroundColor: context.isDarkMode
+                                        ? AppColors.DARK_BLUE_COLOR
+                                        : Colors.white,
+                                    icon: Icons.delete_outlined,
+                                    label: state.chats![index].archived
+                                        ? LocaleKeys.unarchive.localize
+                                        : LocaleKeys.archive.localize,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ],
+                              ),
+                              child: NewChatCard(
+                                isSecret: isSecret,
+                                chat: state.chats?[index],
+                                chatsCubit: chatsCubit,
+                              ),
                             ),
-                            child: NewChatCard(
-                              isSecret: isSecret,
-                              chat: state.chats?[index],
-                              chatsCubit: chatsCubit,
-                            ),
-                          ),
-                    separatorBuilder: (context, index) => Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
-                      child: Divider(
-                        thickness: 1,
-                        color:context.isDarkMode ? Colors.white12 : Colors.black12,
-                        height: 5,
-                      ),
+                      separatorBuilder: (context, index) {
+                        return const SizedBox();
+                        // return Padding(
+                        //   padding:
+                        //   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+                        //   child: Divider(
+                        //     thickness: 1,
+                        //     color:context.isDarkMode ? Colors.white12 : Colors.black12,
+                        //     height: 5,
+                        //   ),
+                        // );
+                      },
+                      itemCount: state.chats?.length ?? 0,
                     ),
-                    itemCount: state.chats?.length ?? 0,
                   ),
-                );
+              );
     });
   }
 
@@ -1203,8 +1208,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                             value: 3,
                             child: Text(
                               context.isArabic
-                                  ? "الدردشات المغلقه"
-                                  : "Locked chats",
+                                  ? "قفل المحادثات": "Lock Chats",
                               style: Styles.mediumText(
                                   color: context.isDarkMode
                                       ? Colors.white
