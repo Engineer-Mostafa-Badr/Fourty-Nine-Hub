@@ -324,7 +324,7 @@ class StoryViewScreenState extends State<StoryViewScreen> {
               },
             );
           }
-          if (widget.mutedStories!.isNotEmpty) {
+          // if (widget.mutedStories.isNotEmpty) {
             return PageView.builder(
               controller: _pageController,
               itemCount: widget.mutedStories!.length,
@@ -342,7 +342,7 @@ class StoryViewScreenState extends State<StoryViewScreen> {
                 );
               },
             );
-          }
+          // }
           return const Sizer();
         }),
       ),

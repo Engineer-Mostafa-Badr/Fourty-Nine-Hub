@@ -57,7 +57,27 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
     super.dispose();
   }
 
+  final Map<String, DateTime> _lastTapTimes = {};
 
+  void _handleTap(String id) {
+    final now = DateTime.now();
+
+    if (_lastTapTimes.containsKey(id)) {
+      final lastTap = _lastTapTimes[id]!;
+      final difference = now.difference(lastTap);
+
+      if (difference.inMinutes < 5) {
+        print("You need to wait before clicking again.");
+        return; // Block the tap
+      }
+    }
+
+    // Allow tap and update timestamp
+    _lastTapTimes[id] = now;
+
+    context.read<ViewAllTripJoinCubit>().applyViewTrip(id);
+    print("Hi");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +107,9 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
               children: [
                 InkWell(
                   onTap: (){
-                    context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
+                    // context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
+                    // print("Hi");
+                    _handleTap(data.id!);
                   },
                   child: Stack(
                     children: [

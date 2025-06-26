@@ -110,7 +110,8 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                 Sizer(),
                 Expanded(
                   child: AppButton(
-                    color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.black,
+                    color:AppColors.whiteColor,
+                    // color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.whiteColor,
                     radius: 15,
                     label: context.isArabic ? 'تحميله' : 'Shipping',
                     onPressed: () {

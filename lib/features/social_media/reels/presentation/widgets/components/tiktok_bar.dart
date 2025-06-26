@@ -144,6 +144,11 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // )
             ],
           ),
+          InkWell(
+            onTap: (){
+              context.push(Routes.SPOTLIGHT);
+            },
+              child: Text("move")),
           Row(
             children: [
               _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
