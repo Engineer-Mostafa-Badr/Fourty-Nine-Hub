@@ -16,11 +16,13 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_availab
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_expired_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_my_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_running_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_join_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -38,7 +40,8 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final ListenToJoinAvailableRoutesUseCase listenToJoinAvailableRoutesUseCase;
   final ListenToLeaveAvailableRoutesUseCase listenToLeaveAvailableRoutesUseCase;
   final ListenToNewRouteUseCase listenToNewRouteUseCase;
-  CaptainShareCubit(this.createPricePerSeatUseCase,this.listenToCancelRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
+  final JoinToRouteUseCase joinToRouteUseCase;
+  CaptainShareCubit(this.createPricePerSeatUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
       : super(const CaptainShareState());
 
 
@@ -180,6 +183,35 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
         runningBookings.firstWhere((e)=> e.id==id).status='cancelled';
       }
       showSuccessMessage(context, context.isArabic?'تم الغاء الحجز بنجاح':'Booking canceled successfully');
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  Future<void> joinToRoute(
+      {required String id, required BuildContext context}) async {
+    showLoadingDialog(context);
+    Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    final response = await joinToRouteUseCase(JoinToRouteParams(
+      routeId: id,
+      lat: currentPosition.latitude,
+      lng: currentPosition.longitude
+    ));
+    response.fold((l) {
+      context.pop();
+      String errorName = getFailureName(l, context);
+      // errorName == 'DebtError'
+      //     ? showDebtDialog(context, subCategoryId)
+      //     : errorName == 'SubscribeError'
+      //     ? showSubscribeDialog(context, subCategoryId)
+      //     : showErrorMessage(context, getFailureMessage(l, context));
+      showSuccessMessage(context,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareStates.error));
+    }, (data) {
+      availableBookings.firstWhere((e)=>e.id==data.id).clients = data.clients;
+      availableBookings.firstWhere((e)=>e.id==data.id).availableSeats = data.availableSeats;
+      context.pop();
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }

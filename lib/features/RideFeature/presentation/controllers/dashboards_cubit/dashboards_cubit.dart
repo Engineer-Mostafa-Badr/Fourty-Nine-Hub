@@ -1132,6 +1132,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       return;
     }
     emit(state.copyWith(status: DashboardsStates.loading));
+    emit(state.copyWith(status: DashboardsStates.loading));
 
     final response = await getDriverSettingsUseCase(NoParams());
 

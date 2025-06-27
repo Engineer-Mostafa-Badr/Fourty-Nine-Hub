@@ -2,17 +2,17 @@ class MyBookingEntity{
   final String id;
   final String creatorId;
   String? status;
-  final bool isPremium;
-  final bool isComfort;
-  final num availableSeats;
-  final num pricePerSeat;
-  final List<dynamic> clients;
-  final MyBookingLocationEntity? startLocation;
-  final MyBookingLocationEntity? targetLocation;
-  final List<dynamic> waypoints;
-  final String createdAt;
+  bool? isPremium;
+  List<dynamic>? features;
+  num? availableSeats;
+  num? pricePerSeat;
+  List<dynamic>? polyLine;
+  List<BookingClientEntity>? clients;
+  MyBookingLocationEntity? startLocation;
+  MyBookingLocationEntity? targetLocation;
+  String? createdAt;
 
-  MyBookingEntity({required this.id, required this.clients,required this.pricePerSeat,required this.creatorId, this.status, required this.isPremium, required this.isComfort, required this.availableSeats, this.startLocation, this.targetLocation, required this.waypoints, required this.createdAt});
+  MyBookingEntity( {required this.id, this.clients ,this.features ,this.pricePerSeat, this.polyLine ,required this.creatorId, this.status, this.isPremium, this.availableSeats, this.startLocation, this.targetLocation, this.createdAt});
 }
 
 class MyBookingLocationEntity{
@@ -20,4 +20,11 @@ class MyBookingLocationEntity{
   final List<dynamic> location;
 
   MyBookingLocationEntity({required this.address, required this.location});
+}
+
+class BookingClientEntity{
+  final String id;
+  final MyBookingLocationEntity location;
+
+  BookingClientEntity({required this.id, required this.location});
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -25,6 +28,7 @@ class OneWayWidget extends StatefulWidget {
   final String? requestType;
   final MyBookingEntity? model;
   final Function? onCancelBooking;
+  final Function? onJoin;
 
   const OneWayWidget({
     super.key,
@@ -34,6 +38,7 @@ class OneWayWidget extends StatefulWidget {
     this.isMyBooking,
     this.requestType,
     this.onCancelBooking,
+    this.onJoin,
   });
 
   @override
@@ -42,7 +47,7 @@ class OneWayWidget extends StatefulWidget {
 
 class _OneWayWidgetState extends State<OneWayWidget> {
   bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
-  ExpandableController _expandableController=ExpandableController();
+  ExpandableController _expandableController = ExpandableController();
 
   @override
   void initState() {
@@ -50,7 +55,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     _expandableController = ExpandableController(initialExpanded: false);
   }
 
-  String getBookingStatus(String status){
+  String getBookingStatus(String status) {
     switch (status) {
       case 'pending':
         return LocaleKeys.pending.localize;
@@ -59,7 +64,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
       case 'expired':
         return LocaleKeys.expired.localize;
       case 'cancelled':
-        return context.isArabic?'تم الغاء':'Canceled';
+        return context.isArabic ? 'تم الغاء' : 'Canceled';
       case 'done':
         return LocaleKeys.done.localize;
       default:
@@ -67,15 +72,35 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     }
   }
 
+  String getPassengerDescription(List<dynamic> options, bool isArabic) {
+    bool hasLadyDriver = options.contains('LADY_DRIVER');
+    bool hasLadyPassenger = options.contains('LADY_PASSENGER');
+
+    if (hasLadyPassenger && hasLadyDriver) {
+      return isArabic ? 'سيدات' : 'Ladies';
+    } else if (hasLadyPassenger || hasLadyDriver) {
+      return isArabic ? 'راكبات' : 'Lady passengers';
+    } else {
+      return isArabic ? 'أي راكب' : 'Any passenger';
+    }
+  }
+
+  bool isComfort(List<dynamic> options) {
+    return options.contains('COMFORT');
+  }
 
   @override
   Widget build(BuildContext context) {
-    print("isMyBooking ${widget.isMyBooking}");
+    print(
+        "isMyBooking ${widget.model?.creatorId == UserCubit.to.state.data?.id}");
     print("widget.model?.creatorId ${widget.model?.creatorId}");
     print("UserCubit.to.state.data?.id ${UserCubit.to.state.data?.id}");
-    print("widget.model?.startLocation ${widget.model?.startLocation?.location}");
-    print("widget.model?.startLocation ${widget.model?.startLocation?.location[0]}");
-    print("widget.model?.startLocation ${widget.model?.startLocation?.location[1]}");
+    print(
+        "widget.model?.startLocation ${widget.model?.startLocation?.location}");
+    print(
+        "widget.model?.startLocation ${widget.model?.startLocation?.location[1]}");
+    print(
+        "widget.model?.startLocation ${widget.model?.startLocation?.location[0]}");
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -98,7 +123,8 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      LocaleKeys.normal.localize,
+                      getPassengerDescription(
+                          widget.model?.features ?? [], context.isArabic),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppColors.getRedColor(context),
@@ -141,35 +167,51 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          if(widget.isMyBooking!=true)SvgPicture.asset(Assets.bookedMan),
-                          if(widget.isMyBooking==true)CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                UserCubit.to.state.data?.profilePicture ?? UIConst.profilePlaceHolder),
-                          ),
+                          if (!(widget.model?.creatorId ==
+                              UserCubit.to.state.data?.id))
+                            SvgPicture.asset(Assets.bookedMan),
+                          if (widget.model?.creatorId ==
+                              UserCubit.to.state.data?.id)
+                            CircleAvatar(
+                              radius: 30.w,
+                              backgroundColor: Colors.white,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  UserCubit.to.state.data?.profilePicture ??
+                                      UIConst.profilePlaceHolder),
+                            ),
                         ],
                       ),
                       Column(
                         children: [
                           Text(
-                            ((widget.model?.availableSeats??0)>=2)?LocaleKeys.free.localize:LocaleKeys.booked.localize,
+                            ((widget.model?.availableSeats ?? 0) >= 2)
+                                ? LocaleKeys.free.localize
+                                : LocaleKeys.booked.localize,
                             style: TextStyle(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          if(((widget.model?.availableSeats??0)>=2))SvgPicture.asset(
-                            Assets.freeIcon,
-                            color: AppColors.getTextColor(context),
-                          ),
-                          if(((widget.model?.availableSeats??0)<2))CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                 UIConst.profilePlaceHolder),
-                          ),
+                          if (((widget.model?.availableSeats ?? 0) >= 2))
+                            ClickableWidget(
+                              onTap: () {
+                                if (widget.onJoin != null) {
+                                  widget.onJoin!();
+                                }
+                              },
+                              child: SvgPicture.asset(
+                                Assets.freeIcon,
+                                color: AppColors.getTextColor(context),
+                              ),
+                            ),
+                          if (((widget.model?.availableSeats ?? 0) < 2))
+                            CircleAvatar(
+                              radius: 30.w,
+                              backgroundColor: Colors.white,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  UIConst.profilePlaceHolder),
+                            ),
                         ],
                       ),
                       Column(
@@ -177,7 +219,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           Padding(
                             padding: const EdgeInsets.only(left: 13),
                             child: Text(
-                              ((widget.model?.availableSeats??0)>=1)?LocaleKeys.free.localize:LocaleKeys.booked.localize,
+                              ((widget.model?.availableSeats ?? 0) >= 1)
+                                  ? LocaleKeys.free.localize
+                                  : LocaleKeys.booked.localize,
                               style: TextStyle(
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.bold,
@@ -185,16 +229,25 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          if(((widget.model?.availableSeats??0)>=1))SvgPicture.asset(
-                            Assets.freeIcon,
-                            color: AppColors.getTextColor(context),
-                          ),
-                          if(((widget.model?.availableSeats??0)<1))CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                UIConst.profilePlaceHolder),
-                          ),
+                          if (((widget.model?.availableSeats ?? 0) >= 1))
+                            ClickableWidget(
+                              onTap: () {
+                                if (widget.onJoin != null) {
+                                  widget.onJoin!();
+                                }
+                              },
+                              child: SvgPicture.asset(
+                                Assets.freeIcon,
+                                color: AppColors.getTextColor(context),
+                              ),
+                            ),
+                          if (((widget.model?.availableSeats ?? 0) < 1))
+                            CircleAvatar(
+                              radius: 30.w,
+                              backgroundColor: Colors.white,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  UIConst.profilePlaceHolder),
+                            ),
                         ],
                       ),
                       Column(
@@ -269,8 +322,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 ),
                 const SizedBox(height: 8),
                 SizedBox(
-                    height: 200.h,
-                    child: _buildTopMap(context,widget.model)),
+                    height: 200.h, child: _buildTopMap(context, widget.model)),
                 const SizedBox(height: 8),
 
                 Row(
@@ -289,9 +341,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        widget.model?.startLocation?.address??'',
+                        widget.model?.startLocation?.address ?? '',
                         overflow: TextOverflow.ellipsis,
-                        maxLines:2,
+                        maxLines: 2,
                         style: TextStyle(
                           color: context.isDarkMode
                               ? Colors.white
@@ -320,9 +372,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        widget.model?.targetLocation?.address??'',
+                        widget.model?.targetLocation?.address ?? '',
                         overflow: TextOverflow.ellipsis,
-                        maxLines:2,
+                        maxLines: 2,
                         style: TextStyle(
                           color: context.isDarkMode
                               ? Colors.white
@@ -334,7 +386,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ),
                   ],
                 ),
-                SizedBox(height:8),
+                SizedBox(height: 8),
                 Center(
                   child: GestureDetector(
                     onTap: () {
@@ -362,7 +414,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 Row(
                   children: [
                     Text(
-                      TimeUtils.formatTimeAgo(widget.model?.createdAt ?? DateTime.now().toString(),context.isArabic),
+                      TimeUtils.formatTimeAgo(
+                          widget.model?.createdAt ?? DateTime.now().toString(),
+                          context.isArabic),
                       style: TextStyle(
                         fontSize: 14,
                         color: context.isDarkMode
@@ -375,7 +429,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     TextButton(
                       onPressed: () {},
                       child: Text(
-                        widget.model?.isComfort==true?LocaleKeys.comfort.localize:(context.isArabic?'غير مريح':'Uncomfortable'),
+                        isComfort(widget.model?.features ?? [])
+                            ? LocaleKeys.comfort.localize
+                            : (context.isArabic ? 'غير مريح' : 'Uncomfortable'),
                         style: TextStyle(
                           fontSize: 24.sp,
                           color: context.isDarkMode
@@ -388,11 +444,11 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     const SizedBox(width: 5),
                     widget.cancelButton == true
                         ? GestureDetector(
-                      onTap: (){
-                        if(widget.onCancelBooking!=null){
-                          widget.onCancelBooking!();
-                        }
-                      },
+                            onTap: () {
+                              if (widget.onCancelBooking != null) {
+                                widget.onCancelBooking!();
+                              }
+                            },
                             child: Container(
                               width: 120.w,
                               height: 50.h,
@@ -451,26 +507,40 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
   Widget _buildTopMap(BuildContext context, MyBookingEntity? model) {
     List<LatLng> routePoints = [];
-    // routePoints =
-    //     _convertPolylineToLatLng(state.activeTrip?.polyline ?? []);
+    List<dynamic> polyLine = model?.polyLine ?? [];
+
+    List<List<double>> parsedPolyline =
+        polyLine.map<List<double>>((item) => List<double>.from(item)).toList();
+    routePoints =
+        _convertPolylineToLatLng(parsedPolyline);
+    log("routePoints $routePoints");
 
     if (model != null &&
-        model.startLocation?.location[0] == null &&
-        model.startLocation?.location[1] == null) {
+        model.startLocation?.location[1] == null &&
+        model.startLocation?.location[0] == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
-          LatLng(model.startLocation?.location[0], model.startLocation?.location[1]),
+          LatLng(model.startLocation?.location[1],
+              model.startLocation?.location[0]),
           12.0,
         );
       });
-    }else{
+    } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
-          LatLng( 30.033333, 31.233334),
+          LatLng(model?.startLocation?.location[1] ?? 30.033333,
+              model?.startLocation?.location[0] ?? 31.233334),
           12.0,
         );
       });
     }
+
+    List<BookingClientEntity> clients = model?.clients ?? [];
+    if (clients.isNotEmpty) {
+      clients.removeWhere((e) => e.id == model?.creatorId);
+    }
+
+    log("clients ${clients.length}");
 
     return SizedBox(
       width: double.infinity,
@@ -478,16 +548,19 @@ class _OneWayWidgetState extends State<OneWayWidget> {
       child: FlutterMap(
         mapController: _mapController,
         options: (model != null &&
-            model.startLocation?.location[0] == null &&
-            model.startLocation?.location[1] == null &&
-            model.startLocation?.location[0] != 0 &&
-            model.startLocation?.location[1] != 0)? MapOptions(
-          initialCenter: LatLng(model.startLocation?.location[0], model.startLocation?.location[1]),
-          initialZoom: 12.0,
-        ) : MapOptions(
-          initialCenter: LatLng( 30.033333, 31.233334),
-          initialZoom: 12.0,
-        ),
+                model.startLocation?.location[1] == null &&
+                model.startLocation?.location[0] == null &&
+                model.startLocation?.location[1] != 0 &&
+                model.startLocation?.location[0] != 0)
+            ? MapOptions(
+                initialCenter: LatLng(model.startLocation?.location[1],
+                    model.startLocation?.location[0]),
+                initialZoom: 12.0,
+              )
+            : MapOptions(
+                initialCenter: LatLng(30.033333, 31.233334),
+                initialZoom: 12.0,
+              ),
         children: [
           TileLayer(
             // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -502,43 +575,49 @@ class _OneWayWidgetState extends State<OneWayWidget> {
           MarkerLayer(
             markers: [
               if (model != null &&
-                  model.startLocation?.location[0] != null &&
                   model.startLocation?.location[1] != null &&
-                  model.startLocation?.location[0] != 0 &&
-                  model.startLocation?.location[1] != 0)
+                  model.startLocation?.location[0] != null &&
+                  model.startLocation?.location[1] != 0 &&
+                  model.startLocation?.location[0] != 0)
                 Marker(
-                  point: LatLng(model.startLocation?.location[0], model.startLocation?.location[1]),
+                  point: LatLng(model.startLocation?.location[1],
+                      model.startLocation?.location[0]),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
                       color: Colors.green, size: 40),
                 ),
-              if (model?.targetLocation?.location != null && model?.targetLocation?.location[0] != null && model?.targetLocation?.location[1] != null && model?.targetLocation?.location[0] != 0 && model?.targetLocation?.location[1] != 0)
+              if (model?.targetLocation?.location != null &&
+                  model?.targetLocation?.location[1] != null &&
+                  model?.targetLocation?.location[0] != null &&
+                  model?.targetLocation?.location[1] != 0 &&
+                  model?.targetLocation?.location[0] != 0)
                 Marker(
-                  point: LatLng(model?.targetLocation?.location[0], model?.targetLocation?.location[1]),
+                  point: LatLng(model?.targetLocation?.location[1],
+                      model?.targetLocation?.location[0]),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
                       color: Colors.blue, size: 40),
                 ),
-              // if (state.activeTrip?.wayPointOne != null && state.activeTrip?.wayPointOne?[0] != null && state.activeTrip?.wayPointOne?[1] != null && state.activeTrip?.wayPointOne?[0] != 0 && state.activeTrip?.wayPointOne?[1] != 0)
-              //   Marker(
-              //     point:
-              //     LatLng(state.activeTrip!.wayPointOne![0], state.activeTrip!.wayPointOne![1]),
-              //     width: 40,
-              //     height: 40,
-              //     child: const Icon(Icons.location_pin,
-              //         color: Colors.red, size: 40),
-              //   ),
-              // if (state.activeTrip?.wayPointTwo != null && state.activeTrip?.wayPointTwo?[0] != null && state.activeTrip?.wayPointTwo?[1] != null && state.activeTrip?.wayPointTwo?[0] != 0 && state.activeTrip?.wayPointTwo?[1] != 0)
-              //   Marker(
-              //     point:
-              //     LatLng(state.activeTrip!.wayPointTwo![0], state.activeTrip!.wayPointTwo![1]),
-              //     width: 40,
-              //     height: 40,
-              //     child: const Icon(Icons.location_pin,
-              //         color: Colors.red, size: 40),
-              //   ),
+              if (clients.isNotEmpty)
+                Marker(
+                  point: LatLng(clients[0].location.location[1],
+                      clients[0].location.location[0]),
+                  width: 30,
+                  height: 30,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 30),
+                ),
+              if (clients.length > 1)
+                Marker(
+                  point: LatLng(clients[1].location.location[1],
+                      clients[1].location.location[0]),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
+                ),
             ],
           ),
           if (routePoints.isNotEmpty)
@@ -546,7 +625,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
               polylines: [
                 Polyline(
                   points: routePoints,
-                  color: context.isDarkMode ? Colors.blue :  Colors.black87,
+                  color: context.isDarkMode ? Colors.blue : Colors.black87,
                   strokeWidth: 4.0,
                 ),
               ],
@@ -556,8 +635,21 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     );
   }
 
+  LatLng _getInitialCenter(MyBookingEntity? model) {
+    if (model?.startLocation?.location != null &&
+        model!.startLocation!.location.length >= 2 &&
+        model.startLocation!.location[0] != 0 &&
+        model.startLocation!.location[1] != 0) {
+      return LatLng(
+          model.startLocation!.location[1], model.startLocation!.location[0]);
+    }
+
+    // Default to Cairo
+    return const LatLng(30.033333, 31.233334);
+  }
+
   List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => LatLng(point[1], point[0])).toList();
+    return polyline.map((point) => LatLng(point[0], point[1])).toList();
   }
 }
 
@@ -587,26 +679,22 @@ class AddressWidget extends StatelessWidget {
                 children: [
                   TextAddressWidget(
                     color: Colors.green,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
                   TextAddressWidget(
                     color: Colors.black,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
                   TextAddressWidget(
                     color: Colors.black,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
                   TextAddressWidget(
                     color: Colors.blue,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                 ],
               ),
@@ -665,5 +753,4 @@ class TextAddressWidget extends StatelessWidget {
       ],
     );
   }
-
 }

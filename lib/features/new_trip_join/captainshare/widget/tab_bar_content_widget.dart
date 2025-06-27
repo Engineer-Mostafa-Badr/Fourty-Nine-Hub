@@ -176,18 +176,25 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
           cubit.isLoadingAvailableBookings?const Center(child: CircularProgressIndicator()):cubit.availableBookings.isEmpty?_emptyMessage():ListView.separated(
             controller: _scrollController,
             physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.zero,
             shrinkWrap: true,
             itemBuilder: (context, index) => OneWayWidget(
                 requestType: LocaleKeys.regular.localize,
                 statusDriver: cubit.availableBookings[index].status,
                 model: cubit.availableBookings[index],
                 cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.availableBookings[index].creatorId) && cubit.availableBookings[index].status == 'pending',
-                isMyBooking: cubit.availableBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+                isMyBooking: cubit.availableBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
                 onCancelBooking: () {
                   if (cubit.availableBookings[index].status == 'pending') {
                     cubit.cancelMyBooking(id: cubit.availableBookings[index].id, context: context, from: 'available');
                   }
-                }),
+                },
+              onJoin: (){
+                  if((!(cubit.availableBookings[index].clients??[]).contains((UserCubit.to.state.data?.id ?? '')))&&cubit.availableBookings[index].status == 'pending'){
+                    cubit.joinToRoute(id: cubit.availableBookings[index].id, context: context);
+                  }
+              },
+            ),
             separatorBuilder: (context, index) => const Sizer(),
             itemCount: cubit.availableBookings.length,
           ),
@@ -270,7 +277,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
               statusDriver: cubit.myBookings[index].status,
               model: cubit.myBookings[index],
               cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.myBookings[index].creatorId) && cubit.myBookings[index].status == 'pending',
-              isMyBooking: cubit.myBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+              isMyBooking: cubit.myBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
               onCancelBooking: () {
                 if (cubit.myBookings[index].status == 'pending') {
                   cubit.cancelMyBooking(id: cubit.myBookings[index].id, context: context, from: 'myBookings');
@@ -327,7 +334,7 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
               statusDriver: cubit.runningBookings[index].status,
               model: cubit.runningBookings[index],
               cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.runningBookings[index].creatorId) && cubit.runningBookings[index].status == 'pending',
-              isMyBooking: cubit.runningBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+              isMyBooking: cubit.runningBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
               onCancelBooking: () {
                 if (cubit.runningBookings[index].status == 'pending') {
                   cubit.cancelMyBooking(id: cubit.runningBookings[index].id, context: context, from: 'runningBookings');
@@ -401,7 +408,7 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
               statusDriver: cubit.expiredBookings[index].status,
               model: cubit.expiredBookings[index],
               cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.expiredBookings[index].creatorId) && cubit.expiredBookings[index].status == 'pending',
-              isMyBooking: cubit.expiredBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+              isMyBooking: cubit.expiredBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
               onCancelBooking: () {
                 if (cubit.expiredBookings[index].status == 'pending') {
                   cubit.cancelMyBooking(id: cubit.expiredBookings[index].id, context: context, from: 'expiredBookings');

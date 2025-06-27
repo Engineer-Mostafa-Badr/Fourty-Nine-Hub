@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
@@ -102,7 +104,11 @@ class CaptainShareRemoteDataSourceImplementation
       return result.fold(
             (failure) => Left(failure),
             (response) {
-              final list = (response['data']['availableRoutes'] as List).map((e) => MyBookingModel.fromJson(e as Map<String, dynamic>)).toList();
+              log('response[''][''] ${response['data']['availableRoutes']}');
+              final list = (response['data']['availableRoutes'] as List).map((e) {
+                log('response[''][''] $e');
+                return MyBookingModel.fromJson(e as Map<String, dynamic>);
+              }).toList();
           return Right(list);
         },
       );
