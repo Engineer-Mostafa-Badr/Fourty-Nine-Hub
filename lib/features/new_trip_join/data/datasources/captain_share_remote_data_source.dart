@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_mode
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
@@ -23,6 +24,7 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, List<MyBookingEntity>>> getExpiredBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getRunningBooking(PaginationParams params);
   Future<Either<Failure, bool>> cancelMyBooking(String id);
+  Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params);
 }
 
 class CaptainShareRemoteDataSourceImplementation
@@ -156,6 +158,24 @@ class CaptainShareRemoteDataSourceImplementation
       final result = await _apiConsumer.put(
         EndPoints.cancelRoute(id),
         queryParameters: {'routeId': id},
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(response['status']??false);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params) async {
+    try {
+      final result = await _apiConsumer.post(
+        EndPoints.joinToRoute(params.routeId),
+        data: params.toJson(),
       );
       return result.fold(
             (failure) => Left(failure),

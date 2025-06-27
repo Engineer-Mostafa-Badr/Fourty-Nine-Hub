@@ -2,7 +2,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 
 class MyBookingModel extends MyBookingEntity {
   MyBookingModel(
-      {required super.id, required super.clients,required super.pricePerSeat,required super.creatorId,required super.startAddress,required super.targetAddress, super.status, required super.isPremium, required super.availableSeats, required super.startLocation, required super.targetLocation, required super.waypoints, required super.createdAt});
+      {required super.id, required super.clients,required super.pricePerSeat,required super.creatorId, super.status, required super.isPremium, required super.isComfort, required super.availableSeats, required super.startLocation, required super.targetLocation, required super.waypoints, required super.createdAt});
 
   factory MyBookingModel.fromJson(Map<String, dynamic> json) {
     return MyBookingModel(
@@ -12,13 +12,24 @@ class MyBookingModel extends MyBookingEntity {
       clients: json['clients'] ?? [],
       status: json['status'] ?? '',
       isPremium: json['isPremium'] ?? false,
+      isComfort: json['isComfort'] ?? false,
       availableSeats: json['availableSeats'] ?? 0,
-      startLocation: json['location']!=null?json['location']['start']['coordinates']??[]:[],
-      startAddress: json['location']!=null?json['location']['start']['address']??'':'',
-      targetAddress: json['location']!=null?json['location']['target']['address']??'':'',
-      targetLocation: json['location']!=null?json['location']['target']['coordinates']??[]:[],
+      startLocation: json['location']!=null?MyBookingLocationModel.fromJson(json['location']['start']):null,
+      targetLocation: json['location']!=null?MyBookingLocationModel.fromJson(json['location']['target']):null,
       waypoints: json['location']!=null?json['location']['waypoints']??[]:[],
       createdAt: json['createdAt'] ?? '',
     );
+  }
+}
+
+
+class MyBookingLocationModel extends MyBookingLocationEntity{
+  MyBookingLocationModel({required super.address, required super.location,});
+
+  factory MyBookingLocationModel.fromJson(Map<String, dynamic> json) {
+    return MyBookingLocationModel(
+      address: json['address'] ?? '',
+      location: json['coordinates'] ?? [],
+);
   }
 }

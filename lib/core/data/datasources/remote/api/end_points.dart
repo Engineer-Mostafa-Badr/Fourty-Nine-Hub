@@ -495,6 +495,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share";
   static String cancelRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
+  static String joinToRoute(String id) =>
+      "$developmentBaseUrl/captain-share/routes/$id";
   static String myBooking =
       "$developmentBaseUrl/captain-share/routes/me";
   static String availableBooking =

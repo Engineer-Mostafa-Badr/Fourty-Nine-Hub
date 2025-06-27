@@ -9,6 +9,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/header_text_widget.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../driver/widget/available_ride_mode_widget.dart';
 import '../../presentation/view/widget/taps/tab_bar_row_widget.dart';
@@ -16,8 +20,7 @@ import 'one_way_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 
 class TabBarContentWidget extends StatefulWidget {
-  const TabBarContentWidget({super.key, required TabController tabController})
-      : _tabController = tabController;
+  const TabBarContentWidget({super.key, required TabController tabController}) : _tabController = tabController;
   final TabController _tabController;
 
   @override
@@ -48,58 +51,56 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit,CaptainShareState>(
-      builder: (context,state) {
-        var cubit = context.read<CaptainShareCubit>();
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 8),
-            const Center(child: HeaderTextWidget()),
-            const SizedBox(height: 16),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0.h),
-              child: TabBarRowWidget(
-                onTap: (index) {
-                  cubit.onChangeTapIndex(index,context);
-                  log("state.tapIndex ${state.tapIndex}");
-                },
-                onShowHint: (index) {
-                  cubit.onShowHintTap(index, context);
-                },
-                tabController: widget._tabController,
-              ),
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+      var cubit = context.read<CaptainShareCubit>();
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          const Center(child: HeaderTextWidget()),
+          const SizedBox(height: 16),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0.h),
+            child: TabBarRowWidget(
+              onTap: (index) {
+                cubit.onChangeTapIndex(index, context);
+                log("state.tapIndex ${state.tapIndex}");
+              },
+              onShowHint: (index) {
+                cubit.onShowHintTap(index, context);
+              },
+              tabController: widget._tabController,
             ),
-            SizedBox(height: 10.h),
-            if (state.hintText !=null && (state.hintText?.isNotEmpty??false))
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffD9D9D9),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: AnimatedBuilder(
-                    animation: widget._tabController,
-                    builder: (context, child) {
-                      return Text(
-                        context.isArabic ? hintsArabic[state.tapIndex??0] : hints[state.tapIndex??0],
-                        style: TextStyle(
-                          color: const Color(0xffFF0808),
-                          fontSize: 25.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
-                  ),
+          ),
+          SizedBox(height: 10.h),
+          if (state.hintText != null && (state.hintText?.isNotEmpty ?? false))
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                decoration: BoxDecoration(
+                  color: const Color(0xffD9D9D9),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: AnimatedBuilder(
+                  animation: widget._tabController,
+                  builder: (context, child) {
+                    return Text(
+                      context.isArabic ? hintsArabic[state.tapIndex ?? 0] : hints[state.tapIndex ?? 0],
+                      style: TextStyle(
+                        color: const Color(0xffFF0808),
+                        fontSize: 25.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
                 ),
               ),
-            Expanded(child: _buildCategory(controller: widget._tabController)),
-          ],
-        );
-      }
-    );
+            ),
+          Expanded(child: _buildCategory(controller: widget._tabController)),
+        ],
+      );
+    });
   }
 
   _buildCategory({
@@ -132,52 +133,97 @@ class AvailableTripsWidget extends StatefulWidget {
 
 class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
   late ScrollController _scrollController;
+  bool _isVisible = true;
+  double _lastScrollOffset = 0;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       context.read<CaptainShareCubit>().getAvailableBookings(context);
     }
   }
+
+  void _scrollListener() {
+    final currentScroll = _scrollController.offset;
+    // Show when scrolling up, hide when scrolling down
+    if (currentScroll > _lastScrollOffset && currentScroll > 20) {
+      // Scrolling down
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (currentScroll < _lastScrollOffset) {
+      // Scrolling up
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+    _lastScrollOffset = currentScroll;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
-        builder: (context,state) {
-          var cubit = context.read<CaptainShareCubit>();
-          if(cubit.isLoadingAvailableBookings){
-            return const Center(child: CircularProgressIndicator());
-          }
-          if(cubit.availableBookings.isEmpty){
-            return _emptyMessage();
-          }else{
-            return ListView.separated(
-              controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) => OneWayWidget(
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+      var cubit = context.read<CaptainShareCubit>();
+      return Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          cubit.isLoadingAvailableBookings?const Center(child: CircularProgressIndicator()):cubit.availableBookings.isEmpty?_emptyMessage():ListView.separated(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) => OneWayWidget(
                 requestType: LocaleKeys.regular.localize,
                 statusDriver: cubit.availableBookings[index].status,
-                  model: cubit.availableBookings[index],
-                  cancelButton:((UserCubit.to.state.data?.id??'')==cubit.availableBookings[index].creatorId)&&cubit.availableBookings[index].status=='pending',
-                  isMyBooking:cubit.availableBookings[index].clients.contains((UserCubit.to.state.data?.id??'')),
-                  onCancelBooking:(){
-                  if(cubit.availableBookings[index].status=='pending'){
-                    cubit.cancelMyBooking(id: cubit.availableBookings[index].id,context:context, from: 'available');
+                model: cubit.availableBookings[index],
+                cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.availableBookings[index].creatorId) && cubit.availableBookings[index].status == 'pending',
+                isMyBooking: cubit.availableBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+                onCancelBooking: () {
+                  if (cubit.availableBookings[index].status == 'pending') {
+                    cubit.cancelMyBooking(id: cubit.availableBookings[index].id, context: context, from: 'available');
                   }
-                  }
-              ),
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: cubit.availableBookings.length,
-            );
-          }
-        }
-    );
+                }),
+            separatorBuilder: (context, index) => const Sizer(),
+            itemCount: cubit.availableBookings.length,
+          ),
+          if(_isVisible)Padding(
+            padding: EdgeInsets.only(bottom: 30.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    cubit.onNavigateToCreateRoute(context);
+                  },
+                  child: Container(
+                    height: 48.h,
+                    width: 48.h,
+                    decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                    child: Icon(
+                      size: 19,
+                      Icons.question_mark,
+                      color: context.isDarkMode ? AppColors.black : Colors.white,
+                    ),
+                  ),
+                ),
+                TripJoinFloatingActionButton(
+                  title: LocaleKeys.createRoute.localize,
+                  onTap: () {
+                    context.push(Routes.newRouteScreen);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+
+    });
   }
 }
 
@@ -200,45 +246,41 @@ class _BookingsWidgetState extends State<BookingsWidget> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       context.read<CaptainShareCubit>().getMyBookings(context);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
-          builder: (context,state) {
-            var cubit = context.read<CaptainShareCubit>();
-            if(cubit.isLoadingMyBookings){
-              return const Center(child: CircularProgressIndicator());
-            }
-            if(cubit.myBookings.isEmpty){
-              return _emptyMessage();
-            }else{
-              return ListView.separated(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) => OneWayWidget(
-                      requestType: LocaleKeys.regular.localize,
-                      statusDriver: cubit.myBookings[index].status,
-                      model: cubit.myBookings[index],
-                    cancelButton:((UserCubit.to.state.data?.id??'')==cubit.myBookings[index].creatorId)&&cubit.myBookings[index].status=='pending',
-                    isMyBooking:cubit.myBookings[index].clients.contains((UserCubit.to.state.data?.id??'')),
-                    onCancelBooking:(){
-                      if(cubit.myBookings[index].status=='pending'){
-                        cubit.cancelMyBooking(id: cubit.myBookings[index].id,context:context,from:'myBookings');
-                      }
-                    }
-                    ),
-                separatorBuilder: (context, index) => const Sizer(),
-                itemCount: cubit.myBookings.length,
-              );
-            }
-          }
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+      var cubit = context.read<CaptainShareCubit>();
+      if (cubit.isLoadingMyBookings) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (cubit.myBookings.isEmpty) {
+        return _emptyMessage();
+      } else {
+        return ListView.separated(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => OneWayWidget(
+              requestType: LocaleKeys.regular.localize,
+              statusDriver: cubit.myBookings[index].status,
+              model: cubit.myBookings[index],
+              cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.myBookings[index].creatorId) && cubit.myBookings[index].status == 'pending',
+              isMyBooking: cubit.myBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+              onCancelBooking: () {
+                if (cubit.myBookings[index].status == 'pending') {
+                  cubit.cancelMyBooking(id: cubit.myBookings[index].id, context: context, from: 'myBookings');
+                }
+              }),
+          separatorBuilder: (context, index) => const Sizer(),
+          itemCount: cubit.myBookings.length,
         );
+      }
+    });
   }
 }
 
@@ -252,7 +294,6 @@ class RunningTripsWidget extends StatefulWidget {
 }
 
 class _RunningTripsWidgetState extends State<RunningTripsWidget> {
-
   late ScrollController _scrollController;
 
   @override
@@ -262,46 +303,41 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       context.read<CaptainShareCubit>().getRunningBookings(context);
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
-        builder: (context,state) {
-          var cubit = context.read<CaptainShareCubit>();
-          if(cubit.isLoadingRunningBookings){
-            return const Center(child: CircularProgressIndicator());
-          }
-          if(cubit.runningBookings.isEmpty){
-            return _emptyMessage();
-          }else{
-            return ListView.separated(
-              controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) => OneWayWidget(
-                  requestType: LocaleKeys.regular.localize,
-                  statusDriver: cubit.runningBookings[index].status,
-                  model: cubit.runningBookings[index],
-                  cancelButton:((UserCubit.to.state.data?.id??'')==cubit.runningBookings[index].creatorId)&&cubit.runningBookings[index].status=='pending',
-                  isMyBooking:cubit.runningBookings[index].clients.contains((UserCubit.to.state.data?.id??'')),
-                  onCancelBooking:(){
-                    if(cubit.runningBookings[index].status=='pending'){
-                      cubit.cancelMyBooking(id: cubit.runningBookings[index].id,context:context,from:'runningBookings');
-                    }
-                  }
-              ),
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: cubit.runningBookings.length,
-            );
-          }
-        }
-    );
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+      var cubit = context.read<CaptainShareCubit>();
+      if (cubit.isLoadingRunningBookings) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (cubit.runningBookings.isEmpty) {
+        return _emptyMessage();
+      } else {
+        return ListView.separated(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => OneWayWidget(
+              requestType: LocaleKeys.regular.localize,
+              statusDriver: cubit.runningBookings[index].status,
+              model: cubit.runningBookings[index],
+              cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.runningBookings[index].creatorId) && cubit.runningBookings[index].status == 'pending',
+              isMyBooking: cubit.runningBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+              onCancelBooking: () {
+                if (cubit.runningBookings[index].status == 'pending') {
+                  cubit.cancelMyBooking(id: cubit.runningBookings[index].id, context: context, from: 'runningBookings');
+                }
+              }),
+          separatorBuilder: (context, index) => const Sizer(),
+          itemCount: cubit.runningBookings.length,
+        );
+      }
+    });
     return widget.content.isEmpty
         ? _emptyMessage()
         : Column(
@@ -341,45 +377,41 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       context.read<CaptainShareCubit>().getExpiredBookings(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
-        builder: (context,state) {
-          var cubit = context.read<CaptainShareCubit>();
-          if(cubit.isLoadingExpiredBookings){
-            return const Center(child: CircularProgressIndicator());
-          }
-          if(cubit.expiredBookings.isEmpty){
-            return _emptyMessage();
-          }else{
-            return ListView.separated(
-              controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) => OneWayWidget(
-                  requestType: LocaleKeys.regular.localize,
-                  statusDriver: cubit.expiredBookings[index].status,
-                  model: cubit.expiredBookings[index],
-                  cancelButton:((UserCubit.to.state.data?.id??'')==cubit.expiredBookings[index].creatorId)&&cubit.expiredBookings[index].status=='pending',
-                  isMyBooking:cubit.expiredBookings[index].clients.contains((UserCubit.to.state.data?.id??'')),
-                  onCancelBooking:(){
-                    if(cubit.expiredBookings[index].status=='pending'){
-                      cubit.cancelMyBooking(id: cubit.expiredBookings[index].id,context:context,from:'expiredBookings');
-                    }
-                  }
-              ),
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: cubit.expiredBookings.length,
-            );
-          }
-        }
-    );
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+      var cubit = context.read<CaptainShareCubit>();
+      if (cubit.isLoadingExpiredBookings) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (cubit.expiredBookings.isEmpty) {
+        return _emptyMessage();
+      } else {
+        return ListView.separated(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => OneWayWidget(
+              requestType: LocaleKeys.regular.localize,
+              statusDriver: cubit.expiredBookings[index].status,
+              model: cubit.expiredBookings[index],
+              cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.expiredBookings[index].creatorId) && cubit.expiredBookings[index].status == 'pending',
+              isMyBooking: cubit.expiredBookings[index].clients.contains((UserCubit.to.state.data?.id ?? '')),
+              onCancelBooking: () {
+                if (cubit.expiredBookings[index].status == 'pending') {
+                  cubit.cancelMyBooking(id: cubit.expiredBookings[index].id, context: context, from: 'expiredBookings');
+                }
+              }),
+          separatorBuilder: (context, index) => const Sizer(),
+          itemCount: cubit.expiredBookings.length,
+        );
+      }
+    });
     return widget.content.isEmpty
         ? _emptyMessage()
         : Column(

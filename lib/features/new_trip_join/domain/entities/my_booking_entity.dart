@@ -3,15 +3,21 @@ class MyBookingEntity{
   final String creatorId;
   String? status;
   final bool isPremium;
+  final bool isComfort;
   final num availableSeats;
   final num pricePerSeat;
   final List<dynamic> clients;
-  final String startAddress;
-  final String targetAddress;
-  final List<dynamic> startLocation;
-  final List<dynamic> targetLocation;
+  final MyBookingLocationEntity? startLocation;
+  final MyBookingLocationEntity? targetLocation;
   final List<dynamic> waypoints;
   final String createdAt;
 
-  MyBookingEntity({required this.id, required this.clients,required this.pricePerSeat,required this.creatorId,required this.startAddress,required this.targetAddress, this.status, required this.isPremium, required this.availableSeats, required this.startLocation, required this.targetLocation, required this.waypoints, required this.createdAt});
+  MyBookingEntity({required this.id, required this.clients,required this.pricePerSeat,required this.creatorId, this.status, required this.isPremium, required this.isComfort, required this.availableSeats, this.startLocation, this.targetLocation, required this.waypoints, required this.createdAt});
+}
+
+class MyBookingLocationEntity{
+  final String address;
+  final List<dynamic> location;
+
+  MyBookingLocationEntity({required this.address, required this.location});
 }

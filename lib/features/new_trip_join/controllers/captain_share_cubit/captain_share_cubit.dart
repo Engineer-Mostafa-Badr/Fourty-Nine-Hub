@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
@@ -19,6 +20,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_c
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_join_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -79,19 +81,32 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     });
   }
 
+  onNavigateToCreateRoute(BuildContext context) async {
+    await context.push(Routes.captainShareInfoScreen);
+    if(state.tapIndex==0){
+      loadInitialAvailableData(context);
+    }else{
+      onChangeTapIndex(0, context);
+      loadInitialAvailableData(context);
+    }
+  }
+
   void listenToNewRoute(BuildContext context) {
     CliLogger.info('listenToNewRoute');
     // TripsResponseEntity
     listenToNewRouteUseCase((route) {
-      if(state.tapIndex==0){
-        availableBookings.insert(0, route);
-        showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
-      }else{
-        onChangeTapIndex(0,context);
-        loadInitialAvailableData(context);
-        showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+      String userId = UserCubit.to.state.data?.id??'';
+      if(userId==route.creatorId){}else{
+        if(state.tapIndex==0){
+          availableBookings.insert(0, route);
+          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+        }else{
+          onChangeTapIndex(0,context);
+          loadInitialAvailableData(context);
+          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+        }
+        emit(state.copyWith(status: CaptainShareStates.success));
       }
-      emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
 

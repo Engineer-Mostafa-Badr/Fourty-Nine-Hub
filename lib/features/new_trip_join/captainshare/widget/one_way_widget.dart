@@ -2,16 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 
@@ -68,6 +71,11 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   @override
   Widget build(BuildContext context) {
     print("isMyBooking ${widget.isMyBooking}");
+    print("widget.model?.creatorId ${widget.model?.creatorId}");
+    print("UserCubit.to.state.data?.id ${UserCubit.to.state.data?.id}");
+    print("widget.model?.startLocation ${widget.model?.startLocation?.location}");
+    print("widget.model?.startLocation ${widget.model?.startLocation?.location[0]}");
+    print("widget.model?.startLocation ${widget.model?.startLocation?.location[1]}");
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -260,6 +268,11 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   ),
                 ),
                 const SizedBox(height: 8),
+                SizedBox(
+                    height: 200.h,
+                    child: _buildTopMap(context,widget.model)),
+                const SizedBox(height: 8),
+
                 Row(
                   children: [
                     CircleAvatar(
@@ -276,7 +289,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        widget.model?.startAddress??'',
+                        widget.model?.startLocation?.address??'',
                         overflow: TextOverflow.ellipsis,
                         maxLines:2,
                         style: TextStyle(
@@ -307,7 +320,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        widget.model?.targetAddress??'',
+                        widget.model?.targetLocation?.address??'',
                         overflow: TextOverflow.ellipsis,
                         maxLines:2,
                         style: TextStyle(
@@ -349,7 +362,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 Row(
                   children: [
                     Text(
-                      context.isArabic ? "منذ 10 د" : '10 mins ago',
+                      TimeUtils.formatTimeAgo(widget.model?.createdAt ?? DateTime.now().toString(),context.isArabic),
                       style: TextStyle(
                         fontSize: 14,
                         color: context.isDarkMode
@@ -362,7 +375,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     TextButton(
                       onPressed: () {},
                       child: Text(
-                        widget.requestType ?? "",
+                        widget.model?.isComfort==true?LocaleKeys.comfort.localize:(context.isArabic?'غير مريح':'Uncomfortable'),
                         style: TextStyle(
                           fontSize: 24.sp,
                           color: context.isDarkMode
@@ -432,6 +445,119 @@ class _OneWayWidgetState extends State<OneWayWidget> {
         //   ),
       ],
     );
+  }
+
+  final MapController _mapController = MapController();
+
+  Widget _buildTopMap(BuildContext context, MyBookingEntity? model) {
+    List<LatLng> routePoints = [];
+    // routePoints =
+    //     _convertPolylineToLatLng(state.activeTrip?.polyline ?? []);
+
+    if (model != null &&
+        model.startLocation?.location[0] == null &&
+        model.startLocation?.location[1] == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController.move(
+          LatLng(model.startLocation?.location[0], model.startLocation?.location[1]),
+          12.0,
+        );
+      });
+    }else{
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController.move(
+          LatLng( 30.033333, 31.233334),
+          12.0,
+        );
+      });
+    }
+
+    return SizedBox(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      child: FlutterMap(
+        mapController: _mapController,
+        options: (model != null &&
+            model.startLocation?.location[0] == null &&
+            model.startLocation?.location[1] == null &&
+            model.startLocation?.location[0] != 0 &&
+            model.startLocation?.location[1] != 0)? MapOptions(
+          initialCenter: LatLng(model.startLocation?.location[0], model.startLocation?.location[1]),
+          initialZoom: 12.0,
+        ) : MapOptions(
+          initialCenter: LatLng( 30.033333, 31.233334),
+          initialZoom: 12.0,
+        ),
+        children: [
+          TileLayer(
+            // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+            urlTemplate: context.isDarkMode
+                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+            subdomains: const ['a', 'b', 'c'],
+            userAgentPackageName: 'com.example.app',
+          ),
+          MarkerLayer(
+            markers: [
+              if (model != null &&
+                  model.startLocation?.location[0] != null &&
+                  model.startLocation?.location[1] != null &&
+                  model.startLocation?.location[0] != 0 &&
+                  model.startLocation?.location[1] != 0)
+                Marker(
+                  point: LatLng(model.startLocation?.location[0], model.startLocation?.location[1]),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.green, size: 40),
+                ),
+              if (model?.targetLocation?.location != null && model?.targetLocation?.location[0] != null && model?.targetLocation?.location[1] != null && model?.targetLocation?.location[0] != 0 && model?.targetLocation?.location[1] != 0)
+                Marker(
+                  point: LatLng(model?.targetLocation?.location[0], model?.targetLocation?.location[1]),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.blue, size: 40),
+                ),
+              // if (state.activeTrip?.wayPointOne != null && state.activeTrip?.wayPointOne?[0] != null && state.activeTrip?.wayPointOne?[1] != null && state.activeTrip?.wayPointOne?[0] != 0 && state.activeTrip?.wayPointOne?[1] != 0)
+              //   Marker(
+              //     point:
+              //     LatLng(state.activeTrip!.wayPointOne![0], state.activeTrip!.wayPointOne![1]),
+              //     width: 40,
+              //     height: 40,
+              //     child: const Icon(Icons.location_pin,
+              //         color: Colors.red, size: 40),
+              //   ),
+              // if (state.activeTrip?.wayPointTwo != null && state.activeTrip?.wayPointTwo?[0] != null && state.activeTrip?.wayPointTwo?[1] != null && state.activeTrip?.wayPointTwo?[0] != 0 && state.activeTrip?.wayPointTwo?[1] != 0)
+              //   Marker(
+              //     point:
+              //     LatLng(state.activeTrip!.wayPointTwo![0], state.activeTrip!.wayPointTwo![1]),
+              //     width: 40,
+              //     height: 40,
+              //     child: const Icon(Icons.location_pin,
+              //         color: Colors.red, size: 40),
+              //   ),
+            ],
+          ),
+          if (routePoints.isNotEmpty)
+            PolylineLayer(
+              polylines: [
+                Polyline(
+                  points: routePoints,
+                  color: context.isDarkMode ? Colors.blue :  Colors.black87,
+                  strokeWidth: 4.0,
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 }
 
