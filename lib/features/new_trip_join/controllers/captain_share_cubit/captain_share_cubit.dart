@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_rout
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_available_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_expired_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_my_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_route_details_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_running_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
@@ -41,8 +42,12 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final ListenToLeaveAvailableRoutesUseCase listenToLeaveAvailableRoutesUseCase;
   final ListenToNewRouteUseCase listenToNewRouteUseCase;
   final JoinToRouteUseCase joinToRouteUseCase;
-  CaptainShareCubit(this.createPricePerSeatUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
+  final GetRouteDetailsUseCase getRouteDetailsUseCase;
+  CaptainShareCubit(this.createPricePerSeatUseCase,this.getRouteDetailsUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
       : super(const CaptainShareState());
+
+  TextEditingController supportDescriptionController = TextEditingController();
+  TextEditingController supportPhoneController = TextEditingController();
 
 
   void initData(BuildContext context)async{
@@ -213,6 +218,20 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       availableBookings.firstWhere((e)=>e.id==data.id).availableSeats = data.availableSeats;
       context.pop();
       emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  Future<void> getRouteDetails(
+      {required String id, required BuildContext context}) async {
+    emit(state.copyWith(status: CaptainShareStates.loading));
+    final response = await getRouteDetailsUseCase(id);
+    response.fold((l) {
+      context.pop();
+      String errorName = getFailureName(l, context);
+      showErrorMessage(context,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CaptainShareStates.success,routeDetails:data));
     });
   }
 

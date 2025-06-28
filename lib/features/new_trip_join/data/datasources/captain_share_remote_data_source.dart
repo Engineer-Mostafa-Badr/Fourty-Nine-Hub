@@ -23,6 +23,7 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, bool>> createRoute(CreatePricePerSeatParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getMyBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getAvailableBooking(PaginationParams params);
+  Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params);
   Future<Either<Failure, List<MyBookingEntity>>> getExpiredBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getRunningBooking(PaginationParams params);
   Future<Either<Failure, bool>> cancelMyBooking(String id);
@@ -186,7 +187,23 @@ class CaptainShareRemoteDataSourceImplementation
       return result.fold(
             (failure) => Left(failure),
             (response) {
-          return Right(response['status']??false);
+          return Right(MyBookingModel.fromJson(response['data']));
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+  @override
+  Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params) async {
+    try {
+      final result = await _apiConsumer.get(
+        EndPoints.routeDetails(params),
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(MyBookingModel.fromJson(response['data']));
         },
       );
     } catch (e) {

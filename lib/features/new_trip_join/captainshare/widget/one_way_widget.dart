@@ -17,6 +17,8 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -89,6 +91,8 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     return options.contains('COMFORT');
   }
 
+  // bool myRoute = widget.model?.creatorId == UserCubit.to.state.data?.id||((widget.model?.clients??[]).contain((e)=>e.id==UserCubit.to.state.data?.id));
+
   @override
   Widget build(BuildContext context) {
     print(
@@ -101,125 +105,92 @@ class _OneWayWidgetState extends State<OneWayWidget> {
         "widget.model?.startLocation ${widget.model?.startLocation?.location[1]}");
     print(
         "widget.model?.startLocation ${widget.model?.startLocation?.location[0]}");
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+    return ClickableWidget(
+      onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // محتوى الكونتينر الأساسي
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      getPassengerDescription(
-                          widget.model?.features ?? [], context.isArabic),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getRedColor(context),
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: "${widget.model?.pricePerSeat} ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: AppColors.getTextColor(context),
-                        ),
-                        children: [
-                          TextSpan(
-                            text: context.isArabic ? "ج.م" : "EGP",
-                            style: TextStyle(
-                              color: AppColors.getRedColor(context),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-                Padding(
-                  padding: EdgeInsets.only(top: 12.h),
-                  child: Row(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // محتوى الكونتينر الأساسي
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            LocaleKeys.booked.localize,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          if (!(widget.model?.creatorId ==
-                              UserCubit.to.state.data?.id))
-                            SvgPicture.asset(Assets.bookedMan),
-                          if (widget.model?.creatorId ==
-                              UserCubit.to.state.data?.id)
-                            CircleAvatar(
-                              radius: 30.w,
-                              backgroundColor: Colors.white,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  UserCubit.to.state.data?.profilePicture ??
-                                      UIConst.profilePlaceHolder),
-                            ),
-                        ],
+                      Text(
+                        getPassengerDescription(
+                            widget.model?.features ?? [], context.isArabic),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getRedColor(context),
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            ((widget.model?.availableSeats ?? 0) >= 2)
-                                ? LocaleKeys.free.localize
-                                : LocaleKeys.booked.localize,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      RichText(
+                        text: TextSpan(
+                          text: "${widget.model?.pricePerSeat} ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: AppColors.getTextColor(context),
                           ),
-                          SizedBox(height: 8.h),
-                          if (((widget.model?.availableSeats ?? 0) >= 2))
-                            ClickableWidget(
-                              onTap: () {
-                                if (widget.onJoin != null) {
-                                  widget.onJoin!();
-                                }
-                              },
-                              child: SvgPicture.asset(
-                                Assets.freeIcon,
-                                color: AppColors.getTextColor(context),
+                          children: [
+                            TextSpan(
+                              text: context.isArabic ? "ج.م" : "EGP",
+                              style: TextStyle(
+                                color: AppColors.getRedColor(context),
+                                fontSize: 12,
                               ),
                             ),
-                          if (((widget.model?.availableSeats ?? 0) < 2))
-                            CircleAvatar(
-                              radius: 30.w,
-                              backgroundColor: Colors.white,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  UIConst.profilePlaceHolder),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 13),
-                            child: Text(
-                              ((widget.model?.availableSeats ?? 0) >= 1)
+                    ],
+                  ),
+                  SizedBox(height: 16.h),
+                  Padding(
+                    padding: EdgeInsets.only(top: 12.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              LocaleKeys.booked.localize,
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.h),
+                            if (!(widget.model?.creatorId ==
+                                UserCubit.to.state.data?.id))
+                              SvgPicture.asset(Assets.bookedMan),
+                            if (widget.model?.creatorId ==
+                                UserCubit.to.state.data?.id)
+                              CircleAvatar(
+                                radius: 30.w,
+                                backgroundColor: Colors.white,
+                                backgroundImage: CachedNetworkImageProvider(
+                                    UserCubit.to.state.data?.profilePicture ??
+                                        UIConst.profilePlaceHolder),
+                              ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              ((widget.model?.availableSeats ?? 0) >= 2)
                                   ? LocaleKeys.free.localize
                                   : LocaleKeys.booked.localize,
                               style: TextStyle(
@@ -227,279 +198,315 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          SizedBox(height: 8.h),
-                          if (((widget.model?.availableSeats ?? 0) >= 1))
-                            ClickableWidget(
-                              onTap: () {
-                                if (widget.onJoin != null) {
-                                  widget.onJoin!();
-                                }
-                              },
-                              child: SvgPicture.asset(
-                                Assets.freeIcon,
-                                color: AppColors.getTextColor(context),
+                            SizedBox(height: 8.h),
+                            if (((widget.model?.availableSeats ?? 0) >= 2))
+                              ClickableWidget(
+                                onTap: () {
+                                  if (widget.onJoin != null) {
+                                    widget.onJoin!();
+                                  }
+                                },
+                                child: SvgPicture.asset(
+                                  Assets.freeIcon,
+                                  color: AppColors.getTextColor(context),
+                                ),
                               ),
-                            ),
-                          if (((widget.model?.availableSeats ?? 0) < 1))
-                            CircleAvatar(
-                              radius: 30.w,
-                              backgroundColor: Colors.white,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  UIConst.profilePlaceHolder),
-                            ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.PRIMARY_COLOR,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 15.h, left: 8.h),
-                            child: SizedBox(
-                              width: 55.w,
+                            if (((widget.model?.availableSeats ?? 0) < 2))
+                              CircleAvatar(
+                                radius: 30.w,
+                                backgroundColor: Colors.white,
+                                backgroundImage: CachedNetworkImageProvider(
+                                    UIConst.profilePlaceHolder),
+                              ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 13),
                               child: Text(
-                                getBookingStatus(widget.statusDriver ?? ""),
-                                textAlign: TextAlign.center,
+                                ((widget.model?.availableSeats ?? 0) >= 1)
+                                    ? LocaleKeys.free.localize
+                                    : LocaleKeys.booked.localize,
                                 style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w900,
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : AppColors.PRIMARY_COLOR,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    children: [
-                      Icon(Icons.circle,
-                          color: AppColors.getRedColor(context), size: 12),
-                      Expanded(
-                        child: Divider(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          thickness: 2,
-                        ),
-                      ),
-                      const Icon(Icons.circle, color: Colors.green, size: 12),
-                      Expanded(
-                        child: Divider(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          thickness: 2,
-                        ),
-                      ),
-                      const Icon(Icons.circle, color: Colors.green, size: 12),
-                      Expanded(
-                        child: Divider(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          thickness: 2,
-                        ),
-                      ),
-                      const Icon(Icons.circle, color: Colors.blue, size: 12),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                    height: 200.h, child: _buildTopMap(context, widget.model)),
-                const SizedBox(height: 8),
-
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.transparent,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.green,
-                        radius: 10,
-                        child: CircleAvatar(
-                            backgroundColor: AppColors.getFillColor(context),
-                            radius: 5),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        widget.model?.startLocation?.address ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          fontSize: 28.sp,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.transparent,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 10,
-                        child: CircleAvatar(
-                            backgroundColor: AppColors.getFillColor(context),
-                            radius: 5),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        widget.model?.targetLocation?.address ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _expandableController.toggle();
-                      });
-                    },
-                    child: SvgPicture.asset(
-                      Assets.redFrame,
-                      width: 50,
-                    ),
-                  ),
-                ),
-                ExpandablePanel(
-                  controller: _expandableController,
-                  theme: const ExpandableThemeData(
-                    hasIcon: false,
-                    tapBodyToCollapse: false,
-                    tapHeaderToExpand: false,
-                  ),
-                  header: const SizedBox(),
-                  collapsed: const SizedBox(),
-                  expanded: const AddressWidget(),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      TimeUtils.formatTimeAgo(
-                          widget.model?.createdAt ?? DateTime.now().toString(),
-                          context.isArabic),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        isComfort(widget.model?.features ?? [])
-                            ? LocaleKeys.comfort.localize
-                            : (context.isArabic ? 'غير مريح' : 'Uncomfortable'),
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    widget.cancelButton == true
-                        ? GestureDetector(
-                            onTap: () {
-                              if (widget.onCancelBooking != null) {
-                                widget.onCancelBooking!();
-                              }
-                            },
-                            child: Container(
-                              width: 120.w,
-                              height: 50.h,
-                              decoration: BoxDecoration(
-                                color: AppColors.SECONDARY_COLOR_DARK,
-                                borderRadius: BorderRadius.circular(15),
+                            SizedBox(height: 8.h),
+                            if (((widget.model?.availableSeats ?? 0) >= 1))
+                              ClickableWidget(
+                                onTap: () {
+                                  if (widget.onJoin != null) {
+                                    widget.onJoin!();
+                                  }
+                                },
+                                child: SvgPicture.asset(
+                                  Assets.freeIcon,
+                                  color: AppColors.getTextColor(context),
+                                ),
                               ),
-                              child: Center(
+                            if (((widget.model?.availableSeats ?? 0) < 1))
+                              CircleAvatar(
+                                radius: 30.w,
+                                backgroundColor: Colors.white,
+                                backgroundImage: CachedNetworkImageProvider(
+                                    UIConst.profilePlaceHolder),
+                              ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '',
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.PRIMARY_COLOR,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 15.h, left: 8.h),
+                              child: SizedBox(
+                                width: 55.w,
                                 child: Text(
-                                  LocaleKeys.cancel.localize,
+                                  getBookingStatus(widget.statusDriver ?? ""),
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 22.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w900,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
                                   ),
                                 ),
                               ),
                             ),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Icon(Icons.circle,
+                            color: AppColors.getRedColor(context), size: 12),
+                        Expanded(
+                          child: Divider(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            thickness: 2,
+                          ),
+                        ),
+                        const Icon(Icons.circle, color: Colors.green, size: 12),
+                        Expanded(
+                          child: Divider(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            thickness: 2,
+                          ),
+                        ),
+                        const Icon(Icons.circle, color: Colors.green, size: 12),
+                        Expanded(
+                          child: Divider(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            thickness: 2,
+                          ),
+                        ),
+                        const Icon(Icons.circle, color: Colors.blue, size: 12),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                      height: 200.h, child: _buildTopMap(context, widget.model)),
+                  const SizedBox(height: 8),
+
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.transparent,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.green,
+                          radius: 10,
+                          child: CircleAvatar(
+                              backgroundColor: AppColors.getFillColor(context),
+                              radius: 5),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          widget.model?.startLocation?.address ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.transparent,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          radius: 10,
+                          child: CircleAvatar(
+                              backgroundColor: AppColors.getFillColor(context),
+                              radius: 5),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          widget.model?.targetLocation?.address ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _expandableController.toggle();
+                        });
+                      },
+                      child: SvgPicture.asset(
+                        Assets.redFrame,
+                        width: 50,
+                      ),
+                    ),
+                  ),
+                  ExpandablePanel(
+                    controller: _expandableController,
+                    theme: const ExpandableThemeData(
+                      hasIcon: false,
+                      tapBodyToCollapse: false,
+                      tapHeaderToExpand: false,
+                    ),
+                    header: const SizedBox(),
+                    collapsed: const SizedBox(),
+                    expanded: const AddressWidget(),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        TimeUtils.formatTimeAgo(
+                            widget.model?.createdAt ?? DateTime.now().toString(),
+                            context.isArabic),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          isComfort(widget.model?.features ?? [])
+                              ? LocaleKeys.comfort.localize
+                              : (context.isArabic ? 'غير مريح' : 'Uncomfortable'),
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      widget.cancelButton == true
+                          ? GestureDetector(
+                              onTap: () {
+                                if (widget.onCancelBooking != null) {
+                                  widget.onCancelBooking!();
+                                }
+                              },
+                              child: Container(
+                                width: 120.w,
+                                height: 50.h,
+                                decoration: BoxDecoration(
+                                  color: AppColors.SECONDARY_COLOR_DARK,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    LocaleKeys.cancel.localize,
+                                    style: TextStyle(
+                                      fontSize: 22.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        // Positioned(
-        //   bottom: 9,
-        //   left: 270.h,
-        //   child: GestureDetector(
-        //     onTap: () {
-        //       setState(() {
-        //         _showContainer = !_showContainer; // تغيير حالة الـ Container
-        //       });
-        //     },
-        //     child: SvgPicture.asset(
-        //       Assets.frameIcon,
-        //       width: 50,
-        //     ),
-        //   ),
-        // ),
-        // if (_showContainer)
-        //   const Positioned(
-        //     top: 0,
-        //     bottom: 80,
-        //     // تحديد المكان اللي هيظهر فيه الـ Container
-        //     left: 0,
-        //     right: 0,
-        //     child: AddressWidget(),
-        //   ),
-      ],
+          // Positioned(
+          //   bottom: 9,
+          //   left: 270.h,
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       setState(() {
+          //         _showContainer = !_showContainer; // تغيير حالة الـ Container
+          //       });
+          //     },
+          //     child: SvgPicture.asset(
+          //       Assets.frameIcon,
+          //       width: 50,
+          //     ),
+          //   ),
+          // ),
+          // if (_showContainer)
+          //   const Positioned(
+          //     top: 0,
+          //     bottom: 80,
+          //     // تحديد المكان اللي هيظهر فيه الـ Container
+          //     left: 0,
+          //     right: 0,
+          //     child: AddressWidget(),
+          //   ),
+        ],
+      ),
     );
   }
 
@@ -509,11 +516,12 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     List<LatLng> routePoints = [];
     List<dynamic> polyLine = model?.polyLine ?? [];
 
-    List<List<double>> parsedPolyline =
-        polyLine.map<List<double>>((item) => List<double>.from(item)).toList();
+    List<List<double>> parsedPolyline = polyLine
+        .map<List<double>>((item) =>
+        (item as List).map((e) => (e as num).toDouble()).toList())
+        .toList();
     routePoints =
         _convertPolylineToLatLng(parsedPolyline);
-    log("routePoints $routePoints");
 
     if (model != null &&
         model.startLocation?.location[1] == null &&

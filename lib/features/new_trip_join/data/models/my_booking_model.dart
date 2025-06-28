@@ -8,7 +8,7 @@ class MyBookingModel extends MyBookingEntity {
     return MyBookingModel(
       id: json['id'] ?? '',
       creatorId: json['creatorId'] ?? '',
-      pricePerSeat: json['pricePerSeat'] ?? 0,
+      pricePerSeat: json['pricePerSeat'].ceil() ?? 0,
       clients: json['clients'] != null
           ? (json['clients'] as List)
           .map((e) => BookingClientModel.fromJson(e as Map<String, dynamic>))
