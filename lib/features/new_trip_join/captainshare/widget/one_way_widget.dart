@@ -60,7 +60,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   String getBookingStatus(String status) {
     switch (status) {
       case 'pending':
-        return LocaleKeys.pending.localize;
+        return context.isArabic?'انتظار':'Pending';
       case 'accepted':
         return LocaleKeys.accepted.localize;
       case 'expired':
@@ -91,10 +91,10 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     return options.contains('COMFORT');
   }
 
-  // bool myRoute = widget.model?.creatorId == UserCubit.to.state.data?.id||((widget.model?.clients??[]).contain((e)=>e.id==UserCubit.to.state.data?.id));
 
   @override
   Widget build(BuildContext context) {
+    bool myRoute = (widget.model?.creatorId == UserCubit.to.state.data?.id)||((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id));
     print(
         "isMyBooking ${widget.model?.creatorId == UserCubit.to.state.data?.id}");
     print("widget.model?.creatorId ${widget.model?.creatorId}");
@@ -173,11 +173,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                               ),
                             ),
                             SizedBox(height: 8.h),
-                            if (!(widget.model?.creatorId ==
-                                UserCubit.to.state.data?.id))
+                            if (!(myRoute))
                               SvgPicture.asset(Assets.bookedMan),
-                            if (widget.model?.creatorId ==
-                                UserCubit.to.state.data?.id)
+                            if (myRoute)
                               CircleAvatar(
                                 radius: 30.w,
                                 backgroundColor: Colors.white,
@@ -304,7 +302,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             thickness: 2,
                           ),
                         ),
-                        const Icon(Icons.circle, color: Colors.green, size: 12),
+                        Icon(Icons.circle, color:((widget.model?.availableSeats ?? 0) >= 1)?Colors.red: Colors.green, size: 12),
                         Expanded(
                           child: Divider(
                             color: context.isDarkMode
@@ -313,7 +311,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             thickness: 2,
                           ),
                         ),
-                        const Icon(Icons.circle, color: Colors.green, size: 12),
+                        Icon(Icons.circle, color: ((widget.model?.availableSeats ?? 0) < 1)?Colors.red:Colors.green, size: 12),
                         Expanded(
                           child: Divider(
                             color: context.isDarkMode
@@ -393,30 +391,30 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ],
                   ),
                   SizedBox(height: 8),
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _expandableController.toggle();
-                        });
-                      },
-                      child: SvgPicture.asset(
-                        Assets.redFrame,
-                        width: 50,
-                      ),
-                    ),
-                  ),
-                  ExpandablePanel(
-                    controller: _expandableController,
-                    theme: const ExpandableThemeData(
-                      hasIcon: false,
-                      tapBodyToCollapse: false,
-                      tapHeaderToExpand: false,
-                    ),
-                    header: const SizedBox(),
-                    collapsed: const SizedBox(),
-                    expanded: const AddressWidget(),
-                  ),
+                  // Center(
+                  //   child: GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         _expandableController.toggle();
+                  //       });
+                  //     },
+                  //     child: SvgPicture.asset(
+                  //       Assets.redFrame,
+                  //       width: 50,
+                  //     ),
+                  //   ),
+                  // ),
+                  // ExpandablePanel(
+                  //   controller: _expandableController,
+                  //   theme: const ExpandableThemeData(
+                  //     hasIcon: false,
+                  //     tapBodyToCollapse: false,
+                  //     tapHeaderToExpand: false,
+                  //   ),
+                  //   header: const SizedBox(),
+                  //   collapsed: const SizedBox(),
+                  //   expanded: const AddressWidget(),
+                  // ),
                   Row(
                     children: [
                       Text(

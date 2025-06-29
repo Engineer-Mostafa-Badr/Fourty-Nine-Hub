@@ -227,7 +227,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     final response = await getRouteDetailsUseCase(id);
     response.fold((l) {
       context.pop();
-      String errorName = getFailureName(l, context);
+      String errorName = getFailureMessage(l, context);
       showErrorMessage(context,  errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {

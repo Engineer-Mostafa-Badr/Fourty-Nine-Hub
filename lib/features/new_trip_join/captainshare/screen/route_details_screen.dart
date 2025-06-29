@@ -198,14 +198,14 @@ class _RouteDetailsScreenState
               text: LocaleKeys.rideDetails.tr(),
               style:
                   const TextStyle(fontWeight: FontWeight.w600, fontSize: 20))),
-      body: SingleChildScrollView(
-        child: BlocBuilder<CaptainShareCubit, CaptainShareState>(
-          builder: (context,state) {
-            var cubit = context.read<CaptainShareCubit>();
-            if(state.isLoading){
-              return const Center(child: CircularProgressIndicator());
-            }
-            return Padding(
+      body: BlocBuilder<CaptainShareCubit, CaptainShareState>(
+        builder: (context,state) {
+          var cubit = context.read<CaptainShareCubit>();
+          if(state.isLoading){
+            return const Center(child: CircularProgressIndicator());
+          }
+          return SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 spacing: 16,
@@ -477,7 +477,7 @@ class _RouteDetailsScreenState
                               // pdfPath = path;
                               isLoading = false;
                             });
-
+                  
                             // if (path != null) {
                             //   _showPdfPreview(context, path);
                             // }
@@ -500,9 +500,9 @@ class _RouteDetailsScreenState
                   )
                 ],
               ),
-            );
-          }
-        ),
+            ),
+          );
+        }
       ),
     );
   }
