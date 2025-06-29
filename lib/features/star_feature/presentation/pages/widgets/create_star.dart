@@ -65,12 +65,12 @@ class _CreateStarState extends State<CreateStar> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
+        preferredSize: const Size.fromHeight(40),
         child: BackAppBar(
           label: LocaleKeys.addStar.localize,
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: GestureDetector(
                 onTap: () {
                   // Navigator.of(context).push(
@@ -150,7 +150,6 @@ class _CreateStarState extends State<CreateStar> {
                 },
                 builder: (BuildContext context, state) {
                   controllerStar = context.read<StarCubit>();
-
                   _videoControllers = state.video?.map((video) {
                         return VideoPlayerController.file(File(video.file.path))
                           ..initialize().then((_) {
@@ -415,7 +414,7 @@ class _CreateStarState extends State<CreateStar> {
   //                                         child: VideoPlayer(videoController),
   //                                       )
   //                                     : const Center(
-  //                                         child: CircularProgressIndicator()),
+  //                                         child: CustomCircularProgressIndicator()),
   //                               ),
   //                               PositionedDirectional(
   //                                 start: 5,

@@ -82,7 +82,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // if (isLoading) {
-    //   return const Center(child: CircularProgressIndicator());
+    //   return const Center(child: CustomCircularProgressIndicator());
     // }
     // if (images.isEmpty) {
     //   return const Center(child: Text('No images found!'));
@@ -134,23 +134,25 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                             //     .read<CreatePostInstagramCubit>()
                             //     .nextPage(context);
                           }
-                        } else if (state.postTypeSelectedIndex == 2) {
-                          bool isGalleryReelEmpty = context
-                              .read<CreatePostInstagramCubit>()
-                              .state
-                              .selectedGalleryReels
-                              .isEmpty;
-                          if (isGalleryReelEmpty) {
-                            showErrorMessage(
-                              context,
-                              LocaleKeys.youMustSelectAtLeastOneVideo.localize,
-                            );
-                          } else {
-                            context.pushNamed(
-                              Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                              extra: context.read<CreatePostInstagramCubit>(),
-                            );
-                          }
+                        }
+                        else if (state.postTypeSelectedIndex == 2) {
+                          context.push(Routes.REELS);
+                          // bool isGalleryReelEmpty = context
+                          //     .read<CreatePostInstagramCubit>()
+                          //     .state
+                          //     .selectedGalleryReels
+                          //     .isEmpty;
+                          // if (isGalleryReelEmpty) {
+                          //   showErrorMessage(
+                          //     context,
+                          //     LocaleKeys.youMustSelectAtLeastOneVideo.localize,
+                          //   );
+                          // } else {
+                          //   context.pushNamed(
+                          //     Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                          //     extra: context.read<CreatePostInstagramCubit>(),
+                          //   );
+                          // }
                         }
                       },
                     ),
@@ -163,8 +165,9 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                       ),
                     // if (state.postTypeSelectedIndex == 1)
                     //   const Expanded(child: Placeholder()),
-                    if (state.postTypeSelectedIndex == 2)
-                      const Expanded(child: ReelBodyCreatePostInstagram()),
+
+                    // if (state.postTypeSelectedIndex == 2)
+                    //   const Expanded(child: ReelBodyCreatePostInstagram()),
                   ],
                 );
               },
@@ -292,7 +295,7 @@ class _ReelBodyCreatePostInstagramState
             //               _buildVideoControls(),
             //             ],
             //           )
-            //         : const Center(child: CircularProgressIndicator()),
+            //         : const Center(child: CustomCircularProgressIndicator()),
             //   ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),

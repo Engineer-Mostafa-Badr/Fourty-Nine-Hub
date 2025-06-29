@@ -43,6 +43,8 @@ abstract class AppColors {
   static const fill_Color_DARK = Color(0xFF171717);
   static const red_Color_DARK = Color(0xFFF45560);
   static const Find_fill_DARK = Color(0xFF262626);
+  static const Facebook_Red_DARK = Color(0xFFFF4622);
+  static const Facebook_Fill_Red_DARK = Color(0xFFFFEEEB);
   static const c0B1035 = Color(0xFF0B1035);
   static const c46484B = Color(0xFF46484B);
   static const cF5F5F5 = Color(0xFFF5F5F5);
@@ -154,6 +156,11 @@ abstract class AppColors {
         ? AppColors.whiteColor
         : AppColors.black;
   }
+  static Color getPrimaryTextColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.PRIMARY_COLOR
+        : AppColors.whiteColor;
+  }
   static Color getReversedTextColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.black
@@ -169,6 +176,11 @@ abstract class AppColors {
         ? AppColors.Floating_Button_COLOR_DARK
         : AppColors.PRIMARY_COLOR;
   }
+  static Color getButtonPrimaryWhiteColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.whiteColor
+        : AppColors.PRIMARY_COLOR;
+  }
   static Color getFillColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.fill_Color_DARK
@@ -178,6 +190,11 @@ abstract class AppColors {
     return context.isDarkMode
         ? AppColors.Find_fill_DARK
         : AppColors.LIGHT_GRAY_COLOR;
+  }
+  static Color getFacebookFillRedColor(BuildContext context) {
+    return context.isDarkMode
+        ? AppColors.Find_fill_DARK
+        :AppColors.Facebook_Fill_Red_DARK ;
   }
   
 }

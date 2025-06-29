@@ -92,4 +92,9 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   Future<Either<Failure, bool>> answerQuestion(AnswerQuestionParams params) {
     return _fourtyNineRemoteDataSource.answerQuestion(params);
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteAd(String id) {
+    return _fourtyNineRemoteDataSource.deleteAd(id);
+  }
 }

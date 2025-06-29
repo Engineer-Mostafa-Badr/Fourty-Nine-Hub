@@ -24,7 +24,7 @@ class TenPercentView extends StatelessWidget {
           actions: [
             CustomWinnerAppbar(
               onPressed: () {
-                context.push(Routes.WINNERSGift);
+                context.push(Routes.WinnersTenPercent);
               },
             ),
           ],

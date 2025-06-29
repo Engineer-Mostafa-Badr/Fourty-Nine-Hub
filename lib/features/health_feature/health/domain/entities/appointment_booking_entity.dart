@@ -1,11 +1,10 @@
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../doctor_details/domain/entities/doctor_entity.dart';
 
 class BookedAppointmentEntity {
   final String id;
   final bool bookedPremium;
-  final DoctorEntity doctor;
+  final DoctorEntity? doctor;
   final String userId;
   final BookingTypes bookingType;
   final String day;
@@ -17,7 +16,7 @@ class BookedAppointmentEntity {
   BookedAppointmentEntity(
       {required this.id,
       required this.bookedPremium,
-      required this.doctor,
+        this.doctor,
       required this.userId,
       required this.bookingType,
       required this.day,
@@ -33,13 +32,13 @@ extension BookingTypesExtension on BookingTypes {
   String get translatedName {
     switch (this) {
       case BookingTypes.call:
-        return LocaleKeys.call.localize;
+        return LocaleKeys.call;
       case BookingTypes.clinic:
-        return LocaleKeys.clinicVisit.localize;
+        return LocaleKeys.clinicVisit;
       case BookingTypes.home:
-        return LocaleKeys.homeVisit.localize;
+        return LocaleKeys.homeVisit;
       case BookingTypes.emergency:
-        return LocaleKeys.emergency.localize;
+        return LocaleKeys.emergency;
     }
   }
 }

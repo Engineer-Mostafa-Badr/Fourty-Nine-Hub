@@ -63,6 +63,7 @@ class SocialHomeView extends StatefulWidget {
 class _SocialHomeViewState extends State<SocialHomeView>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   ScrollController scrollController = ScrollController();
+  bool _showButtons = true;
   bool _isScrollingDown = false;
   bool isShowExplain = false;
 
@@ -76,16 +77,17 @@ class _SocialHomeViewState extends State<SocialHomeView>
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
+            _showButtons = false;
           });
         }
       } else {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
+            _showButtons = true;
           });
         }
-      }
-    });
+      }});
     super.initState();
   }
 
@@ -111,7 +113,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 child: Label(
                   text: LocaleKeys.socialExplain.localize,
                   style: Styles.headerText(
-                    color: AppColors.SECONDARY_COLOR,
+                    color: AppColors.getRedColor(context),
                     shadows: const [
                       Shadow(
                         color: Colors.black12,
@@ -186,7 +188,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                     ],
                                   ),
                                   Label(
-                                    text: LocaleKeys.Face.localize,
+                                    text:context.isArabic?'فيس': LocaleKeys.Face.localize,
                                     style: Styles.headerText(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
@@ -404,9 +406,25 @@ class _SocialHomeViewState extends State<SocialHomeView>
                           builder: (context, state) {
                         return context.read<UserCubit>().isLoggedIn
                             ? Scaffold(
-                                body: FacebookBody(
-                                scrollController: scrollController,
-                              ))
+                                body: NotificationListener<ScrollNotification>(
+                                  onNotification: (scrollNotification) {
+                                    if (scrollNotification is UserScrollNotification) {
+                                      if (scrollNotification.direction == ScrollDirection.reverse && _showButtons) {
+                                        setState(() {
+                                          _showButtons = false;
+                                        });
+                                      } else if (scrollNotification.direction == ScrollDirection.forward && !_showButtons) {
+                                        setState(() {
+                                          _showButtons = true;
+                                        });
+                                      }
+                                    }
+                                    return false;
+                                  },
+                                  child: FacebookBody(
+                                  scrollController: scrollController,
+                                                                ),
+                                ))
                             : NestedAppbar(
                                 scrollController: ScrollController(),
                                 appBars: [
@@ -441,9 +459,37 @@ class _SocialHomeViewState extends State<SocialHomeView>
                             create: (context) => serviceLocator<StoryCubit>(),
                           ),
                         ],
-                        child: const InstagramView(),
+                        child: NotificationListener<ScrollNotification>(
+                            onNotification: (scrollNotification) {
+                              if (scrollNotification is UserScrollNotification) {
+                                if (scrollNotification.direction == ScrollDirection.reverse && _showButtons) {
+                                  setState(() {
+                                    _showButtons = false;
+                                  });
+                                } else if (scrollNotification.direction == ScrollDirection.forward && !_showButtons) {
+                                  setState(() {
+                                    _showButtons = true;
+                                  });
+                                }
+                              }
+                              return false;
+                            },child: const InstagramView()),
                       ),
-                      const TwitterView(),
+                      NotificationListener<ScrollNotification>(
+                          onNotification: (scrollNotification) {
+                            if (scrollNotification is UserScrollNotification) {
+                              if (scrollNotification.direction == ScrollDirection.reverse && _showButtons) {
+                                setState(() {
+                                  _showButtons = false;
+                                });
+                              } else if (scrollNotification.direction == ScrollDirection.forward && !_showButtons) {
+                                setState(() {
+                                  _showButtons = true;
+                                });
+                              }
+                            }
+                            return false;
+                          },child: const TwitterView()),
                     ],
                   )),
             ),

@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/D
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_documents_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_photo_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/vehicle_information_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/upload_image_row.dart';
@@ -18,6 +19,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class UploadRiderImagesParams{
   final bool? isShipping;
@@ -52,7 +54,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           body: BlocBuilder<RideRegisterCubit,RideRegisterState>(
             builder: (context,state) {
               var cubit = context.read<RideRegisterCubit>();
-              return state.isLoading?const Center(child: CircularProgressIndicator()):ListView(
+              return state.isLoading?const Center(child: CustomCircularProgressIndicator()):ListView(
                 padding: const EdgeInsets.only(top: 82, left: 16, right: 16),
                 children: [
                   Label(
@@ -98,6 +100,16 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
+        UploadImageRow(title: LocaleKeys.personalPhoto.localize,onTap: () async {
+          await  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+              value: serviceLocator<RideRegisterCubit>(),
+              child: PersonalPhotoScreen(params: params,))));
+          params.isShipping==true?context.read<RideRegisterCubit>().fetchLoaderInfo(context,false):context.read<RideRegisterCubit>().fetchRideDriverInfo(context,false);
+          // context.push(Routes.personalDocumentsScreen);
+        },disableUpload: state.driverInfo?.isUploadDriverImage==true,),
+        const SizedBox(
+          height: 40,
+        ),
         UploadImageRow(title: LocaleKeys.personalDocuments.localize,onTap: () async {
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
@@ -124,7 +136,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               child: VehicleInformationScreen(params: params,))));
           params.isShipping==true?context.read<RideRegisterCubit>().fetchLoaderInfo(context,false):context.read<RideRegisterCubit>().fetchRideDriverInfo(context,false);
           // context.push(Routes.vehicleInformationScreen);
-        },disableUpload: (state.driverInfo?.isUploadCarLicense==true),),
+        },disableUpload: (state.driverInfo?.isUploadCarLicense==true&&state.driverInfo?.isUploadCarImage==true),),
         const SizedBox(
           height: 40,
         ),
@@ -228,6 +240,16 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
   Widget loadingUploadImages(RideRegisterCubit cubit,RideRegisterState state,UploadRiderImagesParams params){
     return Column(
       children:[
+        UploadImageRow(title: LocaleKeys.personalPhoto.localize,onTap: () async {
+         await  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+              value: serviceLocator<RideRegisterCubit>(),
+              child: PersonalPhotoScreen(params: params,))));
+         params.isShipping==true?context.read<RideRegisterCubit>().fetchLoaderInfo(context,false):context.read<RideRegisterCubit>().fetchRideDriverInfo(context,false);
+          // context.push(Routes.personalDocumentsScreen);
+        },disableUpload: state.loaderInfo?.isUploadDriverImage==true,),
+        const SizedBox(
+          height: 40,
+        ),
         UploadImageRow(title: LocaleKeys.personalDocuments.localize,onTap: () async {
          await  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),

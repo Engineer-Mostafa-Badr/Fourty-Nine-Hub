@@ -14,6 +14,12 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../reels/presentation/pages/main_reel_view.dart';
+import '../../../reels/presentation/pages/recording/my_voice.dart';
+import '../../../reels/presentation/pages/recording/next_media_preview.dart';
+import '../../../reels/presentation/pages/recording/recording_shared.dart';
+import '../../../social_posts/presentation/cubit/social_posts_cubit.dart';
 
 class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
   const FloatingActionButtonCreatePostInstagram({
@@ -70,6 +76,31 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                         BlocProvider.of<StoryCubit>(context)
                           ..fetchStories()
                           ..getMutedStories();
+                      } else if (index == 2) {
+                        context.read<UserCubit>().isLoggedIn
+                            // ?context.go(Paths.REELS)
+                            // ? await Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => BlocProvider(
+                            //         create: (context) =>
+                            //             serviceLocator<SocialPostsCubit>(),
+                            //         child: const ReelView(),
+                            //       ),
+                            //     ),
+                            //   )
+                            ? await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ReelsRecordingScreen(
+                                          voiceMediaId:'',
+                                          voiceSignedUrl: '',
+                                      ),
+                                ),
+                              )
+                            : pleaseLoginDialog(context);
+                        // context.push(Paths.REELS);
                       } else {
                         context
                             .read<CreatePostInstagramCubit>()

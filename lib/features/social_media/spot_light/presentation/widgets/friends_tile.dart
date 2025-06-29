@@ -20,7 +20,7 @@ class FriendsTile extends StatelessWidget {
     this.hasCloseButtons = false,
     this.isMyContact = false,
     this.onClose,
-    this.buttonColor = AppColors.PRIMARY_COLOR,
+    this.buttonColor ,
   });
 
   final String name;
@@ -32,7 +32,7 @@ class FriendsTile extends StatelessWidget {
   final bool isOnline;
   final bool hasCloseButtons;
   final bool isMyContact;
-  final Color buttonColor;
+  final Color? buttonColor;
   final void Function()? onClose;
 
 
@@ -77,7 +77,7 @@ class FriendsTile extends StatelessWidget {
         children: [
           if (hasAcceptButton)
             customButton(
-                color: buttonColor,
+                color: buttonColor??AppColors.getButtonPrimaryWhiteColor(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -97,7 +97,7 @@ class FriendsTile extends StatelessWidget {
                 )),
           if (hasAddButton)
             customButton(
-                color: buttonColor,
+                color: buttonColor??AppColors.getButtonPrimaryWhiteColor(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -117,16 +117,16 @@ class FriendsTile extends StatelessWidget {
                 )),
           if (hasCameraButtons) ...[
             customButton(
-                color: buttonColor,
+                color: buttonColor??AppColors.getButtonPrimaryWhiteColor(context),
                 Icon(
                   Icons.messenger_rounded,
-                  color: Colors.white,
+                  color: context.isDarkMode?AppColors.PRIMARY_COLOR:Colors.white,
                   size: 35.h,
                 )),
             const Sizer(),
             customButton(
-                color: buttonColor,
-                Icon(Icons.camera_alt, color: Colors.white, size: 35.h)),
+                color: buttonColor??AppColors.getButtonPrimaryWhiteColor(context),
+                Icon(Icons.camera_alt, color:context.isDarkMode?AppColors.PRIMARY_COLOR:Colors.white, size: 35.h)),
           ],
           if (hasCloseButtons)
             IconButton(

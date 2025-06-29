@@ -8,9 +8,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
@@ -38,6 +40,7 @@ import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class OtherAccountView extends StatefulWidget {
   OtherAccountView({super.key, payload}) {
@@ -46,6 +49,7 @@ class OtherAccountView extends StatefulWidget {
       userId = payload;
     } else {
       print("payloadpayloadpayload $payload");
+      print("payloadpayloadpayload ${payload['userId']}");
       // print(id);
       // print('itemId${payload['itemId']}');
       userId = payload['userId'];
@@ -79,124 +83,124 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CustomCircularProgressIndicator())
               : CustomScrollView(
                   slivers: [
-                    SliverToBoxAdapter(
-                        child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsetsDirectional.only(
-                                top: 80.h, end: 20.w, start: 20.w),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  IconButton(
-                                      onPressed: () => context.pop(),
-                                      icon: const Icon(
-                                        Icons.arrow_back,
-                                      )),
-                                  Text(
-                                    '${state.profileData?.firstName} ${state.profileData?.lastName}',
-                                    style: Styles.headerText(fontSize: 70.sp),
-                                  ),
-                                  const Spacer(),
-                                  if (context.read<UserCubit>().isLoggedIn &&
-                                      loginUser?.id != widget.userId)
-                                    PopupMenuButton(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor,
-                                        icon: const Icon(
-                                          Icons.more_vert,
-                                        ),
-                                        itemBuilder: (context) {
-                                          return [
-                                            if (loginUser?.id !=
-                                                state.profileData?.id)
-                                              PopupMenuItem<int>(
-                                                value: 4,
-                                                child: Text(
-                                                    LocaleKeys.report.localize),
-                                                onTap: () {
-                                                  bottomSheet(
-                                                      context: context,
-                                                      widget: ReportView(
-                                                        id: widget.userId,
-                                                        categoryId:
-                                                            '66b77e77bb35968b535dc944',
-                                                      ));
-                                                },
-                                              ),
-                                            if (loginUser?.id !=
-                                                state.profileData?.id)
-                                              PopupMenuItem<int>(
-                                                value: 5,
-                                                child: Text(state.profileData
-                                                            ?.isBlock ==
-                                                        true
-                                                    ? LocaleKeys
-                                                        .unBlock.localize
-                                                    : LocaleKeys
-                                                        .block.localize),
-                                                onTap: () async {
-                                                  // context.pop();
-                                                  var result = await controller
-                                                      .blockUser(
-                                                          context: context,
-                                                          userId:
-                                                              widget.userId);
-                                                  print("result:$result");
-                                                  if (result == true) {
-                                                    print("object");
-                                                    if (state.profileData
-                                                            ?.isBlock ==
-                                                        false) {
-                                                      state.profileData
-                                                          ?.isBlock = true;
-                                                      showSuccessMessage(
-                                                          context,
-                                                          LocaleKeys
-                                                              .blockedSuccessfully
-                                                              .localize);
-                                                    } else {
-                                                      state.profileData
-                                                          ?.isBlock = false;
-                                                      showSuccessMessage(
-                                                          context,
-                                                          LocaleKeys
-                                                              .unBlockedSuccessfully
-                                                              .localize);
-                                                    }
-                                                  }
-                                                },
-                                              ),
-                                            if (loginUser?.id ==
-                                                state.profileData?.id)
-                                              PopupMenuItem<int>(
-                                                value: 5,
-                                                child: Text(LocaleKeys
-                                                    .editProfile.localize),
-                                                onTap: () async {
-                                                  await context
-                                                      .push(Routes.EDITPROFILE);
-                                                  controller.getUserProfile(
-                                                      id: widget.userId);
-                                                },
-                                              )
-                                          ];
-                                        }),
-                                  if (context.read<UserCubit>().isLoggedIn &&
-                                      loginUser?.id == widget.userId)
-                                    IconButton(
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (_) =>
-                                                  const SearchAppUsers());
-                                        },
-                                        icon: const Icon(
-                                          Icons.search,
-                                        )),
-                                ]))),
+                    // SliverToBoxAdapter(
+                    //     child: Container(
+                    //         width: double.infinity,
+                    //         padding: EdgeInsetsDirectional.only(
+                    //             top: 80.h, end: 20.w, start: 20.w),
+                    //         child: Row(
+                    //             mainAxisAlignment: MainAxisAlignment.start,
+                    //             children: [
+                    //               IconButton(
+                    //                   onPressed: () => context.pop(),
+                    //                   icon: const Icon(
+                    //                     Icons.arrow_back,
+                    //                   )),
+                    //               Text(
+                    //                 '${state.profileData?.firstName} ${state.profileData?.lastName}',
+                    //                 style: Styles.headerText(fontSize: 70.sp),
+                    //               ),
+                    //               const Spacer(),
+                    //               if (context.read<UserCubit>().isLoggedIn &&
+                    //                   loginUser?.id != widget.userId)
+                    //                 PopupMenuButton(
+                    //                     color: Theme.of(context)
+                    //                         .scaffoldBackgroundColor,
+                    //                     icon: const Icon(
+                    //                       Icons.more_vert,
+                    //                     ),
+                    //                     itemBuilder: (context) {
+                    //                       return [
+                    //                         if (loginUser?.id !=
+                    //                             state.profileData?.id)
+                    //                           PopupMenuItem<int>(
+                    //                             value: 4,
+                    //                             child: Text(
+                    //                                 LocaleKeys.report.localize),
+                    //                             onTap: () {
+                    //                               bottomSheet(
+                    //                                   context: context,
+                    //                                   widget: ReportView(
+                    //                                     id: widget.userId,
+                    //                                     categoryId:
+                    //                                         '66b77e77bb35968b535dc944',
+                    //                                   ));
+                    //                             },
+                    //                           ),
+                    //                         if (loginUser?.id !=
+                    //                             state.profileData?.id)
+                    //                           PopupMenuItem<int>(
+                    //                             value: 5,
+                    //                             child: Text(state.profileData
+                    //                                         ?.isBlock ==
+                    //                                     true
+                    //                                 ? LocaleKeys
+                    //                                     .unBlock.localize
+                    //                                 : LocaleKeys
+                    //                                     .block.localize),
+                    //                             onTap: () async {
+                    //                               // context.pop();
+                    //                               var result = await controller
+                    //                                   .blockUser(
+                    //                                       context: context,
+                    //                                       userId:
+                    //                                           widget.userId);
+                    //                               print("result:$result");
+                    //                               if (result == true) {
+                    //                                 print("object");
+                    //                                 if (state.profileData
+                    //                                         ?.isBlock ==
+                    //                                     false) {
+                    //                                   state.profileData
+                    //                                       ?.isBlock = true;
+                    //                                   showSuccessMessage(
+                    //                                       context,
+                    //                                       LocaleKeys
+                    //                                           .blockedSuccessfully
+                    //                                           .localize);
+                    //                                 } else {
+                    //                                   state.profileData
+                    //                                       ?.isBlock = false;
+                    //                                   showSuccessMessage(
+                    //                                       context,
+                    //                                       LocaleKeys
+                    //                                           .unBlockedSuccessfully
+                    //                                           .localize);
+                    //                                 }
+                    //                               }
+                    //                             },
+                    //                           ),
+                    //                         if (loginUser?.id ==
+                    //                             state.profileData?.id)
+                    //                           PopupMenuItem<int>(
+                    //                             value: 5,
+                    //                             child: Text(LocaleKeys
+                    //                                 .editProfile.localize),
+                    //                             onTap: () async {
+                    //                               await context
+                    //                                   .push(Routes.EDITPROFILE);
+                    //                               controller.getUserProfile(
+                    //                                   id: widget.userId);
+                    //                             },
+                    //                           )
+                    //                       ];
+                    //                     }),
+                    //               if (context.read<UserCubit>().isLoggedIn &&
+                    //                   loginUser?.id == widget.userId)
+                    //                 IconButton(
+                    //                     onPressed: () {
+                    //                       showDialog(
+                    //                           context: context,
+                    //                           builder: (_) =>
+                    //                               const SearchAppUsers());
+                    //                     },
+                    //                     icon: const Icon(
+                    //                       Icons.search,
+                    //                     )),
+                    //             ]))),
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -390,34 +394,40 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       child: state.profileData?.isBlock == false &&
                               state.profileData?.blockMe == false
                           ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TabBar(
-                                    labelStyle: Styles.mediumText(),
-                                    isScrollable: true,
-                                    tabAlignment: TabAlignment.center,
-                                    onTap: (i) {
-                                      controller.changeUserPage(i);
-                                    },
-                                    tabs: [
-                                      Tab(
-                                        text: LocaleKeys.posts.localize,
-                                      ),
-                                      Tab(
-                                        text: LocaleKeys.Tweets.localize,
-                                      ),
-                                      Tab(
-                                        text: LocaleKeys.reels.localize,
-                                      ),
-                                      if (context
-                                              .read<UserCubit>()
-                                              .state
-                                              .data
-                                              ?.id ==
-                                          widget.userId)
-                                        Tab(
-                                          text: LocaleKeys.savedReels.localize,
-                                        ),
-                                    ]),
+                                const Sizer(),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Label(text: LocaleKeys.posts.localize,style: Styles.headerText(fontWeight: FontWeight.bold),),
+                                )
+                                // TabBar(
+                                //     labelStyle: Styles.mediumText(),
+                                //     isScrollable: true,
+                                //     tabAlignment: TabAlignment.center,
+                                //     onTap: (i) {
+                                //       controller.changeUserPage(i);
+                                //     },
+                                //     tabs: [
+                                //       Tab(
+                                //         text: LocaleKeys.posts.localize,
+                                //       ),
+                                //       Tab(
+                                //         text: LocaleKeys.Tweets.localize,
+                                //       ),
+                                //       Tab(
+                                //         text: LocaleKeys.reels.localize,
+                                //       ),
+                                //       if (context
+                                //               .read<UserCubit>()
+                                //               .state
+                                //               .data
+                                //               ?.id ==
+                                //           widget.userId)
+                                //         Tab(
+                                //           text: LocaleKeys.savedReels.localize,
+                                //         ),
+                                //     ]),
                                 // _buildAccountPages(state.profileData!),
                               ],
                             )
@@ -551,6 +561,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     width: double.infinity,
                                   ),
                                 ),
+                          PositionedDirectional(
+                            top: 10,
+                            start: 10,
+                            child: ClickableWidget(
+                              onTap: ()=>context.pop(),
+                              child: Container(
+                                padding:const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black.withValues(alpha: .6)
+                                ),
+                                child: Icon(Icons.arrow_back_outlined,color: Colors.white,size: 45.h,) ,
+                              ),
+                            ),
+                          ),
                           if (loginUser?.id == user.id)
                             InkWell(
                               onTap: () {
@@ -581,108 +606,118 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SizedBox(
-                                  width: 180.w,
-                                  height:50.h,
-
-                                  child: AppButton(
-                                      // height: 120.h,
-                                      width: kToolbarHeight * 1.5,
-                                      backColor: user.isFollowed == true
-                                          ? AppColors.PRIMARY_COLOR
-                                          : null,
-                                      label: user.isFollowed == true
-                                          ? LocaleKeys.unFollow.localize
-                                          : LocaleKeys.follow.localize,
-                                      style: Styles.mediumText(
-                                          color: Colors.white, fontSize: 24),
-                                      onPressed: () {
-                                        onFollow();
-                                      }),
+                                Container(
+                                 padding:const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    gradient: LinearGradient(
+                                      colors: [context.isDarkMode?AppColors.Floating_Button_COLOR_DARK:Color(0xFF0B1035), Color(0xFFFF3308)],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                  ),
+                                  child: SizedBox(
+                                    width: 180.w,
+                                    height:50.h,
+                                    child: AppButton(
+                                        // height: 120.h,
+                                        width: kToolbarHeight * 1.5,
+                                        backColor: user.isFollowed == true
+                                            ? AppColors.getFindFillColor(context)
+                                            : AppColors.getFindFillColor(context),
+                                        label: user.isFollowed == true
+                                            ? LocaleKeys.unFollow.localize
+                                            : LocaleKeys.follow.localize,
+                                        style: Styles.mediumText(
+                                            color: AppColors.getTextColor(context), fontSize: 24),
+                                        onPressed: () {
+                                          onFollow();
+                                        }),
+                                  ),
                                 ),
-                                const Sizer(),
-                                (user.areFriends == true ||
-                                        user.isSenTRequest == true)
-                                    ? PopupMenuButton(
-                                        // iconSize: 210,
-                                        itemBuilder: (context) {
-                                          return [
-                                            if (user.isSenTRequest == true) ...[
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                    LocaleKeys.Accept.localize),
-                                                onTap: () => onAcceptFriend(),
-                                              ),
-                                              PopupMenuItem<int>(
-                                                value: 1,
-                                                child: Text(
-                                                    LocaleKeys.reject.localize),
-                                                onTap: () => onRejectFriend(),
-                                              ),
-                                            ],
-                                            if (user.areFriends == true)
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(LocaleKeys
-                                                    .deleteFriend.localize),
-                                                onTap: () => onDeleteFriend(),
-                                              ),
-                                          ];
-                                        },
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: AppColors.PRIMARY_COLOR,
-                                            ),
-                                            child: Text(
-                                              user.isSenTRequest == true
-                                                  ? LocaleKeys
-                                                      .acceptRequest.localize
-                                                  : user.areFriends == true
-                                                      ? LocaleKeys
-                                                          .friends.localize
-                                                      : '',
-                                              style: Styles.mediumText(
-                                                  color: Colors.white),
-                                            )))
-                                    : SizedBox(
-                                        width: user.sentFriendRequest == true
-                                            ? 230.w
-                                            : 180.w,
-                                  height:50.h,
-
-                                        child: AppButton(
-                                            // height: 80.h,
-                                            padding: 5,
-                                            backColor:
-                                                user.sentFriendRequest == true
-                                                    ? AppColors.PRIMARY_COLOR
-                                                    : null,
-                                            style: Styles.mediumText(
-                                                color: Colors.white,
-                                                fontSize: 24),
-                                            label: user.isSenTRequest == true
-                                                ? LocaleKeys
-                                                    .acceptRequest.localize
-                                                : user.areFriends == true
-                                                    ? LocaleKeys
-                                                        .friends.localize
-                                                    : user.sentFriendRequest ==
-                                                            true
-                                                        ? LocaleKeys
-                                                            .removeRequest
-                                                            .localize
-                                                        : LocaleKeys
-                                                            .addFriend.localize,
-                                            onPressed: () {
-                                              onAddFriend();
-                                            }),
-                                      )
+                                // const Sizer(),
+                                // (user.areFriends == true ||
+                                //         user.isSenTRequest == true)
+                                //     ? PopupMenuButton(
+                                //         // iconSize: 210,
+                                //         itemBuilder: (context) {
+                                //           return [
+                                //             if (user.isSenTRequest == true) ...[
+                                //               PopupMenuItem<int>(
+                                //                 value: 0,
+                                //                 child: Text(
+                                //                     LocaleKeys.Accept.localize),
+                                //                 onTap: () => onAcceptFriend(),
+                                //               ),
+                                //               PopupMenuItem<int>(
+                                //                 value: 1,
+                                //                 child: Text(
+                                //                     LocaleKeys.reject.localize),
+                                //                 onTap: () => onRejectFriend(),
+                                //               ),
+                                //             ],
+                                //             if (user.areFriends == true)
+                                //               PopupMenuItem<int>(
+                                //                 value: 0,
+                                //                 child: Text(LocaleKeys
+                                //                     .deleteFriend.localize),
+                                //                 onTap: () => onDeleteFriend(),
+                                //               ),
+                                //           ];
+                                //         },
+                                //         child: Container(
+                                //             alignment: Alignment.center,
+                                //             padding: const EdgeInsets.symmetric(
+                                //                 horizontal: 10),
+                                //             decoration: BoxDecoration(
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5),
+                                //               color: AppColors.PRIMARY_COLOR,
+                                //             ),
+                                //             child: Text(
+                                //               user.isSenTRequest == true
+                                //                   ? LocaleKeys
+                                //                       .acceptRequest.localize
+                                //                   : user.areFriends == true
+                                //                       ? LocaleKeys
+                                //                           .friends.localize
+                                //                       : '',
+                                //               style: Styles.mediumText(
+                                //                   color: Colors.white),
+                                //             )))
+                                //     : SizedBox(
+                                //         width: user.sentFriendRequest == true
+                                //             ? 230.w
+                                //             : 180.w,
+                                //   height:50.h,
+                                //
+                                //         child: AppButton(
+                                //             // height: 80.h,
+                                //             padding: 5,
+                                //             backColor:
+                                //                 user.sentFriendRequest == true
+                                //                     ? AppColors.PRIMARY_COLOR
+                                //                     : null,
+                                //             style: Styles.mediumText(
+                                //                 color: Colors.white,
+                                //                 fontSize: 24),
+                                //             label: user.isSenTRequest == true
+                                //                 ? LocaleKeys
+                                //                     .acceptRequest.localize
+                                //                 : user.areFriends == true
+                                //                     ? LocaleKeys
+                                //                         .friends.localize
+                                //                     : user.sentFriendRequest ==
+                                //                             true
+                                //                         ? LocaleKeys
+                                //                             .removeRequest
+                                //                             .localize
+                                //                         : LocaleKeys
+                                //                             .addFriend.localize,
+                                //             onPressed: () {
+                                //               onAddFriend();
+                                //             }),
+                                //       )
                               ],
                             ),
                     )),
@@ -711,7 +746,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: CircleAvatar(
-                                  radius: 160.w,
+                                  radius: 120.w,
                                   backgroundColor:
                                   Theme.of(context).scaffoldBackgroundColor,
                                   child: Container(
@@ -753,7 +788,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: CircleAvatar(
-                                  radius: 160.w,
+                                  radius: 120.w,
                                   backgroundColor:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   child: ImageFromInternet(
@@ -833,75 +868,75 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                       style: Styles.headerText(fontSize: 26)),
                               ])),
                     ),
-                    if (loginUser?.id != widget.userId)
-                      MessageButton(
-                        width: 180.w,
-                        height:50.h,
-                        user: state.profileData!,
-                        normalPress: () async {
-                          if (context.read<UserCubit>().isLoggedIn) {
-                            if (state.profileData?.areFriends == true) {
-                              ChatEntity? chat = await context
-                                  .read<UserCubit>()
-                                  .createNormalChat(
-                                    otherId: widget.userId,
-                                    categoryId: ChatCategoriesIds.social,
-                                  );
-                              context.pop();
-                              context.push(
-                                Routes.CHAT,
-                                extra: ChatsViewParams(
-                                  isFromStartChat: true,
-                                  initialTabIndex: 0,
-                                  selectedChat: chat,
-                                ),
-                              );
-                            } else {
-                              ChatEntity? chat = await context
-                                  .read<UserCubit>()
-                                  .createNormalChat(
-                                    otherId: widget.userId,
-                                    categoryId: ChatCategoriesIds.greet,
-                                  );
-                              context.pop();
-                              context.push(
-                                Routes.CHAT,
-                                extra: ChatsViewParams(
-                                  isFromStartChat: true,
-                                  initialTabIndex: 0,
-                                  selectedChat: chat,
-                                ),
-                              );
-                            }
-                          } else {
-                            return pleaseLoginDialog(context);
-
-                            // context.push(Routes.LOGIN);
-                          }
-                        },
-                        anonymousPress: () async {
-                          if (context.read<UserCubit>().isLoggedIn) {
-                            ChatEntity? chat = await context
-                                .read<UserCubit>()
-                                .createAnonymousChat(
-                                  otherId: widget.userId,
-                                );
-                            context.pop();
-                            context.push(
-                              Routes.CHAT,
-                              extra: ChatsViewParams(
-                                isFromStartChat: true,
-                                initialTabIndex: 0,
-                                selectedChat: chat,
-                              ),
-                            );
-                          } else {
-                            return pleaseLoginDialog(context);
-
-                            // context.push(Routes.LOGIN);
-                          }
-                        },
-                      ),
+                    // if (loginUser?.id != widget.userId)
+                    //   MessageButton(
+                    //     width: 180.w,
+                    //     height:50.h,
+                    //     user: state.profileData!,
+                    //     normalPress: () async {
+                    //       if (context.read<UserCubit>().isLoggedIn) {
+                    //         if (state.profileData?.areFriends == true) {
+                    //           ChatEntity? chat = await context
+                    //               .read<UserCubit>()
+                    //               .createNormalChat(
+                    //                 otherId: widget.userId,
+                    //                 categoryId: ChatCategoriesIds.social,
+                    //               );
+                    //           context.pop();
+                    //           context.push(
+                    //             Routes.CHAT,
+                    //             extra: ChatsViewParams(
+                    //               isFromStartChat: true,
+                    //               initialTabIndex: 0,
+                    //               selectedChat: chat,
+                    //             ),
+                    //           );
+                    //         } else {
+                    //           ChatEntity? chat = await context
+                    //               .read<UserCubit>()
+                    //               .createNormalChat(
+                    //                 otherId: widget.userId,
+                    //                 categoryId: ChatCategoriesIds.greet,
+                    //               );
+                    //           context.pop();
+                    //           context.push(
+                    //             Routes.CHAT,
+                    //             extra: ChatsViewParams(
+                    //               isFromStartChat: true,
+                    //               initialTabIndex: 0,
+                    //               selectedChat: chat,
+                    //             ),
+                    //           );
+                    //         }
+                    //       } else {
+                    //         return pleaseLoginDialog(context);
+                    //
+                    //         // context.push(Routes.LOGIN);
+                    //       }
+                    //     },
+                    //     anonymousPress: () async {
+                    //       if (context.read<UserCubit>().isLoggedIn) {
+                    //         ChatEntity? chat = await context
+                    //             .read<UserCubit>()
+                    //             .createAnonymousChat(
+                    //               otherId: widget.userId,
+                    //             );
+                    //         context.pop();
+                    //         context.push(
+                    //           Routes.CHAT,
+                    //           extra: ChatsViewParams(
+                    //             isFromStartChat: true,
+                    //             initialTabIndex: 0,
+                    //             selectedChat: chat,
+                    //           ),
+                    //         );
+                    //       } else {
+                    //         return pleaseLoginDialog(context);
+                    //
+                    //         // context.push(Routes.LOGIN);
+                    //       }
+                    //     },
+                    //   ),
                   ],
                 ),
                 Sizer(
@@ -913,25 +948,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 Sizer(
                   height: 4.h,
                 ),
-                Row(
-                  children: [
-                    _buildCounter(
-                      value: '${user.friendsCount} ',
-                      label: LocaleKeys.friends.localize,
-                    ),
-                    const Sizer(),
-                    _buildCounter(
-                      value: '${user.followersCount} ',
-                      label: LocaleKeys.follower.localize,
-                    ),
-                    const Sizer(),
-                    _buildCounter(
-                      value: '${user.followingCount} ',
-                      label: LocaleKeys.following.localize,
-                    ),
-                  ],
-                ),
-                Sizer(height: 5.h),
+
                 if (user.bio.isNotEmpty && user.bio != 'Hidden')
                   Label(
                     text: user.bio,
@@ -1087,9 +1104,31 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         Sizer(
                           height: 5.h,
                         ),
+
                       ],
+
+
                     ],
                   ),
+                Row(
+                  children: [
+                    // _buildCounter(
+                    //   value: '${user.friendsCount} '.toArabicNumbers(context),
+                    //   label: LocaleKeys.friends.localize,
+                    // ),
+                    const Sizer(),
+                    _buildCounter(
+                      value: '${user.followersCount} '.toArabicNumbers(context),
+                      label: LocaleKeys.follower.localize,
+                    ),
+                    const Sizer(),
+                    _buildCounter(
+                      value: '${user.followingCount} '.toArabicNumbers(context),
+                      label: LocaleKeys.following.localize,
+                    ),
+                  ],
+                ),
+                Sizer(height: 5.h),
               ],
             ),
           ),

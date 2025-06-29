@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -54,7 +55,7 @@ class _DoctorUnhandledAppointmentsViewState
           builder: (context, state) {
             var cubit = context.read<DoctorUnhandledAppointmentsCubit>();
             if (state.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             } else {
               if (cubit.appointments.isNotEmpty) {
                 return ListView.separated(

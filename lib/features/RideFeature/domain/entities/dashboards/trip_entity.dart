@@ -7,7 +7,7 @@ import 'trip_details_entity.dart';
 
 class TripEntity extends Equatable {
   final ClientDetailsEntity? clientDetails;
-  final DriverDetailsEntity? driverDetails;
+  final ClientDetailsEntity? driverDetails;
   final SubCategoryEntity? subCategory;
   final TripDetailsEntity? tripDetails;
   final StateEntity? state;

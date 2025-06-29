@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/create_star.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 
@@ -10,6 +11,7 @@ class FloatingActionButtonStar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+
       onPressed: () {
         Navigator.push(
           context,
@@ -18,16 +20,16 @@ class FloatingActionButtonStar extends StatelessWidget {
           ),
         );
       },
-      backgroundColor: const Color(0xff0B1035),
+      backgroundColor: AppColors.getButtonPrimaryColor(context),
       icon: Text(
         LocaleKeys.addTalent.localize,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: AppColors.getReversedTextColor(context),
         ),
       ),
-      label: const Icon(
+      label: Icon(
         Icons.add,
-        color: Colors.white,
+        color: AppColors.getReversedTextColor(context),
       ),
     );
   }

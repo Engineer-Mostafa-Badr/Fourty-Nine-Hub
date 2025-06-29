@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RequstTripJoinBottomSheet extends StatefulWidget {
   const RequstTripJoinBottomSheet({
@@ -113,7 +114,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                                 child: SizedBox(
                                     height: 35.w,
                                     width: 35.w,
-                                    child: const CircularProgressIndicator(
+                                    child: const CustomCircularProgressIndicator(
                                         color: Colors.white)),
                               );
                             }

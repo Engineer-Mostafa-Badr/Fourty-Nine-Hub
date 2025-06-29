@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
@@ -21,6 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../../social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -124,7 +127,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 
       print('⚡ Executing search with filter: $filter');
       switch (filter) {
-        case 'totalUsers':
+        case 'users':
           await cubit.loadUsersSearchData(params: params);
           break;
         case 'reels':
@@ -194,11 +197,11 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
               height: 70.h,
               hint: LocaleKeys.search.localize,
               borderRadius: BorderRadius.circular(40.r),
-              style: Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
+              style: Styles.mediumText(color: context.isDarkMode?Colors.black:AppColors.GREY_NORMAL_COLOR),
               prefix: Icon(
                 Icons.search,
                 size: 30.h,
-                color: AppColors.GREY_NORMAL_COLOR,
+                color:context.isDarkMode?Colors.black:AppColors.GREY_NORMAL_COLOR,
               ),
               noBorder: true,
               action: (_) {}, // no-op now
@@ -301,7 +304,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 
                   final prefs = await SharedPreferences.getInstance();
                   final filters = [
-                    'totalUsers', 'reels', 'posts',
+                    'users', 'reels', 'posts',
                     'mainCategories', 'subCategories', 'ads'
                   ];
                   await prefs.setString('filter', filters[i]);
@@ -319,7 +322,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                   );
 
                   switch (filter) {
-                    case 'totalUsers': cubit.loadUsersSearchData(params: params); break;
+                    case 'users': cubit.loadUsersSearchData(params: params); break;
                     case 'reels': cubit.loadReelsSearchData(params: params); break;
                     case 'posts': cubit.loadPostsSearchData(params: params); break;
                     case 'mainCategories': cubit.loadPaginatedSearchData(params: params); break;
@@ -331,6 +334,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                 indicator: const BoxDecoration(
                   color: Colors.transparent,
                 ),
+                dividerHeight: 0,
                 indicatorPadding: EdgeInsets.zero,
                 labelPadding: EdgeInsets.only(left: 20.w),
                 padding: EdgeInsets.only(right: 40.w),
@@ -338,7 +342,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                   final texts = [
                     LocaleKeys.profile.localize,
                     LocaleKeys.reel.localize,
-                    LocaleKeys.post.localize,
+                    LocaleKeys.post2.localize,
                     LocaleKeys.mainCategory.localize,
                     LocaleKeys.subCategory.localize,
                     LocaleKeys.ads.localize,
@@ -360,12 +364,15 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
         children: [
           const ProfileSearchView(),
           const ReelSearchView(),
-          const PostsSearchView(
+          BlocProvider(
+    create: (context) => serviceLocator<SocialPostsCubit>(),
+  child: const PostsSearchView(
             // params: SearchParams(
             //   search: _searchController.text,
             //   params: PaginationParams(page: 1),
             // ),
           ),
+),
           const MainCategorySearchView(
             // params: SearchParams(
             //   search: _searchController.text,
@@ -411,7 +418,7 @@ class CustomTapWidget extends StatelessWidget {
         height: 35,
         // padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).primaryColor :AppColors.cE0E0E0,
+          color: isSelected ? AppColors.getButtonPrimaryColor(context):AppColors.getFillColor(context),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
@@ -419,7 +426,7 @@ class CustomTapWidget extends StatelessWidget {
             text,
             style: Styles.mediumText(
               // fontSize: 15,
-              color: isSelected ? Colors.white : AppColors.GREY_NORMAL_COLOR,
+              color: isSelected ? AppColors.getReversedTextColor(context) : AppColors.GREY_NORMAL_COLOR,
             ),
           ),
         ),

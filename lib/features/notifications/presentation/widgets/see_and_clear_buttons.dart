@@ -23,20 +23,21 @@ class SeeAndClearButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextAppButton(
-            style: const TextStyle(color: AppColors.SECONDARY_COLOR),
+            style: TextStyle(color: AppColors.getRedColor(context)),
             label: LocaleKeys.seeAll.localize,
             onPressed: () {
-              showAreYouSure(
-                title: LocaleKeys.alert.localize,
-                subTitle: LocaleKeys.showNotification.localize,
-                action: seeAllCallback,
-                context: context,
-              );
+              seeAllCallback();
+              // showAreYouSure(
+              //   title: LocaleKeys.alert.localize,
+              //   subTitle: LocaleKeys.showNotification.localize,
+              //   action: ,
+              //   context: context,
+              // );
             },
           ),
           const Sizer(),
           TextAppButton(
-            style: const TextStyle(color: AppColors.SECONDARY_COLOR),
+            style: TextStyle(color:AppColors.getRedColor(context)),
             label: LocaleKeys.clearAll.localize,
             onPressed: () {
               showAreYouSure(

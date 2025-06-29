@@ -92,7 +92,7 @@ class RideArrivedScreen extends StatelessWidget {
                               from: 'أول العاشر من رمضان',
                               to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                             ),
-                            CustomRideButton(text: "I've Arrived"),
+                            CustomRideButton(text: "I've Arrived",onPressed: (){},),
                             const SizedBox(height: 10),
                             Wrap(
                               spacing: 10, // المسافة بين الأزرار
@@ -163,8 +163,9 @@ class RideArrivedScreen extends StatelessWidget {
 
 class CustomRideButton extends StatelessWidget {
   final String text;
+  final VoidCallback? onPressed;
 
-  const CustomRideButton({required this.text});
+  const CustomRideButton({super.key, required this.text,this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +173,7 @@ class CustomRideButton extends StatelessWidget {
       width: 150,
       height: 45,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.red, // لون الخلفية
           shape: RoundedRectangleBorder(

@@ -3,9 +3,12 @@ import 'sub_category_entity.dart';
 
 class SettingsDashboardEntity {
   final bool isReady;
+  final bool enableNotificationSound;
   final List<SubCategoryEntity> categoryIds;
   final String subscriptionType;
-  final double pricingPerKm;
+  final num pricingPerKm;
+  final num highCostPerKm;
+  final num lowCostPerKm;
   final String city;
   final RatingSettingsEntity rating;
   final double profit;
@@ -13,12 +16,24 @@ class SettingsDashboardEntity {
   final bool isActive;
   final bool isApproved;
   final bool isRejected;
+  final bool isCriminalRecordEnabled;
+  final bool isDrugAnalysisRecordEnabled;
+  final bool isVehicleRecordEnabled;
+  final String idExpiryDate;
+  final String drivingLicenseExpiryDate;
+  final String carLicenseExpiryDate;
+  final String criminalRecordExpiryDate;
+  final String drugAnalysisExpiryDate;
+  final String technicalExaminationExpiryDate;
 
-  SettingsDashboardEntity({
+  SettingsDashboardEntity( {
     required this.isReady,
+    required this.enableNotificationSound,
     required this.categoryIds,
     required this.subscriptionType,
     required this.pricingPerKm,
+    required this.highCostPerKm,
+    required this.lowCostPerKm,
     required this.city,
     required this.rating,
     required this.profit,
@@ -26,6 +41,7 @@ class SettingsDashboardEntity {
     required this.isActive,
     required this.isApproved,
     required this.isRejected,
+    required this.isCriminalRecordEnabled, required this.isDrugAnalysisRecordEnabled, required this.isVehicleRecordEnabled, required this.idExpiryDate, required this.drivingLicenseExpiryDate, required this.carLicenseExpiryDate, required this.criminalRecordExpiryDate, required this.drugAnalysisExpiryDate, required this.technicalExaminationExpiryDate,
   });
 }
 

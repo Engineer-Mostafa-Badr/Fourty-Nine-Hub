@@ -19,7 +19,7 @@ showAreYouSure({
   showAnimatedDialog(
     context,
     AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.getFindFillColor(context),
       content: AreYouSure(
         title: title,
         subTitle: subTitle,
@@ -62,9 +62,7 @@ class AreYouSure extends StatelessWidget {
               text: title,
               style: Styles.headerText(
                 fontWeight: FontWeight.w700,
-                color: context.isDarkMode
-                    ? const Color(0xffF45560)
-                    : AppColors.SECONDARY_COLOR_DARK2,
+                color: AppColors.getRedColor(context),
               ),
             ),
             const SizedBox(
@@ -76,6 +74,7 @@ class AreYouSure extends StatelessWidget {
               style: Styles.mediumText(
                 fontSize: 32,
                 fontWeight: FontWeight.w500,
+                color: AppColors.getTextColor(context)
               ),
             ),
             const SizedBox(
@@ -85,15 +84,11 @@ class AreYouSure extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppButton(
-                      backColor: context.isDarkMode
-                          ? const Color(0xffF45560)
-                          : AppColors.SECONDARY_COLOR_DARK2,
-                      label: LocaleKeys.ok.localize,
+                      backColor:AppColors.getRedColor(context),
+                      label: LocaleKeys.yes.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,
-                        color: context.isDarkMode
-                            ? const Color(0xff0D0D0D)
-                            : Colors.white,
+                        color:AppColors.getReversedTextColor(context),
                       ),
                       onPressed: () {
                         action();
@@ -111,7 +106,7 @@ class AreYouSure extends StatelessWidget {
                       label: LocaleKeys.close.localize,
                       style: Styles.headerText(
                         fontWeight: FontWeight.w500,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
+                        color: AppColors.getTextColor(context),
                       ),
                       onPressed: () => context.pop()),
                 ),

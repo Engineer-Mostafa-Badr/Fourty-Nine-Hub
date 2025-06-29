@@ -60,7 +60,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 8),
+          padding: const EdgeInsetsDirectional.only(bottom: 8,start:15,),
           child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr

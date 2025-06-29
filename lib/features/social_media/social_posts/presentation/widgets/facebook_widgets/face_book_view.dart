@@ -13,9 +13,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class FaceBookView extends StatefulWidget {
-  const FaceBookView({super.key});
+  const FaceBookView({super.key, required this.scrollController});
+  final ScrollController scrollController;
 
   @override
   State<FaceBookView> createState() => _FaceBookViewState();
@@ -23,19 +25,17 @@ class FaceBookView extends StatefulWidget {
 
 class _FaceBookViewState extends State<FaceBookView>
     with TickerProviderStateMixin {
-  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SocialPostsCubit>().getAllFeed();
-    }
-  }
+  // void _onScroll() {
+  //   if (widget.scrollController.position.pixels >=
+  //       widget.scrollController.position.maxScrollExtent - 200) {
+  //     context.read<SocialPostsCubit>().getAllFeed();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,8 @@ class _FaceBookViewState extends State<FaceBookView>
       }
     }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
-      return RefreshIndicator(
+      return RefreshIndicator(backgroundColor: AppColors.getFillColor(context),
+        color:AppColors.getTextColor(context) ,
         onRefresh: () async {
           controller.loadData();
           context.read<StoryCubit>()
@@ -61,7 +62,7 @@ class _FaceBookViewState extends State<FaceBookView>
           controller.onRefresh();
         },
         child: ListView(
-            controller: _scrollController,
+            controller: widget.scrollController,
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             children: [
@@ -79,7 +80,7 @@ class _FaceBookViewState extends State<FaceBookView>
               // BuildPeopleYouMayKnow(),
               controller.loadFaceData
                   ? const Center(
-                      child: CircularProgressIndicator(),
+                      child: CustomCircularProgressIndicator(),
                     )
                   : Column(
                       children: [
@@ -117,7 +118,7 @@ class _FaceBookViewState extends State<FaceBookView>
                               );
                             }),
                         if (controller.isLoadingFaceMore)
-                          const Center(child: CircularProgressIndicator()),
+                          const Center(child: CustomCircularProgressIndicator()),
                       ],
                     ),
             ]),

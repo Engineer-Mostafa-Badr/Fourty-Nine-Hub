@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_tile.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class AllContactsView extends StatefulWidget {
@@ -38,9 +39,11 @@ class _AllContactsViewState extends State<AllContactsView> {
                     )),
                 const Sizer(),
                 FormTextField(
-                  prefix: const Icon(Icons.search,color: Colors.black,),
+                  prefix: Icon(Icons.search,color:AppColors.getTextColor(context),),
                   hint: context.isArabic ? 'بحث...' : 'Search...',
-                  fillColor: const Color(0xFFEDEDED),
+                  style: Styles.mediumText(color: AppColors.getTextColor(context)),
+                  textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                  fillColor: AppColors.getFillColor(context),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 const Sizer(),

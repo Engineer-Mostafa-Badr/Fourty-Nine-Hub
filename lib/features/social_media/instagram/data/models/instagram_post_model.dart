@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/last_like_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 
 import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
@@ -7,7 +8,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/in
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 
 class InstagramPostModel extends InstagramPostEntity {
-  InstagramPostModel( {
+  InstagramPostModel({
     required super.id,
     required super.content,
     required super.userId,
@@ -29,45 +30,71 @@ class InstagramPostModel extends InstagramPostEntity {
     required super.countOfStory,
     required super.isFriend,
     required super.isFollow,
+    required super.isLiked,
+    required super.lastLikeEntity,
   });
 
   factory InstagramPostModel.fromJson(Map<String, dynamic> json) {
     return InstagramPostModel(
-      id: json['postId']?.toString() ?? '', // Default to empty string if null
+      id: json['postId']?.toString() ?? '',
+      // Default to empty string if null
       content: json['content']?.toString() ?? '',
-      userId: json['owner']?['userId']?.toString() ?? '', // Ensure userId is not null
+      userId: json['owner']?['userId']?.toString() ?? '0',
+      // Ensure userId is not null
       firstName: json['owner']?['firstName']?.toString() ?? '',
       lastName: json['owner']?['lastName']?.toString() ?? '',
       username: json['owner']?['username']?.toString() ?? '',
-      locationName: json['location']?['name']?.toString() ?? '', // Handle null location
-      profilePictureUrl: json['owner']?['profilePictureUrl']?.toString() ?? '', // Handle null
-      verifiedBadge: json['owner']?['verifiedBadge'] ?? false, // Default to false if null
+      locationName: json['location']?['name']?.toString() ?? '',
+      // Handle null location
+      profilePictureUrl: json['owner']?['profilePictureUrl']?.toString() ?? '',
+      // Handle null
+      verifiedBadge: json['owner']?['verifiedBadge'] ?? false,
+      // Default to false if null
       medias: json['mediaUrls'] != null
-          ? List<String>.from(json['mediaUrls'].map((x) => x ?? '').toList()) // Handle null in mediaUrls
+          ? List<String>.from(json['mediaUrls']
+              .map((x) => x ?? '')
+              .toList()) // Handle null in mediaUrls
           : [],
       comments: json['comments'] != null
           ? List<CommentInstagramModel>.from(
-        json['comments'].map((x) => CommentInstagramModel.fromJson(x)).toList(),
-      )
+              json['comments']
+                  .map((x) => CommentInstagramModel.fromJson(x))
+                  .toList(),
+            )
           : [],
       userTags: json['userTags'] != null
           ? List<InstagramPostUserTagEntity>.from(
-        json['userTags']
-            .map((x) => InstagramPostUserTagModel.fromJson(x))
-            .toList(),
-      )
+              json['userTags']
+                  .map((x) => InstagramPostUserTagModel.fromJson(x))
+                  .toList(),
+            )
           : [],
       hashtags: json['hashtags'] != null
-          ? List<String>.from(json['hashtags'].map((x) => x ?? '').toList()) // Handle null hashtags
+          ? List<String>.from(json['hashtags']
+              .map((x) => x ?? '')
+              .toList()) // Handle null hashtags
           : [],
-      favoritesCounter: json['favoritesCounter'] ?? 0, // Default to 0 if null
-      commentsCounter: json['commentsCounter'] ?? 0, // Default to 0 if null
-      shareCounter: json['shareCounter'] ?? 0, // Default to 0 if null
-      likesCounter: json['likesCounter'] ?? 0, // Default to 0 if null
-      createdAt: json['createdAt']?.toString() ?? '', // Default to empty string if null
-      countOfStory: json['owner']?['countOfStory'] ?? 0, // Default to 0 if null
-      isFriend: json['owner']?['isFriend'] ?? false, // Default to false if null
-      isFollow: json['owner']?['isFollowed'] ?? false, // Default to false if null
+      favoritesCounter: json['favoritesCounter'] ?? 0,
+      // Default to 0 if null
+      commentsCounter: json['commentsCounter'] ?? 0,
+      // Default to 0 if null
+      shareCounter: json['shareCounter'] ?? 0,
+      // Default to 0 if null
+      likesCounter: json['likesCounter'] ?? 0,
+      // Default to 0 if null
+      createdAt: json['createdAt']?.toString() ?? '',
+      // Default to empty string if null
+      countOfStory: json['owner']?['countOfStory'] ?? 0,
+      // Default to 0 if null
+      isFriend: json['owner']?['isFriend'] ?? false,
+      // Default to false if null
+      isFollow: json['owner']?['isFollowed'] ?? false,
+      // Default to false if null
+      isLiked: json['isLiked'] ?? false,
+      // Default to false if null
+      lastLikeEntity: json['lastLikeUser'] != null
+          ? LastLikeModel.fromJson(json['lastLikeUser'])
+          : null,
     );
   }
 }

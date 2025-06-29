@@ -1,14 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -56,6 +53,7 @@ class CreatePostBanner extends StatelessWidget {
               height: 38,
               padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12), // Adjust left padding
               decoration: BoxDecoration(
+                color: AppColors.getFillColor(context),
                 border: Border.all(color: Colors.grey, width: 1.5),
                 borderRadius: BorderRadius.circular(50.r),
               ),
@@ -65,10 +63,10 @@ class CreatePostBanner extends StatelessWidget {
                   text: context.locale == Locales.english
                       ? 'What’s on your mind?'
                       : 'بم تفكر؟',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: AppColors.black
+                    color: AppColors.getTextColor(context)
                   ),
                 ),
               ),

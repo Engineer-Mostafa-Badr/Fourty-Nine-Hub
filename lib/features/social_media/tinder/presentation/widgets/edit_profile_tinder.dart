@@ -100,7 +100,7 @@ class EditProfileTinder extends StatelessWidget {
                         //       index ==
                         //           state.profileUserData?.pictures.length
                         //       ? const Center(
-                        //     child: CircularProgressIndicator(
+                        //     child: CustomCircularProgressIndicator(
                         //       color: AppColors.SECONDARY_COLOR,
                         //     ),
                         //   )
@@ -253,7 +253,7 @@ class EditProfileTinder extends StatelessWidget {
       //                             index ==
       //                                 state.profileUserData?.pictures.length
       //                         ? const Center(
-      //                             child: CircularProgressIndicator(
+      //                             child: CustomCircularProgressIndicator(
       //                               color: AppColors.SECONDARY_COLOR,
       //                             ),
       //                           )
@@ -328,7 +328,7 @@ class EditProfileTinder extends StatelessWidget {
       //           ),
       //         );
       // }
-      // return const Center(child: CircularProgressIndicator());
+      // return const Center(child: CustomCircularProgressIndicator());
       //     },
       //   ),
       // ),

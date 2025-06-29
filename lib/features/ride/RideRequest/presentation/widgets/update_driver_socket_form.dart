@@ -30,6 +30,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/use
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class UpdateDriverSocketForm extends StatefulWidget {
   const UpdateDriverSocketForm({super.key, required this.model});
@@ -49,7 +50,7 @@ class _UpdateDriverSocketFormState extends State<UpdateDriverSocketForm> {
         if (state is LoadingShippingState) {
           return const Align(
             child: Center(
-              child: CircularProgressIndicator(
+              child: CustomCircularProgressIndicator(
                 color: AppColors.PRIMARY_COLOR,
               ),
             ),

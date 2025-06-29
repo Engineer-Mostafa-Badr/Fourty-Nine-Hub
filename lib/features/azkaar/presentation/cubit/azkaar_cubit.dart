@@ -22,7 +22,7 @@ class AzkarCubit extends Cubit<AzkarState> {
 
   List<AzkarEntity> azkar = [];
   List<AzkarDetailsEntity> azkarDetails = [];
-  List<AzkarSearchEntity> azkarSearch = [];
+  List<AzkarEntity> azkarSearch = [];
   TextEditingController searchController = TextEditingController();
   bool isLoadingMore = false;
   bool hasMoreData = true;
@@ -73,26 +73,32 @@ class AzkarCubit extends Cubit<AzkarState> {
   }
 
   Future<void> searchAzkar({required String search}) async {
+    azkarSearch.clear();
 
-    final response = await _searchAzkarUseCase(
-      SearchAzkarParams(page: 1, limit: 100, search: search),
-    );
+    azkarSearch.addAll(azkar);
 
-    response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: AzkarStates.error)),
-      (data) {
-        print("Test Azkar Search");
-        azkarSearch.clear();
-        azkarSearch.addAll(data);
-        emit(state.copyWith(
-            azkarSearch: azkarSearch, status: AzkarStates.success));
-      },
-    );
+    azkarSearch.retainWhere((element) => element.name.contains(search));
+    emit(state.copyWith(azkarSearch: azkarSearch, status: AzkarStates.success));
+
+    // final response = await _searchAzkarUseCase(
+    //   SearchAzkarParams(page: 1, limit: 100, search: search),
+    // );
+
+    // response.fold(
+    //   (failure) =>
+    //       emit(state.copyWith(failure: failure, status: AzkarStates.error)),
+    //   (data) {
+    //     print("Test Azkar Search");
+    //     azkarSearch.clear();
+    //     azkarSearch.addAll(data);
+    //     emit(state.copyWith(
+    //         azkarSearch: azkarSearch, status: AzkarStates.success));
+    //   },
+    // );
   }
+
   Future<void> cleanSearchAzkar() async {
-    emit(state.copyWith(
-        azkarSearch: [], status: AzkarStates.success));
+    emit(state.copyWith(azkarSearch: [], status: AzkarStates.success));
   }
 
   Future<void> fetchDetailsAzkar(String category) async {
@@ -124,4 +130,13 @@ class AzkarCubit extends Cubit<AzkarState> {
     );
   }
 
+  Future<void> searchAzkar2({required String search}) async {
+    if (state.akar == null) return;
+    emit(state.copyWith(
+      azkarSearch: state.akar!
+          .where((element) =>
+              element.name.toLowerCase().contains(search.toLowerCase()))
+          .toList(),
+    ));
+  }
 }

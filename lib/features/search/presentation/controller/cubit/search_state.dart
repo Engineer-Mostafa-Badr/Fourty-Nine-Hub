@@ -30,7 +30,7 @@ class SearchState {
     this.newComment,
     this.reels,
     this.mainCategory,
-    this.filter = 'totalUsers',
+    this.filter = 'users',
   });
 
   SearchState copyWith({

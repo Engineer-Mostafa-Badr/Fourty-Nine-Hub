@@ -19,7 +19,7 @@ class AppIconBuilder extends StatelessWidget {
       return CustomNotificationWidget(
         icon: Image.asset(
           Assets.logo,
-          height: 30,
+          fit: BoxFit.fitWidth,
         ),
         unreadCount: getUnreadNotificationsCountCubit
                 .unreadNotificationsCountEntity?.appCount ??

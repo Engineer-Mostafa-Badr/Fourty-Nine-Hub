@@ -26,8 +26,8 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
   final PostFollowUserInstagramUseCase _postFollowUserUC;
   final UnFollowUserInstagramUseCase _unFollowUserInstagramUC;
 
-  final int postsLimit = 10;
-  final int reelsLimit = 10;
+  final int postsLimit = 50;
+  final int reelsLimit = 50;
   final int suggestFollowLimit = 10;
 
   // يمكن استدعاء هذه الدالة لتحميل كل البيانات مرة واحدة
@@ -50,11 +50,12 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
             profileStatus: LoadingStatus.failure, profileFailure: f));
       },
       (data) {
+        print('==> data ${data} ${data.postsEntity.length}');
         emit(state.copyWith(
             profileStatus: LoadingStatus.success,
             profileData: data,
             // allPosts: data.postsEntity,
-            postsPage: state.postsPage + 1));
+            postsPage: state.postsPage));
       },
     );
   }
@@ -106,7 +107,7 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
         emit(state.copyWith(
             reelsStatus: LoadingStatus.success,
             reelsData: data,
-            reelsPage: state.reelsPage + 1));
+            reelsPage: state.reelsPage));
       },
     );
   }
@@ -160,7 +161,7 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
         emit(state.copyWith(
             suggestFollowStatus: LoadingStatus.success,
             suggestFollowsData: data,
-            suggestFollowPage: state.suggestFollowPage + 1));
+            suggestFollowPage: state.suggestFollowPage));
       },
     );
   }

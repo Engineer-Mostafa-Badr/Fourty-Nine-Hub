@@ -13,6 +13,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../account_taps/wallet/domain/entities/competition_entity.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CompetitionView extends StatelessWidget {
   final List<CompetitionEntity> list;
@@ -175,10 +176,10 @@ class CompetitionView extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: CircularProgressIndicator(
+                    child: CustomCircularProgressIndicator(
                       value: value / target,
                       strokeWidth: 10,
-                      backgroundColor: getRandomColor().withAlpha(50),
+                      // backgroundColor: getRandomColor().withAlpha(50),
                       color: getRandomColor(),
                     ),
                   ),

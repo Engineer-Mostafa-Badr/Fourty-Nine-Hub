@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/c
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/comment_input_field.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final Reel reel;
@@ -129,7 +130,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
           if (state.isFetchingComments &&
               context.read<ReelsCubit>().comments.isEmpty) {
             return const Center(
-              child: CircularProgressIndicator(
+              child: CustomCircularProgressIndicator(
                 color: AppColors.SECONDARY_COLOR,
               ),
             );

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/time_table_options_checkbox.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -57,7 +58,7 @@ class EditDoctorProfileView extends StatelessWidget {
           ),
         ),
         body: state.status == EditDoctorProfileStateStatus.initial
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CustomCircularProgressIndicator())
             : ListView(
                 padding: const EdgeInsets.all(18),
                 children: [

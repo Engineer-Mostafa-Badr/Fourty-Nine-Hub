@@ -87,7 +87,20 @@ Future<dynamic> customBottomSheet2(context,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
-                  Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+                      maxLines: 2, // Limit to 2 lines
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  // Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600,   color:  AppColors.PRIMARY_COLOR)),
                   IconButton(
                     icon: SvgPicture.asset('assets/icons/close.svg'),
                     onPressed: () {

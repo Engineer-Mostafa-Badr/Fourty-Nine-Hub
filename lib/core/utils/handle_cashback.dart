@@ -21,15 +21,17 @@ class HandleCashback {
       num = 1;
       CacheManager.setInt(key, num);
     } else {
+      print("num:: $num");
       if (num == 9) {
         num = 0;
         CacheManager.setInt(key, num);
         context.read<MainCategoriesCubit>().anyCashBack();
+        print("anyCashBack called");
       } else {
         num++;
         CacheManager.setInt(key, num);
       }
-      print("$key $num");
+      print("xx1 $key $num");
     }
   }
 

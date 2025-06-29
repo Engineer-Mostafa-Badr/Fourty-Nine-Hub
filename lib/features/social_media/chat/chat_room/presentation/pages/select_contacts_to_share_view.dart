@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 
@@ -102,7 +103,7 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
       return Center(child: Text(LocaleKeys.permissionDenied.tr()));
     }
     if (_contacts == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CustomCircularProgressIndicator());
     }
     return ListView.separated(
       itemCount: widget.chatRoomCubit.sharedContacts.length,

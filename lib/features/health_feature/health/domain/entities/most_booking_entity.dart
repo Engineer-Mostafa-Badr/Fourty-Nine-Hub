@@ -13,12 +13,15 @@ class MostBookingEntity {
   final String? profilePicture;
   final String? subscriptionType;
   final int? subscriptionRank;
-  final String? waitingTime;
+  final String? waitingTimeAr;
+  final String? waitingTimeEn;
+  final String? currencyAr;
+  final String? currencyEn;
   final bool? isPremium;
   final String? appointmentType;
   final num? price;
 
-  MostBookingEntity({
+  MostBookingEntity( {
     this.id,
     this.firstName,
     this.lastName,
@@ -33,7 +36,10 @@ class MostBookingEntity {
     this.profilePicture,
     this.subscriptionType,
     this.subscriptionRank,
-    this.waitingTime,
+    this.waitingTimeAr,
+    this.waitingTimeEn,
+    this.currencyAr,
+    this.currencyEn,
     this.isPremium,
     this.appointmentType,
     this.price,

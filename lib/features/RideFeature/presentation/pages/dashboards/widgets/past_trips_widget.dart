@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:go_router/go_router.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -22,9 +25,10 @@ class PastTripsWidget extends StatefulWidget {
 class _PastTripsWidgetState extends State<PastTripsWidget> {
   @override
   initState() {
+  widget.tripEntity!.modeType =  widget.modeType;
     super.initState();
-    widget.tripEntity!.modeType =  widget.modeType;
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -46,7 +50,7 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
             ),
             const SizedBox(width: 16),
             PriceColumn(
-                title:
+                startAddressTitle:
                     widget.tripEntity?.tripDetails?.startLocation.title ?? '',
                 date: "Feb 13 - 12:41 PM",
                 price:
@@ -71,20 +75,20 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
                                 : NetworkImage(widget.tripEntity!.clientDetails!
                                     .profilePictureUrl) as ImageProvider)),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 4.ws),
                       decoration: BoxDecoration(
                           color: AppColors.colorGreyLight,
                           borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        spacing: 1,
+                        spacing: 4.ws,
                         children: [
-                          const Icon(Icons.star,
-                              size: 12, color: AppColors.YELLOW_COLOR),
+                          Icon(Icons.star,
+                              size: 12.ws, color: AppColors.YELLOW_COLOR),
                           Text(
                               "${widget.tripEntity?.rating?.yourRating.rating ?? '0.0'}",
-                              style: const TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.w500)),
+                              style: TextStyle(
+                                  fontSize: 10.ts, fontWeight: FontWeight.w500)),
                         ],
                       ),
                     ),
@@ -94,8 +98,8 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
                           '', //'Ahmed',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          fontSize: 12.ts, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),

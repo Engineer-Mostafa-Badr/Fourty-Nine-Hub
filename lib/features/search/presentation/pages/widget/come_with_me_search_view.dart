@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ComeWithMeSearchView extends StatefulWidget {
   const ComeWithMeSearchView({
@@ -46,7 +47,7 @@ class _ViewAllTripJoinCardBuilderState extends State<ComeWithMeSearchView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       final prefs = await SharedPreferences.getInstance();
-      String? filter = prefs.getString('filter');
+      String filter = prefs.getString('filter')??'';
       SearchParams searchParams = SearchParams(
           filter: filter,
           params: widget.params.params,
@@ -71,7 +72,7 @@ class _ViewAllTripJoinCardBuilderState extends State<ComeWithMeSearchView> {
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
           // if(state.status ==SearchStates.loading){
-          //   return const Center(child: CircularProgressIndicator());
+          //   return const Center(child: CustomCircularProgressIndicator());
           // }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
@@ -220,7 +221,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                                 child: SizedBox(
                                     height: 35.w,
                                     width: 35.w,
-                                    child: const CircularProgressIndicator(
+                                    child: const CustomCircularProgressIndicator(
                                         color: Colors.white)),
                               );
                             }

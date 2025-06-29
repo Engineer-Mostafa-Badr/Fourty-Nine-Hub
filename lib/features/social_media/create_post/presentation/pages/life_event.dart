@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/cub
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class LifeEvent extends StatefulWidget {
   const LifeEvent({super.key});
@@ -58,7 +59,7 @@ class _LifeEventState extends State<LifeEvent> {
               const SizedBox(height: 8,),
 
               Expanded(
-                child:cubit.isLoadingMoreLifeEvent?Center(child: CircularProgressIndicator(),):GridView.builder(
+                child:cubit.isLoadingMoreLifeEvent?Center(child: CustomCircularProgressIndicator(),):GridView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: cubit.lifeEventCategories.length,
@@ -172,7 +173,7 @@ class _CachedSvgImageState extends State<CachedSvgImage> {
         width: widget.width,
         color: widget.color,
         height: widget.height,
-        placeholderBuilder: (context) => const CircularProgressIndicator(),
+        placeholderBuilder: (context) => const CustomCircularProgressIndicator(),
         errorBuilder: (context, error, stackTrace) {
           return SvgPicture.asset(
             widget.fallbackImage,

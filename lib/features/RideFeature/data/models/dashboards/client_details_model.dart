@@ -4,40 +4,55 @@ import '../../../domain/entities/dashboards/rating_entity.dart';
 
 class ClientDetailsModel extends ClientDetailsEntity {
   ClientDetailsModel({
+    required super.id,
     required super.firstName,
     required super.profilePictureUrl,
     required super.gender,
-    required RatingModell? super.rating,
+    super.rating,
   });
 
   factory ClientDetailsModel.fromJson(Map<String, dynamic> json) {
     return ClientDetailsModel(
-      firstName: json['firstName'],
+      id: json['id']??'',
+      firstName: json['firstName']??'',
       profilePictureUrl: json['profilePictureUrl']??'',
-      gender: json['gender'],
+      gender: json['gender']??'',
       rating:
-          json['rating'] != null ? RatingModell.fromJson(json['rating']) : null,
+          json['rating'] != null ? DriverRatingModel.fromJson(json['rating']) : null,
     );
   }
 }
 
 class RatingModel extends RatingEntity {
-  RatingModel({super.rating, super.comment});
+  RatingModel({super.id,super.rating, super.comment});
 
   factory RatingModel.fromJson(Map<String, dynamic> json) {
     return RatingModel(
-      rating: json['rating']?.toDouble(),
-      comment: json['comment'],
+      id: json['id']??'',
+      rating: json['rating']??0.0,
+      comment: json['comment']??'',
+    );
+  }
+}
+
+class DriverRatingModel extends DriverRatingEntity {
+  DriverRatingModel({required super.count,required super.average});
+
+  factory DriverRatingModel.fromJson(Map<String, dynamic> json) {
+    return DriverRatingModel(
+      count: json['count'],
+      average: json['average'],
     );
   }
 }
 class RatingModell extends RatingEntityy {
-  RatingModell({super.average, super.count});
+  RatingModell({super.id,super.average, super.count});
 
   factory RatingModell.fromJson(Map<String, dynamic> json) {
     return RatingModell(
-      average: json['average']?.toDouble(),
-      count: json['count'],
+      id: json['id']??'',
+      average: json['average']??0,
+      count: json['count']??0,
     );
   }
 }

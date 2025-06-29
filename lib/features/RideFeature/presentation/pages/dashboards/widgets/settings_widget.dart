@@ -5,14 +5,25 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/creminal_record_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drivers_license_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drug_analysis_non_socket.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/update_fare_bottom_sheet_widget.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/helpers/responsive/responsive.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
+import '../../../../widget_record.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
@@ -29,10 +40,12 @@ class SettingsWidget extends StatefulWidget {
 
 class _SettingsWidgetState extends State<SettingsWidget> {
   late bool isReady;
+  late bool enableSound;
   late bool isCaptainShare;
   late bool isCaptain;
   late bool isIntercity;
   late bool isPremium;
+  late num perKm;
   var planController = ExpansionTileController();
   var cityController = ExpansionTileController();
   List<String> subscriptionPlans = [
@@ -58,11 +71,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     super.initState();
     planTrailing = widget.settings?.subscriptionType ?? '';
     cityTrailing = widget.settings?.city ?? '';
+    perKm = widget.settings?.pricingPerKm ?? 0;
     isReady = widget.settings?.isReady ?? false;
+    enableSound =  widget.settings?.enableNotificationSound ?? false;
     isCaptainShare = false;
-    isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
-    isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
-    isPremium = widget.settings?.categoryIds[2].isActive ?? false;
+    if((widget.settings?.categoryIds.length ?? 0) > 0)isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
+    if((widget.settings?.categoryIds.length ?? 0) > 1)isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
+    if((widget.settings?.categoryIds.length ?? 0) > 2)isPremium = widget.settings?.categoryIds[2].isActive ?? false;
   }
 
   @override
@@ -71,6 +86,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
       child: ListView(
         children: [
+
           switchWidget(
               title: LocaleKeys.ready.tr(),
               subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
@@ -82,6 +98,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               }),
           if (widget.modeType == 'ride') ...[
             switchWidget(
+                title: context.isArabic?'اشعارات صوتية':'Voice notify',
+                subText: enableSound ? context.isArabic?'تفعيل':'Enabled' : context.isArabic?'تعطيل':'Disabled', //'Disable',
+                valuee: enableSound,
+                onChanged: (value) {
+                  setState(() {
+                    enableSound = value;
+                  });
+                }),
+
+            switchWidget(
                 title: LocaleKeys.captainShare.tr(), //'Captain share',
                 subText:
                     isCaptainShare ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
@@ -91,7 +117,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isCaptainShare = value;
                   });
                 }),
-            switchWidget(
+            if((widget.settings?.categoryIds.length ?? 0) >= 1)switchWidget(
                 title: widget
                     .settings?.categoryIds[0].pictureUrl, //Assets.greyCar,
                 isText: false,
@@ -105,7 +131,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isCaptain = value;
                   });
                 }),
-            switchWidget(
+            if((widget.settings?.categoryIds.length ?? 0) > 1)switchWidget(
                 title: widget
                     .settings?.categoryIds[1].pictureUrl, //Assets.greyCar,
                 isText: false,
@@ -119,7 +145,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isIntercity = value;
                   });
                 }),
-            switchWidget(
+            if((widget.settings?.categoryIds.length ?? 0) > 2)switchWidget(
                 title: widget
                     .settings?.categoryIds[2].pictureUrl, //Assets.greyCar,
                 isText: false,
@@ -157,21 +183,22 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             _expansionTileWidget(
               controller: cityController,
               title: LocaleKeys.favoriteCity.tr(), //'Favorite city',
-              trailing: cityTrailing.tr(),
+              trailing: context.isArabic?(context.read<DashboardsCubit>().state.selectedGov?.nameAr??''):context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
               childrenList: List.generate(
-                favoriteCity.length,
+                context.read<DashboardsCubit>().state.govs?.length??0,
                 (index) => InkWell(
                   onTap: () {
-                    setState(() {
-                      cityTrailing = favoriteCity[index];
-                      cityController.collapse();
-                    });
+                    context.read<DashboardsCubit>().onSelectGovernorate(context.read<DashboardsCubit>().state.govs?[index]);
+                    cityController.collapse();
                   },
                   child: List.generate(
-                      favoriteCity.length,
+                      context.read<DashboardsCubit>().state.govs?.length??0,
                       (index) => Align(
                           alignment: AlignmentDirectional.topEnd,
-                          child: Label(text: favoriteCity[index])))[index],
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Label(text: context.isArabic?(context.read<DashboardsCubit>().state.govs?[index].nameAr??''):context.read<DashboardsCubit>().state.govs?[index].nameEn??''),
+                          )))[index],
                 ),
               ),
             ),
@@ -188,17 +215,40 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         customBottomSheet2(context,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: FareBottomSheetWidget(
-                                rideCubit: context.read<RideCubit>(),
-                                selectedCategoryPrice: 44,
+                              child: UpdateFareBottomSheetWidget(
+                                selectedCategoryPrice: widget.settings?.pricingPerKm ?? 0,
+                                highCostPerKm: widget.settings?.highCostPerKm ?? 0,
+                                lowCostPerKm: widget.settings?.lowCostPerKm ?? 0,
                                 selectedCategoryName: 'aaa',
+                                onChange: (price){
+                                  context.read<DashboardsCubit>().updateSettings(
+                                      context,
+                                      UpdateSettingsDashboardUsecaseParam(
+                                          isReady: isReady,
+                                          enableSound: enableSound,
+                                          subscriptionPlan: planTrailing,
+                                          perKm:price,
+                                          favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
+                                          subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
+                                              subcategoryId:
+                                              widget.settings!.categoryIds[index].id,
+                                              isActive: isCaptain))
+                                      ));
+                                },
                               ),
                             ),
                             title: LocaleKeys.acceptAnothePrice.tr());
                       },
-                      child: Text(
-                          '${widget.settings?.pricingPerKm ?? 0} ${'change'.tr()}',
-                          style: const TextStyle(fontSize: 12)))
+                      child: Row(
+                        children: [
+                          Text(
+                              '${widget.settings?.pricingPerKm ?? 0} ',
+                              style: const TextStyle(fontSize: 12,)),
+                          Text(
+                              'change'.tr(),
+                              style: const TextStyle(fontSize: 12,color: AppColors.SECONDARY_COLOR)),
+                        ],
+                      ))
                 ],
               ),
             ),
@@ -224,7 +274,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                Text(widget.settings?.rating.averageRating.toString() ?? '2.5',
+                Text(widget.settings?.rating.totalRatings.toString() ?? '2.5',
                     style: const TextStyle(
                         fontSize: 12, fontWeight: FontWeight.w700))
               ],
@@ -258,19 +308,64 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ],
             ),
           ),
-          UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6),
-          UpdatePersonalInfoWidget(
-              title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+          ClickableWidget(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                    value: serviceLocator<DashboardsCubit>(),
+                    child: const PersonalDocumentsNonSocketScreen())));
+              },
+
+              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
+          ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: const DriversLicenseNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+          ),
           if (widget.modeType == 'ride') ...[
-            UpdatePersonalInfoWidget(
-                title: LocaleKeys.carLicense.tr(), exdIn: 6),
-            UpdatePersonalInfoWidget(
-                title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
-            UpdatePersonalInfoWidget(
-                title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
+            ClickableWidget(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                    value: serviceLocator<DashboardsCubit>(),
+                    child: const VehicleInformationNonSocketScreen())));
+              },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.carLicense.tr(), exdIn: 6),
+            ),
+            if(widget.settings?.isCriminalRecordEnabled == true)
+              ClickableWidget(
+                onTap: () async {
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                      value: serviceLocator<DashboardsCubit>(),
+                      child: const CriminalRecordNonSocketScreen())));
+                },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
+            ),
+            if(widget.settings?.isDrugAnalysisRecordEnabled == true)
+            ClickableWidget(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                    value: serviceLocator<DashboardsCubit>(),
+                    child: const DragAnalyticsNonSocketScreen())));
+              },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
+            ),
           ],
-          UpdatePersonalInfoWidget(
-              title: LocaleKeys.vehicleInspection.tr(), exdIn: 6),
+          if(widget.settings?.isVehicleRecordEnabled == true)
+          ClickableWidget(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
+                  value: serviceLocator<DashboardsCubit>(),
+                  child: const TechnicalExaminationNonSocketScreen())));
+            },
+            child: UpdatePersonalInfoWidget(
+                title: LocaleKeys.vehicleInspection.tr(), exdIn: 6),
+          ),
           const SizedBox(height: 16),
           Row(
             spacing: 5,
@@ -292,22 +387,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           context,
                           UpdateSettingsDashboardUsecaseParam(
                               isReady: isReady,
+                              enableSound: enableSound,
                               subscriptionPlan: planTrailing,
-                              favoriteCity: cityTrailing,
-                              subCategoriesActive: [
-                                SubCategoriesActive(
-                                    subcategoryId:
-                                        widget.settings!.categoryIds[0].id,
-                                    isActive: isCaptain),
-                                SubCategoriesActive(
-                                    subcategoryId:
-                                        widget.settings!.categoryIds[1].id,
-                                    isActive: isIntercity),
-                                SubCategoriesActive(
-                                    subcategoryId:
-                                        widget.settings!.categoryIds[2].id,
-                                    isActive: isPremium),
-                              ]));
+                              perKm:perKm,
+                              favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
+                              subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
+                                  subcategoryId:
+                                  widget.settings!.categoryIds[index].id,
+                                  isActive: isCaptain))
+                          ));
                     }),
               ),
             ],
@@ -339,10 +427,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-                spacing: 8,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: childrenList),
+            child: SizedBox(
+              height: 200.hs,
+              child: ListView(
+                  // spacing: 8,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: childrenList),
+            ),
           ),
         ],
       );
@@ -362,7 +453,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ? Text(title ?? '',
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500))
-              : Image.network(title ?? '', width: 60, height: 25),
+              : ImageFromInternet(image:title ?? '', width: 60, height: 25),
           const Spacer(),
           Text(subText ?? '',
               style:

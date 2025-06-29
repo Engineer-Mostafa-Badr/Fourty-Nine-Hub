@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -28,6 +29,7 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final _ = context.locale;/// بيجبر الwidgets تعمل rebuild لما اللغة تتغير (setState لما اللغه تتغير)
     return BlocConsumer<GetStatusAllServicesNotificationsCubit,
         GetStatusAllServicesNotificationsState>(
       listener: (context, state) {
@@ -41,17 +43,19 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
           return Shimmer.fromColors(
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white24,
-            child: Column(
-              children: List.generate(
-                14,
-                (index) => Container(
-                  height: 50,
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                  decoration: BoxDecoration(
-                    color: AppColors.AUTH_CONTAINER_COLOR,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey),
+            child: SingleChildScrollView(
+              child: Column(
+                children: List.generate(
+                  14,
+                  (index) => Container(
+                    height: 50,
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey),
+                    ),
                   ),
                 ),
               ),
@@ -68,7 +72,7 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
                   color: AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -84,18 +88,23 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
                         style: Styles.mediumText(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
+                          color: context.isDarkMode?Colors.white:Colors.black,
                         ),
                       ),
                     ),
                     // Spacer(),
-                    Label(
-                      text: context.isArabic
-                          ? cubit.status[index]['valueAr']!
-                          : cubit.status[index]['valueEn']!,
-                      style: Styles.mediumText(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.PRIMARY_COLOR),
+                    Flexible(
+                      child: Label(
+                        text: context.isArabic
+                            ? cubit.status[index]['valueAr']!
+                            : cubit.status[index]['valueEn']!,
+                        maxLines: 2,
+                        textAlign: TextAlign.end,
+                        style: Styles.mediumText(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w600,
+                            color: context.isDarkMode?Colors.white70: AppColors.PRIMARY_COLOR),
+                      ),
                     ),
                   ],
                 ),

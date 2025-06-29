@@ -12,6 +12,8 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/loading_method_helper.dart';
 import 'package:fourtyninehub/core/utils/ride_method_helper.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
@@ -19,9 +21,13 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_cost_per_km_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_picture_optional.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_loading_info_usecase.dart';
@@ -32,6 +38,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_driv
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_governorates.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_models_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_non_tracking_models_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_shipping_models_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/loading_register_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_not_special_usecase.dart';
@@ -60,6 +68,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   final GetRideCategoriesUseCase getRideCategories;
   final GetRideBrandsUseCase getRideBrandsUseCase;
   final GetRideModelsUseCase getRideModelsUseCase;
+  final GetRideNonTrackingModelsUseCase getRideNonTrackingModelsUseCase;
   final GetRideCarColorsUseCase getRideCarColorsUseCase;
   final RegisterRideSpecialUseCase registerRideSpecialUseCase;
   final RegisterRideNotSpecialUseCase registerRideNotSpecialUseCase;
@@ -68,6 +77,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   final GetCostPerKmUseCase getCostPerKmUseCase;
   final LoadingRegisterUseCase loadingRegisterUseCase;
   final GetLoadingInfoUseCase getLoadingInfoUseCase;
+  final AddCarModelUseCase addCarModelUseCase;
+  final AddCarBrandUseCase addCarBrandUseCase;
+  final GetRideShippingModelsUseCase getRideShippingModelsUseCase;
 
   RideRegisterCubit(
       this.getRideGovernoratesUseCase,
@@ -83,6 +95,10 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       this.getLoadingInfoUseCase,
       this.getShippingCategoriesUsecase,
       this.getRideCategories,
+      this.addCarModelUseCase,
+      this.addCarBrandUseCase,
+      this.getRideNonTrackingModelsUseCase,
+      this.getRideShippingModelsUseCase,
       ) : super( RideRegisterState());
 
 
@@ -197,6 +213,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   final drugAnalysisFormKey = GlobalKey<FormState>();
   final criminalRecordFormKey = GlobalKey<FormState>();
   final terminalExaminationFormKey = GlobalKey<FormState>();
+  final personalPhotoFormKey = GlobalKey<FormState>();
   TextEditingController rideNameController = TextEditingController();
   TextEditingController rideSurNameController = TextEditingController();
   TextEditingController rideDateOfBirthController = TextEditingController();
@@ -210,11 +227,13 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   TextEditingController rideVehicleExpireDateController = TextEditingController();
   TextEditingController rideDragAnalysisExpireDateController = TextEditingController();
   TextEditingController rideTechnicalExaminationExpireDateController = TextEditingController();
+  TextEditingController personalPhotoDateController = TextEditingController();
   TextEditingController rideCriminalRecordExpireDateController = TextEditingController();
   TextEditingController rideVehicleProductionYearController = TextEditingController();
   TextEditingController rideVehiclePlateNumberController = TextEditingController();
   TextEditingController ridePricingPerKmController = TextEditingController();
   TextEditingController rideCarModelController = TextEditingController();
+  TextEditingController personalPhotoController = TextEditingController();
 
   Future<void> getCostPerKm() async {
     if (isClosed) return; // Prevents state emission if the cubit is already disposed.
@@ -349,7 +368,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         context.read<RideRegisterCubit>().onSetSavedData(params);
       }
     }
-    await Future.wait([fetchGovs(params), fetchBrands(context),getCostPerKm(), fetchColors(context)]);
+    await Future.wait([fetchGovs(params), fetchBrands(context, type: params.isSocket==true?'socket':params.isShipping==true?'loading':'nonSocket'),getCostPerKm(), fetchColors(context)]);
     loadingRegister=false;
     emit(state.copyWith(status: RideRegisterStates.success));
   }
@@ -384,16 +403,21 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     );
   }
 
-  Future<void> fetchBrands(BuildContext context) async {
-    final Either<Failure, List<String>> result = await getRideBrandsUseCase(const NoParams());
+  Future<void> fetchBrands(BuildContext context,{required String type}) async {
+    final Either<Failure, List<RideBrandEntity>> result = await getRideBrandsUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideRegisterStates.error, failure: failure)),
+          (failure) {
+            log("messageFailure ${getFailureMessage(failure, context)}");
+            emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
+          },
           (data) async {
+            log("messageData $data ${data.length}");
         RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
         String? brand = cachedData?.vehicleBrand;
-        if(brand!=null&&(brand.isNotEmpty))await onSelectBrand(brand, context);
-        emit(state.copyWith(status: RideRegisterStates.success, brands: data,selectedBrand: brand));
+        if(brand!=null&&(brand.isNotEmpty))await onSelectBrand(brand, context, type: type);
+            RideBrandEntity? selectedBrand = data.firstWhereOrNull((element) => element.id == brand);
+        emit(state.copyWith(status: RideRegisterStates.success, brands: data,selectedBrand: selectedBrand));
       },
     );
   }
@@ -403,16 +427,24 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     'Subscribe Package',
   ];
 
-  List<String> models = [];
-  onSelectBrand(String brand, BuildContext context) async {
-    if (brand == state.selectedBrand) return;
-    emit(state.copyWith(selectedBrand: brand, selectedModel: '', status: RideRegisterStates.loadingModels));
-    await fetchModels(brand, context);
+  List<RideModelEntity> models = [];
+  onSelectBrand(String brand, BuildContext context,{required String type}) async {
+    RideBrandEntity? selectedBrand = state.brands?.firstWhereOrNull((element) => element.id == brand);
+    if (selectedBrand == state.selectedBrand) return;
+    emit(state.copyWith(selectedBrand: selectedBrand, selectedModel: RideModelEntity(id: '',modelAr: '',modelEn: ''), status: RideRegisterStates.loadingModels));
+    if(type=='socket')await fetchModels(brand, context);
+    if(type=='nonSocket')await fetchNonSocketModels(brand, context);
+    if(type=='loading')await fetchShippingModels(brand, context);
     emit(state.copyWith(status: RideRegisterStates.success));
   }
 
   onSelectModel(String model) {
-    emit(state.copyWith(selectedModel: model, status: RideRegisterStates.success));
+    RideModelEntity? selectedModel = state.models?.firstWhereOrNull((element) => element.id == model);
+    emit(state.copyWith(selectedModel: selectedModel, status: RideRegisterStates.success));
+  }
+  onRemoveModel() {
+    RideModelEntity? selectedModel = RideModelEntity(id: '',modelAr: '',modelEn: '');
+    emit(state.copyWith(selectedModel: selectedModel, status: RideRegisterStates.success));
   }
 
   onSelectColor(RideColorEntity color) {
@@ -430,23 +462,136 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   Future<void> fetchModels(String brandId, BuildContext context) async {
     models.clear();
-    emit(state.copyWith(colors: [], status: RideRegisterStates.loadingModels));
-    final Either<Failure, List<String>> result = await getRideModelsUseCase(brandId);
+    emit(state.copyWith(status: RideRegisterStates.loadingModels));
+    final Either<Failure, List<RideModelEntity>> result = await getRideModelsUseCase(brandId);
 
     result.fold(
           (failure) {
         emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
       },
           (data) async {
-        models.addAll(data);
-        // RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
-        // String? model = cachedData?.vehicleModel;
-        // if (model != null && (model.isNotEmpty)) {
-        //   onSelectModel(model);
-        // }
+            models.addAll(data);
         emit(state.copyWith(status: RideRegisterStates.success, models: data));
       },
     );
+  }
+
+  Future<void> fetchNonSocketModels(String brandId, BuildContext context) async {
+    models.clear();
+    emit(state.copyWith(status: RideRegisterStates.loadingModels));
+    final Either<Failure, List<RideModelEntity>> result = await getRideNonTrackingModelsUseCase(brandId);
+
+    result.fold(
+          (failure) {
+        emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
+      },
+          (data) async {
+            models.addAll(data);
+        emit(state.copyWith(status: RideRegisterStates.success, models: data));
+      },
+    );
+  }
+
+  Future<void> fetchShippingModels(String brandId, BuildContext context) async {
+    models.clear();
+    emit(state.copyWith(status: RideRegisterStates.loadingModels));
+    final Either<Failure, List<RideModelEntity>> result = await getRideShippingModelsUseCase(brandId);
+
+    result.fold(
+          (failure) {
+        emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
+      },
+          (data) async {
+            models.addAll(data);
+        emit(state.copyWith(status: RideRegisterStates.success, models: data));
+      },
+    );
+  }
+
+  TextEditingController modelNameController = TextEditingController();
+  var modelFormKey = GlobalKey<FormState>();
+  Future<void> addNewModel({required BuildContext context,required String modelName,required String brandId}) async {
+    //addCarModelUseCase
+    showLoadingDialog(context);
+    emit(state.copyWith(status: RideRegisterStates.initState,selectedModel: RideModelEntity(id: '',modelAr: '',modelEn: '')));
+    final Either<Failure, String> result = await addCarModelUseCase(AddCarModelParams(
+      modelName: modelName,
+        type:"car",
+        carBrandId: brandId
+    ));
+
+    result.fold(
+          (failure) {
+            context.pop();
+        emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
+      },
+          (data) async {
+            context.pop();
+            showSuccessMessage(context, context.isArabic? "تم اضافة الموديل بنجاح" : "Model added successfully");
+        RideCarModelModel newModel = RideCarModelModel(
+          id: data,
+          modelAr: modelName,
+          modelEn: modelName,
+        );
+            newModelAddedController.text = modelName;
+        emit(state.copyWith(status: RideRegisterStates.success, newModel: newModel));
+      },
+    );
+
+  }
+
+  TextEditingController newModelAddedController = TextEditingController();
+  removeNewModel(){
+    newModelAddedController.clear();
+    RideCarModelModel newModel = RideCarModelModel(
+      id: '',
+      modelAr: '',
+      modelEn: '',
+    );
+    emit(state.copyWith(status: RideRegisterStates.success, newModel: newModel));
+
+  }
+
+  TextEditingController newBrandAddedController = TextEditingController();
+  removeNewBrand(){
+    newBrandAddedController.clear();
+    RideBrandModel newBrand = RideBrandModel(
+        id: '',
+        brandNameAr: '',
+        brandNameEn: '',
+        logoUrl: ''
+    );
+    removeNewModel();
+    emit(state.copyWith(status: RideRegisterStates.success, newBrand: newBrand));
+  }
+
+  TextEditingController brandNameController = TextEditingController();
+  var brandFormKey = GlobalKey<FormState>();
+  Future<void> addNewBrand({required BuildContext context,required String brandName}) async {
+    //addCarModelUseCase
+    showLoadingDialog(context);
+    emit(state.copyWith(status: RideRegisterStates.initState,selectedBrand: RideBrandEntity(id: '',brandNameEn: '',brandNameAr: '',logoUrl: '')));
+    final Either<Failure, String> result = await addCarBrandUseCase(brandName);
+
+    result.fold(
+          (failure) {
+            context.pop();
+        emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
+      },
+          (data) async {
+            context.pop();
+            showSuccessMessage(context, context.isArabic? "تم اضافة الموديل بنجاح" : "Model added successfully");
+            RideBrandModel newBrand = RideBrandModel(
+          id: data,
+          brandNameAr: brandName,
+          brandNameEn: brandName,
+          logoUrl: ''
+        );
+            newBrandAddedController.text = brandName;
+        emit(state.copyWith(status: RideRegisterStates.success, newBrand: newBrand));
+      },
+    );
+
   }
 
   Future<void> fetchColors(BuildContext context) async {
@@ -959,6 +1104,65 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       emit(state.copyWith(status: RideRegisterStates.success, isUploadTechnicalExamination: true));
     }
   }
+  onSubmitUploadingPersonalPhoto(BuildContext context,UploadRiderImagesParams params) async {
+    if (personalPhotoFormKey.currentState!.validate()) {
+      emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
+      DriverInfoEntity? driverInfo = state.driverInfo;
+      LoadingInfoEntity? loaderInfo = state.loaderInfo;
+      showLoadingDialog(context, canPop: false);
+      if(params.isShipping!=true) {
+        await RideMethodHelper().uploadDriverImage(
+          driverImage: state.personalPicture!, onSuccessUploaded: (bool isSuccess) async{
+        if (isSuccess) {
+          driverInfo?.isUploadDriverImage = true;
+          emit(state.copyWith(driverInfo: driverInfo, status: RideRegisterStates.success));
+          if (state.driverInfo?.isUploadDriverLicense == true &&
+              state.driverInfo?.isUploadDriverId == true &&
+              state.driverInfo?.isUploadCarLicense == true &&
+              state.driverInfo?.isUploadConfirmIdentifier == true &&
+              state.driverInfo?.isUploadDriverImage == true &&
+              state.driverInfo?.isUploadCarImage == true) {
+            await fetchRideDriverInfo(context,false);
+            showSuccessMessage(context,
+                context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
+          }
+          context.pop();
+          context.pop();
+          emit(state.copyWith(status: RideRegisterStates.success));
+        } else {
+          context.pop();
+          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+        }
+      });
+      }else{
+        await LoadingMethodHelper().uploadDriverImage(
+            driverImage: state.personalPicture!,
+            onSuccessUploaded: (bool isSuccess) async {
+              if (isSuccess == true) {
+                loaderInfo?.isUploadDriverImage = true;
+                emit(state.copyWith(loaderInfo: loaderInfo, status: RideRegisterStates.success));
+                if (state.loaderInfo?.isUploadDriverLicense == true &&
+                    state.loaderInfo?.isUploadDriverId == true &&
+                    state.loaderInfo?.isUploadCarLicense == true &&
+                    state.loaderInfo?.isUploadDriverImage == true &&
+                    state.loaderInfo?.isUploadCarImage == true) {
+                  await fetchLoaderInfo(context,false);
+                  showSuccessMessage(context,
+                      context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
+                }
+                showSuccessMessage(context, context.isArabic ? 'تم رفع الصور بنجاح' : "Successfully uploaded images");
+                context.pop();
+                context.pop();
+                emit(state.copyWith(status: RideRegisterStates.success));
+              } else {
+                context.pop();
+                showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+              }
+            });
+      }
+      emit(state.copyWith(status: RideRegisterStates.success, isUploadTechnicalExamination: true));
+    }
+  }
 
   onSaveRegisterData(BuildContext context,List<String> subCategories) async {
     RegisterRideSpecialEntity params = RegisterRideSpecialEntity(
@@ -973,9 +1177,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         plateInfo: rideVehiclePlateNumberController.text,
         pricingPerKm: ridePricingPerKmController.text,
         smoker: state.isSmoking ?? false,
-        vehicleBrand: state.selectedBrand ?? '',
+        vehicleBrand: (state.newBrand?.id.isNotEmpty??false)?state.newBrand?.id??'':state.selectedBrand?.id??'',
         vehicleColor: state.selectedColors?.id ?? '',
-        vehicleModel: state.selectedModel ?? '',
+        vehicleModel: (state.newModel?.id.isNotEmpty??false)?state.newModel?.id??'':state.selectedModel?.id ?? '',
         vehicleYear: rideVehicleProductionYearController.text,
         workingType: state.selectedPlan ?? '',
         personalPicture: state.personalPicture?.path,
@@ -994,7 +1198,10 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         idNumber: ridePersonalDocIdNumController.text,
         phone: ridePhoneNumberController.text,
         plateInfo: rideVehiclePlateNumberController.text,
-        // subcategoryId: "62c8baa08e28a58a3edf57ed",
+        vehicleBrand: state.selectedBrand?.id ?? '',
+        vehicleColor: state.selectedColors?.id ?? '',
+        vehicleModel: state.selectedModel?.id ?? '',
+        vehicleYear: rideVehicleProductionYearController.text,
         subcategoryId: subCategories[0],
         carModel: rideCarModelController.text);
     print("params.ssss${params.toJson()}");
@@ -1013,7 +1220,11 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         firstName: rideNameController.text,
         lastName: rideSurNameController.text,
         categoryId: subCategories[0],
-        carModel: rideCarModelController.text);
+      vehicleBrand: state.selectedBrand?.id ?? '',
+      vehicleColor: state.selectedColors?.id ?? '',
+      vehicleModel: state.selectedModel?.id ?? '',
+      vehicleYear: rideVehicleProductionYearController.text,
+    );
     await Storage().saveLoaderEntity(params);
     context.push(Routes.RIDE_HOME);
   }
@@ -1042,13 +1253,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     ridePhoneNumberController.text = data?.phone??'';
     ridePricingPerKmController.text = data?.pricingPerKm??'';
     rideVehicleProductionYearController.text = data?.vehicleYear??'';
+    RideBrandEntity? selectedBrand = state.brands?.firstWhere((element) => element.id == data?.vehicleBrand);
+    RideModelEntity? selectedModel = state.models?.firstWhere((element) => element.id == data?.vehicleModel);
     emit(state.copyWith(
       hasAirCondition:data?.airConditioner,
       selectedGov:data?.city,
       isSmoking:data?.smoker,
-      selectedBrand:data?.vehicleBrand,
+      selectedBrand:selectedBrand,
       selectedColors:(state.colors!=null||(state.colors?.isNotEmpty??false))?state.colors?.firstWhere((e) => e.id == data?.vehicleColor):null,
-      selectedModel:data?.vehicleModel,
+      selectedModel:selectedModel,
       selectedPlan:data?.workingType,
       personalPicture:XFile(data?.personalPicture??''),
       savedRideSubCategories:data?.subcategoryIds??[],
@@ -1079,7 +1292,6 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     rideVehiclePlateNumberController.text = data?.plateInformation??'';
     rideNameController.text = data?.firstName??'';
     rideSurNameController.text = data?.lastName??'';
-    rideCarModelController.text = data?.carModel??'';
     emit(state.copyWith(
       selectedGov:data?.location,
         savedRideSubCategories:(data?.categoryId.isNotEmpty??false)?[data?.categoryId??'']:[],
@@ -1095,31 +1307,34 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   onRegister(BuildContext context,List<String> subCategoryIds,bool isSocket,bool isShipping) async {
     DriverInfoEntity? driverInfo = state.driverInfo;
-    if (state.personalPicture == null) {
-      showErrorMessage(context, "Please select profile picture");
+    print("state.personalPicture${state.personalPicture?.path}");
+    if (state.personalPicture == null||(state.personalPicture?.path.isEmpty??false)) {
+      showErrorMessage(context, context.isArabic?"برجاء اختيار صورة الملف الشخصي":"Please select profile picture");
       return;
     }
     if (formKey.currentState!.validate()) {
-      if (state.selectedBrand == null || (state.selectedBrand?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select vehicle brand");
+      if (state.selectedBrand == null || (state.selectedBrand?.id.isEmpty ?? false)) {
+        showErrorMessage(context, context.isArabic?"برجاء اختيار ماركة السيارة":"Please select vehicle brand");
         return;
       }
 
-      if (state.selectedModel == null || (state.selectedModel?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select vehicle Model");
+      if (state.selectedModel == null || (state.selectedModel?.id.isEmpty ?? false)) {
+        showErrorMessage(context, context.isArabic?"برجاء اختيار موديل السيارة":"Please select vehicle Model");
         return;
       }
+
       if (state.selectedColors == null || (state.selectedColors?.id.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select color");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار لون السيارة":"Please select color");
         return;
       }
 
       if (state.selectedPlan == null || (state.selectedPlan?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select plan");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار نوع الرحلة":"Please select plan");
         return;
       }
+
       if (state.selectedGov == null || (state.selectedGov?.isEmpty ?? false)) {
-        showErrorMessage(context, "Please select city");
+        showErrorMessage(context, context.isArabic?"برجاء اختيار المدينة":"Please select city");
         return;
       }
 
@@ -1138,12 +1353,13 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           plateInfo: rideVehiclePlateNumberController.text,
           pricingPerKm: ridePricingPerKmController.text,
           smoker: state.isSmoking ?? false,
-          vehicleBrand: state.selectedBrand ?? '',
+          vehicleBrand: state.selectedBrand?.id ?? '',
           vehicleColor: state.selectedColors?.id ?? '',
-          vehicleModel: state.selectedModel ?? '',
+          vehicleModel: state.selectedModel?.id ?? '',
           vehicleYear: rideVehicleProductionYearController.text,
           workingType: state.selectedPlan ?? '',
           subcategoryIds: subCategoryIds);
+
       final Either<Failure, bool> result = await registerRideSpecialUseCase(params);
 
       result.fold(
@@ -1188,6 +1404,10 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   onNoSocketRegister(BuildContext context,String categoryId,bool isSocket,bool isShipping) async {
     if (formKey.currentState!.validate()) {
+      if (state.personalPicture == null||(state.personalPicture?.path.isEmpty??false)) {
+        showErrorMessage(context, context.isArabic?"برجاء اختيار صورة الملف الشخصي":"Please select profile picture");
+        return;
+      }
       isLoadingSubmitRegister = true;
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
 
@@ -1199,6 +1419,11 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           idNumber: ridePersonalDocIdNumController.text,
           phone: ridePhoneNumberController.text,
           plateInfo: rideVehiclePlateNumberController.text,
+          vehicleBrand: state.selectedBrand?.id ?? '',
+          vehicleColor: state.selectedColors?.id ?? '',
+          vehicleModel: state.newModel?.id??state.selectedModel?.id ?? '',
+          vehicleYear: rideVehicleProductionYearController.text,
+
           // subcategoryId: "62c8baa08e28a58a3edf57ed",
           subcategoryId: categoryId,
           carModel: rideCarModelController.text);
@@ -1210,13 +1435,22 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           isLoadingSubmitRegister = false;
           emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
         },
-            (data) async {
+       (data) async {
           isLoadingSubmitRegister = false;
+          await RideMethodHelper().uploadDriverImage(driverImage: state.personalPicture!, onSuccessUploaded: (bool isSuccess) async{
+            if (isSuccess) {
+              context.pop();
+              context.pop();
+              emit(state.copyWith(status: RideRegisterStates.success));
+            } else {
+              context.pop();
+              showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+            }
+          });
           await fetchRideDriverInfo(context,false);
           emit(state.copyWith(status: RideRegisterStates.success));
           showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
           context.pushReplacement(Routes.completeRegisterScreen,extra: UploadRiderImagesParams(isSocket: isSocket,isShipping: isShipping));
-          // context.pushReplacement(Routes.UploadRiderImages);
         },
       );
     }
@@ -1224,6 +1458,11 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   onLoadingRegister(BuildContext context,String categoryId,bool isSocket,bool isShipping) async {
     if (formKey.currentState!.validate()) {
+      if (state.personalPicture == null||(state.personalPicture?.path.isEmpty??false)) {
+        showErrorMessage(context, context.isArabic?"برجاء اختيار صورة الملف الشخصي":"Please select profile picture");
+        return;
+      }
+      showLoadingDialog(context);
       isLoadingSubmitRegister = true;
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
 
@@ -1235,7 +1474,11 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           firstName: rideNameController.text,
           lastName: rideSurNameController.text,
           categoryId: categoryId,
-          carModel: rideCarModelController.text);
+        vehicleBrand: state.selectedBrand?.id ?? '',
+        vehicleColor: state.selectedColors?.id ?? '',
+        vehicleModel: (state.newModel?.id.isNotEmpty??false)?state.newModel?.id??'':state.selectedModel?.id ?? '',
+        vehicleYear: rideVehicleProductionYearController.text,
+      );
       final Either<Failure, bool> result = await loadingRegisterUseCase(params);
 
       result.fold(
@@ -1245,6 +1488,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
         },
             (data) async {
+              await LoadingMethodHelper().uploadDriverImage(driverImage: state.personalPicture!, onSuccessUploaded: (bool isSuccess) async{
+                if (isSuccess) {
+                  context.pop();
+                  emit(state.copyWith(status: RideRegisterStates.success));
+                } else {
+                  context.pop();
+                  showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+                }
+              });
           isLoadingSubmitRegister = false;
           await fetchLoaderInfo(context,false);
           emit(state.copyWith(status: RideRegisterStates.success));
@@ -1306,7 +1558,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     SubCategoryEntityUpdated intercityCategory = subCategories.firstWhere((element) => element.subCategoryId == intercity);
     if (id == captain) {
       if (!isMale) {
-        showErrorMessage(context, "You are female, try register as a lady or change your gender from setting.");
+        showErrorMessage(context, context.isArabic?"انت فتاة , يرجى التسجيل في السيدات او تغيير الجنس من الاعدادات":"You are female, try register as a lady or change your gender from setting.");
         return;
       }
       if (selectedItem.isSelected == true) {
@@ -1335,7 +1587,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       }
     } else if (id == lady) {
       if (isMale) {
-        showErrorMessage(context, "You are male, try register as a captain or change your gender from setting.");
+        showErrorMessage(context, context.isArabic?"انت رجل , يرجى التسجيل في كابتن او تغيير الجنس من الاعدادات":"You are male, try register as a captain or change your gender from setting.");
         return;
       }
       if (selectedItem.isSelected == true) {

@@ -60,8 +60,8 @@ class RegisterRideSpecialEntity {
         }
       },
       "vehicleInfo": {
-        "brand": vehicleBrand,
-        "model": vehicleModel,
+        "brandId": vehicleBrand,
+        "modelId": vehicleModel,
         "color": vehicleColor,
         "year": vehicleYear,
         "plateDetails": plateInfo,

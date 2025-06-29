@@ -8,6 +8,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/restaurants_list_cubit.dart';
 import '../widgets/subcatigories_restaurant_card.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class RestaurantForSelectedMeal extends StatefulWidget {
   final String mealId;
@@ -46,7 +47,7 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
               final subCategories = state.subCategories ?? [];
               if (subCategories.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CustomCircularProgressIndicator(),
                 );
               }
               return GridView.builder(

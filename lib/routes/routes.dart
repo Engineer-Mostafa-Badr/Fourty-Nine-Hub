@@ -6,6 +6,9 @@ abstract class Routes {
   static const HOME = '/';
   static const RIDE_HOME = '/RideHome';
   static const onBoardingScreen = '/OnBoardingScreen';
+  static const ChooseLangScreen = '/ChooseLangScreen';
+  static const FirstLoginScreen = '/FirstLoginScreen';
+  static const CompleteRegisterWelcomeScreen = '/CompleteRegisterWelcomeScreen';
   static const MY_TALENT = '/MyTalent';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
@@ -14,6 +17,9 @@ abstract class Routes {
       '/RIDEOPENSTREETMAPSEARCHANDPICK';
   static const RIDERUNNINGTRIPS = '/RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = '/RIDEEXPIREDTRIPS';
+  static const RIDEHISTORYTRIPS = '/RIDEHISTORYTRIPS';
+  static const RIDEDETAILSTRIPS = '/RIDEDETAILSTRIPS';
+  static const TripReceiptScreen = '/TripReceiptScreen';
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
@@ -32,6 +38,8 @@ abstract class Routes {
   static const ADRequests = '/Subcategories/ADS/AD-Details/AD-Requests';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+  static const CREATECOMPANYPOSTAD = '/Subcategories/ADS/CreatePostCompany';
+  static const CREATECOMPANYPOSTREALAD = '/Subcategories/ADS/CreatePostRealCompany';
 
   // static const CAMERA
 
@@ -191,6 +199,7 @@ abstract class Routes {
   static const TRIP_JOIN = '/TripJoin';
   static const BE_STAR = '/BeAStar';
   static const TenPercent = '/TenPercent';
+  static const WinnersTenPercent = '/WinnersTenPercent';
   static const Married = '/Married';
   static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
@@ -289,6 +298,12 @@ abstract class Routes {
   static const INSTAGRAMADDLOCATION = '/InstagramAddLocation';
   static const INSTAGRAMADDMUSIC = '/InstagramAddMusic';
   static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
+  static const followersScreen = '/FollowersScreen';
+  static const rideOffer = '/RiderOffer';
+  static const allDriverRatingScreen = '/allDriverRatingScreen';
+  static const allClientRatingScreen = '/allClientRatingScreen';
+  static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
+
 }
 
 abstract class Paths {
@@ -297,6 +312,9 @@ abstract class Paths {
   static const HOME = '/';
   static const RIDEHOME = 'RideHome';
   static const onBoardingScreen = 'OnBoardingScreen';
+  static const ChooseLangScreen = 'ChooseLangScreen';
+  static const FirstLoginScreen = 'FirstLoginScreen';
+  static const CompleteRegisterWelcomeScreen = 'CompleteRegisterWelcomeScreen';
   static const MY_TALENT = 'MyTalent';
   static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';
@@ -306,6 +324,9 @@ abstract class Paths {
       'RIDEOPENSTREETMAPSEARCHANDPICK';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
+  static const RIDEHISTORYTRIPS = 'RIDEHISTORYTRIPS';
+  static const RIDEDETAILSTRIPS = 'RIDEDETAILSTRIPS';
+  static const TripReceiptScreen = 'TripReceiptScreen';
   static const UploadRiderImages = 'UploadRiderImages';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
   static const SEARCH = 'Search';
@@ -324,6 +345,8 @@ abstract class Paths {
   static const ARCHIVEDCHATS = 'ArchivedChatsView';
   static const CREATEAD = 'CreateAd';
   static const CREATECOMPANYAD = 'CreateCompanyAd';
+  static const CREATECOMPANYPOSTAD = 'CreatePostCompany';
+  static const CREATECOMPANYPOSTREALAD = 'CreatePostRealCompany';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERSCASHBACK = 'WinnersCashback';
@@ -460,6 +483,7 @@ abstract class Paths {
   static const TRIP_JOIN = 'TripJoin';
   static const BE_STAR = 'BeAStar';
   static const TenPercent = 'TenPercent';
+  static const WinnersTenPercent = 'WinnersTenPercent';
   static const Married = 'Married';
   static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
@@ -529,6 +553,7 @@ abstract class Paths {
   static const safetyRideScreen = 'SafetyRideScreen';
   static const rideFindingScreen = 'RideFindingScreen';
   static const RideStatusScreen = 'RideStatusScreen';
+  static const loadingDashboardDetailsScreen = 'LoadingDashboardDetailsScreen';
   static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
   static const supportRideScreen = 'SupportRideScreen';
@@ -539,6 +564,8 @@ abstract class Paths {
   static const completeRideScreen = 'CompleteRideScreen';
   static const newRideModeScreen = 'NewRideModeScreen';
   static const registerVerifyPhoneOTP = 'RegisterVerifyPhoneOTP';
+  static const rideOffer = 'RiderOffer';
+  static const allDriverRatingScreen = 'allDriverRatingScreen';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';
@@ -564,4 +591,7 @@ abstract class Paths {
   static const INSTAGRAMADDMUSIC = 'InstagramAddMusic';
   static const SINGLEPOSTINSTAGRAM = 'SinglePostInstagram';
   static const FOLLOWREQUESTSINSTAGRAM = 'FollowRequestsInstagram';
+  static const followersScreen = 'FollowersScreen';
+  static const allClientRatingScreen = 'allClientRatingScreen';
+
 }

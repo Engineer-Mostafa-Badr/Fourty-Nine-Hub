@@ -28,7 +28,8 @@ abstract class AdsRemoteDataSource {
       {required RequestParams params});
 
   Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params);
-  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(GetMyAdByIdParams params);
+  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(
+      GetMyAdByIdParams params);
 }
 
 class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
@@ -39,12 +40,17 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
   @override
   Future<Either<Failure, List<AdModel>>> getAds(
       {required GetAdsParams params}) async {
-    final response = await _apiConsumer.get(EndPoints.subCategoryAds(params));
-    return response.fold(
-        (failure) => Left(failure),
-        (response) => Right((response['data']['ads'] as List)
-            .map((e) => AdModel.fromJson(e))
-            .toList()));
+    try {
+      final response = await _apiConsumer.get(EndPoints.subCategoryAds(params));
+      return response.fold(
+          (failure) => Left(failure),
+          (response) => Right((response['data']['ads'] as List)
+              .map((e) => AdModel.fromJson(e))
+              .toList()));
+    } catch (e) {
+      print(e);
+      return Left(UnknownFailure(e.toString()));
+    }
   }
 
   @override
@@ -101,20 +107,26 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params) async {
+  Future<Either<Failure, List<AdModel>>> getMyAdById(
+      GetMyAdByIdParams params) async {
     final response =
         await _apiConsumer.get(EndPoints.myAdsByCategoryId(params: params));
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['ads'] as List)
-            .map((e) => AdModel.fromJson(e))
-            .toList()));
+    try {
+      return response.fold(
+          (failure) => Left(failure),
+          (data) => Right((data['data']['ads'] as List)
+              .map((e) => AdModel.fromJson(e))
+              .toList()));
+    } catch (e) {
+      print(e);
+      return Left(UnknownFailure(e.toString()));
+    }
   }
 
   @override
-  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(GetMyAdByIdParams params) async {
-    final response =
-        await _apiConsumer.get(EndPoints.myFavouriteAds(params));
+  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(
+      GetMyAdByIdParams params) async {
+    final response = await _apiConsumer.get(EndPoints.myFavouriteAds(params));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['ads'] as List)

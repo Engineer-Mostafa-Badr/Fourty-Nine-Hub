@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -43,11 +45,30 @@ class PagePreview extends StatefulWidget {
 class _PagePreviewState extends State<PagePreview>
     with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  ScrollController _scrollController = ScrollController();
+  bool _showButtons = true;
 
   @override
   initState() {
-    serviceLocator<MainCategoriesCubit>().loadData();
+    serviceLocator<MainCategoriesCubit>().loadData(context);
     super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_showButtons) {
+          setState(() {
+            _showButtons = false;
+          });
+        }
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_showButtons) {
+          setState(() {
+            _showButtons = true;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -116,179 +137,261 @@ class _PagePreviewState extends State<PagePreview>
           drawer: const DrawerWidget(),
           body: Stack(
             children: [
-              TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<InstagramCubit>()..loadData(),
-                      ),
-                      BlocProvider(
-                        create: (context) => serviceLocator<StoryCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (context) => serviceLocator<CustomPageCubit>()
-                          ..fetchSocialPage(),
-                      ),
-                      // BlocProvider(
-                      //   create: (context) => ThumbnailsCubit(serviceLocator()),
-                      // ),
-                    ],
-                    child: BlocBuilder<InstagramCubit, InstagramState>(
-                      builder: (BuildContext context, state) {
-                        return BlocBuilder<CustomPageCubit, CustomPageState>(
-                          builder: (BuildContext context, social) {
-                            if (social.status == CustomPageStates.success) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 8, left: 8, top: 8),
-                                child: social.social?.face == true
-                                    ? SocialHomeView(
-                                        payload: SocialParams(
-                                          userId: social.social?.userId ?? '',
-                                          hideAppBar: true,
-                                        ),
-                                      )
-                                    : social.social?.insta == true
-                                        ? const InstagramView(
+              NotificationListener<ScrollNotification>(
+                onNotification: (scrollNotification) {
+                  if (scrollNotification is UserScrollNotification) {
+                    if (scrollNotification.direction ==
+                            ScrollDirection.reverse &&
+                        _showButtons) {
+                      setState(() {
+                        _showButtons = false;
+                      });
+                    } else if (scrollNotification.direction ==
+                            ScrollDirection.forward &&
+                        !_showButtons) {
+                      setState(() {
+                        _showButtons = true;
+                      });
+                    }
+                  }
+                  return false;
+                },
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<InstagramCubit>()..loadData(),
+                        ),
+                        BlocProvider(
+                          create: (context) => serviceLocator<StoryCubit>(),
+                        ),
+                        BlocProvider(
+                          create: (context) => serviceLocator<CustomPageCubit>()
+                            ..fetchSocialPage(),
+                        ),
+                        // BlocProvider(
+                        //   create: (context) => ThumbnailsCubit(serviceLocator()),
+                        // ),
+                      ],
+                      child: BlocBuilder<InstagramCubit, InstagramState>(
+                        builder: (BuildContext context, state) {
+                          return BlocBuilder<CustomPageCubit, CustomPageState>(
+                            builder: (BuildContext context, social) {
+                              if (social.status == CustomPageStates.success) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: social.social?.face == true
+                                      ? SocialHomeView(
+                                          payload: SocialParams(
+                                            userId: social.social?.userId ?? '',
                                             hideAppBar: true,
-                                          )
-                                        : const TwitterView(),
-                              );
-                            } else {
-                              return const CustomLoading();
-                            }
-                          },
-                        );
-                      },
+                                          ),
+                                        )
+                                      : social.social?.insta == true
+                                          ? const InstagramView(
+                                              hideAppBar: true,
+                                            )
+                                          : const TwitterView(),
+                                );
+                              } else {
+                                return const CustomLoading();
+                              }
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  const ServicePagePreview(),
-                  // Container()
-                ],
+                    ServicePagePreview(
+                      noNavBar: widget.isButtonsVisible,
+                    ),
+                    // Container()
+                  ],
+                ),
               ),
               Visibility(
-                visible: widget.isButtonsVisible,
-                child: Positioned(
-                  right: 0,
-                  left: 0,
-                  bottom: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomElevatedButton(
-                          child: Text(
-                            LocaleKeys.saveAndActivate.localize,
-                            style:
-                                Styles.smallText(color: AppColors.whiteColor),
-                          ),
-                          onPressed: () async {
-                            showAnimatedDialog(
-                              context,
-                              AlertDialog(
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Label(
-                                        text: LocaleKeys.restartToApply.localize,
-                                        style: Styles.headerText(
-                                            fontWeight: FontWeight.w400)),
-                                    const Sizer(),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: AppButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            label: LocaleKeys.cancel.localize,
-                                          ),
+                  visible: widget.isButtonsVisible,
+                  child: Positioned(
+                    right: 0,
+                    left: 0,
+                    bottom: 5,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 300),
+                      offset: _showButtons ? Offset.zero : const Offset(0, 2),
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 300),
+                        opacity: _showButtons ? 1.0 : 0.0,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: CustomElevatedButton(
+                                  onPressed: () async {
+                                    showAnimatedDialog(
+                                      context,
+                                      AlertDialog(
+                                        backgroundColor:
+                                            AppColors.getFindFillColor(context),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Label(
+                                                text:context.isArabic?LocaleKeys.restartToApply.localize:'Restart to Apply',
+                                                style: Styles.headerText(
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            const Sizer(),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: AppButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    label: LocaleKeys
+                                                        .cancel.localize,
+                                                    backColor:
+                                                        AppColors.getRedColor(
+                                                            context),
+                                                    color: AppColors
+                                                        .getReversedTextColor(
+                                                            context),
+                                                  ),
+                                                ),
+                                                const Sizer(
+                                                  width: 16,
+                                                ),
+                                                Expanded(
+                                                  child: AppButton(
+                                                    onPressed: () {
+                                                      context
+                                                          .read<
+                                                              CustomPageCubit>()
+                                                          .updateActivate(true);
+                                                      Restart.restartApp();
+                                                    },
+                                                    label: LocaleKeys
+                                                        .restart.localize,
+                                                    backColor: AppColors
+                                                        .getButtonPrimaryColor(
+                                                            context),
+                                                    color: AppColors
+                                                        .getReversedTextColor(
+                                                            context),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        const Sizer(
-                                          width: 16,
-                                        ),
-                                        Expanded(
-                                          child: AppButton(
-                                            backColor: AppColors.PRIMARY_COLOR,
-                                            onPressed: () {
-                                              context
-                                                  .read<CustomPageCubit>()
-                                                  .updateActivate(true);
-                                              Restart.restartApp();
-                                            },
-                                            label: LocaleKeys.restart.localize,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
+                                    );
+                                  },
+                                  backgoundColor:
+                                      AppColors.getButtonPrimaryColor(context),
+                                  child: Center(
+                                    child: Text(
+                                      LocaleKeys.saveAndActivate.localize,
+                                      style: Styles.smallText(
+                                          color: AppColors.getReversedTextColor(
+                                              context)),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                        CustomElevatedButton(
-                          onPressed: () async {
-                            showAnimatedDialog(
-                              context,
-                              AlertDialog(
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Label(
-                                        text: LocaleKeys.restartToApply.localize,
-                                        style: Styles.headerText(
-                                            fontWeight: FontWeight.w400)),
-                                    const Sizer(),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: AppButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            label: LocaleKeys.cancel.localize,
-                                          ),
+                              Sizer(
+                                width: 50,
+                              ),
+                              Expanded(
+                                child: CustomElevatedButton(
+                                  onPressed: () async {
+                                    showAnimatedDialog(
+                                      context,
+                                      AlertDialog(
+                                        backgroundColor:
+                                            AppColors.getFindFillColor(context),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Label(
+                                                text:context.isArabic?LocaleKeys.restartToApply.localize:'Restart to Apply',
+                                                style: Styles.headerText(
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            const Sizer(),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: AppButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    label: LocaleKeys
+                                                        .cancel.localize,
+                                                    color: AppColors
+                                                        .getReversedTextColor(
+                                                            context),
+                                                    backColor:
+                                                        AppColors.getRedColor(
+                                                            context),
+                                                  ),
+                                                ),
+                                                const Sizer(
+                                                  width: 16,
+                                                ),
+                                                Expanded(
+                                                  child: AppButton(
+                                                    backColor: AppColors
+                                                        .getButtonPrimaryColor(
+                                                            context),
+                                                    onPressed: () {
+                                                      context
+                                                          .read<
+                                                              CustomPageCubit>()
+                                                          .updateActivate(true);
+                                                      Restart.restartApp();
+                                                    },
+                                                    color: AppColors
+                                                        .getReversedTextColor(
+                                                            context),
+                                                    label: LocaleKeys
+                                                        .restart.localize,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        const Sizer(
-                                          width: 16,
-                                        ),
-                                        Expanded(
-                                          child: AppButton(
-                                            backColor: AppColors.PRIMARY_COLOR,
-                                            onPressed: () {
-                                              context
-                                                  .read<CustomPageCubit>()
-                                                  .updateActivate(true);
-                                              Restart.restartApp();
-                                            },
-                                            label: LocaleKeys.restart.localize,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
+                                    );
+                                  },
+                                  backgoundColor:
+                                      AppColors.getButtonPrimaryColor(context),
+                                  child: Center(
+                                    child: Text(
+                                      LocaleKeys.saveWithOutActivate.localize,
+                                      style: Styles.smallText(
+                                          color: AppColors.getReversedTextColor(
+                                              context)),
+                                      textAlign: TextAlign.center,
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            );
-                          },
-                          child: Text(
-                            LocaleKeys.saveWithOutActivate.localize,
-                            style:
-                                Styles.smallText(color: AppColors.whiteColor),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              )
+                  ))
             ],
           ),
         ),

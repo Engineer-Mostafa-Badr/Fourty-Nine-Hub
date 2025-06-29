@@ -15,20 +15,26 @@ class UpdateSettingsDashboardUsecase{
 class UpdateSettingsDashboardUsecaseParam {
     UpdateSettingsDashboardUsecaseParam({
         required this.isReady,
+        required this.enableSound,
         required this.subscriptionPlan,
+        required this.perKm,
         required this.favoriteCity,
         required this.subCategoriesActive,
     });
 
     final bool isReady;
+    final bool enableSound;
     final String subscriptionPlan;
+    final num perKm;
     final String favoriteCity;
     final List<SubCategoriesActive> subCategoriesActive;
 
     factory UpdateSettingsDashboardUsecaseParam.fromJson(Map<String, dynamic> json){ 
         return UpdateSettingsDashboardUsecaseParam(
             isReady: json["isReady"] ?? false,
+            enableSound: json["isVoiceCommentAlertsEnabled"] ?? false,
             subscriptionPlan: json["subscriptionPlan"] ?? "",
+            perKm: json["pricingPerKm"] ?? 0,
             favoriteCity: json["favoriteCity"] ?? "",
             subCategoriesActive: json["subCategoriesActive"] == null ? [] : List<SubCategoriesActive>.from(json["subCategoriesActive"]!.map((x) => SubCategoriesActive.fromJson(x))),
         );
@@ -36,8 +42,10 @@ class UpdateSettingsDashboardUsecaseParam {
 
     Map<String, dynamic> toJson() => {
         "isReady": isReady,
+        'isVoiceCommentAlertsEnabled': enableSound,
         "subscriptionPlan": subscriptionPlan,
         "favoriteCity": favoriteCity,
+        "pricingPerKm": perKm,
         "subCategoriesActive": subCategoriesActive.map((x) => x.toJson()).toList(),
     };
 

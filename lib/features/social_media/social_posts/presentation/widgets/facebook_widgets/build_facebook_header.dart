@@ -39,12 +39,14 @@ class BuildFacebookHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // if (user != null && user.image != null)
-        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ImageFromInternet(
-          image: user.image ?? '',
-          isCircle: true,
-          defaultLogo: false,
-          width: 40,
-          height: 40,
+        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.image),
+          child: ImageFromInternet(
+            image: user.image ?? '',
+            isCircle: true,
+            defaultLogo: false,
+            width: 40,
+            height: 40,
+          ),
         ),
         const SizedBox(width: 10.0),
         Expanded(
@@ -59,10 +61,10 @@ class BuildFacebookHeader extends StatelessWidget {
                     text: TextSpan(children: [
                   TextSpan(
                       text: '${user.firstName} ${user.lastName}',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.PRIMARY_COLOR)),
+                          color: AppColors.getTextColor(context))),
                   if ((activity != null &&
                           (activity?.id.isNotEmpty ?? false)) ||
                       (feeling != null && (feeling?.id.isNotEmpty ?? false)) ||
@@ -173,10 +175,10 @@ class BuildFacebookHeader extends StatelessWidget {
                         },
                         child: Text(
                             "${users?.first.firstName ?? ''} ${users?.first.lastName ?? ''}",
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.PRIMARY_COLOR)),
+                                color:AppColors.getTextColor(context))),
                       )),
                       if ((users?.length ?? 0) > 1)
                         TextSpan(
@@ -212,10 +214,10 @@ class BuildFacebookHeader extends StatelessWidget {
                                         context.isArabic
                                             ? "${(users?.length ?? 0) - 1} أخرين"
                                             : "${(users?.length ?? 0) - 1} others",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500,
-                                            color: AppColors.PRIMARY_COLOR)))),
+                                            color: AppColors.getTextColor(context))))),
                           ]
                         )
                     ]),
@@ -232,10 +234,10 @@ class BuildFacebookHeader extends StatelessWidget {
                       const WidgetSpan(child: Sizer()),
                       TextSpan(
                           text: location?.place ?? '',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.PRIMARY_COLOR))
+                              color: AppColors.getTextColor(context)))
                     ]),
                 ])),
               ),
@@ -245,23 +247,23 @@ class BuildFacebookHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                      "$sinceTime .",
-                      style: const TextStyle(
+                      "${sinceTime??''} .",
+                      style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 14,
-                          color: AppColors.PRIMARY_COLOR)),
+                          color: AppColors.getTextColor(context))),
                   const SizedBox(width: 4),
-                  SvgPicture.asset(Assets.publication,width: 16,height: 12.5,)
+                  SvgPicture.asset(Assets.publication,width: 16,height: 12.5,color: context.isDarkMode?Colors.white:null,)
                 ],
               ),
             ],
           ),
         ),
-        const Row(
+        Row(
           children: [
-            Icon(Icons.more_horiz_outlined,color: AppColors.PRIMARY_COLOR,size: 24,),
+            Icon(Icons.more_horiz_outlined,color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,size: 24,),
             SizedBox(width: 12.0),
-            Icon(Icons.close,color: AppColors.SECONDARY_COLOR,size: 24,),
+            Icon(Icons.close,color: AppColors.getRedColor(context),size: 24,),
           ],
         ),
       ],

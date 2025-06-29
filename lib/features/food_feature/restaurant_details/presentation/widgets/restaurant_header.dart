@@ -4,16 +4,15 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class RestaurantHeader extends StatefulWidget {
@@ -62,8 +61,8 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                       Colors.black.withOpacity(0.6),
                       Colors.transparent,
                     ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                    begin:Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
                 ),
               ),
@@ -154,7 +153,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                         onRatingUpdate: (double value) {},
                                       ),
                                       Text(
-                                        '${widget.restaurant.totalRating ?? '0.0'} ',
+                                        '${widget.restaurant.totalRating ?? '0.0'} '.toArabicNumbers(context),
                                         style: Styles.mediumText(
                                           fontWeight: FontWeight.w500,
                                           color: AppColors.PRIMARY_COLOR
@@ -165,7 +164,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})',
+                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})'.toArabicNumbers(context),
                                   style: Styles.mediumText(
                                     color: Colors.white70,
                                   ),
@@ -176,7 +175,6 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                           ],
                         ),
                         // Favorite icon
-
                       ],
                     ),
                   ],

@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -20,20 +21,35 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../core/utils/format_numbers.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
+import '../../../../ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
+import '../../../../subcategories/presentation/widgets/are_you_sure_delete_ad_widget.dart';
+import '../../../../subcategories/presentation/widgets/build_tag_ads_widget.dart';
+import '../../../../subcategories/presentation/widgets/image_ads_widget.dart';
+import '../../../domain/entity/create_ad_search_entity.dart';
 
 class BuildItemAdsSearch extends StatefulWidget {
   final AdsSearchEntity item;
-  const BuildItemAdsSearch(
-      {super.key,
-      required this.item,
-      required this.onFav,
-      required this.onRemoveFav});
+
+  const BuildItemAdsSearch({
+    super.key,
+    required this.item,
+    required this.onFav,
+    required this.onRemoveFav,
+  });
+
   final Function(String) onFav;
   final Function(String) onRemoveFav;
 
@@ -47,14 +63,200 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
     print(userId);
     print(widget.item.userId);
-    List<CreateAdEntity> details = widget.item.details
+    List<CreateAdSearchEntity> details = widget.item.details
         .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
         .toList();
     return BlocProvider<AdvertisementCubit>(
       create: (BuildContext context) => serviceLocator(),
       child: BlocBuilder<AdvertisementCubit, AdsState>(
         builder: (BuildContext context, state) {
-          return Container(
+          return InkWell(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
+            child: IntrinsicHeight(
+              child: Container(
+                // width: kToolbarHeight * 2.5,
+                // height: 600.h,
+                // margin: EdgeInsetsDirectional.all(10.w),
+                padding: const EdgeInsetsDirectional.only(bottom: 8),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                      color: context.isDarkMode
+                          ? AppColors.LIGHT_COLOR
+                          : AppColors.GREY_DARK_COLOR,
+                      width: 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (context.read<UserCubit>().isLoggedIn)
+                      BuildTagAdsWidget(
+                          status: 'widget.item.ownerSubscriptionStatus' ?? '',
+                          views: widget.item.views ?? 0),
+                    Expanded(
+                      child: ImageAdsWidget(
+                        images: widget.item.images.map((e) => e.mediaKey).toList(),
+                        // isFavourite: widget.item.isFavourite ?? false,
+                        isFavourite:  false,
+                        // onPressedFavorite: () async {
+                        //   if (widget.item.isFavourite == false) {
+                        //     var result = await widget.onFav(widget.item.id);
+                        //     if (result == true) {
+                        //       widget.item.isFavourite = !widget.item.isFavourite!;
+                        //     }
+                        //   } else {
+                        //     var result = await widget.onRemoveFav(widget.item.id);
+                        //     if (result == true) {
+                        //       widget.item.isFavourite = !widget.item.isFavourite!;
+                        //     }
+                        //   }
+                        //   setState(() {});
+                        // },
+                        onPressedFavorite: () async{},
+                        isVerified: true, // widget.item.isVerified ?? false,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        spacing: 4,
+                        children: [
+                          Row(
+                            children: [
+                              Label(
+                                text: widget.item.title,
+                                style: Styles.headerText(
+                                  fontSize: 32,
+                                  height: 1.6,
+                                ),
+                              ),
+                              const Spacer(),
+                              SvgPicture.asset(Assets.adsCashIcon),
+                              const Sizer(width: 5),
+                              // Label(
+                              //   text:
+                              //   '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
+                              //   style: Styles.mediumText(
+                              //       fontWeight: FontWeight.bold,
+                              //       color: AppColors.SECONDARY_COLOR),
+                              //   maxLines: 1,
+                              // ),
+                            ],
+                          ),
+                          // اذا كان الاعلان من نوع المركبات
+                          if (widget.item.mainCategoryId ==
+                              '62c8b5889332225799fe3316') ...[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: widget.item.details
+                                  .where((e) =>
+                              e.propId == '66ec666f12cfcdf9779dfcc5' ||
+                                  e.propId == '66ec666f12cfcdf9779dfd05' ||
+                                  e.propId == '66ec666f12cfcdf9779dfcc6')
+                                  .map((e) {
+                                return Row(
+                                  children: [
+                                    ImageFromInternet(
+                                      image: e.image ?? '',
+                                      width: 24,
+                                      height: 24,
+                                      defaultLogo: true,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Label(
+                                      text: context.isArabic
+                                          ? e.value.nameAr
+                                          : e.value.nameEn,
+                                      style: Styles.headerText(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.60,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ] else
+                            Column(
+                              children: widget.item.details
+                                  .where((e) => e.nameEn == 'experience level')
+                                  .map((e) {
+                                return Row(
+                                  children: [
+                                    ImageFromInternet(
+                                      image: e.image ?? '',
+                                      width: 30.w,
+                                      height: 30.h,
+                                      defaultLogo: true,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Label(
+                                      text: context.isArabic
+                                          ? e.value.nameAr
+                                          : e.value.nameEn,
+                                      style: Styles.headerText(
+                                        fontSize: 24,
+                                        height: 1.60,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset(Assets.adsLocationIcon),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  // Label(
+                                  //   text:
+                                  //   '${context.isArabic ? widget.item.address.addressAr : widget.item.address?.addressEn}',
+                                  //   style: Styles.headerText(
+                                  //     fontSize: 24,
+                                  //     height: 1.60,
+                                  //   ),
+                                  //   maxLines: 1,
+                                  // ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                              _buildRequestsButton(
+                            adId: widget.item.id,
+                            userIdOfAd: widget.item.userId ?? '',
+                            subcategoryId: widget.item.subCategoryId ?? '',
+                            phone: widget.item.phone ?? '',
+                            subscriptionStatus:
+                            'widget.item.userSubscriptionStatus' ?? '',
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+          /*return Container(
             width: kToolbarHeight * 2.5,
             height: 800.h,
             margin: EdgeInsetsDirectional.all(10.w),
@@ -288,6 +490,8 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                         adId: widget.item.id,
                                         subscriptionStatus:
                                             widget.item.subscriptionType,
+                                        successRequest: () {},
+                                        errorRequest: (failure) {},
                                       ),
                                     )
                                   ],
@@ -298,7 +502,9 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                   subcategoryId: widget.item.subCategoryId,
                                   phone: widget.item.phone,
                                   id: widget.item.id,
-                                  hasReport: true, senderName: '', senderImage: '',
+                                  hasReport: true,
+                                  senderName: '',
+                                  senderImage: '',
                                 ),
                               ],
                             )
@@ -337,13 +543,126 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                 ),
               ],
             ),
-          );
+          );*/
         },
       ),
     );
   }
-
-  Widget _buildTag({required String status}) {
+  Widget _buildRequestsButton({
+    required String userIdOfAd,
+    required String subcategoryId,
+    required String phone,
+    required String adId,
+    required String subscriptionStatus,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        // left: 16,
+        // right: 16,
+        // bottom: 32,
+        // top: 8,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: AppButton(
+              label: LocaleKeys.request.localize,
+              height: 30,
+              backColor: AppColors.SECONDARY_COLOR_DARK2,
+              onPressed: () async {
+                if (!context.read<UserCubit>().isLoggedIn) {
+                  return pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                } else {
+                  bottomSheet(
+                    context: context,
+                    widget: BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: IconButton(
+                              iconSize: 20,
+                              padding: EdgeInsets.zero,
+                              style: IconButton.styleFrom(
+                                backgroundColor: const Color(0xffD9D9D9),
+                              ),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.black,
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          PremiumRequestButton(
+                            adId: adId,
+                            subCategoryId: subcategoryId,
+                            subscriptionStatus: subscriptionStatus,
+                            dontPop: true,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          RequestButton(
+                            adId: adId,
+                            subscriptionStatus: subscriptionStatus,
+                            dontPop: true,
+                            successRequest: () {
+                              context.pop();
+                              showSuccessMessage(
+                                  context,
+                                  context.isArabic
+                                      ? 'تم ارسال طلب التواصل'
+                                      : 'Request Sent Successfully');
+                              context.read<AdvertisementCubit>().resetRequest();
+                            },
+                            errorRequest: (failure) {
+                              context.pop();
+                              context.pop();
+                              showErrorMessage(
+                                  context,
+                                  getFailureMessage(
+                                      failure ?? UnknownFailure(''), context));
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              },
+              style: Styles.headerText(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+                height: 1.60,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 80.w,
+          ),
+          Expanded(
+            child: MarriageCallMessageButtons(
+              otherUserId: userIdOfAd,
+              subcategoryId: subcategoryId,
+              phone: phone,
+              id: adId,
+              hasReport: true,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+/*  Widget _buildTag({required String status}) {
     // super premium
     return Container(
       width: double.infinity,
@@ -383,5 +702,6 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
     );
     // premium
     // regular
-  }
+  }*/
 }
+

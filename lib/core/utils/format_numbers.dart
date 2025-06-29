@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -17,33 +19,50 @@ class FormatNumbers {
   // }
 
   String formatNumber(num number,
-      {int decimals = 1, bool useArabicNumerals = false}) {
+      {int decimals = 1,
+      bool useArabicNumerals = false,
+      bool roundDown = false}) {
     String formattedNumber;
 
     if (number >= 1000 && number < 1000000) {
-      formattedNumber = '${(number / 1000).toStringAsFixed(decimals)} K';
+      double dividedValue = number / 1000;
+      formattedNumber = roundDown
+          ? '${_roundDown(dividedValue, decimals)} K'
+          : '${dividedValue.toStringAsFixed(decimals)} K';
     } else if (number >= 1000000 && number < 1000000000) {
-      formattedNumber = '${(number / 1000000).toStringAsFixed(decimals)} M';
+      double dividedValue = number / 1000000;
+      formattedNumber = roundDown
+          ? '${_roundDown(dividedValue, decimals)} M'
+          : '${dividedValue.toStringAsFixed(decimals)} M';
     } else if (number >= 1000000000) {
-      formattedNumber = '${(number / 1000000000).toStringAsFixed(decimals)} B';
+      double dividedValue = number / 1000000000;
+      formattedNumber = roundDown
+          ? '${_roundDown(dividedValue, decimals)} B'
+          : '${dividedValue.toStringAsFixed(decimals)} B';
     } else {
-      formattedNumber = number.toStringAsFixed(0);
+      formattedNumber = number.floor().toString();
     }
 
     if (useArabicNumerals) {
-      return _convertToArabicNumerals(formattedNumber);
+      return convertToArabicNumerals(formattedNumber);
     }
     return formattedNumber;
+  }
+
+  // دالة مساعدة للتقريب إلى الأدنى
+  double _roundDown(double value, int decimals) {
+    final factor = pow(10, decimals).toDouble();
+    return (value * factor).floorToDouble() / factor;
   }
 
   String convertNumberToLocalizedString(String number,
       {required bool isArabic}) {
     return isArabic
-        ? _convertToArabicNumerals(number.toString())
+        ? convertToArabicNumerals(number.toString())
         : number.toString();
   }
 
-  String _convertToArabicNumerals(String input) {
+  String convertToArabicNumerals(String input) {
     const Map<String, String> numeralsMap = {
       '0': '٠',
       '1': '١',
@@ -70,7 +89,7 @@ class FormatNumbers {
     bool isArabic = false,
   }) {
     if (balance == null || balance.isEmpty) {
-      return "0";
+      return "N/A";
     }
 
     try {
@@ -82,12 +101,13 @@ class FormatNumbers {
 
       // إذا كانت اللغة عربية، تحويل الأرقام إلى العربية
       if (isArabic) {
-        formattedNumber = _convertToArabicNumerals(formattedNumber);
+        formattedNumber = convertToArabicNumerals(formattedNumber);
       }
 
       return formattedNumber;
     } catch (e) {
-      return "0";
+      print("Error parsing number: $e");
+      return "N/A";
     }
   }
 
@@ -117,7 +137,7 @@ class FormatNumbers {
 }
 
 class FormatDate {
-  String formatDate(String dateString) {
+  String formatDate(String dateString, {bool isArabic = false}) {
     DateTime date = DateTime.parse(dateString).toLocal();
     DateTime now = DateTime.now();
 
@@ -128,18 +148,43 @@ class FormatDate {
     if (date.year == today.year &&
         date.month == today.month &&
         date.day == today.day) {
-      return "Today";
+      return isArabic ? "اليوم" : "Today";
     } else if (date.year == yesterday.year &&
         date.month == yesterday.month &&
         date.day == yesterday.day) {
-      return "Yesterday";
+      return isArabic ? "الأمس" : "Yesterday";
     } else if (date.year == tomorrow.year &&
         date.month == tomorrow.month &&
         date.day == tomorrow.day) {
-      return "Tomorrow";
+      return isArabic ? "غداً" : "Tomorrow";
     } else {
-      return DateFormat('dd/MM/yyyy').format(date);
+      return isArabic
+          ? DateFormat('yyyy/MM/dd', 'ar').format(date)
+          : DateFormat('yyyy/MM/dd', 'en').format(date);
     }
+
+    //   DateTime date = DateTime.parse(dateString).toLocal();
+    //   DateTime now = DateTime.now();
+
+    //   DateTime today = DateTime(now.year, now.month, now.day);
+    //   DateTime yesterday = today.subtract(Duration(days: 1));
+    //   DateTime tomorrow = today.add(Duration(days: 1));
+
+    //   if (date.year == today.year &&
+    //       date.month == today.month &&
+    //       date.day == today.day) {
+    //     return "Today";
+    //   } else if (date.year == yesterday.year &&
+    //       date.month == yesterday.month &&
+    //       date.day == yesterday.day) {
+    //     return "Yesterday";
+    //   } else if (date.year == tomorrow.year &&
+    //       date.month == tomorrow.month &&
+    //       date.day == tomorrow.day) {
+    //     return "Tomorrow";
+    //   } else {
+    //     return DateFormat('dd/MM/yyyy').format(date);
+    //   }
   }
 
   String fromatDateLikeMonthDay(BuildContext context, String dateString) {

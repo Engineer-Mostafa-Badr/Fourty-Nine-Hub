@@ -31,6 +31,7 @@ import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_kit_helper.d
 import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
+import 'package:fourtyninehub/service_locator/captain_share_service_locator.dart';
 import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/competition_service_locator.dart';
@@ -82,6 +83,7 @@ import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
 import 'live_service_locator.dart';
 import 'meeting_service_locator.dart';
+import 'new_trip_join_service_location.dart';
 import 'ride_dashboard_service_locator_updated.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
@@ -301,7 +303,8 @@ class DI {
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
-    //Notification
+    //captain share service locator
+    CaptainShareServiceLocator.execute(serviceLocator: serviceLocator);
     // await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
@@ -365,6 +368,7 @@ class DI {
     FollowServiceLocator.execute(serviceLocator: serviceLocator);
     TinderServiceLocator.execute(serviceLocator: serviceLocator);
     CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
+    NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

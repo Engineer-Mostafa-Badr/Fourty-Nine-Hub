@@ -127,7 +127,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
 //       builder: (context, state) {
 //         if (state.isFetchingComments &&state.postComments!.isEmpty) {
 //           return const Center(
-//             child: CircularProgressIndicator(color: AppColors.SECONDARY_COLOR,),
+//             child: CustomCircularProgressIndicator(color: AppColors.SECONDARY_COLOR,),
 //           );
 //         }
 //         final comments = state.postComments;

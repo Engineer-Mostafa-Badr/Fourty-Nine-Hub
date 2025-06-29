@@ -18,6 +18,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/utils/format_numbers.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/entities/subscription_plans_entity.dart';
@@ -261,7 +262,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                         ),
                         child: Center(
                           child: Label(
-                            text: LocaleKeys.premium.localize,
+                            text: LocaleKeys.premium2.localize,
                             textAlign: TextAlign.center,
                             style: Styles.headerText(
                               fontSize: 28,
@@ -333,8 +334,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           print(_groupValue);
 
                           if (selectedPlanPrice < walletPrice) {
-                            // print('selectedWallet${selectedWallet!.name}');
-                            print('selectedWallet mainWallet');
+                            print('selectedWallet${selectedWallet!.name}');
+                            // print('selectedWallet mainWallet');
                             showLoadingDialog(context);
                             await context.read<WalletCubit>().addSubscription(
                                   params: AddSubscriptionParams(
@@ -347,14 +348,18 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                                   ),
                                 );
                             if (context.mounted) {
-                              widget.onSubscribe != null
-                                  ? widget.onSubscribe!()
-                                  : context.push(Routes.HOME);
+                              if(widget.onSubscribe != null) {
+                                widget.onSubscribe!();
+                              }
+                             else {
+                                context.pop();
+                                context.pop();
+                              }
 
                               // context.pushReplacement(Routes.HOME);
                               context
                                   .read<MainCategoriesCubit>()
-                                  .loadDataCategory();
+                                  .loadDataCategory(context);
                               // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
                               // Phoenix.rebirth(context);
                             }
@@ -566,7 +571,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           const SizedBox(width: 30),
           Expanded(
             child: ElevatedAppButton(
-              label: '$price',
+              label: FormatNumbers().formatNumberByComma(price.toString(), isArabic: context.isArabic),
               onPressed: () {},
               backColor: _isPremium
                   ? (context.isDarkMode

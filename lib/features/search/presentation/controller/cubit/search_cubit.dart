@@ -33,8 +33,6 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favo
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../../common/models/public/pagination_params.dart';
-
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
@@ -56,7 +54,6 @@ class SearchCubit extends Cubit<SearchState> {
   final EditCommentUseCase _editCommentUseCase;
   final CommentReactUseCase _commentReactUseCase;
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
-
 
   void clearPostsSearchResults() {
     postsSearch.clear();
@@ -111,18 +108,17 @@ class SearchCubit extends Cubit<SearchState> {
     ));
   }
 
-
   initPref() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('filter', 'totalUsers');
+    await prefs.setString('filter', 'users');
   }
 
   final int pageSize = 10;
 
-
   List<MainCategoryEntity> paginatedSearch = [];
 
   bool loadPaginatedSearch = false;
+
   Future loadPaginatedSearchData({required SearchParams params}) async {
     loadPaginatedSearch = true;
     paginatedSearch.clear();
@@ -149,8 +145,8 @@ class SearchCubit extends Cubit<SearchState> {
     final response = await _fetchSearchUseCase.call(params);
 
     response.fold(
-          (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-          (data) async {
+      (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+      (data) async {
         paginatedSearch.addAll(data);
 
         // FIX: If it's the first page and data is empty,
@@ -164,7 +160,8 @@ class SearchCubit extends Cubit<SearchState> {
         }
 
         isLoadingPaginatedSearchMore = false;
-        emit(state.copyWith(status: SearchStates.success, search: paginatedSearch));
+        emit(state.copyWith(
+            status: SearchStates.success, search: paginatedSearch));
       },
     );
   }
@@ -207,10 +204,8 @@ class SearchCubit extends Cubit<SearchState> {
   //       });
   // }
 
-
   List<SubCategoryEntity> subCategoriesSearch = [];
   bool loadSubCategoriesSearch = false;
-
 
   Future loadSubCategoriesSearchData({required SearchParams params}) async {
     loadSubCategoriesSearch = true;
@@ -225,72 +220,69 @@ class SearchCubit extends Cubit<SearchState> {
     emit(state.copyWith(status: SearchStates.success));
   }
 
-
   bool isLoadingSubCategoriesSearchMore = false;
   bool hasMoreSubCategoriesSearchData = true;
   int subCategoriesSearchPage = 1;
 
-
   Future<void> getPaginatedSubCategorySearch(
-      {required SearchParams params}
-      ) async {
-    if (!hasMoreSubCategoriesSearchData || isLoadingSubCategoriesSearchMore) return;
+      {required SearchParams params}) async {
+    if (!hasMoreSubCategoriesSearchData || isLoadingSubCategoriesSearchMore)
+      return;
     isLoadingSubCategoriesSearchMore = true;
     emit(state.copyWith(status: SearchStates.loading));
     final response = await _fetchSearchSubCategoryUseCase.call(params);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-            (data) async {
-          subCategoriesSearch.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreSubCategoriesSearchData = false;
-          } else {
-            subCategoriesSearchPage++;
-          }
-          isLoadingSubCategoriesSearchMore = false;
-          emit(state.copyWith(status: SearchStates.success,searchSubCategory:subCategoriesSearch ));
-        });
+        (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+        (data) async {
+      subCategoriesSearch.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreSubCategoriesSearchData = false;
+      } else {
+        subCategoriesSearchPage++;
+      }
+      isLoadingSubCategoriesSearchMore = false;
+      emit(state.copyWith(
+          status: SearchStates.success,
+          searchSubCategory: subCategoriesSearch));
+    });
   }
-
-
 
   List<UserSearchEntity> usersSearch = [];
   bool loadUsersSearch = false;
+
   Future loadUsersSearchData({required SearchParams params}) async {
-    loadUsersSearch=true;
+    loadUsersSearch = true;
     usersSearch.clear();
     usersSearchPage = 1;
     hasMoreUsersSearchData = true;
     emit(state.copyWith(status: SearchStates.loading));
-    await getPaginatedUserSearch(params:params);
-    loadUsersSearch=false;
+    await getPaginatedUserSearch(params: params);
+    loadUsersSearch = false;
     emit(state.copyWith(status: SearchStates.success));
   }
+
   bool isLoadingUsersSearchMore = false;
   bool hasMoreUsersSearchData = true;
   int usersSearchPage = 1;
 
-  Future<void> getPaginatedUserSearch(
-      {required SearchParams params}
-      ) async {
+  Future<void> getPaginatedUserSearch({required SearchParams params}) async {
     if (!hasMoreUsersSearchData || isLoadingUsersSearchMore) return;
     isLoadingUsersSearchMore = true;
     emit(state.copyWith(status: SearchStates.loading));
     final response = await _fetchUserSearchUseCase.call(params);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-            (data) async {
-          usersSearch.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreUsersSearchData = false;
-          } else {
-            usersSearchPage++;
-          }
-          isLoadingUsersSearchMore = false;
-          emit(state.copyWith(status: SearchStates.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+        (data) async {
+      usersSearch.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreUsersSearchData = false;
+      } else {
+        usersSearchPage++;
+      }
+      isLoadingUsersSearchMore = false;
+      emit(state.copyWith(status: SearchStates.success));
+    });
   }
-
 
   List<AdsSearchEntity> adsSearch = [];
   bool loadAds = false;
@@ -314,19 +306,29 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   Future<void> getPaginatedAdsSearch({required SearchParams params}) async {
+    print('==> getPaginatedAdsSearch');
+    print('==> getPaginatedAdsSearch ${(!hasMoreAdsData || isLoadingAdsMore)}');
     if (!hasMoreAdsData || isLoadingAdsMore) return;
-
     isLoadingAdsMore = true;
+    print('==> getPaginatedAdsSearch test 1');
+
     emit(state.copyWith(status: SearchStates.loading));
+    print('==> getPaginatedAdsSearch test 2');
 
     final response = await _fetchAdsSearchUseCase.call(params);
+    print('==> getPaginatedAdsSearch response $response');
+
     response.fold(
-          (l) {
+      (l) {
+        print('==> failure $l');
         isLoadingAdsMore = false;
         emit(state.copyWith(failure: l, status: SearchStates.error));
       },
-          (data) {
+      (data) {
+          print('==> data $data');
+
         adsSearch.addAll(data);
+        print('==> adsSearch.length ${adsSearch.length}');
 
         if (data.length < pageSize) {
           hasMoreAdsData = false;
@@ -377,45 +379,43 @@ class SearchCubit extends Cubit<SearchState> {
   //       });
   // }
 
-
-
   List<TripComeWithYouEntity> tripComeSearch = [];
   bool loadTripComeSearch = false;
+
   Future loadTripComeSearchData({required SearchParams params}) async {
-    loadTripComeSearch=true;
+    loadTripComeSearch = true;
     tripComeSearch.clear();
     tripComeSearchPage = 1;
     hasMoreAdsData = true;
     emit(state.copyWith(status: SearchStates.loading));
-    await getPaginatedTripComeSearch(params:params);
-    loadTripComeSearch=false;
+    await getPaginatedTripComeSearch(params: params);
+    loadTripComeSearch = false;
     emit(state.copyWith(status: SearchStates.success));
   }
+
   bool isLoadingTripComeSearchMore = false;
   bool hasMoreTripComeSearchData = true;
   int tripComeSearchPage = 1;
+
   Future<void> getPaginatedTripComeSearch(
-      {required SearchParams params}
-      ) async {
+      {required SearchParams params}) async {
     if (!hasMoreTripComeSearchData || isLoadingTripComeSearchMore) return;
     isLoadingTripComeSearchMore = true;
     emit(state.copyWith(status: SearchStates.loading));
     final response = await _fetchTripComeSearchUseCase.call(params);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-            (data) async {
-          tripComeSearch.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreTripComeSearchData = false;
-          } else {
-            tripComeSearchPage++;
-          }
-          isLoadingTripComeSearchMore = false;
-          emit(state.copyWith(status: SearchStates.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+        (data) async {
+      tripComeSearch.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreTripComeSearchData = false;
+      } else {
+        tripComeSearchPage++;
+      }
+      isLoadingTripComeSearchMore = false;
+      emit(state.copyWith(status: SearchStates.success));
+    });
   }
-
-
 
   List<ReelsSearchEntity> reelsSearch = [];
   bool loadReelsSearch = false;
@@ -446,11 +446,11 @@ class SearchCubit extends Cubit<SearchState> {
 
     final response = await _fetchReelSearchUseCase.call(params);
     response.fold(
-          (l) {
+      (l) {
         isLoadingReelsSearchMore = false;
         emit(state.copyWith(failure: l, status: SearchStates.error));
       },
-          (data) {
+      (data) {
         reelsSearch.addAll(data);
 
         if (data.length < pageSize) {
@@ -467,7 +467,6 @@ class SearchCubit extends Cubit<SearchState> {
       },
     );
   }
-
 
   List<PostEntity> postsSearch = [];
   bool loadPostsSearch = false;
@@ -503,20 +502,18 @@ class SearchCubit extends Cubit<SearchState> {
     // emit(state.copyWith(status: SearchStates.success));
   }
 
-
-
-
   bool isLoadingPostsSearchMore = false;
   bool hasMorePostsSearchData = true;
   int postsSearchPage = 1;
+
   Future<void> getPaginatedPostsSearch({required SearchParams params}) async {
     if (!hasMorePostsSearchData || isLoadingPostsSearchMore) return;
     isLoadingPostsSearchMore = true;
     emit(state.copyWith(status: SearchStates.loading));
     final response = await _fetchPostsSearchUseCase.call(params);
     response.fold(
-          (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-          (data) async {
+      (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+      (data) async {
         print("Fetched data: $data"); // Debug the data
         postsSearch.addAll(data);
         if (data.length < pageSize) {
@@ -529,9 +526,7 @@ class SearchCubit extends Cubit<SearchState> {
         emit(state.copyWith(status: SearchStates.success, posts: postsSearch));
       },
     );
-
   }
-
 
   Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
@@ -597,7 +592,8 @@ class SearchCubit extends Cubit<SearchState> {
         (r) {
       result = r;
       if (from == 'feed') {
-        var currentPost = postsSearch.firstWhere((element) => element.id == postId);
+        var currentPost =
+            postsSearch.firstWhere((element) => element.id == postId);
         print("commmmmment count${currentPost.commentsCount}");
 
         // currentPost.commentsCount = (currentPost.commentsCount - 1);
@@ -619,7 +615,7 @@ class SearchCubit extends Cubit<SearchState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
         (r) {
-          postsSearch.removeWhere((e) => e.id == postId);
+      postsSearch.removeWhere((e) => e.id == postId);
       emit(state.copyWith(posts: postsSearch));
       showSuccessMessage(context, "Post hide successfully");
     });
@@ -636,7 +632,8 @@ class SearchCubit extends Cubit<SearchState> {
       model = data;
       if (from == 'feed') {
         print(postsSearch.length);
-        var currentPost = postsSearch.firstWhere((element) => element.id == params.postId);
+        var currentPost =
+            postsSearch.firstWhere((element) => element.id == params.postId);
         print("comment count${currentPost.commentsCount}");
 
         // currentPost.commentsCount = (currentPost.commentsCount + 1);
@@ -657,7 +654,8 @@ class SearchCubit extends Cubit<SearchState> {
             ), (data) {
       model = data;
       if (from == 'feed') {
-        var currentPost = postsSearch.firstWhere((element) => element.id == params.postId);
+        var currentPost =
+            postsSearch.firstWhere((element) => element.id == params.postId);
         print("commmmmment count${currentPost.commentsCount}");
 
         // currentPost.commentsCount = (currentPost.commentsCount + 1);
@@ -683,7 +681,8 @@ class SearchCubit extends Cubit<SearchState> {
         //     ?.firstWhere((element) => element.id == params.postId);
         // changeReaction(currentUserPost, params.react);
       } else {
-        var currentPost = postsSearch.firstWhere((element) => element.id == params.postId);
+        var currentPost =
+            postsSearch.firstWhere((element) => element.id == params.postId);
         changeReaction(currentPost, params.react);
         changeReaction(state.postDetails, params.react);
         // changeReaction(currentUserPost, params.react);
@@ -705,8 +704,6 @@ class SearchCubit extends Cubit<SearchState> {
     });
     return value;
   }
-
-
 
   Future<bool> onCommentReact({required PostReactParams params}) async {
     var response = await _commentReactUseCase(params);

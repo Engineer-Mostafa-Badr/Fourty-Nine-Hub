@@ -72,9 +72,10 @@ class _TwitterViewState extends State<TwitterView> {
                 // context.push(Routes.LOGIN);
               }
             },
+            backgoundColor: AppColors.getButtonPrimaryColor(context),
             child: Text(
               LocaleKeys.createPost.localize,
-              style: Styles.smallText(color: AppColors.whiteColor),
+              style: Styles.smallText(color: AppColors.getReversedTextColor(context)),
             ),
           ),
         ),

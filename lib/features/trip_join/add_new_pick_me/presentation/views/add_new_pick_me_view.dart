@@ -134,10 +134,10 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                     }),
               ),
               const Sizer(),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: TripJoinBottomSection(),
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 8.0),
+              //   child: TripJoinBottomSection(),
+              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h,),
                 child: const PremiumAndRequestWidget(),

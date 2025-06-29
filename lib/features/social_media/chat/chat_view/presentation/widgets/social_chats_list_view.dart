@@ -8,7 +8,7 @@
 //     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
 //       return state.chats == null
 //           ? const Center(
-//         child: CircularProgressIndicator.adaptive(),
+//         child: CustomCircularProgressIndicator(),
 //       )
 //           : state.chats!.isEmpty
 //           ? Center(

@@ -27,9 +27,8 @@ class WinnersCashbackViewBody extends StatelessWidget {
                     name: '${w.firstName} ${w.lastName}',
                     date: w.winAt,
                     price: w.profitAmount.toString(),
-                    // TODO: add currency
-                    currencyAr: '****',
-                    currencyEn: '****',
+                    currencyAr: w.currencyAr,
+                    currencyEn: w.currencyEn,
                   ),
                 )
                 .toList(),
@@ -37,6 +36,7 @@ class WinnersCashbackViewBody extends StatelessWidget {
             paginationOnpressed: () {
               context.read<WinnersCashbackCubit>().getWinners(context);
             },
+            mainAxisExtent: 170,
           );
         } else {
           return CustomFailureWidget(

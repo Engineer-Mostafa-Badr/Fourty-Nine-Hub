@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:path/path.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 
@@ -104,7 +105,7 @@ import '../../../../../../core/widget/custom_scaffold.dart';
 //             ? AppColors.BACKGROUND_COLOR
 //             : Colors.grey,
 //         child: isLoading
-//             ? const CircularProgressIndicator(color: AppColors.PRIMARY_COLOR)
+//             ? const CustomCircularProgressIndicator(color: AppColors.PRIMARY_COLOR)
 //             : const Icon(Icons.send, color: AppColors.PRIMARY_COLOR),
 //       ),
 //       body: BlocProvider.value(
@@ -352,7 +353,7 @@ class _OneTimeDocumentMessageViewState
             ? AppColors.BACKGROUND_COLOR
             : Colors.grey,
         child: isLoading
-            ? const CircularProgressIndicator(color: AppColors.PRIMARY_COLOR)
+            ? const CustomCircularProgressIndicator(color: AppColors.PRIMARY_COLOR)
             : const Icon(Icons.send, color: AppColors.PRIMARY_COLOR),
       ),
       body: BlocProvider.value(

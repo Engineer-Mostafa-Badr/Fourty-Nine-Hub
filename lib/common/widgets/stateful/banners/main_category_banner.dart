@@ -66,7 +66,6 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     return widget.fromHome == true
         ? Container(
             decoration: BoxDecoration(
-              // border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(30.r),
             ),
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -186,7 +185,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     PositionedDirectional(
                         end: 0, child: _buildRegisterButton()),
                     Label(
-                      text: widget.category.name ?? "",
+                      text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -225,12 +224,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             ),
           )
         : CachedNetworkImage(
-            // imageUrl: 'https://images.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png',
             imageUrl: widget.category.banner,
             width: double.infinity,
             height: 70,
             imageBuilder: (context, i) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: widget.category.banner.isNotEmpty
@@ -243,10 +240,15 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   ),
                 ),
               ),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  PositionedDirectional(end: 0, child: _buildRegisterButton()),
+                  Container(
+                    color: Colors.black38,
+                    width: double.infinity,
+                  ),
+                  PositionedDirectional(end: 16, child: _buildRegisterButton()),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -258,7 +260,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                       ],
                     ),
                     child: Label(
-                      text: widget.category.name ?? "",
+                      text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
                       style: Styles.headerText(
                         fontSize: 48,
                         color: Colors.white,
@@ -291,7 +293,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 children: [
                   PositionedDirectional(end: 0, child: _buildRegisterButton()),
                   Label(
-                    text: widget.category.name ?? '',
+                    text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

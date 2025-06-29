@@ -40,11 +40,12 @@ class CustomNotificationWidget extends StatelessWidget {
   const CustomNotificationWidget({
     super.key,
     required this.icon,
-    required this.unreadCount,
+    required this.unreadCount,  this.height,
   });
 
   final Widget icon;
   final int unreadCount;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,9 @@ class CustomNotificationWidget extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          padding: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,),
+          height:height?? 40,
+          margin: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,bottom: 8),
+          // padding: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,bottom: 8),
           child: icon,
         ),
         Visibility(
@@ -61,14 +64,16 @@ class CustomNotificationWidget extends StatelessWidget {
             top: 6,
             right: -5,
             child: Container(
+              width: 35.w,
+              height: 35.h,
               padding: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: AppColors.SECONDARY_COLOR),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: AppColors.getRedColor(context)),
               child: Center(
                 child: Text(
                   unreadCount == 0 ? '   ' : '$unreadCount',
                   style: Styles.smallText(
-                      color: AppColors.whiteColor, fontSize: 20),
+                      color: AppColors.getReversedTextColor(context), fontSize: 20),
                 ),
               ),
             ),

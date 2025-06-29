@@ -34,7 +34,7 @@ class CreateDoctorView extends StatelessWidget {
       child: const CustomScaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(30),
-          child: HomeAppbar(),
+          child: HomeAppbar(isWithBackArrow: true,),
         ),
         body: CreateDoctorViewBody(),
       ),

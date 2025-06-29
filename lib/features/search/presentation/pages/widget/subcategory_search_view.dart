@@ -23,7 +23,9 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../domain/use_case/fetch_search_use_case.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class SubCategorySearchView extends StatefulWidget {
   const SubCategorySearchView({super.key});
@@ -96,37 +98,79 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
       prev.searchSubCategory != curr.searchSubCategory || prev.status != curr.status,
       builder: (context, state) {
         final subCategories = _cubit.subCategoriesSearch;
-
+        if (_cubit.searchController.text.trim().isEmpty) {
+          return CustomEmptyWidget(
+            label: LocaleKeys.noData.localize,
+          );
+        }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         // No results
         if (subCategories.isEmpty) {
-          return const Center(child: Text('No subcategories found.'));
+          return CustomEmptyWidget(
+            label: LocaleKeys.noResultsFound.localize,
+          );
         }
 
         // List view with loader at bottom
-        return ListView.builder(
+        return GridView.builder(
           controller: _scrollController,
           physics: _cubit.searchController.text.trim().isEmpty
               ? const NeverScrollableScrollPhysics()
               : const AlwaysScrollableScrollPhysics(),
-
+          gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: .65,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+          ),
           itemCount: _cubit.subCategoriesSearch.length +
               (_cubit.isLoadingSubCategoriesSearchMore ? 1 : 0),
           itemBuilder: (context, index) {
             if (index >= _cubit.subCategoriesSearch.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: CustomCircularProgressIndicator()),
               );
             }
             final subCategory = _cubit.subCategoriesSearch[index];
-            return ListTile(
-              title: Text(subCategory.nameEn),
+            return SubCategoryCard(
+              mainCategory: MainCategoryEntity(id: 'id', nameEn: 'nameEn', image: 'image', banner: 'banner', cover: 'cover', total: 5),
+              item: subCategory,
+              onFav: () async {
+                // var result = await controller
+                //     .toggleSubCategoryToFavorites(data[index].id);
+                // return result;
+              },
             );
+            /*return GridView.builder(
+              padding: EdgeInsets.all(24.w),
+              itemCount: _cubit.subCategoriesSearch.length,
+              // controller: this.scrollController,
+              gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: .65,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+              ),
+              itemBuilder: (context, index) => SubCategoryCard(
+                mainCategory: MainCategoryEntity(id: 'id', nameEn: 'nameEn', image: 'image', banner: 'banner', cover: 'cover', total: 5),
+                item: _cubit.subCategoriesSearch[index],
+                onFav: () async {
+                  // var result = await controller
+                  //     .toggleSubCategoryToFavorites(data[index].id);
+                  // return result;
+                },
+              ),
+            );*/
+            // return ListTile(
+            //   title: Text(subCategory.nameEn),
+            // );
           },
         );
 

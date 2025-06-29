@@ -18,31 +18,39 @@ import 'package:fourtyninehub/features/call/presentation/controller/call_control
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
 import 'package:fourtyninehub/features/call/widgets/minimized_call_overlay.dart';
+import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
-import 'package:fourtyninehub/helpers/web_socket/websocket_isolate_manager.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'core/service/cache_service.dart';
+import 'core/service/connectivity_service.dart';
 import 'core/themes/light_theme.dart';
+import 'core/widget/network_alert_banner.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
+import 'features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'firebase_options.dart';
@@ -55,22 +63,13 @@ bool isShowOnboarding = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await WebSocketIsolateManager.instance.initialize();
-  final token = await CacheManager.getAccessToken();
-  if (token != null && token.isNotEmpty) {
-    await SharedWebSocket.connect(token: token);
-  }
-
   await CacheManager.init();
   timeago.setLocaleMessages('en', timeago.EnMessages());
   timeago.setLocaleMessages('ar', timeago.ArMessages());
 //  await  initPickMeFeature();
-  FirebaseApp? app;
-  try {
-    app = Firebase.app();
-  } catch (e) {
-    app = await Firebase.initializeApp();
-  }
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
   // final locationService = LocationService();
   //
   // locationService.startLocationTracking();
@@ -103,7 +102,8 @@ void main() async {
   );
   // ZegoGiftManager().cache.cache(giftItemList);
   isActivate = await CacheManager.getActivation() ?? false;
-  isShowOnboarding = await CacheManager.getShowOnboarding() ?? false;
+  isShowOnboarding = await CacheManager.getShowOnboarding();
+  // isShowOnboarding = false;
   await CacheManager.getFloatingNavigator();
   //Admob.initialize();
 
@@ -118,22 +118,14 @@ void main() async {
   // final isActivated =  false;
   // Routes.onBoardingScreen
   print('will go onBoardingScreen ${!isShowOnboarding}');
+  // final initialRoute = Routes.ChooseLangScreen;
   final initialRoute = !isShowOnboarding
-      ? Routes.onBoardingScreen
+      ? Routes.ChooseLangScreen
       : isActivate
           ? Routes.PAGEPREVIEW
           : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
-
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.light,
-    ),
-  );
-
   runApp(
     LocalizationService.rootWidget(
       child: Phoenix(
@@ -159,6 +151,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
 
+    NetworkManager().initialize();
+
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -183,7 +177,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    SharedWebSocket.dispose();
     super.dispose();
   }
 
@@ -220,7 +213,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         //to initialize preloading
         BlocProvider<ReelsCubit>(
-          create: (_) => serviceLocator<ReelsCubit>(),
+          create: (_) => serviceLocator<ReelsCubit>(), //..fetchReels(),
         ),
         // BlocProvider(
         //   create: (BuildContext context) => serviceLocator<SearchCubit>(),
@@ -249,6 +242,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             getUnreadNotificationsCountUseCase: serviceLocator(),
           )..getUnreadNotificationsCount(),
         ),
+        BlocProvider<GetAppNotificationsCubit>(
+          create: (context) => GetAppNotificationsCubit(
+            getNotficationsUseCase: serviceLocator(),
+            context: context,
+          ),
+        ),
+        BlocProvider<GetStatusAllServicesNotificationsCubit>(
+          create: (context) =>
+              serviceLocator<GetStatusAllServicesNotificationsCubit>(),
+        ),
+        BlocProvider<GetSocialNotificationsCubit>(
+          create: (context) => GetSocialNotificationsCubit(
+            getNotficationsUseCase: serviceLocator(),
+            context: context,
+          ),
+        ),
         // BlocProvider(
         //   create: (context) => AuthenticationRideCubit(),
         // ),
@@ -267,7 +276,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // BlocProvider(
         //   create: (context) => AuthenticationRideCubit(),
         // ),
-
+        BlocProvider<NotificationSocketIoCubit>(
+            create: (context) => NotificationSocketIoCubit(
+                  context: context,
+                  notificationListenerUseCase: serviceLocator(),
+                )),
         // BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
           create: (context) => FloatingNavigatorCubit()
@@ -281,7 +294,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
       ],
       child: ScreenUtilInit(
-        designSize: const Size(750, 1334), // Size(375, 812)
+        designSize: const Size(750, 1334),
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
@@ -291,50 +304,63 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
-              return FutureBuilder<bool>(
-                future: CacheManager.getMode(),
+              return StreamBuilder<bool>(
+                  stream: NetworkManager().onStatusChange,
+                  initialData: true, // assume connected at start
                 builder: (context, snapshot) {
-                  return BlocBuilder<CustomPageCubit, CustomPageState>(
-                    builder: (BuildContext context, custom) {
-                      return Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Stack(
-                          children: [
-                            MaterialApp.router(
-                              routerConfig: AppPages.router,
-                              builder: (BuildContext context, Widget? child) {
-                                final mediaQuery = MediaQuery.of(context);
-                                return MediaQuery(
-                                  data: mediaQuery.copyWith(
-                                    textScaler: TextScaler.noScaling,
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      child!,
-                                      const WhatsAppCallScreen(),
-                                    ],
-                                  ),
-                                );
-                              },
-                              themeMode: (snapshot.data ?? false)
-                                  ? ThemeMode.dark
-                                  : ThemeMode.light,
-                              theme: lightTheme,
-                              darkTheme: darkTheme,
-                              title: '49',
-                              debugShowCheckedModeBanner: false,
-                              localizationsDelegates:
-                                  context.localizationDelegates,
-                              supportedLocales: context.supportedLocales,
-                              locale: context.locale,
+                  final bool isConnected = snapshot.data ?? true;
+                  return FutureBuilder<bool>(
+                    future: CacheManager.getMode(),
+                    builder: (context, snapshot) {
+                      return BlocBuilder<CustomPageCubit, CustomPageState>(
+                        builder: (BuildContext context, custom) {
+                          return Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Stack(
+                              children: [
+                                MaterialApp.router(
+                                  routerConfig: AppPages.router,
+                                  builder: (BuildContext context, Widget? child) {
+                                    final mediaQuery = MediaQuery.of(context);
+                                    return MediaQuery(
+                                      data: mediaQuery.copyWith(
+                                        textScaler: TextScaler.noScaling,
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          child!,
+                                          const WhatsAppCallScreen(),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  themeMode: (snapshot.data ?? false)
+                                      ? ThemeMode.dark
+                                      : ThemeMode.light,
+                                  theme: lightTheme,
+                                  darkTheme: darkTheme,
+                                  title: '49',
+                                  debugShowCheckedModeBanner: false,
+                                  localizationsDelegates:
+                                      context.localizationDelegates,
+                                  supportedLocales: context.supportedLocales,
+                                  locale: context.locale,
+                                ),
+                                const MinimizedCallOverlay(),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: NetworkAlertBanner(isConnected: isConnected),
+                                ),
+                              ],
                             ),
-                            const MinimizedCallOverlay(),
-                          ],
-                        ),
+                          );
+                        },
                       );
                     },
                   );
-                },
+                }
               );
             },
           );

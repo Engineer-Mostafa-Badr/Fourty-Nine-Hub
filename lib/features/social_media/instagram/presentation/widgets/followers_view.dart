@@ -13,9 +13,13 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+
+import 'instagram_user_follow_widget.dart';
 
 class FollowersView extends StatefulWidget {
   const FollowersView({super.key, required this.otherId});
+
   final String otherId;
 
   @override
@@ -89,7 +93,7 @@ class _FollowersViewState extends State<FollowersView> {
         BlocBuilder<FollowCubit, FollowState>(
           builder: (context, state) {
             if (state.isLoading && _cubit.followers.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomCircularProgressIndicator());
             }
             return Expanded(
               child: ListView.separated(
@@ -100,15 +104,23 @@ class _FollowersViewState extends State<FollowersView> {
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {
                   if (index == _cubit.followers.length) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CustomCircularProgressIndicator());
                   }
                   final followers = _cubit.followers[index];
                   return GestureDetector(
                     onTap: () {
                       context.push(Routes.INSTAGRAMPROFILE,
-                          extra: followers.followerId);
+                          extra: followers.userId);
                     },
-                    child: Row(
+                    child: InstagramUserFollowWidget(
+                      inFollowers: true,
+                      image: followers.profilePictureUrl,
+                      userName: followers.username,
+                      fullName: '${followers.firstName} ${followers.lastname}',
+                      userId: followers.userId,
+                    ),
+
+                    /* Row(
                       children: [
                         ImageFromInternet(
                           image: followers.image,
@@ -150,7 +162,7 @@ class _FollowersViewState extends State<FollowersView> {
                         //   ),
                         // ),
                       ],
-                    ),
+                    )*/
                   );
                 },
               ),

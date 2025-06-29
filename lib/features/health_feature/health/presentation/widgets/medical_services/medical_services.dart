@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/current_history_booking.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_service_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -39,6 +40,63 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       const SizedBox(
+            //         width: 16,
+            //       ),
+            //       Icon(
+            //         Icons.search,
+            //         size: 50.sp,
+            //       ),
+            //       const Sizer(),
+
+            //       /// Favourite Ads
+            //       CurrentHistoryBooking(
+            //         title: LocaleKeys.mostBooking.localize,
+            //         isSelected: false, // _showMost,
+            //         onTap: () {}, // => _toggleView('most'),
+            //       ),
+            //       const Sizer(),
+
+            //       /// History
+            //       CurrentHistoryBooking(
+            //         title: context.isArabic ? 'سجل حجوزات' : 'Booking History',
+            //         isSelected: false, //_showHistory,
+            //         onTap: () {},
+            //         //  {
+            //         //   if (!context.read<UserCubit>().isLoggedIn) {
+            //         //     return pleaseLoginDialog(context);
+            //         //   } else {
+            //         //     _toggleView('history');
+            //         //   }
+            //         // },
+            //       ),
+            //       const Sizer(),
+
+            //       /// Current Booking
+            //       CurrentHistoryBooking(
+            //         title:
+            //             context.isArabic ? 'حجوزات حالية' : 'Current Booking',
+            //         isSelected: false, // _showCurrent,
+            //         onTap: () {
+            //           // if (!context.read<UserCubit>().isLoggedIn) {
+            //           //   return pleaseLoginDialog(context);
+            //           // } else {
+            //           //   _toggleView('current');
+            //           // }
+            //         },
+            //       ),
+            //       const SizedBox(
+            //         width: 16,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
             state.medicalServices == null
                 ? Shimmer.fromColors(
                     baseColor: Colors.grey.shade300,
@@ -50,41 +108,44 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
                   )
                 : state.medicalServices == []
                     ? const SizedBox.shrink()
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Label(
-                            text:  LocaleKeys.medicalService.localize,
-                            style: Styles.headerText(),
-                          ),
-                          ClickableWidget(
-                            onTap: () {
-                              _scrollController?.animateTo(
-                                (_scrollController?.position.pixels ?? 0) +
-                                    0.8.sw,
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            child: Row(
-                              children: [
-                                Label(
-                                  text: context.isArabic
-                                      ? 'مشاهدة المزيد'
-                                      : 'See More',
-                                  style: Styles.mediumText(
-                                      decoration: TextDecoration.underline,
-                                      color: AppColors.PRIMARY_COLOR_DARK),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: AppColors.PRIMARY_COLOR_DARK,
-                                  size: 30.h,
-                                ),
-                              ],
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                              text: LocaleKeys.medicalService.localize,
+                              style: Styles.headerText(),
                             ),
-                          )
-                        ],
+                            ClickableWidget(
+                              onTap: () {
+                                _scrollController?.animateTo(
+                                  (_scrollController?.position.pixels ?? 0) +
+                                      0.8.sw,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  Label(
+                                    text: context.isArabic
+                                        ? 'مشاهدة المزيد'
+                                        : 'See More',
+                                    style: Styles.mediumText(
+                                        decoration: TextDecoration.underline,
+                                        color: AppColors.getRedColor(context)),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: AppColors.getRedColor(context),
+                                    size: 30.h,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
             const Sizer(),
             Expanded(
@@ -94,8 +155,15 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
                       controller: _scrollController,
                       separatorBuilder: (context, index) => const Sizer(),
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => HealthMedicalServiceCard(
-                        subCategory: state.medicalServices![index],
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsetsDirectional.only(
+                            start: index == 0 ? 16 : 0,
+                            end: index == state.medicalServices!.length - 1
+                                ? 16
+                                : 0),
+                        child: HealthMedicalServiceCard(
+                          subCategory: state.medicalServices![index],
+                        ),
                       ),
                       itemCount: state.medicalServices!.length,
                     )

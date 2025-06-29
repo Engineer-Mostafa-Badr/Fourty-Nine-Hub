@@ -12,7 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 class PostAdInstagram extends StatelessWidget {
   const PostAdInstagram({
     super.key,
-    required this.instagramPostEntity,
+    required this.instagramPostEntity, required this.posts, required this.currentPost,
     // required this.userImageUrl,
     // required this.userName,
     // required this.images,
@@ -21,8 +21,9 @@ class PostAdInstagram extends StatelessWidget {
     // this.songName,
   });
 
+  final List<InstagramPostEntity> posts;
+  final int currentPost;
   final InstagramPostEntity instagramPostEntity;
-
   // final String userImageUrl;
   // final String userName;
   // final List<String> images;
@@ -79,7 +80,8 @@ class PostAdInstagram extends StatelessWidget {
           height: 11,
         ),
         InstagramPostReviewWidget(
-          instagramPostEntity: instagramPostEntity,
+          posts: posts,
+          currentPost: currentPost,
         )
       ],
     );

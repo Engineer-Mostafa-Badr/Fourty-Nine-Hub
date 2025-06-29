@@ -179,7 +179,7 @@ class _CarPoolBodyState extends State<CarPoolBody>
                       //   builder: (context, state) {
                       //     if (state is GetAvailableTripsForDriversLoading) {
                       //       return const Center(
-                      //           child: CircularProgressIndicator(
+                      //           child: CustomCircularProgressIndicator(
                       //         color: AppColors.PRIMARY_COLOR,
                       //       ));
                       //     } else if (state
@@ -238,7 +238,7 @@ class _CarPoolBodyState extends State<CarPoolBody>
                       //       builder: (context, state) {
                       //         if (state is GetAcceptedTripLoading) {
                       //           return const Center(
-                      //               child: CircularProgressIndicator(
+                      //               child: CustomCircularProgressIndicator(
                       //                   color: AppColors.PRIMARY_COLOR));
                       //         } else if (state is GetAcceptedTripSuccess) {
                       //           final tripParam = state.carpoolTripParam;

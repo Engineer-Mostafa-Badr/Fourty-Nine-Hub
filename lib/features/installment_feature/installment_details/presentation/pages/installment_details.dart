@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/functions/helper/launch_url.dart';
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
@@ -70,7 +71,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
           ),
           body: state.isLoading
               ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
+                  child: CustomCircularProgressIndicator(),
                 )
               : Padding(
                   padding: const EdgeInsets.all(8.0),

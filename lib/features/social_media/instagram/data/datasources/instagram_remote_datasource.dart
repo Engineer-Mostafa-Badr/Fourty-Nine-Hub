@@ -42,6 +42,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/data/models/pos
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../../../../core/error/failure.dart';
+import '../../domain/usecases/get_all_followers_use_case.dart';
 
 abstract class InstagramRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getFeed(
@@ -63,10 +64,10 @@ abstract class InstagramRemoteDataSource {
       {required TwitterFeedParams params});
 
   Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
-      TwitterFeedParams params);
+      GetAllFollowersParams params);
 
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
-      TwitterFeedParams params);
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowing(
+      GetAllFollowersParams params);
 
   Future<Either<Failure, InstagramPostDataModel>> getPosts(
       PaginationParams params);
@@ -210,8 +211,8 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
 
   @override
   Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
-      TwitterFeedParams params) async {
-    final response = await _apiConsumer.get(EndPoints.followers(params));
+      GetAllFollowersParams params) async {
+    final response = await _apiConsumer.get(EndPoints.getSocialFollowers(params: params));
 
     return response.fold((l) {
       return Left(l);
@@ -224,15 +225,15 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
-      TwitterFeedParams params) async {
-    final response = await _apiConsumer.get(EndPoints.following(params));
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowing(
+      GetAllFollowersParams params) async {
+    final response = await _apiConsumer.get(EndPoints.getSocialFollowing(params: params));
 
     return response.fold((l) {
       return Left(l);
     }, (data) {
-      final list = (data['data'] as List)
-          .map((e) => FollowingModel.fromJson(e))
+      final list = (data['data']['following'] as List)
+          .map((e) => FollowersModel.fromJson(e))
           .toList();
       return Right(list);
     });
@@ -404,7 +405,7 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
           return Left(l);
         },
         (data) {
-          final responseData = ProfileInstagramDataModel.fromJson(data['data']);
+          final responseData = ProfileInstagramDataModel.fromJson(data['data']['profile']);
           return Right(responseData);
         },
       );

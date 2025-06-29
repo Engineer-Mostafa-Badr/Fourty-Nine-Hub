@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_ne
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/login_with_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
@@ -255,6 +256,11 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params) {
     return _remoteDataSource.verifyPhoneOTP(params);
+  }
+
+  @override
+  Future<Either<Failure, UserTokensEntity>> loginWithPhone(LoginWithPhoneParams params) {
+    return _remoteDataSource.loginWithPhone(params);
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

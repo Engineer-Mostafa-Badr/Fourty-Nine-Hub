@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../res/style/app_colors.dart';
 import '../utils/hex_color_helper.dart';
@@ -36,10 +37,10 @@ class CustomSwitchListTile extends StatelessWidget {
       subtitle: subtitle,
       value: value,
       onChanged: onChanged,
-      thumbColor: const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+      thumbColor:  WidgetStatePropertyAll(context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),
       trackOutlineColor: value
           ? const WidgetStatePropertyAll(Colors.transparent)
-          : const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+          : WidgetStatePropertyAll(context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),
 
       inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
       activeTrackColor: HexColor('4CDA64'),

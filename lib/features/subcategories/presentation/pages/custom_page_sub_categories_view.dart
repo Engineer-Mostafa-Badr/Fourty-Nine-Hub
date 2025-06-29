@@ -185,7 +185,7 @@
 //             },
 //               builder: (context, state) {
 //               if (state.status == SubcategoriesStates.loading) {
-//                 return const Center(child: CircularProgressIndicator());
+//                 return const Center(child: CustomCircularProgressIndicator());
 //               }
 //               if (state.status == SubcategoriesStates.error) {
 //                 return Center(child: Text('state.failure!.message'));
@@ -229,7 +229,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -239,23 +241,44 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_search_view.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/debouncer.dart';
 import '../../../../core/widget/custom_notification_badge.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import '../../../ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import '../cubit/subcategories_cubit.dart';
 import '../widgets/floating_add_button.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../widgets/search_bar_widget.dart';
+import 'ads_request_log_view.dart';
+import 'favourite_ads_view.dart';
+import 'my_ads_view.dart';
+
+class CustomPageSubCategoriesParams {
+  final MainCategoryEntity mainCategory;
+  final bool isCustomPage;
+
+  CustomPageSubCategoriesParams({
+    required this.mainCategory,
+    required this.isCustomPage,
+  });
+}
 
 class CustomPageSubCategoriesView extends StatefulWidget {
-  final MainCategoryEntity mainCategory;
+  const CustomPageSubCategoriesView({
+    super.key,
+    required this.params,
+  });
 
-  const CustomPageSubCategoriesView({super.key, required this.mainCategory});
+  final CustomPageSubCategoriesParams params;
 
   @override
   State<CustomPageSubCategoriesView> createState() =>
@@ -266,17 +289,15 @@ class _CustomPageSubCategoriesViewState
     extends State<CustomPageSubCategoriesView> {
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
-
+  late Debouncer _debounce;
   @override
   void initState() {
-    print('widget.mainCategory.id ${widget.mainCategory.id}');
-    // context
-    //     .read<SubcategoriesCubit>()
-    //     .init(mainCategoryId: widget.mainCategory.id);
+    _debounce = Debouncer();
+    print('widget.mainCategory.id ${widget.params.mainCategory.nameEn}');
     context
         .read<SubcategoriesCubit>()
-        .init(mainCategoryId: widget.mainCategory.id);
-    _fetchSubcategories();
+        .init(mainCategoryId: widget.params.mainCategory.id);
+    _fetchSubcategories(widget.params.isCustomPage);
     scrollController = ScrollController();
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection ==
@@ -293,12 +314,31 @@ class _CustomPageSubCategoriesViewState
   List<SubCategoryEntity> subCategories = [];
   String? selectedValue;
 
-  void _fetchSubcategories() async {
-    final subCategoriesList =
-        await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
-    setState(() {
-      subCategories = subCategoriesList;
-    });
+  Future<void> _fetchSubcategories(bool isCustomPage) async {
+    if (isCustomPage) {
+      final subCategoriesList =
+          await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
+      setState(() {
+        subCategories = subCategoriesList;
+      });
+      return;
+    } else {
+      final subCategoriesList = await context
+          .read<SubcategoriesCubit>()
+          .getSubcategories(
+              paginationParams: PaginationParams(page: 1, limit: 200),
+              mainCategoryId: widget.params.mainCategory.id);
+      setState(() {
+        subCategories = subCategoriesList;
+      });
+      print('subCategories.length ${subCategories.length}');
+      return;
+    }
+    // final subCategoriesList =
+    // await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
+    // setState(() {
+    //   subCategories = subCategoriesList;
+    // });
   }
 
   void _showDropdownMenu(BuildContext context) async {
@@ -352,7 +392,7 @@ class _CustomPageSubCategoriesViewState
                               Navigator.pop(context);
                               context.push(Routes.CREATEAD,
                                   extra: CategorizationEntity(
-                                      mainCategory: widget.mainCategory,
+                                      mainCategory: widget.params.mainCategory,
                                       subCategory: item));
                             } else {
                               return pleaseLoginDialog(context);
@@ -431,7 +471,9 @@ class _CustomPageSubCategoriesViewState
     return CustomScaffold(
       enableCustomAppBar: true,
       appBar: BackAppBar(
-        label: widget.mainCategory.name,
+        label: context.isArabic
+            ? widget.params.mainCategory.name
+            : widget.params.mainCategory.nameEn,
         textColor: Colors.white,
         iconColor: Colors.white,
         enableCustomAppBar: true,
@@ -449,11 +491,26 @@ class _CustomPageSubCategoriesViewState
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.search,
-                    color: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
+                  IconButton(
+                    padding: const EdgeInsets.all(0),
+                    onPressed: () {
+                      context
+                          .read<SubcategoriesCubit>()
+                          .toggleMyAds('isSearchAdsOpen');
+                      // setState(() {
+                      //   isSearchOpen = !isSearchOpen;
+                      // });
+                    },
+                    icon: SvgPicture.asset(
+                      Assets.searchIcon,
+                      colorFilter: ColorFilter.mode(
+                        context.read<SubcategoriesCubit>().isSearchAdsOpen
+                            ? const Color(0xffF33D49)
+                            : AppColors.PRIMARY_COLOR,
+                        BlendMode.srcIn,
+                      ),
+                      // color: context.isDarkMode ? Colors.white : null,
+                    ),
                   ),
                   const SizedBox(
                     width: 8,
@@ -467,18 +524,21 @@ class _CustomPageSubCategoriesViewState
                             .read<SubcategoriesCubit>()
                             .isFavouriteAdsOpen,
                         onPressed: () {
-                          if (context.isUserLoggedIn) {
+                          if (!context.isUserLoggedIn) {
                             return pleaseLoginDialog(context);
                           } else {
-    if (!context.isUserLoggedIn) {
-    return pleaseLoginDialog(context);
-    } else { context
-                                .read<SubcategoriesCubit>()
-                                .getRequestsLog(widget.mainCategory.id);
+                            if (!context.isUserLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            } else {
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .loadMyFavouriteAds(
+                                      id: widget.params.mainCategory.id);
 
-                            context
-                                .read<SubcategoriesCubit>()
-                                .toggleMyAds('isFavouriteAdsOpen');}
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .toggleMyAds('isFavouriteAdsOpen');
+                            }
                           }
                         },
                       ),
@@ -487,6 +547,17 @@ class _CustomPageSubCategoriesViewState
                   const SizedBox(
                     width: 8,
                   ),
+                  if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+                    SearchBarWidget(
+                      onChanged: (value) {
+                        _debounce.run(() {
+                          context.read<SubcategoriesCubit>().searchAds(
+                            value: value,
+                            mainCategoryId: widget.params.mainCategory.id,
+                          );
+                        });
+                      },
+                    ),
                   Expanded(
                     child: CustomNotificationBadge(
                       count: 0,
@@ -497,7 +568,9 @@ class _CustomPageSubCategoriesViewState
                         onPressed: () {
                           context
                               .read<SubcategoriesCubit>()
-                              .getRequestsLog(widget.mainCategory.id);
+                              .loadRequestsLogByMainCategory(
+                                  mainCategoryId:
+                                      widget.params.mainCategory.id);
                           context
                               .read<SubcategoriesCubit>()
                               .toggleMyAds('isRequestLogOpen');
@@ -521,7 +594,7 @@ class _CustomPageSubCategoriesViewState
                         } else {
                           context
                               .read<SubcategoriesCubit>()
-                              .getMarriageMyAds(widget.mainCategory.id);
+                              .loadMyAds(id: widget.params.mainCategory.id);
                           context
                               .read<SubcategoriesCubit>()
                               .toggleMyAds('isMyAdsOpen');
@@ -536,12 +609,68 @@ class _CustomPageSubCategoriesViewState
             const SizedBox(
               height: 8,
             ),
-            if (controller.isFavouriteAdsOpen) Container(),
-            if (controller.isRequestLogOpen) Container(),
-            if (controller.isMyAdsOpen) Container(),
+            if (controller.isFavouriteAdsOpen)
+              Expanded(
+                  child: BlocProvider(
+                create: (context) => serviceLocator<AdvertisementCubit>(),
+                child: FavouriteAdsView(
+                  id: widget.params.mainCategory.id,
+                  isFloatingButtonVisible: (value) {
+                    isFloatingButtonVisible = value;
+                    setState(() {});
+                  },
+                ),
+              )),
+            if (controller.isRequestLogOpen)
+              Expanded(
+                  child: AdsRequestLogView(
+                      mainCategoryId: widget.params.mainCategory.id,
+                      isFloatingButtonVisible: (value) {
+                        isFloatingButtonVisible = value;
+                        setState(() {});
+                      })),
+            if (controller.isMyAdsOpen)
+              Expanded(
+                child: BlocProvider(
+                    create: (context) => serviceLocator<AdvertisementCubit>(),
+                    child: MyAdsView(
+                      id: widget.params.mainCategory.id,
+                      isFloatingButtonVisible: (value) {
+                        isFloatingButtonVisible = value;
+                        setState(() {});
+                      },
+                    )),
+              ),
+            if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+              SearchBarWidget(
+                onChanged: (value) {
+                  _debounce.run(() {
+                    context.read<SubcategoriesCubit>().searchAds(
+                      value: value,
+                      mainCategoryId: widget.params.mainCategory.id,
+                    );
+                  });
+                },
+              ),
+            if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+            //kslkfjslkfjslkfsldfkjlsfld
+              Expanded(
+                child: BlocProvider(
+                  create: (context) => serviceLocator<AdvertisementCubit>(),
+                  child: AdsSearchView(
+                    mainCategoryNameAr: widget.params.mainCategory.name ?? 'N/A',
+                    mainCategoryNameEn: widget.params.mainCategory.nameEn ?? 'N/A',
+                    isFloatingButtonVisible: (value) {
+                      isFloatingButtonVisible = value;
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
             if (!controller.isMyAdsOpen &&
                 !controller.isFavouriteAdsOpen &&
-                !controller.isRequestLogOpen)
+                !controller.isRequestLogOpen&&
+                !controller.isSearchAdsOpen)
               Expanded(
                 child: PaginationView<SubCategoryEntity>(
                   build: (ScrollController scrollController,
@@ -559,7 +688,7 @@ class _CustomPageSubCategoriesViewState
                         crossAxisSpacing: 16,
                       ),
                       itemBuilder: (context, index) => SubCategoryCard(
-                        mainCategory: widget.mainCategory,
+                        mainCategory: widget.params.mainCategory,
                         item: data[index],
                         onFav: () async {
                           var result = await controller
@@ -569,9 +698,20 @@ class _CustomPageSubCategoriesViewState
                       ),
                     );
                   },
-                  fetchData: (PaginationParams paginationParams) => context
-                      .read<SubcategoriesCubit>()
-                      .getCustomPageSubcategories(),
+                  fetchData: (PaginationParams paginationParams) {
+                    if (widget.params.isCustomPage) {
+                      return context
+                          .read<SubcategoriesCubit>()
+                          .getCustomPageSubcategories();
+                    } else {
+                      return context
+                          .read<SubcategoriesCubit>()
+                          .getSubcategories(
+                              mainCategoryId: widget.params.mainCategory.id,
+                              paginationParams:
+                                  PaginationParams(page: 1, limit: 200));
+                    }
+                  },
                 ),
               ),
           ],

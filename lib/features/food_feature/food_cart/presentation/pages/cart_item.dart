@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/data/mode
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:intl/intl.dart';
 
 class BuildCartItem extends StatefulWidget {
   const BuildCartItem(
@@ -150,7 +152,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        '${widget.totalPrice.toStringAsFixed(2)} ${widget.currency}' ,
+                                        '${context.isArabic?(widget.totalPrice).toLocalizedArabic(context):(widget.totalPrice).toStringAsFixed(0)} ${widget.currency}' ,
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
@@ -188,7 +190,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                         ),
                                         const SizedBox(width: 12),
                                         Text(
-                                          '$localQuantity',
+                                          '$localQuantity'.toArabicNumbers(context),
                                           style: Styles.headerText(),
                                         ),
                                         const SizedBox(width: 12),
@@ -250,7 +252,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
               if (localQuantity != widget.quantity) ...[
                 const SizedBox(height: 8),
                 Text(
-                  '${LocaleKeys.confirmQuantity.localize} (${widget.quantity}).',
+                  '${LocaleKeys.confirmQuantity.localize} (${context.isArabic?(widget.quantity).toLocalizedArabic(context):widget.quantity}).',
                   style: Styles.mediumText(color: AppColors.getRedColor(context)),
                 ),
               ],

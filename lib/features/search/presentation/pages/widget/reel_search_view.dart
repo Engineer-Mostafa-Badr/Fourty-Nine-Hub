@@ -14,6 +14,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../domain/use_case/fetch_search_use_case.dart';
 
 class ReelSearchView extends StatefulWidget {
@@ -72,11 +73,8 @@ class _ReelSearchViewState extends State<ReelSearchView> {
         builder: (context, state) {
           final reels = _cubit.reelsSearch;
           if (_cubit.searchController.text.trim().isEmpty) {
-            return Center(
-              child: Text(
-                LocaleKeys.noData.localize,
-                style: Styles.mediumText(),
-              ),
+            return CustomEmptyWidget(
+              label: LocaleKeys.noData.localize,
             );
           }
           if (state.status == SearchStates.loading) {
@@ -84,18 +82,21 @@ class _ReelSearchViewState extends State<ReelSearchView> {
           }
 
           if (reels.isEmpty) {
-            return Center(
-              child: Text(
-                LocaleKeys.noResultsFound.localize,
-                style: Styles.mediumText(),
-              ),
+            return CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
             );
+            // return Center(
+            //   child: Text(
+            //     LocaleKeys.noResultsFound.localize,
+            //     style: Styles.mediumText(),
+            //   ),
+            // );
           }
 
           return GridView.builder(
             controller: _scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),

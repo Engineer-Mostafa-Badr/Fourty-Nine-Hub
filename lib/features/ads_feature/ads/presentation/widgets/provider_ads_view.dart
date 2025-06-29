@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
@@ -16,24 +19,23 @@ import 'package:go_router/go_router.dart';
 import '../../../../../res/style/styles.dart';
 
 class ProviderAdsView extends StatelessWidget {
-  const ProviderAdsView(
-      {super.key,
-      required this.params,
-      required this.userType,
-      required this.controller});
+  const ProviderAdsView({
+    super.key,
+    required this.params,
+    required this.userType,
+    required this.controller,
+    required this.onScrollChanged,
+  });
 
   final AdsViewParams params;
   final String userType;
   final AdvertisementCubit controller;
+  final Function(bool) onScrollChanged;
 
   @override
   Widget build(BuildContext context) {
     return controller.state.status == AdsStates.loading
-        ? Center(
-            child: Padding(
-            padding: EdgeInsets.only(top: 30.h),
-            child: const CircularProgressIndicator(),
-          ))
+        ? const CustomLoading()
         : Column(children: [
             const Sizer(),
             Container(
@@ -44,13 +46,15 @@ class ProviderAdsView extends StatelessWidget {
                       child: BadgedLabel(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.filter.localize,
-                          style: Styles.headerText(color: AppColors.getReversedTextColor(context),
-                              fontWeight:FontWeight.w400 ),
+                          style: Styles.headerText(
+                              color: AppColors.getReversedTextColor(context),
+                              fontWeight: FontWeight.w400),
                           color: AppColors.getButtonPrimaryColor(context),
                           width: 170.h,
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
-                          iconLeading: Icons.keyboard_arrow_down_rounded,textColor: AppColors.getReversedTextColor(context),
+                          iconLeading: Icons.keyboard_arrow_down_rounded,
+                          textColor: AppColors.getReversedTextColor(context),
                           onTap: () async {
                             dynamic data = await context.push(Routes.FILTERADS,
                                 extra: CategorizationEntity(
@@ -73,10 +77,12 @@ class ProviderAdsView extends StatelessWidget {
                     ),
                     Expanded(
                       child: BadgedLabel(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.city.localize,
                           width: 170.h,
-                          style: Styles.headerText(fontWeight:FontWeight.w400 ,color: AppColors.getReversedTextColor(context)),
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.getReversedTextColor(context)),
                           textColor: AppColors.getReversedTextColor(context),
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
@@ -105,18 +111,31 @@ class ProviderAdsView extends StatelessWidget {
                   ],
                 )),
             Expanded(
-                child: controller.state.hasFilter == false
-                    ? ProviderAds(
-                        params: params,
-                        userType: userType,
-                        controller: controller,
-                      )
-                    : ProviderFilterAds(
-                        userType: userType,
-                        params: params,
-                        model: controller.state.filterModel!,
-                        controller: controller,
-                      ))
+                child:
+                    // controller.state.ads?.isEmpty ?? false // true
+                    //     ? Center(
+                    //         child: Label(
+                    //           text: LocaleKeys.noAds.localize,
+                    //           style: Styles.mediumText(
+                    //               color: context.isDarkMode
+                    //                   ? AppColors.whiteColor
+                    //                   : AppColors.PRIMARY_COLOR),
+                    //         ),
+                    //       )
+                    //     :
+                    controller.state.hasFilter == false
+                        ? ProviderAds(
+                            params: params,
+                            userType: userType,
+                            controller: controller,
+                            onScrollChanged: onScrollChanged,
+                          )
+                        : ProviderFilterAds(
+                            userType: userType,
+                            params: params,
+                            model: controller.state.filterModel!,
+                            controller: controller,
+                          ))
           ]);
   }
 }

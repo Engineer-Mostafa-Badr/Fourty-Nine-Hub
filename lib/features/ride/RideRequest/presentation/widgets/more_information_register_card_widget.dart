@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
 
@@ -134,7 +135,7 @@ class _MoreInformationRegisterCardWidgetState
           BlocBuilder<HealthCubit, HealthState>(
             builder: (context, state) {
               if (state.isLoading) {
-                return const CircularProgressIndicator(
+                return const CustomCircularProgressIndicator(
                   color: AppColors.PRIMARY_COLOR,
                 );
               }

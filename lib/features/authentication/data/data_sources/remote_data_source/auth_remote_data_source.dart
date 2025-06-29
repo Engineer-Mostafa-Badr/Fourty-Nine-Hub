@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_no
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/login_with_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
@@ -114,6 +115,9 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
       VerifyPhoneOTPParams params);
+
+  Future<Either<Failure, UserTokensEntity>> loginWithPhone(
+      LoginWithPhoneParams params);
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -292,7 +296,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
     final result = await _apiConsumer.put(
-      EndPoints.resendVerificationOTP,
+      params.forVerification
+          ? EndPoints.resendVerificationOTP
+          : EndPoints.resendOTP,
       data: params.toJson(),
     );
     return result.fold(
@@ -555,6 +561,30 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         return Right(VerifyOtpModel.fromJson(
           response['data'],
         ));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UserTokensEntity>> loginWithPhone(
+      LoginWithPhoneParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.loginWithPhone,
+      data: await params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) async {
+        _apiConsumer.attachToken(UserTokensModel.fromJson(
+          response['data'],
+        ));
+
+        // await registerSocket();
+        return Right(
+          UserTokensModel.fromJson(
+            response['data'],
+          ),
+        );
       },
     );
   }

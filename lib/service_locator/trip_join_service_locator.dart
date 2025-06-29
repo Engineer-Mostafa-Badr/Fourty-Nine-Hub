@@ -114,13 +114,13 @@ class TripJoinServiceLocator {
     );
 
     //! view all trip join db injection
-    serviceLocator.registerLazySingleton<ViewAllTripJoinRemoteDataSource>(
-      () => ViewAllTripJoinRemoteDataSourceImp(apiConsumer: serviceLocator()),
-    );
-    serviceLocator.registerLazySingleton<ViewAllTripJoinRepo>(
-      () =>
-          ViewAllTripJoinRepoImp(viewripJoinRemoteDataSource: serviceLocator()),
-    );
+    // serviceLocator.registerLazySingleton<ViewAllTripJoinRemoteDataSource>(
+    //   () => ViewAllTripJoinRemoteDataSourceImp(apiConsumer: serviceLocator()),
+    // );
+    // serviceLocator.registerLazySingleton<ViewAllTripJoinRepo>(
+    //   () =>
+    //       ViewAllTripJoinRepoImp(viewripJoinRemoteDataSource: serviceLocator()),
+    // );
     serviceLocator.registerLazySingleton<ViewAllTripJoinUseCase>(
       () => ViewAllTripJoinUseCase(viewAllTripJoinRepo: serviceLocator()),
     );

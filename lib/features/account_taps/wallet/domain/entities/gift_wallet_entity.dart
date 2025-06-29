@@ -1,7 +1,7 @@
 class GiftWalletEntity {
   final String id;
   final String userId;
-  final num? amount;
+  final String? amount;
   final bool isActive;
   final bool tenYearsComplete;
   final bool fiveYearsComplete;

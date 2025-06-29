@@ -47,19 +47,55 @@ class ClientTripsState {
   final List<TripEntity>? offers;
   final List<CityEntity>? cities;
   final List<GovernorateEntity>? governorates;
-  const ClientTripsState({
+  final CreateNonTrackTripEntity? createNonTrackTripEntity;
+  final List<ClientPendingTripEntity>? clientPendingTripData;
+  final List<ClientAcceptedTripEntity>? clientAcceptedTripData;
+  final List<ClientOfferTripEntity> clientOfferTripData;
+  final List<ClientPastTripEntity>? clientPastTripData;
+   int newOfferCount;
+  final CreateLoadingTripEntity? createLoadingTripEntity;
+  final String? message;
+  final bool showSnackbar;
+  final RateResponseEntity? rateResponseEntity;
+  final DriverAllRatingEntity? driverAllRating;
+  final ClientAllRatingEntity? clientAllRating;
+   ClientTripsState({
     this.status = ClientTripsStates.initState,
     this.failure,
     this.offers,
     this.cities,
     this.governorates,
+    this.createNonTrackTripEntity,
+    this.createLoadingTripEntity,
+    this.clientPendingTripData,
+    this.message,
+    this.showSnackbar = false,
+    this.clientAcceptedTripData,
+    this.clientOfferTripData  = const  [],
+    this.clientPastTripData,
+    this.rateResponseEntity,
+    this.driverAllRating,
+    this.clientAllRating,
+    this.newOfferCount =0 ,
   });
   ClientTripsState copyWith({
     ClientTripsStates? status,
     Failure? failure,
+    String? message,
     List<TripEntity>? offers,
     List<CityEntity>? cities,
     List<GovernorateEntity>? governorates,
+    CreateNonTrackTripEntity? createNonTrackTripEntity,
+    CreateLoadingTripEntity? createLoadingTripEntity,
+    List<ClientPendingTripEntity>? clientPendingTripData,
+    List<ClientAcceptedTripEntity>? clientAcceptedTripData,
+    bool? showSnackbar,
+    List<ClientOfferTripEntity>? clientOfferTripData,
+    List<ClientPastTripEntity>? clientPastTripData,
+    RateResponseEntity? rateResponseEntity,
+    DriverAllRatingEntity? driverAllRating,
+    ClientAllRatingEntity? clientAllRating,
+    int? newOfferCount,
   }) {
     return ClientTripsState(
       status: status ?? this.status,
@@ -67,6 +103,18 @@ class ClientTripsState {
       offers: offers ?? this.offers,
       cities: cities ?? this.cities,
       governorates: governorates ?? this.governorates,
+      createNonTrackTripEntity: createNonTrackTripEntity ?? this.createNonTrackTripEntity,
+      clientPendingTripData: clientPendingTripData ?? this.clientPendingTripData,
+      message: message ?? this.message,
+      showSnackbar: showSnackbar ?? this.showSnackbar,
+      clientAcceptedTripData: clientAcceptedTripData ?? this.clientAcceptedTripData,
+      clientOfferTripData: clientOfferTripData ?? this.clientOfferTripData,
+      clientPastTripData: clientPastTripData ?? this.clientPastTripData,
+      createLoadingTripEntity: createLoadingTripEntity ?? this.createLoadingTripEntity,
+      rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
+      driverAllRating: driverAllRating ?? this.driverAllRating,
+      clientAllRating: clientAllRating ?? this.clientAllRating,
+      newOfferCount: newOfferCount ?? this.newOfferCount,
     );
   }
 }

@@ -6,9 +6,12 @@ import 'sub_category_model.dart';
 class SettingsDashboardModel extends SettingsDashboardEntity {
   SettingsDashboardModel({
     required super.isReady,
+    required super.enableNotificationSound,
     required List<SubCategoryModel> super.categoryIds,
     required super.subscriptionType,
     required super.pricingPerKm,
+    required super.highCostPerKm,
+    required super.lowCostPerKm,
     required super.city,
     required RatingSettingsModel super.rating,
     required super.profit,
@@ -16,15 +19,19 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
     required super.isActive,
     required super.isApproved,
     required super.isRejected,
+    required super.isCriminalRecordEnabled, required super.isDrugAnalysisRecordEnabled, required super.isVehicleRecordEnabled, required super.idExpiryDate, required super.drivingLicenseExpiryDate, required super.carLicenseExpiryDate, required super.criminalRecordExpiryDate, required super.drugAnalysisExpiryDate, required super.technicalExaminationExpiryDate,
   });
 
   factory SettingsDashboardModel.fromJson(Map<String, dynamic> json) {
     return SettingsDashboardModel(
-      isReady: json['isReady'],
+      isReady: json['isReady']??false,
+      enableNotificationSound: json['isVoiceCommentAlertsEnabled']??false,
       categoryIds: List<SubCategoryModel>.from((json['categoryIds'] as List)
           .map((x) => SubCategoryModel.fromJson(x))),
       subscriptionType: json['subscriptionType'],
       pricingPerKm: json['pricingPerKm']!=null?json['pricingPerKm'].toDouble():0.0,
+      highCostPerKm: json['fairCostPerKm']!=null?json['fairCostPerKm']['highCostPerKm']??0.0:0.0,
+      lowCostPerKm: json['fairCostPerKm']!=null?json['fairCostPerKm']['lowCostPerKm']??0.0:0.0,
       city: json['city'],
       rating: RatingSettingsModel.fromJson(json['rating']),
       profit: json['profit']!=null?json['profit'].toDouble():0.0,
@@ -32,6 +39,15 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
       isActive: json['isActive'],
       isApproved: json['isApproved'],
       isRejected: json['isRejected'],
+      carLicenseExpiryDate: json['documentations']!=null?json['documentations']['carLicenseExpiryDate']??'':'',
+      criminalRecordExpiryDate: json['documentations']!=null?json['documentations']['criminalRecordExpiryDate']??'':'',
+      drivingLicenseExpiryDate: json['documentations']!=null?json['documentations']['drivingLicenseExpiryDate']??'':'',
+      drugAnalysisExpiryDate: json['documentations']!=null?json['documentations']['drugAnalysisExpiryDate']??'':'',
+      idExpiryDate: json['documentations']!=null?json['documentations']['idExpiryDate']??'':'',
+      isCriminalRecordEnabled: json['documentations']!=null?json['documentations']['isCriminalRecordEnabled']??false:false,
+      isDrugAnalysisRecordEnabled: json['documentations']!=null?json['documentations']['isDrugAnalysisRecordEnabled']??false:false,
+      isVehicleRecordEnabled: json['documentations']!=null?json['documentations']['isVehicleRecordEnabled']??false:false,
+      technicalExaminationExpiryDate: json['documentations']!=null?json['documentations']['technicalExaminationExpiryDate']??'':'',
     );
   }
 }

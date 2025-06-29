@@ -268,7 +268,7 @@
 // //     if (!_isInitialized) {
 // //       // Display a loading indicator if the camera is not initialized yet
 // //       return Center(
-// //         child: CircularProgressIndicator(),
+// //         child: CustomCircularProgressIndicator(),
 // //       );
 // //     }
 // //
@@ -309,7 +309,7 @@
 // //           ),
 // //         ],
 // //       )
-// //           : Center(child: CircularProgressIndicator()),
+// //           : Center(child: CustomCircularProgressIndicator()),
 // //     );
 // //   }
 // //

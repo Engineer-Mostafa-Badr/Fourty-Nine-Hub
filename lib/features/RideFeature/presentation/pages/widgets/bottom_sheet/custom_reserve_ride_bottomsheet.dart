@@ -15,6 +15,8 @@ import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../../core/utils/format_numbers.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -104,7 +106,7 @@ class _CustomReserveRideBottomSheetState
                                     itemCount: (state.rideExpectedPrice
                                                 ?.subcategoryModel.length ??
                                             0) +
-                                        3, // +3 لإضافة الـ ImageTextRow
+                                        3,
                                     itemBuilder: (context, index) {
                                       if (index <
                                           (state.rideExpectedPrice
@@ -113,6 +115,21 @@ class _CustomReserveRideBottomSheetState
                                         return GestureDetector(
                                           onTap: () {
                                             setState(() {
+
+                                              if(context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null){
+                                                if(serviceLocator<UserCubit>().state.data?.gender == "male"){
+                                                  if(state
+                                                      .rideExpectedPrice
+                                                      ?.subcategoryModel[index]
+                                                      .nameEn.trim().toLowerCase() == "lady") {
+                                                    showErrorMessage(context,
+                                                        context.isArabic
+                                                            ? "أنت رجل, لا يمكنك استخدام هذه الخدمة"
+                                                            : "You are a man, you can't use this service");
+                                                    return;
+                                                  }
+                                                }
+                                              }
                                               selectedCategoryId = state
                                                       .rideExpectedPrice
                                                       ?.subcategoryModel[index]
@@ -158,7 +175,7 @@ class _CustomReserveRideBottomSheetState
                                         const SizedBox(width: 18),
                                         Expanded(
                                             child: _buildSelectableContainer(
-                                                1, context.isArabic ? "فيزا" : "Visa", false)),
+                                                1, context.isArabic ? "بطاقة بنكية" : "Visa", false)),
                                       ],
                                     ),
                                     const SizedBox(height: 6),
@@ -201,8 +218,9 @@ class _CustomReserveRideBottomSheetState
                                                   price: state.rideExpectedPrice?.highestFare,
                                                 );
                                               }else{
-                                                context.pop();
+                                                // context.pop();
                                                 await widget.rideCubit.requestTrip(
+                                                  context: context,
                                                   price: widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price,),
                                                   comfort: widget.rideCubit.isComfort,
                                                   autoAccept: widget.rideCubit.isAutoAccept,
@@ -228,8 +246,9 @@ class _CustomReserveRideBottomSheetState
                                               }
                                             }
                                             else {
-                                              context.pop();
+                                              // context.pop();
                                               await widget.rideCubit.requestTrip(
+                                                context: context,
                                                 price: widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price,),
                                                 comfort: widget.rideCubit.isComfort,
                                                 autoAccept: widget.rideCubit.isAutoAccept,
@@ -277,9 +296,10 @@ class _CustomReserveRideBottomSheetState
                                                     ?.highestFare,
                                               );
                                             } else {
-                                              context.pop();
+                                              // context.pop();
                                               await widget.rideCubit
                                                   .requestTrip(
+                                                context: context,
                                                 price: widget.rideCubit
                                                     .getTotalPrice(
                                                   state.rideExpectedPrice!
@@ -370,8 +390,9 @@ class _CustomReserveRideBottomSheetState
                                               );
                                             }
                                           } else {
-                                            context.pop();
+                                            // context.pop();
                                             await widget.rideCubit.requestTrip(
+                                              context: context,
                                               price: widget.rideCubit
                                                   .getTotalPrice(
                                                 state.rideExpectedPrice!
@@ -467,35 +488,6 @@ class _CustomReserveRideBottomSheetState
       ),
     );
   }
-
-  // Widget _buildDriversOffers(RideState state) {
-  //   return ListView.builder(
-  //     itemCount: state.rideOffers.length,
-  //     physics: const BouncingScrollPhysics(),
-  //     itemBuilder: (context, index) {
-  //       final RideOfferEntity rideOffer = state.rideOffers[index];
-  //
-  //       return StatefulBuilder(
-  //         builder: (context, setState) {
-  //           bool isVisible = true;
-  //
-  //           return Visibility(
-  //             visible: isVisible,
-  //             child: TopCardRequest(
-  //               rideOffer: rideOffer,
-  //               onAccept: () {
-  //                 context.push(Routes.RideStatusScreen);
-  //               },
-  //               onRefuse: () {
-  //                 context.read<RideCubit>().removeRideOfferFromRideOffers(rideOffer);
-  //               },
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget _buildSelectableContainer(int index, String text, bool hasImage) {
     bool isSelected = selectedContainerIndex == index;
@@ -609,8 +601,8 @@ class _CustomReserveRideBottomSheetState
                 ),
                 Label(
                   text: context.isArabic
-                      ? ' ج.م${widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price, isScooter: state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.nameEn.toLowerCase() == 'scooter').toInt()}'
-                      : 'EGP ${widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price, isScooter: state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.nameEn.toLowerCase() == 'scooter').toInt()}' ??
+                      ? '${FormatNumbers().convertNumberToLocalizedString(widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price, isScooter: state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.nameEn.toLowerCase() == 'scooter').toInt().toString(), isArabic: context.isArabic)} ج.م'
+                      : 'EGP ${FormatNumbers().convertNumberToLocalizedString(widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price, isScooter: state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.nameEn.toLowerCase() == 'scooter').toInt().toString(), isArabic: context.isArabic)}' ??
                           "",
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -697,19 +689,15 @@ class _CustomReserveRideBottomSheetState
                       ),
                       Label(
                         text: context.isArabic
-                            ? ' ج.م${widget.rideCubit.getTotalPrice(subcategory?.price ?? 0, isScooter: subcategory?.nameEn.toLowerCase() == 'scooter').toInt()}' ??
+                            ? '${FormatNumbers().convertNumberToLocalizedString(widget.rideCubit.getTotalPrice(subcategory?.price ?? 0, isScooter: subcategory?.nameEn.toLowerCase() == 'scooter').toInt().toString(), isArabic: context.isArabic)} ج.م' ??
                                 ''
-                            : 'EGP ${widget.rideCubit.getTotalPrice(subcategory?.price ?? 0, isScooter: subcategory?.nameEn.toLowerCase() == 'scooter').toInt()}' ??
+                            : 'EGP ${FormatNumbers().convertNumberToLocalizedString(widget.rideCubit.getTotalPrice(subcategory?.price ?? 0, isScooter: subcategory?.nameEn.toLowerCase() == 'scooter').toInt().toString(), isArabic: context.isArabic)}' ??
                                 '',
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
-                  // const Label(
-                  //   text: 'Drop off today at 5:00 PM',
-                  //   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                  // ),
                 ],
               ),
             ),

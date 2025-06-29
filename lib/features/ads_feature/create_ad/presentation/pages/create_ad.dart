@@ -12,6 +12,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
@@ -33,6 +34,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/categorization_entity.dart';
 import '../widgets/ad_dynamic_inputs.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class CreateAdView extends StatefulWidget {
   final CategorizationEntity categorization;
@@ -55,12 +57,11 @@ class _CreateAdViewState extends State<CreateAdView> {
   }
 
   final RegExp _phonePattern = RegExp(
-      r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'  // Common formats: +1 (123) 456-7890, 123-456-7890
-      r'\d{10}|'                                                  // 10 consecutive digits
-      r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'                            // 123 456 7890, 123.456.7890
-      r'\+\d{10,}'                                               // International format: +1234567890
-  );
-
+      r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|' // Common formats: +1 (123) 456-7890, 123-456-7890
+      r'\d{10}|' // 10 consecutive digits
+      r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|' // 123 456 7890, 123.456.7890
+      r'\+\d{10,}' // International format: +1234567890
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -80,15 +81,15 @@ class _CreateAdViewState extends State<CreateAdView> {
       return CustomScaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(30),
-          child:HomeAppbar(isWithBackArrow: true,),
+          child: HomeAppbar(
+            isWithBackArrow: true,
+          ),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           // buildWhen: (previous, current) => previous.status == current.status,
           builder: (context, state) {
             if (state.status == CreateAdStates.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const CustomLoading();
             } else {
               return Padding(
                 padding: const EdgeInsets.only(
@@ -106,7 +107,6 @@ class _CreateAdViewState extends State<CreateAdView> {
                       const Sizer(
                         height: 20,
                       ),
-
 
                       _buildImagePicker(),
 
@@ -130,16 +130,23 @@ class _CreateAdViewState extends State<CreateAdView> {
                                   }
                                 });
                               },
-                              child: Container(
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                    color: AppColors.getFillColor(context),
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
-                                        color: (state.isUser == true &&
-                                            state.isSale == true &&
-                                            state.isMale == true)
-                                            ? AppColors.getRedColor(context):AppColors.getFillColor(context))),
+                                  color: (state.isUser == true &&
+                                          state.isSale == true &&
+                                          state.isMale == true)
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.getFillColor(context),
+                                  borderRadius: BorderRadius.circular(15),
+                                  // border: Border.all(
+                                  //     color: (state.isUser == true &&
+                                  //             state.isSale == true &&
+                                  //             state.isMale == true)
+                                  //         ? AppColors.getRedColor(context)
+                                  //         : AppColors.getFillColor(context))
+                                ),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
                                   widget.categorization.mainCategory.nameEn ==
@@ -151,7 +158,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                                           ? LocaleKeys.sale.localize
                                           : LocaleKeys.user.localize,
                                   style: Styles.mediumText(
-                                      color:  AppColors.getTextColor(context)),
+                                      color: (state.isUser == true &&
+                                              state.isSale == true &&
+                                              state.isMale == true)
+                                          ? Colors.white
+                                          : AppColors.getTextColor(context)),
                                 ),
                               ),
                             )),
@@ -175,16 +186,24 @@ class _CreateAdViewState extends State<CreateAdView> {
                                     }
                                   });
                                 },
-                                child: Container(
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                      color:AppColors.getFillColor(context),
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                          color: (state.isUser == false ||
-                                              state.isSale == false ||
-                                              state.isMale == false)
-                                              ? AppColors.getRedColor(context):AppColors.getFillColor(context))),
+                                    color: (state.isUser == false ||
+                                            state.isSale == false ||
+                                            state.isMale == false)
+                                        ? AppColors.PRIMARY_COLOR
+                                        : AppColors.getFillColor(context),
+                                    borderRadius: BorderRadius.circular(15),
+                                    // border: Border.all(
+                                    //     color: (state.isUser == false ||
+                                    //             state.isSale == false ||
+                                    //             state.isMale == false)
+                                    //         ? AppColors.getRedColor(context)
+                                    //         : AppColors.getFillColor(
+                                    //             context))
+                                  ),
                                   alignment: AlignmentDirectional.center,
                                   child: Text(
                                     widget.categorization.mainCategory.nameEn ==
@@ -196,7 +215,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                                             ? LocaleKeys.rent.localize
                                             : LocaleKeys.provider.localize,
                                     style: Styles.mediumText(
-                                        color: AppColors.getTextColor(context)),
+                                        color: (state.isUser == false ||
+                                                state.isSale == false ||
+                                                state.isMale == false)
+                                            ? Colors.white
+                                            : AppColors.getTextColor(context)),
                                   ),
                                 ),
                               ),
@@ -204,7 +227,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                           ],
                         ),
                       const Sizer(
-                        height:10,
+                        height: 10,
                       ),
                       // Padding(
                       //   padding: const EdgeInsetsDirectional.only(start: 16),
@@ -229,11 +252,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                             return LocaleKeys.required.localize;
                           }
                           if (_phonePattern.hasMatch(value)) {
-                            return 'Phone numbers are not allowed. Please remove any phone number pattern.';
+                            return context.isArabic?'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود':'Phone numbers are not allowed. Please remove any phone number pattern.';
                           }
 
                           return null;
-
                         },
                       ),
                       // TextFormField(
@@ -272,7 +294,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //   ),
                       // ),
                       const Sizer(
-                        height:10,
+                        height: 10,
                       ),
                       CreateAdTextFormField(
                         hintText: LocaleKeys.desc.localize,
@@ -290,12 +312,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                             return 'Phone numbers are not allowed. Please remove any phone number pattern.';
                           }
 
-                            return null;
-
+                          return null;
                         },
                       ),
                       const Sizer(
-                        height:10,
+                        height: 10,
                       ),
                       // Padding(
                       //   padding: const EdgeInsetsDirectional.only(start: 16),
@@ -308,7 +329,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                         hintText: LocaleKeys.phone.localize,
                         onChanged: (v) => controller.phone = v,
                         keyboardType: TextInputType.phone,
-                        inputFormatters:[FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (value) {
                           if ((value == null || value.isEmpty)) {
                             return LocaleKeys.required.localize;
@@ -328,7 +351,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //   ),
                       // ),
                       CreateAdDropdownMenu<GovernorateEntity>(
-                        value:state.governorate!.isEmpty
+                        value: state.governorate!.isEmpty
                             ? null
                             : state.governorates!
                                 .where((gov) => gov.id == state.governorate)
@@ -339,10 +362,15 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 (GovernorateEntity government) {
                           return DropdownMenuItem<GovernorateEntity>(
                             value: government,
-                            child: Text(
-                              context.isArabic
+                            child: Label(
+                              text: context.isArabic
                                   ? government.nameAr
                                   : government.nameEn,
+                              style: Styles.mediumText(
+                                fontSize: 32,
+                                height: 1.60,
+                                color: Colors.black,
+                              ),
                             ), // Change to city.nameAr for Arabic
                           );
                         }).toList(),
@@ -415,19 +443,23 @@ class _CreateAdViewState extends State<CreateAdView> {
                         height: 10,
                       ),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CircularProgressIndicator())
+                          ? const Center(child: CustomCircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          start: 16),
-                                      child: Label(
-                                        text: LocaleKeys.city.localize,
-                                        style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:Colors.black),
-                                      ),
-                                    ),
+                                    // Padding(
+                                    //   padding: const EdgeInsetsDirectional.only(
+                                    //       start: 16),
+                                    //   child: Label(
+                                    //     text: LocaleKeys.city.localize,
+                                    //     style: Styles.mediumText(
+                                    //         fontSize: 32,
+                                    //         color: context.isDarkMode
+                                    //             ? AppColors.whiteColor
+                                    //             : Colors.black),
+                                    //   ),
+                                    // ),
                                     CreateAdDropdownMenu<CityEntity>(
                                       value: state.city == null ||
                                               state.city!.isEmpty
@@ -442,7 +474,17 @@ class _CreateAdViewState extends State<CreateAdView> {
                                               (CityEntity city) {
                                         return DropdownMenuItem<CityEntity>(
                                           value: city,
-                                          child: Text(context.isArabic?city.nameAr:city.nameEn),
+                                          child: Label(
+                                            text: context.isArabic
+                                                ? city.nameAr
+                                                : city.nameEn,
+                                            // color: Colors.black,
+                                            style: Styles.mediumText(
+                                              fontSize: 32,
+                                              height: 1.60,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                         );
                                       }).toList(),
                                       onChange: (CityEntity? newValue) {
@@ -537,7 +579,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                               ? LocaleKeys.price.localize
                               : LocaleKeys.salary.localize,
                           keyboardType: TextInputType.number,
-            inputFormatters:[FilteringTextInputFormatter.digitsOnly],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           validator: (value) {
                             if ((value == null || value.isEmpty)) {
                               return LocaleKeys.required.localize;
@@ -592,22 +636,52 @@ class _CreateAdViewState extends State<CreateAdView> {
                       const SizedBox(
                         height: 16,
                       ),
-                      state.isLoadingCreateAd? const Center(child: CircularProgressIndicator())
-                          :AppButton(
-                        label: LocaleKeys.publish.localize,
-                        backColor: AppColors.getButtonPrimaryColor(context),
-                        style: Styles.headerText(
-                          color: AppColors.getReversedTextColor(context),
-                          fontSize: 28,
-                        ),
-                        height: 44,
-                        onPressed: () {
-                          controller.createAd(
-                            categorize: widget.categorization,
-                            context: context,
-                          );
-                        },
-                      ),
+                      state.isLoadingCreateAd
+                          ? const Center(child: CustomCircularProgressIndicator())
+                          : Row(
+                              children: [
+                                Expanded(
+                                  child: AppButton(
+                                    label: LocaleKeys.publish_permiun.localize,
+                                    backColor: AppColors.getRedColor(context),
+                                    style: Styles.headerText(
+                                      color: AppColors.getReversedTextColor(
+                                          context),
+                                      fontSize: 28,
+                                    ),
+                                    height: 44,
+                                    onPressed: () {
+                                      controller.createAd(
+                                        categorize: widget.categorization,
+                                        context: context,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: AppButton(
+                                    label: LocaleKeys.publish.localize,
+                                    backColor: AppColors.getButtonPrimaryColor(
+                                        context),
+                                    style: Styles.headerText(
+                                      color: AppColors.getReversedTextColor(
+                                          context),
+                                      fontSize: 28,
+                                    ),
+                                    height: 44,
+                                    onPressed: () {
+                                      controller.createAd(
+                                        categorize: widget.categorization,
+                                        context: context,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                       const SizedBox(
                         height: 16,
                       ),
@@ -648,7 +722,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                 padding: const EdgeInsets.all(16),
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color:AppColors.getFillColor(context),
+                  color: AppColors.getFillColor(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -662,11 +736,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     // if (state.isImageUploading)
-                    //   const CircularProgressIndicator.adaptive(),
+                    //   const CustomCircularProgressIndicator(),
                     // if (!state.isImageUploading)
                     SvgPicture.asset(
                       Assets.image2Icon,
-                      color: context.isDarkMode?AppColors.whiteColor:null,
+                      color: context.isDarkMode ? AppColors.whiteColor : null,
                     ),
                     const SizedBox(
                       height: 4,
@@ -679,7 +753,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                         //   Assets.uploadIcon,
                         //   color: const Color(0xff0B1035),
                         // ),
-                        Icon(Icons.file_upload_outlined,size: 30,color: context.isDarkMode?AppColors.whiteColor:AppColors.c0B1035,),
+                        Icon(
+                          Icons.file_upload_outlined,
+                          size: 30,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.c0B1035,
+                        ),
                         const Sizer(
                           width: 8,
                         ),
@@ -688,7 +768,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w500,
                             fontSize: 32,
-                            color:context.isDarkMode?AppColors.whiteColor: const Color(0xff0B1035),
+                            color: context.isDarkMode
+                                ? AppColors.whiteColor
+                                : const Color(0xff0B1035),
                           ),
                         ),
                       ],
@@ -711,7 +793,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                       text: LocaleKeys.addImagesDesc.localize,
                       textStyle: Styles.mediumText(
                         fontSize: 24,
-                        color: context.isDarkMode?AppColors.whiteColor:const Color(0xff717171),
+                        color: context.isDarkMode
+                            ? AppColors.whiteColor
+                            : const Color(0xff717171),
                       ),
                     ),
                     // Label(
@@ -734,7 +818,7 @@ class _CreateAdViewState extends State<CreateAdView> {
               SizedBox(
                 height: 80,
                 child: ListView.separated(
-                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       final image = state.images![index];

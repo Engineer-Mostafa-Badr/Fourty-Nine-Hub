@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../common/widgets/stateless/buttons/app_button.dart';
 import '../../common/widgets/stateless/buttons/default_button.dart';
@@ -221,39 +222,56 @@ Future<void> showPermissionDialog({required String message}) async =>
 // );
 
 void showLoadingDialog(BuildContext context,
-        {String? message,
-        bool canPop = false,
-        bool barrierDismissible = false}) =>
-    showAnimatedDialog(
-      context,
-      barrierDismissible: barrierDismissible,
-      PopScope(
+    {String? message,
+      bool canPop = false,
+      bool barrierDismissible = false}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    transitionDuration: const Duration(milliseconds: 400),
+    pageBuilder: (context, _, __) {
+      return PopScope(
         canPop: canPop,
-        child: AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CircularProgressIndicator.adaptive(),
-              Sizer(height: 20.h),
-              Text(
-                message ?? Labels.loading,
-                style: Styles.headerText(),
-                textAlign: TextAlign.center,
+        child: Center(
+          child: Material(
+            type: MaterialType.transparency,
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
               ),
-            ],
-          ),
-          contentPadding: const EdgeInsets.only(
-            right: 20,
-            left: 20,
-            top: 20,
-            bottom: 40,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CustomCircularProgressIndicator(),
+                  const SizedBox(height: 20),
+                  Text(
+                    message ?? 'Loading...',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              contentPadding: const EdgeInsets.only(
+                right: 20,
+                left: 20,
+                top: 20,
+                bottom: 40,
+              ),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    },
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      return ScaleTransition(
+        scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+        ),
+        child: child,
+      );
+    },
+  );
+}
 // showDialog(
 //   context: context,
 //   barrierDismissible: barrierDismissible,
@@ -266,7 +284,7 @@ void showLoadingDialog(BuildContext context,
 //       content: Column(
 //         mainAxisSize: MainAxisSize.min,
 //         children: [
-//           const CircularProgressIndicator.adaptive(),
+//           const CustomCircularProgressIndicator(),
 //           Sizer(height: 20.h),
 //           Text(
 //             message ?? Labels.loading,
@@ -442,7 +460,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
         ));
   }
 
-  showDebtDialog(BuildContext context, String subCategoryId) {
+  showDebtDialog(BuildContext context, String subCategoryId, String title) {
     showCustomDialogTrip(
         context,
         Column(
@@ -457,7 +475,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text('Please pay the Debt for more trips',
+            Text(title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -470,7 +488,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
               children: [
                 AppButton(
                     width: context.screenWidth / 3.4,
-                    label: 'Close',
+                    label: context.isArabic? 'اغلاق' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -478,7 +496,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
                 const SizedBox(width: 16),
                 AppButton(
                     width: context.screenWidth / 3.4,
-                    label: 'Pay',
+                    label: context.isArabic? 'دفع' : 'Pay',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       Navigator.of(context).pop();

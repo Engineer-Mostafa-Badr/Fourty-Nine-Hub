@@ -6,13 +6,18 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/restaurants_list_cubit.dart';
@@ -83,13 +88,13 @@ class _RestaurantExpiredRequestsScreenState
 //               ),
 //               if (controller.isLoadingExpiredOrdersMore)
 //                 const Center(
-//                   child: CircularProgressIndicator(),
+//                   child: CustomCircularProgressIndicator(),
 //                 )
 //             ],
 //           );
 //         } else {
 //           return const Center(
-//             child: CircularProgressIndicator(),
+//             child: CustomCircularProgressIndicator(),
 //           );
 //         }
 //       }),
@@ -102,7 +107,13 @@ class _RestaurantExpiredRequestsScreenState
         builder: (context, state) {
           final controller = context.read<RestaurantsCubit>();
           if (!state.isLoading) {
-            return SizedBox(
+            if(controller.expiredOrders.isEmpty) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+                child:CustomEmptyWidget(label: LocaleKeys.thereNoItems.localize) ,
+              );
+            } else {
+              return SizedBox(
               // height:double.minPositive,
               child: Column(
                 children: [
@@ -126,17 +137,18 @@ class _RestaurantExpiredRequestsScreenState
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
                       child: const Center(
-                        child: CircularProgressIndicator(),
+                        child: CustomCircularProgressIndicator(),
                       ),
                     )
                 ],
               ),
             );
+            }
           } else {
             return SizedBox(
               height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
               child: const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               ),
             );
           }
@@ -185,10 +197,25 @@ class TripRequestCard extends StatelessWidget {
         Stack(
           alignment: Alignment.topRight,
           children: [
-            CircleAvatar(
-              radius: 65.w,
-              backgroundColor: Colors.grey[600],
-              backgroundImage: AssetImage(_getGenderImage(orderData.user)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:14.0),
+              child:CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.grey[600],
+                backgroundImage:
+                orderData.user?.userProfile?.profilePictureKey !=
+                    null
+                    ? NetworkImage(orderData.user?.userProfile?.profilePictureKey?.mediaKey??'')
+                    : null,
+                child: orderData.user?.userProfile?.profilePictureKey ==
+                    null
+                    ? const Icon(
+                  Icons.person,
+                  size: 40,
+                  color: Colors.white,
+                )
+                    : null,
+              ),
             ),
             Container(
               width: 32,
@@ -202,7 +229,7 @@ class TripRequestCard extends StatelessWidget {
                 children: [
                   Icon(Icons.star,size: 6.6,color: AppColors.ACCENT_COLOR,),
                   Text(
-                    '4.5',
+                    context.isArabic?numAr(4.5):'4.5',
                     style: Styles.smallText(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -216,7 +243,7 @@ class TripRequestCard extends StatelessWidget {
         ),
         SizedBox(width: 8.h),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +254,7 @@ class TripRequestCard extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Expanded(
-          flex: 1,
+          flex: 3,
           child: Center(child: _buildRestaurantDetails(context)),
         ),
       ],
@@ -241,9 +268,9 @@ class TripRequestCard extends StatelessWidget {
       style: Styles.mediumText(
         fontWeight: FontWeight.w600,
         color:AppColors.getTextColor(context),
-
-
       ),
+      maxLines: 2,
+      textAlign: TextAlign.start,
     );
   }
 
@@ -307,9 +334,8 @@ class TripRequestCard extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            "${LocaleKeys.total.tr()}:"
-                "${orderData.total?.toString() ?? '0'}"
-                "${context.isArabic ? orderData.currencyAr
+                "${context.isArabic?numAr(orderData.total??0):orderData.total?.toString() ?? '0'}"
+                " ${context.isArabic ? orderData.currencyAr
                 : orderData.currencyEn ?? ''}",
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
@@ -324,13 +350,32 @@ class TripRequestCard extends StatelessWidget {
 
   }
 
+  String getSubscriptionType(String? subscriptionType) {
+    final normalizedType = subscriptionType?.trim().toLowerCase();
+
+    // 'Premium subscription': 2
+    // 'Regular subscription': 1
+    // 'No subscription': 0
+    switch (normalizedType) {
+      case ('no subscription'):
+        return LocaleKeys.notSubscribed.localize;
+      case ('premium subscription'):
+        return LocaleKeys.premium2.localize;
+      case ('regular subscription'):
+        return LocaleKeys.regular.localize;
+      default:
+        return 'N/A';
+    }
+  }
+
+
   Widget _buildFooter(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           orderData.createdAt != null
-              ? DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!)
+              ? (context.isArabic?DateFormat('d MMM, yyyy h:mm a','ar').format(orderData.createdAt!):DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!))
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
             fontWeight: FontWeight.w600,
@@ -342,8 +387,8 @@ class TripRequestCard extends StatelessWidget {
         Flexible(
           flex: 5,
           child: Text(
-            (context.isArabic ? orderData.subscriptionType?.ar : orderData.subscriptionType?.en)
-                ?? LocaleKeys.noSubscription.tr(),
+            (getSubscriptionType(orderData.subscriptionType?.en))
+                ?? LocaleKeys.notSubscribed.tr(),
             style: Styles.smallText(
               color: AppColors.getRedColor(context),
               fontWeight: FontWeight.w600,

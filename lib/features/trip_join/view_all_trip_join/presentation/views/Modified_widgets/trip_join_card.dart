@@ -6,12 +6,15 @@ class CustomCard extends StatelessWidget {
   const CustomCard({
     super.key,
     required this.children,
-    this.title = '', this.radius=10,  this.padding,
+    this.title = '', this.radius=10,
+    this.padding,
+    this.color,
   });
   final List<Widget> children;
   final String title;
   final double radius;
   final EdgeInsetsGeometry? padding;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,7 +26,7 @@ class CustomCard extends StatelessWidget {
               : AppColors.PRIMARY_COLOR_LIGHT,
         ),
         borderRadius: BorderRadius.circular(radius),
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: color ?? Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

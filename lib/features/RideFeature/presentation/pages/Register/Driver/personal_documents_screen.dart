@@ -9,8 +9,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -21,7 +19,7 @@ import '../widgets/upload_file_widget.dart';
 
 class PersonalDocumentsScreen extends StatelessWidget {
   const PersonalDocumentsScreen({super.key, required this.params});
-  final UploadRiderImagesParams params;
+    final UploadRiderImagesParams params;
 
   @override
   Widget build(BuildContext context) {

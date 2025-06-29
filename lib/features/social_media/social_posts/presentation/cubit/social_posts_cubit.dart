@@ -451,6 +451,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
       emit(state.copyWith(postDetails: data, status: StateStatus.initial));
+      print('data:: ${data.content}');
     });
   }
 
@@ -1269,3 +1270,20 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   void triggerBlock() {}
 }
+
+// people_tab_cubit.dart
+
+abstract class ProfileTabState {}
+
+class ProfileViewState extends ProfileTabState {}
+
+class OtherProfileState extends ProfileTabState {}
+
+class PeopleTabCubit extends Cubit<ProfileTabState> {
+  PeopleTabCubit() : super(ProfileViewState());
+
+  void showList() => emit(ProfileViewState());
+
+  void showOtherProfile() => emit(OtherProfileState());
+}
+
