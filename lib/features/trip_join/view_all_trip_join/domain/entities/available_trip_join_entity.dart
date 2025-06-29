@@ -1,4 +1,3 @@
-
 class AvailableTripJoinEntity {
   final String? id;
   final double? pricePerSeat;
@@ -7,6 +6,9 @@ class AvailableTripJoinEntity {
   final bool? isRepeat;
   final int? passengers;
   final String? startDate;
+  final String? offerType;
+  final bool? isPremium;
+  final IsButtonEnabledEntity? isButtonEnabled;
   final VehicleDetailsEntity? vehicleDetails;
   final LocationEntity? location;
 
@@ -18,9 +20,18 @@ class AvailableTripJoinEntity {
     this.isRepeat,
     this.passengers,
     this.startDate,
+    this.offerType,
+    this.isPremium,
+    this.isButtonEnabled,
     this.vehicleDetails,
     this.location,
   });
+}
+
+class IsButtonEnabledEntity {
+  final bool? state;
+
+  IsButtonEnabledEntity({this.state});
 }
 
 class VehicleDetailsEntity {

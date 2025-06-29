@@ -786,7 +786,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
 
   String _formatDistance(double meters) {
     final km = (meters / 1000).toStringAsFixed(1);
-    return '$km KM';
+    return '$km ${LocaleKeys.KM.localize}';
   }
 
   String _calculateTotalPrice(ExpectedPriceTripEntity? entity) {

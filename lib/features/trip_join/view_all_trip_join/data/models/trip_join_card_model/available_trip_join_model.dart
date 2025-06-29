@@ -1,6 +1,5 @@
 import '../../../domain/entities/available_trip_join_entity.dart';
 
-
 class AvailableTripJoinModel extends AvailableTripJoinEntity {
   AvailableTripJoinModel({
     String? id,
@@ -10,6 +9,9 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
     bool? isRepeat,
     int? passengers,
     String? startDate,
+    String? offerType,
+    bool? isPremium,
+    IsButtonEnabledModel? isButtonEnabled,
     VehicleDetailsModel? vehicleDetails,
     LocationModel? location,
   }) : super(
@@ -20,6 +22,9 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
     isRepeat: isRepeat,
     passengers: passengers,
     startDate: startDate,
+    offerType: offerType,
+    isPremium: isPremium,
+    isButtonEnabled: isButtonEnabled,
     vehicleDetails: vehicleDetails,
     location: location,
   );
@@ -33,12 +38,27 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
       isRepeat: json['isRepeat'] as bool?,
       passengers: (json['passengers'] as num?)?.toInt(),
       startDate: json['startDate'] as String?,
+      offerType: json['offerType'] as String?,
+      isPremium: json['isPremium'] as bool?,
+      isButtonEnabled: json['isButtonEnabled'] != null
+          ? IsButtonEnabledModel.fromJson(json['isButtonEnabled'])
+          : null,
       vehicleDetails: json['vehicleDetails'] != null
           ? VehicleDetailsModel.fromJson(json['vehicleDetails'])
           : null,
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,
+    );
+  }
+}
+
+class IsButtonEnabledModel extends IsButtonEnabledEntity {
+  IsButtonEnabledModel({bool? state}) : super(state: state);
+
+  factory IsButtonEnabledModel.fromJson(Map<String, dynamic> json) {
+    return IsButtonEnabledModel(
+      state: json['state'] as bool?,
     );
   }
 }

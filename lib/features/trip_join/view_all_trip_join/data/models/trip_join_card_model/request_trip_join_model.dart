@@ -1,7 +1,4 @@
-
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/request_trip_join_entity.dart';
-
-
 
 class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
   GetRequestTripJoinModel({
@@ -9,9 +6,11 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
     String? userId,
     String? firstName,
     double? pricePerSeat,
-    DateTime? startDate,
+    String? startDate,
     bool? isPremium,
     bool? isRead,
+    String? gender,
+    IsButtonEnabledModel? isButtonEnabled,
     LocationModel? location,
   }) : super(
     id: id,
@@ -21,6 +20,8 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
     startDate: startDate,
     isPremium: isPremium,
     isRead: isRead,
+    gender: gender,
+    isButtonEnabled: isButtonEnabled,
     location: location,
   );
 
@@ -30,12 +31,26 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
       userId: json['userId'],
       firstName: json['firstName'],
       pricePerSeat: (json['pricePerSeat'] as num?)?.toDouble(),
-      startDate: json['startDate'] != null ? DateTime.parse(json['startDate']) : null,
+      startDate: json['startDate'] ,
       isPremium: json['isPremium'],
       isRead: json['isRead'],
+      gender: json['gender'],
+      isButtonEnabled: json['isButtonEnabled'] != null
+          ? IsButtonEnabledModel.fromJson(json['isButtonEnabled'])
+          : null,
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,
+    );
+  }
+}
+
+class IsButtonEnabledModel extends IsButtonEnabledEntity {
+  IsButtonEnabledModel({bool? state}) : super(state: state);
+
+  factory IsButtonEnabledModel.fromJson(Map<String, dynamic> json) {
+    return IsButtonEnabledModel(
+      state: json['state'],
     );
   }
 }

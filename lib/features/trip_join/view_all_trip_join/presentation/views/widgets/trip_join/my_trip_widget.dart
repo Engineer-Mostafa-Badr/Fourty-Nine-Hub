@@ -34,24 +34,7 @@ class MyAdsTripWidget extends StatefulWidget {
 
 class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
 
-  // String formatTimestamp(dynamic time) {
-  //   // Handle if time is String
-  //   int timestamp = 0;
-  //   if (time is String) {
-  //     timestamp = int.tryParse(time) ?? 0;
-  //   } else if (time is int) {
-  //     timestamp = time;
-  //   }
-  //
-  //   if (timestamp == 0) return "-";
-  //
-  //   DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-  //
-  //   // Format date to your preferred format (you can customize it)
-  //   String formattedDate = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  //
-  //   return formattedDate;
-  // }
+
 
 
 
@@ -100,16 +83,16 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    const Icon(
+                                     Icon(
                                       Icons.remove_red_eye_sharp,
-                                      color: AppColors.DARK_GRAY_COLOR,
+                                      color:  context.isDarkMode ? AppColors.whiteColor: AppColors.DARK_GRAY_COLOR,
                                     ),
                                     const Sizer(),
                                     Label(
                                       text: '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
                                       style: Styles.mediumText(
                                         fontSize: 24,
-                                        color: AppColors.DARK_GRAY_COLOR,
+                                        color:  context.isDarkMode ? AppColors.whiteColor: AppColors.DARK_GRAY_COLOR,
                                       ),
                                     ),
 
@@ -117,7 +100,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                 ),
                               ),
                               Text(
-                                "${data.status ?? 0}",
+                                "${data.offerType ?? ""}",
                                 style: Styles.headerText(
                                     color: AppColors.getRedColor(context), fontSize: 32),
                               ),
@@ -142,17 +125,13 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                         const Sizer(
                           height: 30,
                         ),
-                        // _locationWidget(
-                        //     title: context.isArabic
-                        //         ? data?.fromAr ?? ""
-                        //         : data?.fromEn ?? "",
-                        //     iconColor: AppColors.LIGHT_BLUE),
-                        // const Sizer(),
-                        // _locationWidget(
-                        //     title: context.isArabic
-                        //         ? data?.toAr ?? ""
-                        //         : data?.toEn ?? "",
-                        //     iconColor: AppColors.CHECK_MARK_COLOR),
+                        _locationWidget(
+                            title: data?.location?.start?.address ?? "",
+                            iconColor: AppColors.LIGHT_BLUE),
+                        const Sizer(),
+                        _locationWidget(
+                            title:data?.location?.target?.address ?? "",
+                            iconColor: AppColors.CHECK_MARK_COLOR),
                         const Sizer(),
                         Padding(
                           padding: EdgeInsets.symmetric(
@@ -162,7 +141,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                formatTimestamp(data.startDate),
+                                formatTimestamp(data.startDate!,context),
                                 style: Styles.headerText(
                                     fontSize: 32, fontWeight: FontWeight.bold),
                               ),
@@ -282,7 +261,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
               RichText(
                   text: TextSpan(children: [
                     TextSpan(
-                        text: price,
+                        text: "${price}  ",
                         style: Styles.headerText(
                             color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.bold)),

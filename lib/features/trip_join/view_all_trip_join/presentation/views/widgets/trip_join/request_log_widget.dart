@@ -14,6 +14,7 @@ import '../../../../../../../res/style/styles.dart';
 import '../../../../domain/entities/request_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../Modified_widgets/cards/available_trips_card.dart';
+import '../../Modified_widgets/cards/trip_contacts_buttons.dart';
 import '../../Modified_widgets/trip_join_card.dart';
 import '../../Modified_widgets/trip_join_card_bottom_section.dart';
 import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
@@ -93,7 +94,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                   // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
                   color: data.isRead == true
                       ? (context.isDarkMode ? Colors.transparent : AppColors.whiteColor)
-                      : (context.isDarkMode ?AppColors.PRIMARY_COLOR_DARK : AppColors.grey.shade300),
+                      : (context.isDarkMode ?AppColors.grey : AppColors.grey.shade300),
 
                   radius: 20,
                   children: [
@@ -106,16 +107,16 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                           Expanded(
                             child: Row(
                               children: [
-                                const Icon(
+                                 Icon(
                                   Icons.remove_red_eye_sharp,
-                                  color: AppColors.DARK_GRAY_COLOR,
+                                  color: context.isDarkMode ? AppColors.whiteColor:AppColors.DARK_GRAY_COLOR  ,
                                 ),
                                 const Sizer(),
                                 Label(
                                   text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
                                   style: Styles.mediumText(
                                     fontSize: 24,
-                                    color: AppColors.DARK_GRAY_COLOR,
+                                    color: context.isDarkMode ? AppColors.whiteColor: AppColors.DARK_GRAY_COLOR,
                                   ),
                                 ),
 
@@ -134,10 +135,14 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                     TripCardInfoWidget(
                         price: "${data.pricePerSeat}",
                         title: data.firstName ?? "",
-                        icon:   Assets.maleUser,
-
-                        // : Assets.femaleUser,
-                        seats: "1"
+                        icon: data.gender == "male"
+                    ? Assets.maleUser
+                        : Assets.femaleUser,
+                        seats: "${ 3}"
+                        // icon:   Assets.maleUser,
+                        //
+                        // // : Assets.femaleUser,
+                        // seats: "1"
                     ),
                     const Sizer(
                       height: 30,
@@ -160,7 +165,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            formatDateTime(data.startDate),
+                            formatTimestamp(data.startDate!,context),
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
                           ),
@@ -190,13 +195,22 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                       padding: EdgeInsets.symmetric(
                         horizontal: 32.0.h,
                       ),
-                      child: TripJoinButtonsSection(
-                        isContactInfo: true,
-                        isRequestButton: false,
-                        buttonTitle:LocaleKeys.requests.localize,
-                        // buttonTitle:" widget.buttonTitle",
-                        onTap: (){},
+                      child:ContactsTripButtons(
+                        // isPremium: false,
+                        isPremium:data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
+                        otherUserId: '2',
+                        subcategoryId: '2',
+                        phone: '2223',
+                        id: '2',
+                        hasReport: true,
                       ),
+                      // TripJoinButtonsSection(
+                      //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
+                      //   isRequestButton: false,
+                      //   buttonTitle:LocaleKeys.requests.localize,
+                      //   // buttonTitle:" widget.buttonTitle",
+                      //   onTap: (){},
+                      // ),
                     ),
                     const Sizer(),
                   ],
@@ -204,7 +218,8 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
               ),
             ],
           ),
-          TripCardSubscribeText(),
+          data.isPremium == true || data.isButtonEnabled!.state == true ? SizedBox() : TripCardSubscribeText()   ,
+
         ],
       ),
     );
@@ -267,7 +282,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
               RichText(
                   text: TextSpan(children: [
                     TextSpan(
-                        text: price,
+                        text: "${price}  ",
                         style: Styles.headerText(
                             color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.bold)),
@@ -328,68 +343,129 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
 }
 
 
-String formatTimestamp2(dynamic time) {
+
+
+
+String convertToArabicNumerals(String input) {
+  const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+  for (int i = 0; i < english.length; i++) {
+    input = input.replaceAll(english[i], arabic[i]);
+  }
+  return input;
+}
+String formatTimestamp1(dynamic time, BuildContext context) {
   DateTime? date;
+
+  print("formatTimestamp received: $time of type ${time.runtimeType}");
+
+  if (time == null) return "-";
 
   if (time is String) {
     try {
-      // Parse the string and ensure UTC handling with toLocal()
       date = DateTime.parse(time).toLocal();
     } catch (e) {
-      print('Error parsing string timestamp: $e'); // Debug log
+      print("Date parsing error: $e");
       return "-";
     }
   } else if (time is int) {
     try {
       if (time.toString().length == 10) {
-        // Handle seconds-based timestamp
         date = DateTime.fromMillisecondsSinceEpoch(time * 1000).toLocal();
       } else if (time.toString().length == 13) {
-        // Handle milliseconds-based timestamp
         date = DateTime.fromMillisecondsSinceEpoch(time).toLocal();
       } else {
-        print('Invalid integer timestamp length: $time'); // Debug log
+        print("Unexpected int length: ${time.toString().length}");
         return "-";
       }
     } catch (e) {
-      print('Error parsing integer timestamp: $e'); // Debug log
+      print("Int date parsing error: $e");
       return "-";
     }
   } else {
-    print('Invalid timestamp type: $time'); // Debug log
+    print("Unsupported time type");
     return "-";
   }
 
-  // Ensure date is not null before formatting
-  if (date == null) {
-    print('Date is null'); // Debug log
-    return "-";
-  }
+  if (date == null) return "-";
 
-  // Format hour for 12-hour clock
   final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
   final ampm = date.hour >= 12 ? "PM" : "AM";
 
-  // Format date and time
-  final formattedDate =
-      "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  final formattedTime =
+  String formattedDate =
+      "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  String formattedTime =
       "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
 
-  return "$formattedDate\n$formattedTime";
+  String result = "$formattedDate\n  $formattedTime";
+
+  try {
+    if (context.locale.languageCode == 'ar') {
+      result = convertToArabicNumerals(result)
+          .replaceAll("AM", "ص")
+          .replaceAll("PM", "م");
+    }
+  } catch (e) {
+    print("Locale check failed: $e");
+  }
+
+  return result;
 }
 
-String formatTimestamp(dynamic time) {
+String formatTimestamp12(String timestamp, BuildContext context) {
+  try {
+    // Parse the ISO 8601 timestamp
+    DateTime dateTime = DateTime.parse(timestamp);
+
+    // Get current time
+    DateTime now = DateTime.now();
+
+    // Calculate the difference
+    Duration difference = now.difference(dateTime);
+
+    // Handle future dates (just in case)
+    if (difference.isNegative) {
+      return "just now";
+    }
+
+    // Calculate time units
+    int seconds = difference.inSeconds;
+    int minutes = difference.inMinutes;
+    int hours = difference.inHours;
+    int days = difference.inDays;
+
+    // Return appropriate format
+    if (seconds < 60) {
+      return "just now";
+    } else if (minutes < 60) {
+      return "$minutes min ago";
+    } else if (hours < 24) {
+      return "$hours hour${hours == 1 ? '' : 's'} ago";
+    } else if (days < 7) {
+      return "$days day${days == 1 ? '' : 's'} ago";
+    } else {
+      int weeks = (days / 7).floor();
+      return "$weeks week${weeks == 1 ? '' : 's'} ago";
+    }
+  } catch (e) {
+    // Fallback in case of parsing error
+    return "Invalid date";
+  }
+}
+
+
+
+String formatTimestamp(dynamic time, BuildContext context) {
   DateTime? date;
 
   if (time is String) {
     try {
-      date = DateTime.parse(time).toLocal(); // Convert from UTC to local time
+      date = DateTime.parse(time).toLocal();
     } catch (e) {
       return "-";
     }
   } else if (time is int) {
-    // If it's a timestamp in seconds or milliseconds
     if (time.toString().length == 10) {
       date = DateTime.fromMillisecondsSinceEpoch(time * 1000).toLocal();
     } else if (time.toString().length == 13) {
@@ -404,8 +480,19 @@ String formatTimestamp(dynamic time) {
   final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
   final ampm = date.hour >= 12 ? "PM" : "AM";
 
-  final formattedDate = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  final formattedTime = "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
+  String formattedDate =
+      "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  String formattedTime =
+      "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
 
-  return "$formattedDate\n  $formattedTime";
+  String result = "$formattedDate\n  $formattedTime";
+
+  if (context.locale.languageCode == 'ar') {
+    result = convertToArabicNumerals(result)
+        .replaceAll("AM", "ص")
+        .replaceAll("PM", "م");
+  }
+
+  return result;
 }
+

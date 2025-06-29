@@ -1,5 +1,3 @@
-// my_ads_trip_join_entity.dart
-
 class MyAdsTripJoinEntity {
   final List<MyAdsTripDocEntity>? offers;
   final PaginationEntity? pagination;
@@ -18,6 +16,9 @@ class MyAdsTripDocEntity {
   final bool? isRepeat;
   final int? passengers;
   final String? startDate;
+  final String? offerType;
+  final bool? isPremium;
+  final IsButtonEnabledEntity? isButtonEnabled;
   final VehicleDetailsEntity? vehicleDetails;
   final LocationEntity? location;
 
@@ -29,9 +30,18 @@ class MyAdsTripDocEntity {
     this.isRepeat,
     this.passengers,
     this.startDate,
+    this.offerType,
+    this.isPremium,
+    this.isButtonEnabled,
     this.vehicleDetails,
     this.location,
   });
+}
+
+class IsButtonEnabledEntity {
+  final bool? state;
+
+  IsButtonEnabledEntity({this.state});
 }
 
 class VehicleDetailsEntity {
@@ -59,9 +69,13 @@ class LocationEntity {
 }
 
 class CoordinatesEntity {
+  final String? address;
   final List<double>? coordinates;
 
-  CoordinatesEntity({this.coordinates});
+  CoordinatesEntity({
+    this.address,
+    this.coordinates,
+  });
 }
 
 class PaginationEntity {

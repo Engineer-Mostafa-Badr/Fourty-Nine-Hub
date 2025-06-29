@@ -327,7 +327,7 @@ class StoryViewScreenState extends State<StoryViewScreen> {
           // if (widget.mutedStories.isNotEmpty) {
             return PageView.builder(
               controller: _pageController,
-              itemCount: widget.mutedStories!.length,
+              itemCount: widget.mutedStories?.length ?? 0,
               onPageChanged: (index) {
                 setState(() {
                   _currentUserIndex = index;
