@@ -141,6 +141,11 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToUpdateRoute(Function(MyBookingEntity route) params) {
+    remoteDataSource.listenToUpdateRoute(params);
+  }
+
+  @override
   void listenToJoinAvailableRoutes(Function(bool isJoined) params) {
     remoteDataSource.listenToJoinAvailableRoutes(params);
   }

@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_c
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_join_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_update_route_use_case.dart';
 import 'package:get_it/get_it.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
 
@@ -82,9 +83,14 @@ class CaptainShareServiceLocator {
         () => GetRouteDetailsUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<ListenToUpdateRouteUseCase>(
+        () => ListenToUpdateRouteUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

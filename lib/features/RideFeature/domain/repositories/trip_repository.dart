@@ -84,6 +84,7 @@ abstract class TripRepository {
    void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
    void listenToPartialPaymentDriver(Function(num amountPaidCash) params);
    void listenToCancelRoute(Function(ListenToCancelRouteParams params) params);
+   void listenToUpdateRoute(Function(MyBookingEntity route) params);
    void listenToNewRoute(Function(MyBookingEntity newBooking) params);
    void listenToJoinAvailableRoutes(Function(bool isJoined) params);
    void listenToLeaveAvailableRoutes(Function(String routeId) params);
