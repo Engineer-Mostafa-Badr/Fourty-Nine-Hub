@@ -105,10 +105,10 @@ class DI {
     // //preloading
     serviceLocator.registerLazySingleton(() => OnBoardingCubit());
 
-    // await Firebase.initializeApp(
-    // name: "49-App",
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // );
+    await Firebase.initializeApp(
+    name: "49-App",
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     await FirebaseMessaging.instance.requestPermission(
       announcement: true,
