@@ -107,7 +107,7 @@ class _FollowersScreenState extends State<FollowersScreen>
             ),
             Tab(
               text:
-                  '${widget.args.dataProfile.followingCount} ${LocaleKeys.following.localize}',
+                  '${widget.args.dataProfile.followingCount} ${LocaleKeys.blocked.localize}',
             ),
           ],
         ),
