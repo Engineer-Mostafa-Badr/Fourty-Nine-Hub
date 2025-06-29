@@ -1,18 +1,18 @@
-part of 'notification_socket_io_cubit.dart';
+// part of 'notification_socket_io_cubit.dart';
 
-sealed class NotificationSocketIoState {}
+// sealed class NotificationSocketIoState {}
 
-final class NotificationSocketIoInitial extends NotificationSocketIoState {}
+// final class NotificationSocketIoInitial extends NotificationSocketIoState {}
 
-final class NotificationSocketIoFailed extends NotificationSocketIoState {
-  final String message;
+// final class NotificationSocketIoFailed extends NotificationSocketIoState {
+//   final String message;
 
-  NotificationSocketIoFailed(this.message);
-}
+//   NotificationSocketIoFailed(this.message);
+// }
 
-final class NotificationSocketIoNewNotification
-    extends NotificationSocketIoState {
-  final NotificationEntity notificationEntity;
+// final class NotificationSocketIoNewNotification
+//     extends NotificationSocketIoState {
+//   final NotificationEntity notificationEntity;
 
-  NotificationSocketIoNewNotification(this.notificationEntity);
-}
+//   NotificationSocketIoNewNotification(this.notificationEntity);
+// }

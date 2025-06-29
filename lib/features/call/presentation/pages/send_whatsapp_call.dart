@@ -24,12 +24,12 @@ class SendWhatsappCallScreen extends StatefulWidget {
     required this.receiver,
     required this.sender,
     required this.callType,
-    // required this.isRealCall,
+    required this.isRealCall,
   });
   final CallType callType;
   final UserModel receiver;
   final UserModel sender;
-  // final bool isRealCall;
+  final bool isRealCall;
 
   @override
   State<SendWhatsappCallScreen> createState() => _SendWhatsappCallScreenState();
@@ -43,15 +43,14 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
   void initState() {
     serviceLocator<CallWithNotificationHelper>()
         .sendCallNotification(
-          isRealCall: "true",
-          //  widget.isRealCall.toString(),
+          isRealCall: widget.isRealCall.toString(),
           callType: widget.callType.name.toString(),
           agoraAppId: UIConst.agoraAppId,
           serviceType: "zegocloud",
-          //  "agora",
+          // "agora",
           uid: widget.sender.id,
-          zegoAppId: 0,
-          zegoAppSign: '',
+          zegoAppId: UIConst.zegoAppId,
+          zegoAppSign: UIConst.zegoAppSign,
           context: context,
           receiverToken: widget.receiver.firebaseToken!
               .trim()
@@ -69,8 +68,7 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
           (_) => timer = Timer(
             const Duration(seconds: UIConst.callRingingDuration),
             () {
-              if ("true" == "true") {
-                //widget.isRealCall
+              if (widget.isRealCall) {
                 context
                     .read<SendCallCubit>()
                     .setCallClosedState('no answer from receiver');
@@ -218,7 +216,7 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
 
                 // Bottom call control buttons
                 BuildBottomBtns(
-          currentContext: context,
+                  currentContext: context,
                   callData: CallData(
                       isCaller: true,
                       isRealCall: false.toString(),
@@ -244,9 +242,7 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
                       channelId: "",
                       permission: "",
                       expiresAt: ""),
-                  onMorePressed: () {
-                
-                  },
+                  onMorePressed: () {},
                 ),
               ],
             ),

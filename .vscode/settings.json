@@ -1,6 +1,6 @@
 {
   "cmake.ignoreCMakeListsMissing": true,
-  "dart.flutterSdkPath": ".fvm/versions/3.27.3",
+  "dart.flutterSdkPath": "D:\\flutter_3.27.3\\flutter",
   "cSpell.words": [
     "انتظر"
   ],

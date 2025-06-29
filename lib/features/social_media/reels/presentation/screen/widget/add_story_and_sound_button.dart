@@ -27,12 +27,16 @@ class AddStoryAndSoundButton extends StatelessWidget {
                 side: WidgetStateProperty.all(
                     const BorderSide(color: Colors.transparent)),
               ),
-              icon: SvgPicture.asset(Assets.musicIcon),
+              icon: SvgPicture.asset(
+                Assets.musicIcon,
+                width: 20,
+                height: 20,
+              ),
               label: Text(
                 context.isArabic ? " أضف إلى القصة" : "Add to Story",
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 28.sp,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -47,12 +51,16 @@ class AddStoryAndSoundButton extends StatelessWidget {
                 side: WidgetStateProperty.all(
                     const BorderSide(color: Colors.transparent)),
               ),
-              icon: SvgPicture.asset(Assets.addSoundIcon),
+              icon: SvgPicture.asset(
+                width: 20,
+                height: 20,
+                Assets.addSoundIcon,
+              ),
               label: Text(
                 context.isArabic ? "استخدم الصوت" : "use sound",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 28.sp,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),

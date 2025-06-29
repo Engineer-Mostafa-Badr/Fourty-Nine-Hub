@@ -10,21 +10,16 @@ class NotificationCardLoadingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final decoration = BoxDecoration(
-      color: Colors.grey,
-      borderRadius: BorderRadius.circular(12),
-    );
+        color: Colors.grey, borderRadius: BorderRadius.circular(2));
     const double height = 50;
     return Column(
       children: [
         ...List.generate(
-          10,
-          (index) => CustomFadingWidget(
-            child: NotificationCardLoading(
-              decoration: decoration,
-              height: height,
-            ),
-          ),
-        ),
+            10,
+            (index) => CustomFadingWidget(
+                  child: NotificationCardLoading(
+                      decoration: decoration, height: height),
+                )),
       ],
     );
   }
@@ -51,12 +46,7 @@ class NotificationCardLoading extends StatelessWidget {
             Expanded(
               flex: 1,
               child: CustomGrayContainer(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
-                  ),
-                  height: height * 4,
-                  flex: 10),
+                  decoration: decoration, height: height * 1.25, flex: 10),
             ),
             Expanded(
               flex: 6,
@@ -89,7 +79,6 @@ class CustomGrayContainer extends StatelessWidget {
   final BoxDecoration decoration;
   final double height;
   final int flex;
-
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -76,8 +76,10 @@ class UseSoundBody extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 15.w),
-                        const Icon(
-                          color: AppColors.SECONDARY_COLOR,
+                        Icon(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.SECONDARY_COLOR,
                           Icons.add,
                           size: 20,
                         ),
@@ -87,7 +89,9 @@ class UseSoundBody extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.SECONDARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.SECONDARY_COLOR,
                           ),
                         ),
                       ],
@@ -103,13 +107,14 @@ class UseSoundBody extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     Assets.pauseIcon,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
                   ),
                   SizedBox(width: 10.w),
                   Text(
                     "36s",
                     style: TextStyle(fontSize: 28.sp),
                   ),
-                  SizedBox(width: 10.w),
+                  SizedBox(width: 15.w),
                   Image.asset(Assets.linePng),
                   SizedBox(width: 15.w),
                   Text(
@@ -128,13 +133,13 @@ class UseSoundBody extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(width: 120.w),
+                  SizedBox(width: 90.w),
                   Text(
                     context.isArabic ? "126" : "126",
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.grey,
+                      color: context.isDarkMode ? Colors.white : Colors.grey,
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -142,9 +147,9 @@ class UseSoundBody extends StatelessWidget {
                     child: Text(
                       context.isArabic ? "المنشورات" : "posts",
                       style: TextStyle(
-                        fontSize: 22.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w400,
-                        color: Colors.grey,
+                        color: context.isDarkMode ? Colors.white : Colors.grey,
                       ),
                     ),
                   ),
@@ -162,8 +167,13 @@ class UseSoundBody extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: () {},
             icon: SvgPicture.asset(Assets.addFavIcon),
-            label:
-                Text(context.isArabic ? "اضافة للمفضلة" : "Add to favourites"),
+            label: Text(
+              context.isArabic ? "اضافة للمفضلة" : "Add to favourites",
+              style: TextStyle(
+                fontSize: 32.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.grey[100],
               foregroundColor: Colors.black,

@@ -123,9 +123,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
   @override
   initState() {
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
     _setupScrollController();
     super.initState();
   }
@@ -144,21 +141,23 @@ class _FourtyNineViewState extends State<FourtyNineView>
   Widget build(BuildContext context) {
     // context.push(Routes.REELS);
     print("objectUser${UserCubit.to.state.data?.id}");
-    return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
-      listener: (context, state) {
-        if (state is NotificationSocketIoNewNotification) {
-          // pr('new notfication is recieved by the bloc listner');
-          // pr(state.notificationEntity);
-          notificationSnackBar(
-              context: context,
-              notificationEntity: state.notificationEntity,
-              isAppNotification: state.notificationEntity.filterType == 'app');
-        } else if (state is NotificationSocketIoFailed) {
-          // pr('Failed to recieve the new notfication ');
-          // pr(state.message);
-        }
-      },
-      child: ExitWidget(
+    return 
+    // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
+    //   listener: (context, state) {
+    //     if (state is NotificationSocketIoNewNotification) {
+    //       // pr('new notfication is recieved by the bloc listner');
+    //       // pr(state.notificationEntity);
+    //       notificationSnackBar(
+    //           context: context,
+    //           notificationEntity: state.notificationEntity,
+    //           isAppNotification: state.notificationEntity.filterType == 'app');
+    //     } else if (state is NotificationSocketIoFailed) {
+    //       // pr('Failed to recieve the new notfication ');
+    //       // pr(state.message);
+    //     }
+    //   },
+    //   child:
+       ExitWidget(
         child: CustomScaffold(
           key: _scaffoldKey,
           appBar: const HomeAppbar(
@@ -413,7 +412,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
             ],
           ),
         ),
-      ),
+      // ),
     );
   }
 
