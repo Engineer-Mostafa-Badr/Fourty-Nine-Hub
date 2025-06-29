@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
@@ -26,6 +27,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -99,6 +101,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToNewTrip(),
               dashboardCubit.listenToRemoveTrip(),
               dashboardCubit.listenToEndTrip(context, widget.params),
+              dashboardCubit.listenToPartialPaymentDriver(context),
             ]
           : [
               widget.params.modeType == "ride"
@@ -408,6 +411,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 onSafety: () {
                                   cubit.showSafety(state.tripStatus ?? '');
                                 },
+                                onReport: () {
+                                  bottomSheet(
+                                      context: context,
+                                      widget: ReportView(
+                                        id: state.activeTrip?.tripId??'',
+                                        categoryId: state.activeTrip?.subCategoryId??'',
+                                      ));
+                                },
                               ),
                             if (state.tripStatus == TripState.inLocation.name)
                               BuildDriverOtpSheet(
@@ -423,6 +434,15 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 },
                                 onFinalizeTrip: () {
                                   cubit.finalizeTripByRider(context: context, tripId: state.activeTrip?.tripId ?? '');
+                                },
+                                onReport: () {
+                                  print("object");
+                                  bottomSheet(
+                                      context: context,
+                                      widget: ReportView(
+                                        id: state.activeTrip?.tripId??'',
+                                        categoryId: state.activeTrip?.subCategoryId??'',
+                                      ));
                                 },
                                 remainingTime: state.remainingTime,
                                 activeTrip: state.activeTrip,
@@ -441,6 +461,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 },
                                 onCompleteRideWithPrice: (String price) {
                                   cubit.completeDriverTripWithPrice(context, state.activeTrip?.tripId ?? '', price);
+                                },
+                                onSafety: () {
+                                  cubit.showSafety(state.tripStatus ?? '');
+                                },
+                                onReport: () {
+                                  bottomSheet(
+                                      context: context,
+                                      widget: ReportView(
+                                        id: state.activeTrip?.tripId??'',
+                                        categoryId: state.activeTrip?.subCategoryId??'',
+                                      ));
                                 },
                                 tripId: state.activeTrip?.tripId ?? '',
                               ),

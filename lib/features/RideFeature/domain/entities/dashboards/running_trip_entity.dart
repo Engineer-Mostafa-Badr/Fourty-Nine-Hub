@@ -23,7 +23,8 @@ class RunningTripEntity {
   final String clientPicture;
   final int distance;
   final int duration;
+  final num price;
 
-  RunningTripEntity({required this.tripId,required this.driverId,required this.clientId,required this.distance,required this.duration, this.status, this.from, this.to, this.wayPointOneTitle, this.wayPointTwoTitle, this.startCoordinates, this.targetCoordinates,  this.wayPointOne, this.wayPointTwo, required this.polyline, required this.subCategoryId, required this.subCategoryNameAr, required this.subCategoryNameEn, required this.subCategoryPicture, required this.clientName, required this.clientGender, required this.clientPicture});
+  RunningTripEntity({required this.tripId,required this.driverId,required this.price,required this.clientId,required this.distance,required this.duration, this.status, this.from, this.to, this.wayPointOneTitle, this.wayPointTwoTitle, this.startCoordinates, this.targetCoordinates,  this.wayPointOne, this.wayPointTwo, required this.polyline, required this.subCategoryId, required this.subCategoryNameAr, required this.subCategoryNameEn, required this.subCategoryPicture, required this.clientName, required this.clientGender, required this.clientPicture});
 
 }

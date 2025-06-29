@@ -27,6 +27,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/em
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
+import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -101,6 +104,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, bool>> acceptTrip(String params);
 
   void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
+  void listenToPartialPaymentDriver(Function(num amountPaidCash) params);
 
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
 
@@ -111,6 +115,11 @@ abstract class TripRemoteDataSource {
   void listenToRemoveTrip(Function(String tripId) params);
   void listenToEndTrip(Function(String tripId) params);
   void listenToClientComing(Function(String tripId) params);
+  void listenToCancelRoute(Function(ListenToCancelRouteParams params) params);
+  void listenToUpdateRoute(Function(MyBookingEntity route) params);
+  void listenToJoinAvailableRoutes(Function(bool isJoined) params);
+  Future<Either<Failure, bool>> listenToLeaveAvailableRoutes(Function(String routeId) params);
+  void listenToNewRoute(Function(MyBookingEntity newBooking) params);
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
@@ -310,6 +319,22 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
+  void listenToPartialPaymentDriver(Function(num amountPaidCash) params) {
+    try {
+      CliLogger.info("trip listenToPartialPaymentDriver ");
+      SharedWebSocket.socket!.on(SocketIOListeners.partialPaymentDriver, (data) {
+        // // final decodedData = jsonDecode(data);
+        // CliLogger.info("offer data :  $decodedData");
+        // params(RideOfferModel.fromJson(decodedData));
+        CliLogger.info("listenToPartialPaymentDriver data :  $data");
+        params(data['amountPaidCash']??0);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to offer error $e");
+    }
+  }
+
+  @override
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params) {
     try {
       CliLogger.info("trip Listen To Accept Offer");
@@ -401,6 +426,91 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info("End Trip data :  $data");
         log("End Trip data :  $data");
         params(data['trip']['_id']);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToCancelRoute(Function(ListenToCancelRouteParams params) params) {
+    try {
+      CliLogger.info("Listen to Cancel Route ");
+      log("Listen to Cancel Route ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToCancelRoute, (data) {
+        CliLogger.info("Cancel Route data :  $data");
+        log("Cancel Route data :  $data");
+        params(ListenToCancelRouteParams.fromJson(data['routeCancelled']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+
+  @override
+  void listenToUpdateRoute(Function(MyBookingEntity route) params) {
+    try {
+      CliLogger.info("Listen to Update Route ");
+      log("Listen to Update Route ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToUpdateRoute, (data) {
+        CliLogger.info("Update Route data :  $data");
+        log("Update Route data :  $data");
+        params(MyBookingModel.fromJson(data['updatedRoute']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Update Route error $e");
+    }
+  }
+
+
+
+  @override
+  Future<Either<Failure, bool>> listenToJoinAvailableRoutes(
+      Function(bool isJoined) params) async {
+    try {
+      CliLogger.info("Join Available Route ");
+      log("Join Available Route ");
+      SharedWebSocket.socket!.emit(SocketIOEvents.joinAvailableRoutes);
+      CliLogger.info(
+          "SocketIOEvents.leaveAvailableRoutes${SocketIOEvents.joinAvailableRoutes}");
+
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t Join Available error $e');
+      return const Left(ServerFailure(message: "can't Join Available "));
+    }
+  }
+
+
+
+  @override
+  Future<Either<Failure, bool>> listenToLeaveAvailableRoutes(
+      Function(String tripId) params) async {
+    try {
+      CliLogger.info("Leave Available Route ");
+      log("Leave Available Route ");
+      SharedWebSocket.socket!.emit(SocketIOEvents.leaveAvailableRoutes);
+      CliLogger.info(
+          "SocketIOEvents.leaveAvailableRoutes${SocketIOEvents.leaveAvailableRoutes}");
+
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t Leave Available error $e');
+      return const Left(ServerFailure(message: "can't Leave Available "));
+    }
+  }
+
+
+  @override
+  void listenToNewRoute(Function(MyBookingEntity newBooking) params) {
+    try {
+      CliLogger.info("Listen to New Route ");
+      log("Listen to New Route ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRoute, (data) {
+        CliLogger.info("New Route data :  $data");
+        log("New Route data :  $data");
+        params(MyBookingModel.fromJson(data['newAllowedRoute']));
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

@@ -10,6 +10,34 @@ class TimeUtils {
         : Duration.zero;
   }
 
+  static String formatTimeAgo(String timestamp, bool isArabic) {
+    final now = DateTime.now().toUtc();
+    final dateTime = DateTime.parse(timestamp).toUtc();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return isArabic ? 'الآن' : 'Just now';
+    } else if (difference.inMinutes < 60) {
+      final minutes = difference.inMinutes;
+      return isArabic ? '$minutes دقيقة' : '$minutes m';
+    } else if (difference.inHours < 24) {
+      final hours = difference.inHours;
+      return isArabic ? '$hours ساعة' : '$hours h';
+    } else if (difference.inDays < 7) {
+      final days = difference.inDays;
+      return isArabic ? '$days يوم' : '$days d';
+    } else if (difference.inDays < 30) {
+      final weeks = (difference.inDays / 7).floor();
+      return isArabic ? '$weeks أسبوع' : '$weeks w';
+    } else if (difference.inDays < 365) {
+      final months = (difference.inDays / 30).floor();
+      return isArabic ? '$months شهر' : '$months mo';
+    } else {
+      final years = (difference.inDays / 365).floor();
+      return isArabic ? '$years سنة' : '$years y';
+    }
+  }
+
   /// Returns a human-readable time difference (e.g., "3 h", "2 days", or "15 October 2023")
   static String getSinceTime(DateTime? createdAt) {
     if (createdAt == null) return "Unknown";

@@ -36,7 +36,7 @@ dependencies:
   emoji_picker_flutter: any
   equatable: ^2.0.5
 #  ffmpeg_kit_flutter: ^6.0.1
-  ffmpeg_kit_flutter_new: ^1.2.1
+#  ffmpeg_kit_flutter_new: ^1.2.1
   file_picker: ^8.0.6
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
@@ -160,6 +160,7 @@ dependencies:
   video_compress: ^3.1.4
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
+  record_linux: ^1.1.1
   http: ^0.13.3
   text_scroll: null
   auto_scroll_text: null

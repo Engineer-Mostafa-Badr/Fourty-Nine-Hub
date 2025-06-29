@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -8,10 +9,12 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/trip_option_widget.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/all_pickme_view.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/trip_join_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
@@ -102,66 +105,66 @@ class _TripJoinViewState extends State<TripJoinView>
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.h),
-                child: Column(children: [
-                  const Sizer(height: 30,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(3, (index) {
-                      bool isSelected = selectedIndex == index;
-                      Widget child = TripOptionWidget(
-                        imagePath: Assets.locationTripIcon,
-                        title: getTitleForIndex(index),
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = index;
-                            _controller.forward(from: 0);
-                          });
-                        },
-                        icon: getIconForIndex(index),
-                        borderColor: index == selectedIndex ? Colors.red : null,
-                        containerColor:
-                            index == selectedIndex ? context.isDarkMode?AppColors.Scaffold_Color_DARK:Colors.white : null,
-                        iconColor: index == selectedIndex
-                            ? AppColors.getRedColor(context)
-                            : AppColors.getButtonPrimaryColor(context),
-                        textColor: index == selectedIndex
-                            ? AppColors.getRedColor(context)
-                            : null,
-                      );
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32.h),
+              child: Column(children: [
+                const Sizer(height: 30,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(3, (index) {
+                    bool isSelected = selectedIndex == index;
+                    Widget child = TripOptionWidget(
+                      imagePath: Assets.locationTripIcon,
+                      title: getTitleForIndex(index),
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                          _controller.forward(from: 0);
+                        });
+                      },
+                      icon: getIconForIndex(index),
+                      borderColor: index == selectedIndex ? Colors.red : null,
+                      containerColor:
+                          index == selectedIndex ? context.isDarkMode?AppColors.Scaffold_Color_DARK:Colors.white : null,
+                      iconColor: index == selectedIndex
+                          ? AppColors.getRedColor(context)
+                          : AppColors.getButtonPrimaryColor(context),
+                      textColor: index == selectedIndex
+                          ? AppColors.getRedColor(context)
+                          : null,
+                    );
 
-                      if (isSelected) {
-                        return AnimatedBuilder(
-                          animation: _controller,
-                          builder: (context, _) {
-                            return Transform.translate(
-                              offset: Offset(0, _positionAnimation.value),
-                              child: Transform.scale(
-                                scale: _scaleAnimation.value,
-                                child: child,
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return child;
-                      }
-                    }),
-                  ),
-                  const Sizer(
-                    height: 20,
-                  ),
-                  AnimatedSwitcher(
+                    if (isSelected) {
+                      return AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, _) {
+                          return Transform.translate(
+                            offset: Offset(0, _positionAnimation.value),
+                            child: Transform.scale(
+                              scale: _scaleAnimation.value,
+                              child: child,
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return child;
+                    }
+                  }),
+                ),
+                const Sizer(
+                  height: 20,
+                ),
+                Expanded(
+                  child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: getSelectedContent(selectedIndex),
                   ),
-                ]),
-              ),
+                ),
+              ]),
             ),
-            Positioned.directional(
+            if(selectedIndex!=0)Positioned.directional(
               bottom: 40.h,
               start: 10,
               textDirection:
@@ -194,7 +197,7 @@ class _TripJoinViewState extends State<TripJoinView>
                 ),
               ),
             ),
-            getFloatingActionButtonContent(selectedIndex),
+            if(selectedIndex!=0)getFloatingActionButtonContent(selectedIndex),
           ],
         ),
       ),
@@ -212,7 +215,9 @@ class _TripJoinViewState extends State<TripJoinView>
       case 1:
         return Container(
           key: const ValueKey(1),
-          child: const TripJoinContent(),
+          child: Expanded(child: BlocProvider(
+              create: (context)=>serviceLocator<ViewAllTripJoinCubit>(),
+              child: const TripJoinContent())),
         );
       case 2:
         return Container(
