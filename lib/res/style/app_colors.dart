@@ -20,6 +20,7 @@ abstract class AppColors {
   static const whiteColor = Colors.white;
 
   static const DARK_GRAY_COLOR = Color(0xFF909090);
+  static const grey300 = Color(0xFFB3B3B3);
   static const LIGHT_GRAY_COLOR = Color(0xFFE0E0E0);
   static const BG_GRAY_COLOR = Color(0xFFD9D9D9);
   static const LIGHT_GRAY_COLOR2 = Color(0xFFA5A3A3);

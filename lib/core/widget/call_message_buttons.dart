@@ -153,6 +153,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                                         MaterialPageRoute(
                                         builder: (context) =>
                                         SendWhatsappCallScreen(
+                                          isRealCall: true,
                                         callType: CallType.audio,
                                         receiver: UserModel(
                                         id: widget.otherUserId,

@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/minimized_cubit/cubit/minimize_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
 import 'package:fourtyninehub/features/call/services/call_timer_service.dart';
 import 'package:fourtyninehub/features/call/widgets/call_control_button.dart';
-import 'package:fourtyninehub/features/call/widgets/minimized_call_overlay.dart';
-import 'package:fourtyninehub/main.dart'; // Add this import for navigatorKey
 
 class CallTimer extends StatefulWidget {
   const CallTimer({super.key});
@@ -17,7 +16,6 @@ class CallTimer extends StatefulWidget {
   @override
   State<CallTimer> createState() => _CallTimerState();
 }
-
 class _CallTimerState extends State<CallTimer> {
   final CallTimerService _timerService = CallTimerService();
 
@@ -26,37 +24,56 @@ class _CallTimerState extends State<CallTimer> {
     super.initState();
     print("CallTimer widget initializing");
     
-    // Don't start a new timer, just ensure the existing one is running
-    if (!_timerService.isRunning) {
-      print("Starting timer in CallTimer widget (was not running)");
-      _timerService.startTimer();
-    } else {
-      print("Timer already running in CallTimer widget: ${_timerService.formatDuration(_timerService.duration.value)}");
-    }
+    // Check if call is connected and start timer if not running
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final sendCallState = context.read<SendCallCubit>().state;
+      final callState = context.read<CallCubit>().state;
+      
+      if ((sendCallState is CallConnected || (callState is HasCall && callState.isCallConnected)) 
+          && !_timerService.isRunning) {
+        print("Starting timer in CallTimer widget - call is connected");
+        _timerService.startTimer();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Duration>(
-      valueListenable: _timerService.duration,
-      builder: (context, duration, _) {
-        final formattedTime = _timerService.formatDuration(duration);
-        print("Building CallTimer widget with time: $formattedTime");
-        return Text(
-          formattedTime,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 14,
-          ),
-        );
+    return BlocListener<SendCallCubit, SendCallState>(
+      listener: (context, state) {
+        if (state is CallConnected && !_timerService.isRunning) {
+          print("SendCallCubit state changed to CallConnected - starting timer");
+          _timerService.startTimer();
+        }
       },
+      child: BlocListener<CallCubit, CallState>(
+        listener: (context, state) {
+          if (state is HasCall && state.isCallConnected && !_timerService.isRunning) {
+            print("CallCubit state changed to connected - starting timer");
+            _timerService.startTimer();
+          }
+        },
+        child: ValueListenableBuilder<Duration>(
+          valueListenable: _timerService.duration,
+          builder: (context, duration, _) {
+            final formattedTime = _timerService.formatDuration(duration);
+            print("Building CallTimer widget with time: $formattedTime");
+            return Text(
+              formattedTime,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
   
   @override
   void dispose() {
     print("CallTimer widget disposed, but NOT stopping the timer");
-    // Don't reset or stop the timer on dispose - important for state persistence
     super.dispose();
   }
 }
@@ -69,6 +86,7 @@ class BuildAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SendCallCubit, SendCallState>(
       builder: (context, callState) {
+        print("Building app bar with call state: $callState");
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 40),
           child: Row(

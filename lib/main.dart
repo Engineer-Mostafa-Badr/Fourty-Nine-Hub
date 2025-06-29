@@ -276,11 +276,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // BlocProvider(
         //   create: (context) => AuthenticationRideCubit(),
         // ),
-        BlocProvider<NotificationSocketIoCubit>(
-            create: (context) => NotificationSocketIoCubit(
-                  context: context,
-                  notificationListenerUseCase: serviceLocator(),
-                )),
+        // BlocProvider<NotificationSocketIoCubit>(
+        //     create: (context) => NotificationSocketIoCubit(
+        //           context: context,
+        //           notificationListenerUseCase: serviceLocator(),
+        //         )),
         // BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
           create: (context) => FloatingNavigatorCubit()
@@ -307,61 +307,62 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               return StreamBuilder<bool>(
                   stream: NetworkManager().onStatusChange,
                   initialData: true, // assume connected at start
-                builder: (context, snapshot) {
-                  final bool isConnected = snapshot.data ?? true;
-                  return FutureBuilder<bool>(
-                    future: CacheManager.getMode(),
-                    builder: (context, snapshot) {
-                      return BlocBuilder<CustomPageCubit, CustomPageState>(
-                        builder: (BuildContext context, custom) {
-                          return Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: Stack(
-                              children: [
-                                MaterialApp.router(
-                                  routerConfig: AppPages.router,
-                                  builder: (BuildContext context, Widget? child) {
-                                    final mediaQuery = MediaQuery.of(context);
-                                    return MediaQuery(
-                                      data: mediaQuery.copyWith(
-                                        textScaler: TextScaler.noScaling,
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          child!,
-                                          const WhatsAppCallScreen(),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  themeMode: (snapshot.data ?? false)
-                                      ? ThemeMode.dark
-                                      : ThemeMode.light,
-                                  theme: lightTheme,
-                                  darkTheme: darkTheme,
-                                  title: '49',
-                                  debugShowCheckedModeBanner: false,
-                                  localizationsDelegates:
-                                      context.localizationDelegates,
-                                  supportedLocales: context.supportedLocales,
-                                  locale: context.locale,
-                                ),
-                                const MinimizedCallOverlay(),
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: NetworkAlertBanner(isConnected: isConnected),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  );
-                }
-              );
+                  builder: (context, snapshot) {
+                    final bool isConnected = snapshot.data ?? true;
+                    return FutureBuilder<bool>(
+                      future: CacheManager.getMode(),
+                      builder: (context, snapshot) {
+                        return BlocBuilder<CustomPageCubit, CustomPageState>(
+                          builder: (BuildContext context, custom) {
+                            return Directionality(
+                              textDirection: TextDirection.ltr,
+                              child: Stack(
+                                children: [
+                                  MaterialApp.router(
+                                    routerConfig: AppPages.router,
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      final mediaQuery = MediaQuery.of(context);
+                                      return MediaQuery(
+                                        data: mediaQuery.copyWith(
+                                          textScaler: TextScaler.noScaling,
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            child!,
+                                            const WhatsAppCallScreen(),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    themeMode: (snapshot.data ?? false)
+                                        ? ThemeMode.dark
+                                        : ThemeMode.light,
+                                    theme: lightTheme,
+                                    darkTheme: darkTheme,
+                                    title: '49',
+                                    debugShowCheckedModeBanner: false,
+                                    localizationsDelegates:
+                                        context.localizationDelegates,
+                                    supportedLocales: context.supportedLocales,
+                                    locale: context.locale,
+                                  ),
+                                  const MinimizedCallOverlay(),
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: NetworkAlertBanner(
+                                        isConnected: isConnected),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  });
             },
           );
         },

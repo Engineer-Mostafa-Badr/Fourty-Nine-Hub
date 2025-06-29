@@ -52,12 +52,12 @@ class NotificationsRemoteDataSourceImp
     implements NotificationsRemoteDataSource {
   final FirebaseHelper firebaseHelper;
   final ApiConsumer apiConsumer;
-  final WebSocketHelper webSocketHelper;
+  // final WebSocketHelper webSocketHelper;
 
   NotificationsRemoteDataSourceImp({
     required this.firebaseHelper,
     required this.apiConsumer,
-    required this.webSocketHelper,
+    // required this.webSocketHelper,
   });
 
   @override
@@ -116,7 +116,7 @@ class NotificationsRemoteDataSourceImp
   Future<void> notificationListener(
       {required Function(Map<String, dynamic> data)
       notificationCallback}) async {
-    webSocketHelper.notificationListener(notificationCallback);
+    // webSocketHelper.notificationListener(notificationCallback);
   }
 
   @override
