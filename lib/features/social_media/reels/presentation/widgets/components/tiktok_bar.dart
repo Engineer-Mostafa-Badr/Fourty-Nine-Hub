@@ -10,15 +10,16 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/tiktok_option_sheet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-
-import '../../../../../../common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../pages/recording/recording_shared.dart';
 
 class AdvancedTikTokTabBar extends StatefulWidget {
@@ -47,70 +48,20 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Column(
-          //         mainAxisAlignment: MainAxisAlignment.end,
-          //         children: [
-          //           Container(
-          //               alignment: Alignment.centerLeft,
-          //               // color: Colors.red,
-          //               child: IconButton(
-          //                   onPressed: () {
-          //                     if (context.read<ReelsCubit>().state.controllers[
-          //                             context
-          //                                 .read<ReelsCubit>()
-          //                                 .state
-          //                                 .focusedIndex] !=
-          //                         null) {
-          //                       context
-          //                           .read<ReelsCubit>()
-          //                           .state
-          //                           .controllers[context
-          //                               .read<ReelsCubit>()
-          //                               .state
-          //                               .focusedIndex]
-          //                           ?.pause();
-          //                     }
-          //                     context.read<ReelsCubit>().resetFocusedIndex(
-          //                         context.read<ReelsCubit>().state.focusedIndex);
-          //                     Navigator.pop(context);
-          //                   },
-          //                   icon: Icon(
-          //                     Icons.arrow_back_ios,
-          //                     size: 0.08.sw,
-          //                     color: Colors.white,
-          //                     shadows: const [
-          //                       Shadow(
-          //                         color: Colors.black,
-          //                         offset: Offset(1, 1),
-          //                         blurRadius: 5.0,
-          //                       )
-          //                     ],
-          //                   )
-          //                   )
-          //                   ),
-          //           Sizer(),
-          //           // Icon(Icons.volume_off)
-          //         ],
-          //       ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _buildLiveIcon(onTap: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                if (context
-                    .read<ReelsCubit>()
-                    .state
-                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () {
+                if (context.read<ReelsCubit>().state.controllers[
+                        context.read<ReelsCubit>().state.focusedIndex] !=
+                    null) {
                   context
                       .read<ReelsCubit>()
                       .state
@@ -118,139 +69,181 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                           context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
-                if (context.isUserLoggedIn) {
-                  showTiktokOption(context, generateRandom9DigitNumber);
-                } else {
-                  return pleaseLoginDialog(context);
-                  // context.push(Routes.LOGIN);
-                }
-              }),
-              const Sizer(
-                height: 50,
-              ),
-              // Image.asset(
-              //   Assets.volumeOff,
-              //   color: Colors.white,
-              //   width: 15,
-              //   height: 15,
-              // ),
-              // Image.asset(
-              //   Assets.volumeOn,
-              //   color: Colors.white,
-              //   width: 20,
-              //   height: 20,
-              // )
-            ],
-          ),
-          Row(
-            children: [
-              _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
-                if (context
-                    .read<ReelsCubit>()
-                    .state
-                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<ReelsCubit>()
-                      .state
-                      .controllers[
-                          context.read<ReelsCubit>().state.focusedIndex]
-                      ?.pause();
-                }
-                setState(() {
-                  _selectedIndex = 0;
-                });
-                context.push(Routes.SPOTLIGHT);
-              }),
-              // Following Tab
-              _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                if (context
-                    .read<ReelsCubit>()
-                    .state
-                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<ReelsCubit>()
-                      .state
-                      .controllers[
-                          context.read<ReelsCubit>().state.focusedIndex]
-                      ?.pause();
-                }
-                setState(() {
-                  _selectedIndex = 1;
-                });
-                context.push(Routes.SNAP);
-              }),
-
-              // For You Tab with rounded underline
-              _buildTab("Reel", 2, onTap: () {
-                setState(() {
-                  _selectedIndex = 2;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReelsRecordingScreen(),
-                  ),
-                );
-              }),
-            ],
-          ),
-          GestureDetector(
-            onTap: () {
-              context.push(Routes.Tinder);
-            },
-            child: const Icon(
-              Icons.search,
-              size: 40,
-              color: Colors.white,
+                // context.read<ReelsCubit>().resetFocusedIndex(
+                //     context.read<ReelsCubit>().state.focusedIndex);
+                Navigator.pop(context);
+              },
+              child: MediaQuery(
+                  data: MediaQuery.of(context)
+                      .copyWith(textScaler: const TextScaler.linear(1.0)),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    size: 32,
+                    color: Colors.white,
+                  )),
             ),
-          )
-        ],
-      ),
+            Row(
+              children: [
+                _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
+                  if (context
+                      .read<ReelsCubit>()
+                      .state
+                      .controllers[
+                          context.read<ReelsCubit>().state.focusedIndex]!
+                      .value
+                      .isPlaying) {
+                    context
+                        .read<ReelsCubit>()
+                        .state
+                        .controllers[
+                            context.read<ReelsCubit>().state.focusedIndex]
+                        ?.pause();
+                  }
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                  context.push(Routes.SPOTLIGHT);
+                }),
+                SizedBox(width: 16),
+                // Following Tab
+                _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  if (context
+                      .read<ReelsCubit>()
+                      .state
+                      .controllers[
+                          context.read<ReelsCubit>().state.focusedIndex]!
+                      .value
+                      .isPlaying) {
+                    context
+                        .read<ReelsCubit>()
+                        .state
+                        .controllers[
+                            context.read<ReelsCubit>().state.focusedIndex]
+                        ?.pause();
+                  }
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                  context.push(Routes.SNAP);
+                }),
+                SizedBox(width: 16),
+                // For You Tab with rounded underline
+                _buildTab("Reel", 2, onTap: () {
+                  setState(() {
+                    _selectedIndex = 2;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReelsRecordingScreen(),
+                    ),
+                  );
+                }),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                if (!serviceLocator<UserCubit>().isLoggedIn) {
+                  context.read<PreloadBloc>().pauseTheVideo();
+                  context.push(Routes.LOGIN);
+                } else {
+                  context.push(Routes.Tinder);
+                }
+              },
+              child: MediaQuery(
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: const TextScaler.linear(1.0)),
+                child: SvgPicture.asset(
+                  Assets.searchIcon,
+                  color: Colors.white,
+                  width: 30,
+                  height: 30,
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(height: 18),
+        _buildLiveIcon(onTap: () {
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          if (context
+              .read<ReelsCubit>()
+              .state
+              .controllers[context.read<ReelsCubit>().state.focusedIndex]!
+              .value
+              .isPlaying) {
+            context
+                .read<ReelsCubit>()
+                .state
+                .controllers[context.read<ReelsCubit>().state.focusedIndex]
+                ?.pause();
+          }
+          if (context.isUserLoggedIn) {
+            showTiktokOption(context, generateRandom9DigitNumber);
+          } else {
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          }
+        }, onBackTap: () {
+          context.pop();
+        }),
+
+        // Image.asset(
+        //   Assets.volumeOff,
+        //   color: Colors.white,
+        //   width: 15,
+        //   height: 15,
+        // ),
+        // Image.asset(
+        //   Assets.volumeOn,
+        //   color: Colors.white,
+        //   width: 20,
+        //   height: 20,
+        // )
+      ],
     );
   }
 
   // Custom Live Icon with Glow Effect
-  Widget _buildLiveIcon({required VoidCallback? onTap}) {
-    return InkWell(
+  Widget _buildLiveIcon(
+      {required VoidCallback? onTap, required VoidCallback? onBackTap}) {
+    return GestureDetector(
       onTap: onTap,
-      child: SizedBox(
-        height: 0.07.sw,
-        width: 0.07.sw,
-        child: Stack(
-          children: [
-            // Shadow layer
-            Transform.translate(
-              offset: const Offset(1, 1), // Adjust the offset as neede
-              child: ImageFiltered(
-                enabled: true,
-                imageFilter: ImageFilter.blur(
-                  sigmaX: 0.0,
-                  sigmaY: 1.5,
-                ),
-                child: SvgPicture.asset(
-                  'assets/images/live_icon.svg',
-                  color: Colors.black87, // Shadow color
-                  width: 70.w,
-                  height: 70.w,
-                ),
-              ),
-            ),
-            // Actual SVG
-            SvgPicture.asset(
-              'assets/images/live_icon.svg',
-              color: Colors.white,
-              width: 70.w,
-              height: 70.w,
-            ),
-          ],
-        ),
+      child: SvgPicture.asset(
+        Assets.liveReel,
+        color: Colors.white,
+        fit: BoxFit.cover,
+        width: 30,
+        height: 30,
       ),
+
+      //  Stack(
+      //   alignment: Alignment.center,
+      //   children: [
+      //     Transform.translate(
+      //       offset: const Offset(1, 1),
+      //       child: ImageFiltered(
+      //         imageFilter: ImageFilter.blur(sigmaX: 0, sigmaY: 1.5),
+      //         child: SvgPicture.asset(
+      //           Assets.liveReel,
+      //           color: Colors.black87,
+      //           width: 50.w,
+      //           height: 50.w,
+      //         ),
+      //       ),
+      //     ),
+      //     SvgPicture.asset(
+      //       Assets.liveReel,
+      //       color: Colors.white,
+      //       width: 50.w,
+      //       height: 50.w,
+      //     ),
+      //   ],
+      // ),
+      // ),
     );
   }
 
@@ -260,55 +253,45 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 4.0, left: 4.0, top: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              text,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.white70,
-                fontWeight: FontWeight.w500,
-                fontSize: 18.0,
-                shadows: const [
-                  Shadow(
-                    color: Colors.black,
-                    offset: Offset(1, 1),
-                    blurRadius: 5.0,
-                  )
-                ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+                color: isSelected ? Colors.white : AppColors.grey300,
+                fontWeight: FontWeight.w600,
+                fontSize: 16.0,
+                wordSpacing: 1.4),
+          ),
+          // Rounded Underline effect for selected tab
+          if (hasUnderline || isSelected)
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+              margin: const EdgeInsets.only(top: 4.0),
+              height: 3.0,
+              width: 34.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                // boxShadow: const [
+                //   BoxShadow(
+                //     color: Colors.black,
+                //     offset: Offset(1, 1),
+                //     blurRadius: 5.0,
+                //   )
+                // ],
+                borderRadius: BorderRadius.circular(2),
               ),
+            )
+          else
+            Container(
+              margin: const EdgeInsets.only(top: 4.0),
+              height: 3.0,
+              width: 34.0,
             ),
-            // Rounded Underline effect for selected tab
-            if (hasUnderline || isSelected)
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOut,
-                margin: const EdgeInsets.only(top: 6.0),
-                height: 3.0,
-                width: 35.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(1, 1),
-                      blurRadius: 5.0,
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              )
-            else
-              Container(
-                margin: const EdgeInsets.only(top: 6.0),
-                height: 3.0,
-                width: 35.0,
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

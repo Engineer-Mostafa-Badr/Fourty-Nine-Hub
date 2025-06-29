@@ -85,7 +85,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               ),
               CommentInputField(
                 focusNode: focusNode,
-                //  reel: widget.reel,
+                reel: widget.reel,
                 isReplying: isReplying,
                 commentController: _commentController,
                 scrollController: scrollController,
@@ -143,7 +143,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               itemCount: comments.length,
               itemBuilder: (context, index) {
                 return CommentWidget(
-                  //      commentData: comments[index],
+                  commentData: comments[index],
                   index: index,
                   commentController: _commentController,
                   //for reply

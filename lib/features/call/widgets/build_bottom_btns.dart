@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
+import 'package:fourtyninehub/core/utils/logging_service.dart';
 import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
@@ -52,12 +53,33 @@ class BuildBottomBtns extends StatelessWidget {
                 ? Icons.videocam
                 : Icons.videocam_off,
             onPressed: () async {
+              LoggingService.info("🎥 VIDEO BUTTON CLICKED!");
+              LoggingService.info("📊 Current video state: ${state?.isVideoEnabled}");
+              LoggingService.info("🏢 Engine: ${state?.engine != null}");
+              LoggingService.info("☁️ ZegoCloud: ${state?.isZegoCloud}");
+              
               if (state?.engine != null || state?.isZegoCloud == true) {
-                if (await Permission.camera.request() !=
-                    PermissionStatus.granted) {
-                  await Permission.camera.request();
+                LoggingService.info("✅ Conditions met, checking camera permission...");
+                
+                // Check camera permission
+                final permissionStatus = await Permission.camera.status;
+                LoggingService.info("📷 Camera permission status: $permissionStatus");
+                
+                if (permissionStatus != PermissionStatus.granted) {
+                  LoggingService.info("🔐 Requesting camera permission...");
+                  final requestResult = await Permission.camera.request();
+                  LoggingService.info("📷 Permission request result: $requestResult");
+                  if (requestResult != PermissionStatus.granted) {
+                    LoggingService.warning("❌ Camera permission denied, aborting");
+                    return; // Don't proceed if permission denied
+                  }
                 }
-                context.read<CallCubit>().toggleVideo();
+                
+                LoggingService.info("🚀 Calling toggleVideoSimple()...");
+                context.read<CallCubit>().toggleVideoSimple(); // Use simple implementation first
+                LoggingService.info("✅ toggleVideoSimple() called");
+              } else {
+                LoggingService.warning("❌ Conditions not met - engine: ${state?.engine != null}, zegoCloud: ${state?.isZegoCloud}");
               }
             },
             backgroundColor: state?.isVideoEnabled ?? false
@@ -112,11 +134,11 @@ class BuildBottomBtns extends StatelessWidget {
                   reason: 'caller ended call while send call',
                 );
                 await Future.delayed(const Duration(milliseconds: 200));
-                Future.microtask(() {
-                  if (navigatorKey.currentState != null) {
-                    navigatorKey.currentState!.pop();
-                  }
-                });
+                // Future.microtask(() {
+                //   if (navigatorKey.currentState != null) {
+                //     navigatorKey.currentState!.pop();
+                //   }
+                // });
                 _timerService.resetTimer();
               } else {
                 context.read<CallCubit>().endCall();

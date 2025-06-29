@@ -106,13 +106,7 @@ class _LoginViewState extends State<LoginView> {
               state.userTokensEntity.accessToken);
           await CacheManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
-          context
-              .read<NotificationSocketIoCubit>()
-              .notificationListener(languageCode: 'en');
-          context
-              .read<NotificationSocketIoCubit>()
-              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
-
+        
           serviceLocator<UserCubit>()
             ..setLogin(true)
             ..attachToken()
@@ -250,12 +244,7 @@ class _LoginViewState extends State<LoginView> {
                 // Navigator.pop(context);
                 context.pushReplacement(Routes.HOME);
               });
-            context
-                .read<NotificationSocketIoCubit>()
-                .notificationListener(languageCode: 'en');
-            context
-                .read<NotificationSocketIoCubit>()
-                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+          
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },

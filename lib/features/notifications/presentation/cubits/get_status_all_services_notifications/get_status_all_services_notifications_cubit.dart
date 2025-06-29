@@ -130,11 +130,10 @@ class GetStatusAllServicesNotificationsCubit
       'Not Used': 'لم يتم استخدامها',
       'Approved': 'موافقة',
       'Active': 'نشط',
-      'Waiting For Approval': 'انتظار الموافقة',
+      'Waiting Approval': 'انتظار الموافقة',
       'Rejected': 'مرفوض',
       'Submitted': 'تم التقديم',
     };
-
     return statusMap[status] ?? status;
   }
 }

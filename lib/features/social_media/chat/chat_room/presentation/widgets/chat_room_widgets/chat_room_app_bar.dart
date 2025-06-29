@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/authentication/data/models/user_model.dar
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/pages/send_whatsapp_call.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/forward_messages_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
@@ -89,7 +90,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                         leadingWidth: 20,
                         leading: InkWell(
                           onTap: () {
-                            if (context.read<ChatRoomCubit>().chat.isSearching) {
+                            if (context
+                                .read<ChatRoomCubit>()
+                                .chat
+                                .isSearching) {
                               context.read<ChatRoomCubit>().stopSearching();
                             } else {
                               context.pop();
@@ -97,8 +101,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                           },
                           child: Icon(
                             Icons.arrow_back,
-                            color:
-                                context.isDarkMode ? Colors.white : Colors.black,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                         title: widget.chatRoomCubit.chat.isSearching
@@ -124,8 +129,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                             .black54, // Same as hint text color
                                   ),
                                   decoration: InputDecoration(
-                                    hintText:
-                                        context.isArabic ? "بحث..." : "Search...",
+                                    hintText: context.isArabic
+                                        ? "بحث..."
+                                        : "Search...",
                                     hintStyle: Styles.mediumText(
                                       color: context.isDarkMode
                                           ? Colors.white54
@@ -185,7 +191,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                           ))
                                                       : null,
                                                   child: CircleAvatar(
-                                                    backgroundColor: Colors.white,
+                                                    backgroundColor:
+                                                        Colors.white,
                                                     backgroundImage: context
                                                                 .read<
                                                                     ChatsCubit>()
@@ -253,9 +260,12 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                         )
                                                       : null,
                                                   child: const CircleAvatar(
-                                                    backgroundColor: Colors.white,
-                                                    backgroundImage: NetworkImage(
-                                                      UIConst.profilePlaceHolder,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      UIConst
+                                                          .profilePlaceHolder,
                                                     ),
                                                   ),
                                                 ),
@@ -284,7 +294,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                                 0.30),
                                                         child: Label(
                                                           text: context
-                                                              .read<ChatsCubit>()
+                                                              .read<
+                                                                  ChatsCubit>()
                                                               .selectedChat
                                                               .name,
                                                           style:
@@ -305,14 +316,14 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                                   .isAdmin ==
                                                               "admin"
                                                           ? Positioned(
-                                                              right:
-                                                                  context.isArabic
-                                                                      ? 0
-                                                                      : -72,
-                                                              left:
-                                                                  context.isArabic
-                                                                      ? -72
-                                                                      : 0,
+                                                              right: context
+                                                                      .isArabic
+                                                                  ? 0
+                                                                  : -72,
+                                                              left: context
+                                                                      .isArabic
+                                                                  ? -72
+                                                                  : 0,
                                                               child: const Icon(
                                                                 Icons.verified,
                                                                 color:
@@ -335,8 +346,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       : "Typing...",
                                                   style: Styles.mediumText(
                                                     fontSize: 24,
-                                                    color:
-                                                        AppColors.SECONDARY_COLOR,
+                                                    color: AppColors
+                                                        .SECONDARY_COLOR,
                                                   ),
                                                 ),
                                               if (context
@@ -349,8 +360,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       : "Recording...",
                                                   style: Styles.mediumText(
                                                     fontSize: 24,
-                                                    color:
-                                                        AppColors.SECONDARY_COLOR,
+                                                    color: AppColors
+                                                        .SECONDARY_COLOR,
                                                   ),
                                                 ),
                                               if (!context
@@ -392,8 +403,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                           : Colors.black,
                                                     ),
                                                   )
-                                                else if (chatsCubit
-                                                        .selectedChat.lastSeen !=
+                                                else if (chatsCubit.selectedChat
+                                                        .lastSeen !=
                                                     null)
                                                   Label(
                                                     text: context.isArabic
@@ -453,14 +464,29 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                   .request();
                                               await Permission.camera.request();
                                             }
-                                            final fcmToken = await serviceLocator<
-                                                    FcmNotificationHelper>()
-                                                .getFcmUserToken();
+                                            if (chat.fcmToken == null) {
+                                              showCustomSnackBar(
+                                                  context,
+                                                  LocaleKeys.userNotAvailable
+                                                      .localize,
+                                                  Icon(
+                                                      Icons
+                                                          .warning_amber_rounded,
+                                                      color: AppColors
+                                                          .PRIMARY_COLOR_DARK));
+                                              return;
+                                            }
+                                            final fcmToken =
+                                                await serviceLocator<
+                                                        FcmNotificationHelper>()
+                                                    .getFcmUserToken();
+
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     SendWhatsappCallScreen(
+                                                  isRealCall: true,
                                                   callType: CallType.video,
                                                   receiver: UserModel(
                                                       id: chat.userId,
@@ -469,7 +495,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       firebaseToken:
                                                           chat.fcmToken),
                                                   sender: UserModel(
-                                                    id: userStateEntity.data!.id,
+                                                    id: userStateEntity
+                                                        .data!.id,
                                                     firstName: userStateEntity
                                                         .data!.firstName,
                                                     lastName: userStateEntity
@@ -502,25 +529,38 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                             }
                                             print(
                                                 'sender data is ${chat.id}, ${chat.name}, ${chat.avatar}, ${chat.fcmToken}');
-                                            final fcmToken = await serviceLocator<
-                                                    FcmNotificationHelper>()
-                                                .getFcmUserToken();
+                                            final fcmToken =
+                                                await serviceLocator<
+                                                        FcmNotificationHelper>()
+                                                    .getFcmUserToken();
+                                            print('FCM Token: $fcmToken');
+                                            if (chat.fcmToken == null) {
+                                              showCustomSnackBar(
+                                                  context,
+                                                  LocaleKeys.userNotAvailable
+                                                      .localize,
+                                                  Icon(
+                                                      Icons
+                                                          .warning_amber_rounded,
+                                                      color: AppColors
+                                                          .PRIMARY_COLOR_DARK));
+                                              return;
+                                            }
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         SendWhatsappCallScreen(
+                                                          isRealCall: true,
                                                           callType:
                                                               CallType.audio,
                                                           receiver: UserModel(
                                                             id: chat.userId,
-                                                            firstName: chat.name,
+                                                            firstName:
+                                                                chat.name,
                                                             lastName: '',
                                                             firebaseToken:
                                                                 chat.fcmToken,
-                                                            // 'eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0'
-                                                            // "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
-                                                            //chat.fcmToken
                                                           ),
                                                           sender: UserModel(
                                                             id: userStateEntity
@@ -567,14 +607,14 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                             }
                                             if (value == 5) {
                                               // Show alert dialog when "Clear Chat" is selected
-                                              _showClearChatAlert(
-                                                  context, widget.chatRoomCubit);
+                                              _showClearChatAlert(context,
+                                                  widget.chatRoomCubit);
                                             }
                                             if (value == 6) {
                                               await widget.chatRoomCubit
                                                   .getLabels();
-                                              _showLabelChatBottomSheet(
-                                                  context, widget.chatRoomCubit);
+                                              _showLabelChatBottomSheet(context,
+                                                  widget.chatRoomCubit);
                                             }
                                             if (value == 2) {
                                               widget.chatRoomCubit
@@ -594,9 +634,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         icon: Icons.copy,
                                         size: 20,
                                         onPressed: () async {
-                                          await widget.chatRoomCubit.copyMessage(
-                                            widget.chatRoomCubit.selectedMessages
-                                                .first,
+                                          await widget.chatRoomCubit
+                                              .copyMessage(
+                                            widget.chatRoomCubit
+                                                .selectedMessages.first,
                                           );
                                           widget.chatRoomCubit
                                               .clearSelectedMessages();
@@ -1278,7 +1319,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(LocaleKeys.clearThisChat.localize,),
+          title: Text(
+            LocaleKeys.clearThisChat.localize,
+          ),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(

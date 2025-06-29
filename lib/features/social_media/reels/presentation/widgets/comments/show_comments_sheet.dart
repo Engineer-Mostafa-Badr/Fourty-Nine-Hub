@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/comment_bottom_sheet.dart';
 
-Future<void> showCommentsBottomSheet(BuildContext context) async {
+Future<void> showCommentsBottomSheet(BuildContext context,{required Reel reel}) async {
   await showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -12,7 +13,7 @@ Future<void> showCommentsBottomSheet(BuildContext context) async {
     // ),
     backgroundColor: Colors.transparent,
     builder: (context) {
-      return CommentsBottomSheet(); // Use the new CommentsBottomSheet widget
+      return CommentsBottomSheet(reel: reel,); // Use the new CommentsBottomSheet widget
     },
   );
 }

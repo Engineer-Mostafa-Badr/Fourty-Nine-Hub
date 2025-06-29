@@ -20,6 +20,12 @@ class HasCall extends CallState {
   final bool isZegoCloud;
   final Widget localView;
   final Widget remoteView;
+  final bool isCallConnected;
+  final bool isVideoUpgradeRequested;
+  final bool isReceivingVideoUpgradeRequest;
+  final String? videoUpgradeRequesterId;
+  final String? videoUpgradeRequesterName;
+  final String? videoUpgradeInvitationId;
 
   HasCall({
     this.engine,
@@ -31,6 +37,12 @@ class HasCall extends CallState {
     this.isZegoCloud = false,
     this.localView = const SizedBox(),
     this.remoteView = const SizedBox(),
+    this.isCallConnected = false,
+    this.isVideoUpgradeRequested = false,
+    this.isReceivingVideoUpgradeRequest = false,
+    this.videoUpgradeRequesterId,
+    this.videoUpgradeRequesterName,
+    this.videoUpgradeInvitationId,
   });
 
   HasCall copyWith({
@@ -43,6 +55,12 @@ class HasCall extends CallState {
     bool? isZegoCloud,
     Widget? localView,
     Widget? remoteView,
+    bool? isCallConnected,
+    bool? isVideoUpgradeRequested,
+    bool? isReceivingVideoUpgradeRequest,
+    String? videoUpgradeRequesterId,
+    String? videoUpgradeRequesterName,
+    String? videoUpgradeInvitationId,
   }) {
     return HasCall(
       engine: engine ?? this.engine,
@@ -54,6 +72,12 @@ class HasCall extends CallState {
       isZegoCloud: isZegoCloud ?? this.isZegoCloud,
       localView: localView ?? this.localView,
       remoteView: remoteView ?? this.remoteView,
+      isCallConnected: isCallConnected ?? this.isCallConnected,
+      isVideoUpgradeRequested: isVideoUpgradeRequested ?? this.isVideoUpgradeRequested,
+      isReceivingVideoUpgradeRequest: isReceivingVideoUpgradeRequest ?? this.isReceivingVideoUpgradeRequest,
+      videoUpgradeRequesterId: videoUpgradeRequesterId ?? this.videoUpgradeRequesterId,
+      videoUpgradeRequesterName: videoUpgradeRequesterName ?? this.videoUpgradeRequesterName,
+      videoUpgradeInvitationId: videoUpgradeInvitationId ?? this.videoUpgradeInvitationId,
     );
   }
 
@@ -64,9 +88,15 @@ class HasCall extends CallState {
         isMute,
         isSpeaker,
         isVideoEnabled,
-        isZegoCloud,
         isRemoteVideoEnabled,
+        isZegoCloud,
         localView,
         remoteView,
+        isCallConnected,
+        isVideoUpgradeRequested,
+        isReceivingVideoUpgradeRequest,
+        videoUpgradeRequesterId,
+        videoUpgradeRequesterName,
+        videoUpgradeInvitationId,
       ];
 }

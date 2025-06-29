@@ -125,6 +125,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   Future<Either<Exception, void>> sendNotification(
       SendNotificationParams params) async {
     try {
+      print('++++++++++++++notification sent++ ${params.toMap()}');
       final token = await _generateAccessKey();
       print('Access token inside sendNotification $token');
       if (token == null) {
@@ -160,11 +161,16 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 }
 
 Future<String?> _generateAccessKey() async {
+  print("++++++++++++++_generateAccessKey+++++++++++++");
   final jsonString =
       await rootBundle.loadString('assets/keys/service_account_key.json');
+  print("++++++++++++++jsonString+++++++++++++ $jsonString");
   final serviceAccount = ServiceAccountCredentials.fromJson(jsonString);
+  print("++++++++++++++serviceAccount+++++++++++++ $serviceAccount");
   final scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
+  print("++++++++++++++scopes+++++++++++++ $scopes");
   final authClient = await clientViaServiceAccount(serviceAccount, scopes);
+  print("++++++++++++++authClient+++++++++++++ $authClient");
   final accessToken = authClient.credentials.accessToken;
   print('Access token is ${accessToken.data}');
   return accessToken.data;
@@ -184,12 +190,18 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
 
 Future<void> _handleNotification(RemoteMessage message) async {
   log('++++++++++++++notification received++ ${message.data}');
-  
+
   try {
-    // Using Future.delayed to ensure the app is more stable when accessing Provider
     await Future.delayed(const Duration(milliseconds: 300));
+    if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      await DI.execute();
+    }
     
     if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+      print('+++++ CallWithNotificationHelper +++++++++');
       serviceLocator<CallWithNotificationHelper>()
           .handleIncomingCallNotification(message.data);
     } else {

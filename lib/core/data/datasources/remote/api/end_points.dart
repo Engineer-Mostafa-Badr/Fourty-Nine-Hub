@@ -570,8 +570,8 @@ class EndPoints {
   static const updatePrivacy = '/stories/privacy';
   static const getFollowers =
       '/follow/followers?subCategory=66b77e77bb35968b535dc944';
-  // static addReelComment(AddReelCommentParams params) =>
-  //     '/reels/comments/${params.reelId}';
+  static addReelComment(AddReelCommentParams params) =>
+      '/reels/comments/${params.reelId}';
   static addReelReply(AddReelReplyParams params) =>
       '/reels/comments/${params.reelId}';
 

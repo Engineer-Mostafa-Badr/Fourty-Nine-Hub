@@ -20,7 +20,7 @@ class ServicesIconBuilder extends StatelessWidget {
       return CustomNotificationWidget(
         icon: Image.asset(
           Assets.hand,
-          width: 40,
+          height: 40,
         ),
         unreadCount: getUnreadNotificationsCountCubit
                 .unreadNotificationsCountEntity?.servicesCount ??

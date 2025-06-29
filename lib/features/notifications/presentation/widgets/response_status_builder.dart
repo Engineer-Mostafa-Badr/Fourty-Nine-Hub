@@ -41,19 +41,17 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
           return Shimmer.fromColors(
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white24,
-            child: SingleChildScrollView(
-              child: Column(
-                children: List.generate(
-                  14,
-                  (index) => Container(
-                    height: 50,
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey),
-                    ),
+            child: Column(
+              children: List.generate(
+                14,
+                (index) => Container(
+                  height: 50,
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.AUTH_CONTAINER_COLOR,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
                   ),
                 ),
               ),
@@ -86,7 +84,6 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
                         style: Styles.mediumText(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
-                          color: context.isDarkMode?Colors.white:Colors.black,
                         ),
                       ),
                     ),
@@ -98,7 +95,7 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
                       style: Styles.mediumText(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
-                          color: context.isDarkMode?Colors.white70: AppColors.PRIMARY_COLOR),
+                          color: AppColors.PRIMARY_COLOR),
                     ),
                   ],
                 ),

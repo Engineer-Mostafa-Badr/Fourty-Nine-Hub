@@ -179,6 +179,7 @@ class _MarriageCallMessageButtonsState
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 SendWhatsappCallScreen(
+                                                                  isRealCall: true,
                                                                   callType:
                                                                       CallType
                                                                           .audio,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -29,7 +32,6 @@ class _AddStoryBodyState extends State<AddStoryBody> {
       extendBody: true,
       body: Stack(
         children: [
-          // الخلفية بتدرج اللون
           Container(
             margin: EdgeInsets.only(top: 50, bottom: 80),
             decoration: const BoxDecoration(
@@ -49,7 +51,6 @@ class _AddStoryBodyState extends State<AddStoryBody> {
               ),
             ),
           ),
-          // المحتوى الأساسي
           SafeArea(
             child: Column(
               children: [
@@ -57,11 +58,115 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // يخلي كل العناصر تبدا من فوق
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.arrow_back_ios_new,
-                          color: Colors.white, size: 20),
+                      GestureDetector(
+                        onTapDown: (details) {
+                          showDialog(
+                            context: context,
+                            barrierColor: Colors.transparent,
+                            builder: (context) {
+                              return Stack(
+                                children: [
+                                  Positioned(
+                                    top: details.globalPosition.dy,
+                                    left: context.isArabic
+                                        ? null
+                                        : details.globalPosition.dx - 5,
+                                    right: context.isArabic
+                                        ? MediaQuery.of(context).size.width -
+                                            details.globalPosition.dx -
+                                            5
+                                        : null,
+                                    child: Material(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                      elevation: 6,
+                                      child: SizedBox(
+                                        width: 140,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 10),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    context.pushReplacement(
+                                                      Routes.UseSoundScreen,
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        Assets.discardIcon,
+                                                        width: 15,
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Text(
+                                                        context.isArabic
+                                                            ? 'تجاهل'
+                                                            : 'Discard',
+                                                        style: const TextStyle(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 10),
+                                                child: Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      Assets.saveDraftIcon,
+                                                      width: 18,
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      context.isArabic
+                                                          ? 'حفظ المسودة'
+                                                          : 'Save draft',
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
 
                       const SizedBox(width: 8),
 
@@ -76,9 +181,9 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             constraints: const BoxConstraints(maxWidth: 140),
-                            child: Row(
+                            child: const Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
+                              children: [
                                 Icon(Icons.music_note,
                                     color: Colors.white, size: 14),
                                 SizedBox(width: 4),
@@ -114,7 +219,7 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                     ],
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Center(
                   child: Container(
                     width: 220,
@@ -126,7 +231,7 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ClipRRect(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(12),
                               topRight: Radius.circular(12),
                             ),
@@ -142,25 +247,29 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                               bottomRight: Radius.circular(12),
                             ),
                           ),
-                          child: const Column(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Amr Diab Music',
-                                style: TextStyle(
+                                context.isArabic
+                                    ? "عمر دياب موسيقى"
+                                    : 'Amr Diab Music',
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 2),
+                              const SizedBox(height: 2),
                               Row(
                                 children: [
                                   Text(
-                                    'Amr Diab Music',
-                                    style: TextStyle(
+                                    context.isArabic
+                                        ? "عمر دياب موسيقى"
+                                        : 'Amr Diab Music',
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 12),
                                   ),
                                   Spacer(),
-                                  Icon(Icons.bar_chart,
+                                  const Icon(Icons.bar_chart,
                                       size: 14, color: Colors.white),
                                 ],
                               ),
@@ -171,10 +280,7 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                     ),
                   ),
                 ),
-
                 const Spacer(),
-
-                // زر Your Story
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Container(
@@ -195,9 +301,12 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                               'https://randomuser.me/api/portraits/men/12.jpg'),
                         ),
                         const SizedBox(width: 8),
-                        const Text(
-                          "Your Story",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Text(
+                          context.isArabic ? "قصتك" : "Your Story",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     ),

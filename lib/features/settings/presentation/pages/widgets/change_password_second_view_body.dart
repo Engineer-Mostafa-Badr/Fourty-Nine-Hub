@@ -79,12 +79,7 @@ class _ChangePasswordSecondViewBodyState
                 // Navigator.pop(context);
                 context.pushReplacement(Routes.HOME);
               });
-            context
-                .read<NotificationSocketIoCubit>()
-                .notificationListener(languageCode: 'en');
-            context
-                .read<NotificationSocketIoCubit>()
-                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+           
           }
           if (state is ConfirmPasswordNotMache) {
             showErrorMessage(

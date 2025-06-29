@@ -96,9 +96,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
+   
   }
 
   void _setupScrollController() {
@@ -122,9 +120,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
     // super.initState();
   }
 
@@ -190,21 +185,23 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
   @override
   Widget build(BuildContext context) {
     print("objectUser${UserCubit.to.state.data?.id}");
-    return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
-      listener: (context, state) {
-        if (state is NotificationSocketIoNewNotification) {
-          // pr('new notfication is recieved by the bloc listner');
-          // pr(state.notificationEntity);
-          notificationSnackBar(
-              context: context,
-              notificationEntity: state.notificationEntity,
-              isAppNotification: state.notificationEntity.filterType == 'app');
-        } else if (state is NotificationSocketIoFailed) {
-          // pr('Failed to recieve the new notfication ');
-          // pr(state.message);
-        }
-      },
-      child: Scaffold(
+    return 
+    // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
+    //   listener: (context, state) {
+    //     if (state is NotificationSocketIoNewNotification) {
+    //       // pr('new notfication is recieved by the bloc listner');
+    //       // pr(state.notificationEntity);
+    //       notificationSnackBar(
+    //           context: context,
+    //           notificationEntity: state.notificationEntity,
+    //           isAppNotification: state.notificationEntity.filterType == 'app');
+    //     } else if (state is NotificationSocketIoFailed) {
+    //       // pr('Failed to recieve the new notfication ');
+    //       // pr(state.message);
+    //     }
+    //   },
+    //   child: 
+      Scaffold(
         key: _scaffoldKey,
         bottomNavigationBar: BottomNavigator(
           scrollController: scrollController,
@@ -447,7 +444,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             ),
           ],
         ),
-      ),
+      // ),
     );
   }
 

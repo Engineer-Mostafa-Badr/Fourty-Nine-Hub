@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "872417805780",
     "project_id": "app-af0a7",
-    "storage_bucket": "app-af0a7.appspot.com"
+    "storage_bucket": "app-af0a7.firebasestorage.app"
   },
   "client": [
     {
@@ -13,6 +13,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "872417805780-bi9ujup85jrnh8hkl3b93k22vbln8hu2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.fourtynine",
+            "certificate_hash": "e5ad73de921942c766ac19f7d5451f0dc9f2dc53"
+          }
+        },
         {
           "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
           "client_type": 3
@@ -86,6 +94,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "872417805780-ocq7k6nf5k4hcmqktjjj2jaoch3fdn6v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fourtyninehub",
+            "certificate_hash": "e5ad73de921942c766ac19f7d5451f0dc9f2dc53"
+          }
+        },
+        {
           "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -127,6 +143,14 @@
           "android_info": {
             "package_name": "com.fourtyninehub.fourtynine",
             "certificate_hash": "3e27c2d97bdc923448b470ef30cad6c45a9c368f"
+          }
+        },
+        {
+          "client_id": "872417805780-s6bhbcfk9osbjo909kt339vm8lpo5s0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourtyninehub.fourtynine",
+            "certificate_hash": "e5ad73de921942c766ac19f7d5451f0dc9f2dc53"
           }
         },
         {

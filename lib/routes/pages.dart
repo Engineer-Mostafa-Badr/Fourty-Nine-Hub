@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/utils/localization_helper.dart';
 
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
@@ -12,6 +13,14 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_tr
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_all_notifications/delete_all_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_notification/delete_notification_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_seen/notification_seen_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/emergency_contacts_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_client_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
@@ -244,8 +253,11 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/all_location_screen.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/tiktok_option_screen.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_post_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_suggest_people.dart';
@@ -1113,40 +1125,67 @@ class AppPages {
                   name: Routes.ACCOUNT,
                   builder: (context, state) => const NotificationView(),
                   routes: [
-                    // GoRoute(
-                    //   path: Paths.NOTIFICATIONS,
-                    //   name: Routes.NOTIFICATIONS,
-                    //   builder: (context, state) => MultiBlocProvider(
-                    //     providers: [
-                    //       BlocProvider<GetAppNotificationsCubit>(
-                    //         create: (context) =>
-                    //             serviceLocator<GetAppNotificationsCubit>(),
-                    //       ),
-                    //       BlocProvider<GetStatusAllServicesNotificationsCubit>(
-                    //         create: (context) => serviceLocator<
-                    //             GetStatusAllServicesNotificationsCubit>(),
-                    //       ),
-                    //       BlocProvider<GetSocialNotificationsCubit>(
-                    //         create: (context) => GetSocialNotificationsCubit(
-                    //           getNotficationsUseCase: serviceLocator(),
-                    //           context: context,
-                    //         ),
-                    //       ),
-                    //       BlocProvider<GetServicesNotificationsCubit>(
-                    //         create: (context) => GetServicesNotificationsCubit(
-                    //           getNotficationsUseCase: serviceLocator(),
-                    //           context: context,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //     child: const NotificationView(),
-                    //   ),
-                    // ),
                     GoRoute(
                       path: Paths.NOTIFICATIONS,
                       name: Routes.NOTIFICATIONS,
-                      builder: (context, state) => const NotificationView(),
+                      builder: (context, state) {
+                        String languageCode = LocalizationHelper.of(context)
+                            .getCurrentLanguageCode();
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider<GetAppNotificationsCubit>(
+                              create: (context) =>
+                                  serviceLocator<GetAppNotificationsCubit>()
+                                    ..getAppNotifications(
+                                        languageCode: languageCode),
+                            ),
+                            BlocProvider<
+                                GetStatusAllServicesNotificationsCubit>(
+                              create: (context) => serviceLocator<
+                                  GetStatusAllServicesNotificationsCubit>()
+                                ..getStatusAllServices(),
+                            ),
+                            BlocProvider<GetSocialNotificationsCubit>(
+                              create: (context) => GetSocialNotificationsCubit(
+                                getNotficationsUseCase: serviceLocator(),
+                                context: context,
+                              )..getSocialNotifications(
+                                  languageCode: languageCode),
+                            ),
+                            BlocProvider<GetServicesNotificationsCubit>(
+                              create: (context) =>
+                                  GetServicesNotificationsCubit(
+                                getNotficationsUseCase: serviceLocator(),
+                                context: context,
+                              )..getServicesNotifications(
+                                      languageCode: languageCode),
+                            ),
+                            BlocProvider<NotificationSeenCubit>(
+                              create: (context) => NotificationSeenCubit(
+                                notificationSeenUseCase: serviceLocator(),
+                              ),
+                            ),
+                            BlocProvider<AllNotficationsSeenCubit>(
+                              create: (context) => AllNotficationsSeenCubit(
+                                allNotificationSeenUseCase: serviceLocator(),
+                              ),
+                            ),
+                            BlocProvider<DeleteNotificationCubit>(
+                              create: (context) => DeleteNotificationCubit(
+                                deleteNotificationUseCase: serviceLocator(),
+                              ),
+                            ),
+                            BlocProvider<DeleteAllNotificationsCubit>(
+                              create: (context) => DeleteAllNotificationsCubit(
+                                deleteAllNotificationsUseCase: serviceLocator(),
+                              ),
+                            ),
+                          ],
+                          child: const NotificationView(),
+                        );
+                      },
                     ),
+                   
                     GoRoute(
                         path: Paths.SETTINGS,
                         name: Routes.SETTINGS,
@@ -1556,10 +1595,27 @@ class AppPages {
                       path: Paths.REELS,
                       name: Routes.REELS,
                       builder: (context, state) {
-                        // context.read<ReelsCubit>().fetchReels();
-                        return BlocProvider(
-                          create: (context) =>
-                              serviceLocator<SocialPostsCubit>(),
+                        final reelsCubit = serviceLocator<ReelsCubit>();
+                        final preloadBloc = serviceLocator<PreloadBloc>();
+
+                        // Check if we need to reload data
+                        if (reelsCubit.state.globalReels.isEmpty) {
+                          reelsCubit.fetchReels();
+                        }
+
+                        if (preloadBloc.state.urls.isEmpty) {
+                          preloadBloc.getVideosFromApi();
+                        }
+
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(value: reelsCubit),
+                            BlocProvider.value(value: preloadBloc),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<SocialPostsCubit>(),
+                            ),
+                          ],
                           child: const ReelView(),
                         );
                       },
@@ -1572,6 +1628,37 @@ class AppPages {
                       ],
                     ),
                     GoRoute(
+                      path: Paths.TiktokOptionScreen,
+                      name: Routes.TiktokOptionScreen,
+                      builder: (context, state) {
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ],
+                          child: const TiktokOptionScreen(),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                        path: Paths.AllLocationScreen,
+                        name: Routes.AllLocationScreen,
+                        builder: (context, state) {
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider<DestGetLatAndLongCubit>(
+                                create: (context) => DestGetLatAndLongCubit(
+                                    getLatLongFromAddressRemoteDataSource:
+                                        serviceLocator()),
+                              ),
+                            ],
+                            child: const AllLocationScreen(),
+                          );
+                        }),
+                    GoRoute(
                         path: Paths.TINDER,
                         name: Routes.Tinder,
                         builder: (context, state) => const TinderView()),
@@ -1582,7 +1669,8 @@ class AppPages {
                     GoRoute(
                         path: Paths.FindMyProfileScreen,
                         name: Routes.FindMyProfileScreen,
-                        builder: (context, state) => const FindMyProfileScreen()),
+                        builder: (context, state) =>
+                            const FindMyProfileScreen()),
                     GoRoute(
                         path: Paths.EditProfileTinder,
                         name: Routes.EditProfileTinder,

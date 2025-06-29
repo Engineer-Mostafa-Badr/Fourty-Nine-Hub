@@ -4,18 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/full_screen_widget.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../pages/profile_buttom_sheet.dart';
@@ -187,38 +182,40 @@ class _ReelsWidgetState extends State<ReelsWidget>
               Positioned.fill(
                 bottom: MediaQuery.of(context).size.height * 0.0,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 20),
+                  padding: const EdgeInsets.only(right: 20, left: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.keyboard_double_arrow_left_sharp,
-                            color: Colors.white,
+                          // Icon(
+                          //   Icons.keyboard_double_arrow_left_sharp,
+                          //   color: Colors.white,
+                          // ),
+                          SizedBox(
+                            height: 10,
                           ),
                         ],
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          if (!serviceLocator<UserCubit>().isLoggedIn) {
-                            return pleaseLoginDialog(context);
-
-                            // context.push(Routes.LOGIN);
-                          } else {
-                            _showGiftBottomSheet(context);
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.9),
-                                blurRadius: 30)
-                          ]),
-                          child: SvgPicture.asset(Assets.giftReelsIcon),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     if (!serviceLocator<UserCubit>().isLoggedIn) {
+                      //       context.read<PreloadBloc>().pauseTheVideo();
+                      //       context.push(Routes.LOGIN);
+                      //     } else {
+                      //       _showGiftBottomSheet(context);
+                      //     }
+                      //   },
+                      //   child: Container(
+                      //     decoration: BoxDecoration(boxShadow: [
+                      //       BoxShadow(
+                      //           color: Colors.black.withOpacity(0.9),
+                      //           blurRadius: 30)
+                      //     ]),
+                      //     child: SvgPicture.asset(Assets.giftReelsIcon),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -232,13 +229,55 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   rotationController: _rotationController,
                 ),
               ),
+            Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 60,
+                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.black,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // if (reel.audio.audioName.isNotEmpty)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 30,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  reel.audio.audioName.isNotEmpty
+                                      ? reel.audio.audioName
+                                      : "No audio",
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: Colors.white70,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        SizedBox(height: 5),
+                        CustomProgressBar(
+                          videoPlayerController: widget.controller,
+                        ),
+                      ],
+                    ),
+                  )),
               Positioned(
-                bottom: 20,
-                left: 10,
-                right: 10,
-                child: CustomProgressBar(
-                  videoPlayerController: widget.controller,
-                ),
+                bottom: MediaQuery.of(context).size.height * 0.5,
+                left: MediaQuery.of(context).size.width * 0.115,
+                child: FullScreenWidget(),
               ),
             ],
           ),
@@ -250,12 +289,12 @@ class _ReelsWidgetState extends State<ReelsWidget>
   Widget buildPlayPauseIcon() {
     return AnimatedOpacity(
       opacity: _showPlayPauseIcon ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 1000),
       child: Center(
         child: Icon(
           widget.controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-          color: Colors.white,
-          size: 100,
+          color: Colors.white.withOpacity(0.5),
+          size: 85,
         ),
       ),
     );

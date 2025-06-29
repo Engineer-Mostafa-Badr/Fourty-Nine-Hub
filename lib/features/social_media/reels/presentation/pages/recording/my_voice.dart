@@ -4,8 +4,6 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
-// import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-// import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +14,8 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart'
- import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart' as thumb;
+import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart'
+    as thumb;
 
 import '../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
@@ -258,36 +257,6 @@ class MyVoiceVideoRecordingScreenState
     //   }
     //   return false;
     // }
-    try {
-      // // final session = await FFmpegKit.executeWithArguments(commandArgs);
-      // final returnCode = await session.getReturnCode();
-      // final output = await session.getOutput();
-      // log("FFmpeg output: $output");
-      // if (ReturnCode.isSuccess(returnCode)) {
-      //   log("FFmpeg process succeeded");
-      //   // final savedSuccessfully =
-      //   //     await GallerySaver.saveVideo(filteredVideoPath!);
-      //   await _generateThumbnail(filteredVideoPath!);
-      //   _navigateToPlaybackScreen();
-      //   // if (savedSuccessfully ?? false) {
-      //   //   log('Saved');
-      //   // } else {
-      //   //   throw Exception('error_dialog_save_video_fail');
-      //   // }
-      //   // return savedSuccessfully;
-      // } else {
-      //   final failStackTrace = await session.getFailStackTrace();
-      //   throw Exception(
-      //       "FFmpeg process failed with return code $returnCode\n$failStackTrace");
-      // }
-    } catch (e) {
-      log("Error in _mergeVideoWithFilter: $e");
-      _showErrorDialog(
-          LocaleKeys.error_dialog_video_process_fail.tr(args: [e.toString()]));
-      filteredVideoPath = null;
-    }
-    return false;
-  }
 
     void _navigateToPlaybackScreen() {
       Navigator.push(
@@ -387,7 +356,7 @@ class MyVoiceVideoRecordingScreenState
                   right: 0,
                   child: Column(
                     children: [
-                      //   _buildControls(),
+                      //    _buildControls(),
                     ],
                   ),
                 ),
@@ -571,9 +540,9 @@ class MyVoiceVideoRecordingScreenState
     }
   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     // TODO: implement build
-//     throw UnimplementedError();
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
