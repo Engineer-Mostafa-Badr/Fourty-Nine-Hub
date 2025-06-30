@@ -473,7 +473,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       log("Join Available Route ");
       SharedWebSocket.socket!.emit(SocketIOEvents.joinAvailableRoutes);
       CliLogger.info(
-          "SocketIOEvents.leaveAvailableRoutes${SocketIOEvents.joinAvailableRoutes}");
+          "SocketIOEvents.leaveAvailableRoutes ${SocketIOEvents.joinAvailableRoutes}");
 
       return const Right(true);
     } catch (e) {

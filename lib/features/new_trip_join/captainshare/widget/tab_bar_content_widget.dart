@@ -171,7 +171,6 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
     return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
       var cubit = context.read<CaptainShareCubit>();
       return Stack(
-        alignment: Alignment.bottomCenter,
         children: [
           cubit.isLoadingAvailableBookings?const Center(child: CircularProgressIndicator()):cubit.availableBookings.isEmpty?_emptyMessage():ListView.separated(
             controller: _scrollController,
@@ -198,33 +197,38 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
             separatorBuilder: (context, index) => const Sizer(),
             itemCount: cubit.availableBookings.length,
           ),
-          if(_isVisible)Padding(
-            padding: EdgeInsets.only(bottom: 30.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    cubit.onNavigateToCreateRoute(context);
-                  },
-                  child: Container(
-                    height: 48.h,
-                    width: 48.h,
-                    decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(
-                      size: 19,
-                      Icons.question_mark,
-                      color: context.isDarkMode ? AppColors.black : Colors.white,
+          if(_isVisible)PositionedDirectional(
+            bottom: 0.h,
+            start: 0,
+            end: 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      cubit.onNavigateToCreateRoute(context);
+                    },
+                    child: Container(
+                      height: 48.h,
+                      width: 48.h,
+                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(
+                        size: 19,
+                        Icons.question_mark,
+                        color: context.isDarkMode ? AppColors.black : Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                TripJoinFloatingActionButton(
-                  title: LocaleKeys.createRoute.localize,
-                  onTap: () {
-                    context.push(Routes.newRouteScreen);
-                  },
-                ),
-              ],
+                  TripJoinFloatingActionButton(
+                    title: LocaleKeys.createRoute.localize,
+                    onTap: () {
+                      context.push(Routes.newRouteScreen);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
