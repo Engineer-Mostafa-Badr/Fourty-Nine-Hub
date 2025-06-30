@@ -8,7 +8,6 @@ class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
 
   factory MyAdsTripJoinModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'];
-
     return MyAdsTripJoinModel(
       offers: (data['offers'] as List<dynamic>?)
           ?.map((e) => MyAdsTripDocModel.fromJson(e))
@@ -31,6 +30,8 @@ class MyAdsTripDocModel extends MyAdsTripDocEntity {
     super.startDate,
     super.offerType,
     super.isPremium,
+    super.phoneNumber,
+    super.createdAt,
     super.isButtonEnabled,
     super.vehicleDetails,
     super.location,
@@ -47,6 +48,8 @@ class MyAdsTripDocModel extends MyAdsTripDocEntity {
       startDate: json['startDate'],
       offerType: json['offerType'],
       isPremium: json['isPremium'],
+      phoneNumber: json['phoneNumber'],
+      createdAt: json['createdAt'],
       isButtonEnabled: json['isButtonEnabled'] != null
           ? IsButtonEnabledModel.fromJson(json['isButtonEnabled'])
           : null,

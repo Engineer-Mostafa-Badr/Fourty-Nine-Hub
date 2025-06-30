@@ -14,6 +14,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/loading/get_loading_history_entity.dart';
 import '../widgets/car_circle_widget.dart';
 import '../widgets/info_column_widget.dart';
+import 'loading_dashboard_details_screen.dart';
 
 class PastLoadingWidget extends StatefulWidget {
   final GetLoadingHistoryEntity ? tripEntity;
@@ -45,31 +46,32 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child:Row(
+          spacing: 2,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CarContainer(
-              title: context.isArabic
-                  ? widget.tripEntity?.subCategory?.nameAr ?? ''
-                  : widget.tripEntity?.subCategory?.nameEn ?? '',
-              image: widget.tripEntity!.subCategory!.pictureUrl!,
+            Expanded(
+              child: CarContainer(
+                title: context.isArabic
+                    ? widget.tripEntity?.subCategory?.nameAr ?? ''
+                    : widget.tripEntity?.subCategory?.nameEn ?? '',
+                image: widget.tripEntity!.subCategory!.pictureUrl!,
+              ),
             ),
-            const SizedBox(width: 12),
-
             // Flexible middle column
             Expanded(
+              flex: 3,
               child: PriceColumnNonSocket(
                 status: widget.tripEntity?.tripDetails?.status ?? "",
                 title: widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
-                date: "${formattedDate} ${formattedTime}",
-                price: widget.tripEntity?.tripDetails?.price?.toStringAsFixed(0) ?? '0.0',
+                date: "${formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context)}",
+                price:formatPrice( widget.tripEntity?.tripDetails?.price?.toDouble() ?? 0,context),
               ),
             ),
 
-            const SizedBox(width: 8),
 
             // Profile column
-            SizedBox(
-              width: 70,
+            Expanded(
+              // width: 70,
               child: Column(
                 children: [
                   Stack(
@@ -107,7 +109,7 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
                                 SvgPicture.asset(Assets.star2, width: 8, height: 8),
                                 const Sizer(width: 4),
                                 Label(
-                                  text: widget.tripEntity?.clientDetails?.rating?.count.toString() ?? '0',
+                                  text:formatPrice(widget.tripEntity?.clientDetails?.rating?.count  ?? 0,context),
                                   style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                                 ),
                               ],

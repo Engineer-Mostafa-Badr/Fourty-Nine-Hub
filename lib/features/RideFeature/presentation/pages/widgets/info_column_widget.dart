@@ -104,28 +104,38 @@ class PriceColumnNonSocket extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Row(
-          spacing: 4,
-          children: [
-            Label(
-              text: price,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                // color: AppColors.PRIMARY_COLOR,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Text(
+                price,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            Label(
-                text: LocaleKeys.egp.tr(),
+              const SizedBox(width: 4),
+              Text(
+                LocaleKeys.egp.tr(),
                 style: Styles.mediumText(
-                    color: AppColors.SECONDARY_COLOR,
-                    fontWeight: FontWeight.w700)),
-            Label(
-                text: "- ${status}",
+                  color: AppColors.SECONDARY_COLOR,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                "- $status",
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.w700))
-          ],
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
+
+
+
 
       ],
     );

@@ -1624,5 +1624,8 @@ class EndPoints {
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
 
+  static const updateDriverLoadingRatingNonSocket = '/loading/trip/rating/driver';
+  static const addRateToClientWithDriverLoadingNonSocket = '/loading/trip/rating/';
+
 
 }

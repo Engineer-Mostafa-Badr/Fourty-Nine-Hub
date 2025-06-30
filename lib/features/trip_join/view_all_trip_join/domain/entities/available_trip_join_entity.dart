@@ -8,6 +8,7 @@ class AvailableTripJoinEntity {
   final String? startDate;
   final String? offerType;
   final bool? isPremium;
+  final String? phoneNumber; // ✅ Added
   final IsButtonEnabledEntity? isButtonEnabled;
   final VehicleDetailsEntity? vehicleDetails;
   final LocationEntity? location;
@@ -22,6 +23,7 @@ class AvailableTripJoinEntity {
     this.startDate,
     this.offerType,
     this.isPremium,
+    this.phoneNumber, // ✅ Added
     this.isButtonEnabled,
     this.vehicleDetails,
     this.location,

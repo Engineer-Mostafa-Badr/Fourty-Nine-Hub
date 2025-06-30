@@ -7,11 +7,15 @@ class DriverSettingsEntity {
   final bool? isActive;
   final bool? isApproved;
   final bool? isRejected;
+  final bool? isVoiceCommentAlertsEnabled;
   final RatingEntity? rating;
   final CategoryEntity? category;
+  final FairCostPerKmEntity? fairCostPerKm;
+
   final bool? isCriminalRecordEnabled;
   final bool? isDrugAnalysisRecordEnabled;
   final bool? isVehicleRecordEnabled;
+
   final String? idExpiryDate;
   final String? drivingLicenseExpiryDate;
   final String? carLicenseExpiryDate;
@@ -28,8 +32,10 @@ class DriverSettingsEntity {
     this.isActive,
     this.isApproved,
     this.isRejected,
+    this.isVoiceCommentAlertsEnabled,
     this.rating,
     this.category,
+    this.fairCostPerKm,
     this.isCriminalRecordEnabled,
     this.isDrugAnalysisRecordEnabled,
     this.isVehicleRecordEnabled,
@@ -46,10 +52,7 @@ class RatingEntity {
   final double? average;
   final int? count;
 
-  RatingEntity({
-    this.average,
-    this.count,
-  });
+  RatingEntity({this.average, this.count});
 }
 
 class CategoryEntity {
@@ -78,4 +81,11 @@ class SubCategoryEntity {
     this.nameAr,
     this.nameEn,
   });
+}
+
+class FairCostPerKmEntity {
+  final int? highCostPerKm;
+  final int? lowCostPerKm;
+
+  FairCostPerKmEntity({this.highCostPerKm, this.lowCostPerKm});
 }

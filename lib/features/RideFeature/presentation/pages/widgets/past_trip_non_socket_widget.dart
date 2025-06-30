@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/assets/assets.dart';
@@ -62,8 +63,8 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
               child: PriceColumnNonSocket(
                 status: widget.tripEntity?.tripDetails?.status ?? "",
                 title: widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
-                date: "${formattedDate} ${formattedTime}",
-                price: widget.tripEntity?.tripDetails?.price?.toStringAsFixed(0) ?? '0.0',
+                date: "${formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context)}",
+                price: "${formatPrice(widget.tripEntity?.tripDetails?.price?.toInt() ?? 0.0, context)}",
               ),
             ),
 
@@ -109,7 +110,7 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
                                 SvgPicture.asset(Assets.star2, width: 8, height: 8),
                                 const Sizer(width: 4),
                                 Label(
-                                  text: widget.tripEntity?.clientDetails?.rating?.count.toString() ?? '0',
+                                  text:formatPrice(widget.tripEntity?.clientDetails?.rating?.count ?? 0,context) ,
                                   style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                                 ),
                               ],

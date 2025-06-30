@@ -1432,7 +1432,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  "Select Car Brand",
+                 LocaleKeys.selectCarBrand.localize,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -1445,7 +1445,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                       return Center(child: CircularProgressIndicator());
                     }
                     if (brands.isEmpty) {
-                      return Center(child: Text("No brands found"));
+                      return Center(child: Text(LocaleKeys.noData.localize));
                     }
                     return ListView.builder(
                       controller: _scrollController,
@@ -1506,7 +1506,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  "Select Car Model",
+                  LocaleKeys.selectCarModel.localize,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -1519,7 +1519,8 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                       return Center(child: CircularProgressIndicator());
                     }
                     if (models.isEmpty) {
-                      return Center(child: Text("No models found"));
+                      return Center(child: Text(LocaleKeys.noData.localize));
+
                     }
                     return ListView.builder(
                       controller: _scrollController,

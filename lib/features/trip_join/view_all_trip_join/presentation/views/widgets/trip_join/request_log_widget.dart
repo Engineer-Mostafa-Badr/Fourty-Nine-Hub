@@ -11,6 +11,7 @@ import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
+import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import '../../../../domain/entities/request_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../Modified_widgets/cards/available_trips_card.dart';
@@ -52,14 +53,14 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
   // }
 
 
-  String formatDateTime(DateTime? dateTime) {
-    if (dateTime == null) return 'No date';
-
-    String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
-    String formattedTime = DateFormat('h:mm a').format(dateTime);
-
-    return "$formattedDate\n$formattedTime";
-  }
+  // String formatDateTime(DateTime? dateTime) {
+  //   if (dateTime == null) return 'No date';
+  //
+  //   String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+  //   String formattedTime = DateFormat('h:mm a').format(dateTime);
+  //
+  //   return "$formattedDate\n$formattedTime";
+  // }
 
 
 
@@ -113,7 +114,8 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                 ),
                                 const Sizer(),
                                 Label(
-                                  text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
+                                  // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
+                                  text: '${formatPrice(formatViews(data.views ?? 0, context).toInt,context)} ${LocaleKeys.views.localize}',
                                   style: Styles.mediumText(
                                     fontSize: 24,
                                     color: context.isDarkMode ? AppColors.whiteColor: AppColors.DARK_GRAY_COLOR,
@@ -133,12 +135,12 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                     ),
                     const Divider(),
                     TripCardInfoWidget(
-                        price: "${data.pricePerSeat}",
+                        price: "${formatPrice(data.pricePerSeat?.round() ?? 10,context)}",
                         title: data.firstName ?? "",
                         icon: data.gender == "male"
                     ? Assets.maleUser
                         : Assets.femaleUser,
-                        seats: "${ 3}"
+                        seats: "${LocaleKeys.eachSeat.localize}"
                         // icon:   Assets.maleUser,
                         //
                         // // : Assets.femaleUser,
@@ -165,7 +167,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            formatTimestamp(data.startDate!,context),
+                            formatTimestamp12(data.createdAt!,context),
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
                           ),
@@ -175,7 +177,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                             //     ? '${data.trip.passengers} ${LocaleKeys.seat.localize}'
                             //     :
                             // '${data.passengers} ${LocaleKeys.seat.localize}',
-                            "${3}  ${LocaleKeys.seat.localize}",
+                            "${formatPrice(data.totalPassengers ?? 1, context)}  ${LocaleKeys.seat.localize}",
 
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
@@ -200,7 +202,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         isPremium:data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
                         otherUserId: '2',
                         subcategoryId: '2',
-                        phone: '2223',
+                        phone:data.phoneNumber ?? "123",
                         id: '2',
                         hasReport: true,
                       ),
@@ -299,12 +301,6 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                 children: [
                   Label(
                     text: seats,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getTextColor(context)),
-                  ),
-                  Label(
-                    text: LocaleKeys.seat.localize,
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
                         color: AppColors.getTextColor(context)),
@@ -415,6 +411,48 @@ String formatTimestamp1(dynamic time, BuildContext context) {
 
 String formatTimestamp12(String timestamp, BuildContext context) {
   try {
+    DateTime dateTime = DateTime.parse(timestamp);
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(dateTime);
+
+    if (difference.isNegative) {
+      return LocaleKeys.justNow.localize;
+    }
+
+    int seconds = difference.inSeconds;
+    int minutes = difference.inMinutes;
+    int hours = difference.inHours;
+    int days = difference.inDays;
+    int weeks = (days / 7).floor();
+
+    if (seconds < 60) {
+      return LocaleKeys.justNow.localize;
+    } else if (minutes < 60) {
+      return _localizedTime(context.isArabic, minutes, LocaleKeys.minute.localize,context);
+    } else if (hours < 24) {
+      return _localizedTime(context.isArabic, hours, LocaleKeys.hour.localize,context);
+    } else if (days < 7) {
+      return _localizedTime(context.isArabic, days, LocaleKeys.day.localize,context);
+    } else {
+      return _localizedTime(context.isArabic, weeks, LocaleKeys.week.localize,context);
+    }
+  } catch (e) {
+    return "Invalid date";
+  }
+}
+
+String _localizedTime(bool isArabic, int value, String unit,BuildContext context) {
+  if (isArabic) {
+    return "منذ ${formatPrice(value, context)} $unit";
+  } else {
+    return "${formatPrice(value, context)} $unit ago";
+  }
+}
+
+
+/*
+String formatTimestamp12(String timestamp, BuildContext context) {
+  try {
     // Parse the ISO 8601 timestamp
     DateTime dateTime = DateTime.parse(timestamp);
 
@@ -426,7 +464,7 @@ String formatTimestamp12(String timestamp, BuildContext context) {
 
     // Handle future dates (just in case)
     if (difference.isNegative) {
-      return "just now";
+      return LocaleKeys.justNow.localize;
     }
 
     // Calculate time units
@@ -437,23 +475,23 @@ String formatTimestamp12(String timestamp, BuildContext context) {
 
     // Return appropriate format
     if (seconds < 60) {
-      return "just now";
+      return LocaleKeys.justNow.localize;
     } else if (minutes < 60) {
-      return "$minutes min ago";
+      return "$minutes ${LocaleKeys.minAgo.localize}";
     } else if (hours < 24) {
-      return "$hours hour${hours == 1 ? '' : 's'} ago";
+      return "${formatPrice(hours, context)} ${LocaleKeys.hour.localize}${hours == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
     } else if (days < 7) {
-      return "$days day${days == 1 ? '' : 's'} ago";
+      return "${formatPrice(days, context)} ${LocaleKeys.day.localize}${days == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
     } else {
       int weeks = (days / 7).floor();
-      return "$weeks week${weeks == 1 ? '' : 's'} ago";
+      return "$weeks ${LocaleKeys.week.localize}${weeks == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
     }
   } catch (e) {
     // Fallback in case of parsing error
     return "Invalid date";
   }
 }
-
+*/
 
 
 String formatTimestamp(dynamic time, BuildContext context) {

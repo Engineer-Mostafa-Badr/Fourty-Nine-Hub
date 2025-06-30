@@ -22,16 +22,19 @@ class UpdateDriverSettingsUseCase
 }
 class UpdateDriverSettingsParams {
   final bool isReady;
+  final bool isVoiceCommentAlertsEnabled;
 
 
 
   UpdateDriverSettingsParams({
     required this.isReady,
+    required this.isVoiceCommentAlertsEnabled,
 
   });
 
   Map<String, dynamic> toJson() => {
     'isReady': isReady,
+    'isVoiceCommentAlertsEnabled': isVoiceCommentAlertsEnabled,
 
   };
 }

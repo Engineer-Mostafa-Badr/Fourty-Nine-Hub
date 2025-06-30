@@ -18,6 +18,8 @@ class MyAdsTripDocEntity {
   final String? startDate;
   final String? offerType;
   final bool? isPremium;
+  final String? phoneNumber;
+  final String? createdAt;
   final IsButtonEnabledEntity? isButtonEnabled;
   final VehicleDetailsEntity? vehicleDetails;
   final LocationEntity? location;
@@ -32,6 +34,8 @@ class MyAdsTripDocEntity {
     this.startDate,
     this.offerType,
     this.isPremium,
+    this.phoneNumber,
+    this.createdAt,
     this.isButtonEnabled,
     this.vehicleDetails,
     this.location,

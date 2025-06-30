@@ -101,12 +101,14 @@ import '../../../domain/usecases/dashboards/listen_to_accept_untracked_trip_offe
 import '../../../domain/usecases/dashboards/listen_to_available_untracked_trip_use_case.dart';
 import '../../../domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../../../domain/usecases/dashboards/loading/create_offer_loading_use_case.dart';
+import '../../../domain/usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import '../../../domain/usecases/dashboards/loading/get_accepted_ride_non_socket_loading_use_case.dart';
 import '../../../domain/usecases/dashboards/loading/get_available_ride_non_socket_loading_use_case.dart';
 import '../../../domain/usecases/dashboards/loading/get_driver_setting_loading_use_case.dart';
 import '../../../domain/usecases/dashboards/loading/get_history_ride_non_socket_loading_use_case.dart';
 import '../../../domain/usecases/dashboards/loading/listen_to_available_loading_use_case.dart';
 import '../../../domain/usecases/dashboards/loading/listen_to_remove_loading_use_case.dart';
+import '../../../domain/usecases/dashboards/loading/update_driver_loading_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../../../domain/usecases/dashboards/update_driver_rate_non_socket_use_case.dart';
 import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
@@ -184,6 +186,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   final ListenToAvailableLoadingUseCase listenToAvailableLoadingUseCase;
 
+
+
+  final UpdateDriverRateLoadingNonSocketUseCase updateDriverRateLoadingNonSocketUseCase;
+  final AddRateWithDriverLoadingUseCase addRateWithDriverLoadingUseCase;
+
+
+
   DashboardsCubit(
       this.getAvailableTripsUsecase,
       this.getPastTripsUsecase,
@@ -231,7 +240,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToAcceptUntrackedTripOfferUseCase,
       this.listenToPartialPaymentDriverUseCase,
       this.getRideGovernoratesUseCase,
-      this.addRateWithDriverUseCase, this.getAcceptedNonSocketLoadingUseCase, this.createOfferLoadingUseCase, this.getAvailableNonSocketLoadingUseCase, this.getHistoryNonSocketLoadingUseCase, this.updateDriverRateNonSocketUseCase, this.getDriverLoadingSettingsUseCase, this.updateDriverSettingsLoadingUseCase, this.listenToRemoveLoadingUseCase, this.listenToAvailableLoadingUseCase)
+      this.addRateWithDriverUseCase,
+      this.getAcceptedNonSocketLoadingUseCase, this.createOfferLoadingUseCase,
+      this.getAvailableNonSocketLoadingUseCase, this.getHistoryNonSocketLoadingUseCase,
+      this.updateDriverRateNonSocketUseCase, this.getDriverLoadingSettingsUseCase,
+      this.updateDriverSettingsLoadingUseCase, this.listenToRemoveLoadingUseCase,
+      this.listenToAvailableLoadingUseCase, this.updateDriverRateLoadingNonSocketUseCase, this.addRateWithDriverLoadingUseCase)
       : super(const DashboardsState());
   TextEditingController rideVehicleExpireDateController =
       TextEditingController();
@@ -240,6 +254,45 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   TextEditingController rideTechnicalExaminationExpireDateController = TextEditingController();
   final drugAnalysisFormKey = GlobalKey<FormState>();
   TextEditingController rideDragAnalysisExpireDateController = TextEditingController();
+
+  Future<void> rateDriverLoadingNonSocket(
+      {required AddRateWithDriverLoadingParams params}) async {
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await addRateWithDriverLoadingUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: DashboardsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          rateResponseEntity: rateData,
+          status: DashboardsStates.success,
+        ));
+      },
+    );
+  }
+  Future<void> updateRateDriverLoadingNonSocket(
+      {required UpdateClientRateParams params,required BuildContext context}) async {
+    emit(state.copyWith(status: DashboardsStates.loading));
+
+    final response = await updateDriverRateLoadingNonSocketUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: DashboardsStates.error));
+      },
+          (rateData) {
+        emit(state.copyWith(
+          createNonTrackOfferEntity: rateData,
+          status: DashboardsStates.success,
+        ));
+        showSuccessMessage(context, rateData.message ?? LocaleKeys.successSubmit.localize);
+
+      },
+    );
+  }
 
 
 
@@ -1151,14 +1204,14 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  Future<void> updateDriverSettings(bool isReady,BuildContext context) async {
+  Future<void> updateDriverSettings(UpdateDriverSettingsParams params,BuildContext context) async {
     if (isClosed) {
       return;
     }
     emit(state.copyWith(status: DashboardsStates.loading));
 
     final response = await updateDriverSettingsUseCase(
-        UpdateDriverSettingsParams(isReady: isReady));
+        params);
 
     if (isClosed) return;
     response.fold(

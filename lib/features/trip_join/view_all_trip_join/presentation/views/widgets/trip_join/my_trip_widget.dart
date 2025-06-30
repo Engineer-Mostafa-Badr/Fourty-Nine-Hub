@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -33,15 +34,6 @@ class MyAdsTripWidget extends StatefulWidget {
 }
 
 class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
-
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +92,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                 ),
                               ),
                               Text(
-                                "${data.offerType ?? ""}",
+                                data.formattedOfferType,
                                 style: Styles.headerText(
                                     color: AppColors.getRedColor(context), fontSize: 32),
                               ),
@@ -113,8 +105,8 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                             title: context.isArabic ?  data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
                             model:  context.isArabic ?  data.vehicleDetails?.modelAr ?? "" : data.vehicleDetails?.modelEn ?? "",
                             icon: Assets.tripJoinCarIcon,
-                            price: "${data.pricePerSeat}",
-                            seats: "${data.passengers ?? 0}"
+                            price: "${formatPrice(data.pricePerSeat?.round() ?? 1, context)}",
+                            seats: "${LocaleKeys.eachSeat.localize}"
                           // icon: widget.iconCar
                           //     ? Assets.tripJoinCarIcon
                           //     : widget.isMale
@@ -181,7 +173,8 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                     ),
                   ],
                 ),
-                TripCardSubscribeText(),
+                data.isPremium == true || data.isButtonEnabled!.state == true ? SizedBox() : TripCardSubscribeText()   ,
+
 
               ],
             ),
@@ -318,5 +311,19 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
         ),
       ),
     );
+  }
+}
+extension OfferTypeFormatter on MyAdsTripDocEntity {
+  String get formattedOfferType {
+    switch (offerType) {
+      case 'premium':
+        return LocaleKeys.premium.tr();
+      case 'notSubscribed':
+        return LocaleKeys.notSubscribed.tr();
+      case 'regular':
+        return LocaleKeys.regular.tr(); // if you have one
+      default:
+        return offerType ?? '';
+    }
   }
 }

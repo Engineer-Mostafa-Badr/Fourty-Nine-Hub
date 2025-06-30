@@ -30,6 +30,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/dr
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
@@ -309,6 +310,17 @@ class TripRepositoryImpl implements TripRepository {
   @override
   void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params) {
     remoteDataSource.listenToAvailableLoading(params);
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params) {
+    return  remoteDataSource.updateDriverRateLoadingNonSocket(params);
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params) {
+    return  remoteDataSource.addRateWithDriverLoading(params);
+
   }
 
 

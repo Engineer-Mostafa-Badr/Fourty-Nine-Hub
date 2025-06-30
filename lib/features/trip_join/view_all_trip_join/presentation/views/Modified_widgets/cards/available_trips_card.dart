@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import '../../../../domain/entities/available_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../widgets/trip_join/request_log_widget.dart';
@@ -134,7 +135,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                       ),
                                       const Sizer(),
                                       Label(
-                                        text: '${formatViews(data.viewerIds ?? 0, context)} ${LocaleKeys.views.localize}',
+                                        text: '${formatPrice(formatViews(data.viewerIds ?? 0, context).toInt,context)} ${LocaleKeys.views.localize}',
                                         style: Styles.mediumText(
                                           fontSize: 24,
                                           color:  context.isDarkMode ? AppColors.whiteColor:AppColors.DARK_GRAY_COLOR,
@@ -145,10 +146,12 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                   ),
                                 ),
                                 Text(
-                                  "${data.offerType ?? 0}",
+                                  data.formattedOfferType,
                                   style: Styles.headerText(
-                                      color: AppColors.getRedColor(context), fontSize: 32),
+                                      color: AppColors.getRedColor(context),
+                                      fontSize: 32),
                                 ),
+
                               ],
                             ),
                           ),
@@ -158,13 +161,8 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                               title:context.isArabic ?data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
                               model:context.isArabic ?data.vehicleDetails?.modelAr ?? "" :  data.vehicleDetails?.modelEn ?? "",
                               icon: Assets.tripJoinCarIcon,
-                              price: "${data.pricePerSeat}",
-                              seats: "${data.passengers ?? 0}"
-                            // icon: iconCar
-                            //     ? Assets.tripJoinCarIcon
-                            //     : isMale
-                            //     ? Assets.maleUser
-                            //     : Assets.femaleUser,
+                              price: "${formatPrice(data.pricePerSeat?.round() ?? 0,context)}",
+                              seats: "${LocaleKeys.eachSeat.localize}"
                           ),
 
                           const Sizer(
@@ -194,7 +192,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                   // data.passengers == 1
                                   //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
                                   //     : ''
-                                  '${data.passengers} ${LocaleKeys.seat.localize}',
+                                  '${formatPrice(data.passengers ?? 1,context)} ${LocaleKeys.seat.localize}',
                                   style: Styles.headerText(
                                       fontSize: 32, fontWeight: FontWeight.bold),
                                 ),
@@ -219,7 +217,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                     child: TripJoinCardButton(
                                       padding:
                                       const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                      title: LocaleKeys.requests.localize,
+                                      title: LocaleKeys.request.localize,
                                       color: AppColors.getRedColor(context),
                                       onTap: (){},
                                       radius: 15,
@@ -354,12 +352,6 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                         fontWeight: FontWeight.bold,
                         color: AppColors.getTextColor(context)),
                   ),
-                  Label(
-                    text: LocaleKeys.seat.localize,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getTextColor(context)),
-                  ),
                 ],
               )
             ],
@@ -409,4 +401,17 @@ String formatViews(num views, BuildContext context) {
         : '${mViews.toStringAsFixed(1)}M';
   }
 }
-
+extension OfferTypeFormatter on AvailableTripJoinEntity {
+  String get formattedOfferType {
+    switch (offerType) {
+      case 'premium':
+        return LocaleKeys.premium.tr();
+      case 'notSubscribed':
+        return LocaleKeys.notSubscribed.tr();
+      case 'regular':
+        return LocaleKeys.regular.tr(); // if you have one
+      default:
+        return offerType ?? '';
+    }
+  }
+}

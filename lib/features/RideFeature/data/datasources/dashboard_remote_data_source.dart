@@ -55,6 +55,7 @@ import '../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import '../../domain/usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import '../../domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
@@ -146,6 +147,10 @@ abstract class TripRemoteDataSource {
 
   void listenToRemoveLoading(Function(String tripId) params);
   void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
+
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params);
+
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params);
 
 }
 
@@ -942,6 +947,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params)async {
+    final url = "${EndPoints.updateDriverLoadingRatingNonSocket}";
+
+    final response = await _apiConsumer.put(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = CreateNonTrackOfferModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params) async{
+    final url = "${EndPoints.addRateToClientWithDriverLoadingNonSocket}${params.tripId}/driver";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = RateResponseModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
   }
 
 }

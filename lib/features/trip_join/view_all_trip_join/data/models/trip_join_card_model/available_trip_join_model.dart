@@ -11,6 +11,7 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
     String? startDate,
     String? offerType,
     bool? isPremium,
+    String? phoneNumber, // ✅ Added
     IsButtonEnabledModel? isButtonEnabled,
     VehicleDetailsModel? vehicleDetails,
     LocationModel? location,
@@ -24,6 +25,7 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
     startDate: startDate,
     offerType: offerType,
     isPremium: isPremium,
+    phoneNumber: phoneNumber, // ✅ Added
     isButtonEnabled: isButtonEnabled,
     vehicleDetails: vehicleDetails,
     location: location,
@@ -40,6 +42,7 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
       startDate: json['startDate'] as String?,
       offerType: json['offerType'] as String?,
       isPremium: json['isPremium'] as bool?,
+      phoneNumber: json['phoneNumber'] as String?, // ✅ Added
       isButtonEnabled: json['isButtonEnabled'] != null
           ? IsButtonEnabledModel.fromJson(json['isButtonEnabled'])
           : null,

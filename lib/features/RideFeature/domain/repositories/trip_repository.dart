@@ -37,6 +37,7 @@ import '../usecases/dashboards/create_driver_rating_usecase.dart';
 import '../usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../usecases/dashboards/get_available_ride_trips_use_case.dart';
+import '../usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import '../usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../usecases/get_client_pending_untracked_trips_use_case.dart';
@@ -70,6 +71,7 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
+   Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
    void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
@@ -92,6 +94,7 @@ abstract class TripRepository {
    Future<Either<Failure, List<GetLoadingHistoryEntity>>> getHistoryNonSocketLoading(ClientPendingTripParams params);
    Future<Either<Failure, CreateNonTrackOfferEntity>> createOfferLoading(CreateNonTrackOfferParams params);
    Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateNonSocket(UpdateClientRateParams params);
+   Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params);
    Future<Either<Failure, DriverSettingLoadingEntity >> getDriverLoadingSettings();
    Future<Either<Failure, CreateNonTrackOfferEntity >> updateDriverLoadingSettings(UpdateDriverSettingsLoadingParams params);
 

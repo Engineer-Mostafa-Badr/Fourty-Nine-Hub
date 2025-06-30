@@ -7,9 +7,13 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
     String? firstName,
     double? pricePerSeat,
     String? startDate,
+    String? createdAt,
     bool? isPremium,
     bool? isRead,
     String? gender,
+    int? totalPassengers,
+    int? views,
+    String? phoneNumber,
     IsButtonEnabledModel? isButtonEnabled,
     LocationModel? location,
   }) : super(
@@ -18,23 +22,31 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
     firstName: firstName,
     pricePerSeat: pricePerSeat,
     startDate: startDate,
+    createdAt: createdAt,
     isPremium: isPremium,
     isRead: isRead,
     gender: gender,
+    totalPassengers: totalPassengers,
+    views: views,
+    phoneNumber: phoneNumber,
     isButtonEnabled: isButtonEnabled,
     location: location,
   );
 
   factory GetRequestTripJoinModel.fromJson(Map<String, dynamic> json) {
     return GetRequestTripJoinModel(
-      id: json['id'],
-      userId: json['userId'],
-      firstName: json['firstName'],
+      id: json['id'] as String?,
+      userId: json['userId'] as String?,
+      firstName: json['firstName'] as String?,
       pricePerSeat: (json['pricePerSeat'] as num?)?.toDouble(),
-      startDate: json['startDate'] ,
-      isPremium: json['isPremium'],
-      isRead: json['isRead'],
-      gender: json['gender'],
+      startDate: json['startDate'] as String?,
+      createdAt: json['createdAt'] as String?,
+      isPremium: json['isPremium'] as bool?,
+      isRead: json['isRead'] as bool?,
+      gender: json['gender'] as String?,
+      totalPassengers: json['totalPassengers'] as int?,
+      views: json['views'] as int?,
+      phoneNumber: json['phoneNumber'] as String?,
       isButtonEnabled: json['isButtonEnabled'] != null
           ? IsButtonEnabledModel.fromJson(json['isButtonEnabled'])
           : null,
@@ -50,7 +62,7 @@ class IsButtonEnabledModel extends IsButtonEnabledEntity {
 
   factory IsButtonEnabledModel.fromJson(Map<String, dynamic> json) {
     return IsButtonEnabledModel(
-      state: json['state'],
+      state: json['state'] as bool?,
     );
   }
 }
@@ -77,8 +89,8 @@ class AddressModel extends AddressEntity {
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
-      address: json['address'],
-      coordinates: (json['coordinates'] as List?)
+      address: json['address'] as String?,
+      coordinates: (json['coordinates'] as List<dynamic>?)
           ?.map((coord) => (coord as num).toDouble())
           .toList(),
     );
