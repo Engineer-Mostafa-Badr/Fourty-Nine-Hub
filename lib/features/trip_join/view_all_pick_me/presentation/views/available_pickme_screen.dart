@@ -65,32 +65,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
             padding: EdgeInsets.symmetric(
               vertical: 10.h,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Hi"),
-                Text("Nice"),
-
-              ],
-            ),
+            child:SizedBox(),
           );
         });
   }

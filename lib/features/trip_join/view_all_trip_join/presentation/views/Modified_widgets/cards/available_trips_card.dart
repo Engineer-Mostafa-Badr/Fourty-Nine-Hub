@@ -79,7 +79,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
     _lastTapTimes[id] = now;
 
     context.read<ViewAllTripJoinCubit>().applyViewTrip(id);
-    print("Hi");
+    // print("Hi");
   }
 
   @override
