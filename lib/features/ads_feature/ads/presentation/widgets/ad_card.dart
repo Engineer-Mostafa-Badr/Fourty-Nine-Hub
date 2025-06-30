@@ -55,10 +55,20 @@ class _AdCardState extends State<AdCard> {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
       return MyAdCard(
         item: widget.item,
-        onFav: (id) {},
-        onRemoveFav: (id) {},
+        onFav: (id) async {
+          bool result = await context
+              .read<AdvertisementCubit>()
+              .favouriteAd(widget.item.id);
+          return result;
+        },
+        onRemoveFav: (id) async {
+          bool result = await context
+              .read<AdvertisementCubit>()
+              .unFavouriteAd(widget.item.id);
+          return result;
+        },
       );
-      return InkWell(
+      /*return InkWell(
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -420,7 +430,7 @@ class _AdCardState extends State<AdCard> {
             ],
           ),
         ),
-      );
+      );*/
     });
   }
 

@@ -26,6 +26,7 @@ class UserModel extends UserEntity {
     super.gender,
     super.firebaseToken,
     super.birthday,
+    super.isAccountVerified,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +52,7 @@ class UserModel extends UserEntity {
       isDoctor: json['isDoctor'] ?? false,
       isRestaurant: json['isRestaurant'] ?? false,
       isLoading: json['isLoading'] ?? false,
+      isAccountVerified: json['isAccountVerified'] ?? false,
       isDocument: json['isDocument'] ?? false,
       bio: json['bio'] ?? '',
       phone: json['phone'] ?? '',

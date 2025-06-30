@@ -458,6 +458,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
       (data) {
+        print("==> myFavouriteAds ${data.length} : ${data.first.isFavourite}");
         myFavouriteAds.addAll(data);
         if (data.length < pageSize) {
           hasMoreMyFavouriteAds = false;
@@ -656,6 +657,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     required String mainCategoryId,
   }) async {
     print("Gettinghiii");
+    requestsLogByMainCategory.clear();
     isLoadingRequestsLogByMainCategory = true;
     currentRequestsLogByMainCategoryPage = 1;
     hasMoreRequestsLogByMainCategory = true;
