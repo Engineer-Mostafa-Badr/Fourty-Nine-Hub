@@ -17,6 +17,7 @@ import '../../../../requests_history/domain/entities/trip_entity.dart';
 import '../../data/models/Ad_model.dart';
 import '../../domain/usecases/get_ads_usecase.dart';
 import '../../domain/usecases/get_my_ad_by_id_usecase.dart';
+import '../../domain/usecases/view_ad_usecase.dart';
 
 part 'ads_state.dart';
 
@@ -32,6 +33,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final MakeAdRequestUsecase _makeAdRequestUsecase;
   final MakeAdPremiumRequestUsecase _makeAdPremiumRequestUsecase;
   final GetMyAdByIdUseCase _getMyAdByIdUseCase;
+  final ViewAdUseCase _viewAdUseCase;
 
   AdvertisementCubit(
     this._getAdsUseCase,
@@ -44,7 +46,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
     this._filterAdUseCase,
     this._makeAdRequestUsecase,
     this._makeAdPremiumRequestUsecase,
-    this._getMyAdByIdUseCase,
+    this._getMyAdByIdUseCase, this._viewAdUseCase,
   ) : super(AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
@@ -331,6 +333,14 @@ class AdvertisementCubit extends Cubit<AdsState> {
       emit(state.copyWith(status: AdsStates.success));
     });
     return result;
+  }
+
+  adViewToAds(String id) async {
+    final response = await _viewAdUseCase(id);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: AdsStates.error)),
+        (data) => emit(state.copyWith(status: AdsStates.success)));
   }
 
   Future<bool> unFavouriteAd(String id) async {

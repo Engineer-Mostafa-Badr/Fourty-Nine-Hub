@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
@@ -36,11 +37,14 @@ class CallMessageButtons extends StatefulWidget {
       {super.key,
       required this.otherUserId,
       required this.subcategoryId,
-      required this.phone, this.senderName, this.senderImage,
+      required this.phone,
+      this.senderName,
+      this.senderImage,
       required this.id,
       this.hasReport = false,
       this.flex,
       this.clientId});
+
   final String otherUserId;
   final String? clientId;
   final String subcategoryId;
@@ -69,22 +73,26 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                flex: widget.flex??3,
+                flex: widget.flex ?? 3,
                 child: IconButton(
                   color: (snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
                   icon: SvgPicture.asset(
-                    Assets.phoneIcon
-                      ,color: context.isDarkMode?Colors.white:null
+                    Assets.phoneIcon,
+                    color: snap.data == true
+                        ? AppColors.SECONDARY_COLOR
+                        : context.isDarkMode
+                            ? Colors.white
+                            : null,
                   ),
                   // icon: const Icon(Icons.call),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
-                    return pleaseLoginDialog(context);
-                    // context.push(Routes.LOGIN);
-                  }
+                          return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
                       : snap.data == true
                           ? () {
                     showModalBottomSheet(
@@ -198,13 +206,18 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
-                  icon: SvgPicture.asset(Assets.mailIcon,color: context.isDarkMode?Colors.white:null),
+                  icon: SvgPicture.asset(Assets.mailIcon,
+                      color: snap.data == true
+                          ? AppColors.SECONDARY_COLOR
+                          : context.isDarkMode
+                              ? Colors.white
+                              : null),
                   // icon: const Icon(Icons.email),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
-                    return pleaseLoginDialog(context);
-                    // context.push(Routes.LOGIN);
-                  }
+                          return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
                       : snap.data == true
                           ? () async {
                               ChatEntity? chat = await context
@@ -236,9 +249,9 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   icon: const Icon(Icons.report),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
-          return pleaseLoginDialog(context);
-          // context.push(Routes.LOGIN);
-          }
+                          return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
                       : () {
                           bottomSheet(
                               context: context,

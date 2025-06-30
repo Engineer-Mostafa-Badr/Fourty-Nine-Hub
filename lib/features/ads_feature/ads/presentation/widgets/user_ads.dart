@@ -19,6 +19,7 @@ class UserAds extends StatefulWidget {
     required this.userType,
     required this.onScrollChanged,
   });
+
   final AdsViewParams params;
   final String userType;
   final Function(bool) onScrollChanged;
@@ -38,6 +39,7 @@ class _UserAdsState extends State<UserAds> {
   //   // super.initState();
   // }
   final AdsManager _adsManager = AdsManager();
+
   // @override
   // void initState() {
   //   _adsManager.preloadAds();
@@ -45,6 +47,7 @@ class _UserAdsState extends State<UserAds> {
   // }
   late ScrollController _scrollController;
   late AdvertisementCubit _cubit;
+
   @override
   void initState() {
     super.initState();
@@ -130,8 +133,18 @@ class _UserAdsState extends State<UserAds> {
         }
         return MyAdCard(
           item: context.read<AdvertisementCubit>().ads[index],
-          onFav: (id) {},
-          onRemoveFav: (id) {},
+          onFav: (id) async {
+            bool result = await context
+                .read<AdvertisementCubit>()
+                .favouriteAd(context.read<AdvertisementCubit>().ads[index].id);
+            return result;
+          },
+          onRemoveFav: (id) async {
+            bool result = await context
+                .read<AdvertisementCubit>()
+                .unFavouriteAd(context.read<AdvertisementCubit>().ads[index].id);
+            return result;
+          },
         );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
