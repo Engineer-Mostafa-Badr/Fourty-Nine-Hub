@@ -125,15 +125,15 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
       },
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
-            child: Divider(
-              thickness: 1,
-              color:context.isDarkMode?Colors.white12: Colors.black12,
-              height: 5,
-            ),
-
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+          //   child: Divider(
+          //     thickness: 1,
+          //     color:context.isDarkMode?Colors.white12: Colors.black12,
+          //     height: 5,
+          //   ),
+          //
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             child: Row(

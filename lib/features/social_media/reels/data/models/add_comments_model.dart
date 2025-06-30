@@ -109,9 +109,9 @@ class UserComment {
   factory UserComment.fromJson(Map<String, dynamic> json) {
     return UserComment(
       id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      profilePictureSignedUrl: json['profilePictureSignedUrl'],
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      profilePictureSignedUrl: json['profilePictureSignedUrl'] ?? '', 
     );
   }
 

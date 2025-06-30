@@ -21,8 +21,8 @@ import '../../../../../core/error/failure.dart';
 abstract class ReelsRepository {
   Future<Either<Failure, ReelsResponse>> getExploreReels(
       PaginationParams params);
-  // Future<Either<Failure, AddCommentResponse>> addComment(
-  //     AddReelCommentParams params);
+  Future<Either<Failure, AddCommentResponse>> addComment(
+      AddReelCommentParams params);
   Future<Either<Failure, GetCommentsResponse>> getComments(
       CommentParams params);
   Future<Either<Failure, String>> toggleCommentLike(String commentId);

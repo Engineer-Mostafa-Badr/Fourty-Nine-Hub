@@ -52,13 +52,7 @@ class _RegisterVerifyPhoneOTPState extends State<RegisterVerifyPhoneOTP> {
               state.userTokensEntity.accessToken);
           await CacheManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
-          context
-              .read<NotificationSocketIoCubit>()
-              .notificationListener(languageCode: 'en');
-          context
-              .read<NotificationSocketIoCubit>()
-              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
-
+       
           serviceLocator<UserCubit>()
             ..setLogin(true)
             ..attachToken()

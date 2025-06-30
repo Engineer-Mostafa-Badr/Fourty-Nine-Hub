@@ -24,13 +24,15 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 class BuildDriverCompleteTripSheet extends StatefulWidget {
   const BuildDriverCompleteTripSheet(
-      {super.key, required this.onPressed, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.onCompleteRideWithPrice, required this.tripId});
+      {super.key, required this.onPressed,required this.onSafety,required this.onReport, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.onCompleteRideWithPrice, required this.tripId});
   final Function(String) onPressed;
   final Function onStartRecord;
   final Function onStopRecord;
   final Function onCompleteRide;
   final Function(String price) onCompleteRideWithPrice;
   final String tripId;
+  final VoidCallback onSafety;
+  final VoidCallback onReport;
 
   @override
   State<BuildDriverCompleteTripSheet> createState() => _BuildDriverCompleteTripSheetState();
@@ -77,20 +79,23 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                           child: Baseline(
                             baseline: 10.h,
                             baselineType: TextBaseline.alphabetic,
-                            child: Container(
-                              width: double.infinity,
-                              height: 45,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                context.isArabic ? "تقرير العميل" : "Report Client",
-                                style: const TextStyle(
-                                  fontSize: FontSize.s16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.PRIMARY_COLOR_DARK,
+                            child: GestureDetector(
+                              onTap: ()=>widget.onReport(),
+                              child: Container(
+                                width: double.infinity,
+                                height: 45,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  context.isArabic ? "تقرير العميل" : "Report Client",
+                                  style: const TextStyle(
+                                    fontSize: FontSize.s16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.PRIMARY_COLOR_DARK,
+                                  ),
                                 ),
                               ),
                             ),
@@ -103,8 +108,8 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                           icon: Icons.security,
                           label: LocaleKeys.safety.localize,
                           onTap: () {
-                            context.push(Routes.ratingClientScreen);
-                          },
+                            widget.onSafety();
+                            },
                         ),
                       ],
                     ),

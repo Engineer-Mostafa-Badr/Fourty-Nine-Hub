@@ -22,10 +22,9 @@ import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 class RequestLogTripJoinWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   const RequestLogTripJoinWidget({
-    super.key, required this.data,
+    super.key,
   });
 
-  final GetRequestTripJoinEntity data;
   @override
   State<RequestLogTripJoinWidget> createState() => _RequestLogTripJoinWidgetState();
 }
@@ -66,7 +65,18 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
+  builder: (context, state) {
+    if(context.read<ViewAllTripJoinCubit>().isLoadingRequestTripJoin==true){
+      return const Center(child: CircularProgressIndicator(),);
+    }
+
+    if(context.read<ViewAllTripJoinCubit>().requestTripJoinData.isEmpty){
+      return  Center(child: Text(LocaleKeys.noData.localize));
+    }
+    return ListView.separated(itemBuilder: (context,i) {
+      GetRequestTripJoinEntity data = context.read<ViewAllTripJoinCubit>().requestTripJoinData[i];
+      return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 10.h,
       ),
@@ -77,17 +87,17 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
             children: [
               InkWell(
                 onTap: (){
-                  context.read<ViewAllTripJoinCubit>().applyReadRequestTrip(widget.data.id!);
+                  context.read<ViewAllTripJoinCubit>().applyReadRequestTrip(data.id!);
                 },
                 child: CustomCard(
-                  // color: widget.data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
-                  color: widget.data.isRead == true
+                  // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
+                  color: data.isRead == true
                       ? (context.isDarkMode ? Colors.transparent : AppColors.whiteColor)
                       : (context.isDarkMode ?AppColors.PRIMARY_COLOR_DARK : AppColors.grey.shade300),
 
                   radius: 20,
                   children: [
-                    // Text("${widget.data.read}"),
+                    // Text("${data.read}"),
                     const Sizer(),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 32.0.h),
@@ -113,7 +123,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                             ),
                           ),
                           // Text(
-                          //   "${widget.data.status ?? ""}",
+                          //   "${data.status ?? ""}",
                           //   style: Styles.headerText(
                           //       color: AppColors.getRedColor(context), fontSize: 32),
                           // ),
@@ -122,11 +132,11 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                     ),
                     const Divider(),
                     TripCardInfoWidget(
-                      price: "${widget.data.pricePerSeat}",
-                      title: widget.data.firstName ?? "",
-                      icon:   Assets.maleUser,
+                        price: "${data.pricePerSeat}",
+                        title: data.firstName ?? "",
+                        icon:   Assets.maleUser,
 
-                          // : Assets.femaleUser,
+                        // : Assets.femaleUser,
                         seats: "1"
                     ),
                     const Sizer(
@@ -134,12 +144,12 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                     ),
                     _locationWidget(
                         title:
-                             widget.data.location?.start?.address ?? ""
-                           ,
+                        data.location?.start?.address ?? ""
+                        ,
                         iconColor: AppColors.LIGHT_BLUE),
                     const Sizer(),
                     _locationWidget(
-                        title:     widget.data.location?.target?.address ?? "",
+                        title:     data.location?.target?.address ?? "",
                         iconColor: AppColors.CHECK_MARK_COLOR),
                     const Sizer(),
                     Padding(
@@ -150,23 +160,23 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            formatDateTime(widget.data.startDate),
+                            formatDateTime(data.startDate),
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
                           ),
 
                           Text(
-                            // widget.data.trip.passengers == 1
-                            //     ? '${widget.data.trip.passengers} ${LocaleKeys.seat.localize}'
+                            // data.trip.passengers == 1
+                            //     ? '${data.trip.passengers} ${LocaleKeys.seat.localize}'
                             //     :
-                            // '${widget.data.passengers} ${LocaleKeys.seat.localize}',
+                            // '${data.passengers} ${LocaleKeys.seat.localize}',
                             "${3}  ${LocaleKeys.seat.localize}",
 
                             style: Styles.headerText(
                                 fontSize: 32, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            // widget.data.isRepeat ? LocaleKeys.repeated.localize :
+                            // data.isRepeat ? LocaleKeys.repeated.localize :
                             LocaleKeys.oneTime.localize,
                             // widget.status,
                             style: Styles.headerText(
@@ -198,6 +208,9 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
         ],
       ),
     );
+    }, separatorBuilder: (context,i)=>SizedBox(height: 10.h,), itemCount: context.read<ViewAllTripJoinCubit>().requestTripJoinData.length);
+  },
+);
   }
 
   _locationWidget({required String title, required Color iconColor}) {

@@ -25,10 +25,9 @@ import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 class MyAdsTripWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   const MyAdsTripWidget({
-    super.key, required this.data,
+    super.key
   });
 
-  final MyAdsTripDocEntity data;
   @override
   State<MyAdsTripWidget> createState() => _MyAdsTripWidgetState();
 }
@@ -65,134 +64,150 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
       builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 10.h,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  CustomCard(
-                    radius: 20,
-                    children: [
-                      const Sizer(
-                        height: 8,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32.0.h),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.remove_red_eye_sharp,
-                                    color: AppColors.DARK_GRAY_COLOR,
-                                  ),
-                                  const Sizer(),
-                                  Label(
-                                    text: '${formatViews(widget.data.views ?? 0, context)} ${LocaleKeys.views.localize}',
-                                    style: Styles.mediumText(
-                                      fontSize: 24,
+        if(context.read<ViewAllTripJoinCubit>().isLoadingMyAds==true){
+          return const Center(child: CircularProgressIndicator(),);
+        }
+
+        if(context.read<ViewAllTripJoinCubit>().myAdsData.isEmpty){
+          return  Center(child: Text(LocaleKeys.noData.localize));
+        }
+
+        return ListView.separated(
+          itemCount: context.read<ViewAllTripJoinCubit>().myAdsData.length,
+          separatorBuilder: (context,i)=>SizedBox(height: 10.h,),
+          itemBuilder: (context,i) {
+            MyAdsTripDocEntity data = context.read<ViewAllTripJoinCubit>().myAdsData[i];
+
+            return Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 10.h,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    CustomCard(
+                      radius: 20,
+                      children: [
+                        const Sizer(
+                          height: 8,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 32.0.h),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.remove_red_eye_sharp,
                                       color: AppColors.DARK_GRAY_COLOR,
                                     ),
-                                  ),
+                                    const Sizer(),
+                                    Label(
+                                      text: '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
+                                      style: Styles.mediumText(
+                                        fontSize: 24,
+                                        color: AppColors.DARK_GRAY_COLOR,
+                                      ),
+                                    ),
 
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Text(
-                              "${widget.data.status ?? 0}",
-                              style: Styles.headerText(
-                                  color: AppColors.getRedColor(context), fontSize: 32),
-                            ),
-                          ],
+                              Text(
+                                "${data.status ?? 0}",
+                                style: Styles.headerText(
+                                    color: AppColors.getRedColor(context), fontSize: 32),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Divider(),
-                      const Sizer(),
-                      TripCardInfoWidget(
-                          title: context.isArabic ?  widget.data.vehicleDetails?.brandAr ?? "" : widget.data.vehicleDetails?.brandEn ?? "",
-                          model:  context.isArabic ?  widget.data.vehicleDetails?.modelAr ?? "" : widget.data.vehicleDetails?.modelEn ?? "",
-                          icon: Assets.tripJoinCarIcon,
-                          price: "${widget.data.pricePerSeat}",
-                          seats: "${widget.data.passengers ?? 0}"
-                        // icon: widget.iconCar
-                        //     ? Assets.tripJoinCarIcon
-                        //     : widget.isMale
-                        //     ? Assets.maleUser
-                        //     : Assets.femaleUser,
-                      ),
+                        const Divider(),
+                        const Sizer(),
+                        TripCardInfoWidget(
+                            title: context.isArabic ?  data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
+                            model:  context.isArabic ?  data.vehicleDetails?.modelAr ?? "" : data.vehicleDetails?.modelEn ?? "",
+                            icon: Assets.tripJoinCarIcon,
+                            price: "${data.pricePerSeat}",
+                            seats: "${data.passengers ?? 0}"
+                          // icon: widget.iconCar
+                          //     ? Assets.tripJoinCarIcon
+                          //     : widget.isMale
+                          //     ? Assets.maleUser
+                          //     : Assets.femaleUser,
+                        ),
 
-                      const Sizer(
-                        height: 30,
-                      ),
-                      // _locationWidget(
-                      //     title: context.isArabic
-                      //         ? widget.data?.fromAr ?? ""
-                      //         : widget.data?.fromEn ?? "",
-                      //     iconColor: AppColors.LIGHT_BLUE),
-                      // const Sizer(),
-                      // _locationWidget(
-                      //     title: context.isArabic
-                      //         ? widget.data?.toAr ?? ""
-                      //         : widget.data?.toEn ?? "",
-                      //     iconColor: AppColors.CHECK_MARK_COLOR),
-                      const Sizer(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 32.0.h,
+                        const Sizer(
+                          height: 30,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              formatTimestamp(widget.data.startDate),
-                              style: Styles.headerText(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              // widget.data.passengers == 1
-                              //     ? '${widget.data.passengers} ${LocaleKeys.seat.localize}'
-                              //     : ''
-                              '${widget.data.passengers} ${LocaleKeys.seat.localize}',
-                              style: Styles.headerText(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              widget.data.isRepeat  == true ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
-                              style: Styles.headerText(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                        // _locationWidget(
+                        //     title: context.isArabic
+                        //         ? data?.fromAr ?? ""
+                        //         : data?.fromEn ?? "",
+                        //     iconColor: AppColors.LIGHT_BLUE),
+                        // const Sizer(),
+                        // _locationWidget(
+                        //     title: context.isArabic
+                        //         ? data?.toAr ?? ""
+                        //         : data?.toEn ?? "",
+                        //     iconColor: AppColors.CHECK_MARK_COLOR),
+                        const Sizer(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 32.0.h,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                formatTimestamp(data.startDate),
+                                style: Styles.headerText(
+                                    fontSize: 32, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                // data.passengers == 1
+                                //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
+                                //     : ''
+                                '${data.passengers} ${LocaleKeys.seat.localize}',
+                                style: Styles.headerText(
+                                    fontSize: 32, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                data.isRepeat  == true ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
+                                style: Styles.headerText(
+                                    fontSize: 32, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Divider(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 32.0.h,
-                        ),
-                        child: AppButton(
-                          backColor: AppColors.PRIMARY_COLOR_DARK,
-                          color: AppColors.whiteColor,
-                          onPressed: (){
-                            context.read<ViewAllTripJoinCubit>().deleteMyAdsTrip(widget.data.id ?? "",context);
-                          },
-                          label: LocaleKeys.deleteRequest.localize,
+                        const Divider(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 32.0.h,
+                          ),
+                          child: AppButton(
+                            backColor: AppColors.PRIMARY_COLOR_DARK,
+                            color: AppColors.whiteColor,
+                            onPressed: (){
+                              context.read<ViewAllTripJoinCubit>().deleteMyAdsTrip(data.id ?? "",context);
+                            },
+                            label: LocaleKeys.deleteRequest.localize,
 
+                          ),
                         ),
-                      ),
-                      const Sizer(),
-                    ],
-                  ),
-                ],
-              ),
-              TripCardSubscribeText(),
+                        const Sizer(),
+                      ],
+                    ),
+                  ],
+                ),
+                TripCardSubscribeText(),
 
-            ],
-          ),
+              ],
+            ),
+          );
+          },
         );
       },
     );
