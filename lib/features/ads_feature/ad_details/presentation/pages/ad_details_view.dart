@@ -28,6 +28,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/strings/labels.dart';
@@ -99,7 +100,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       color: AppColors.getTextColor(context),
                     ),
                     Label(
-                        text: '${LocaleKeys.currency.localize} ${state.ad!.price}',
+                        text: '${FormatNumbers().formatNumberByComma(state.ad!.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? state.ad!.currencyAr : state.ad!.currencyEn}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       color: AppColors.getTextColor(context),),

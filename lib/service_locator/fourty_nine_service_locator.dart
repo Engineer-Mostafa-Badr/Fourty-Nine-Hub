@@ -83,6 +83,7 @@ import '../features/ads_feature/ad_details/data/repositories/ad_details_repo_imp
 import '../features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import '../features/ads_feature/ads/data/repositories/ads_repo_impl.dart';
 import '../features/ads_feature/ads/domain/usecases/get_my_ad_by_id_usecase.dart';
+import '../features/ads_feature/ads/domain/usecases/view_ad_usecase.dart';
 import '../features/ads_feature/create_ad/domain/repositories/create_ad_repo.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/fourty_nine/domain/use_cases/get_parent_main_categories_use_case.dart';
@@ -435,6 +436,9 @@ class FourtyNineServiceLocator {
     serviceLocator.registerLazySingleton<MakeAdPremiumRequestUsecase>(
       () => MakeAdPremiumRequestUsecase(serviceLocator()),
     );
+    serviceLocator.registerLazySingleton<ViewAdUseCase>(
+      () => ViewAdUseCase(serviceLocator()),
+    );
     serviceLocator.registerLazySingleton<AnyCashBackUseCase>(
       () => AnyCashBackUseCase(serviceLocator()),
     );
@@ -510,6 +514,7 @@ class FourtyNineServiceLocator {
 
     serviceLocator.registerFactory<AdvertisementCubit>(
       () => AdvertisementCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

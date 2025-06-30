@@ -56,10 +56,9 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
 
-
-
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
+
   // static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
   static const productionBaseUrl = 'https://49backend.com/api/v1';
@@ -211,6 +210,7 @@ class EndPoints {
       '/talent/upload';
   static String bannerTalent =
       '/talent/banner?subCategory=${Constants.tubeSubCategory}';
+
   static String deleteMyStar({required String id}) =>
       '/talent/$id?subCategory=${Constants.tubeSubCategory}';
 
@@ -253,6 +253,7 @@ class EndPoints {
 
   static sendLiveGift(String id) => '/stream/fan/send-gift/$id';
   static const fetchUsers = '/users/all-usernames';
+
   static searchUsersByUsernameOrEmail(String query) =>
       '/users/user-searchByUsernameOrEmail/$query';
   static const getPrice = '/advertisementCompany/price';
@@ -673,6 +674,10 @@ class EndPoints {
 
   static String removeFavouriteAd(String id) {
     return '/ads-favorites/removeAdFromFavorites/$id';
+  }
+
+  static String viewAd(String id) {
+    return '/ads-views/addViewToAd/$id';
   }
 
   static String requestComeWithMe(String id) {

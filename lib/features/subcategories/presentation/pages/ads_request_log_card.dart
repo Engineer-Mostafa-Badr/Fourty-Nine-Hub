@@ -11,11 +11,13 @@ import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/r
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class AdsRequestLogCard extends StatefulWidget {
   final RequestsLogByMainCategoryEntity requestLog;
+
   const AdsRequestLogCard({
     super.key,
     required this.requestLog,
@@ -109,13 +111,20 @@ class _AdsRequestLogCardState extends State<AdsRequestLogCard> {
               children: [
                 Row(
                   children: [
-                    ImageFromInternet(
-                      image: widget.requestLog.profilePictureUrl,
-                      width: 40,
+                    Container(
                       height: 40,
-                      isCircle: true,
-                      isMale: widget.requestLog.gender == 'male',
+                      width: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Image.asset(
+                        widget.requestLog.gender == 'male'
+                            ? Assets.maleImagePlaceholder
+                            : Assets.femaleImagePlacehlder,
+                      ),
                     ),
+
                     SizedBox(
                       width: 16.w,
                     ),
@@ -132,7 +141,7 @@ class _AdsRequestLogCardState extends State<AdsRequestLogCard> {
                   ],
                 ),
                 SizedBox(
-                  height: 8.h,
+                  height: 16,
                 ),
                 Align(
                   alignment: AlignmentDirectional.centerStart,

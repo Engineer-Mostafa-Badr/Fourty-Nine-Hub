@@ -61,4 +61,9 @@ class AdsRepoImpl implements AdsRepo {
       GetMyAdByIdParams params) {
     return _remoteDataSource.getMyAdFavouriteAds(params);
   }
+
+  @override
+  Future<Either<Failure, bool>> viewAd({required String params}) {
+    return _remoteDataSource.viewAd(params: params);
+  }
 }
