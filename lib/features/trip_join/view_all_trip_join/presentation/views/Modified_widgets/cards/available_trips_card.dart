@@ -90,11 +90,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
       return const Center(child: CircularProgressIndicator(),);
     }
     if(context.read<ViewAllTripJoinCubit>().tripJoinData.isEmpty){
-      return  Center(child: Column(
-        children: [
-          Text(LocaleKeys.noData.localize),
-        ],
-      ));
+      return  Center(child: Text(LocaleKeys.noData.localize));
     }
     return ListView.builder(
         controller: _scrollController,
