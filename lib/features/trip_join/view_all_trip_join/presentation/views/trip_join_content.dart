@@ -216,7 +216,9 @@ class _TripJoinContentState extends State<TripJoinContent>
           context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
         }
         if(index == 1){
+          print("Second");
           context.read<ViewAllTripJoinCubit>().loadInitialRequestTripJoin();
+          context.read<ViewAllTripJoinCubit>().getRequestCount();
         }
         setState(() {
           _displayedCategory = title;

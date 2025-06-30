@@ -26,6 +26,7 @@ import '../../../domain/entities/get_client_offer_trips_entity.dart';
 import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
+import '../loading_dashboard/loading_dashboard_details_screen.dart';
 
 class OfferRideOfferScreen extends StatefulWidget {
   final String type;
@@ -214,6 +215,13 @@ class ClientOfferWidget extends StatelessWidget {
         ? offers?.newOfferPrice ?? offers?.price ?? 300
         : offers?.price ?? 300;
     final priceText = _formatNumber(price.toString(), context);
+
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final avatarSize = screenWidth * 0.2; // 20% of screen width, tweak as needed
+    final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
+    final badgeEndOffset = avatarSize * 0.0; // 0% from right edge (or tweak slightly)
+
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -235,8 +243,10 @@ class ClientOfferWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Container(
-                        width: 75,
-                        height: 75,
+                        // width: 75,
+                        // height: 75,
+                        width: avatarSize,
+                        height: avatarSize,
                         decoration:
                         const BoxDecoration(shape: BoxShape.circle),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -250,9 +260,9 @@ class ClientOfferWidget extends StatelessWidget {
                           image: offers!.driverDetails!.pictureUrl!,
                         )),
                   ),
-                  Positioned(
-                      top: 0,
-                      right: 0,
+                  PositionedDirectional(
+                      top: badgeTopOffset,
+                      end: badgeEndOffset,
                       child: Container(
                           decoration: BoxDecoration(
                             color: AppColors.grey,
@@ -388,13 +398,13 @@ class ClientOfferWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: formattedTime,
+                        text: "${formatTimeOnly(offers?.tripDetails?.data,context)}",
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Label(
-                        text: formattedDate,
+                        text: "${formatPickupDate(offers?.tripDetails?.data, context)}",
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),

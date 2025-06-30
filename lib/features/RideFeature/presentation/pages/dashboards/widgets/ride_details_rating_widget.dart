@@ -16,6 +16,7 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../../../../domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
+import '../../../../domain/usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import '../../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 
@@ -297,13 +298,15 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
         ),
   );
 }
-/*
+
+
 class RideDetailsRatingNonSocketWidget extends StatelessWidget {
   final double? rate;
   final String title;
   final DashboardsCubit cubit;
   final String tripId;
   final bool isClient;
+  final bool? isRide;
   final Function(double)? onRatingUpdated;
 
   const RideDetailsRatingNonSocketWidget({
@@ -314,180 +317,7 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
     required this.tripId,
     this.onRatingUpdated,
     this.isClient = false,
-  });
-
-  bool get isRate => rate != null && rate! > 0;
-
-  String getRatingLabel(double rate) {
-    if (rate >= 1 && rate <= 1.5) return LocaleKeys.poor2.tr();
-    if (rate > 1.5 && rate <= 2.5) return LocaleKeys.bad.tr();
-    if (rate > 2.5 && rate <= 3.5) return LocaleKeys.good.tr();
-    if (rate > 3.5 && rate <= 4.5) return LocaleKeys.veryGood.tr();
-    if (rate > 4.5 && rate <= 5) return LocaleKeys.excellent.tr();
-    return '';
-  }
-
-
-  void _openRatingSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) => RatingBottomSheet(
-        restaurantId: tripId,
-        cubit: cubit,
-        onRatingUpdated: onRatingUpdated,
-      ),
-    );
-  }
-
-  Color getRatingColor(double rate) {
-    if (rate >= 1 && rate <= 1.5) {
-      return Colors.red;
-    } else if (rate > 1.5 && rate <= 2.5) {
-      return Colors.orange;
-    } else if (rate > 2.5 && rate <= 3.5) {
-      return Colors.amber;
-    } else if (rate > 3.5 && rate <= 4.5) {
-      return Colors.lightGreen;
-    } else if (rate > 4.5 && rate <= 5) {
-      return Colors.green;
-    }
-    return Colors.grey;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Label(
-          text: title,
-          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-        ),
-        const Spacer(),
-
-        // Show for client
-        if (isClient && isRate)
-          Row(
-            children: [
-              Text(
-                getRatingLabel(rate!),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: getRatingColor(rate!),
-                ),
-              ),
-              const SizedBox(width: 6),
-              RatingBar(
-                initialRating: rate!,
-                ignoreGestures: true,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 2),
-                ratingWidget: RatingWidget(
-                  full: SvgPicture.asset(Assets.star1),
-                  half: SvgPicture.asset(Assets.halfStar),
-                  empty: SvgPicture.asset(Assets.starEmpty),
-                ),
-                itemSize: 14,
-                onRatingUpdate: (_) {},
-              ),
-            ],
-          ),
-
-        // Show for non-client with rate
-        if (!isClient && isRate)
-          Row(
-            children: [
-              Text(
-                getRatingLabel(rate!),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: getRatingColor(rate!),
-                ),
-              ),
-              const SizedBox(width: 6),
-              RatingBar(
-                initialRating: rate!,
-                ignoreGestures: true,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 2),
-                ratingWidget: RatingWidget(
-                  full: SvgPicture.asset(Assets.star1),
-                  half: SvgPicture.asset(Assets.halfStar),
-                  empty: SvgPicture.asset(Assets.starEmpty),
-                ),
-                itemSize: 14,
-                onRatingUpdate: (_) {},
-              ),
-              const SizedBox(width: 6),
-              InkWell(
-                onTap: () => _openRatingSheet(context),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: AppColors.cF3F3F3,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    LocaleKeys.modify.localize,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.PRIMARY_COLOR,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-        // No rate, and not client
-        if (!isRate && !isClient)
-          InkWell(
-            onTap: () => _openRatingSheet(context),
-            child: noRateWidget(context),
-          ),
-      ],
-    );
-  }
-
-  Widget noRateWidget(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-        decoration: BoxDecoration(
-          color: AppColors.cF3F3F3,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          LocaleKeys.noRating.localize,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.getTextColor(context),
-          ),
-        ),
-      );
-}
-*/
-class RideDetailsRatingNonSocketWidget extends StatelessWidget {
-  final double? rate;
-  final String title;
-  final DashboardsCubit cubit;
-  final String tripId;
-  final bool isClient;
-  final Function(double)? onRatingUpdated;
-
-  const RideDetailsRatingNonSocketWidget({
-    super.key,
-    required this.rate,
-    required this.title,
-    required this.cubit,
-    required this.tripId,
-    this.onRatingUpdated,
-    this.isClient = false,
+    this.isRide = true,
   });
 
   bool get isRate => rate != null && rate! > 0;
@@ -518,6 +348,7 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) => RatingBottomSheet(
+        isRide:  isRide!,
         tripId: tripId,
         cubit: cubit,
         onRatingUpdated: onRatingUpdated,
@@ -530,6 +361,7 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Title: Expanded to take leftover space but ellipsize if needed
         Expanded(
@@ -578,6 +410,8 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: false,
+                        textAlign: TextAlign.center,
+
                         style: Styles.smallText(
                           fontWeight: FontWeight.w600,
                           color: AppColors.PRIMARY_COLOR,
@@ -611,6 +445,7 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
             ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
+            textAlign: TextAlign.center,
           ),
         ),
         const SizedBox(width: 6),
@@ -659,6 +494,7 @@ class RatingBottomSheet extends StatefulWidget {
   final DashboardsCubit cubit;
   final Function(double)? onRatingUpdated;
   final double? existingRate;
+  final bool isRide;
 
   const RatingBottomSheet({
     super.key,
@@ -666,6 +502,7 @@ class RatingBottomSheet extends StatefulWidget {
     required this.cubit,
     this.onRatingUpdated,
     this.existingRate,
+    required this.isRide,
   });
 
   @override
@@ -689,32 +526,125 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
     _commentController.dispose();
     super.dispose();
   }
-
   Future<void> _sendRating(BuildContext context) async {
     if (_rating == 0) {
       return;
     }
 
     try {
-      if (widget.existingRate == null || widget.existingRate == 0) {
-        // First time rating
-        final params = AddRateWithDriverParams(
-          tripId: widget.tripId,
-          rate: _rating,
-          comment: _commentController.text.trim(),
-        );
-        await widget.cubit.rateDriverNonSocket(params: params);
+      if (widget.isRide == true) {
+        if (widget.existingRate == null || widget.existingRate == 0) {
+          // First time rating for ride
+          final params = AddRateWithDriverParams(
+            tripId: widget.tripId,
+            rate: _rating,
+            comment: _commentController.text.trim(),
+          );
+          await widget.cubit.rateDriverNonSocket(params: params);
+        } else {
+          // Update existing rating for ride
+          // Using correct parameter class for driver rating update
+          final params = UpdateClientRateParams(
+            tripId: widget.tripId,
+            newRatingValue: _rating,
+            newComment: _commentController.text.trim(),
+          );
+          await widget.cubit.updateRateDriverNonSocket(params: params, context: context);
+        }
       } else {
-        // Update existing rating
-        // Note: You'll need to create UpdateDriverRateParams similar to UpdateClientRateParams
-        final params = UpdateClientRateParams(
-          tripId: widget.tripId,
-          newRatingValue: _rating,
-          newComment: _commentController.text.trim(),
-        );
-        await widget.cubit.updateRateDriverNonSocket(params: params, context: context);
+        // Loading/delivery trip
+        if (widget.existingRate == null || widget.existingRate == 0) {
+          // First time rating for loading
+          final params = AddRateWithDriverLoadingParams(
+            tripId: widget.tripId,
+            rate: _rating,
+            comment: _commentController.text.trim(),
+          );
+          await widget.cubit.rateDriverLoadingNonSocket(params: params);
+        } else {
+          // Update existing rating for loading
+          // Using correct parameter class for driver loading rating update
+          final params = UpdateClientRateParams(
+            tripId: widget.tripId,
+            newRatingValue: _rating,
+            newComment: _commentController.text.trim(),
+          );
+          await widget.cubit.updateRateDriverLoadingNonSocket(params: params, context: context);
+        }
+      }
 
-        print("x");
+      // Notify callback if provided
+      if (widget.onRatingUpdated != null) {
+        widget.onRatingUpdated!(_rating);
+      }
+
+      // Close dialog if widget is still mounted
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      // Show error message if widget is still mounted
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${LocaleKeys.errorHappen.localize}: $e'),
+            backgroundColor: AppColors.getFindFillColor(context),
+          ),
+        );
+      }
+    }
+  }
+/*
+  Future<void> _sendRating(BuildContext context) async {
+    if (_rating == 0) {
+      return;
+    }
+
+    try {
+      if(widget.isRide == true){
+        if (widget.existingRate == null || widget.existingRate == 0) {
+          // First time rating
+          final params = AddRateWithDriverParams(
+            tripId: widget.tripId,
+            rate: _rating,
+            comment: _commentController.text.trim(),
+          );
+          await widget.cubit.rateDriverNonSocket(params: params);
+        } else {
+          // Update existing rating
+          // Note: You'll need to create UpdateDriverRateParams similar to UpdateClientRateParams
+          final params = UpdateClientRateParams(
+            tripId: widget.tripId,
+            newRatingValue: _rating,
+            newComment: _commentController.text.trim(),
+          );
+          await widget.cubit.updateRateDriverNonSocket(params: params, context: context);
+
+          print("x");
+        }
+
+      }else {
+        if (widget.existingRate == null || widget.existingRate == 0) {
+          // First time rating
+          final params = AddRateWithDriverLoadingParams(
+            tripId: widget.tripId,
+            rate: _rating,
+            comment: _commentController.text.trim(),
+          );
+          await widget.cubit.rateDriverLoadingNonSocket(params: params);
+        } else {
+          // Update existing rating
+          // Note: You'll need to create UpdateDriverRateParams similar to UpdateClientRateParams
+          final params = UpdateClientRateParams(
+            tripId: widget.tripId,
+            newRatingValue: _rating,
+            newComment: _commentController.text.trim(),
+          );
+          await widget.cubit.updateRateDriverLoadingNonSocket(params: params, context: context);
+
+          print("x");
+        }
+        print("Hahahahahahahaha");
       }
 
       if (widget.onRatingUpdated != null) {
@@ -735,7 +665,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       }
     }
   }
-
+*/
   String getRatingText() {
     if (_rating == 1) return LocaleKeys.poor2.localize;
     if (_rating == 2) return LocaleKeys.bad.localize;
@@ -845,192 +775,6 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
   }
 }
 
-/*
-class _RatingBottomSheetState extends State<RatingBottomSheet> {
-  double _rating = 0;
-  final TextEditingController _commentController =
-      TextEditingController(); // Comment controller
-
-  @override
-  void dispose() {
-    _commentController.dispose(); // Clean up controller
-    super.dispose();
-  }
-
-  Future<void> _sendRating(BuildContext context) async {
-    if (_rating > 0) {
-      final params = AddRateWithDriverParams(
-        tripId: widget.restaurantId,
-        rate: _rating,
-        comment: _commentController.text.trim(), // Use the comment from input
-      );
-
-      try {
-        // Show loading
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              LocaleKeys.submittingRating.localize,
-              style: Styles.mediumText(color: AppColors.getTextColor(context)),
-            ),
-            backgroundColor: AppColors.getFindFillColor(context),
-          ),
-        );
-
-        // Submit rating
-        await widget.cubit.rateDriverNonSocket(params: params);
-
-        // Call the callback if provided
-        widget.onRatingUpdated?.call(_rating);
-
-        // Refresh data
-        widget.cubit.loadInitialPastNonSocketTrips();
-
-        // Close bottom sheet
-        Navigator.pop(context);
-
-        // Show success
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(LocaleKeys.ratingSubmittedSuccessfully.localize,
-                style:
-                    Styles.mediumText(color: AppColors.getTextColor(context))),
-            backgroundColor: AppColors.getFindFillColor(context),
-          ),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Error: ${e.toString()}',
-                  style: Styles.mediumText(
-                      color: AppColors.getTextColor(context))),
-              backgroundColor: AppColors.getFindFillColor(context)),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(LocaleKeys.pleaseProvideRate.localize,
-                style:
-                    Styles.mediumText(color: AppColors.getTextColor(context))),
-            backgroundColor: AppColors.getFindFillColor(context)),
-      );
-    }
-  }
-
-  String getRatingText() {
-    if (_rating == 1) {
-      return LocaleKeys.bad.localize;
-    } else if (_rating == 2) {
-      return LocaleKeys.poor2.localize;
-    } else if (_rating == 3) {
-      return LocaleKeys.good.localize;
-    } else if (_rating == 4) {
-      return LocaleKeys.veryGood.localize;
-    } else if (_rating == 5) {
-      return LocaleKeys.excellent.localize;
-    }
-    return '';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.getFindFillColor(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Label(
-            text: LocaleKeys.rateTheRestaurant.localize,
-            style: Styles.headerText(
-              fontWeight: FontWeight.w700,
-              color:
-                  context.isDarkMode ? AppColors.whiteColor : AppColors.black,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Label(
-            text: getRatingText(),
-            style: Styles.mediumText(
-              fontWeight: FontWeight.w500,
-              fontSize: 30,
-              color:
-                  context.isDarkMode ? AppColors.whiteColor : AppColors.black,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-          // Rating Bar
-          RatingBar(
-            initialRating: _rating,
-            ignoreGestures: false,
-            // Allow interaction
-            itemPadding: const EdgeInsets.symmetric(horizontal: 3),
-            ratingWidget: RatingWidget(
-              full: SvgPicture.asset(Assets.star1),
-              half: SvgPicture.asset(Assets.star1),
-              // You can adjust the half icon if needed
-              empty: SvgPicture.asset(
-                Assets.starEmpty,
-                color:
-                    context.isDarkMode ? AppColors.whiteColor : AppColors.black,
-              ),
-            ),
-            itemSize: 40,
-            // Adjust the size of the star
-            onRatingUpdate: (rating) {
-              setState(() {
-                _rating = rating;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-
-          // New Comment Field
-          TextFormField(
-            controller: _commentController,
-            maxLines: 3,
-            decoration: InputDecoration(
-              hintText: LocaleKeys.comment.localize,
-              hintStyle: Styles.smallText(
-                  color: AppColors.getTextColor(context).withOpacity(0.6)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                    color: AppColors.getTextColor(context).withOpacity(0.4)),
-              ),
-              filled: true,
-              fillColor:
-                  context.isDarkMode ? Colors.black12 : Colors.grey.shade100,
-            ),
-          ),
-          const SizedBox(height: 24),
-          AppButton(
-              backColor: context.isDarkMode
-                  ? AppColors.whiteColor
-                  : AppColors.PRIMARY_COLOR,
-              color: context.isDarkMode
-                  ? AppColors.PRIMARY_COLOR
-                  : AppColors.whiteColor,
-              style: Styles.mediumText(
-                fontSize: 50,
-                color: context.isDarkMode
-                    ? AppColors.PRIMARY_COLOR
-                    : AppColors.whiteColor,
-              ),
-              onPressed: () => _sendRating(context),
-              label: LocaleKeys.send.localize),
-        ],
-      ),
-    );
-  }
-}
-*/
 // Client
 class RideDetailsRatingNonSocketClientWidget extends StatelessWidget {
   final double? rate;
@@ -1438,167 +1182,4 @@ class _RatingBottomSheetClientState extends State<RatingBottomSheetClient> {
 
 }
 
-// class RatingBottomSheetClient extends StatefulWidget {
-//   final String restaurantId;
-//   final ClientTripsCubit cubit;
-//   final Function(double)? onRatingUpdated; // Add this callback
-//
-//   const RatingBottomSheetClient({
-//     super.key,
-//     required this.restaurantId,
-//     required this.cubit,
-//     this.onRatingUpdated,
-//   });
-//
-//   @override
-//   _RatingBottomSheetClientState createState() => _RatingBottomSheetClientState();
-// }
-//
-// class _RatingBottomSheetClientState extends State<RatingBottomSheetClient> {
-//   double _rating = 0;
-//   final TextEditingController _commentController = TextEditingController(); // Comment controller
-//
-//   @override
-//   void dispose() {
-//     _commentController.dispose(); // Clean up controller
-//     super.dispose();
-//   }
-//
-//   Future<void> _sendRating(BuildContext context) async {
-//     if (_rating > 0) {
-//       final params = AddRateWithDriverParams(
-//         tripId: widget.restaurantId,
-//         rate: _rating,
-//         comment: _commentController.text.trim(), // Use the comment from input
-//       );
-//
-//       try {
-//         // Show loading
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text(LocaleKeys.submittingRating.localize,style: Styles.mediumText(color: AppColors.getTextColor(context)),),backgroundColor: AppColors.getFindFillColor(context),),
-//         );
-//
-//         // Submit rating
-//         await widget.cubit.rateClientNonSocket(params: params);
-//
-//         // Call the callback if provided
-//         widget.onRatingUpdated?.call(_rating);
-//
-//         // Refresh data
-//         widget.cubit.loadInitialClientPendingTrips();
-//
-//         // Close bottom sheet
-//         Navigator.pop(context);
-//
-//         // Show success
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text(LocaleKeys.ratingSubmittedSuccessfully.localize,style: Styles.mediumText(color: AppColors.getTextColor(context))),backgroundColor: AppColors.getFindFillColor(context),),
-//         );
-//       } catch (e) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Error: ${e.toString()}',style: Styles.mediumText(color: AppColors.getTextColor(context))),backgroundColor: AppColors.getFindFillColor(context)),
-//         );
-//       }
-//     } else {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text(LocaleKeys.pleaseProvideRate.localize,style: Styles.mediumText(color: AppColors.getTextColor(context))),backgroundColor: AppColors.getFindFillColor(context)),
-//       );
-//     }
-//   }
-//
-//   String getRatingText() {
-//     if (_rating == 1) {
-//       return LocaleKeys.bad.localize;
-//     } else if (_rating == 2) {
-//       return LocaleKeys.poor2.localize;
-//     } else if (_rating == 3) {
-//       return LocaleKeys.good.localize;
-//     } else if (_rating == 4) {
-//       return LocaleKeys.veryGood.localize;
-//     } else if (_rating == 5) {
-//       return LocaleKeys.excellent.localize;
-//     }
-//     return '';
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: double.infinity,
-//       padding: const EdgeInsets.all(16),
-//       decoration:  BoxDecoration(
-//         color: AppColors.getFindFillColor(context),
-//         borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-//       ),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Label(
-//             text: LocaleKeys.rateTheRestaurant.localize,
-//             style:  Styles.headerText(
-//               fontWeight: FontWeight.w700,
-//               color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
-//             ),
-//           ),
-//           const SizedBox(height: 8),
-//           Label(
-//             text: getRatingText(),
-//             style:  Styles.mediumText(
-//               fontWeight: FontWeight.w500, fontSize: 30,
-//               color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,
-//             ),
-//           ),
-//
-//           const SizedBox(height: 8),
-//           // Rating Bar
-//           RatingBar(
-//             initialRating: _rating,
-//             ignoreGestures: false,
-//             // Allow interaction
-//             itemPadding: const EdgeInsets.symmetric(horizontal: 3),
-//             ratingWidget: RatingWidget(
-//               full: SvgPicture.asset(Assets.star1),
-//               half: SvgPicture.asset(Assets.star1),
-//               // You can adjust the half icon if needed
-//               empty: SvgPicture.asset(Assets.starEmpty,color: context.isDarkMode ? AppColors.whiteColor :AppColors.black,),
-//             ),
-//             itemSize: 40,
-//             // Adjust the size of the star
-//             onRatingUpdate: (rating) {
-//               setState(() {
-//                 _rating = rating;
-//               });
-//             },
-//           ),
-//           const SizedBox(height: 16),
-//
-//           // New Comment Field
-//           TextFormField(
-//             controller: _commentController,
-//             maxLines: 3,
-//             decoration: InputDecoration(
-//               hintText: LocaleKeys.comment.localize,
-//               hintStyle: Styles.smallText(color: AppColors.getTextColor(context).withOpacity(0.6)),
-//               border: OutlineInputBorder(
-//                 borderRadius: BorderRadius.circular(12),
-//                 borderSide: BorderSide(color: AppColors.getTextColor(context).withOpacity(0.4)),
-//               ),
-//               filled: true,
-//               fillColor: context.isDarkMode ? Colors.black12 : Colors.grey.shade100,
-//             ),
-//           ),
-//           const SizedBox(height: 24),
-//           AppButton(
-//               backColor: context.isDarkMode ? AppColors.whiteColor :AppColors.PRIMARY_COLOR,
-//               color: context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor,
-//               style: Styles.mediumText(
-//                 fontSize: 50,
-//                 color: context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor,
-//               ),
-//               onPressed: () => _sendRating(context),
-//               label: LocaleKeys.send.localize),
-//         ],
-//       ),
-//     );
-//   }
-// }
+

@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -160,15 +162,12 @@ class ClientPendingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.parse(
-      offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z',
-    );
 
-    String formattedDate =
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+    final screenWidth = MediaQuery.of(context).size.width;
+    final avatarSize = screenWidth * 0.2; // 20% of screen width, tweak as needed
+    final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
+    final badgeEndOffset = avatarSize * 0.0; // 0% from right edge (or tweak slightly)
 
-    String formattedTime =
-        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -186,8 +185,8 @@ class ClientPendingWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Container(
-                        width: 75,
-                        height: 75,
+                        width: avatarSize,
+                        height: avatarSize,
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: (offers?.yourDetails?.pictureUrl == null ||
@@ -201,9 +200,9 @@ class ClientPendingWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
+                    PositionedDirectional(
+                      top: badgeTopOffset,
+                      end: badgeEndOffset,
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.grey,
@@ -295,7 +294,7 @@ class ClientPendingWidget extends StatelessWidget {
                             ),
                             Label(
                               text:
-                              '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
+                              '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1,context)}',
                               style: Styles.mediumText(),
                             ),
                           ],
@@ -327,7 +326,7 @@ class ClientPendingWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                        text: "${offers?.tripDetails?.price?.toInt() ?? 300}",
+                        text: "${formatPrice(offers?.tripDetails?.price?.toInt() ?? 300, context)}",
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(width: 4),
@@ -345,11 +344,11 @@ class ClientPendingWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: formattedTime,
+                        text: "${formatTimeOnly(offers?.tripDetails?.date, context)}",
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       Label(
-                        text: formattedDate,
+                        text: "${formatPickupDate(offers?.tripDetails?.date, context)}",
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                     ],

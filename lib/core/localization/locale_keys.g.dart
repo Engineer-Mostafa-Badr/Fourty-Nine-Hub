@@ -1617,5 +1617,14 @@ abstract class  LocaleKeys {
   static const DidntReceiveOTP = 'DidntReceiveOTP';
   static const resendOTP = 'resendOTP';
   static const oneTime = 'oneTime';
+  static const eachSeat = 'eachSeat';
+  static const justNow = 'justNow';
+  static const minAgo = 'minAgo';
+  static const hour = 'hour';
+  static const ss = 'ss';
+  static const ago = 'ago';
+  static const week = 'week';
+  static const selectCarBrand = 'selectCarBrand';
+  static const selectCarModel = 'selectCarModel';
 
 }

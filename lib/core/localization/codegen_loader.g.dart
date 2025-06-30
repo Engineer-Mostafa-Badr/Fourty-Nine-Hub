@@ -1639,7 +1639,16 @@ class CodegenLoader extends AssetLoader{
   "time": "الوقت",
   "DidntReceiveOTP": "لم تستلم الكود؟",
   "resendOTP": "اعادة ارسال الكود",
-  "oneTime": "مرة واحدة"
+  "oneTime": "مرة واحدة",
+  "eachSeat": "لكل مقعد",
+  "justNow": "الآن",
+  "minAgo": "منذ دقيقة",
+  "hour": "ساعة",
+  "ss": "س",
+  "ago": "منذ",
+  "week": "أسبوع",
+  "selectCarBrand": "اختر ماركة السيارة",
+  "selectCarModel": "اختر طراز السيارة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3281,7 +3290,16 @@ static const Map<String,dynamic> _en = {
   "time": "Time",
   "DidntReceiveOTP": "Didn't receive OTP?",
   "resendOTP": "Resend OTP",
-  "oneTime": "One Time"
+  "oneTime": "One Time",
+  "eachSeat": "For each seat",
+  "justNow": "Just now",
+  "minAgo": "Min ago",
+  "hour": "Hour",
+  "ss": "s",
+  "ago": "Ago",
+  "week": "Week",
+  "selectCarBrand": "Select Car Brand",
+  "selectCarModel": "Select Car Model"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

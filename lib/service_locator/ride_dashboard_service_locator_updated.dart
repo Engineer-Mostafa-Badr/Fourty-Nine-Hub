@@ -45,12 +45,14 @@ import '../features/RideFeature/domain/usecases/dashboards/listen_to_accept_untr
 import '../features/RideFeature/domain/usecases/dashboards/listen_to_available_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/listen_to_remove_untracked_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/create_offer_loading_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/get_accepted_ride_non_socket_loading_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/get_available_ride_non_socket_loading_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/get_driver_setting_loading_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/get_history_ride_non_socket_loading_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/listen_to_available_loading_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/listen_to_remove_loading_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/loading/update_driver_loading_rating_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_rate_non_socket_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_usecase.dart';
@@ -126,10 +128,14 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<ListenToRemoveLoadingUseCase>(() => ListenToRemoveLoadingUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToAvailableLoadingUseCase>(() => ListenToAvailableLoadingUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToPartialPaymentDriverUseCase>(() => ListenToPartialPaymentDriverUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateDriverRateLoadingNonSocketUseCase>(() => UpdateDriverRateLoadingNonSocketUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<AddRateWithDriverLoadingUseCase>(() => AddRateWithDriverLoadingUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

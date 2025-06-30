@@ -1,36 +1,53 @@
-// Entities
-  class GetRequestTripJoinEntity {
+class GetRequestTripJoinEntity {
   final String? id;
   final String? userId;
   final String? firstName;
   final double? pricePerSeat;
-  final DateTime? startDate;
+  final String? startDate;
+  final String? createdAt;
   final bool? isPremium;
   final bool? isRead;
+  final String? gender;
+  final int? totalPassengers;
+  final int? views;
+  final String? phoneNumber;
+  final IsButtonEnabledEntity? isButtonEnabled;
   final LocationEntity? location;
 
   GetRequestTripJoinEntity({
-  this.id,
-  this.userId,
-  this.firstName,
-  this.pricePerSeat,
-  this.startDate,
-  this.isPremium,
-  this.isRead,
-  this.location,
+    this.id,
+    this.userId,
+    this.firstName,
+    this.pricePerSeat,
+    this.startDate,
+    this.createdAt,
+    this.isPremium,
+    this.isRead,
+    this.gender,
+    this.totalPassengers,
+    this.views,
+    this.phoneNumber,
+    this.isButtonEnabled,
+    this.location,
   });
-  }
+}
 
-  class LocationEntity {
+class IsButtonEnabledEntity {
+  final bool? state;
+
+  IsButtonEnabledEntity({this.state});
+}
+
+class LocationEntity {
   final AddressEntity? start;
   final AddressEntity? target;
 
   LocationEntity({this.start, this.target});
-  }
+}
 
-  class AddressEntity {
+class AddressEntity {
   final String? address;
   final List<double>? coordinates;
 
   AddressEntity({this.address, this.coordinates});
-  }
+}

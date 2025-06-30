@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +23,16 @@ import '../../../data/models/loading/get_loading_accepted_model.dart';
 import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'loading_dashboard_details_screen.dart';
 
 class AcceptedNonSocketLoadingWidget extends StatelessWidget {
   // final String modeType;
   final GetLoadingAcceptedEntity? offers;
+
   const AcceptedNonSocketLoadingWidget(
       {super.key,
-        // this.modeType = 'truk',
-        this.offers});
+      // this.modeType = 'truk',
+      this.offers});
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +72,10 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-            color:
-            context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-            borderRadius: BorderRadius.circular(20)
-        ),
+            color: context.isDarkMode
+                ? AppColors.PRIMARY_COLOR
+                : AppColors.cF5F5F5,
+            borderRadius: BorderRadius.circular(20)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -90,21 +91,17 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                             width: 50,
                             height: 50,
                             decoration:
-                            const BoxDecoration(shape: BoxShape.circle),
+                                const BoxDecoration(shape: BoxShape.circle),
                             clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: offers?.client?.profilePictureKey ==
-                                null ||
-                                offers!
-                                    .client!.profilePictureKey!.isEmpty
+                            child: offers?.client?.profilePictureKey == null ||
+                                    offers!.client!.profilePictureKey!.isEmpty
                                 ? Image.asset(
-                              Assets.maleImagePlaceholder,
-                              fit: BoxFit.cover,
-                            )
+                                    Assets.maleImagePlaceholder,
+                                    fit: BoxFit.cover,
+                                  )
                                 : ImageFromInternet(
-                              image:  offers!
-                                  .client!.profilePictureKey!,
-                            )
-                        ),
+                                    image: offers!.client!.profilePictureKey!,
+                                  )),
                       ),
                       Positioned(
                           top: 0,
@@ -115,20 +112,16 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
                                   child: Row(children: [
                                     SvgPicture.asset(Assets.star2,
                                         width: 8, height: 8),
                                     const Sizer(width: 4),
                                     Label(
-                                        text: offers
-                                            ?.client?.rating?.count
-                                            .toString() ??
-                                            '0',
+                                        text: formatPrice(offers?.client?.rating?.count ?? 0,context),
                                         style: Styles.smallText(
-                                            color: AppColors.PRIMARY_COLOR
-                                        ))
+                                            color: AppColors.PRIMARY_COLOR))
                                   ])))),
                       const VerifiedWidget(),
                     ],
@@ -169,7 +162,8 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                                   Expanded(
                                       flex: 8,
                                       child: Label(
-                                          text: offers?.tripDetails?.location?.toTitle ??
+                                          text: offers?.tripDetails?.location
+                                                  ?.toTitle ??
                                               'Cairo International Airport',
                                           style: Styles.headerText()))
                                 ],
@@ -184,14 +178,16 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                                   Expanded(
                                       flex: 8,
                                       child: Label(
-                                          text: offers?.tripDetails?.location?.fromTitle ??
+                                          text: offers?.tripDetails?.location
+                                                  ?.fromTitle ??
                                               'Cairo International Airport',
                                           style: Styles.mediumText(
                                               fontWeight: FontWeight.w300)))
                                 ],
                               ),
                               Label(
-                                  text: '${offers?.tripDetails?.cargoDescription ?? ""}',
+                                  text:
+                                      '${offers?.tripDetails?.cargoDescription ?? ""}',
                                   style: Styles.mediumText())
                             ],
                           ),
@@ -205,14 +201,20 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                                 //     width: 40, height: 40, fit: BoxFit.cover)
                                 //     :
                                 ImageFromInternet(
-                                    image: offers!.tripDetails!.category?.picture?? "",
+                                    image: offers!
+                                            .tripDetails!.category?.picture ??
+                                        "",
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),
                                 Label(
                                     text: context.isArabic
-                                        ? (offers?.tripDetails!.category?.nameAr ?? '')
-                                        : (offers?.tripDetails!.category?.nameEn ?? ''),
+                                        ? (offers?.tripDetails!.category
+                                                ?.nameAr ??
+                                            '')
+                                        : (offers?.tripDetails!.category
+                                                ?.nameEn ??
+                                            ''),
                                     style: Styles.mediumText(fontSize: 25))
                               ],
                             )),
@@ -228,9 +230,9 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                            text: "${offers?.tripDetails?.price ?? 300}",
+                            text: "${formatPrice(offers?.tripDetails?.price ?? 100, context)}",
                             style:
-                            Styles.mediumText(fontWeight: FontWeight.w700)),
+                                Styles.mediumText(fontWeight: FontWeight.w700)),
                         const Sizer(width: 4),
                         Label(
                             text: LocaleKeys.egp.tr(),
@@ -243,13 +245,13 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: formattedTime, //'10 AM',
+                          text:  formatTimeOnly(offers?.tripDetails?.date,context) ,
                           style: Styles.mediumText(
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w700
                           ),
                         ),
                         Label(
-                          text: formattedDate, //'20/2/2025',
+                          text: formatPickupDate( offers?.tripDetails?.date,context) ,
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
@@ -298,7 +300,6 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                         )
                       ],
                     ),
-
                   ],
                 ),
               ),
@@ -308,6 +309,4 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
       ),
     );
   }
-
-
 }

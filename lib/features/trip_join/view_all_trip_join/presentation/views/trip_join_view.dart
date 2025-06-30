@@ -104,6 +104,7 @@ class _TripJoinViewState extends State<TripJoinView>
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.h),
@@ -164,40 +165,79 @@ class _TripJoinViewState extends State<TripJoinView>
                 ),
               ]),
             ),
-            if(selectedIndex!=0)Positioned.directional(
-              bottom: 40.h,
-              start: 10,
-              textDirection:
-                  context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-              child: GestureDetector(
-                onTap: () {
-                  switch (selectedIndex) {
-                    case 0:
-                      context.push(Routes.captainShareInfoScreen);
-                    case 1:
-                      context.push(Routes.tripJoinInfoScreen);
-                    case 2:
-                      context.push(Routes.pickMeInfoScreen);
+            // if(selectedIndex!=0)Positioned.directional(
+            //   bottom: 40.h,
+            //   start: 10,
+            //   textDirection:
+            //       context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       switch (selectedIndex) {
+            //         case 0:
+            //           context.push(Routes.captainShareInfoScreen);
+            //         case 1:
+            //           context.push(Routes.tripJoinInfoScreen);
+            //         case 2:
+            //           context.push(Routes.pickMeInfoScreen);
+            //
+            //         default:
+            //           () {};
+            //       }
+            //     },
+            //     child: Container(
+            //       height: 48.h,
+            //       width: 48.h,
+            //       decoration: BoxDecoration(
+            //           color: AppColors.getButtonPrimaryColor(context),
+            //           borderRadius: BorderRadius.circular(10)),
+            //       child: Icon(
+            //         size: 19,
+            //         Icons.question_mark,
+            //         color: context.isDarkMode?AppColors.black:Colors.white,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            if(selectedIndex!=0)PositionedDirectional(
+                bottom: 30.h,
+                end: 10,
+                start: 10,
+                // textDirection:
+                // context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        switch (selectedIndex) {
+                          case 0:
+                            context.push(Routes.captainShareInfoScreen);
+                          case 1:
+                            context.push(Routes.tripJoinInfoScreen);
+                          case 2:
+                            context.push(Routes.pickMeInfoScreen);
 
-                    default:
-                      () {};
-                  }
-                },
-                child: Container(
-                  height: 48.h,
-                  width: 48.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.getButtonPrimaryColor(context),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Icon(
-                    size: 19,
-                    Icons.question_mark,
-                    color: context.isDarkMode?AppColors.black:Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            if(selectedIndex!=0)getFloatingActionButtonContent(selectedIndex),
+                          default:
+                                () {};
+                        }
+                      },
+                      child: Container(
+                        height: 48.h,
+                        width: 48.h,
+                        decoration: BoxDecoration(
+                            color: AppColors.getButtonPrimaryColor(context),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Icon(
+                          size: 19,
+                          Icons.question_mark,
+                          color: context.isDarkMode?AppColors.black:Colors.white,
+                        ),
+                      ),
+                    ),
+                    getFloatingActionButtonContent(selectedIndex),
+
+                  ],
+                )),
           ],
         ),
       ),
