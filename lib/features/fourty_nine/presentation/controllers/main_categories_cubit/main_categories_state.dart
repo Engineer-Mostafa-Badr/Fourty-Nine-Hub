@@ -10,6 +10,7 @@ class MainCategoriesState {
   final MainCategoryEntity? marriageMainCategory;
   final WalletHomeEntity? wallet;
   final QuestionEntity? question;
+  final SettingsDashboardEntityResponse? setting;
   MainCategoriesState({
     this.status = StateStatus.initial,
     this.failure,
@@ -20,6 +21,7 @@ class MainCategoriesState {
     this.customPage,
     this.question,
     this.wallet,
+    this.setting,
   });
 
   MainCategoriesState copyWith({
@@ -32,6 +34,7 @@ class MainCategoriesState {
     MainCategoryEntity? marriageMainCategory,
     List<MainCategoryEntity>? data,
     List<MainCategoryEntity>? customPage,
+    SettingsDashboardEntityResponse? setting,
   }) {
     return MainCategoriesState(
       status: status ?? this.status,
@@ -43,6 +46,7 @@ class MainCategoriesState {
       wallet: wallet ?? this.wallet,
       question: question ?? this.question,
       marriageMainCategory: marriageMainCategory ?? this.marriageMainCategory,
+      setting: setting ?? this.setting,
     );
   }
 }

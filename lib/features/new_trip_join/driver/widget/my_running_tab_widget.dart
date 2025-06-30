@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/one_way_widget.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -29,7 +34,21 @@ class MyRunningTabWidget extends StatefulWidget {
 
 class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
   final TextEditingController otpController = TextEditingController();
+  late ScrollController _scrollController;
+  bool _isVisible = true;
+  double _lastScrollOffset = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      context.read<CaptainShareDashboardCubit>().getAvailableBookings(context);
+    }
+  }
   // @override
   // void dispose() {
   //   otpController.dispose();
@@ -38,335 +57,54 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.content.isEmpty
-        ? _emptyMessage(context)
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                AvailableRideModeWidget(
-                  requestType: context.isArabic ? 'عادي' : 'Regular',
-                  cancelButton: false,
-                  statusDriver: context.isArabic ? "الحالية " : "Running",
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildTripInfo(context),
-                      const SizedBox(height: 10),
-                      _buildActionButtons(context),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 15),
-                            GestureDetector(
-                              onTap: () => _showOtpBottomSheet(context),
-                              child: Text(
-                                context.isArabic
-                                    ? "أدخل رمز OTP"
-                                    : "Enter OTP Code",
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : AppColors.black,
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            PinCodeTextField(
-                              onTap: () => _showOtpBottomSheet(context),
-                              readOnly: true,
-                              appContext: context,
-                              length: 6,
-                              controller: otpController,
-                              pinTheme: PinTheme(
-                                shape: PinCodeFieldShape.box,
-                                borderRadius: BorderRadius.circular(8),
-                                fieldHeight: 50,
-                                fieldWidth: 40,
-                                activeColor: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors.PRIMARY_COLOR,
-                                inactiveColor: Colors.grey,
-                                selectedColor: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors.PRIMARY_COLOR,
-                              ),
-                              animationDuration:
-                                  const Duration(milliseconds: 300),
-                              backgroundColor: Colors.transparent,
-                              enableActiveFill: false,
-                              onCompleted: (value) {},
-                              onChanged: (value) {},
-                            ),
-                          ],
-                        ),
-                      ),
-                      _buildReportButton(context),
-                    ],
-                  ),
-                )
-              ],
+    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(builder: (context, state) {
+      var cubit = context.read<CaptainShareDashboardCubit>();
+      return Stack(
+        children: [
+          cubit.isLoadingAvailableBookings?const Center(child: CircularProgressIndicator()):cubit.availableBookings.isEmpty?_emptyMessage():ListView.separated(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemBuilder: (context, index) => OneWayWidget(
+              requestType: LocaleKeys.regular.localize,
+              statusDriver: cubit.availableBookings[index].status,
+              model: cubit.availableBookings[index],
+              cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.availableBookings[index].creatorId) && cubit.availableBookings[index].status == 'pending',
+              onCancelBooking: () {
+                if (cubit.availableBookings[index].status == 'pending') {
+                  // cubit.cancelMyBooking(id: cubit.availableBookings[index].id, context: context, from: 'available');
+                }
+              },
+              onJoin: (){
+                if((!(cubit.availableBookings[index].clients??[]).contains((UserCubit.to.state.data?.id ?? '')))&&cubit.availableBookings[index].status == 'pending'){
+                  // cubit.joinToRoute(id: cubit.availableBookings[index].id, context: context);
+                }
+              },
             ),
-          );
+            separatorBuilder: (context, index) => const Sizer(),
+            itemCount: cubit.availableBookings.length,
+          ),
+        ],
+      );
+
+    });
   }
 
-  Widget _buildTripInfo(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 12,
-                backgroundColor: Colors.transparent,
-                child: CircleAvatar(
-                  backgroundColor: Colors.green,
-                  radius: 10,
-                  child: CircleAvatar(
-                      backgroundColor: AppColors.getFillColor(context), radius: 5),
-                ),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                context.isArabic?'الجيزة ،مصر':"Giza, Egypt",
-                style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-            context.isArabic ? "العميل الأول 3 د" : "1st Client  3 mins",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActionButtons(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: _customButton(context,
-            context.isArabic
-                ? widget.clientNumberAr ?? ""
-                : widget.clientNumberEn ?? "",
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _customButton(context,
-            context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _customButton(BuildContext context,String text) {
-    return Container(
-      height: 65.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: AppColors.getButtonPrimaryColor(context),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: 12,
-            color: context.isDarkMode?Colors.black: Colors.white,
+  Widget _emptyMessage() {
+    return Center(
+      child: Text(
+        LocaleKeys.thereIsNoTripsInThisList.localize,
+        style: TextStyle(
+          fontSize: 28.sp,
+          fontWeight: FontWeight.w600,
+          color: const Color(
+            0xff727272,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildReportButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          backgroundColor: AppColors.getFillColor(context),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          side: BorderSide(
-            color: context.isDarkMode ? Colors.white : AppColors.black,
-            width: 1.5,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12),
-        ),
-        child: Text(
-          context.isArabic ? "تقرير العميل" : "Report Client",
-          style: TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: 28.sp,
-            color: context.isDarkMode ? Colors.white : AppColors.black,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showOtpBottomSheet(BuildContext context) {
-    final TextEditingController tempController = TextEditingController();
-    final FocusNode otpFocusNode = FocusNode();
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      isScrollControlled: true,
-      elevation: 0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted) {
-            FocusScope.of(context).requestFocus(otpFocusNode);
-          }
-        });
-
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(20)),
-                boxShadow: [
-                  BoxShadow(
-                    color: isDarkMode
-                        ? Colors.black.withOpacity(0.3)
-                        : Colors.grey.withOpacity(0.1),
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                    offset: const Offset(0, -2), // جعل الظل للأعلى فقط
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 16,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildOtpHeader(context),
-                  const SizedBox(height: 20),
-                  PinCodeTextField(
-                    keyboardType: TextInputType.number,
-                    focusNode: otpFocusNode,
-                    appContext: context,
-                    length: 6,
-                    controller: tempController,
-                    pinTheme: PinTheme(
-                      shape: PinCodeFieldShape.box,
-                      borderRadius: BorderRadius.circular(8),
-                      fieldHeight: 50,
-                      fieldWidth: 40,
-                      activeColor: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.PRIMARY_COLOR,
-                      inactiveColor: Colors.grey,
-                      selectedColor: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.PRIMARY_COLOR,
-                    ),
-                    backgroundColor: Colors.transparent,
-                    enableActiveFill: false,
-                    onChanged: (value) {},
-                  ),
-                  const SizedBox(height: 20),
-                  _buildDoneButton(context),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildOtpHeader(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Center(
-            child: Text(
-              context.isArabic ? "أدخل رمز OTP" : "Enter OTP Code",
-              style: TextStyle(
-                fontSize: 30.sp,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: ClickableWidget(
-            onTap: ()=>Navigator.of(context).pop(),
-            child: CircleAvatar(
-              radius: 30.h,
-              backgroundColor: AppColors.getFillColor(context),
-              child:Center(
-                child: Icon(
-                  Icons.close,
-                  color: AppColors.getTextColor(context),
-                  ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDoneButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pop(context),
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: AppColors.getButtonPrimaryColor(context),
-        ),
-        child: Center(
-          child: Text(context.isArabic?"تم":'Done',
-              style: TextStyle(fontSize: 36.sp, color:context.isDarkMode?Colors.black: Colors.white)),
-        ),
-      ),
-    );
-  }
 }
 
-Widget _emptyMessage(BuildContext context) {
-  return  Center(
-    child: Text(
-      LocaleKeys.thereIsNoTripsInThisList.localize,
-      style: const TextStyle(fontSize: 16, color: Colors.grey),
-    ),
-  );
-}

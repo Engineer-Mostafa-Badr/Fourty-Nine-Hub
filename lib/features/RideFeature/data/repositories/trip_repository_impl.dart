@@ -161,6 +161,11 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params) {
+    remoteDataSource.listenToNewRouteDriver(params);
+  }
+
+  @override
   Future<Either<Failure, RunningTripEntity>> getRunningTrip() async{
     return await remoteDataSource.getRunningTrip();
   }

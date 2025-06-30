@@ -305,7 +305,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         emit(state.copyWith(status: StateStatus.error, failure: failure));
       },
           (settings) {
-        log("Suzccess");
+        log("Suzccess $settings");
 
         bool isReady = isServiceAvailable(settings);
         log("SuccessIsReady : $isReady");
@@ -315,7 +315,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
           listenToAcceptOffer(context);
         }
         emit(state.copyWith(
-            status: StateStatus.success,));
+            status: StateStatus.success,setting: settings));
       },
     );
   }

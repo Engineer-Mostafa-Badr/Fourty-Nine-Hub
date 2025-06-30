@@ -65,11 +65,12 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     // TripsResponseEntity
     listenToCancelRouteUseCase((routeId) {
       if(state.tapIndex==0){
-        availableBookings.removeWhere((element) => element.id==routeId);
+        print("routeId.routeId ${routeId.routeId}");
+        availableBookings.removeWhere((element) => element.id==routeId.routeId);
         showSuccessMessage(context, context.isArabic?'تم الغاء الرحله بواسطة ناشئ الرحلة':'Route canceled by creator');
       }
       if(state.tapIndex==1){
-        myBookings.removeWhere((element) => element.id==routeId);
+        myBookings.removeWhere((element) => element.id==routeId.routeId);
         showSuccessMessage(context, context.isArabic?'تم الغاء الرحله بواسطة ناشئ الرحلة':'Route canceled by creator');
       }
       emit(state.copyWith(status: CaptainShareStates.success));
@@ -93,7 +94,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   }
 
   onNavigateToCreateRoute(BuildContext context) async {
-    await context.push(Routes.captainShareInfoScreen);
+    await context.push(Routes.newRouteScreen);
     if(state.tapIndex==0){
       loadInitialAvailableData(context);
     }else{
@@ -126,7 +127,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     // TripsResponseEntity
     listenToUpdateRouteUseCase((route) {
       String userId = UserCubit.to.state.data?.id??'';
-      if(userId==route.creatorId){}else{
+
         if(state.tapIndex==0){
           availableBookings.removeWhere((e)=>e.id==route.id);
           // availableBookings.firstWhere((e)=>e.id==route.id).clients = route.clients;
@@ -140,7 +141,6 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
           // showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }
         emit(state.copyWith(status: CaptainShareStates.success));
-      }
     });
   }
 
@@ -296,6 +296,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
       context.pop();
+      context.pop(true);
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }

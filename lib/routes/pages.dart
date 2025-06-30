@@ -128,6 +128,7 @@ import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentati
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/route_details_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
@@ -3760,10 +3761,8 @@ class AppPages {
                 builder: (context, state) {
                   return MultiBlocProvider(
                     providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
+                      BlocProvider(
+                        create: (context) => serviceLocator<CaptainShareDashboardCubit>()..loadInitData(context),
                       ),
                     ],
                     child: const RunningAndPastTripsScreen(),
