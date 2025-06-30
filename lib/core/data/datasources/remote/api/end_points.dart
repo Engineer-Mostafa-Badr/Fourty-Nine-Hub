@@ -504,6 +504,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/routes/me";
   static String availableBooking =
       "$developmentBaseUrl/captain-share/routes/available";
+  static String driverAvailableBooking =
+      "$developmentBaseUrl/captain-share/driver/routes";
   static String expiredBooking =
       "$developmentBaseUrl/captain-share/routes/expired";
   static String runningBooking =

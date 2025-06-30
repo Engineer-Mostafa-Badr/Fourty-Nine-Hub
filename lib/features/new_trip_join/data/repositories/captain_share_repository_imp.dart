@@ -38,6 +38,12 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
     return await shippingRemoteDataSource.getAvailableBooking(params);
   }
 
+
+  @override
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params) async {
+    return await shippingRemoteDataSource.getDriverAvailableBooking(params);
+  }
+
   @override
   Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params) async {
     return await shippingRemoteDataSource.getRouteDetails(params);
