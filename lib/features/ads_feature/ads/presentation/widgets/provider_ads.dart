@@ -149,7 +149,8 @@ class _ProviderAdsState extends State<ProviderAds> {
         //   onFav: (id) {},
         //   onRemoveFav: (id) {},
         // );
-        if (index > 0 && index % 2 == 0) {
+        //TODO: Montaser add google ads
+        /*if (index > 0 && index % 2 == 0) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -161,7 +162,7 @@ class _ProviderAdsState extends State<ProviderAds> {
               _buildAdContent(ad), // Your content for the ad
             ],
           );
-        }
+        }*/
 
         return _buildAdContent(ad);
       },
