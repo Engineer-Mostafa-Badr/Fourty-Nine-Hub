@@ -146,7 +146,7 @@ class _UserAdsState extends State<UserAds> {
             return result;
           },
         );
-        return Column(
+        /*return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (index > nativeAdStart && index % adFrequency == adFrequency - 1)
@@ -169,7 +169,7 @@ class _UserAdsState extends State<UserAds> {
               },
             ),
           ],
-        );
+        );*/
       },
     );
   }

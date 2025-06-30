@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -16,8 +17,10 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
+import '../cubit/ads_cubit.dart';
 
 class MarriageAdsListViewItem extends StatelessWidget {
   const MarriageAdsListViewItem({
@@ -72,6 +75,24 @@ class MarriageAdsListViewItem extends StatelessWidget {
                           AppColors.getTextColor(context),
                           height: 1.60,
                         ),
+                      ),
+                      Spacer(),
+                      IconAppButton(
+                        size: 32,
+                        icon: marriageAds.isFavourite == false
+                            ? Icons.favorite_border
+                            : Icons.favorite,
+                        color: AppColors.SECONDARY_COLOR,
+                        onPressed: () async {
+                          if(marriageAds.isFavourite == false){
+                            await context
+                                .read<AdvertisementCubit>()
+                                .favouriteAd(marriageAds.id);
+                          }else{
+                            await context
+                                .read<AdvertisementCubit>()
+                                .unFavouriteAd(marriageAds.id);                          }
+                        },
                       ),
                     ],
                   ),

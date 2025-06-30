@@ -874,8 +874,15 @@ class AppPages {
               GoRoute(
                 path: Paths.MARRIAGESUBCATEGORIES,
                 name: Routes.MARRIAGESUBCATEGORIES,
-                builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<SubcategoriesCubit>(),
+                builder: (context, state) => MultiBlocProvider(
+                  providers:[
+                    BlocProvider(
+                      create: (context) => serviceLocator<SubcategoriesCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                    ),
+                   ],
                   child: const MarriageSubCategoriesView(
                       // mainCategory: state.extra as MainCategoryEntity,
                       ),

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
@@ -28,7 +29,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class MarriageCallMessageButtons extends StatefulWidget {
   const MarriageCallMessageButtons({
@@ -43,6 +43,7 @@ class MarriageCallMessageButtons extends StatefulWidget {
     this.clientId,
     this.startPadding = 0,
   });
+
   final String otherUserId;
   final String? clientId;
   final String subcategoryId;
@@ -81,9 +82,9 @@ class _MarriageCallMessageButtonsState
                   child: InkWell(
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-                      return pleaseLoginDialog(context);
-              // context.push(Routes.LOGIN);
-          }
+                            return pleaseLoginDialog(context);
+                            // context.push(Routes.LOGIN);
+                          }
                         : snap.data == true
                             ? () {
                                 showModalBottomSheet(
@@ -179,7 +180,8 @@ class _MarriageCallMessageButtonsState
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 SendWhatsappCallScreen(
-                                                                  isRealCall: true,
+                                                                  isRealCall:
+                                                                      true,
                                                                   callType:
                                                                       CallType
                                                                           .audio,
@@ -230,9 +232,13 @@ class _MarriageCallMessageButtonsState
                               context.read<UserCubit>().isLoggedIn)
                           ? Assets.phoneIconRed
                           : Assets.phoneIcon,
-                      color:!(snap.data == true &&
-                          context.read<UserCubit>().isLoggedIn)?
-                      context.isDarkMode ? Colors.white : null: null,height: 37.h,
+                      color: !(snap.data == true &&
+                              context.read<UserCubit>().isLoggedIn)
+                          ? context.isDarkMode
+                              ? Colors.white
+                              : null
+                          : null,
+                      height: 37.h,
                       // color: (snap.data == true &&
                       //         context.read<UserCubit>().isLoggedIn)
                       //     ? AppColors.PRIMARY_COLOR
@@ -248,9 +254,9 @@ class _MarriageCallMessageButtonsState
                   //         : AppColors.DARK_GRAY_COLOR,
                   onTap: !context.read<UserCubit>().isLoggedIn
                       ? () {
-          return pleaseLoginDialog(context);
-          // context.push(Routes.LOGIN);
-          }
+                          return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
                       : snap.data == true
                           ? () async {
                               ChatEntity? chat = await context
@@ -281,9 +287,13 @@ class _MarriageCallMessageButtonsState
                     (snap.data == true && context.read<UserCubit>().isLoggedIn)
                         ? Assets.mailIconRed
                         : Assets.mailIcon,
-                    color:!(snap.data == true &&
-                        context.read<UserCubit>().isLoggedIn)?
-                    context.isDarkMode ? Colors.white : null: null,height: 30.h,
+                    color: !(snap.data == true &&
+                            context.read<UserCubit>().isLoggedIn)
+                        ? context.isDarkMode
+                            ? Colors.white
+                            : null
+                        : null,
+                    height: 30.h,
                   ),
                 ),
                 if (widget.hasReport == true) ...[
@@ -291,9 +301,9 @@ class _MarriageCallMessageButtonsState
                     // color: AppColors.SECONDARY_COLOR,
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-          return pleaseLoginDialog(context);
-          // context.push(Routes.LOGIN);
-          }
+                            return pleaseLoginDialog(context);
+                            // context.push(Routes.LOGIN);
+                          }
                         : () {
                             bottomSheet(
                                 context: context,
@@ -306,7 +316,7 @@ class _MarriageCallMessageButtonsState
                     child: Icon(
                       Icons.report,
                       color: AppColors.SECONDARY_COLOR_DARK2,
-                      size:50.h,
+                      size: 50.h,
                     ),
                   ),
                 ]
