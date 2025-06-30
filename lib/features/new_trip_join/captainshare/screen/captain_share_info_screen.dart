@@ -23,7 +23,7 @@ class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
     return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
-          context.push(Routes.captainShareScreen);
+          context.pop();
         },
         child: Container(
           width: 300.w,

@@ -59,10 +59,10 @@ class EndPoints {
 
 
   static const pageSize = 10;
-  static const developmentWebSocketBaseUrl = 'https://c433-41-239-172-48.ngrok-free.app';
-  // static const developmentWebSocketBaseUrl = 'https://c433-41-239-172-48.ngrok-free.app';
-  static const developmentBaseUrl = 'https://c433-41-239-172-48.ngrok-free.app/api/v1';
-  static const productionBaseUrl = 'https://c433-41-239-172-48.ngrok-free.app/api/v1';
+  static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  // static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  static const developmentBaseUrl = 'https://49backend.com/api/v1';
+  static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const loginWithPhone = '/auth/login/phone-number';
@@ -503,6 +503,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/routes/me";
   static String availableBooking =
       "$developmentBaseUrl/captain-share/routes/available";
+  static String driverAvailableBooking =
+      "$developmentBaseUrl/captain-share/driver/routes";
   static String expiredBooking =
       "$developmentBaseUrl/captain-share/routes/expired";
   static String runningBooking =

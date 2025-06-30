@@ -26,7 +26,6 @@ import '../../../../core/localization/locale_keys.g.dart';
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
-  final bool? isMyBooking;
   final String? requestType;
   final MyBookingEntity? model;
   final Function? onCancelBooking;
@@ -37,7 +36,6 @@ class OneWayWidget extends StatefulWidget {
     this.statusDriver,
     this.model,
     this.cancelButton,
-    this.isMyBooking,
     this.requestType,
     this.onCancelBooking,
     this.onJoin,
@@ -95,8 +93,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   @override
   Widget build(BuildContext context) {
     bool myRoute = (widget.model?.creatorId == UserCubit.to.state.data?.id)||((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id));
-    print(
-        "isMyBooking ${widget.model?.creatorId == UserCubit.to.state.data?.id}");
     print("widget.model?.creatorId ${widget.model?.creatorId}");
     print("UserCubit.to.state.data?.id ${UserCubit.to.state.data?.id}");
     print(
@@ -302,7 +298,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             thickness: 2,
                           ),
                         ),
-                        Icon(Icons.circle, color:((widget.model?.availableSeats ?? 0) >= 1)?Colors.red: Colors.green, size: 12),
+                        Icon(Icons.circle, color:((widget.model?.availableSeats ?? 0) <= 1)?Colors.red: Colors.green, size: 12),
                         Expanded(
                           child: Divider(
                             color: context.isDarkMode
@@ -608,8 +604,8 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 ),
               if (clients.isNotEmpty)
                 Marker(
-                  point: LatLng(clients[0].location.location[1],
-                      clients[0].location.location[0]),
+                  point: LatLng(clients[0].location.location[0],
+                      clients[0].location.location[1]),
                   width: 30,
                   height: 30,
                   child: const Icon(Icons.location_pin,
@@ -617,8 +613,8 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 ),
               if (clients.length > 1)
                 Marker(
-                  point: LatLng(clients[1].location.location[1],
-                      clients[1].location.location[0]),
+                  point: LatLng(clients[1].location.location[0],
+                      clients[1].location.location[1]),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,

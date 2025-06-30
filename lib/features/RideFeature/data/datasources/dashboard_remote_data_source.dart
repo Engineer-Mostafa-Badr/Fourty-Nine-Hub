@@ -120,6 +120,7 @@ abstract class TripRemoteDataSource {
   void listenToJoinAvailableRoutes(Function(bool isJoined) params);
   Future<Either<Failure, bool>> listenToLeaveAvailableRoutes(Function(String routeId) params);
   void listenToNewRoute(Function(MyBookingEntity newBooking) params);
+  void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
@@ -508,6 +509,21 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       CliLogger.info("Listen to New Route ");
       log("Listen to New Route ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRoute, (data) {
+        CliLogger.info("New Route data :  $data");
+        log("New Route data :  $data");
+        params(MyBookingModel.fromJson(data['newAllowedRoute']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params) {
+    try {
+      CliLogger.info("Listen to New Route ");
+      log("Listen to New Route ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRouteDriver, (data) {
         CliLogger.info("New Route data :  $data");
         log("New Route data :  $data");
         params(MyBookingModel.fromJson(data['newAllowedRoute']));

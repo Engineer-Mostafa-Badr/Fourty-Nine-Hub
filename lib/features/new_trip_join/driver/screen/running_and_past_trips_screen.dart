@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/assets/assets.dart';
@@ -87,10 +89,13 @@ class ItemTabRideModeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = tabController.index == index;
 
+    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
+  builder: (context, state) {
+    var cubit = context.read<CaptainShareDashboardCubit>();
+    bool isSelected = cubit.state.tapIndex == index;
     return GestureDetector(
-      onTap: () => tabController.animateTo(index),
+      onTap: () => cubit.changeTapIndex(index),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -127,6 +132,8 @@ class ItemTabRideModeWidget extends StatelessWidget {
         ],
       ),
     );
+  },
+);
   }
 }
 
@@ -146,7 +153,7 @@ class TabBarRowRideModeWidget extends StatelessWidget {
         Expanded(
           child: ItemTabRideModeWidget(
             onTap: onTap,
-            text: context.isArabic ? "رحلاتي الحاليه" : "My Running",
+            text: context.isArabic ? "رحلات متاحة" : "Available Routes",
             icon: Assets.ideaIcon,
             index: 0,
             tabController: tabController,
@@ -156,9 +163,19 @@ class TabBarRowRideModeWidget extends StatelessWidget {
         Expanded(
           child: ItemTabRideModeWidget(
             onTap: onTap,
-            text: context.isArabic ? "رحلات السابقة" : "Past Trips",
+            text: context.isArabic ? "رحلات جارية" : "Running Routes",
             icon: Assets.ideaIcon,
             index: 1,
+            tabController: tabController,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: ItemTabRideModeWidget(
+            onTap: onTap,
+            text: context.isArabic ? "رحلات منتهية" : "Expired Routes",
+            icon: Assets.ideaIcon,
+            index: 2,
             tabController: tabController,
           ),
         ),
@@ -193,6 +210,9 @@ class _TabBarContentRideModeWidgetState
   bool showHint = false;
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
+  builder: (context, state) {
+    var cubit = context.read<CaptainShareDashboardCubit>();
     return Column(
       children: [
         Padding(
@@ -233,21 +253,16 @@ class _TabBarContentRideModeWidgetState
             ),
           ),
         Expanded(
-          child: TabBarView(
-            controller: widget.tabController,
-            children: [
-              MyRunningTabWidget(
-                clientNumberEn: "Go to first client",
-                clientNumberAr: "الذهاب للعميل الأول",
-                content: tabContents[0],
-              ),
-              PastTripsWidget(
-                content: tabContents[1],
-              ),
-            ],
-          ),
-        ),
+          child: state.tapIndex==0?MyRunningTabWidget(
+            clientNumberEn: "Go to first client",
+            clientNumberAr: "الذهاب للعميل الأول",
+            content: tabContents[0],
+          ):state.tapIndex==1?PastTripsWidget(
+            content: tabContents[1],
+          ):Container(),)
       ],
     );
+  },
+);
   }
 }

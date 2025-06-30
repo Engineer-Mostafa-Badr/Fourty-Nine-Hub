@@ -74,6 +74,7 @@ abstract class SocketIOListeners {
   static const String listenToCancelRoute = 'CAPTAIN-SHARE:ROUTE-CANCELLED';
   static const String listenToUpdateRoute = 'captain-share:update-available-route';
   static const String listenToNewRoute = 'captain-share:new-route-available';
+  static const String listenToNewRouteDriver = 'captain-share:new-available-trip';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
   static const String removeLoading = 'LOADING:REMOVE_TRIP';
   static const String newLoadingTrip = 'LOADING:NEW_TRIP';
@@ -148,7 +149,7 @@ abstract class SocketIOEvents {
 //   initSocketConnection(userToken) async {
 //     try {
 //       socket = io(
-//           'https://c433-41-239-172-48.ngrok-free.app',
+//           'https://49backend.com',
 //           OptionBuilder()
 //               .setTransports(['websocket'])
 //               .disableAutoConnect()
