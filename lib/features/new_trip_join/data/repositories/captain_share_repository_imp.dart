@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_pric
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
 
 import '../../domain/repositories/captain_share_repository.dart';
 import '../datasources/captain_share_remote_data_source.dart';
@@ -39,6 +40,17 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
 
 
   @override
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params) async {
+    return await shippingRemoteDataSource.getDriverAvailableBooking(params);
+  }
+
+  @override
+  Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params) async {
+    return await shippingRemoteDataSource.getRouteDetails(params);
+  }
+
+
+  @override
   Future<Either<Failure, List<MyBookingEntity>>> getRunningBooking(PaginationParams params) async {
     return await shippingRemoteDataSource.getRunningBooking(params);
   }
@@ -53,6 +65,11 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   Future<Either<Failure, bool>> cancelMyBooking(String id) async {
     return await shippingRemoteDataSource.cancelMyBooking(id);
 
+  }
+
+  @override
+  Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params) async{
+    return await shippingRemoteDataSource.joinToRoute(params);
   }
 
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
@@ -10,6 +12,7 @@ import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_mode
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
@@ -20,9 +23,12 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, bool>> createRoute(CreatePricePerSeatParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getMyBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getAvailableBooking(PaginationParams params);
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params);
+  Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params);
   Future<Either<Failure, List<MyBookingEntity>>> getExpiredBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getRunningBooking(PaginationParams params);
   Future<Either<Failure, bool>> cancelMyBooking(String id);
+  Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params);
 }
 
 class CaptainShareRemoteDataSourceImplementation
@@ -100,7 +106,35 @@ class CaptainShareRemoteDataSourceImplementation
       return result.fold(
             (failure) => Left(failure),
             (response) {
-              final list = (response['data']['availableRoutes'] as List).map((e) => MyBookingModel.fromJson(e as Map<String, dynamic>)).toList();
+              log('response[''][''] ${response['data']['availableRoutes']}');
+              final list = (response['data']['availableRoutes'] as List).map((e) {
+                log('response[''][''] $e');
+                return MyBookingModel.fromJson(e as Map<String, dynamic>);
+              }).toList();
+          return Right(list);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params) async {
+    try {
+      final result = await _apiConsumer.get(
+        EndPoints.driverAvailableBooking,
+        queryParameters: params.toJson(),
+      );
+
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+              log('response[''][''] ${response['data']['availableRoutes']}');
+              final list = (response['data']['availableRoutes'] as List).map((e) {
+                log('response[''][''] $e');
+                return MyBookingModel.fromJson(e as Map<String, dynamic>);
+              }).toList();
           return Right(list);
         },
       );
@@ -161,6 +195,40 @@ class CaptainShareRemoteDataSourceImplementation
             (failure) => Left(failure),
             (response) {
           return Right(response['status']??false);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params) async {
+    try {
+      final result = await _apiConsumer.post(
+        EndPoints.joinToRoute(params.routeId),
+        data: params.toJson(),
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(MyBookingModel.fromJson(response['data']));
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+  @override
+  Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params) async {
+    try {
+      final result = await _apiConsumer.get(
+        EndPoints.routeDetails(params),
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(MyBookingModel.fromJson(response['data']));
         },
       );
     } catch (e) {

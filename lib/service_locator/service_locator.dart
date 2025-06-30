@@ -64,6 +64,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:zego_express_engine/zego_express_engine.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
@@ -103,28 +104,9 @@ class DI {
     _callFeatureInjector();
     // //preloading
     serviceLocator.registerLazySingleton(() => OnBoardingCubit());
-    serviceLocator.registerLazySingleton(() => PreloadBloc());
-    serviceLocator.registerLazySingleton<ReelsCubit>(
-      () => ReelsCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        //  serviceLocator(),
-      ),
-    );
 
     await Firebase.initializeApp(
-      name: "49-App",
+    name: "49-App",
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
@@ -185,6 +167,9 @@ class DI {
             )
         ]),
     );
+
+    
+
     //for gifts
     serviceLocator.registerLazySingleton(() => GiftsCubit(serviceLocator()));
 

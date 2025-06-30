@@ -41,6 +41,20 @@ abstract class Assets {
   static String call = 'assets/icons/call.svg';
   static String createStory = 'assets/icons/create_story.svg';
   static String createReel = 'assets/icons/create_reels.svg';
+
+  static String saveSongIcon = 'assets/images/saveSongIcon.svg';
+  static String discardIcon = 'assets/images/dicardIcon.svg';
+  static String saveDraftIcon = 'assets/images/saveDraftIcon.svg';
+  static String liveReel = 'assets/images/liveReel.svg';
+  static String searchCountBottom = 'assets/images/searchCountBottom.svg';
+  static String hashtagsIcon = 'assets/images/hashtagsIcon.svg';
+  static String userEx = 'assets/images/userEx.png';
+  static String songEx = 'assets/images/songEx.png';
+  static String photoEx = 'assets/images/photoEx.png';
+  static String placeIcon = 'assets/images/placeIcon.svg';
+  static String saveSong = 'assets/images/saveSong.svg';
+  static String shareSong = 'assets/images/shareSong.svg';
+
   static String groupIcon = 'assets/icons/group.svg';
   static String likeReact = 'assets/icons/like.png';
   static String home = 'assets/icons/home.svg';

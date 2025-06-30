@@ -37,6 +37,14 @@ class Reel {
   final String videoMedia;
   final String audioMedia;
   final String name;
+  final String caption;
+  final String location;
+  final String locationId;
+  final String locationSignedUrl;
+  final String locationName;
+  final String hashtags;
+  final String hashtagsId;
+  final String shopNowUrl;
   int likeCount;
   int commentCount;
   int shareCount;
@@ -67,6 +75,15 @@ class Reel {
     required this.repost,
     required this.thumbnailSignedUrl,
     required this.createdAt,
+    this.caption = '',
+    this.location = '',
+    this.locationId = '',
+    this.locationSignedUrl = '',
+    this.locationName = '',
+    this.hashtags = '',
+    this.hashtagsId = '',
+    this.shopNowUrl = '',
+
   });
 
   factory Reel.fromJson(Map<String, dynamic> json) {
@@ -78,6 +95,14 @@ class Reel {
       videoMedia: json['videoMedia'] ?? '',
       audioMedia: json['audioMedia'] ?? '',
       name: json['name'] ?? '',
+      caption: json['caption'] ?? '',
+      location: json['location'] ?? '',
+      locationId: json['locationId'] ?? '',
+      locationSignedUrl: json['locationSignedUrl'] ?? '',
+      locationName: json['locationName'] ?? '',
+      hashtags: json['hashtags'] ?? '',
+      hashtagsId: json['hashtagsId'] ?? '',
+      shopNowUrl: json['shopNowUrl'] ?? '',
       likeCount: json['likeCount'] ?? 0,
       commentCount: json['commentCount'] ?? 0,
       shareCount: json['shareCount'] ?? 0,

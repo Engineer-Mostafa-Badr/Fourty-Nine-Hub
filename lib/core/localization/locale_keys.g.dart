@@ -460,6 +460,7 @@ abstract class  LocaleKeys {
   static const noReplied = 'noReplied';
   static const sendMessage = 'sendMessage';
   static const thisContentIsNotAvailableNow = 'thisContentIsNotAvailableNow';
+  static const userNotAvailable = 'userNotAvailable';
   static const withUsers = 'withUsers';
   static const noMedia = 'noMedia';
   static const discoverPeople = 'discoverPeople';

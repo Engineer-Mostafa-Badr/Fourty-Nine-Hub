@@ -150,13 +150,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     }
                     Future.delayed(const Duration(seconds: 1)).then((_) {
                       // ignore: use_build_context_synchronously
-                      context
-                          .read<NotificationSocketIoCubit>()
-                          .notificationListener(languageCode: context.isArabic ? 'ar' :'en');
-                      context
-                          .read<NotificationSocketIoCubit>()
-                          .clearAllNotificationsAndRefeatchAfterLogin(
-                              languageCode:  context.isArabic ? 'ar' :'en');
+                     
                     });
                   })),
           SizedBox(

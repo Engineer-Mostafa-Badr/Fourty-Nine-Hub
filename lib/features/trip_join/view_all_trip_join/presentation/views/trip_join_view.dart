@@ -164,7 +164,7 @@ class _TripJoinViewState extends State<TripJoinView>
                 ),
               ]),
             ),
-            Positioned.directional(
+            if(selectedIndex!=0)Positioned.directional(
               bottom: 40.h,
               start: 10,
               textDirection:
@@ -197,7 +197,7 @@ class _TripJoinViewState extends State<TripJoinView>
                 ),
               ),
             ),
-            getFloatingActionButtonContent(selectedIndex),
+            if(selectedIndex!=0)getFloatingActionButtonContent(selectedIndex),
           ],
         ),
       ),

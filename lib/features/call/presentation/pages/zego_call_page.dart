@@ -76,29 +76,45 @@ class _ZegoCallPageState extends State<ZegoCallPage>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-    
-    enableFloatingWhileMinimizedViaSystem();
-    // Set up early background configuration right at initialization
     ZegoExpressEngine.setEngineConfig(ZegoEngineConfig(
       advancedConfig: {
         "audio.capture.force_using_media_recorder": "true",
-        "audio.captureAndRender.androidLowLatencyEnabled": "true",
+        "audio.enable.aec": "true", // Echo cancellation
+        "audio.enable.agc": "true", // Auto gain control
+        "audio.enable.ans": "true", // Noise suppression
+        "audio.voice.communication.mode": "true",
         "background.mode.enabled": "true",
         "audio.process.continue.in.background": "true",
         "android.audio.focus.request": "true",
         "audio.audioRecord.keep.audiosession.active": "true",
+        "audio.audioRecord.low.latency": "true",
       },
     ));
 
-    context.read<CallCubit>().startZegoListenEvent();
-    context.read<CallCubit>().loginZegoRoom(
-        roomId: widget.callData.zegoRoomId,
-        userID: getUserId(),
-        userName: getUserId());
-    _enableKeepScreenOn();
-    _setupBackgroundKeepAlive(); // Add this line
+    if (!widget.callData.isCaller) {
+      context.read<SendCallCubit>().setCallConnected();
+    }
 
-    // enableFloatingWhileMinimizedViaSystem();
+    // CRITICAL: Use consistent user ID
+    final userId =
+        getUserId(); // This will now return receiverId for both users
+
+    print("=== ZEGO CALL INIT ===");
+    print("Is Caller: ${widget.callData.isCaller}");
+    print("User ID: $userId");
+    print("Room ID: ${widget.callData.zegoRoomId}");
+    print("Receiver Name: ${widget.callData.receiverName}");
+
+    // Start the call process
+    context.read<CallCubit>().loginZegoRoom(
+          roomId: widget.callData.zegoRoomId,
+          userID: userId,
+          userName: userId, // Use same value for consistency
+        );
+
+    _enableKeepScreenOn();
+    _setupBackgroundKeepAlive();
+    enableFloatingWhileMinimizedViaSystem();
   }
 
   enableFloatingWhileMinimizedViaSystem() async {
@@ -194,7 +210,7 @@ class _ZegoCallPageState extends State<ZegoCallPage>
               }
 
               // Re-publish stream frequently to keep connection active
-              final userId = widget.callData.receiverName ?? getUserId();
+              final userId = widget.callData.receiverName;
               final streamID = '${widget.callData.zegoRoomId}_${userId}_call';
               ZegoExpressEngine.instance.startPublishingStream(streamID);
 
@@ -257,9 +273,19 @@ class _ZegoCallPageState extends State<ZegoCallPage>
   }
 
   String getUserId() {
-    Random rand = Random();
-    return rand.nextInt(100000000).toString();
+    // Use a more consistent user ID generation
+    final callData = widget.callData;
+    if (callData.isCaller) {
+      return 'caller_${callData.receiverId}';
+    } else {
+      return 'receiver_${callData.receiverId}';
+    }
   }
+
+  // String getUserId() {
+  //   Random rand = Random();
+  //   return rand.nextInt(100000000).toString();
+  // }
 
   @override
   void dispose() {
@@ -290,7 +316,11 @@ class _ZegoCallPageState extends State<ZegoCallPage>
   // More aggressive approach to force disable PiP mode
   Future<void> _forceDisablePip() async {
     print('Force disabling PiP...');
-    await floating.cancelOnLeavePiP();
+    try {
+      await floating.cancelOnLeavePiP();
+    } catch (e) {
+      print('Failed to disable PiP: $e');
+    }
   }
 
   @override
@@ -331,6 +361,7 @@ class _ZegoCallPageState extends State<ZegoCallPage>
   }
 
   Widget _buildBody() {
+    // context.read<CallCubit>().debugAudioState();
     return Scaffold(
         backgroundColor: AppColors.PRIMARY_COLOR,
         extendBody: true,
@@ -359,6 +390,7 @@ class _ZegoCallPageState extends State<ZegoCallPage>
   }
 
   Widget _buildZegoVideoLayer(HasCall state) {
+    print("Building Zego Video Layer with state: $state");
     return Stack(
       children: [
         Image.asset(
@@ -367,32 +399,15 @@ class _ZegoCallPageState extends State<ZegoCallPage>
           height: double.infinity,
           width: double.infinity,
         ),
-        // Container(color: const Color(0xFF121212)),
+        // Container(color: const Color(0xFF121212)),        // Remote Video - Enhanced logic to handle both state flags and actual widget
+        _buildRemoteVideoWidget(state),
 
-        if (state.isRemoteVideoEnabled && state.remoteView is! SizedBox)
-          Positioned.fill(
-            child: state.remoteView,
-          )
-        else
-          // Show placeholder when no remote video
-          Positioned.fill(
-            child: Container(
-              color: const Color(0xFF121212),
-              child: const Center(
-                child: Icon(
-                  Icons.videocam_off,
-                  size: 48,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-
-        if (state.isVideoEnabled && state.localView is! SizedBox)
+        // Local Video (Small Window)
+        if (state.isVideoEnabled)
           Positioned(
             right: 16,
             top: 100,
-            child: Container(
+            child:            Container(
               width: 150,
               height: 200,
               decoration: BoxDecoration(
@@ -405,52 +420,64 @@ class _ZegoCallPageState extends State<ZegoCallPage>
               ),
             ),
           ),
-
-        // Remote Video
-        // state.isRemoteVideoEnabled
-        //     ? Stack(
-        //         children: [
-        //           state.remoteView,
-        //           if (!state.isRemoteVideoEnabled)
-        //             Container(
-        //               color: const Color(0xFF121212),
-        //               child: const Center(
-        //                 child: Icon(
-        //                   Icons.videocam_off,
-        //                   size: 48,
-        //                   color: Colors.white,
-        //                 ),
-        //               ),
-        //             ),
-        //         ],
-        //       )
-        //     : Container(color: const Color(0xFF121212)),
-        //========
-
-        // if (state.isRemoteVideoEnabled) state.remoteView,
-        // ?? Container(color: const Color(0xFF121212)),
-
-        // Local Video (Small Window)
-        // if (state.isVideoEnabled)
-        //   Positioned(
-        //     right: 16,
-        //     top: 100,
-        //     child: Container(
-        //       width: 150,
-        //       height: 200,
-        //       decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.circular(12),
-        //         border: Border.all(color: Colors.white, width: 2),
-        //       ),
-        //       child: ClipRRect(
-        //           borderRadius: BorderRadius.circular(10),
-        //           child: state.localView
-        //           // ?? Container(color: Colors.transparent),
-        //           ),
-        //     ),
-        //   ),
       ],
     );
+  }
+  Widget _buildRemoteVideoWidget(HasCall state) {
+    // Check if we have both the flag enabled AND a valid remote view widget
+    final bool hasValidRemoteVideo = state.isRemoteVideoEnabled && 
+        state.remoteView is! SizedBox;
+    
+    if (hasValidRemoteVideo) {
+      print("✅ Displaying remote video - enabled: ${state.isRemoteVideoEnabled}, has widget: ${state.remoteView.runtimeType}");
+      return Positioned.fill(child: state.remoteView);
+    } else {
+      // Determine the appropriate placeholder based on call state
+      String placeholderText;
+      IconData placeholderIcon;
+      
+      if (state.isCallConnected) {
+        // if (state.callData.callType == 'video') {
+          placeholderText = state.isRemoteVideoEnabled 
+              ? "Connecting video..."
+              : "Camera turned off";
+          placeholderIcon = state.isRemoteVideoEnabled 
+              ? Icons.hourglass_bottom
+              : Icons.videocam_off;
+        // } else {
+        //   placeholderText = "Audio call";
+        //   placeholderIcon = Icons.phone;
+        // }
+      } else {
+        placeholderText = "Connecting...";
+        placeholderIcon = Icons.hourglass_bottom;
+      }
+      
+      print("📱 Remote video placeholder - enabled: ${state.isRemoteVideoEnabled}, connected: ${state.isCallConnected}, widget: ${state.remoteView.runtimeType}");
+      
+      return Positioned.fill(
+        child: Container(
+          color: const Color(0xFF121212),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  placeholderIcon,
+                  size: 48,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  placeholderText,
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildUILayer(HasCall state) {
@@ -462,17 +489,16 @@ class _ZegoCallPageState extends State<ZegoCallPage>
             id: widget.callData.receiverId,
             firstName: widget.callData.receiverName,
             lastName: '',
-            profilePicture: widget.callData.receiverImage,
-          ),
+            profilePicture: widget.callData.receiverImage,          ),
         ),
 
         // Profile Picture (only show when video is off)
         if (!state.isVideoEnabled && !state.isRemoteVideoEnabled)
           CircleAvatar(
             radius: 100,
-            backgroundImage: NetworkImage(
-              state.callData.receiverImage ??
-                  'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+            backgroundImage: NetworkImage(              state.callData.receiverImage.isEmpty 
+                  ? 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                  : state.callData.receiverImage,
             ),
           ),
 

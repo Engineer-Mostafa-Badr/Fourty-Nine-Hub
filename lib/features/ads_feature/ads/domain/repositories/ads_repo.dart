@@ -21,4 +21,6 @@ abstract class AdsRepo {
   Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params);
   Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(
       GetMyAdByIdParams params);
+
+  Future<Either<Failure, bool>> viewAd({required String params});
 }

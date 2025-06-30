@@ -23,6 +23,7 @@ class UserEntity extends Equatable {
   final bool? isRestaurant;
   final bool? isLoading;
   final bool? isDocument;
+  final bool? isAccountVerified;
   final String? firebaseToken;
 
   // final String? birthday;
@@ -51,6 +52,7 @@ class UserEntity extends Equatable {
     this.isRestaurant = false,
     this.isLoading = false,
     this.isDocument = false,
+    this.isAccountVerified = false,
     this.bio,
     this.phone,
     this.city,
@@ -76,5 +78,6 @@ class UserEntity extends Equatable {
         wallet,
         firebaseToken,
         birthday,
+        isAccountVerified,
       ];
 }

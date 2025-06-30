@@ -15,18 +15,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../tinder/data/shared/shared.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
 import 'Icon_and_text_widget.dart';
 import 'components/social_widget.dart';
+import 'love_button.dart';
+import 'send_to_bottom_sheet.dart';
 
 class CommentWidget extends StatefulWidget {
-  // final CommentData commentData;
+  final CommentData commentData;
   final int index;
   final FocusNode focusNode;
   String? replyingTo;
   final TextEditingController commentController;
   CommentWidget(
       {super.key,
-      //  required this.commentData,
+      required this.commentData,
       required this.focusNode,
       required this.index,
       this.replyingTo,
@@ -50,10 +53,11 @@ class _CommentWidgetState extends State<CommentWidget> {
           GestureDetector(
             onLongPress: () {
               showModalBottomSheet(
+                backgroundColor:
+                    context.isDarkMode ? Colors.grey[900] : Colors.white,
                 context: context,
-                backgroundColor: Colors.white,
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                   side: BorderSide(
                     color: Colors.transparent,
                   ),
@@ -64,51 +68,12 @@ class _CommentWidgetState extends State<CommentWidget> {
               );
             },
             child: _buildCommentRow(
-              'Ahmed',
+              context.isArabic ? 'احمد' : 'Ahmed',
               DateTime.now(),
               false,
             ),
           ),
-          IconButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                  side: BorderSide(
-                    color: Colors.transparent,
-                  ), // حدود زي اللي في الصورة
-                ),
-                builder: (context) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        DeleteComment(Assets.deleteComIcon,
-                            context.isArabic ? 'حذف' : 'Delete'),
-                        DeleteComment(Assets.copyComIcon,
-                            context.isArabic ? 'نسخ' : 'Copy'),
-                        DeleteComment(
-                            Assets.replyIcon,
-                            context.isArabic
-                                ? 'الرد بالفيديو'
-                                : 'Reply with video'),
-                        DeleteComment(
-                            Assets.addFavIcon,
-                            context.isArabic
-                                ? 'أضف إلى المفضلة'
-                                : 'Add to favourites'),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-            icon: Icon(Icons.more_horiz),
-          ),
-          SizedBox(height: 0.h),
+          SizedBox(height: 10.h),
           _buildToggleRepliesButton(),
           if (_isRepliesVisible) ...[
             AnimatedSize(
@@ -116,19 +81,46 @@ class _CommentWidgetState extends State<CommentWidget> {
               curve: Curves.easeInOut,
               child: _isRepliesVisible
                   ? InkWell(
-                      onTap: () {
+                      onLongPress: () {
                         showModalBottomSheet(
+                          backgroundColor: context.isDarkMode
+                              ? Colors.grey[900]
+                              : Colors.white,
                           context: context,
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(16)),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            ),
                             side: BorderSide(
                               color: Colors.transparent,
-                            ), // حدود زي اللي في الصورة
+                            ),
+                          ),
+                          builder: (context) {
+                            return const CopyBottomSheet();
+                          },
+                        );
+                      },
+                      onTap: () {
+                        showModalBottomSheet(
+                          backgroundColor: context.isDarkMode
+                              ? Colors.grey[900]
+                              : Colors.white,
+                          isDismissible: false,
+                          enableDrag: false,
+                          isScrollControlled: true,
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
                           ),
                           builder: (BuildContext context) {
-                            return ReplyWidget();
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: const ReplyWidget(),
+                            );
                           },
                         );
                       },
@@ -144,58 +136,89 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Widget _buildCommentRow(String comment, DateTime createdAt, bool reply,
       {String? replyId}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ImageFromInternet(
-          width: 50,
-          height: 50,
-          isCircle: true,
-          image: "",
-          //  widget.commentData.user.profilePictureSignedUrl.isEmpty
-          //     ? UIConst.profilePlaceHolder
-          //     : widget.commentData.user.profilePictureSignedUrl,
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NoScaleText(
-                capitalizeAndSplit('${"ahmed "} ${'ahmed'}'),
-                style: TextStyle(
-                  color: context.isDarkMode ? Colors.white70 : Colors.grey,
-                  fontSize: 25.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              // SizedBox(height: 5.h),
-              NoScaleText(
-                comment,
-                style: TextStyle(
-                  color: context.isDarkMode ? Colors.white70 : Colors.black87,
-                  fontSize: 25.sp,
-                ),
-              ),
-              Row(
-                children: [
-                  NoScaleText(
-                    formatDateTime(createdAt),
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(width: 30.w),
-                  _buildReplyButton(),
-                  const Spacer(),
-                  _buildLikeButton(reply, replyId: replyId),
-                ],
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ImageFromInternet(
+            width: 40,
+            height: 40,
+            isCircle: true,
+            image:
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLlsHCzHU2GndYsMJQscyixYSlDVggHDzbXtXSuEmLAc309Z-6e1TUhHJFCLCw40Kicw0",
+            //  widget.commentData.user.profilePictureSignedUrl.isEmpty
+            //     ? UIConst.profilePlaceHolder
+            //     : widget.commentData.user.profilePictureSignedUrl,
           ),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                NoScaleText(
+                  capitalizeAndSplit(
+                      '${context.isArabic ? 'احمد' : "Ahmed "} ${context.isArabic ? 'محمد' : 'Mohamed'}'),
+                  style: TextStyle(
+                    color: context.isDarkMode ? Colors.white : Colors.grey,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // SizedBox(height: 5.h),
+                NoScaleText(
+                  context.isArabic ? 'كيف حالك' : 'how are you?',
+                  // comment,
+                  style: TextStyle(
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    NoScaleText(
+                      '1d',
+                      //        formatDateTime(createdAt),
+                      style: TextStyle(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : Colors.grey[500],
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(width: 30.w),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          backgroundColor: context.isDarkMode
+                              ? Colors.grey[900]
+                              : Colors.white,
+                          isScrollControlled: true,
+                          isDismissible: false,
+                          enableDrag: false,
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                          builder: (BuildContext context) {
+                            return const ReplyWidget();
+                          },
+                        );
+                      },
+                      child: _buildReplyButton(),
+                    ),
+                    const Spacer(),
+                    LoveButtonComment()
+                    //      LoveDislikeButtons()
+                    //       _buildLikeButton(reply, replyId: replyId),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -205,10 +228,11 @@ class _CommentWidgetState extends State<CommentWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ImageFromInternet(
-          width: 50,
-          height: 50,
+          width: 30,
+          height: 30,
           isCircle: true,
-          image: '',
+          image:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLlsHCzHU2GndYsMJQscyixYSlDVggHDzbXtXSuEmLAc309Z-6e1TUhHJFCLCw40Kicw0",
           // ? UIConst.profilePlaceHolder
           // : widget.commentData.user.profilePictureSignedUrl,
         ),
@@ -218,10 +242,12 @@ class _CommentWidgetState extends State<CommentWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               NoScaleText(
-                capitalizeAndSplit('${'ahmed'} ${'mohamed'}'),
+                capitalizeAndSplit(context.isArabic
+                    ? 'احمد'
+                    : '${'ahmed'} ${context.isArabic ? 'محمد' : 'mohamed'}'),
                 style: TextStyle(
-                  color: context.isDarkMode ? Colors.white70 : Colors.grey,
-                  fontSize: 25.sp,
+                  color: context.isDarkMode ? Colors.white : Colors.grey,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -229,24 +255,54 @@ class _CommentWidgetState extends State<CommentWidget> {
               NoScaleText(
                 comment,
                 style: TextStyle(
-                  color: context.isDarkMode ? Colors.white70 : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                   fontSize: 25.sp,
                 ),
               ),
+              SizedBox(height: 8),
               Row(
                 children: [
-                  NoScaleText(
-                    formatDateTime(createdAt),
+                  Text(
+                    context.isArabic ? '5 h' : '5h',
                     style: TextStyle(
-                      color: Colors.grey[500],
-                      fontWeight: FontWeight.w400,
+                      color:
+                          context.isDarkMode ? Colors.white : Colors.grey[500],
+                      fontWeight: FontWeight.w300,
                     ),
                   ),
-                  SizedBox(width: 30.w),
-                  _buildReplyButton(),
+                  // NoScaleText(
+                  //   formatDateTime(createdAt),
+                  //   style: TextStyle(
+                  //     color:
+                  //         context.isDarkMode ? Colors.white : Colors.grey[500],
+                  //     fontWeight: FontWeight.w400,
+                  //   ),
+                  // ),
+                  SizedBox(width: 14),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        backgroundColor: context.isDarkMode
+                            ? Colors.grey[900]
+                            : Colors.white,
+                        isDismissible: false,
+                        enableDrag: false,
+                        isScrollControlled: true,
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        builder: (BuildContext context) {
+                          return const ReplyWidget();
+                        },
+                      );
+                    },
+                    child: _buildReplyButton(),
+                  ),
                   const Spacer(),
-                  _buildReplyLikeButton(reply,
-                      replyId: replyId, isLike: isLike, likeCount: replyCount),
+                  LoveButtonComment()
+                  // _buildReplyLikeButton(reply,
+                  //     replyId: replyId, isLike: isLike, likeCount: replyCount),
                 ],
               ),
             ],
@@ -279,9 +335,30 @@ class _CommentWidgetState extends State<CommentWidget> {
       onTap: () {
         _toggleReplyMode('${'Ahmed'} ${'yousef'}');
       },
-      child: NoScaleText(
-        LocaleKeys.reply.localize,
-        style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+      child: GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            backgroundColor:
+                context.isDarkMode ? Colors.grey[900] : Colors.white,
+            isScrollControlled: true,
+            isDismissible: false,
+            enableDrag: false,
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.zero, // هنا بتخلي الزوايا صفر يعني مربع
+            ),
+            builder: (BuildContext context) {
+              return const ReplyWidget();
+            },
+          );
+        },
+        child: NoScaleText(
+          context.isArabic ? 'رد' : 'Replay',
+          style: TextStyle(
+              color: context.isDarkMode ? Colors.white : Colors.grey,
+              fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
@@ -315,12 +392,15 @@ class _CommentWidgetState extends State<CommentWidget> {
         NoScaleText(
           '24',
           style: TextStyle(
-            color: context.isDarkMode ? Colors.white70 : Colors.black87,
+            color: context.isDarkMode ? Colors.white : Colors.black87,
             fontSize: 25.sp,
           ),
         ),
         SizedBox(width: 48.w),
-        SvgPicture.asset(Assets.disLikeIcon),
+        SvgPicture.asset(
+          Assets.disLikeIcon,
+          color: context.isDarkMode ? Colors.white : Colors.black,
+        ),
         SizedBox(width: 10.w),
       ],
     );
@@ -369,12 +449,16 @@ class _CommentWidgetState extends State<CommentWidget> {
     final remainingReplies = -_displayedRepliesCount;
     final buttonText = _isRepliesVisible
         ? (remainingReplies > 0
-            ? "View ${remainingReplies > 2 ? 'More' : remainingReplies} Replies"
-            : "Hide Replies")
+            ? context.isArabic
+                ? "عرض ${remainingReplies > 2 ? 'المزيد' : remainingReplies} الردود"
+                : "  View ${remainingReplies > 2 ? 'More' : remainingReplies} Replies"
+            : context.isArabic
+                ? "اخفاء الردود"
+                : "Hide Replies")
         : "View ${3} ${1 == 1 ? 'Reply' : 'Replies'}";
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 40.0.w),
+      padding: EdgeInsets.symmetric(horizontal: 140.0.w),
       child: InkWell(
         onTap: () {
           setState(() {
@@ -390,21 +474,27 @@ class _CommentWidgetState extends State<CommentWidget> {
         },
         child: Row(
           children: [
+            Container(
+              width: 25,
+              color: context.isDarkMode ? Colors.white : Colors.grey,
+              height: 2.h,
+            ),
+            SizedBox(width: 10.w),
             Text(
               buttonText,
               style: TextStyle(
-                  color: Colors.grey,
+                  color: context.isDarkMode ? Colors.white : Colors.grey,
                   fontSize: 25.sp,
                   fontWeight: FontWeight.w600),
             ),
             _isRepliesVisible
-                ? const Icon(
+                ? Icon(
                     Icons.keyboard_arrow_up,
-                    color: Colors.grey,
+                    color: context.isDarkMode ? Colors.white : Colors.grey,
                   )
-                : const Icon(
+                : Icon(
                     Icons.keyboard_arrow_down,
-                    color: Colors.grey,
+                    color: context.isDarkMode ? Colors.white : Colors.grey,
                   )
           ],
         ),
@@ -422,7 +512,7 @@ class _CommentWidgetState extends State<CommentWidget> {
           //     controller: context.read<ReelsCubit>().replyScrollController,
           children: [
             _buildReplyRow(
-              'Ahmed',
+              context.isArabic ? 'كيف حالك' : 'how are you ?',
               DateTime.now(),
               replyCount: 5,
               isLike: true,
@@ -436,6 +526,42 @@ class _CommentWidgetState extends State<CommentWidget> {
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
+    );
+  }
+}
+
+class CopyBottomSheet extends StatelessWidget {
+  const CopyBottomSheet({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DeleteComment(
+              icon: Assets.deleteComIcon,
+              title: context.isArabic ? 'حذف' : 'Delete'),
+          SizedBox(height: 24),
+          DeleteComment(
+              icon: Assets.copyComIcon,
+              title: context.isArabic ? 'نسخ' : 'Copy'),
+          SizedBox(height: 24),
+          DeleteComment(
+              icon: Assets.replyIcon,
+              title: context.isArabic ? 'الرد بالفيديو' : 'Reply with video'),
+          SizedBox(height: 24),
+          DeleteComment(
+              icon: Assets.addFavIcon,
+              title:
+                  context.isArabic ? 'أضف إلى المفضلة' : 'Add to favourites'),
+          SizedBox(height: 24.h),
+        ],
+      ),
     );
   }
 }
@@ -457,8 +583,9 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 20.h),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
               context.isArabic ? 'أرسل إلى' : 'Send to',
               style: TextStyle(
@@ -467,26 +594,29 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
               ),
             ),
           ),
-          SizedBox(height: 5.h),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment:
+                    CrossAxisAlignment.center,
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      const SizedBox(height: 7),
                       SizedBox(
                         width: 40,
                         height: 40,
                         child: Stack(
                           children: [
-                            const CircleAvatar(
-                              radius: 20,
+                            CircleAvatar(
+                              radius:
+                                  25,
                               backgroundImage: NetworkImage(
-                                  "https://i.pravatar.cc/150?img=3"),
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLlsHCzHU2GndYsMJQscyixYSlDVggHDzbXtXSuEmLAc309Z-6e1TUhHJFCLCw40Kicw0'),
                             ),
                             Positioned(
                               bottom: 0,
@@ -507,31 +637,54 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        "AHMED",
-                        style: TextStyle(
+                      const SizedBox(height: 5),
+                      Text(
+                        textAlign: TextAlign.center,
+                        context.isArabic ? 'احمد\n محمد' : "AHMED\nMOHAMED",
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(width: 30.w),
+                  const SizedBox(width: 15),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const CircleAvatar(
-                        radius: 22,
-                        backgroundColor: Color(0xffEDEDED),
-                        child: Icon(
-                          Icons.search,
-                          color: AppColors.black,
-                        ),
-                      ),
+                      CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Color(0xffEDEDED),
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                backgroundColor: context.isDarkMode
+                                    ? Colors.grey[900]
+                                    : Colors.white,
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(16)),
+                                  side: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                builder: (context) {
+                                  return const SendToBottomSheet();
+                                },
+                              );
+                            },
+                            child: SvgPicture.asset(
+                              Assets.searchCountBottom,
+                            ),
+                          )),
+                      const SizedBox(
+                          height: 5), // غيرناها من 3 لـ 5 عشان تكون زي الأولى
                       Text(
-                        context.isArabic ? 'المزيد' : 'More',
-                        style: TextStyle(
+                        context.isArabic ? "المزيد" : "More",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
@@ -544,7 +697,7 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
           ),
           SizedBox(height: 42.h),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 21),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -560,8 +713,11 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                         children: [
                           SvgPicture.asset(
                             Assets.shareWithIcon,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.black,
                           ),
-                          SizedBox(width: 10.w),
+                          SizedBox(width: 8),
                           Text(
                             context.isArabic ? 'شارك مع' : 'Share with',
                             style: TextStyle(
@@ -581,6 +737,7 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                           Assets.whatsIcon,
                         ),
                       ),
+                      const SizedBox(width: 12),
                       CircleAvatar(
                         backgroundColor: Color(0xffF5F5F5),
                         child: Image.asset(
@@ -599,6 +756,8 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                       },
                       child: SvgPicture.asset(
                         Assets.arrowIcon,
+                        color:
+                            context.isDarkMode ? Colors.white : AppColors.black,
                       ),
                     ),
                   ],
@@ -606,81 +765,121 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                 SizedBox(height: 12),
                 if (showExtraContainer) ...[
                   const SizedBox(height: 20),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
+                  Column(
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SocialWidget(
+                              radius: 22,
+                              iconName:
+                                  context.isArabic ? 'واتساب' : 'Whatsapp',
                               icon: Assets.whatsIcon,
                               backGroundColor: 0xff25D366,
                             ),
+                            SizedBox(width: 23.w),
                             SocialWidget(
-                              icon: Assets.facebookMessenger,
-                              backGroundColor: 0xffFFFC00,
+                              width: 24,
+                              radius: 22,
+                              iconName:
+                                  context.isArabic ? 'مسانجر' : 'Messenger',
+                              icon: Assets.messengerIcon,
+                              backGroundColor: 0xffF5F5F5,
                             ),
+                            SizedBox(width: 23.w),
                             SocialWidget(
+                              radius: 22,
+                              iconName:
+                                  context.isArabic ? 'فيسبوك' : 'Facebook',
                               icon: Assets.faceIcon,
                               backGroundColor: 0,
                             ),
+                            SizedBox(width: 23.w),
                             SocialWidget(
-                              icon: Assets.faceIcon,
+                              radius: 22,
+                              iconName:
+                                  context.isArabic ? 'انستقرام' : 'Instagram',
+                              icon: Assets.instagram,
                               backGroundColor: 0,
                             ),
+                            SizedBox(width: 23.w),
                             SocialWidget(
+                              radius: 23,
+                              iconName:
+                                  context.isArabic ? 'نسخ الرابط' : 'Copy Link',
                               icon: Assets.coppyLinkIcon,
                               backGroundColor: 0xff2E75FD,
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                      const SizedBox(height: 20),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
                           children: [
                             SocialWidget(
+                              radius: 20,
+                              iconName:
+                                  context.isArabic ? 'تيليجرام' : 'Telegram',
                               icon: Assets.telegramIcon,
                               backGroundColor: 0xff24A1DE,
                             ),
+                            SizedBox(width: 40.w),
                             SocialWidget(
+                              radius: 23,
+                              iconName:
+                                  context.isArabic ? 'سنابشات' : 'Snabchat',
                               icon: Assets.snapIcon,
                               backGroundColor: 0xffFFFC00,
                             ),
+                            SizedBox(width: 40.w),
                             SocialWidget(
+                              radius: 22,
+                              iconName:
+                                  context.isArabic ? 'رسالة قصيرة' : 'Sms',
                               icon: Assets.smsIcon,
                               backGroundColor: 0xff34C759,
                             ),
+                            SizedBox(width: 40.w),
                             SocialWidget(
+                              radius: 22,
+                              iconName: context.isArabic
+                                  ? 'البريد الإلكتروني'
+                                  : 'Email',
                               icon: Assets.emailIcon,
                               backGroundColor: 0xff04B7C4,
                             ),
+                            SizedBox(width: 60.w),
                             SocialWidget(
+                              radius: 22,
+                              iconName: context.isArabic ? 'المزيد' : 'More',
                               color: AppColors.whiteColor,
                               icon: Assets.moreIcon,
                               backGroundColor: 0xff078AC9,
                             ),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ],
             ),
           ),
-          const SizedBox(height: 31),
+          const SizedBox(height: 20),
           IconAndTextWidget(
+            onTap: () {
+              _showReportBottomSheet(context);
+            },
             name: context.isArabic ? 'الإبلاغ' : 'Report',
             icon: Assets.reportComIcon,
           ),
           const SizedBox(height: 20),
           IconAndTextWidget(
+            onTap: () {},
             name: context.isArabic ? 'نسخ' : 'Copy',
             icon: Assets.copyComIcon,
           ),
@@ -694,16 +893,220 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
       ),
     );
   }
+
+  Future<void> _showReportBottomSheet(BuildContext context) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SizedBox(
+          height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+          child: ReportView(
+            id: '5',
+            categoryId: '66684135dbb427ee42aa0141',
+          ),
+        );
+      },
+    );
+  }
 }
 
 bool isKeyboardVisible(BuildContext context) {
   return MediaQuery.of(context).viewInsets.bottom != 0;
 }
 
-Widget DeleteComment(String Icon, String title) {
-  return ListTile(
-    leading: SvgPicture.asset(Icon),
-    title: Text(title),
-    onTap: () {},
-  );
+// Widget DeleteComment(String Icon, String title) {
+//   return ListTile(
+//     leading: SvgPicture.asset(Icon),
+//     title: Text(
+//       title,
+//       style: TextStyle(
+//         fontWeight: FontWeight.w500,
+//       ),
+//     ),
+//     onTap: () {},
+//   );
+// }
+
+class DeleteComment extends StatelessWidget {
+  final String icon;
+  final String title;
+  const DeleteComment({super.key, required this.icon, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            icon,
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
+          SizedBox(width: 13.w),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 32.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LoveButtonComment extends StatefulWidget {
+  final MainAxisAlignment mainAxisAlignment;
+
+  const LoveButtonComment({
+    super.key,
+    this.mainAxisAlignment = MainAxisAlignment.center,
+  });
+
+  @override
+  State<LoveButtonComment> createState() => _LoveButtonCommentState();
+}
+
+class _LoveButtonCommentState extends State<LoveButtonComment>
+    with TickerProviderStateMixin {
+  bool isLoved = false;
+  bool isDisliked = false;
+
+  late AnimationController _loveController;
+  late AnimationController _dislikeController;
+
+  late Animation<double> _loveScaleAnimation;
+  late Animation<double> _dislikeScaleAnimation;
+
+  late Animation<Color?> _loveColorAnimation;
+  late Animation<Color?> _dislikeColorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loveController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    _dislikeController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    _loveScaleAnimation = _buildScaleAnimation(_loveController);
+    _dislikeScaleAnimation = _buildScaleAnimation(_dislikeController);
+
+    _loveColorAnimation = ColorTween(
+      begin: Colors.grey,
+      end: Colors.red,
+    ).animate(CurvedAnimation(
+      parent: _loveController,
+      curve: Curves.easeIn,
+    ));
+
+    _dislikeColorAnimation = ColorTween(
+      begin: Colors.grey,
+      end: Colors.black,
+    ).animate(CurvedAnimation(
+      parent: _dislikeController,
+      curve: Curves.easeIn,
+    ));
+  }
+
+  Animation<double> _buildScaleAnimation(AnimationController controller) {
+    return TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 1.0, end: 1.6)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween:
+            Tween(begin: 1.6, end: 1.0).chain(CurveTween(curve: Curves.easeIn)),
+        weight: 50,
+      ),
+    ]).animate(controller);
+  }
+
+  @override
+  void dispose() {
+    _loveController.dispose();
+    _dislikeController.dispose();
+    super.dispose();
+  }
+
+  void toggleLove() {
+    setState(() {
+      isLoved = !isLoved;
+      if (isLoved) isDisliked = false;
+    });
+    _loveController.forward(from: 0);
+  }
+
+  void toggleDislike() {
+    setState(() {
+      isDisliked = !isDisliked;
+      if (isDisliked) isLoved = false;
+    });
+    _dislikeController.forward(from: 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final iconSize = MediaQuery.of(context).size.width * 0.06;
+
+    return Row(
+      mainAxisAlignment: widget.mainAxisAlignment,
+      children: [
+        GestureDetector(
+          onTap: toggleLove,
+          child: AnimatedBuilder(
+            animation: _loveController,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _loveScaleAnimation.value,
+                child: Icon(
+                  Icons.favorite,
+                  color: isLoved ? _loveColorAnimation.value : Colors.grey,
+                  size: iconSize,
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(width: 3),
+        Text(
+          '24',
+          style: TextStyle(
+            fontSize: 12,
+            color: context.isDarkMode ? Colors.white : Colors.grey,
+          ),
+        ),
+        const SizedBox(width: 30),
+        GestureDetector(
+          onTap: toggleDislike,
+          child: AnimatedBuilder(
+            animation: _dislikeController,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _dislikeScaleAnimation.value,
+                child: Icon(
+                  Icons.thumb_down,
+                  color:
+                      isDisliked ? _dislikeColorAnimation.value : Colors.grey,
+                  size: iconSize,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 }

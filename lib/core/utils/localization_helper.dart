@@ -16,6 +16,11 @@ class LocalizationHelper {
 
   static init(BuildContext context) => _homeContext = context;
 
+  
+  String getCurrentLanguageCode() {
+    return _context.locale.languageCode;
+  }
+
   Future<void> changeAppLocale(Locale locale) async {
     final languageCode = locale.languageCode;
     _saveLocalizationCode(languageCode);

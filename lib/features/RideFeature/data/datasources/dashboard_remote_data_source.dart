@@ -117,9 +117,11 @@ abstract class TripRemoteDataSource {
   void listenToEndTrip(Function(String tripId) params);
   void listenToClientComing(Function(String tripId) params);
   void listenToCancelRoute(Function(ListenToCancelRouteParams params) params);
+  void listenToUpdateRoute(Function(MyBookingEntity route) params);
   void listenToJoinAvailableRoutes(Function(bool isJoined) params);
   Future<Either<Failure, bool>> listenToLeaveAvailableRoutes(Function(String routeId) params);
   void listenToNewRoute(Function(MyBookingEntity newBooking) params);
+  void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
@@ -452,6 +454,22 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
 
+  @override
+  void listenToUpdateRoute(Function(MyBookingEntity route) params) {
+    try {
+      CliLogger.info("Listen to Update Route ");
+      log("Listen to Update Route ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToUpdateRoute, (data) {
+        CliLogger.info("Update Route data :  $data");
+        log("Update Route data :  $data");
+        params(MyBookingModel.fromJson(data['updatedRoute']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Update Route error $e");
+    }
+  }
+
+
 
   @override
   Future<Either<Failure, bool>> listenToJoinAvailableRoutes(
@@ -461,7 +479,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       log("Join Available Route ");
       SharedWebSocket.socket!.emit(SocketIOEvents.joinAvailableRoutes);
       CliLogger.info(
-          "SocketIOEvents.leaveAvailableRoutes${SocketIOEvents.joinAvailableRoutes}");
+          "SocketIOEvents.leaveAvailableRoutes ${SocketIOEvents.joinAvailableRoutes}");
 
       return const Right(true);
     } catch (e) {
@@ -496,6 +514,21 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       CliLogger.info("Listen to New Route ");
       log("Listen to New Route ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRoute, (data) {
+        CliLogger.info("New Route data :  $data");
+        log("New Route data :  $data");
+        params(MyBookingModel.fromJson(data['newAllowedRoute']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params) {
+    try {
+      CliLogger.info("Listen to New Route ");
+      log("Listen to New Route ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRouteDriver, (data) {
         CliLogger.info("New Route data :  $data");
         log("New Route data :  $data");
         params(MyBookingModel.fromJson(data['newAllowedRoute']));

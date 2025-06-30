@@ -52,7 +52,7 @@ class AdModel extends AdEntity {
     }
     // } catch (e) {}
     return AdModel(
-      id: json['_id'] ?? '',
+      id: json['adId']??json['_id'] ?? '',
       title: json['title'] ?? '',
       description: json['desc'] ?? json['description'],
       images: images,

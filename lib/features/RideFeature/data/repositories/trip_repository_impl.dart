@@ -142,6 +142,11 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToUpdateRoute(Function(MyBookingEntity route) params) {
+    remoteDataSource.listenToUpdateRoute(params);
+  }
+
+  @override
   void listenToJoinAvailableRoutes(Function(bool isJoined) params) {
     remoteDataSource.listenToJoinAvailableRoutes(params);
   }
@@ -154,6 +159,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   void listenToNewRoute(Function(MyBookingEntity newBooking) params) {
     remoteDataSource.listenToNewRoute(params);
+  }
+
+  @override
+  void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params) {
+    remoteDataSource.listenToNewRouteDriver(params);
   }
 
   @override
