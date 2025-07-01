@@ -150,11 +150,26 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       descController.clear();
       offerPriceController.clear();
       emit(state.copyWith(subCategoryId: id));
+      print("montaserrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
     }else{
+      print("montaserrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr2");
+      print('state.subCategoryId ${state.subCategoryId}');
+      print("id $id");
+      selectedTime = '';
+      selectedDate = '';
+      offerPrice = '';
+      phoneController.clear();
+      passengerController.clear();
+      descController.clear();
+      offerPriceController.clear();
+      emit(state.copyWith(subCategoryId: id));
       return;
     }
   }
-  
+  void clearError() {
+    emit(state.copyWith(status: ClientTripsStates.initState, failure: null));
+  }
+
   Future<void> getClientAllRating(
       {required String params,}) async {
     emit(state.copyWith(status: ClientTripsStates.loading));
