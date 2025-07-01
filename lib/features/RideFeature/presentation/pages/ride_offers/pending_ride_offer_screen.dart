@@ -126,8 +126,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                             child: Label(
                                 text: LocaleKeys.youDontHavePendingOffer.localize,
 
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),

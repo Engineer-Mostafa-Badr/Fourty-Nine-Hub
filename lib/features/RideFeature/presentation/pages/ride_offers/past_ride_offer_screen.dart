@@ -126,8 +126,7 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
                         ? Center(
                             child: Label(
                                 text: LocaleKeys.youDontHavePastOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
