@@ -603,6 +603,44 @@ class _LoadingDashboardDetailsScreenState
     );
   }
 }
+String formatTimeOnlyLoading(String? dateTimeString, BuildContext context) {
+  if (dateTimeString == null) return '--:--';
+
+  try {
+    // Parse and convert to local time
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
+
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    // Format to time only
+    String formattedTime = DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+
+    // Optional: Arabic numeral conversion
+    if (isArabic) {
+      formattedTime = _convertToArabicNumerals(formattedTime);
+    }
+
+    return formattedTime;
+  } catch (e, stackTrace) {
+    // For debugging: log the exception and string
+    debugPrint('Failed to parse: $dateTimeString');
+    debugPrint('Error: $e\n$stackTrace');
+    return '--:--';
+  }
+}
+
+String formatPickupTimeLoading(String? dateTimeString, BuildContext context) {
+  if (dateTimeString == null) return 'No time';
+
+  try {
+    final dateTime = DateTime.parse(dateTimeString).toLocal(); // 👈 convert to local
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    return DateFormat('yyyy-MM-dd hh:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+  } catch (e) {
+    return 'Invalid time';
+  }
+}
 
 String formatTimeOnly(String? dateTimeString, BuildContext context) {
   if (dateTimeString == null) return '--:--';
