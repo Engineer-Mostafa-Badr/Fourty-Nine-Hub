@@ -126,8 +126,9 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                         ?  Center(
                             child: Label(
                                 text: LocaleKeys.youDontHaveAvailableOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                                // style:
+                                //     TextStyle(color: Colors.red, fontSize: 18)
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),

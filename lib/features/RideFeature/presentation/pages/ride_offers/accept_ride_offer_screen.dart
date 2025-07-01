@@ -115,7 +115,9 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                       )
                     : context.read<ClientTripsCubit>().clientAcceptedTripsData == null || context.read<ClientTripsCubit>().clientAcceptedTripsData.isEmpty
                         ? Center(
-                            child: Label(text: LocaleKeys.youDontHaveAcceptedOffer.localize, style: TextStyle(color: Colors.red, fontSize: 18)),
+                            child: Label(text: LocaleKeys.youDontHaveAcceptedOffer.localize
+                                // , style: TextStyle(color: Colors.red, fontSize: 18)
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
