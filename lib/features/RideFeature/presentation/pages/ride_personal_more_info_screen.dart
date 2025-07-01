@@ -568,7 +568,7 @@ class _RidePersonalMoreInfoScreenState
                           }
 
                           if (widget.type == 'shipping') {
-                            cubit.makeNonTrackingTripParam.date = initialTime;
+                            cubit.makeLoadingTripParam.date = initialTime;
                           } else {
                             cubit.makeNonTrackingTripParam.date = initialTime;
                           }
@@ -864,83 +864,81 @@ class _RidePersonalMoreInfoScreenState
                                   context.push(Routes.LOGIN);
                                   return;
                                 }
-                                if (formKey.currentState!.validate()) {
-                                  final price =
-                                      double.tryParse(cubit.offerPrice) ?? 0.0;
-                                  final passengerText = convertDigits(cubit.passengerController.text, toArabic: false);
-                                  final passengerCount = int.tryParse(passengerText) ?? 0;
 
+                                final price = double.tryParse(cubit.offerPrice) ?? 0.0;
+                                final passengerText = cubit.passengerController.text;
+                                final passengerCount =
+                                    int.tryParse(passengerText) ?? 0;
 
-                                  if (passengerCount > 1000) {
+                                if (passengerCount > 1000) {
+                                  showErrorMessage(
+                                    context,
+                                    context.isArabic
+                                        ? 'لا يمكن أن يكون عدد الركاب أكبر من 1000'
+                                        : 'Passenger count cannot be greater than 1000',
+                                  );
+                                  return;
+                                }
+
+                                if (widget.isTruk) {
+                                  cubit.makeLoadingTripParam
+                                    ..isPremium = false
+                                    ..price = price
+                                  ..phone=cubit.phoneController.text;
+                                  // ..date = cubit.selectedDate;
+
+                                  if (!_validateLoadingTripParams(
+                                      cubit.makeLoadingTripParam)) {
                                     showErrorMessage(
                                       context,
-                                      context.isArabic
-                                          ? 'لا يمكن أن يكون عدد الركاب أكبر من 1000'
-                                          : 'Passenger count cannot be greater than 1000',
+                                      LocaleKeys
+                                          .pleaseFillAllRequiredFields.localize,
                                     );
                                     return;
                                   }
 
-                                  // if (widget.type == 'shipping') {
-                                  //   final p = cubit.makeNonTrackingTripParam
-                                  //     ..price = price
-                                  //   ..desc = cubit.descController.text;
-                                  //
-                                  //   if (!_validateRequiredShippingFields(
-                                  //       p, price)) {
-                                  //     showErrorMessage(
-                                  //       context,
-                                  //       LocaleKeys
-                                  //           .pleaseFillAllRequiredFields.localize,
-                                  //     );
-                                  //     return;
-                                  //   }
-                                  //   final tripParams = CreateLoadingTripParams(
-                                  //       subcategoryId: widget.subCategoryId,
-                                  //       fromTitle: p.fromTitle!,
-                                  //       toTitle: p.toTitle!,
-                                  //       price: price,
-                                  //       date: p.date!,
-                                  //       phone: p.phone!,
-                                  //       passengers: passengerCount,
-                                  //       isPremium: false,
-                                  //       description: p.description ?? '',
-                                  //       desc: cubit.descController.text
-                                  //   );
-                                  //
-                                  //   cubit.createShippingTrip(
-                                  //       params: tripParams, context: context);
-                                  //   // cubit.makeLoadingRequestTrip(context);
-                                  // }
-                                  // else {
+                                  final tripParams = CreateLoadingTripParams(
+                                    subcategoryId: widget.subCategoryId,
+                                    fromTitle: cubit.makeLoadingTripParam.fromTitle??'',
+                                    toTitle: cubit.makeLoadingTripParam.toTitle??'',
+                                    price: price,
+                                    date: cubit.makeLoadingTripParam.date!,
+                                    phone: cubit.makeLoadingTripParam.phone??'',
+                                    passengers: passengerCount,
+                                    isPremium: false,
+                                    description: cubit.makeLoadingTripParam.description ?? '', desc: cubit.descController.text,
+                                  );
+
+
+                                  cubit.createShippingTrip(params:tripParams,context: context);
+                                } else {
                                   final p = cubit.makeNonTrackingTripParam
                                     ..passengers = passengerCount;
 
-                                  // if (!_validateRequiredFields(p, price)) {
-                                  //   showErrorMessage(
-                                  //     context,
-                                  //     LocaleKeys
-                                  //         .pleaseFillAllRequiredFields.localize,
-                                  //   );
-                                  //   return;
-                                  // }
+                                  if (!_validateRequiredFields(p, price)) {
+                                    showErrorMessage(
+                                      context,
+                                      LocaleKeys
+                                          .pleaseFillAllRequiredFields.localize,
+                                    );
+                                    return;
+                                  }
 
                                   final tripParams = CreateNonTrackTripParams(
-                                      subcategoryId: widget.subCategoryId,
-                                      fromTitle: p.fromTitle!,
-                                      toTitle: p.toTitle!,
-                                      price: price,
-                                      date: p.date!,
-                                      phone: p.phone!,
-                                      passengers: passengerCount,
-                                      isPremium: false,
-                                      description: p.description ?? '',
-                                      desc: cubit.descController.text);
+                                    subcategoryId: widget.subCategoryId,
+                                    fromTitle: p.fromTitle!,
+                                    toTitle: p.toTitle!,
+                                    price: price,
+                                    date: p.date!,
+                                    phone: p.phone!,
+                                    passengers: passengerCount,
+                                    isPremium: false,
+                                    description: p.description ?? '', desc: cubit.descController.text,
+                                  );
 
                                   cubit.createNonTrackTrip(
                                       params: tripParams, context: context);
                                 }
-                                // }
                               },
                               backColor: AppColors.PRIMARY_COLOR,
                               width: MediaQuery.of(context).size.width,
@@ -1224,6 +1222,9 @@ class _RidePersonalMoreInfoScreenState
   }
 
   bool _validateLoadingTripParams(dynamic param) {
+    print("param.date ${param.date}");
+    print("param.phone ${param.phone}");
+    print("param.price ${param.price}");
     return param.date != null &&
         param.phone != null &&
         param.phone!.isNotEmpty &&
