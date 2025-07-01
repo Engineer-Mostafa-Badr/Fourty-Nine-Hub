@@ -66,14 +66,14 @@ class RatingEntity {
 class TripDetailsEntity {
   final String? id;
   final int? passengers;
-  final String? data;
+  final String? date;
   final LocationEntity? location;
   final SubcategoryEntity? subcategory;
 
   TripDetailsEntity({
     this.id,
     this.passengers,
-    this.data,
+    this.date,
     this.location,
     this.subcategory,
   });
