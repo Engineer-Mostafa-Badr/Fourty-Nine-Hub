@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -16,6 +17,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_of
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_past_shipping_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_shipping_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/refuse_shipping_trip_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -954,6 +957,13 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
       },
           (trip) {
+            showCustomSnackBar(
+              context,
+              // "Cart Update Successfully",
+              state.createNonTrackTripEntity?.message ??
+                  LocaleKeys.requestSentSuccess.localize,
+              Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
+            );
         emit(state.copyWith(
           createNonTrackTripEntity: trip,
           status: ClientTripsStates.successCreateTrip,
@@ -978,6 +988,13 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
       },
           (trip) {
+            showCustomSnackBar(
+              context,
+              // "Cart Update Successfully",
+              state.createNonTrackTripEntity?.message ??
+                  LocaleKeys.requestSentSuccess.localize,
+              Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
+            );
         emit(state.copyWith(
           status: ClientTripsStates.successCreateTrip,
         ));

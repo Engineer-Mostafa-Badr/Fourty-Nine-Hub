@@ -222,8 +222,10 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                           // final fullAddress = "$resultGovernorate, $resultCity, Egypt";
                           if (widget.isStartLocation) {
                             widget.cubit.makeNonTrackingTripParam.fromTitle = fullAddress;
+                            widget.cubit.makeLoadingTripParam.fromTitle = fullAddress;
                           } else {
                             widget.cubit.makeNonTrackingTripParam.toTitle = fullAddress;
+                            widget.cubit.makeLoadingTripParam.toTitle = fullAddress;
                           }
                           print("Full Adress ===============================${fullAddress}");
                           Navigator.pop(context, fullAddress);
