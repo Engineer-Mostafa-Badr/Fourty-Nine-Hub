@@ -396,6 +396,46 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         ));
       },
           (data) {
+        final trips = data ?? [];
+        tripJoinData.addAll(trips);
+
+        if (trips.length < 15) {
+          hasMoreTripJoin = false;
+        } else {
+          currentPageTripJoin++;
+        }
+
+        isLoadingMoreTripJoin = false;
+        emit(state.copyWith(
+          availableTripJoinEntity: tripJoinData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> getTripJoin1() async {
+    if (!hasMoreTripJoin || isLoadingMoreTripJoin) return;
+
+    isLoadingMoreTripJoin = true;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await getAvailableTripJoinUseCase(
+      CarBrandParams(
+        page: currentPageTripJoin,
+        limit: 15,
+      ),
+    );
+
+    response.fold(
+          (failure) {
+        isLoadingMoreTripJoin = false;
+        emit(state.copyWith(
+          failure: failure,
+          status: ViewAllTripJoinStatus.failure,
+        ));
+      },
+          (data) {
         // you will receive AvailableTripJoinEntity from usecase
         final trips = data ?? [];
         tripJoinData.addAll(trips);

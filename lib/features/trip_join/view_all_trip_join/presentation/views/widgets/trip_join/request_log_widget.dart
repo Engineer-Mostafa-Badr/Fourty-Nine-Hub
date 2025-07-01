@@ -42,9 +42,11 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
 
   @override
   void initState() {
-    _scrollController = ScrollController()..addListener(_scrollListener);
-    _scrollController = ScrollController()..addListener(_onScroll);
     super.initState();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {

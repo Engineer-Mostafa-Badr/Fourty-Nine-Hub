@@ -1173,7 +1173,9 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           targetLatitude: toLocation![1],
                         );
 
-                        context.read<ViewAllTripJoinCubit>().createTripJoinOffer(params, context);
+                        context.read<ViewAllTripJoinCubit>().createTripJoinOffer(params, context).then((_){
+                          Navigator.pop(context);
+                        });
                       },
                       onNormalPressed: () {
                         if (phoneController.text.isEmpty ||
@@ -1208,7 +1210,9 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           targetLatitude: toLocation![1],
                         );
 
-                        context.read<ViewAllTripJoinCubit>().createTripJoinOffer(params, context);
+                        context.read<ViewAllTripJoinCubit>().createTripJoinOffer(params, context).then((_){
+                          Navigator.pop(context);
+                        });
                       },
                     ),
                   ),
