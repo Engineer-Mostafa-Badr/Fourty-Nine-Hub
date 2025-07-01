@@ -269,8 +269,34 @@ class _TripJoinContentState extends State<TripJoinContent>
               ),
             ),
           ),
+          // Visibility(
+          //   visible: title == LocaleKeys.requestLog,
+          //   child: Positioned(
+          //     top: -3.h,
+          //     right: 4.h,
+          //     child: Container(
+          //       padding: const EdgeInsets.all(5),
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         color: AppColors.getRedColor(context),
+          //       ),
+          //       child: Center(
+          //         child: Text(
+          //          "${formatCount(context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 0)}",
+          //           style: Styles.smallText(
+          //             color: context.isDarkMode
+          //                 ? Colors.black
+          //                 : AppColors.whiteColor,
+          //             fontSize: 20,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Visibility(
-            visible: title == LocaleKeys.requestLog,
+            visible: title == LocaleKeys.requestLog &&
+                (context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 0) > 0,
             child: Positioned(
               top: -3.h,
               right: 4.h,
@@ -282,7 +308,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                 ),
                 child: Center(
                   child: Text(
-                   "${formatCount(context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 0)}",
+                    "${formatCount(context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 0)}",
                     style: Styles.smallText(
                       color: context.isDarkMode
                           ? Colors.black

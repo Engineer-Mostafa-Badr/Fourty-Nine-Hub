@@ -45,9 +45,11 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
 
   @override
   void initState() {
-    _scrollController = ScrollController()..addListener(_scrollListener);
-    _scrollController = ScrollController()..addListener(_onScroll);
     super.initState();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _scrollController.addListener(_onScroll);
   }
 
 
@@ -60,10 +62,12 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (_isVisible) {
+        print("Visaible ${_isVisible}");
         setState(() => _isVisible = false);
       }
     } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!_isVisible) {
+        print("Visaible true ${_isVisible}");
         setState(() => _isVisible = true);
       }
     }
@@ -72,6 +76,8 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
+    _scrollController.removeListener(_scrollListener);
+
     _scrollController.dispose();
     super.dispose();
   }
@@ -91,6 +97,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
             }
 
             return ListView.separated(
+              shrinkWrap: true,
               controller: _scrollController,
               itemCount: context.read<ViewAllTripJoinCubit>().myAdsData.length,
               separatorBuilder: (context,i)=>SizedBox(height: 10.h,),
@@ -368,12 +375,12 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                         fontWeight: FontWeight.bold,
                         color: AppColors.getTextColor(context)),
                   ),
-                  Label(
-                    text: LocaleKeys.seat.localize,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getTextColor(context)),
-                  ),
+                  // Label(
+                  //   text: LocaleKeys.seat.localize,
+                  //   style: Styles.mediumText(
+                  //       fontWeight: FontWeight.bold,
+                  //       color: AppColors.getTextColor(context)),
+                  // ),
                 ],
               )
             ],
@@ -406,11 +413,13 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
     );
   }
 }
+
+
 extension OfferTypeFormatter on MyAdsTripDocEntity {
   String get formattedOfferType {
     switch (offerType) {
       case 'premium':
-        return LocaleKeys.premium.tr();
+        return LocaleKeys.premium2.tr();
       case 'notSubscribed':
         return LocaleKeys.notSubscribed.tr();
       case 'regular':

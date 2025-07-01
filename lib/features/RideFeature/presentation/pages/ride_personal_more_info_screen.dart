@@ -991,7 +991,7 @@ class _RidePersonalMoreInfoScreenState
                     return null;
                   },
                   maxLines: 4,
-                  hintText: context.isArabic ? 'الوصف' : 'Cargo Description',
+                  hintText: context.isArabic ? 'وصف الشحنة' : 'Cargo Description',
                 ),
               const SizedBox(height: 8),
               //phone

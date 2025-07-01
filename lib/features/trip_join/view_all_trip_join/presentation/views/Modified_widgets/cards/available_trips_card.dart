@@ -46,11 +46,12 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
 
   @override
   void initState() {
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
-
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+    _scrollController.addListener(_scrollListener);
   }
+
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
@@ -227,6 +228,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                   horizontal: 32.0.h,
                                 ),
                                 child: Row(
+                                  spacing: 15,
                                   children: [
                                         Expanded(
                                       child: Padding(
@@ -247,7 +249,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                         isPremium:data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
                                         otherUserId: '2',
                                         subcategoryId: '2',
-                                        phone: '2223',
+                                        phone: data.phoneNumber ?? "1234",
                                         id: '2',
                                         hasReport: true,
                                       ),
@@ -269,7 +271,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                         ],
                       ),
                     ),
-                    data.isPremium == true || data.isButtonEnabled!.state == true ? SizedBox() : TripCardSubscribeText()   ,
+                    data.isPremium == true || data.isButtonEnabled!.state == true ? SizedBox() : TripCardSubscribeText(),
 
                   ],
                 ),
@@ -470,7 +472,7 @@ extension OfferTypeFormatter on AvailableTripJoinEntity {
   String get formattedOfferType {
     switch (offerType) {
       case 'premium':
-        return LocaleKeys.premium.tr();
+        return LocaleKeys.premium2.tr();
       case 'notSubscribed':
         return LocaleKeys.notSubscribed.tr();
       case 'regular':
