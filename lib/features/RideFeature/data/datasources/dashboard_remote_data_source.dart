@@ -526,15 +526,15 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params) {
     try {
-      CliLogger.info("Listen to New Route ");
+      CliLogger.info("Listen to New Route Driver");
       log("Listen to New Route ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRouteDriver, (data) {
-        CliLogger.info("New Route data :  $data");
+        CliLogger.info("New Route Driver data :  $data");
         log("New Route data :  $data");
-        params(MyBookingModel.fromJson(data['newAllowedRoute']));
+        params(MyBookingModel.fromJson(data['formattedResponse']));
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to New Route Driver error $e");
     }
   }
 

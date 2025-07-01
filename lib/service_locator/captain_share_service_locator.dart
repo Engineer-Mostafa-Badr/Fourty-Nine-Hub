@@ -5,7 +5,9 @@ import 'package:fourtyninehub/features/new_trip_join/data/repositories/captain_s
 import 'package:fourtyninehub/features/new_trip_join/domain/repositories/captain_share_repository.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/cancel_my_booking_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/accept_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_available_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_running_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_new_route_driver_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_available_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_expired_bookings_use_case.dart';
@@ -98,6 +100,14 @@ class CaptainShareServiceLocator {
         () => ListenToNewRouteDriverUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<AcceptRouteUseCase>(
+        () => AcceptRouteUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetDriverRunningRouteUseCase>(
+        () => GetDriverRunningRouteUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
@@ -119,6 +129,8 @@ class CaptainShareServiceLocator {
 
     serviceLocator.registerFactory<CaptainShareDashboardCubit>(
         () => CaptainShareDashboardCubit(
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

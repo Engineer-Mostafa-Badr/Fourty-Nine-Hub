@@ -496,6 +496,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share";
   static String cancelRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
+  static String acceptRoute(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/accept";
   static String joinToRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
   static String routeDetails(String id) =>
@@ -510,6 +512,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/routes/expired";
   static String runningBooking =
       "$developmentBaseUrl/captain-share/routes/running";
+  static String runningDriverBooking =
+      "$developmentBaseUrl/captain-share/driver/routes/running";
 
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =

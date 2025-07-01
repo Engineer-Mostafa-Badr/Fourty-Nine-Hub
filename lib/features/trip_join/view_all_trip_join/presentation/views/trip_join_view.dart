@@ -198,7 +198,7 @@ class _TripJoinViewState extends State<TripJoinView>
             //     ),
             //   ),
             // ),
-            if(selectedIndex!=0)PositionedDirectional(
+            if(selectedIndex!=0&&selectedIndex!=1)PositionedDirectional(
                 bottom: 30.h,
                 end: 10,
                 start: 10,

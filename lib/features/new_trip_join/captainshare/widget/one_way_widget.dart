@@ -22,20 +22,26 @@ import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
+  final bool? hasAcceptButton;
   final String? requestType;
   final MyBookingEntity? model;
   final Function? onCancelBooking;
   final Function? onJoin;
+  final Function? onAccept;
 
   const OneWayWidget({
     super.key,
     this.statusDriver,
     this.model,
     this.cancelButton,
+    this.hasAcceptButton,
+    this.onAccept,
     this.requestType,
     this.onCancelBooking,
     this.onJoin,
@@ -132,24 +138,35 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           color: AppColors.getRedColor(context),
                         ),
                       ),
-                      RichText(
-                        text: TextSpan(
-                          text: "${widget.model?.pricePerSeat} ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: AppColors.getTextColor(context),
-                          ),
-                          children: [
-                            TextSpan(
-                              text: context.isArabic ? "ج.م" : "EGP",
+                      Column(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "${widget.model?.pricePerSeat} ",
                               style: TextStyle(
-                                color: AppColors.getRedColor(context),
-                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: AppColors.getTextColor(context),
                               ),
+                              children: [
+                                TextSpan(
+                                  text: context.isArabic ? "ج.م" : "EGP",
+                                  style: TextStyle(
+                                    color: AppColors.getRedColor(context),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Text(
+                          context.isArabic?'لكل مقعد':'Per Seat',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.getRedColor(context),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -387,30 +404,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ],
                   ),
                   SizedBox(height: 8),
-                  // Center(
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       setState(() {
-                  //         _expandableController.toggle();
-                  //       });
-                  //     },
-                  //     child: SvgPicture.asset(
-                  //       Assets.redFrame,
-                  //       width: 50,
-                  //     ),
-                  //   ),
-                  // ),
-                  // ExpandablePanel(
-                  //   controller: _expandableController,
-                  //   theme: const ExpandableThemeData(
-                  //     hasIcon: false,
-                  //     tapBodyToCollapse: false,
-                  //     tapHeaderToExpand: false,
-                  //   ),
-                  //   header: const SizedBox(),
-                  //   collapsed: const SizedBox(),
-                  //   expanded: const AddressWidget(),
-                  // ),
                   Row(
                     children: [
                       Text(
@@ -471,6 +464,17 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           : const SizedBox(),
                     ],
                   ),
+                  SizedBox(height: 8),
+                  if(widget.hasAcceptButton==true)AppButton(
+                      width: context.screenWidth ,
+                      label: context.isArabic ? 'قبول' : 'Accept',
+                      backColor: AppColors.PRIMARY_COLOR,
+                      onPressed: () {
+                        if(widget.onAccept!=null){
+                          widget.onAccept!();
+                        }
+                        // cubit
+                      }),
                 ],
               ),
             ),
