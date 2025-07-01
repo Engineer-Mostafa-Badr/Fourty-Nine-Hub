@@ -255,9 +255,9 @@ class _TripJoinViewState extends State<TripJoinView>
       case 1:
         return Container(
           key: const ValueKey(1),
-          child: Expanded(child: BlocProvider(
+          child: BlocProvider(
               create: (context)=>serviceLocator<ViewAllTripJoinCubit>(),
-              child: const TripJoinContent())),
+              child: const TripJoinContent()),
         );
       case 2:
         return Container(

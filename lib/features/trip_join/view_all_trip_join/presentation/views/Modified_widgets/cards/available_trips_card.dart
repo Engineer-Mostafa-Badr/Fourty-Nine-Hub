@@ -93,6 +93,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
       return  Center(child: Text(LocaleKeys.noData.localize));
     }
     return ListView.builder(
+      shrinkWrap: true,
         controller: _scrollController,
         itemCount: context.read<ViewAllTripJoinCubit>().tripJoinData.length,
         itemBuilder: (context,index){
