@@ -33,7 +33,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
 
 
   void listenToNewRoute(BuildContext context) {
-    CliLogger.info('listenToNewRoute');
+    CliLogger.info('listenToNewDriverRoute');
     // TripsResponseEntity
     listenToNewRouteDriverUseCase((route) {
         if(state.tapIndex==0){

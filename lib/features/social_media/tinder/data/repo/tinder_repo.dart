@@ -70,7 +70,7 @@
 // //   }
 // //
 // //   Future<MainCategoryResponse?> fetchMainCategoryById(String id) async {
-// //     final url = 'https://49backend.com/api/v1/categories/main/$id';
+// //     final url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/categories/main/$id';
 // //     final response =
 // //         await _makeGetRequest(url: url, fromMethod: 'fetchMainCategoryById');
 // //     if (response != null) {
@@ -83,7 +83,7 @@
 // //   Future<NormalChatResponse?> startNormalChat(
 // //       String receiverId, String subCategoryId) async {
 // //     final url =
-// //         'https://49backend.com/api/v1/chat/start-chat/$receiverId?categoryId=$subCategoryId';
+// //         'https://1220-41-239-172-48.ngrok-free.app/api/v1/chat/start-chat/$receiverId?categoryId=$subCategoryId';
 // //     final response = await _makePostRequest(url: url, body: '{}');
 // //     if (response != null) {
 // //       final data = json.decode(response.body);
@@ -94,7 +94,7 @@
 // //
 // //   Future<AnonymousChatResponse?> startAnonymousChat(String receiverId) async {
 // //     final url =
-// //         'https://49backend.com/api/v1/chat/start-anonymous-chat/$receiverId';
+// //         'https://1220-41-239-172-48.ngrok-free.app/api/v1/chat/start-anonymous-chat/$receiverId';
 // //     final response = await _makePostRequest(url: url, body: '{}');
 // //     if (response != null) {
 // //       final data = json.decode(response.body);
@@ -104,7 +104,7 @@
 // //   }
 // //
 // //   Future<ProfileUserModel?> fetchUserProfile(String userId) async {
-// //     final uri = Uri.parse('https://49backend.com/api/v1/tinder/get-profile/$userId')
+// //     final uri = Uri.parse('https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/get-profile/$userId')
 // //         .replace(queryParameters: {'subCategory': '66b2683f3a360fbdbf110767'});
 // //     final response = await _makeGetRequest(
 // //         url: uri.toString(), fromMethod: 'fetchUserProfile');
@@ -116,7 +116,7 @@
 // //   }
 // //
 // //   Future<SubFavoritesResponse?> fetchFavorites() async {
-// //     const url = 'https://49backend.com/api/v1/favorite-sub-category';
+// //     const url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/favorite-sub-category';
 // //     final response =
 // //         await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
 // //     if (response != null) {
@@ -127,14 +127,14 @@
 // //   }
 // //
 // //   Future<bool> addFavoriteCategory(String categoryId) async {
-// //     final url = 'https://49backend.com/api/v1/favorite-sub-category/$categoryId';
+// //     final url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/favorite-sub-category/$categoryId';
 // //     final response = await _makePostRequest(url: url, body: '{}');
 // //     return response != null && response.statusCode == 200;
 // //   }
 // //
 // //   Future<LastSeenModel?> fetchLastSeen(String userId) async {
 // //     final url =
-// //         'https://49backend.com/api/v1/users/last-seen/$userId?status=online';
+// //         'https://1220-41-239-172-48.ngrok-free.app/api/v1/users/last-seen/$userId?status=online';
 // //     final response =
 // //         await _makeGetRequest(url: url, fromMethod: 'fetchLastSeen');
 // //     if (response != null) {
@@ -147,7 +147,7 @@
 // //   Future<String?> sendGift(
 // //       String receiverId, String giftId, String subCategoryId) async {
 // //     const url =
-// //         'https://49backend.com/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
+// //         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
 // //     final data = jsonEncode({
 // //       "receiverId": receiverId,
 // //       "giftId": giftId,
@@ -157,7 +157,7 @@
 // //   }
 // //
 // //   Future<List<GiftData>?> fetchGifts() async {
-// //     final url = 'https://49backend.com/api/v1/dashboard-gifts?limit=10';
+// //     final url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/dashboard-gifts?limit=10';
 // //     final response = await _makeGetRequest(url: url, fromMethod: 'fetchGifts');
 // //     if (response != null) {
 // //       final data = json.decode(response.body);
@@ -169,7 +169,7 @@
 // //
 // //   Future<NearByModel?> checkUserNearby(String cardUserId) async {
 // //     final url =
-// //         'https://49backend.com/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746';
+// //         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746';
 // //     final response =
 // //         await _makeGetRequest(url: url, fromMethod: 'checkUserNearby');
 // //     if (response != null) {
@@ -180,7 +180,7 @@
 // //   }
 // //
 // //   Future<List<SubCategoryData>?> fetchSubCategoryData() async {
-// //     const url = 'https://49backend.com/api/v1/tinder/subCategories';
+// //     const url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/subCategories';
 // //     final response =
 // //         await _makeGetRequest(url: url, fromMethod: 'fetchSubCategoryData');
 // //     if (response != null) {
@@ -193,11 +193,11 @@
 // //   }
 // //
 // //   // Future<List<UserData>?> fetchUserData(String gender) async {
-// //   //   // final url = 'https://49backend.com/api/v1/tinder/?gender=$gender&subCategory=66af974f8bf69f9469944746';
+// //   //   // final url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/?gender=$gender&subCategory=66af974f8bf69f9469944746';
 // //   //   // final url =
-// //   //   //     'https://49backend.com/api/v1/tinder/?gender=female&page=4&subCategory=66af974f8bf69f9469944746&limit=10';
+// //   //   //     'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/?gender=female&page=4&subCategory=66af974f8bf69f9469944746&limit=10';
 // //   //   final url =
-// //   //       'https://49backend.com/api/v1/tinder/?gender=$gender&&subCategory=66af974f8bf69f9469944746';
+// //   //       'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/?gender=$gender&&subCategory=66af974f8bf69f9469944746';
 // //   //   final response =
 // //   //       await _makeGetRequest(url: url, fromMethod: 'fetchUserData');
 // //   //   if (response != null) {
@@ -210,7 +210,7 @@
 // //   // }
 // //   // Future<List<UserData>?> fetchUserData(String gender, int page) async {
 // //   //   final url =
-// //   //       'https://49backend.com/api/v1/tinder/?gender=$gender&page=$page&subCategory=66af974f8bf69f9469944746&limit=20';
+// //   //       'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/?gender=$gender&page=$page&subCategory=66af974f8bf69f9469944746&limit=20';
 // //   //
 // //   //   final response =
 // //   //   await _makeGetRequest(url: url, fromMethod: 'fetchUserData');
@@ -225,7 +225,7 @@
 // //   // }
 // //   Future<List<UserData>?> fetchUserData(String gender, int page) async {
 // //     final url =
-// //         'https://49backend.com/api/v1/tinder/?gender=$gender&page=$page&subCategory=66af974f8bf69f9469944746&limit=20';
+// //         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/?gender=$gender&page=$page&subCategory=66af974f8bf69f9469944746&limit=20';
 // //
 // //     final response = await _makeGetRequest(url: url, fromMethod: 'fetchUserData');
 // //
@@ -239,7 +239,7 @@
 // //
 // //   Future<void> uploadPictures(List<String> pictures) async {
 // //     const url =
-// //         'https://49backend.com/api/v1/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
+// //         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
 // //     await _makePostRequest(url: url, body: jsonEncode({'pictures': pictures}));
 // //   }
 // // }
@@ -351,7 +351,7 @@
 //   }
 //
 //   Future<MainCategoryResponse?> fetchMainCategoryById(String id) async {
-//     final url = 'https://49backend.com/api/v1/categories/main/$id';
+//     final url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/categories/main/$id';
 //     final response =
 //         await _makeGetRequest(url: url, fromMethod: 'fetchMainCategoryById');
 //     if (response != null) {
@@ -364,7 +364,7 @@
 //   Future<NormalChatResponse?> startNormalChat(
 //       String receiverId, String subCategoryId) async {
 //     final url =
-//         'https://49backend.com/api/v1/chat/start-chat/$receiverId?categoryId=$subCategoryId';
+//         'https://1220-41-239-172-48.ngrok-free.app/api/v1/chat/start-chat/$receiverId?categoryId=$subCategoryId';
 //     final response = await _makePostRequest(url: url, body: '{}');
 //     if (response != null) {
 //       final data = json.decode(response.body);
@@ -375,7 +375,7 @@
 //
 //   Future<AnonymousChatResponse?> startAnonymousChat(String receiverId) async {
 //     final url =
-//         'https://49backend.com/api/v1/chat/start-anonymous-chat/$receiverId';
+//         'https://1220-41-239-172-48.ngrok-free.app/api/v1/chat/start-anonymous-chat/$receiverId';
 //     final response = await _makePostRequest(url: url, body: '{}');
 //     if (response != null) {
 //       final data = json.decode(response.body);
@@ -385,7 +385,7 @@
 //   }
 //
 //   Future<ProfileUserModel?> fetchUserProfile(String userId) async {
-//     final uri = Uri.parse('https://49backend.com/api/v1/tinder/get-profile/$userId')
+//     final uri = Uri.parse('https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/get-profile/$userId')
 //         .replace(queryParameters: {'subCategory': '66b2683f3a360fbdbf110767'});
 //     final response = await _makeGetRequest(
 //         url: uri.toString(), fromMethod: 'fetchUserProfile');
@@ -398,7 +398,7 @@
 //   }
 //
 //   Future<SubFavoritesResponse?> fetchFavorites() async {
-//     const url = 'https://49backend.com/api/v1/favorite-sub-category';
+//     const url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/favorite-sub-category';
 //     final response =
 //         await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
 //     if (response != null) {
@@ -409,7 +409,7 @@
 //   }
 //
 //   Future<CategoryFavoritesResponse?> fetchFavoritesCategory() async {
-//     const url = 'https://49backend.com/api/v1/favorite-category';
+//     const url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/favorite-category';
 //     final response =
 //         await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
 //     if (response != null) {
@@ -420,13 +420,13 @@
 //   }
 //
 //   Future<bool> addFavoriteCategory(String categoryId) async {
-//     final url = 'https://49backend.com/api/v1/favorite-sub-category/$categoryId';
+//     final url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/favorite-sub-category/$categoryId';
 //     final response = await _makePostRequest(url: url, body: '{}');
 //     return response != null && response.statusCode == 200;
 //   }
 //
 //   Future<LastSeenModel?> fetchLastSeen(String userId) async {
-//     final url = 'https://49backend.com/api/v1/users/last-seen/$userId';
+//     final url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/users/last-seen/$userId';
 //     final response =
 //         await _makeGetRequest(url: url, fromMethod: 'fetchLastSeen');
 //     if (response != null) {
@@ -440,7 +440,7 @@
 //   Future<dynamic> sendGift(
 //       String receiverId, String giftId, String subCategoryId) async {
 //     const url =
-//         'https://49backend.com/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
+//         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
 //     final data = jsonEncode({
 //       "receiverId": receiverId,
 //       "giftId": giftId,
@@ -464,7 +464,7 @@
 //   }
 //
 //   Future<List<GiftData>?> fetchGifts() async {
-//     const url = 'https://49backend.com/api/v1/dashboard-gifts?limit=10';
+//     const url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/dashboard-gifts?limit=10';
 //     final response = await _makeGetRequest(url: url, fromMethod: 'fetchGifts');
 //     if (response != null) {
 //       final data = json.decode(response.body);
@@ -476,7 +476,7 @@
 //
 //   Future<NearByModel?> checkUserNearby(String cardUserId) async {
 //     final url =
-//         'https://49backend.com/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746';
+//         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746';
 //     final response =
 //         await _makeGetRequest(url: url, fromMethod: 'checkUserNearby');
 //     if (response != null) {
@@ -487,7 +487,7 @@
 //   }
 //
 //   Future<List<SubCategoryEntity>?> fetchSubCategoryData() async {
-//     const url = 'https://49backend.com/api/v1/tinder/subCategories';
+//     const url = 'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/subCategories';
 //     final response =
 //         await _makeGetRequest(url: url, fromMethod: 'fetchSubCategoryData');
 //     if (response != null) {
@@ -501,7 +501,7 @@
 //
 //   Future<List<UserData>?> fetchUserData(String gender, int page) async {
 //     final url =
-//         'https://49backend.com/api/v1/tinder/?gender=$gender&page=$page&subCategory=66af974f8bf69f9469944746&limit=20';
+//         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/?gender=$gender&page=$page&subCategory=66af974f8bf69f9469944746&limit=20';
 //
 //     final response =
 //         await _makeGetRequest(url: url, fromMethod: 'fetchUserData');
@@ -518,7 +518,7 @@
 //
 //   Future<void> uploadPictures(List<String> pictures) async {
 //     const url =
-//         'https://49backend.com/api/v1/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
+//         'https://1220-41-239-172-48.ngrok-free.app/api/v1/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
 //     await _makePostRequest(url: url, body: jsonEncode({'pictures': pictures}));
 //   }
 // }
