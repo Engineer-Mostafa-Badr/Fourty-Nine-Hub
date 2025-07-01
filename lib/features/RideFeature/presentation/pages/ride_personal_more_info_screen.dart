@@ -334,13 +334,7 @@ class _RidePersonalMoreInfoScreenState
           }
         }
         if (state.isSuccessCreateTrip) {
-          showCustomSnackBar(
-            context,
-            // "Cart Update Successfully",
-            state.createNonTrackTripEntity?.message ??
-                LocaleKeys.requestSentSuccess.localize,
-            Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
-          );
+
         }
       },
       builder: (context, state) {
