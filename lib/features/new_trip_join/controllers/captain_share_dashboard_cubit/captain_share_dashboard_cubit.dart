@@ -11,8 +11,11 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/accept_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_available_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_running_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_new_route_driver_use_case.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 part 'captain_share_dashboard_state.dart';
@@ -20,9 +23,11 @@ part 'captain_share_dashboard_state.dart';
 class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final GetDriverAvailableBookingsUseCase getDriverAvailableBookingsUseCase;
+  final GetDriverRunningRouteUseCase getDriverRunningRouteUseCase;
   final ListenToNewRouteDriverUseCase listenToNewRouteDriverUseCase;
+  final AcceptRouteUseCase acceptRouteUseCase;
 
-  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
+  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
       : super(const CaptainShareDashboardState());
 
 
@@ -40,7 +45,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
           availableBookings.insert(0, route);
           showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }else{
-          changeTapIndex(0);
+          changeTapIndex(0,context);
           loadInitialAvailableData(context);
           showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }
@@ -72,13 +77,15 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
     );
   }
 
-  changeTapIndex(int index){
+  changeTapIndex(int index,BuildContext context){
+    if(index==0)loadInitialAvailableData(context);
     emit(state.copyWith(tapIndex: index,status: CaptainShareDashboardStates.success));
   }
 
 
 
   List<MyBookingEntity> availableBookings = [];
+  MyBookingEntity? runningRoute;
   bool isLoadingMoreAvailable = false;
   bool isLoadingAvailableBookings = false;
   bool hasMoreAvailableData = true;
@@ -132,4 +139,47 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
     );
   }
 
+
+  Future<void> getRunningRoute(BuildContext context) async {
+
+    emit(state.copyWith(status: CaptainShareDashboardStates.loading));
+
+    final response = await getDriverRunningRouteUseCase(NoParams());
+
+    response.fold(
+          (failure) {
+        print("objectFailure ${getFailureMessage(failure, context)}");
+        emit(
+            state.copyWith(failure: failure, status: CaptainShareDashboardStates.error));
+      },
+          (data) {
+        runningRoute = data;
+        emit(state.copyWith(status: CaptainShareDashboardStates.success,runningRoute:data));
+      },
+    );
+  }
+
+
+
+  Future<void> acceptRoute(
+      {required String id, required BuildContext context}) async {
+    showLoadingDialog(context);
+    final response = await acceptRouteUseCase(id);
+    response.fold((l) {
+      context.pop();
+      String errorName = getFailureName(l, context);
+      // errorName == 'DebtError'
+      //     ? showDebtDialog(context, subCategoryId)
+      //     : errorName == 'SubscribeError'
+      //     ? showSubscribeDialog(context, subCategoryId)
+      //     : showErrorMessage(context, getFailureMessage(l, context));
+      showSuccessMessage(context,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
+    }, (data) {
+      context.pop();
+        availableBookings.removeWhere((e)=> e.id==id);
+      showSuccessMessage(context, context.isArabic?'تم قبول الحجز بنجاح':'Booking Accepted Successfully');
+      emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    });
+  }
 }

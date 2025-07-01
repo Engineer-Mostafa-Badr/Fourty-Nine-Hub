@@ -531,7 +531,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRouteDriver, (data) {
         CliLogger.info("New Route Driver data :  $data");
         log("New Route data :  $data");
-        params(MyBookingModel.fromJson(data['newAllowedRoute']));
+        params(MyBookingModel.fromJson(data['formattedResponse']));
       });
     } catch (e) {
       CliLogger.info("can't listen to New Route Driver error $e");

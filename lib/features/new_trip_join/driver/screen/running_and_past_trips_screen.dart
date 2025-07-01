@@ -4,10 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_route_tab_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/assets/assets.dart';
-import '../widget/my_running_tab_widget.dart';
+import '../widget/available_routes_tab_widget.dart';
 import '../widget/past_trips_widget.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 
@@ -95,7 +96,7 @@ class ItemTabRideModeWidget extends StatelessWidget {
     var cubit = context.read<CaptainShareDashboardCubit>();
     bool isSelected = cubit.state.tapIndex == index;
     return GestureDetector(
-      onTap: () => cubit.changeTapIndex(index),
+      onTap: () => cubit.changeTapIndex(index,context),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -253,13 +254,11 @@ class _TabBarContentRideModeWidgetState
             ),
           ),
         Expanded(
-          child: state.tapIndex==0?MyRunningTabWidget(
+          child: state.tapIndex==0?AvailableRoutesTabWidget(
             clientNumberEn: "Go to first client",
             clientNumberAr: "الذهاب للعميل الأول",
             content: tabContents[0],
-          ):state.tapIndex==1?PastTripsWidget(
-            content: tabContents[1],
-          ):Container(),)
+          ):state.tapIndex==1?RunningRouteTabWidget():Container(),)
       ],
     );
   },

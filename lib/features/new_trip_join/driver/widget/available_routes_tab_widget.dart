@@ -14,13 +14,13 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'available_ride_mode_widget.dart';
 
-class MyRunningTabWidget extends StatefulWidget {
+class AvailableRoutesTabWidget extends StatefulWidget {
   final String? clientNumberEn;
   final String? clientNumberAr;
   final void Function()? onPressed;
   final List<String> content;
 
-  const MyRunningTabWidget({
+  const AvailableRoutesTabWidget({
     super.key,
     required this.content,
     this.clientNumberEn,
@@ -29,10 +29,10 @@ class MyRunningTabWidget extends StatefulWidget {
   });
 
   @override
-  State<MyRunningTabWidget> createState() => _MyRunningTabWidgetState();
+  State<AvailableRoutesTabWidget> createState() => _AvailableRoutesTabWidgetState();
 }
 
-class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
+class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
   final TextEditingController otpController = TextEditingController();
   late ScrollController _scrollController;
   bool _isVisible = true;
@@ -68,6 +68,10 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
             shrinkWrap: true,
             itemBuilder: (context, index) => OneWayWidget(
               requestType: LocaleKeys.regular.localize,
+              hasAcceptButton:true,
+              onAccept: (){
+                cubit.acceptRoute(id: cubit.availableBookings[index].id,context: context);
+              },
               statusDriver: cubit.availableBookings[index].status,
               model: cubit.availableBookings[index],
               cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.availableBookings[index].creatorId) && cubit.availableBookings[index].status == 'pending',

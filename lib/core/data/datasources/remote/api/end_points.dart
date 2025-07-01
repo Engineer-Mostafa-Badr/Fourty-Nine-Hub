@@ -57,11 +57,11 @@ class EndPoints {
   static const logout = '/auth/logout';
 
   static const pageSize = 10;
-  static const developmentWebSocketBaseUrl = 'https://1220-41-239-172-48.ngrok-free.app';
+  static const developmentWebSocketBaseUrl = 'https://49backend.com';
 
-  // static const developmentWebSocketBaseUrl = 'https://1220-41-239-172-48.ngrok-free.app';
-  static const developmentBaseUrl = 'https://1220-41-239-172-48.ngrok-free.app/api/v1';
-  static const productionBaseUrl = 'https://1220-41-239-172-48.ngrok-free.app/api/v1';
+  // static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  static const developmentBaseUrl = 'https://49backend.com/api/v1';
+  static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const loginWithPhone = '/auth/login/phone-number';
@@ -496,6 +496,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share";
   static String cancelRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
+  static String acceptRoute(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/accept";
   static String joinToRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
   static String routeDetails(String id) =>
@@ -510,6 +512,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/routes/expired";
   static String runningBooking =
       "$developmentBaseUrl/captain-share/routes/running";
+  static String runningDriverBooking =
+      "$developmentBaseUrl/captain-share/driver/routes/running";
 
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =

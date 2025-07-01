@@ -470,7 +470,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       label: context.isArabic ? 'قبول' : 'Accept',
                       backColor: AppColors.PRIMARY_COLOR,
                       onPressed: () {
-                        context.pop();
+                        if(widget.onAccept!=null){
+                          widget.onAccept!();
+                        }
                         // cubit
                       }),
                 ],
