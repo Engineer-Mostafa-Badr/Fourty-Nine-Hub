@@ -656,46 +656,6 @@ class _RidePersonalMoreInfoScreenState
                     toArabic: context.isArabic,
                   ),
                 ),
-              /*
-                PickUpTextFormField(
-                fieldType: FieldType.phone,
-                controller: passengerController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return LocaleKeys.required.localize;
-                  }
-
-                  if (_phonePattern.hasMatch(value)) {
-                    return context.isArabic
-                        ? 'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود'
-                        : 'Phone numbers are not allowed. Please remove any phone number pattern.';
-                  }
-
-                  final parsedNumber = int.tryParse(value);
-                  if (parsedNumber == null) {
-                    return context.isArabic
-                        ? 'الرجاء إدخال رقم صالح'
-                        : 'Please enter a valid number.';
-                  }
-
-                  if (parsedNumber < 0) {
-                    return context.isArabic
-                        ? 'لا يمكن أن يكون الرقم سالباً'
-                        : 'Number cannot be negative.';
-                  }
-
-                  if (parsedNumber > 1000) {
-                    return context.isArabic
-                        ? 'لا يمكن أن يكون الرقم أكبر من 1000'
-                        : 'Number cannot be greater than 1000.';
-                  }
-
-                  return null;
-                },
-                hintText: LocaleKeys.numberOfPassenger.localize,
-              ),
-
-                 */
               if (widget.type == 'shipping')
                 PickUpTextFormField(
                   fieldType: FieldType.text,
