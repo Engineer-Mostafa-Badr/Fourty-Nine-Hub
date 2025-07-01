@@ -185,7 +185,7 @@ class ClientOfferWidget extends StatelessWidget {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     DateTime dateTime = DateTime.parse(
-        offers?.tripDetails?.data ?? '2025-03-11T21:50:21.998Z');
+        offers?.tripDetails?.date ?? '2025-03-11T21:50:21.998Z');
 
     // Format date with Arabic digits if needed
     final formattedDate = isArabic
@@ -349,6 +349,7 @@ class ClientOfferWidget extends StatelessWidget {
                                             fontWeight: FontWeight.w300)))
                               ],
                             ),
+                            if(modeType =='ride')
                             Label(
                                 text:
                                 '${LocaleKeys.passenger.localize}  $passengersCount',
@@ -383,7 +384,7 @@ class ClientOfferWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                        text: "${offers?.isFromSocket == true ? offers?.newOfferPrice ?? offers?.newOfferPrice ?? 300 : offers?.newOfferPrice ?? 300}",
+                        text: "${formatPrice(offers?.isFromSocket == true ? offers?.newOfferPrice ?? offers?.newOfferPrice ?? 300 : offers?.newOfferPrice ?? 300, context)}",
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const Sizer(width: 4),
@@ -398,13 +399,13 @@ class ClientOfferWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: "${formatTimeOnly(offers?.tripDetails?.data,context)}",
+                        text: "${formatTimeOnly(offers?.tripDetails?.date,context)}",
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Label(
-                        text: "${formatPickupDate(offers?.tripDetails?.data, context)}",
+                        text: "${formatPickupDate(offers?.tripDetails?.date, context)}",
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),

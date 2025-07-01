@@ -345,7 +345,7 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   Failure _getFailure(dynamic e) {
-    final errorData = e.response?.data; // Get the entire response data safely
+    final errorData = e.response?.date; // Get the entire response data safely
     final error = (errorData is Map && errorData['error'] is Map)
         ? errorData['error'] as Map
         : null;
