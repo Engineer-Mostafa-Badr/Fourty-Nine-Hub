@@ -2496,6 +2496,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             index;
                 return GestureDetector(
                   onTap: () {
+                    context.read<RideCubit>().onChangeCategoriesType(type);
                     setState(() {
                       if (context.isUserLoggedIn &&
                           serviceLocator<UserCubit>().state.data?.gender !=
