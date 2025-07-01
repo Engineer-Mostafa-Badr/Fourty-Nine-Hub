@@ -52,19 +52,14 @@ class RidePersonalMoreInfoScreen extends StatefulWidget {
 
 class _RidePersonalMoreInfoScreenState
     extends State<RidePersonalMoreInfoScreen> {
-  String _selectedTime = '';
-  String _selectedDate = '';
-  String offerPrice = '';
   late ClientTripsCubit cubit;
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController passengerController = TextEditingController();
-  TextEditingController descController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     cubit = context.read<ClientTripsCubit>();
+    cubit.initData(widget.subCategoryId);
     if (widget.isTruk) {
       cubit.makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
       log(cubit.makeLoadingTripParam.toJson().toString());
@@ -369,7 +364,7 @@ class _RidePersonalMoreInfoScreenState
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        if (_selectedDate.isEmpty) {
+                        if (cubit.selectedDate.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -441,7 +436,7 @@ class _RidePersonalMoreInfoScreenState
 
                           // Robust date parsing
                           final parts =
-                              _selectedDate.split(RegExp(r'[/-]')).map((part) {
+                              cubit.selectedDate.split(RegExp(r'[/-]')).map((part) {
                             // Convert Arabic digits to Latin if needed
                             const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
                             const latinDigits = '0123456789';
@@ -497,7 +492,7 @@ class _RidePersonalMoreInfoScreenState
                           }
 
                           setState(() {
-                            _selectedTime =
+                            cubit.selectedTime =
                                 formatTimeWithLocale(selectedTime, context);
                             cubit.makeNonTrackingTripParam.date =
                                 selectedDateTime;
@@ -506,24 +501,24 @@ class _RidePersonalMoreInfoScreenState
                       },
                       child: PickUpContainer(
                         fontWeight: FontWeight.w400,
-                        title: _selectedTime.isEmpty
+                        title: cubit.selectedTime.isEmpty
                             ? (context.isArabic
                                 ? 'اختر الوقت'
                                 : LocaleKeys.chooseTheTime.localize)
-                            : _selectedTime,
+                            : cubit.selectedTime,
                       ),
                     ),
                   ),
                   const SizedBox(width: 7),
                   Expanded(
                     child: CustomDatePickerButton(
-                      selectedDate: _selectedDate.isEmpty
+                      selectedDate: cubit.selectedDate.isEmpty
                           ? LocaleKeys.chooseTheDate.tr()
-                          : _selectedDate,
+                          : cubit.selectedDate,
                       onDateSelected: (newDate) {
                         setState(() {
-                          _selectedDate = newDate;
-                          _selectedTime = ""; // Reset time when date changes
+                          cubit.selectedDate = newDate;
+                          cubit.selectedTime = ""; // Reset time when date changes
 
                           // Parse the date safely using multiple formats
                           DateTime parsedDate;
@@ -587,13 +582,13 @@ class _RidePersonalMoreInfoScreenState
               if (widget.type != 'shipping')
                 PickUpTextFormField(
                   fieldType: FieldType.phone,
-                  controller: passengerController,
+                  controller: cubit.passengerController,
                   onChanged: (value) {
                     // if (context.isArabic) {
                     //   final formatted = convertDigits(value, toArabic: true);
                     //   final selectionIndex = formatted.length;
                     //
-                    //   passengerController.value = TextEditingValue(
+                    //   cubit.passengerController.value = TextEditingValue(
                     //     text: formatted,
                     //     selection:
                     //         TextSelection.collapsed(offset: selectionIndex),
@@ -604,7 +599,7 @@ class _RidePersonalMoreInfoScreenState
                     //   cubit.makeNonTrackingTripParam.passengers =
                     //       int.tryParse(englishValue); // ✅ parsed to int
                     // } else {
-                    //   passengerController.text = value;
+                    //   cubit.passengerController.text = value;
                     //   cubit.makeNonTrackingTripParam.passengers =
                     //       int.tryParse(value); // ✅ parsed to int
                     // }
@@ -612,7 +607,7 @@ class _RidePersonalMoreInfoScreenState
                       final formatted = convertDigits(value, toArabic: true);
                       final selectionIndex = formatted.length;
 
-                      passengerController.value = TextEditingValue(
+                      cubit.passengerController.value = TextEditingValue(
                         text: formatted,
                         selection: TextSelection.collapsed(offset: selectionIndex),
                       );
@@ -620,7 +615,7 @@ class _RidePersonalMoreInfoScreenState
                       final englishValue = convertDigits(formatted, toArabic: false);
                       cubit.makeNonTrackingTripParam.passengers = int.tryParse(englishValue);
                     } else {
-                      passengerController.text = value;
+                      cubit.passengerController.text = value;
                       cubit.makeNonTrackingTripParam.passengers = int.tryParse(value);
                     }
 
@@ -659,7 +654,7 @@ class _RidePersonalMoreInfoScreenState
               if (widget.type == 'shipping')
                 PickUpTextFormField(
                   fieldType: FieldType.text,
-                  controller: descController,
+                  controller: cubit.descController,
                   onChanged: (v) => formKey.currentState!.validate(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -673,7 +668,7 @@ class _RidePersonalMoreInfoScreenState
               const SizedBox(height: 8),
               PickUpTextFormField(
                 fieldType: FieldType.phone,
-                controller: phoneController,
+                controller: cubit.phoneController,
                 // validator: (value) {
                 //   if (value == null || value.isEmpty) {
                 //     return LocaleKeys.required.localize;
@@ -740,18 +735,15 @@ class _RidePersonalMoreInfoScreenState
                   }
                 },
                 maxLines: 1,
-                hintText: cubit.makeNonTrackingTripParam.phone == null ||
-                        cubit.makeNonTrackingTripParam.phone!.isEmpty
-                    ? LocaleKeys.phone.localize
-                    : cubit.makeNonTrackingTripParam.phone!,
+                hintText:  LocaleKeys.phone.localize,
               ),
               const SizedBox(height: 8),
               GestureDetector(
                 onTap: () => _showOfferFareBottomSheet(context),
                 child: PickUpContainer(
-                  title: offerPrice.isEmpty
+                  title: cubit.offerPrice.isEmpty
                       ? LocaleKeys.offerPrice.localize
-                      : convertDigits(offerPrice, toArabic: context.isArabic),
+                      : convertDigits(cubit.offerPrice, toArabic: context.isArabic),
                 ),
               ),
               const SizedBox(height: 8),
@@ -785,15 +777,15 @@ class _RidePersonalMoreInfoScreenState
                                   return;
                                 }
                                 final price =
-                                    double.tryParse(offerPrice) ?? 0.0;
-                                final passengerText = passengerController.text;
+                                    double.tryParse(cubit.offerPrice) ?? 0.0;
+                                final passengerText = cubit.passengerController.text;
                                 final passengerCount =
                                     int.tryParse(passengerText) ?? 0;
 
                                 if (widget.type == 'shipping') {
                                   final p = cubit.makeNonTrackingTripParam
                                     ..price = price
-                                    ..desc = descController.text;
+                                    ..desc = cubit.descController.text;
 
                                   if (!_validateRequiredShippingFields(
                                       p, price)) {
@@ -814,7 +806,7 @@ class _RidePersonalMoreInfoScreenState
                                       passengers: passengerCount,
                                       isPremium: true,
                                       description: p.description ?? '',
-                                      desc: descController.text);
+                                      desc: cubit.descController.text);
 
                                   cubit.createShippingTrip(
                                       params: tripParams, context: context);
@@ -851,7 +843,7 @@ class _RidePersonalMoreInfoScreenState
                                       passengers: passengerCount,
                                       isPremium: true,
                                       description: p.description ?? '',
-                                      desc: descController.text);
+                                      desc: cubit.descController.text);
 
                                   cubit.createNonTrackTrip(
                                       params: tripParams, context: context);
@@ -874,8 +866,8 @@ class _RidePersonalMoreInfoScreenState
                                 }
                                 if (formKey.currentState!.validate()) {
                                   final price =
-                                      double.tryParse(offerPrice) ?? 0.0;
-                                  final passengerText = convertDigits(passengerController.text, toArabic: false);
+                                      double.tryParse(cubit.offerPrice) ?? 0.0;
+                                  final passengerText = convertDigits(cubit.passengerController.text, toArabic: false);
                                   final passengerCount = int.tryParse(passengerText) ?? 0;
 
 
@@ -892,7 +884,7 @@ class _RidePersonalMoreInfoScreenState
                                   // if (widget.type == 'shipping') {
                                   //   final p = cubit.makeNonTrackingTripParam
                                   //     ..price = price
-                                  //   ..desc = descController.text;
+                                  //   ..desc = cubit.descController.text;
                                   //
                                   //   if (!_validateRequiredShippingFields(
                                   //       p, price)) {
@@ -913,7 +905,7 @@ class _RidePersonalMoreInfoScreenState
                                   //       passengers: passengerCount,
                                   //       isPremium: false,
                                   //       description: p.description ?? '',
-                                  //       desc: descController.text
+                                  //       desc: cubit.descController.text
                                   //   );
                                   //
                                   //   cubit.createShippingTrip(
@@ -943,7 +935,7 @@ class _RidePersonalMoreInfoScreenState
                                       passengers: passengerCount,
                                       isPremium: false,
                                       description: p.description ?? '',
-                                      desc: descController.text);
+                                      desc: cubit.descController.text);
 
                                   cubit.createNonTrackTrip(
                                       params: tripParams, context: context);
@@ -967,8 +959,8 @@ class _RidePersonalMoreInfoScreenState
                                   return;
                                 }
 
-                                final price = double.tryParse(offerPrice) ?? 0.0;
-                                final passengerText = passengerController.text;
+                                final price = double.tryParse(cubit.offerPrice) ?? 0.0;
+                                final passengerText = cubit.passengerController.text;
                                 final passengerCount = int.tryParse(passengerText) ?? 0;
 
                                 if (passengerCount > 1000) {
@@ -1031,8 +1023,8 @@ class _RidePersonalMoreInfoScreenState
                                   return;
                                 }
 
-                                final price = double.tryParse(offerPrice) ?? 0.0;
-                                final passengerText = passengerController.text;
+                                final price = double.tryParse(cubit.offerPrice) ?? 0.0;
+                                final passengerText = cubit.passengerController.text;
                                 final passengerCount = int.tryParse(passengerText) ?? 0;
 
                                 if (passengerCount > 1000) {
@@ -1100,7 +1092,7 @@ class _RidePersonalMoreInfoScreenState
                           //               cubit.makeLoadingTripParam.isPremium =
                           //                   true;
                           //               cubit.makeLoadingTripParam.price =
-                          //                   double.tryParse(offerPrice) ?? 0.0;
+                          //                   double.tryParse(cubit.offerPrice) ?? 0.0;
                           //               log(cubit.makeLoadingTripParam
                           //                   .toJson()
                           //                   .toString());
@@ -1123,7 +1115,7 @@ class _RidePersonalMoreInfoScreenState
                           //               cubit.makeNonTrackingTripParam
                           //                   .subcategoryId = widget.subCategoryId;
                           //               cubit.makeNonTrackingTripParam.price =
-                          //                   double.tryParse(offerPrice) ?? 0.0;
+                          //                   double.tryParse(cubit.offerPrice) ?? 0.0;
                           //               log(cubit.makeNonTrackingTripParam
                           //                   .toJson()
                           //                   .toString());
@@ -1166,7 +1158,7 @@ class _RidePersonalMoreInfoScreenState
                           //               cubit.makeLoadingTripParam.isPremium =
                           //                   false;
                           //               cubit.makeLoadingTripParam.price =
-                          //                   double.tryParse(offerPrice) ?? 0.0;
+                          //                   double.tryParse(cubit.offerPrice) ?? 0.0;
                           //               log(cubit.makeLoadingTripParam
                           //                   .toJson()
                           //                   .toString());
@@ -1189,7 +1181,7 @@ class _RidePersonalMoreInfoScreenState
                           //               cubit.makeNonTrackingTripParam
                           //                   .subcategoryId = widget.subCategoryId;
                           //               cubit.makeNonTrackingTripParam.price =
-                          //                   double.tryParse(offerPrice) ?? 0.0;
+                          //                   double.tryParse(cubit.offerPrice) ?? 0.0;
                           //               log(cubit.makeNonTrackingTripParam
                           //                   .toJson()
                           //                   .toString());
@@ -1272,7 +1264,6 @@ class _RidePersonalMoreInfoScreenState
   }
 
   void _showOfferFareBottomSheet(BuildContext context) {
-    final TextEditingController offerPriceController = TextEditingController();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
@@ -1338,7 +1329,7 @@ class _RidePersonalMoreInfoScreenState
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () {
-                              offerPriceController.clear();
+                              cubit.offerPriceController.clear();
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -1360,7 +1351,7 @@ class _RidePersonalMoreInfoScreenState
                     const SizedBox(height: 16),
                     TextFormField(
                       cursorColor: AppColors.PRIMARY_COLOR,
-                      controller: offerPriceController,
+                      controller: cubit.offerPriceController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -1399,9 +1390,9 @@ class _RidePersonalMoreInfoScreenState
                               _convertToArabicDigits(englishValue);
                           if (arabicValue != value) {
                             final cursorPos =
-                                offerPriceController.selection.base.offset;
-                            offerPriceController.value =
-                                offerPriceController.value.copyWith(
+                                cubit.offerPriceController.selection.base.offset;
+                            cubit.offerPriceController.value =
+                                cubit.offerPriceController.value.copyWith(
                               text: arabicValue,
                               selection: TextSelection.collapsed(
                                 offset: cursorPos == -1
@@ -1447,8 +1438,8 @@ class _RidePersonalMoreInfoScreenState
                         if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
                           setState(() {
-                            offerPrice = _convertToEnglishDigits(
-                                offerPriceController.text);
+                            cubit.offerPrice = _convertToEnglishDigits(
+                                cubit.offerPriceController.text);
                           });
                         }
                       },

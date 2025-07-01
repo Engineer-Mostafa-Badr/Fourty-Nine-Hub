@@ -235,7 +235,6 @@ class _TripJoinViewState extends State<TripJoinView>
                       ),
                     ),
                     getFloatingActionButtonContent(selectedIndex),
-
                   ],
                 )),
           ],
