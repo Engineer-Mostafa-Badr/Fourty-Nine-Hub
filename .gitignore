@@ -67,3 +67,22 @@ app.*.map.json
 macos/Flutter/GeneratedPluginRegistrant.swift
 macos/Flutter/ephemeral/flutter_export_environment.sh
 macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+
+
+
+
+
+
+
+
+
+.android
+.dart_tool
+.idea
+.vscode
+build/
+*.jks
+*.keystore
+*.pem
+firebase_options.dart  # لو فيها dev info
+.env

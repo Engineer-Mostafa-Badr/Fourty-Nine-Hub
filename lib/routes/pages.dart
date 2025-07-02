@@ -136,6 +136,10 @@ import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/ne
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_all_notifications/delete_all_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_notification/delete_notification_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_seen/notification_seen_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_ride_cubit.dart';
@@ -1226,7 +1230,9 @@ class AppPages {
               GoRoute(
                   path: Paths.ACCOUNT,
                   name: Routes.ACCOUNT,
-                  builder: (context, state) => const NotificationView(),
+                  builder: (context, state) => BlocProvider(
+                      create: (context)=>serviceLocator<NotificationSeenCubit>(),
+                      child: const NotificationView()),
                   routes: [
                     // GoRoute(
                     //   path: Paths.NOTIFICATIONS,
@@ -1260,7 +1266,14 @@ class AppPages {
                     GoRoute(
                       path: Paths.NOTIFICATIONS,
                       name: Routes.NOTIFICATIONS,
-                      builder: (context, state) => const NotificationView(),
+                      builder: (context, state) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider(create: (context)=>serviceLocator<NotificationSeenCubit>(),),
+                            BlocProvider(create: (context)=>serviceLocator<AllNotficationsSeenCubit>(),),
+                            BlocProvider(create: (context)=>serviceLocator<DeleteNotificationCubit>(),),
+                            BlocProvider(create: (context)=>serviceLocator<DeleteAllNotificationsCubit>(),),
+                          ],
+                          child: const NotificationView()),
                     ),
                     GoRoute(
                         path: Paths.SETTINGS,

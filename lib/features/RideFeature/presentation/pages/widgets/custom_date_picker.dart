@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -7,6 +8,10 @@ import 'custom_pickup_container.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart'; // بدون alias
+
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 class CustomDatePickerButton extends StatelessWidget {
   final String selectedDate;
@@ -50,29 +55,33 @@ class CustomDatePickerButton extends StatelessWidget {
                         ),
                         canvasColor: backgroundColor,
                       ),
-                      child: DayPicker.single(
-                        selectedDate: pickedDate,
-                        onChanged: (date) {
-                          setState(() {
-                            pickedDate = date;
-                          });
-                        },
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                        datePickerStyles: DatePickerRangeStyles(
-                          selectedDateStyle: const TextStyle(color: Colors.white),
-                          selectedSingleDateDecoration: BoxDecoration(
-                            color: AppColors.PRIMARY_COLOR,
-                            shape: BoxShape.circle,
-                          ),
-                          disabledDateStyle: TextStyle(
-                            color: Colors.grey.withOpacity(0.4),
-                          ),
-                          dayHeaderStyle: DayHeaderStyle(
-                            textStyle: TextStyle(color: primaryTextColor),
+                      child:
+
+                      Localizations.override(
+                        context: context,
+                        locale: context.isArabic ? const Locale('ar', 'EG') : const Locale('en', 'US'),
+                        child: DayPicker.single(
+                          selectedDate: pickedDate,
+                          onChanged: (date) {
+                            setState(() => pickedDate = date);
+                          },
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                          datePickerStyles: DatePickerRangeStyles(
+                            selectedDateStyle: const TextStyle(color: Colors.white),
+                            selectedSingleDateDecoration: BoxDecoration(
+                              color: AppColors.PRIMARY_COLOR,
+                              shape: BoxShape.circle,
+                            ),
+                            disabledDateStyle: TextStyle(
+                              color: Colors.grey.withOpacity(0.4),
+                            ),
+                            dayHeaderStyle: DayHeaderStyle(
+                              textStyle: TextStyle(color: primaryTextColor),
+                            ),
                           ),
                         ),
-                      ),
+                      )
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -83,8 +92,15 @@ class CustomDatePickerButton extends StatelessWidget {
                             height: 38,
                             backColor: AppColors.PRIMARY_COLOR,
                             onPressed: () {
-                              final newDateStr =
-                                  "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                              // Determine locale based on app language
+                              final locale = context.isArabic
+                                  ? const Locale('ar', 'EG')
+                                  : const Locale('en', 'US');
+
+                              final formatter =
+                              DateFormat('dd/MM/yyyy', locale.toString());
+                              final newDateStr = formatter.format(pickedDate);
+
                               onDateSelected(newDateStr);
                               Navigator.pop(context);
                             },

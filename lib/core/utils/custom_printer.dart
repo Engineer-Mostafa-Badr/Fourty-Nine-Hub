@@ -8,7 +8,7 @@ class CustomPrinter {
 
   static logJsonResponsePretty({String? title, required dynamic response}) {
     if (response.runtimeType == Response<dynamic>) {
-      String prettyResponse = encoder.convert(response.data);
+      String prettyResponse = encoder.convert(response.date);
 
       log('[$title] StatusCode: ${response.statusCode}');
       log('[$title] response:');

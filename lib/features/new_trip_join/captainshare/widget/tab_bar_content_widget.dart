@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -150,20 +151,15 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
   }
 
   void _scrollListener() {
-    final currentScroll = _scrollController.offset;
-    // Show when scrolling up, hide when scrolling down
-    if (currentScroll > _lastScrollOffset && currentScroll > 20) {
-      // Scrolling down
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (_isVisible) {
         setState(() => _isVisible = false);
       }
-    } else if (currentScroll < _lastScrollOffset) {
-      // Scrolling up
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!_isVisible) {
         setState(() => _isVisible = true);
       }
     }
-    _lastScrollOffset = currentScroll;
   }
 
   @override
@@ -196,40 +192,47 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
             separatorBuilder: (context, index) => const Sizer(),
             itemCount: cubit.availableBookings.length,
           ),
-          if(_isVisible)PositionedDirectional(
-            bottom: 0.h,
-            start: 0,
-            end: 0,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 30.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      context.push(Routes.captainShareInfoScreen);
-                    },
-                    child: Container(
-                      height: 48.h,
-                      width: 48.h,
-                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
-                      child: Icon(
-                        size: 19,
-                        Icons.question_mark,
-                        color: context.isDarkMode ? AppColors.black : Colors.white,
+      PositionedDirectional(
+        bottom: 0.h,
+        start: 0,
+        end: 0,
+        child: AnimatedSlide(
+        duration: const Duration(milliseconds: 300),
+        offset: _isVisible ? Offset.zero : const Offset(0, 2),
+        child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity: _isVisible ? 1 : 0,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 30.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        context.push(Routes.captainShareInfoScreen);
+                      },
+                      child: Container(
+                        height: 48.h,
+                        width: 48.h,
+                        decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                        child: Icon(
+                          size: 19,
+                          Icons.question_mark,
+                          color: context.isDarkMode ? AppColors.black : Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  TripJoinFloatingActionButton(
-                    title: LocaleKeys.createRoute.localize,
-                    onTap: () {
-                      cubit.onNavigateToCreateRoute(context);
-                    },
-                  ),
-                ],
+                    TripJoinFloatingActionButton(
+                      title: LocaleKeys.createRoute.localize,
+                      onTap: () {
+                        cubit.onNavigateToCreateRoute(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
+            ),),
+      ),
         ],
       );
 
@@ -265,22 +268,16 @@ class _BookingsWidgetState extends State<BookingsWidget> {
   }
 
   void _scrollListener() {
-    final currentScroll = _scrollController.offset;
-    // Show when scrolling up, hide when scrolling down
-    if (currentScroll > _lastScrollOffset && currentScroll > 20) {
-      // Scrolling down
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (_isVisible) {
         setState(() => _isVisible = false);
       }
-    } else if (currentScroll < _lastScrollOffset) {
-      // Scrolling up
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!_isVisible) {
         setState(() => _isVisible = true);
       }
     }
-    _lastScrollOffset = currentScroll;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -313,40 +310,47 @@ class _BookingsWidgetState extends State<BookingsWidget> {
             );
           }
         }),
-        if(_isVisible)PositionedDirectional(
+        PositionedDirectional(
           bottom: 0.h,
           start: 0,
           end: 0,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 30.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
-                  },
-                  child: Container(
-                    height: 48.h,
-                    width: 48.h,
-                    decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(
-                      size: 19,
-                      Icons.question_mark,
-                      color: context.isDarkMode ? AppColors.black : Colors.white,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isVisible ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isVisible ? 1 : 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
+                    },
+                    child: Container(
+                      height: 48.h,
+                      width: 48.h,
+                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(
+                        size: 19,
+                        Icons.question_mark,
+                        color: context.isDarkMode ? AppColors.black : Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                TripJoinFloatingActionButton(
-                  title: LocaleKeys.createRoute.localize,
-                  onTap: () {
-                    context.push(Routes.newRouteScreen);
-                  },
-                ),
-              ],
+                  TripJoinFloatingActionButton(
+                    title: LocaleKeys.createRoute.localize,
+                    onTap: () {
+                      context.push(Routes.newRouteScreen);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        )),
       ],
     );
   }
@@ -380,22 +384,16 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
   }
 
   void _scrollListener() {
-    final currentScroll = _scrollController.offset;
-    // Show when scrolling up, hide when scrolling down
-    if (currentScroll > _lastScrollOffset && currentScroll > 20) {
-      // Scrolling down
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (_isVisible) {
         setState(() => _isVisible = false);
       }
-    } else if (currentScroll < _lastScrollOffset) {
-      // Scrolling up
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!_isVisible) {
         setState(() => _isVisible = true);
       }
     }
-    _lastScrollOffset = currentScroll;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -428,40 +426,47 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
             );
           }
         }),
-        if(_isVisible)PositionedDirectional(
+       PositionedDirectional(
           bottom: 0.h,
           start: 0,
           end: 0,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 30.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
-                  },
-                  child: Container(
-                    height: 48.h,
-                    width: 48.h,
-                    decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(
-                      size: 19,
-                      Icons.question_mark,
-                      color: context.isDarkMode ? AppColors.black : Colors.white,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isVisible ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isVisible ? 1 : 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
+                    },
+                    child: Container(
+                      height: 48.h,
+                      width: 48.h,
+                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(
+                        size: 19,
+                        Icons.question_mark,
+                        color: context.isDarkMode ? AppColors.black : Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                TripJoinFloatingActionButton(
-                  title: LocaleKeys.createRoute.localize,
-                  onTap: () {
-                    context.push(Routes.newRouteScreen);
-                  },
-                ),
-              ],
+                  TripJoinFloatingActionButton(
+                    title: LocaleKeys.createRoute.localize,
+                    onTap: () {
+                      context.push(Routes.newRouteScreen);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        )),
       ],
     );
   }
@@ -494,20 +499,15 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
     }
   }
   void _scrollListener() {
-    final currentScroll = _scrollController.offset;
-    // Show when scrolling up, hide when scrolling down
-    if (currentScroll > _lastScrollOffset && currentScroll > 20) {
-      // Scrolling down
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (_isVisible) {
         setState(() => _isVisible = false);
       }
-    } else if (currentScroll < _lastScrollOffset) {
-      // Scrolling up
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!_isVisible) {
         setState(() => _isVisible = true);
       }
     }
-    _lastScrollOffset = currentScroll;
   }
 
   @override
@@ -536,40 +536,47 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
               itemCount: cubit.expiredBookings.length,
             );
         }),
-        if(_isVisible)PositionedDirectional(
+        PositionedDirectional(
           bottom: 0.h,
           start: 0,
           end: 0,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 30.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
-                  },
-                  child: Container(
-                    height: 48.h,
-                    width: 48.h,
-                    decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(
-                      size: 19,
-                      Icons.question_mark,
-                      color: context.isDarkMode ? AppColors.black : Colors.white,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isVisible ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isVisible ? 1 : 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
+                    },
+                    child: Container(
+                      height: 48.h,
+                      width: 48.h,
+                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(
+                        size: 19,
+                        Icons.question_mark,
+                        color: context.isDarkMode ? AppColors.black : Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                TripJoinFloatingActionButton(
-                  title: LocaleKeys.createRoute.localize,
-                  onTap: () {
-                    context.push(Routes.newRouteScreen);
-                  },
-                ),
-              ],
+                  TripJoinFloatingActionButton(
+                    title: LocaleKeys.createRoute.localize,
+                    onTap: () {
+                      context.push(Routes.newRouteScreen);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        )),
       ],
     );
   }

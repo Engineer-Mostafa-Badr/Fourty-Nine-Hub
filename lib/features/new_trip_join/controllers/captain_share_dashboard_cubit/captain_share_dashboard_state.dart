@@ -22,11 +22,13 @@ class CaptainShareDashboardState {
   final int? tapIndex;
   final String? hintText;
   final SettingsDashboardEntityResponse? setting;
+  final MyBookingEntity? runningRoute;
   final bool? isCaptain;
 
   const CaptainShareDashboardState({
     this.failure,
     this.setting,
+    this.runningRoute,
     this.tapIndex=0,
     this.hintText='',
     this.isCaptain=false,
@@ -34,6 +36,7 @@ class CaptainShareDashboardState {
   });
   CaptainShareDashboardState copyWith({
     CaptainShareDashboardStates? status,
+    MyBookingEntity? runningRoute,
     SettingsDashboardEntityResponse? setting,
     Failure? failure,
     int? tapIndex,
@@ -47,6 +50,7 @@ class CaptainShareDashboardState {
       hintText: hintText ?? this.hintText,
       setting: setting ?? this.setting,
       isCaptain: isCaptain ?? this.isCaptain,
+      runningRoute: runningRoute ?? this.runningRoute,
     );
   }
 }

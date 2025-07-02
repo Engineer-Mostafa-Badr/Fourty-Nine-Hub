@@ -1624,6 +1624,16 @@
   "time": "الوقت",
   "DidntReceiveOTP" : "لم تستلم الكود؟",
   "resendOTP" : "اعادة ارسال الكود",
-  "oneTime": "مرة واحدة"
+  "oneTime": "مرة واحدة",
+  "request": "طلب",
+  "eachSeat": "لكل مقعد",
+  "justNow": "الآن",
+  "minAgo": "منذ دقيقة",
+  "hour": "ساعة",
+  "ss": "س",
+  "ago": "منذ",
+  "week": "أسبوع",
+  "selectCarBrand": "اختر ماركة السيارة",
+  "selectCarModel": "اختر طراز السيارة"
 
 }

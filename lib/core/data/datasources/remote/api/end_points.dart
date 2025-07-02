@@ -496,6 +496,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share";
   static String cancelRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
+  static String acceptRoute(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/accept";
   static String joinToRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
   static String routeDetails(String id) =>
@@ -510,6 +512,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/routes/expired";
   static String runningBooking =
       "$developmentBaseUrl/captain-share/routes/running";
+  static String runningDriverBooking =
+      "$developmentBaseUrl/captain-share/driver/routes/running";
 
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =
@@ -1569,7 +1573,6 @@ class EndPoints {
   static const getMostBooking = '/health/doctors';
   static const addCarModel = '/ride/cars/models';
   static const addCarBrand = '/ride/cars/brands';
-
   static const getDoctorList = '/health/doctors';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
@@ -1634,6 +1637,9 @@ class EndPoints {
   static String createTripJoinOffer = '/trip-join/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
+
+  static const updateDriverLoadingRatingNonSocket = '/loading/trip/rating/driver';
+  static const addRateToClientWithDriverLoadingNonSocket = '/loading/trip/rating/';
 
 
 }

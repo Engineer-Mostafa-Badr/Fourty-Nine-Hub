@@ -1640,7 +1640,17 @@
   "time": "Time",
   "DidntReceiveOTP" : "Didn't receive OTP?",
   "resendOTP" : "Resend OTP",
-  "oneTime": "One Time"
+  "oneTime": "One Time",
+  "eachSeat": "For each seat",
+  "justNow": "Just now",
+  "minAgo": "Min ago",
+  "hour": "Hour",
+  "ss": "s",
+  "ago": "Ago",
+  "week": "Week",
+  "selectCarBrand": "Select Car Brand",
+  "selectCarModel": "Select Car Model"
+
 
 
 }

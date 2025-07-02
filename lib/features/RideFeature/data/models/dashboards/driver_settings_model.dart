@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/driver_settings_entity.dart';
 
+
 class DriverSettingsModel extends DriverSettingsEntity {
   DriverSettingsModel({
     super.id,
@@ -10,20 +11,23 @@ class DriverSettingsModel extends DriverSettingsEntity {
     super.isActive,
     super.isApproved,
     super.isRejected,
+    super.isVoiceCommentAlertsEnabled,
     super.rating,
     super.category,
-    super.carLicenseExpiryDate,
-    super.criminalRecordExpiryDate,
-    super.drivingLicenseExpiryDate,
-    super.drugAnalysisExpiryDate,
-    super.idExpiryDate,
+    super.fairCostPerKm,
     super.isCriminalRecordEnabled,
     super.isDrugAnalysisRecordEnabled,
     super.isVehicleRecordEnabled,
+    super.idExpiryDate,
+    super.drivingLicenseExpiryDate,
+    super.carLicenseExpiryDate,
+    super.criminalRecordExpiryDate,
+    super.drugAnalysisExpiryDate,
     super.technicalExaminationExpiryDate,
   });
 
   factory DriverSettingsModel.fromJson(Map<String, dynamic> json) {
+    final docs = json['documentations'];
     return DriverSettingsModel(
       id: json['id'] as String?,
       userId: json['userId'] as String?,
@@ -33,29 +37,19 @@ class DriverSettingsModel extends DriverSettingsEntity {
       isActive: json['isActive'] as bool?,
       isApproved: json['isApproved'] as bool?,
       isRejected: json['isRejected'] as bool?,
-      rating: json['rating'] != null
-          ? RatingModel.fromJson(json['rating'])
-          : null,
-      category: json['category'] != null
-          ? CategoryModel.fromJson(json['category'])
-          : null,
-      carLicenseExpiryDate: json['documentations']!=null?json['documentations']['carLicenseExpiryDate']??'':'',
-
-      criminalRecordExpiryDate: json['documentations']!=null?json['documentations']['criminalRecordExpiryDate']??'':'',
-
-      drivingLicenseExpiryDate: json['documentations']!=null?json['documentations']['drivingLicenseExpiryDate']??'':'',
-
-      drugAnalysisExpiryDate: json['documentations']!=null?json['documentations']['drugAnalysisExpiryDate']??'':'',
-
-      idExpiryDate: json['documentations']!=null?json['documentations']['idExpiryDate']??'':'',
-
-      isCriminalRecordEnabled: json['documentations']!=null?json['documentations']['isCriminalRecordEnabled']??false:false,
-
-      isDrugAnalysisRecordEnabled: json['documentations']!=null?json['documentations']['isDrugAnalysisRecordEnabled']??false:false,
-
-      isVehicleRecordEnabled: json['documentations']!=null?json['documentations']['isVehicleRecordEnabled']??false:false,
-
-      technicalExaminationExpiryDate: json['documentations']!=null?json['documentations']['technicalExaminationExpiryDate']??'':'',
+      isVoiceCommentAlertsEnabled: json['isVoiceCommentAlertsEnabled'] as bool?,
+      rating: json['rating'] != null ? RatingModel.fromJson(json['rating']) : null,
+      category: json['subcategory'] != null ? CategoryModel.fromJson(json['subcategory']) : null,
+      fairCostPerKm: json['fairCostPerKm'] != null ? FairCostPerKmModel.fromJson(json['fairCostPerKm']) : null,
+      carLicenseExpiryDate: docs?['carLicenseExpiryDate'],
+      criminalRecordExpiryDate: docs?['criminalRecordExpiryDate'],
+      drivingLicenseExpiryDate: docs?['drivingLicenseExpiryDate'],
+      drugAnalysisExpiryDate: docs?['drugAnalysisExpiryDate'],
+      idExpiryDate: docs?['idExpiryDate'],
+      technicalExaminationExpiryDate: docs?['technicalExaminationExpiryDate'],
+      isCriminalRecordEnabled: docs?['isCriminalRecordEnabled'],
+      isDrugAnalysisRecordEnabled: docs?['isDrugAnalysisRecordEnabled'],
+      isVehicleRecordEnabled: docs?['isVehicleRecordEnabled'],
     );
   }
 }
@@ -105,6 +99,17 @@ class SubCategoryModel extends SubCategoryEntity {
       picture: json['picture'] as String?,
       nameAr: json['nameAr'] as String?,
       nameEn: json['nameEn'] as String?,
+    );
+  }
+}
+
+class FairCostPerKmModel extends FairCostPerKmEntity {
+  FairCostPerKmModel({super.highCostPerKm, super.lowCostPerKm});
+
+  factory FairCostPerKmModel.fromJson(Map<String, dynamic> json) {
+    return FairCostPerKmModel(
+      highCostPerKm: json['highCostPerKm'] as int?,
+      lowCostPerKm: json['lowCostPerKm'] as int?,
     );
   }
 }

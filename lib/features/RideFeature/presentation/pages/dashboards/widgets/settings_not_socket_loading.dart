@@ -24,6 +24,7 @@ import '../../../../domain/entities/loading/settings_driver_loading_entity.dart'
 import '../../../../domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../../loading_dashboard/loading_dashboard_details_screen.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
 import 'creminal_record_non_socket_screen.dart';
@@ -164,8 +165,9 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  widget.settings?.rating?.average?.toString() ?? '2.5',
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                formatPrice(widget.settings?.rating?.average?.toDouble() ?? 2.5,context),
+
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 )
               ],
             ),
@@ -180,7 +182,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  '${widget.settings?.profit ?? '0'} ${LocaleKeys.egp.tr()}',
+                  '${formatPrice(widget.settings?.profit ?? 0,context)} ${LocaleKeys.egp.tr()}',
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 )
               ],
@@ -196,7 +198,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  widget.settings?.countTrips.toString() ?? '',
+                  formatPrice(widget.settings?.countTrips ?? 0,context),
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 )
               ],

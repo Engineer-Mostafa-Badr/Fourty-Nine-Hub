@@ -1,5 +1,3 @@
-// my_ads_trip_join_model.dart
-
 import '../../../domain/entities/my_ads_trip_join_entity.dart';
 
 class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
@@ -10,7 +8,6 @@ class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
 
   factory MyAdsTripJoinModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'];
-
     return MyAdsTripJoinModel(
       offers: (data['offers'] as List<dynamic>?)
           ?.map((e) => MyAdsTripDocModel.fromJson(e))
@@ -31,6 +28,11 @@ class MyAdsTripDocModel extends MyAdsTripDocEntity {
     super.isRepeat,
     super.passengers,
     super.startDate,
+    super.offerType,
+    super.isPremium,
+    super.phoneNumber,
+    super.createdAt,
+    super.isButtonEnabled,
     super.vehicleDetails,
     super.location,
   });
@@ -44,12 +46,29 @@ class MyAdsTripDocModel extends MyAdsTripDocEntity {
       isRepeat: json['isRepeat'],
       passengers: json['passengers'],
       startDate: json['startDate'],
+      offerType: json['offerType'],
+      isPremium: json['isPremium'],
+      phoneNumber: json['phoneNumber'],
+      createdAt: json['createdAt'],
+      isButtonEnabled: json['isButtonEnabled'] != null
+          ? IsButtonEnabledModel.fromJson(json['isButtonEnabled'])
+          : null,
       vehicleDetails: json['vehicleDetails'] != null
           ? VehicleDetailsModel.fromJson(json['vehicleDetails'])
           : null,
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,
+    );
+  }
+}
+
+class IsButtonEnabledModel extends IsButtonEnabledEntity {
+  IsButtonEnabledModel({super.state});
+
+  factory IsButtonEnabledModel.fromJson(Map<String, dynamic> json) {
+    return IsButtonEnabledModel(
+      state: json['state'],
     );
   }
 }
@@ -92,11 +111,13 @@ class LocationModel extends LocationEntity {
 
 class CoordinatesModel extends CoordinatesEntity {
   CoordinatesModel({
+    super.address,
     super.coordinates,
   });
 
   factory CoordinatesModel.fromJson(Map<String, dynamic> json) {
     return CoordinatesModel(
+      address: json['address'],
       coordinates: (json['coordinates'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),

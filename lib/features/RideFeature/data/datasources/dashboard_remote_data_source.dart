@@ -55,6 +55,7 @@ import '../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import '../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import '../../domain/usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import '../../domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
@@ -148,6 +149,10 @@ abstract class TripRemoteDataSource {
 
   void listenToRemoveLoading(Function(String tripId) params);
   void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
+
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params);
+
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params);
 
 }
 
@@ -521,15 +526,15 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params) {
     try {
-      CliLogger.info("Listen to New Route ");
+      CliLogger.info("Listen to New Route Driver");
       log("Listen to New Route ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToNewRouteDriver, (data) {
-        CliLogger.info("New Route data :  $data");
+        CliLogger.info("New Route Driver data :  $data");
         log("New Route data :  $data");
-        params(MyBookingModel.fromJson(data['newAllowedRoute']));
+        params(MyBookingModel.fromJson(data['formattedResponse']));
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to New Route Driver error $e");
     }
   }
 
@@ -975,6 +980,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params)async {
+    final url = "${EndPoints.updateDriverLoadingRatingNonSocket}";
+
+    final response = await _apiConsumer.put(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = CreateNonTrackOfferModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params) async{
+    final url = "${EndPoints.addRateToClientWithDriverLoadingNonSocket}${params.tripId}/driver";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = RateResponseModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
   }
 
 }

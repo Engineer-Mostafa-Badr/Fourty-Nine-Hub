@@ -18,6 +18,9 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
@@ -2496,6 +2499,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             index;
                 return GestureDetector(
                   onTap: () {
+                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId??'');
+                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId??'');
+                    context.read<ClientTripsCubit>().makeNonTrackingTripParam = MakeNonTrackingRequestTripUsecaseParam();
+                    context.read<ClientTripsCubit>().makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
+                    context.read<RideCubit>().onChangeCategoriesType(type);
                     setState(() {
                       if (context.isUserLoggedIn &&
                           serviceLocator<UserCubit>().state.data?.gender !=
