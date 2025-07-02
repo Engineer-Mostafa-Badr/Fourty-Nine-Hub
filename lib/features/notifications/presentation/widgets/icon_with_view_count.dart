@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/widget/counter_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../res/style/styles.dart';
@@ -60,23 +61,10 @@ class CustomNotificationWidget extends StatelessWidget {
         ),
         Visibility(
           visible: unreadCount != 0,
-          child: Positioned(
+          child: PositionedDirectional(
             top: 6,
-            right: -5,
-            child: Container(
-              width: 35.w,
-              height: 35.h,
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: AppColors.getRedColor(context)),
-              child: Center(
-                child: Text(
-                  unreadCount == 0 ? '   ' : '$unreadCount',
-                  style: Styles.smallText(
-                      color: AppColors.getReversedTextColor(context), fontSize: 20),
-                ),
-              ),
-            ),
+            end: -2,
+            child: CounterWidget(unreadCount: unreadCount,),
           ),
         )
       ],
