@@ -80,11 +80,11 @@ class _MyAdCardState extends State<MyAdCard> {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            // border: Border.all(
-            //     color: context.isDarkMode
-            //         ? AppColors.LIGHT_COLOR
-            //         : AppColors.GREY_DARK_COLOR,
-            //     width: 1),
+            border: Border.all(
+                color: context.isDarkMode
+                    ? AppColors.LIGHT_COLOR
+                    : AppColors.GREY_DARK_COLOR,
+                width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +128,7 @@ class _MyAdCardState extends State<MyAdCard> {
                           '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
                       style: Styles.mediumText(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.PRIMARY_COLOR),
+                          color: AppColors.getTextColor(context)),
                       maxLines: 1,
                     ),
                     Label(
@@ -230,7 +230,7 @@ class _MyAdCardState extends State<MyAdCard> {
                       children: [
                         Row(
                           children: [
-                            SvgPicture.asset(Assets.adsLocationIcon),
+                            SvgPicture.asset(Assets.adsLocationIcon,color: AppColors.getButtonPrimaryWhiteColor(context)),
                             const SizedBox(
                               width: 4,
                             ),
@@ -252,7 +252,8 @@ class _MyAdCardState extends State<MyAdCard> {
                                     : widget.item.subCategoryNameEn) ??
                                 'N/A',
                             style: Styles.smallText(
-                              color: const Color(0xFFF33D49),
+                              color: context.isDarkMode
+                                  ? AppColors.whiteColor: AppColors.SECONDARY_COLOR,
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
                               height: 1.60,
@@ -488,6 +489,7 @@ class _MyAdCardState extends State<MyAdCard> {
                 } else {
                   bottomSheet(
                     context: context,
+                    backColor: Theme.of(context).scaffoldBackgroundColor,
                     widget: BlocProvider(
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                       child: Column(

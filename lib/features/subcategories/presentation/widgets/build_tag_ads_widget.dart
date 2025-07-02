@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/constants/subscription_status.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class BuildTagAdsWidget extends StatelessWidget {
@@ -44,13 +46,14 @@ class BuildTagAdsWidget extends StatelessWidget {
           // ],
           SvgPicture.asset(
             Assets.adsEyeIcon,
+            color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
           ),
           const SizedBox(width: 6),
           if (views == 0) ...[
             Label(
               text: LocaleKeys.noViews.localize,
               style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
+                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
@@ -59,7 +62,7 @@ class BuildTagAdsWidget extends StatelessWidget {
             Label(
               text: LocaleKeys.oneView.localize,
               style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
+                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
@@ -68,16 +71,16 @@ class BuildTagAdsWidget extends StatelessWidget {
             Label(
               text: LocaleKeys.twoViews.localize,
               style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
+                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
             ),
           ] else if (views >= 3 && views <= 10) ...[
             Label(
-              text: '$views ${LocaleKeys.views.localize}',
+              text: '${FormatNumbers().formatNumber(views,useArabicNumerals: context.isArabic)} ${LocaleKeys.views.localize}',
               style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
+                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
@@ -101,7 +104,7 @@ class BuildTagAdsWidget extends StatelessWidget {
                     ? LocaleKeys.regular.localize
                     : LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(
-              color: Colors.black,
+              color: AppColors.getTextColor(context),
               fontSize: 32,
               fontWeight: FontWeight.w700,
               height: 1.60,

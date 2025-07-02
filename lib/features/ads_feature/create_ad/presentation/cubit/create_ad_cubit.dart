@@ -495,6 +495,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
           (r) {
+            print("model::: ${model.toJson()}");
+
         context.pop(model);
       });
     } else if (state.governorate == '') {

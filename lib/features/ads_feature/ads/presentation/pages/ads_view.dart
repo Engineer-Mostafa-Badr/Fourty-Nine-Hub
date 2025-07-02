@@ -274,8 +274,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                 }
               },
               iconSize: 18,
-              icon: Icons.add,
-              text: LocaleKeys.addAde.localize,
+              // icon: Icons.add,
+              text: '${LocaleKeys.addAde.localize} +',
             )
           : null,
     );

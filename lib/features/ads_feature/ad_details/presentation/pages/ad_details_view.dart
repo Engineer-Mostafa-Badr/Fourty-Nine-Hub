@@ -115,7 +115,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       children: [
                         Row(
                           children: [
-                            SvgPicture.asset(Assets.adsLocationIcon),
+                            SvgPicture.asset(Assets.adsLocationIcon,color: AppColors.getTextColor(context),),
                             const SizedBox(
                               width: 4,
                             ),
@@ -194,7 +194,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       height: 8,
                     ),
                     itemCount: state.ad!.images.length ?? 0,
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top*2),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
