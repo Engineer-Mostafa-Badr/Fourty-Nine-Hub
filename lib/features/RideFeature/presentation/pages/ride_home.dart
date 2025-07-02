@@ -125,18 +125,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
-                color: context.isDarkMode
-                    ? AppColors.QUANTITY_COLOR
-                    : AppColors.whiteColor,
+                color: context.isDarkMode ? AppColors.QUANTITY_COLOR : AppColors.whiteColor,
               ),
               child: BottomCardRequest(
                 driversCount: serviceLocator<RideCubit>().tripViewers.length,
                 rideCubit: serviceLocator<RideCubit>(),
                 onCancel: () async {
                   await context.read<RideCubit>().cancelPendingTripByClient(
-                        tripId:
-                            context.read<RideCubit>().state.requestedTrip?.id ??
-                                '',
+                        tripId: context.read<RideCubit>().state.requestedTrip?.id ?? '',
                       );
                 },
               ),
@@ -182,9 +178,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 rideOffer: offerEntity,
                 rideCubit: serviceLocator<RideCubit>(),
                 onAccept: () async {
-                  await context
-                      .read<RideCubit>()
-                      .acceptOfferByClient(offerId: offerEntity.offerId);
+                  await context.read<RideCubit>().acceptOfferByClient(offerId: offerEntity.offerId);
                 },
               );
             },
@@ -214,10 +208,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                    context.isArabic
-                        ? 'لماذا تريد الغاء الرحلة'
-                        : 'Why do you want to cancel ?',
+                Text(context.isArabic ? 'لماذا تريد الغاء الرحلة' : 'Why do you want to cancel ?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -242,9 +233,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         Icon(Icons.info_outline, color: Colors.black54),
                         SizedBox(width: 5),
                         Text(
-                          context.isArabic
-                              ? "لم يظهر السائق"
-                              : "The Driver did not show up",
+                          context.isArabic ? "لم يظهر السائق" : "The Driver did not show up",
                           style: TextStyle(color: Colors.black54, fontSize: 14),
                         ),
                       ],
@@ -261,9 +250,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
-                      border: state.isChangedMindReason == true
-                          ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2)
-                          : null,
+                      border: state.isChangedMindReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -271,9 +258,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         Icon(Icons.info_outline, color: Colors.black54),
                         SizedBox(width: 5),
                         Text(
-                          context.isArabic
-                              ? "لقد قمت بتغيير رأيي"
-                              : "I changed my mind",
+                          context.isArabic ? "لقد قمت بتغيير رأيي" : "I changed my mind",
                           style: TextStyle(color: Colors.black54, fontSize: 14),
                         ),
                       ],
@@ -287,11 +272,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   },
                   child: Container(
                     height: 40,
-                    decoration: BoxDecoration(
-                        color: state.isOtherReason == true
-                            ? Colors.transparent
-                            : Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(color: state.isOtherReason == true ? Colors.transparent : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -309,13 +290,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   const SizedBox(height: 20),
                   DefaultTextFormField(
                     currentController: cubit.reasonController,
-                    fillColor: context.isDarkMode
-                        ? AppColors.GREY_DARK_COLOR
-                        : AppColors.GREYBG,
+                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                     borderColor: Colors.transparent,
-                    hint: context.isArabic
-                        ? 'اكتب السبب هنا'
-                        : 'Write the reason here',
+                    hint: context.isArabic ? 'اكتب السبب هنا' : 'Write the reason here',
                     // label: LocaleKeys.firstName.localize,
                     validator: (v) {
                       if (v == null || v.isEmpty) {
@@ -345,9 +322,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () {
                           context.pop();
-                          if (state.isOtherReason == true ||
-                              state.isChangedMindReason == true ||
-                              state.isClientNotShownReason == true) {
+                          if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             cubit.cancleNonPendingTripByClient(
                               context: context,
                               tripId: state.requestedTrip?.id ?? '',
@@ -367,11 +342,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           : '',
                             );
                           } else {
-                            showErrorMessage(
-                                context,
-                                context.isArabic
-                                    ? "يرجى تحديد سبب"
-                                    : 'Please select a reason');
+                            showErrorMessage(context, context.isArabic ? "يرجى تحديد سبب" : 'Please select a reason');
                           }
                         }),
                   ],
@@ -416,89 +387,63 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      BlocBuilder<RideCubit, RideState>(
-                          builder: (context, state) {
-                        print(
-                            "state.requestedTrip?.status ${state.requestedTrip?.status}");
+                      BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+                        print("state.requestedTrip?.status ${state.requestedTrip?.status}");
                         return DriverHeaderWidget(
-                          carModel: context.isArabic? state.requestedTrip?.vehicleModelAr : state.requestedTrip?.vehicleModelEn,
+                          carModel: context.isArabic ? state.requestedTrip?.vehicleModelAr : state.requestedTrip?.vehicleModelEn,
                           carColor: state.requestedTrip?.vehicleColor,
-                          rideStatusWidget: state.requestedTrip?.status ==
-                                  TripState.started.name
+                          rideStatusWidget: state.requestedTrip?.status == TripState.started.name
                               ? TripDurationCountdown(
-                                  key: ValueKey(
-                                      "${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
-                                  tripDurationSeconds:
-                                      state.requestedTrip?.duration?.toDouble(),
+                                  key: ValueKey("${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
+                                  tripDurationSeconds: state.requestedTrip?.duration?.toDouble(),
                                   isArabic: context.isArabic,
                                 )
                               : DriverArrivalCountdown(
-                                  key: ValueKey(
-                                      "${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
-                                  arrivalTimestampMs:
-                                      state.requestedTrip?.driverIsArrivingIn ??
-                                          0,
-                                  isCountdown: state.requestedTrip?.status ==
-                                      TripState.goToClient.name,
-                                  isInLocation: state.requestedTrip?.status ==
-                                      TripState.inLocation.name,
+                                  key: ValueKey("${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
+                                  arrivalTimestampMs: state.requestedTrip?.driverIsArrivingIn ?? 0,
+                                  isCountdown: state.requestedTrip?.status == TripState.goToClient.name,
+                                  isInLocation: state.requestedTrip?.status == TripState.inLocation.name,
                                 ),
-                          carImageUrl: state.requestedTrip?.vehiclePicture ??
-                              "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
+                          carImageUrl: state.requestedTrip?.vehiclePicture ?? "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
                           carName: context.isArabic ? state.requestedTrip?.vehicleBrandAr : state.requestedTrip?.vehicleBrandEn,
-                          carNumber:
-                              state.requestedTrip?.vehiclePlateNumber ?? "",
+                          carNumber: state.requestedTrip?.vehiclePlateNumber ?? "",
                         );
                       }),
-                      if (state.requestedTrip?.status !=
-                          TripState.inLocation.name)
-                        const Divider(height: 1),
-                      if (state.requestedTrip?.status ==
-                          TripState.inLocation.name)
+                      if (state.requestedTrip?.status != TripState.inLocation.name) const Divider(height: 1),
+                      if (state.requestedTrip?.status == TripState.inLocation.name)
                         Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: Container(
                               decoration: BoxDecoration(
-                                color: context.isDarkMode
-                                    ? AppColors.GREY_DARK_COLOR
-                                    : AppColors.GREY_NORMAL_COLOR
-                                        .withValues(alpha: 0.3),
+                                color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREY_NORMAL_COLOR.withValues(alpha: 0.3),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Column(
                                   children: [
-                                    BlocBuilder<RideCubit, RideState>(
-                                        builder: (context, state) {
+                                    BlocBuilder<RideCubit, RideState>(builder: (context, state) {
                                       return CountdownTimerWidget(
-                                        isActive: state.requestedTrip?.status ==
-                                            TripState.inLocation.name,
+                                        isActive: state.requestedTrip?.status == TripState.inLocation.name,
                                         isArabic: context.isArabic,
                                       );
                                     }),
                                     const SizedBox(height: 16),
                                     GestureDetector(
                                       onTap: () async {
-                                        await serviceLocator<RideCubit>()
-                                            .sendIamOkMessage(context);
+                                        await serviceLocator<RideCubit>().sendIamOkMessage(context);
                                       },
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
+                                        width: MediaQuery.of(context).size.width * 0.6,
                                         decoration: BoxDecoration(
                                           color: AppColors.PRIMARY_COLOR,
-                                          borderRadius:
-                                              BorderRadius.circular(16),
+                                          borderRadius: BorderRadius.circular(16),
                                         ),
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(8),
                                             child: Text(
-                                              context.isArabic
-                                                  ? "حسنا، أنا قادم"
-                                                  : "Ok, I'm coming",
+                                              context.isArabic ? "حسنا، أنا قادم" : "Ok, I'm coming",
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16,
@@ -514,8 +459,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               )),
                         ),
                       ActionButtonsWidget(
-                        driverImageUrl:
-                            state.requestedTrip?.driverProfilePicture,
+                        driverImageUrl: state.requestedTrip?.driverProfilePicture,
                         driverRating: state.requestedTrip?.driverRating,
                         driverName: state.requestedTrip?.driverFirstName ?? "",
                         onContactDriver: () {
@@ -523,9 +467,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         },
                         onSafety: () {
                           // context.push(Routes.rideArrivedScreen);
-                          context
-                              .read<RideCubit>()
-                              .changeTripStatus(tripState: TripState.support);
+                          context.read<RideCubit>().changeTripStatus(tripState: TripState.support);
                         },
                         is_show_message: true,
                         onMessage: () {},
@@ -533,7 +475,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       // const FeedbackWidget(),
                       // const Divider(height: 2),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           bottomSheet(
                               context: context,
                               widget: ReportView(
@@ -543,101 +485,61 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         },
                         child: Container(
                             decoration: BoxDecoration(
-                              color: context.isDarkMode
-                                  ? AppColors.GREY_DARK_COLOR
-                                  : AppColors.GREY_NORMAL_COLOR
-                                      .withValues(alpha: 0.3),
+                              color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREY_NORMAL_COLOR.withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(color: AppColors.PRIMARY_COLOR),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(6),
-                              child: Center(
-                                  child: Text(context.isArabic
-                                      ? "الابلاغ عن السائق"
-                                      : "Report Driver")),
+                              child: Center(child: Text(context.isArabic ? "الابلاغ عن السائق" : "Report Driver")),
                             )),
                       ),
 
                       BottomRideStatusWidget(
                         price: state.requestedTrip?.price?.toInt() ?? 0,
                         isStarted: state.requestedTrip?.status == TripState.started.name,
-                        fromLocation:
-                            state.requestedTrip?.from ?? 'أول العاشر من رمضان',
-                        toLocation: state.requestedTrip?.to ??
-                            'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                        fromLocation: state.requestedTrip?.from ?? 'أول العاشر من رمضان',
+                        toLocation: state.requestedTrip?.to ?? 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                         onGoogleMap: () {},
                         onPartialPayment: () {
-                          showModalBottomSheet<
-                              bool>(
+                          showModalBottomSheet<bool>(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor:
-                            Colors.transparent,
-                            builder: (BuildContext
-                            context) {
+                            backgroundColor: Colors.transparent,
+                            builder: (BuildContext context) {
                               return Padding(
-                                padding:
-                                EdgeInsets.only(
-                                  bottom:
-                                  MediaQuery.of(
-                                      context)
-                                      .viewInsets
-                                      .bottom,
+                                padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context).viewInsets.bottom,
                                 ),
                                 child: Container(
-                                  padding:
-                                  const EdgeInsets
-                                      .all(20.0),
-                                  decoration:
-                                  const BoxDecoration(
-                                    color:
-                                    Colors.white,
-                                    borderRadius:
-                                    BorderRadius.vertical(
-                                        top: Radius
-                                            .circular(
-                                            20.0)),
+                                  padding: const EdgeInsets.all(20.0),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                                   ),
                                   child: Form(
-                                    key:
-                                    _partialPaymentFormKey, // Use the class-level key
+                                    key: _partialPaymentFormKey, // Use the class-level key
                                     child: Column(
-                                      mainAxisSize:
-                                      MainAxisSize
-                                          .min,
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const SizedBox(
-                                                width:
-                                                24),
+                                            const SizedBox(width: 24),
                                             Text(
-                                              context.isArabic? "دفع جزءي" : "Partial Payment",
-                                              style:
-                                              const TextStyle(
-                                                fontSize:
-                                                18,
-                                                fontWeight:
-                                                FontWeight.bold,
+                                              context.isArabic ? "دفع جزءي" : "Partial Payment",
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             IconButton(
-                                              icon: const Icon(
-                                                  Icons.close),
-                                              onPressed:
-                                                  () =>
-                                                  Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                              icon: const Icon(Icons.close),
+                                              onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                            height:
-                                            20),
-
+                                        const SizedBox(height: 20),
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
@@ -647,7 +549,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               size: 14,
                                             ),
                                             const SizedBox(width: 8),
-                                            Text( context.isArabic? "بطاقة بنكية" : "Visa",
+                                            Text(
+                                              context.isArabic ? "بطاقة بنكية" : "Visa",
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 12,
@@ -674,8 +577,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     return newValue;
                                                   }),
                                                 ],
-
-                                                style:  TextStyle(
+                                                style: TextStyle(
                                                   color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 30,
@@ -684,8 +586,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                 decoration: InputDecoration(
                                                   floatingLabelBehavior: FloatingLabelBehavior.never,
                                                   hintText: context.isArabic ? 'ج.م' : 'EGP',
-                                                  hintStyle:  const TextStyle(
-                                                    color:  Color(0xff96979B),
+                                                  hintStyle: const TextStyle(
+                                                    color: Color(0xff96979B),
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 30,
                                                   ),
@@ -700,15 +602,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                 ),
                                                 validator: (value) {
                                                   if (value == null || value.isEmpty) {
-                                                    return context.isArabic
-                                                        ? 'يرجى إدخال مبلغ'
-                                                        : 'Please enter an amount';
+                                                    return context.isArabic ? 'يرجى إدخال مبلغ' : 'Please enter an amount';
                                                   }
 
                                                   final int? amount = int.tryParse(value);
 
-                                                  if (amount == null ||
-                                                      amount < 100) {
+                                                  if (amount == null || amount < 100) {
                                                     return context.isArabic
                                                         ? 'يجب أن يكون المبلغ اكثر من ${FormatNumbers().convertNumberToLocalizedString('100', isArabic: context.isArabic)}'
                                                         : 'Amount must be greater than ${FormatNumbers().convertNumberToLocalizedString('100', isArabic: context.isArabic)}';
@@ -718,49 +617,32 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                 },
                                               ),
                                             ),
-
                                           ],
                                         ),
-
-                                        const SizedBox(
-                                            height:
-                                            20),
+                                        const SizedBox(height: 20),
                                         SizedBox(
-                                          width: double
-                                              .infinity,
-                                          child:
-                                          ElevatedButton(
-                                            onPressed:
-                                                () async {
-                                              if (_partialPaymentFormKey
-                                                  .currentState!
-                                                  .validate())  {
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              if (_partialPaymentFormKey.currentState!.validate()) {
                                                 context.pop();
-                                                await serviceLocator<RideCubit>().partialPayment(tripId: state.requestedTrip?.id ?? '', amount: double.parse(_controller.text), context: context, subCategoryId: state.requestedTrip?.subCategoryId ?? '');
+                                                await serviceLocator<RideCubit>().partialPayment(
+                                                    tripId: state.requestedTrip?.id ?? '',
+                                                    amount: double.parse(_controller.text),
+                                                    context: context,
+                                                    subCategoryId: state.requestedTrip?.subCategoryId ?? '');
                                               }
                                             },
-                                            style: ElevatedButton
-                                                .styleFrom(
-                                              backgroundColor:
-                                              AppColors.PRIMARY_COLOR,
-                                              padding: const EdgeInsets
-                                                  .symmetric(
-                                                  vertical:
-                                                  15),
-                                              shape:
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(10),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: AppColors.PRIMARY_COLOR,
+                                              padding: const EdgeInsets.symmetric(vertical: 15),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                             ),
-                                            child:
-                                            Text(
-                                              context.isArabic? "تطبيق" : "Apply",
-                                              style: const TextStyle(
-                                                  fontSize:
-                                                  18,
-                                                  color:
-                                                  Colors.white),
+                                            child: Text(
+                                              context.isArabic ? "تطبيق" : "Apply",
+                                              style: const TextStyle(fontSize: 18, color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -770,7 +652,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 ),
                               );
                             },
-
                           );
                         },
                         onStartRecord: () {
@@ -787,9 +668,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  context.isArabic
-                                      ? 'لا يمكن الاتصال بالهاتف'
-                                      : 'Could not launch phone dialer.',
+                                  context.isArabic ? 'لا يمكن الاتصال بالهاتف' : 'Could not launch phone dialer.',
                                 ),
                               ),
                             );
@@ -800,12 +679,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             context: context,
                           );
                         },
-                        isRecording: state.requestedTrip?.status ==
-                            TripState.started.name,
+                        isRecording: state.requestedTrip?.status == TripState.started.name,
                         audioDuration: '',
                         onMicTap: () {},
-                        paymentMethod:
-                            state.requestedTrip?.paymentMethod ?? "cash",
+                        paymentMethod: state.requestedTrip?.paymentMethod ?? "cash",
                         wayPointOne: state.requestedTrip?.wayPointOneTitle,
                         wayPointTwo: state.requestedTrip?.wayPointTwoTitle,
                         otp: state.requestedTrip?.otp,
@@ -825,8 +702,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final ScrollController _shippingScrollController = ScrollController();
 
   void _scrollRight(String type) {
-    final ScrollController? activeController =
-        type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController? activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
 
     if (activeController != null && activeController.hasClients) {
       activeController.animateTo(
@@ -838,8 +714,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   void _scrollToStart(String type) {
-    final ScrollController? activeController =
-        type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController? activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
 
     if (activeController != null && activeController.hasClients) {
       activeController.animateTo(
@@ -873,140 +748,69 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             appBars: const [],
                             body: Stack(
                               children: [
-                                context
-                                        .read<RideCubit>()
-                                        .selectedCategoryIsSocket
-                                    ? _buildTopImage()
-                                    : const SizedBox.shrink(),
+                                context.read<RideCubit>().selectedCategoryIsSocket ? _buildTopImage() : const SizedBox.shrink(),
                                 state.requestedTrip == null
                                     ? _buildBottomSheet()
-                                    : state.requestedTrip!.status ==
-                                                TripState.completed.name ||
-                                            state.requestedTrip!.status ==
-                                                TripState.canceled.name
+                                    : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name
                                         ? _buildBottomSheet()
                                         : const SizedBox.shrink(),
-                                !context
-                                        .read<RideCubit>()
-                                        .selectedCategoryIsSocket
+                                !context.read<RideCubit>().selectedCategoryIsSocket
                                     ? const SizedBox()
                                     : state.requestedTrip == null
                                         ? const SizedBox()
-                                        : state.requestedTrip!.status ==
-                                                TripState.pending.name
+                                        : state.requestedTrip!.status == TripState.pending.name
                                             ? buildDriversOffers(context)
                                             : const SizedBox(),
-                                !context
-                                        .read<RideCubit>()
-                                        .selectedCategoryIsSocket
+                                !context.read<RideCubit>().selectedCategoryIsSocket
                                     ? const SizedBox()
                                     : state.requestedTrip == null
                                         ? _buildBottomSheet()
-                                        : state.requestedTrip!.status ==
-                                                    TripState.completed.name ||
-                                                state.requestedTrip!.status ==
-                                                    TripState.canceled.name
+                                        : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name
                                             ? _buildBottomSheet()
-                                            : state.requestedTrip!.status ==
-                                                    TripState.pending.name
+                                            : state.requestedTrip!.status == TripState.pending.name
                                                 ? buildPendingSheet()
-                                                : state.requestedTrip!.status ==
-                                                            TripState.accepted
-                                                                .name ||
-                                                        state.requestedTrip!.status ==
-                                                            TripState.goToClient
-                                                                .name ||
-                                                        state.requestedTrip!
-                                                                .status ==
-                                                            TripState.inLocation
-                                                                .name ||
-                                                        state.requestedTrip!
-                                                                .status ==
-                                                            TripState
-                                                                .started.name
+                                                : state.requestedTrip!.status == TripState.accepted.name ||
+                                                        state.requestedTrip!.status == TripState.goToClient.name ||
+                                                        state.requestedTrip!.status == TripState.inLocation.name ||
+                                                        state.requestedTrip!.status == TripState.started.name
                                                     ? acceptedTripButtonSheet()
-                                                    : state.requestedTrip!
-                                                                .status ==
-                                                            TripState
-                                                                .ratingSheet
-                                                                .name
+                                                    : state.requestedTrip!.status == TripState.ratingSheet.name
                                                         ? BuildClientRateDriverSheet(
-                                                            onPressed: (String
-                                                                    message,
-                                                                double
-                                                                    rate) async {
-                                                              await serviceLocator<
-                                                                      RideCubit>()
-                                                                  .ratingDriverByClient(
+                                                            onPressed: (String message, double rate) async {
+                                                              await serviceLocator<RideCubit>().ratingDriverByClient(
                                                                 context,
                                                                 RatingDriverByClientUseCaseParams(
-                                                                  tripId: state
-                                                                      .requestedTrip!
-                                                                      .id!,
-                                                                  ratingValue:
-                                                                      rate.toInt(),
-                                                                  comment:
-                                                                      message,
+                                                                  tripId: state.requestedTrip!.id!,
+                                                                  ratingValue: rate.toInt(),
+                                                                  comment: message,
                                                                 ),
                                                               );
                                                             },
                                                           )
-                                                        : state.requestedTrip!
-                                                                    .status ==
-                                                                TripState
-                                                                    .support
-                                                                    .name
+                                                        : state.requestedTrip!.status == TripState.support.name
                                                             ? BuildSafetySheet(
                                                                 params: SupportRideParams(
-                                                                    tripId: state
-                                                                            .requestedTrip
-                                                                            ?.id ??
-                                                                        '',
-                                                                    tripType:
-                                                                        'tracing',
-                                                                    userType:
-                                                                        'client',
-                                                                    driverId: state
-                                                                            .requestedTrip
-                                                                            ?.driverId ??
-                                                                        '',
-                                                                    clientId: UserCubit
-                                                                            .to
-                                                                            .state
-                                                                            .data
-                                                                            ?.id ??
-                                                                        ''),
+                                                                    tripId: state.requestedTrip?.id ?? '',
+                                                                    tripType: 'tracing',
+                                                                    userType: 'client',
+                                                                    driverId: state.requestedTrip?.driverId ?? '',
+                                                                    clientId: UserCubit.to.state.data?.id ?? ''),
                                                                 onClose: () {
-                                                                  context
-                                                                      .read<
-                                                                          RideCubit>()
-                                                                      .closeSafetySheet();
+                                                                  context.read<RideCubit>().closeSafetySheet();
                                                                 },
-                                                                supportRideScreen:
-                                                                    () {
-                                                                  context.push(
-                                                                      Routes
-                                                                          .supportRideScreen,
+                                                                supportRideScreen: () {
+                                                                  context.push(Routes.supportRideScreen,
                                                                       extra: SupportRideParams(
-                                                                          tripId: state.requestedTrip?.id ??
-                                                                              '',
-                                                                          tripType:
-                                                                              'tracing',
-                                                                          userType:
-                                                                              'client',
-                                                                          driverId: state.requestedTrip?.driverId ??
-                                                                              '',
-                                                                          clientId:
-                                                                              UserCubit.to.state.data?.id ?? ''));
+                                                                          tripId: state.requestedTrip?.id ?? '',
+                                                                          tripType: 'tracing',
+                                                                          userType: 'client',
+                                                                          driverId: state.requestedTrip?.driverId ?? '',
+                                                                          clientId: UserCubit.to.state.data?.id ?? ''));
                                                                 },
-                                                                emergencyContactsScreen:
-                                                                    () {
-                                                                  context.push(
-                                                                      Routes
-                                                                          .emergencyContactsScreen);
+                                                                emergencyContactsScreen: () {
+                                                                  context.push(Routes.emergencyContactsScreen);
                                                                 },
-                                                                rideFindingScreen:
-                                                                    () async {
+                                                                rideFindingScreen: () async {
                                                                   final Uri launchUri = Uri(scheme: 'tel', path: '122');
                                                                   if (await canLaunchUrl(launchUri)) {
                                                                     await launchUrl(launchUri);
@@ -1014,9 +818,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     ScaffoldMessenger.of(context).showSnackBar(
                                                                       SnackBar(
                                                                         content: Text(
-                                                                          context.isArabic
-                                                                              ? 'لا يمكن الاتصال بالهاتف'
-                                                                              : 'Could not launch phone dialer.',
+                                                                          context.isArabic ? 'لا يمكن الاتصال بالهاتف' : 'Could not launch phone dialer.',
                                                                         ),
                                                                       ),
                                                                     );
@@ -1024,25 +826,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 },
                                                               )
                                                             : const SizedBox(),
-                                context
-                                            .read<RideCubit>()
-                                            .selectedCategoryIsSocket &&
+                                context.read<RideCubit>().selectedCategoryIsSocket &&
                                         (state.requestedTrip == null ||
-                                            state.requestedTrip?.status ==
-                                                TripState.completed.name ||
-                                            state.requestedTrip?.status ==
-                                                TripState.canceled.name)
+                                            state.requestedTrip?.status == TripState.completed.name ||
+                                            state.requestedTrip?.status == TripState.canceled.name)
                                     ? _carTruckBtn(
                                         driverInfo: state.driverInfo,
                                         loadingInfo: state.loaderInfo,
                                         openDrawer: () {
                                           showModalBottomSheet(
-                                            backgroundColor: context.isDarkMode
-                                                ? AppColors.QUANTITY_COLOR
-                                                : Colors.white,
+                                            backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                                             context: context,
-                                            builder: (context) =>
-                                                _buttonsWidget(
+                                            builder: (context) => _buttonsWidget(
                                               driverInfo: state.driverInfo,
                                               loadingInfo: state.loaderInfo,
                                             ),
@@ -1062,19 +857,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildTopMap(RideState state, BuildContext context) {
     List<LatLng> routePoints = [];
-    if (state.requestedTrip == null ||
-        state.requestedTrip!.status == TripState.canceled.name ||
-        state.requestedTrip!.status == TripState.completed.name) {
-      routePoints =
-          _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+    if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
+      routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
     } else {
-      routePoints =
-          _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
+      routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
     }
 
-    if (state.currentLocation != null &&
-        state.rideExpectedPrice == null &&
-        state.requestedTrip == null) {
+    if (state.currentLocation != null && state.rideExpectedPrice == null && state.requestedTrip == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
           LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
@@ -1085,9 +874,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
     return SizedBox(
       width: double.infinity,
-      height: state.requestedTrip != null
-          ? MediaQuery.of(context).size.height
-          : MediaQuery.of(context).size.height * 0.5,
+      height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
       child: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
@@ -1112,38 +899,31 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             markers: [
               if (state.currentLocation != null)
                 Marker(
-                  point: LatLng(
-                      state.currentLocation!.lat!, state.currentLocation!.lng!),
+                  point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.green, size: 40),
+                  child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
                 ),
               if (state.toLocation != null)
                 Marker(
                   point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.blue, size: 40),
+                  child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
                 ),
               if (state.wayPointOne != null)
                 Marker(
-                  point:
-                      LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
+                  point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.red, size: 40),
+                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
                 ),
               if (state.wayPointTwo != null)
                 Marker(
-                  point:
-                      LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
+                  point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.red, size: 40),
+                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
                 ),
             ],
           ),
@@ -1171,8 +951,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 
-  Widget _buttonsWidget(
-      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
+  Widget _buttonsWidget({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(10),
@@ -1193,33 +972,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               return pleaseLoginDialog(context);
             }
             context.pop();
-            if (driverInfo == null ||
-                (driverInfo.driverType?.isEmpty ?? false)) {
-              serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
-                  fromShipping: false, context: context);
+            if (driverInfo == null || (driverInfo.driverType?.isEmpty ?? false)) {
+              serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
             } else {
               if (driverInfo.status == RegistrationStatus.pending.status) {
                 return;
-              } else if (driverInfo.status ==
-                  RegistrationStatus.rejected.status) {
-                context.push(Routes.UploadRiderImages,
-                    extra: UploadRiderImagesParams(
-                        isShipping: false,
-                        isSocket:
-                            driverInfo.driverType == 'socket' ? true : false));
-              } else if (driverInfo.status ==
-                  RegistrationStatus.initial.status) {
-                context.push(Routes.UploadRiderImages,
-                    extra: UploadRiderImagesParams(
-                        isShipping: false,
-                        isSocket:
-                            driverInfo.driverType == 'socket' ? true : false));
+              } else if (driverInfo.status == RegistrationStatus.rejected.status) {
+                context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+              } else if (driverInfo.status == RegistrationStatus.initial.status) {
+                context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
               } else {
-                context.push(Routes.rideModeScreen,
-                    extra: RideModeParams(
-                        modeType: 'ride',
-                        isSocket:
-                            driverInfo.driverType == 'socket' ? true : false));
+                context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo.driverType == 'socket' ? true : false));
               }
             }
           },
@@ -1229,9 +992,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             height: 50,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: driverInfo != null &&
-                        (driverInfo.status ==
-                            RegistrationStatus.approved.status)
+                colors: driverInfo != null && (driverInfo.status == RegistrationStatus.approved.status)
                     ? [
                         AppColors.cF33D49,
                         AppColors.cC0303A,
@@ -1240,24 +1001,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         AppColors.c93252C,
                         AppColors.c90242B,
                       ]
-                    : [
-                        const Color(0xFF0B1035),
-                        const Color(0xFF161F68),
-                        const Color(0xFF1B2781),
-                        const Color(0xFF1E2B8E),
-                        const Color(0xFF1F2D95),
-                        const Color(0xFF0B1035)
-                      ],
+                    : [const Color(0xFF0B1035), const Color(0xFF161F68), const Color(0xFF1B2781), const Color(0xFF1E2B8E), const Color(0xFF1F2D95), const Color(0xFF0B1035)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3)),
+                BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
               ],
             ),
             child: Center(
@@ -1270,23 +1020,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         ? context.isArabic
                             ? 'وضع سائق سيارة'
                             : 'Ride Mode'
-                        : (driverInfo.status ==
-                                RegistrationStatus.initial.status)
+                        : (driverInfo.status == RegistrationStatus.initial.status)
                             ? context.isArabic
                                 ? 'استكمال تسجيل سائق'
                                 : 'Complete Ride Register'
-                            : (driverInfo.status ==
-                                    RegistrationStatus.pending.status)
+                            : (driverInfo.status == RegistrationStatus.pending.status)
                                 ? context.isArabic
                                     ? 'انتظار موافقة تسجيل سائق'
                                     : 'Waiting ِApproval Ride Register'
                                 : context.isArabic
                                     ? 'تسجيل سائق سيارة'
                                     : 'Ride Register',
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -1301,22 +1046,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             context.pop();
             if (loadingInfo == null || (loadingInfo.status?.isEmpty ?? false)) {
               print("object");
-              serviceLocator<RideCubit>().onNavigateToWelcomeScreen(
-                  fromShipping: true, context: context);
+              serviceLocator<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
             } else {
               print("loadingInfo.toJson()${loadingInfo.toJson()}");
               if (loadingInfo.status == RegistrationStatus.pending.status) {
                 return;
-              } else if (loadingInfo.status ==
-                  RegistrationStatus.rejected.status) {
-                context.push(Routes.UploadRiderImages,
-                    extra: UploadRiderImagesParams(
-                        isShipping: true, isSocket: false));
-              } else if (loadingInfo.status ==
-                  RegistrationStatus.initial.status) {
-                context.push(Routes.UploadRiderImages,
-                    extra: UploadRiderImagesParams(
-                        isShipping: true, isSocket: false));
+              } else if (loadingInfo.status == RegistrationStatus.rejected.status) {
+                context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+              } else if (loadingInfo.status == RegistrationStatus.initial.status) {
+                context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
               } else {
                 context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'truck', isSocket: driverInfo?.driverType == 'socket' ? true : false));
               }
@@ -1328,9 +1066,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             height: 50,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: loadingInfo != null &&
-                        (loadingInfo.status ==
-                            RegistrationStatus.approved.status)
+                colors: loadingInfo != null && (loadingInfo.status == RegistrationStatus.approved.status)
                     ? [
                         AppColors.cF33D49,
                         AppColors.cC0303A,
@@ -1339,24 +1075,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         AppColors.c93252C,
                         AppColors.c90242B,
                       ]
-                    : [
-                        const Color(0xFF0B1035),
-                        const Color(0xFF161F68),
-                        const Color(0xFF1B2781),
-                        const Color(0xFF1E2B8E),
-                        const Color(0xFF1F2D95),
-                        const Color(0xFF0B1035)
-                      ],
+                    : [const Color(0xFF0B1035), const Color(0xFF161F68), const Color(0xFF1B2781), const Color(0xFF1E2B8E), const Color(0xFF1F2D95), const Color(0xFF0B1035)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3)),
+                BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
               ],
             ),
             child: Center(
@@ -1369,23 +1094,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         ? context.isArabic
                             ? 'وضع سائق نقل'
                             : 'Truck Mode'
-                        : (loadingInfo.status ==
-                                RegistrationStatus.initial.status)
+                        : (loadingInfo.status == RegistrationStatus.initial.status)
                             ? context.isArabic
                                 ? 'استكمال تسجيل سائق نقل'
                                 : 'Complete Truck Register'
-                            : (loadingInfo.status ==
-                                    RegistrationStatus.pending.status)
+                            : (loadingInfo.status == RegistrationStatus.pending.status)
                                 ? context.isArabic
                                     ? 'انتظار موافقة تسجيل سائق'
                                     : 'Waiting ِApproval Truck Register'
                                 : context.isArabic
                                     ? 'تسجيل سائق نقل'
                                     : 'Truck Register',
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -1395,7 +1115,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           onTap: () {
             if (context.isUserLoggedIn) {
               context.pop();
-              context.push(Routes.rideOffer,extra: 'ride');
+              context.push(Routes.rideOffer, extra: 'ride');
             } else {
               context.pop();
               return pleaseLoginDialog(context);
@@ -1407,33 +1127,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             height: 50,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF0B1035),
-                  Color(0xFF161F68),
-                  Color(0xFF1B2781),
-                  Color(0xFF1E2B8E),
-                  Color(0xFF1F2D95),
-                  Color(0xFF0B1035)
-                ],
+                colors: [Color(0xFF0B1035), Color(0xFF161F68), Color(0xFF1B2781), Color(0xFF1E2B8E), Color(0xFF1F2D95), Color(0xFF0B1035)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3)),
+                BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
               ],
             ),
             child: Center(
               child: Text(
                 context.isArabic ? 'وضع المستخدم' : 'User Mode',
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -1459,33 +1165,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             height: 50,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF0B1035),
-                  Color(0xFF161F68),
-                  Color(0xFF1B2781),
-                  Color(0xFF1E2B8E),
-                  Color(0xFF1F2D95),
-                  Color(0xFF0B1035)
-                ],
+                colors: [Color(0xFF0B1035), Color(0xFF161F68), Color(0xFF1B2781), Color(0xFF1E2B8E), Color(0xFF1F2D95), Color(0xFF0B1035)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3)),
+                BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
               ],
             ),
             child: Center(
               child: Text(
                 context.isArabic ? 'تاريخ الرحلات' : 'Ride History',
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -1494,14 +1186,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget _carTruckBtn(
-      {LoadingInfoEntity? loadingInfo,
-      DriverInfoEntity? driverInfo,
-      required Function openDrawer}) {
-    print("loadingInfo?.status ${loadingInfo?.status}");
-    print("loadingInfo?.status ${loadingInfo?.status}");
-    print("loadingInfo?.status ${driverInfo?.driverType}");
-    print("loadingInfo?.status ${driverInfo?.driverType}");
+  Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo, required Function openDrawer}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       width: double.infinity,
@@ -1530,52 +1215,25 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               height: 50,
               child: GestureDetector(
                 onTap: () {
-                  if ((driverInfo == null ||
-                          (driverInfo.driverType?.isEmpty ?? false)) &&
-                      (loadingInfo == null ||
-                          (loadingInfo.status?.isEmpty ?? false))) {
+                  if ((driverInfo?.status != RegistrationStatus.approved.status) && (loadingInfo?.status != RegistrationStatus.approved.status)) {
                     openDrawer();
-                  } else if ((driverInfo != null &&
-                          (driverInfo.driverType?.isNotEmpty ?? false)) &&
-                      (loadingInfo != null &&
-                          (loadingInfo.status?.isNotEmpty ?? false))) {
+                  } else if (driverInfo?.status == RegistrationStatus.approved.status && loadingInfo?.status == RegistrationStatus.approved.status) {
                     openDrawer();
                   } else {
-                    if ((driverInfo != null &&
-                            (driverInfo.driverType?.isNotEmpty ?? false)) &&
-                        (loadingInfo == null ||
-                            (loadingInfo.status?.isEmpty ?? false))) {
-                      context.push(Routes.rideModeScreen,
-                          extra: RideModeParams(
-                              modeType: 'ride',
-                              isSocket: driverInfo.driverType == 'socket'
-                                  ? true
-                                  : false));
-                    } else if ((driverInfo == null ||
-                            (driverInfo.driverType?.isEmpty ?? false)) &&
-                        (loadingInfo != null &&
-                            (loadingInfo.status?.isNotEmpty ?? false))) {
-                      context.push(Routes.rideModeScreen,
-                          extra: RideModeParams(
-                              modeType: 'truk',
-                              isSocket: driverInfo?.driverType == 'socket'
-                                  ? true
-                                  : false));
+                    if (driverInfo?.status == RegistrationStatus.approved.status && loadingInfo?.status != RegistrationStatus.approved.status) {
+                      context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                    } else if (driverInfo?.status != RegistrationStatus.approved.status && loadingInfo?.status == RegistrationStatus.approved.status) {
+                      context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'truk', isSocket: driverInfo?.driverType == 'socket' ? true : false));
                     }
                   }
                 },
                 child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: ((driverInfo != null &&
-                                  (driverInfo.driverType?.isNotEmpty ??
-                                      false)) ||
-                              (loadingInfo != null &&
-                                  (loadingInfo.status?.isNotEmpty ?? false)))
+                      colors: (driverInfo?.status == RegistrationStatus.approved.status || (loadingInfo?.status == RegistrationStatus.approved.status))
                           ? [
                               AppColors.cF33D49,
                               AppColors.cC0303A,
@@ -1584,41 +1242,23 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               AppColors.c93252C,
                               AppColors.c90242B,
                             ]
-                          : [
-                              const Color(0xFF0B1035),
-                              const Color(0xFF161F68),
-                              const Color(0xFF1B2781),
-                              const Color(0xFF1E2B8E),
-                              const Color(0xFF1F2D95),
-                              const Color(0xFF0B1035)
-                            ],
+                          : [const Color(0xFF0B1035), const Color(0xFF161F68), const Color(0xFF1B2781), const Color(0xFF1E2B8E), const Color(0xFF1F2D95), const Color(0xFF0B1035)],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3)),
+                      BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
                     ],
                   ),
                   child: Center(
                     child: Text(
-                      ((driverInfo != null &&
-                                  (driverInfo.driverType?.isNotEmpty ??
-                                      false)) ||
-                              (loadingInfo != null &&
-                                  (loadingInfo.status?.isNotEmpty ?? false)))
+                      (driverInfo?.status == RegistrationStatus.approved.status || loadingInfo?.status == RegistrationStatus.approved.status)
                           ? context.isArabic
                               ? 'وضع السائق'
                               : 'Driver Mode'
                           : LocaleKeys.carTruckRegister.tr(),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -1653,8 +1293,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         children: [
           context.read<RideCubit>().selectedCategoryIsSocket
               ? Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      end: 16.0, start: 16.0, bottom: 0),
+                  padding: const EdgeInsetsDirectional.only(end: 16.0, start: 16.0, bottom: 0),
                   child: Row(
                     spacing: 6,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -1680,8 +1319,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     rideCubit: serviceLocator<RideCubit>(),
                                   ));
                             },
-                            child: _tripsWidget(LocaleKeys.runningTrips.tr(),
-                                color: AppColors.GREYCARD)),
+                            child: _tripsWidget(LocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
                       ),
                       Expanded(
                         child: ClickableWidget(
@@ -1691,8 +1329,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     rideCubit: serviceLocator<RideCubit>(),
                                   ));
                             },
-                            child: _tripsWidget(LocaleKeys.expiredTrips.tr(),
-                                color: AppColors.GREYCARD)),
+                            child: _tripsWidget(LocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
                       ),
                     ],
                   ),
@@ -1702,8 +1339,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height * 0.9,
             ),
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 4),
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 4),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: !context.read<RideCubit>().selectedCategoryIsSocket
@@ -1720,18 +1356,28 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   child: Column(
                     spacing: 8,
                     children: [
-                      _buildCategoryList(
-                          "ride", state.rideCategory?.subCategories ?? []),
-                      _buildCategoryList("shipping",
-                          state.shippingCategory?.subCategories ?? []),
+                      context.read<RideCubit>().selectedCategoryIsSocket == false &&
+                              (state.requestedTrip == null || state.requestedTrip?.status == TripState.completed.name || state.requestedTrip?.status == TripState.canceled.name)
+                          ? _carTruckBtn(
+                              driverInfo: state.driverInfo,
+                              loadingInfo: state.loaderInfo,
+                              openDrawer: () {
+                                showModalBottomSheet(
+                                  backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                                  context: context,
+                                  builder: (context) => _buttonsWidget(
+                                    driverInfo: state.driverInfo,
+                                    loadingInfo: state.loaderInfo,
+                                  ),
+                                );
+                              })
+                          : const SizedBox.shrink(),
+                      _buildCategoryList("ride", state.rideCategory?.subCategories ?? []),
+                      _buildCategoryList("shipping", state.shippingCategory?.subCategories ?? []),
                       if (!context.read<RideCubit>().selectedCategoryIsSocket)
                         RidePersonalMoreInfoScreen(
-                            isTruk: context.read<RideCubit>().isTruk,
-                            subCategoryId:
-                                context.read<RideCubit>().subCategoryId,
-                            type:
-                                context.read<RideCubit>().state.selectedType ??
-                                    'ride'),
+                            subCategoryId: context.read<RideCubit>().subCategoryId,
+                            type: context.read<RideCubit>().state.selectedType ?? 'ride'),
                       context.read<RideCubit>().selectedCategoryIsSocket
                           ? _customLocationField(
                               isTo: false,
@@ -1742,21 +1388,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   context.push(
                                     Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                                     extra: RideOpenStreetMapSearchAndPickParams(
-                                      minDistanceReferencePoint:
-                                          state.toLocation == null
-                                              ? null
-                                              : LatLng(state.toLocation!.lat!,
-                                                  state.toLocation!.lng!),
+                                      minDistanceReferencePoint: state.toLocation == null ? null : LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                                       onPicked: (pickedData) async {
-                                        serviceLocator<RideCubit>()
-                                            .updateFromLocation(
+                                        serviceLocator<RideCubit>().updateFromLocation(
                                           lat: pickedData.latLong.latitude,
                                           lng: pickedData.latLong.longitude,
                                           address: pickedData.addressName,
                                         );
-                                        await context
-                                            .read<RideCubit>()
-                                            .fetchRideExpectedPrice(id: 'id');
+                                        await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
                                         context.pop();
                                       },
                                     ),
@@ -1777,22 +1416,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   context.push(
                                     Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                                     extra: RideOpenStreetMapSearchAndPickParams(
-                                      minDistanceReferencePoint:
-                                          state.currentLocation == null
-                                              ? null
-                                              : LatLng(
-                                                  state.currentLocation!.lat!,
-                                                  state.currentLocation!.lng!),
+                                      minDistanceReferencePoint: state.currentLocation == null ? null : LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
                                       onPicked: (pickedData) async {
-                                        serviceLocator<RideCubit>()
-                                            .updateToLocation(
+                                        serviceLocator<RideCubit>().updateToLocation(
                                           lat: pickedData.latLong.latitude,
                                           lng: pickedData.latLong.longitude,
                                           address: pickedData.addressName,
                                         );
-                                        await context
-                                            .read<RideCubit>()
-                                            .fetchRideExpectedPrice(id: 'id');
+                                        await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
                                         context.pop();
                                       },
                                     ),
@@ -1803,9 +1434,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               },
                             )
                           : const SizedBox(),
-                      context.read<RideCubit>().selectedCategoryIsSocket
-                          ? _fareField()
-                          : const SizedBox(),
+                      context.read<RideCubit>().selectedCategoryIsSocket ? _fareField() : const SizedBox(),
                       context.read<RideCubit>().selectedCategoryIsSocket
                           ? SizedBox(
                               height: 40,
@@ -1905,181 +1534,89 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           // },
                                           onPressed: () async {
                                             if (context.isUserLoggedIn) {
-                                              if (state.toLocation != null &&
-                                                  state.currentLocation !=
-                                                      null) {
-                                                bool isSubscribed =
-                                                    await context
-                                                        .read<RideCubit>()
-                                                        .isSubscribed(
-                                                          userId: UserCubit
-                                                                  .to
-                                                                  .state
-                                                                  .data
-                                                                  ?.id ??
-                                                              '',
-                                                          subcategoryId: state
-                                                                  .rideCategory
-                                                                  ?.subCategories[context
-                                                                      .read<
-                                                                          RideCubit>()
-                                                                      .selectedCategoryIndex!]
-                                                                  .subCategoryId ??
-                                                              '',
-                                                        );
+                                              if (state.toLocation != null && state.currentLocation != null) {
+                                                bool isSubscribed = await context.read<RideCubit>().isSubscribed(
+                                                      userId: UserCubit.to.state.data?.id ?? '',
+                                                      subcategoryId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
+                                                    );
                                                 if (!isSubscribed) {
-                                                  SubscriptionMethod()
-                                                      .subscribe(
-                                                          subscribeId: state
-                                                                  .rideCategory
-                                                                  ?.subCategories[context
-                                                                      .read<
-                                                                          RideCubit>()
-                                                                      .selectedCategoryIndex!]
-                                                                  .subCategoryId ??
-                                                              '',
-                                                          onSubscribe: () {
-                                                            context.pop();
-                                                            context.pop();
-                                                          },
-                                                          showRegular: false,
-                                                          title: LocaleKeys
-                                                              .premiumRequest
-                                                              .localize);
+                                                  SubscriptionMethod().subscribe(
+                                                      subscribeId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
+                                                      onSubscribe: () {
+                                                        context.pop();
+                                                        context.pop();
+                                                      },
+                                                      showRegular: false,
+                                                      title: LocaleKeys.premiumRequest.localize);
                                                 } else {
                                                   // Reset the controller and form state before showing the sheet
-                                                  serviceLocator<RideCubit>()
-                                                      .phoneNumberController
-                                                      .clear(); // Clear any previous input
-                                                  _phoneNumberFormKey
-                                                      .currentState
-                                                      ?.reset(); // Reset validation state
+                                                  serviceLocator<RideCubit>().phoneNumberController.clear(); // Clear any previous input
+                                                  _phoneNumberFormKey.currentState?.reset(); // Reset validation state
 
                                                   // Show the phone number input bottom sheet
-                                                  final bool?
-                                                      isPhoneNumberValid =
-                                                      await showModalBottomSheet<
-                                                          bool>(
+                                                  final bool? isPhoneNumberValid = await showModalBottomSheet<bool>(
                                                     context: context,
                                                     isScrollControlled: true,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    builder:
-                                                        (BuildContext context) {
+                                                    backgroundColor: Colors.transparent,
+                                                    builder: (BuildContext context) {
                                                       return Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          bottom: MediaQuery.of(
-                                                                  context)
-                                                              .viewInsets
-                                                              .bottom,
+                                                        padding: EdgeInsets.only(
+                                                          bottom: MediaQuery.of(context).viewInsets.bottom,
                                                         ),
                                                         child: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(20.0),
-                                                          decoration:
-                                                              const BoxDecoration(
+                                                          padding: const EdgeInsets.all(20.0),
+                                                          decoration: const BoxDecoration(
                                                             color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius.vertical(
-                                                                    top: Radius
-                                                                        .circular(
-                                                                            20.0)),
+                                                            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                                                           ),
                                                           child: Form(
-                                                            key:
-                                                                _phoneNumberFormKey, // Use the class-level key
+                                                            key: _phoneNumberFormKey, // Use the class-level key
                                                             child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
+                                                              mainAxisSize: MainAxisSize.min,
                                                               children: [
                                                                 Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                   children: [
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            24),
+                                                                    const SizedBox(width: 24),
                                                                     Text(
-                                                                      LocaleKeys
-                                                                          .phoneNumber
-                                                                          .localize,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            18,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
+                                                                      LocaleKeys.phoneNumber.localize,
+                                                                      style: const TextStyle(
+                                                                        fontSize: 18,
+                                                                        fontWeight: FontWeight.bold,
                                                                       ),
                                                                     ),
                                                                     IconButton(
-                                                                      icon: const Icon(
-                                                                          Icons
-                                                                              .close),
-                                                                      onPressed:
-                                                                          () =>
-                                                                              Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                      icon: const Icon(Icons.close),
+                                                                      onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
                                                                     ),
                                                                   ],
                                                                 ),
-                                                                const SizedBox(
-                                                                    height: 20),
+                                                                const SizedBox(height: 20),
                                                                 NewPhoneNumberTextFormField(
-                                                                  currentController:
-                                                                      serviceLocator<
-                                                                              RideCubit>()
-                                                                          .phoneNumberController, // Use the class-level controller
-                                                                  keyboardType:
-                                                                      TextInputType
-                                                                          .number,
-                                                                  isRequired:
-                                                                      true,
-                                                                  validator:
-                                                                      validatorEgyptPhone,
+                                                                  currentController: serviceLocator<RideCubit>().phoneNumberController, // Use the class-level controller
+                                                                  keyboardType: TextInputType.number,
+                                                                  isRequired: true,
+                                                                  validator: validatorEgyptPhone,
                                                                 ),
-                                                                const SizedBox(
-                                                                    height: 20),
+                                                                const SizedBox(height: 20),
                                                                 SizedBox(
-                                                                  width: double
-                                                                      .infinity,
-                                                                  child:
-                                                                      ElevatedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      if (_phoneNumberFormKey
-                                                                          .currentState!
-                                                                          .validate()) {
-                                                                        Navigator.of(context)
-                                                                            .pop(true); // Pass true if validated
+                                                                  width: double.infinity,
+                                                                  child: ElevatedButton(
+                                                                    onPressed: () {
+                                                                      if (_phoneNumberFormKey.currentState!.validate()) {
+                                                                        Navigator.of(context).pop(true); // Pass true if validated
                                                                       }
                                                                     },
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          AppColors
-                                                                              .PRIMARY_COLOR,
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          vertical:
-                                                                              15),
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
+                                                                    style: ElevatedButton.styleFrom(
+                                                                      backgroundColor: AppColors.PRIMARY_COLOR,
+                                                                      padding: const EdgeInsets.symmetric(vertical: 15),
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(10),
                                                                       ),
                                                                     ),
                                                                     child: Text(
-                                                                      LocaleKeys
-                                                                          .submit
-                                                                          .localize,
-                                                                      style: const TextStyle(
-                                                                          fontSize:
-                                                                              18,
-                                                                          color:
-                                                                              Colors.white),
+                                                                      LocaleKeys.submit.localize,
+                                                                      style: const TextStyle(fontSize: 18, color: Colors.white),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -2093,27 +1630,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
                                                   // This block runs after the phone number bottom sheet is dismissed
                                                   // isPhoneNumberValid will be true if validated, false if dismissed without validating
-                                                  if (isPhoneNumberValid ==
-                                                      true) {
+                                                  if (isPhoneNumberValid == true) {
                                                     // If valid, show the CustomReserveRideBottomSheet
                                                     showModalBottomSheet(
                                                       context: context,
                                                       isScrollControlled: true,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      builder: (context) =>
-                                                          CustomReserveRideBottomSheet(
-                                                        rideCubit:
-                                                            serviceLocator<
-                                                                RideCubit>(),
-                                                        selectedCategoryId: state
-                                                                .rideCategory
-                                                                ?.subCategories[
-                                                                    serviceLocator<
-                                                                            RideCubit>()
-                                                                        .selectedCategoryIndex!]
-                                                                .subCategoryId ??
-                                                            '',
+                                                      backgroundColor: Colors.transparent,
+                                                      builder: (context) => CustomReserveRideBottomSheet(
+                                                        rideCubit: serviceLocator<RideCubit>(),
+                                                        selectedCategoryId:
+                                                            state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
                                                         isPremium: true,
                                                         // Pass the phone number here if CustomReserveRideBottomSheet needs it
                                                         // phoneNumber: _phoneNumberController.text,
@@ -2121,46 +1647,29 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     );
                                                   } else {
                                                     // If phone number is null or invalid, do nothing (sheet already closed)
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
+                                                    ScaffoldMessenger.of(context).showSnackBar(
                                                       SnackBar(
                                                         content: Text(
-                                                          context.isArabic
-                                                              ? "رقم الهاتف غير صالح أو لم يتم إدخاله."
-                                                              : "Phone number is invalid or not entered.",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white),
+                                                          context.isArabic ? "رقم الهاتف غير صالح أو لم يتم إدخاله." : "Phone number is invalid or not entered.",
+                                                          textAlign: TextAlign.center,
+                                                          style: const TextStyle(color: Colors.white),
                                                         ),
-                                                        backgroundColor:
-                                                            Colors.red,
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 2),
+                                                        backgroundColor: Colors.red,
+                                                        duration: const Duration(seconds: 2),
                                                       ),
                                                     );
                                                   }
                                                 }
                                               } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
+                                                ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
                                                     content: Text(
-                                                      context.isArabic
-                                                          ? "يرجى تحديد الموقع"
-                                                          : "Please select location",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color: Colors.white),
+                                                      context.isArabic ? "يرجى تحديد الموقع" : "Please select location",
+                                                      textAlign: TextAlign.center,
+                                                      style: const TextStyle(color: Colors.white),
                                                     ),
                                                     backgroundColor: Colors.red,
-                                                    duration: const Duration(
-                                                        seconds: 2),
+                                                    duration: const Duration(seconds: 2),
                                                   ),
                                                 );
                                               }
@@ -2168,26 +1677,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               context.push(Routes.LOGIN);
                                             }
                                           },
-                                          backColor:
-                                              AppColors.SECONDARY_COLOR_DARK2,
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width)),
+                                          backColor: AppColors.SECONDARY_COLOR_DARK2,
+                                          width: MediaQuery.of(context).size.width)),
                                   Expanded(
                                       flex: 2,
                                       child: state.isLoadingSubmit
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator())
+                                          ? const Center(child: CircularProgressIndicator())
                                           : AppButton(
                                               radius: 15,
                                               label: LocaleKeys.request.tr(),
                                               onPressed: () async {
                                                 if (context.isUserLoggedIn) {
-                                                  if (state.toLocation !=
-                                                          null &&
-                                                      state.currentLocation !=
-                                                          null) {
+                                                  if (state.toLocation != null && state.currentLocation != null) {
                                                     // showModalBottomSheet(
                                                     //   context: context,
                                                     //   isScrollControlled: true,
@@ -2213,140 +1714,73 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     //           )),
                                                     // );
                                                     // Reset the controller and form state before showing the sheet
-                                                    serviceLocator<RideCubit>()
-                                                        .phoneNumberController
-                                                        .clear(); // Clear any previous input
-                                                    _phoneNumberFormKey
-                                                        .currentState
-                                                        ?.reset(); // Reset validation state
+                                                    serviceLocator<RideCubit>().phoneNumberController.clear(); // Clear any previous input
+                                                    _phoneNumberFormKey.currentState?.reset(); // Reset validation state
 
                                                     // Show the phone number input bottom sheet
-                                                    final bool?
-                                                        isPhoneNumberValid =
-                                                        await showModalBottomSheet<
-                                                            bool>(
+                                                    final bool? isPhoneNumberValid = await showModalBottomSheet<bool>(
                                                       context: context,
                                                       isScrollControlled: true,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      builder: (BuildContext
-                                                          context) {
+                                                      backgroundColor: Colors.transparent,
+                                                      builder: (BuildContext context) {
                                                         return Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                            bottom:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .viewInsets
-                                                                    .bottom,
+                                                          padding: EdgeInsets.only(
+                                                            bottom: MediaQuery.of(context).viewInsets.bottom,
                                                           ),
                                                           child: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(20.0),
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius.vertical(
-                                                                      top: Radius
-                                                                          .circular(
-                                                                              20.0)),
+                                                            padding: const EdgeInsets.all(20.0),
+                                                            decoration: const BoxDecoration(
+                                                              color: Colors.white,
+                                                              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                                                             ),
                                                             child: Form(
-                                                              key:
-                                                                  _phoneNumberFormKey, // Use the class-level key
+                                                              key: _phoneNumberFormKey, // Use the class-level key
                                                               child: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
+                                                                mainAxisSize: MainAxisSize.min,
                                                                 children: [
                                                                   Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                     children: [
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              24),
+                                                                      const SizedBox(width: 24),
                                                                       Text(
-                                                                        LocaleKeys
-                                                                            .phoneNumber
-                                                                            .localize,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              18,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
+                                                                        LocaleKeys.phoneNumber.localize,
+                                                                        style: const TextStyle(
+                                                                          fontSize: 18,
+                                                                          fontWeight: FontWeight.bold,
                                                                         ),
                                                                       ),
                                                                       IconButton(
-                                                                        icon: const Icon(
-                                                                            Icons.close),
-                                                                        onPressed:
-                                                                            () =>
-                                                                                Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                        icon: const Icon(Icons.close),
+                                                                        onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          20),
+                                                                  const SizedBox(height: 20),
                                                                   NewPhoneNumberTextFormField(
-                                                                    currentController:
-                                                                        serviceLocator<RideCubit>()
-                                                                            .phoneNumberController, // Use the class-level controller
-                                                                    keyboardType:
-                                                                        TextInputType
-                                                                            .number,
-                                                                    isRequired:
-                                                                        true,
-                                                                    validator:
-                                                                        validatorEgyptPhone,
+                                                                    currentController: serviceLocator<RideCubit>().phoneNumberController, // Use the class-level controller
+                                                                    keyboardType: TextInputType.number,
+                                                                    isRequired: true,
+                                                                    validator: validatorEgyptPhone,
                                                                   ),
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          20),
+                                                                  const SizedBox(height: 20),
                                                                   SizedBox(
-                                                                    width: double
-                                                                        .infinity,
-                                                                    child:
-                                                                        ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        if (_phoneNumberFormKey
-                                                                            .currentState!
-                                                                            .validate()) {
-                                                                          Navigator.of(context)
-                                                                              .pop(true); // Pass true if validated
+                                                                    width: double.infinity,
+                                                                    child: ElevatedButton(
+                                                                      onPressed: () {
+                                                                        if (_phoneNumberFormKey.currentState!.validate()) {
+                                                                          Navigator.of(context).pop(true); // Pass true if validated
                                                                         }
                                                                       },
-                                                                      style: ElevatedButton
-                                                                          .styleFrom(
-                                                                        backgroundColor:
-                                                                            AppColors.PRIMARY_COLOR,
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            vertical:
-                                                                                15),
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(10),
+                                                                      style: ElevatedButton.styleFrom(
+                                                                        backgroundColor: AppColors.PRIMARY_COLOR,
+                                                                        padding: const EdgeInsets.symmetric(vertical: 15),
+                                                                        shape: RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.circular(10),
                                                                         ),
                                                                       ),
-                                                                      child:
-                                                                          Text(
-                                                                        LocaleKeys
-                                                                            .submit
-                                                                            .localize,
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.white),
+                                                                      child: Text(
+                                                                        LocaleKeys.submit.localize,
+                                                                        style: const TextStyle(fontSize: 18, color: Colors.white),
                                                                       ),
                                                                     ),
                                                                   ),
@@ -2360,28 +1794,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
                                                     // This block runs after the phone number bottom sheet is dismissed
                                                     // isPhoneNumberValid will be true if validated, false if dismissed without validating
-                                                    if (isPhoneNumberValid ==
-                                                        true) {
+                                                    if (isPhoneNumberValid == true) {
                                                       // If valid, show the CustomReserveRideBottomSheet
                                                       showModalBottomSheet(
                                                         context: context,
-                                                        isScrollControlled:
-                                                            true,
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        builder: (context) =>
-                                                            CustomReserveRideBottomSheet(
-                                                          rideCubit:
-                                                              serviceLocator<
-                                                                  RideCubit>(),
-                                                          selectedCategoryId: state
-                                                                  .rideCategory
-                                                                  ?.subCategories[
-                                                                      serviceLocator<
-                                                                              RideCubit>()
-                                                                          .selectedCategoryIndex!]
-                                                                  .subCategoryId ??
-                                                              '',
+                                                        isScrollControlled: true,
+                                                        backgroundColor: Colors.transparent,
+                                                        builder: (context) => CustomReserveRideBottomSheet(
+                                                          rideCubit: serviceLocator<RideCubit>(),
+                                                          selectedCategoryId:
+                                                              state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryId ?? '',
                                                           isPremium: false,
                                                           // Pass the phone number here if CustomReserveRideBottomSheet needs it
                                                           // phoneNumber: _phoneNumberController.text,
@@ -2389,50 +1811,28 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                       );
                                                     } else {
                                                       // If phone number is null or invalid, do nothing (sheet already closed)
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
+                                                      ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(
                                                           content: Text(
-                                                            context.isArabic
-                                                                ? "رقم الهاتف غير صالح أو لم يتم إدخاله."
-                                                                : "Phone number is invalid or not entered.",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: Colors
-                                                                        .white),
+                                                            context.isArabic ? "رقم الهاتف غير صالح أو لم يتم إدخاله." : "Phone number is invalid or not entered.",
+                                                            textAlign: TextAlign.center,
+                                                            style: const TextStyle(color: Colors.white),
                                                           ),
-                                                          backgroundColor:
-                                                              Colors.red,
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 2),
+                                                          backgroundColor: Colors.red,
+                                                          duration: const Duration(seconds: 2),
                                                         ),
                                                       );
                                                     }
                                                   } else {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
+                                                    ScaffoldMessenger.of(context).showSnackBar(
                                                       SnackBar(
                                                         content: Text(
-                                                          context.isArabic
-                                                              ? "يرجى تحديد الموقع"
-                                                              : "Please select location", // Ensure you define this key in your localization file
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white),
+                                                          context.isArabic ? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
+                                                          textAlign: TextAlign.center,
+                                                          style: const TextStyle(color: Colors.white),
                                                         ),
-                                                        backgroundColor:
-                                                            Colors.red,
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 2),
+                                                        backgroundColor: Colors.red,
+                                                        duration: const Duration(seconds: 2),
                                                       ),
                                                     );
                                                   }
@@ -2440,11 +1840,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                   context.push(Routes.LOGIN);
                                                 }
                                               },
-                                              backColor:
-                                                  AppColors.PRIMARY_COLOR,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width)),
+                                              backColor: AppColors.PRIMARY_COLOR,
+                                              width: MediaQuery.of(context).size.width)),
                                 ],
                               ),
                             )
@@ -2465,9 +1862,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       height: 40,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : color,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
+          color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : color, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
       child: Center(
         child: Text(
           text,
@@ -2478,8 +1873,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildCategoryList(String type, List subCategories) {
-    final ScrollController controller =
-        type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController controller = type == "ride" ? _rideScrollController : _shippingScrollController;
 
     return Row(
       children: [
@@ -2493,39 +1887,22 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               itemCount: subCategories.length,
               itemBuilder: (context, index) {
                 final subCategory = subCategories[index];
-                final bool isSelected =
-                    context.read<RideCubit>().selectedCategoryType == type &&
-                        context.read<RideCubit>().selectedCategoryIndex ==
-                            index;
+                final bool isSelected = context.read<RideCubit>().selectedCategoryType == type && context.read<RideCubit>().selectedCategoryIndex == index;
                 return GestureDetector(
                   onTap: () {
-                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId??'');
-                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId??'');
+                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
+                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
                     context.read<ClientTripsCubit>().makeNonTrackingTripParam = MakeNonTrackingRequestTripUsecaseParam();
                     context.read<ClientTripsCubit>().makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
                     context.read<RideCubit>().onChangeCategoriesType(type);
                     setState(() {
-                      if (context.isUserLoggedIn &&
-                          serviceLocator<UserCubit>().state.data?.gender !=
-                              null) {
-                        if (serviceLocator<UserCubit>().state.data?.gender ==
-                                "male" &&
-                            subCategory.subCategoryNameEn
-                                    .trim()
-                                    .toLowerCase() ==
-                                "lady") {
-                          showErrorMessage(
-                              context,
-                              context.isArabic
-                                  ? "أنت رجل, لا يمكنك استخدام هذه الخدمة"
-                                  : "You are a man, you can't use this service");
+                      if (context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null) {
+                        if (serviceLocator<UserCubit>().state.data?.gender == "male" && subCategory.subCategoryNameEn.trim().toLowerCase() == "lady") {
+                          showErrorMessage(context, context.isArabic ? "أنت رجل, لا يمكنك استخدام هذه الخدمة" : "You are a man, you can't use this service");
                           return;
                         }
                       }
-                      if (context.read<RideCubit>().selectedCategoryType ==
-                              type &&
-                          context.read<RideCubit>().selectedCategoryIndex ==
-                              index) {
+                      if (context.read<RideCubit>().selectedCategoryType == type && context.read<RideCubit>().selectedCategoryIndex == index) {
                         // context.read<RideCubit>().selectedCategoryType = null;
                         // context.read<RideCubit>().selectedCategoryIndex = null;
                       } else {
@@ -2533,19 +1910,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         context.read<RideCubit>().selectedCategoryIndex = 0;
                         subCategories.insert(0, subCategories.removeAt(index));
                       }
-                      context.read<RideCubit>().subCategoryId =
-                          subCategory.subCategoryId;
-                      context.read<RideCubit>().checkSelectedCategoryIsSocket(
-                          subCategory.subCategoryId);
+                      context.read<RideCubit>().subCategoryId = subCategory.subCategoryId;
+                      context.read<RideCubit>().checkSelectedCategoryIsSocket(subCategory.subCategoryId);
                     });
                     _scrollToStart(type);
                   },
-                  child: _categoryItem(
-                      context.isArabic
-                          ? subCategory.subCategoryNameAr
-                          : subCategory.subCategoryNameEn,
-                      subCategory.picture,
-                      isSelected),
+                  child: _categoryItem(context.isArabic ? subCategory.subCategoryNameAr : subCategory.subCategoryNameEn, subCategory.picture, isSelected),
                 );
               },
             ),
@@ -2557,8 +1927,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             onTap: () {
               _scrollRight(type);
             },
-            child: const Icon(Icons.arrow_forward_ios,
-                size: 18, color: AppColors.SECONDARY_COLOR_DARK),
+            child: const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.SECONDARY_COLOR_DARK),
           ),
         ),
       ],
@@ -2570,9 +1939,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected
-              ? Colors.redAccent.withOpacity(0.2)
-              : Colors.transparent,
+          color: isSelected ? Colors.redAccent.withOpacity(0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         padding: const EdgeInsets.all(8),
@@ -2581,9 +1948,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           children: [
             Image.network(imageUrl, width: 50, height: 20, fit: BoxFit.fill),
             const SizedBox(height: 5),
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
+            Text(title, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
           ],
         ),
       ),
@@ -2611,9 +1976,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: context.isDarkMode
-                ? AppColors.GREY_DARK_COLOR
-                : const Color(0xFFEEEEEE),
+            color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : const Color(0xFFEEEEEE),
           ),
           child: Row(
             children: [
@@ -2622,8 +1985,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 child: CircleAvatar(
                   backgroundColor: color,
                   radius: 10,
-                  child: const CircleAvatar(
-                      backgroundColor: Colors.white, radius: 5),
+                  child: const CircleAvatar(backgroundColor: Colors.white, radius: 5),
                 ),
               ),
               Expanded(
@@ -2668,43 +2030,25 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       String selectedCategoryName = "Captain";
       double selectedCategoryPrice = 0.0;
       if (context.read<RideCubit>().selectedCategoryType == "ride") {
-        selectedCategoryName = state
-                .rideCategory
-                ?.subCategories[
-                    context.read<RideCubit>().selectedCategoryIndex!]
-                .subCategoryNameEn ??
-            "";
+        selectedCategoryName = state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryNameEn ?? "";
       } else {
-        selectedCategoryName = state
-                .shippingCategory
-                ?.subCategories[
-                    context.read<RideCubit>().selectedCategoryIndex!]
-                .subCategoryNameEn ??
-            "";
+        selectedCategoryName = state.shippingCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryNameEn ?? "";
       }
       // log("""selectedCategoryName: $selectedCategoryName""");
-      if (selectedCategoryName.trim().toLowerCase() ==
-          "Captain".toLowerCase()) {
+      if (selectedCategoryName.trim().toLowerCase() == "Captain".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForCaptain ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() ==
-          "Scooter".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Scooter".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForScooter ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() ==
-          "Taxi".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Taxi".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForTaxi ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() ==
-          "Suv".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Suv".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForSUV ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() ==
-          "Lady".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Lady".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForWomen ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() ==
-          "Premium".toLowerCase()) {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Premium".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForPremium ?? 0.0;
-      } else if (selectedCategoryName.trim().toLowerCase() ==
-          "Intercity".toLowerCase()) {
-        selectedCategoryPrice =
-            state.rideExpectedPrice?.priceForIntercity ?? 0.0;
+      } else if (selectedCategoryName.trim().toLowerCase() == "Intercity".toLowerCase()) {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForIntercity ?? 0.0;
       }
       return GestureDetector(
         onTap: () {
@@ -2731,9 +2075,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(12.0),
                   child: FareBottomSheetWidget(
                     rideCubit: serviceLocator<RideCubit>(),
-                    selectedCategoryPrice: context
-                        .read<RideCubit>()
-                        .getTotalPrice(selectedCategoryPrice),
+                    selectedCategoryPrice: context.read<RideCubit>().getTotalPrice(selectedCategoryPrice),
                     selectedCategoryName: selectedCategoryName,
                   ),
                 ),
@@ -2747,35 +2089,23 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               Expanded(
                 flex: 8,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: context.isDarkMode
-                        ? AppColors.GREY_DARK_COLOR
-                        : AppColors.GREYFIELD,
+                    color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYFIELD,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     spacing: 10,
                     children: [
-                      Text(LocaleKeys.egp.tr(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12)),
+                      Text(LocaleKeys.egp.tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                       state.rideExpectedPrice != null
-                          ? Text(FormatNumbers().convertNumberToLocalizedString(
-                              context
-                                  .read<RideCubit>()
-                                  .getTotalPrice(selectedCategoryPrice)
-                                  .toInt()
-                                  .toString(),
-                              isArabic: context.isArabic))
+                          ? Text(FormatNumbers()
+                              .convertNumberToLocalizedString(context.read<RideCubit>().getTotalPrice(selectedCategoryPrice).toInt().toString(), isArabic: context.isArabic))
                           : Text(LocaleKeys.offerYourFare.tr()),
                       const Spacer(),
                       Icon(
                         Icons.edit_outlined,
-                        color: context.isDarkMode
-                            ? null
-                            : AppColors.DARK_BLUE_COLOR,
+                        color: context.isDarkMode ? null : AppColors.DARK_BLUE_COLOR,
                       ),
                     ],
                   ),
@@ -2807,9 +2137,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: OptionsBottomsheetWidget(
                             rideCubit: serviceLocator<RideCubit>(),
                             selectedCategoryName: selectedCategoryName,
-                            selectedCategoryPrice: context
-                                .read<RideCubit>()
-                                .getTotalPrice(selectedCategoryPrice),
+                            selectedCategoryPrice: context.read<RideCubit>().getTotalPrice(selectedCategoryPrice),
                           ),
                           title: LocaleKeys.options.tr());
                     }
@@ -2818,8 +2146,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     height: 25,
                     child: Icon(
                       Icons.tune_outlined,
-                      color:
-                          context.isDarkMode ? null : AppColors.DARK_BLUE_COLOR,
+                      color: context.isDarkMode ? null : AppColors.DARK_BLUE_COLOR,
                     ),
                   ),
                 ),
@@ -2863,10 +2190,7 @@ class _CarMarkerWidgetState extends State<CarMarkerWidget> {
       value: CarLocationCubit(),
       child: BlocBuilder<CarLocationCubit, GetLocationFromAddressEntity?>(
         builder: (context, state) {
-          if (state == null ||
-              state.lat == null ||
-              state.lng == null ||
-              _initialDirection == null) {
+          if (state == null || state.lat == null || state.lng == null || _initialDirection == null) {
             return const SizedBox.shrink();
           }
 
@@ -2886,8 +2210,7 @@ class _CarMarkerWidgetState extends State<CarMarkerWidget> {
 }
 
 class CarMarker {
-  static Marker build(LatLng carLocation, LatLng? previousLocation,
-      {required double initialDirection}) {
+  static Marker build(LatLng carLocation, LatLng? previousLocation, {required double initialDirection}) {
     double rotation = initialDirection;
 
     if (previousLocation != null) {
@@ -2908,8 +2231,7 @@ class CarMarker {
     final double deltaLng = (to.longitude - from.longitude) * (pi / 180);
 
     final double y = sin(deltaLng) * cos(lat2);
-    final double x =
-        cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLng);
+    final double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLng);
     final double bearing = atan2(y, x);
     return (bearing * (180 / pi) + 360) % 360; // Degrees
   }
@@ -2967,8 +2289,7 @@ class CountdownTimerWidget extends StatefulWidget {
   State<CountdownTimerWidget> createState() => _CountdownTimerWidgetState();
 }
 
-class _CountdownTimerWidgetState extends State<CountdownTimerWidget>
-    with SingleTickerProviderStateMixin {
+class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with SingleTickerProviderStateMixin {
   static const int totalSeconds = 300;
   late Duration _remaining = const Duration(seconds: totalSeconds);
   Timer? _timer;
@@ -3048,12 +2369,8 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget>
     final isLastMinute = _remaining.inSeconds <= 60 && widget.isActive;
 
     final message = widget.isArabic
-        ? (isLastMinute
-            ? "كن حذرًا، يمكن أن يلغي السائق الرحلة، ولديه مبررات قوية لذلك."
-            : "لا تتأخر، قد يؤثر على تقييمك")
-        : (isLastMinute
-            ? "Be careful, the driver could cancel the ride, and he has every right to do so."
-            : "Please don't be late, it might affect your rating");
+        ? (isLastMinute ? "كن حذرًا، يمكن أن يلغي السائق الرحلة، ولديه مبررات قوية لذلك." : "لا تتأخر، قد يؤثر على تقييمك")
+        : (isLastMinute ? "Be careful, the driver could cancel the ride, and he has every right to do so." : "Please don't be late, it might affect your rating");
 
     return AnimatedBuilder(
       animation: _animationController,

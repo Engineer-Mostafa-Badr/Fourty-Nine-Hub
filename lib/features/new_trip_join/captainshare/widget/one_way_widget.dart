@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -52,13 +53,78 @@ class OneWayWidget extends StatefulWidget {
 }
 
 class _OneWayWidgetState extends State<OneWayWidget> {
-  bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+  bool _showContainer = false;
   ExpandableController _expandableController = ExpandableController();
+
+  // Timer related variables
+  Timer? _timer;
+  Duration _remainingTime = Duration.zero;
+  bool _showTimer = false;
 
   @override
   void initState() {
     super.initState();
     _expandableController = ExpandableController(initialExpanded: false);
+    _setupTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _setupTimer() {
+    if (widget.model?.createdAt != null) {
+      try {
+        DateTime createdAt = DateTime.parse(widget.model!.createdAt!);
+        DateTime now = DateTime.now();
+
+        // Check if it's the same day
+        bool isSameDay = createdAt.year == now.year &&
+            createdAt.month == now.month &&
+            createdAt.day == now.day;
+
+        if (isSameDay) {
+          Duration elapsed = now.difference(createdAt);
+          Duration oneHour = const Duration(hours: 1);
+
+          // Check if less than 1 hour has passed
+          if (elapsed < oneHour) {
+            _remainingTime = oneHour - elapsed;
+            _showTimer = true;
+
+            // Start the countdown timer
+            _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+              setState(() {
+                if (_remainingTime.inSeconds > 0) {
+                  _remainingTime = _remainingTime - const Duration(seconds: 1);
+                } else {
+                  _timer?.cancel();
+                  _showTimer = false;
+                  _onTimerFinished();
+                }
+              });
+            });
+          }
+        }
+      } catch (e) {
+        print('Error parsing createdAt: $e');
+      }
+    }
+  }
+
+  // This method will be called when timer finishes
+  void _onTimerFinished() {
+    // Add your logic here when timer finishes
+    print('Timer finished! Add your custom logic here.');
+    // You can add any functionality you need here
+  }
+
+  String _formatRemainingTime(Duration duration) {
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   String getBookingStatus(String status) {
@@ -95,7 +161,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     return options.contains('COMFORT');
   }
 
-
   @override
   Widget build(BuildContext context) {
     bool myRoute = (widget.model?.creatorId == UserCubit.to.state.data?.id)||((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id));
@@ -118,7 +183,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color:
-                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               ),
             ),
             child: Padding(
@@ -160,7 +225,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             ),
                           ),
                           Text(
-                          context.isArabic?'لكل مقعد':'Per Seat',
+                            context.isArabic?'لكل مقعد':'Per Seat',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.getRedColor(context),
@@ -406,7 +471,36 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   SizedBox(height: 8),
                   Row(
                     children: [
-                      Text(
+                      // Show timer if conditions are met, otherwise show time ago
+                      _showTimer
+                          ? Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.orange),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.timer,
+                              size: 16,
+                              color: Colors.orange,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              _formatRemainingTime(_remainingTime),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.orange,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                          : Text(
                         TimeUtils.formatTimeAgo(
                             widget.model?.createdAt ?? DateTime.now().toString(),
                             context.isArabic),
@@ -437,30 +531,30 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       const SizedBox(width: 5),
                       widget.cancelButton == true
                           ? GestureDetector(
-                              onTap: () {
-                                if (widget.onCancelBooking != null) {
-                                  widget.onCancelBooking!();
-                                }
-                              },
-                              child: Container(
-                                width: 120.w,
-                                height: 50.h,
-                                decoration: BoxDecoration(
-                                  color: AppColors.SECONDARY_COLOR_DARK,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    LocaleKeys.cancel.localize,
-                                    style: TextStyle(
-                                      fontSize: 22.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                        onTap: () {
+                          if (widget.onCancelBooking != null) {
+                            widget.onCancelBooking!();
+                          }
+                        },
+                        child: Container(
+                          width: 120.w,
+                          height: 50.h,
+                          decoration: BoxDecoration(
+                            color: AppColors.SECONDARY_COLOR_DARK,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              LocaleKeys.cancel.localize,
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
-                            )
+                            ),
+                          ),
+                        ),
+                      )
                           : const SizedBox(),
                     ],
                   ),
@@ -479,30 +573,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
               ),
             ),
           ),
-          // Positioned(
-          //   bottom: 9,
-          //   left: 270.h,
-          //   child: GestureDetector(
-          //     onTap: () {
-          //       setState(() {
-          //         _showContainer = !_showContainer; // تغيير حالة الـ Container
-          //       });
-          //     },
-          //     child: SvgPicture.asset(
-          //       Assets.frameIcon,
-          //       width: 50,
-          //     ),
-          //   ),
-          // ),
-          // if (_showContainer)
-          //   const Positioned(
-          //     top: 0,
-          //     bottom: 80,
-          //     // تحديد المكان اللي هيظهر فيه الـ Container
-          //     left: 0,
-          //     right: 0,
-          //     child: AddressWidget(),
-          //   ),
         ],
       ),
     );
@@ -554,27 +624,24 @@ class _OneWayWidgetState extends State<OneWayWidget> {
       child: FlutterMap(
         mapController: _mapController,
         options: (model != null &&
-                model.startLocation?.location[1] == null &&
-                model.startLocation?.location[0] == null &&
-                model.startLocation?.location[1] != 0 &&
-                model.startLocation?.location[0] != 0)
+            model.startLocation?.location[1] == null &&
+            model.startLocation?.location[0] == null &&
+            model.startLocation?.location[1] != 0 &&
+            model.startLocation?.location[0] != 0)
             ? MapOptions(
-                initialCenter: LatLng(model.startLocation?.location[1],
-                    model.startLocation?.location[0]),
-                initialZoom: 12.0,
-              )
+          initialCenter: LatLng(model.startLocation?.location[1],
+              model.startLocation?.location[0]),
+          initialZoom: 12.0,
+        )
             : MapOptions(
-                initialCenter: LatLng(30.033333, 31.233334),
-                initialZoom: 12.0,
-              ),
+          initialCenter: LatLng(30.033333, 31.233334),
+          initialZoom: 12.0,
+        ),
         children: [
           TileLayer(
-            // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
             urlTemplate: context.isDarkMode
-                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
             subdomains: const ['a', 'b', 'c'],
             userAgentPackageName: 'com.example.app',
           ),
@@ -650,7 +717,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
           model.startLocation!.location[1], model.startLocation!.location[0]);
     }
 
-    // Default to Cairo
     return const LatLng(30.033333, 31.233334);
   }
 
@@ -705,14 +771,6 @@ class AddressWidget extends StatelessWidget {
                 ],
               ),
             ),
-            // Positioned(
-            //   bottom: -1,
-            //   right: 5,
-            //   left: 2,
-            //   child: SvgPicture.asset(
-            //     Assets.redFrame,
-            //   ),
-            // ),
           ],
         ),
       ),
