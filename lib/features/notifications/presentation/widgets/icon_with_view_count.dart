@@ -41,7 +41,8 @@ class CustomNotificationWidget extends StatelessWidget {
   const CustomNotificationWidget({
     super.key,
     required this.icon,
-    required this.unreadCount,  this.height,
+    required this.unreadCount,
+    this.height,
   });
 
   final Widget icon;
@@ -54,8 +55,9 @@ class CustomNotificationWidget extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          height:height?? 40,
-          margin: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,bottom: 8),
+          height: height ?? 40,
+          margin: const EdgeInsetsDirectional.only(
+              top: 16, end: 8, start: 8, bottom: 8),
           // padding: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,bottom: 8),
           child: icon,
         ),
@@ -64,7 +66,9 @@ class CustomNotificationWidget extends StatelessWidget {
           child: PositionedDirectional(
             top: 6,
             end: -2,
-            child: CounterWidget(unreadCount: unreadCount,),
+            child: CounterWidget(
+              unreadCount: unreadCount,
+            ),
           ),
         )
       ],
