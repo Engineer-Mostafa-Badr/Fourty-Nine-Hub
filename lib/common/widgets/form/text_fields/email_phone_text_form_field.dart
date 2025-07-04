@@ -17,6 +17,7 @@ class EmailOrPhoneTextFormField extends MainTextFormField {
     super.onTap,
     super.isAuthentcation,
     super.labelWidget,
+    super.autofillHints,
     super.label,
     super.prefix,
     super.enabled,

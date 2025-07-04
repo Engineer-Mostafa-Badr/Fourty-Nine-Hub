@@ -135,6 +135,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   currentController: cubit.rideNameController,
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
+                                  onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                   hint: '',
                                   // label: LocaleKeys.firstName.localize,
                                   validator: (v) {
@@ -154,6 +155,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
                                   hint: '',
+                                  onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                   // label: LocaleKeys.surname.localize,
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
@@ -190,10 +192,12 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     borderColor: Colors.transparent,
                                     hint: '',
+                                    maxLength: 11,
                                     // label: LocaleKeys.idNumber.localize,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                     inputFormatter: [FilteringTextInputFormatter.digitsOnly],
-                                    validator: (v) => validatorPhone(v)),
+                                    validator: (v) => validateEgyptianPhone(v)),
                                 const Sizer(),
                                 Label(
                                   text: LocaleKeys.idNumber.localize,
@@ -205,6 +209,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   borderColor: Colors.transparent,
                                   hint: '',
                                   maxLength: 14,
+                                  onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                   // label: LocaleKeys.idNumber.localize,
                                   keyboardType: TextInputType.number,
                                   validator: (v) {
@@ -228,6 +233,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     borderColor: Colors.transparent,
                                     hint: '',
                                     maxLength: 14,
+                                    onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                     // label: LocaleKeys.licenseNumber.localize,
                                     keyboardType: TextInputType.number,
                                     validator: (v) {
@@ -341,6 +347,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                           fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                           borderColor: Colors.transparent,
                                           hint: '',
+                                          onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                           maxLength: 14,
                                           // label: LocaleKeys.licenseNumber.localize,
                                           keyboardType: TextInputType.number,
@@ -440,6 +447,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                     currentController: cubit.newModelAddedController,
                                                     fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                                     borderColor: Colors.transparent,
+                                                    onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                                     hint: '',
                                                     maxLength: 14,
                                                     // label: LocaleKeys.licenseNumber.localize,
@@ -490,6 +498,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     currentController: cubit.rideVehicleProductionYearController,
                                     fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     borderColor: Colors.transparent,
+                                    onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                     hint: '',
                                     // label: LocaleKeys.yearOfProduction.localize,
                                     keyboardType: TextInputType.number,
@@ -510,6 +519,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   hint: '',
                                   fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
+                                  onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
                                       return LocaleKeys.required.localize;
@@ -517,6 +527,28 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     return null;
                                   },
                                 ),
+                                if (state.registerType == 'socket' || state.isShipping == true) ...[
+                                  const Sizer(),
+                                  Label(
+                                    text: LocaleKeys.favoriteCity.localize,
+                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
+                                  ),
+                                  RegisterExpansionTile(
+                                    title: Label(
+                                      text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
+                                    ),
+                                    initialTitle: Label(
+                                      text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
+                                    ),
+                                    onChange: (Widget selectedItem) {
+                                      cubit.onSelectGov((selectedItem as Label).text);
+                                      // print("Selected Item: ${(selectedItem as Label).text}");
+                                    },
+                                    length: state.govs?.length ?? 0,
+                                    children: List.generate(
+                                        state.govs?.length ?? 0, (index) => Label(text: context.isArabic ? (state.govs?[index].nameAr ?? '') : state.govs?[index].nameEn ?? '')),
+                                  )
+                                ],
                                 if (state.registerType == 'socket') ...[
                                   const Sizer(),
                                   // DefaultTextFormField(
@@ -565,6 +597,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     currentController: cubit.ridePricingPerKmController,
                                     hint: '',
                                     // label: LocaleKeys.pricingPerKm.localize,
+                                    onChanged: (v)=>cubit.formKey.currentState?.validate(),
                                     keyboardType: TextInputType.number,
                                     validator: (v) {
                                       if (v == null || v.isEmpty) {
@@ -599,28 +632,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     onChanged: (value) async {
                                       cubit.onChangeAirCondition();
                                     },
-                                  )
-                                ],
-                                if (state.registerType == 'socket' || state.isShipping == true) ...[
-                                  const Sizer(),
-                                  Label(
-                                    text: LocaleKeys.favoriteCity.localize,
-                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
-                                  ),
-                                  RegisterExpansionTile(
-                                    title: Label(
-                                      text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
-                                    ),
-                                    initialTitle: Label(
-                                      text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
-                                    ),
-                                    onChange: (Widget selectedItem) {
-                                      cubit.onSelectGov((selectedItem as Label).text);
-                                      // print("Selected Item: ${(selectedItem as Label).text}");
-                                    },
-                                    length: state.govs?.length ?? 0,
-                                    children: List.generate(
-                                        state.govs?.length ?? 0, (index) => Label(text: context.isArabic ? (state.govs?[index].nameAr ?? '') : state.govs?[index].nameEn ?? '')),
                                   )
                                 ],
                               ],

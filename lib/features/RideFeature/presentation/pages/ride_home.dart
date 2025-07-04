@@ -1190,7 +1190,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       width: double.infinity,
-      height: 75,
+      height: context.read<RideCubit>().selectedCategoryIsSocket == false?55:75,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1200,13 +1200,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               width: 85.w,
               height: kToolbarHeight * 1.2.h,
               decoration: BoxDecoration(
-                color: AppColors.whiteColor,
+    color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :AppColors.whiteColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: const EdgeInsets.all(4),
               alignment: Alignment.center,
               child: Image.asset(
                 Assets.rideMenu,
+                color: context.isDarkMode ? AppColors.whiteColor :null,
               ),
             ),
           ),
@@ -1303,12 +1304,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         height: 40,
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: AppColors.whiteColor,
+                          color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :AppColors.whiteColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         alignment: Alignment.center,
                         child: Image.asset(
                           Assets.targetLocation,
+                          color: context.isDarkMode ? AppColors.whiteColor :null,
                         ),
                       ),
                       Expanded(
