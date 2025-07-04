@@ -61,6 +61,7 @@ import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/cre
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -2260,7 +2261,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         lat: currentPosition.latitude,
         lng: currentPosition.longitude));
     response.fold((l) {
-      context.pop();
+      final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      currentContext.pop();
       String errorName = getFailureName(l, context);
       errorName == 'DebtError'
           ? showDebtDialog(context, subCategoryId)

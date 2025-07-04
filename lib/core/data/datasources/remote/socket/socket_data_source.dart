@@ -149,7 +149,7 @@ abstract class SocketIOEvents {
 //   initSocketConnection(userToken) async {
 //     try {
 //       socket = io(
-//           'https://e0d3-41-239-172-48.ngrok-free.app',
+//           'https://49backend.com',
 //           OptionBuilder()
 //               .setTransports(['websocket'])
 //               .disableAutoConnect()
