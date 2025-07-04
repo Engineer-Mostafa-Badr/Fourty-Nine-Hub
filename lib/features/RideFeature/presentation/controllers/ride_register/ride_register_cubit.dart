@@ -1495,6 +1495,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           isLoadingSubmitRegister = false;
           emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
         },
+
             (data) async {
               await LoadingMethodHelper().uploadDriverImage(driverImage: state.personalPicture!, onSuccessUploaded: (bool isSuccess) async{
                 if (isSuccess) {
