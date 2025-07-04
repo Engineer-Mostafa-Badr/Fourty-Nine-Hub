@@ -46,7 +46,7 @@ class StoryRepository {
     await _ensureTokenInitialized(); // Ensure token is initialized
 
     final url = Uri.parse(
-        'https://49backend.com/api/v1/follow/followers?subCategory=$subCategory');
+        'https://e0d3-41-239-172-48.ngrok-free.app/api/v1/follow/followers?subCategory=$subCategory');
 
     final response = await http.get(
       url,
@@ -74,7 +74,7 @@ class StoryRepository {
   Future<void> updatePrivacy(String privacyType, {List<String>? users}) async {
     await _ensureTokenInitialized(); // Ensure the token is available
 
-    final url = Uri.parse('https://49backend.com/api/v1/stories/privacy');
+    final url = Uri.parse('https://e0d3-41-239-172-48.ngrok-free.app/api/v1/stories/privacy');
     final headers = {
       'Authorization': 'Bearer $_token',
       'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ class StoryRepository {
   Future<void> deleteStory(String storyId) async {
     await _ensureTokenInitialized();
     final response = await http.delete(
-      Uri.parse("https://49backend.com/api/v1/stories/$storyId"),
+      Uri.parse("https://e0d3-41-239-172-48.ngrok-free.app/api/v1/stories/$storyId"),
       headers: {
         "Authorization": "Bearer $_token",
       },
@@ -133,7 +133,7 @@ class StoryRepository {
     log("Fetching stories with token: $_token");
 
     final response = await http.get(
-      Uri.parse("https://49backend.com/api/v1/stories/explore?page=$page"),
+      Uri.parse("https://e0d3-41-239-172-48.ngrok-free.app/api/v1/stories/explore?page=$page"),
       headers: {
         "Authorization": "Bearer $_token",
       },

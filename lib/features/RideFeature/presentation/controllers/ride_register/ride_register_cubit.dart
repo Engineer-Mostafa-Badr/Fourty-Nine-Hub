@@ -510,13 +510,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   TextEditingController modelNameController = TextEditingController();
   var modelFormKey = GlobalKey<FormState>();
-  Future<void> addNewModel({required BuildContext context,required String modelName,required String brandId}) async {
+  Future<void> addNewModel({required BuildContext context,required String modelName,required String brandId,required RideFeatureRegisterParams params}) async {
+    bool isScooter = params.subCategoriesId.contains(scooter);
     //addCarModelUseCase
     showLoadingDialog(context);
     emit(state.copyWith(status: RideRegisterStates.initState,selectedModel: RideModelEntity(id: '',modelAr: '',modelEn: '')));
     final Either<Failure, String> result = await addCarModelUseCase(AddCarModelParams(
       modelName: modelName,
-        type:"car",
+        type:isScooter?'scooter':params.isShipping?'truck':params.isSocket?"car":'bus',
+        //
         carBrandId: brandId
     ));
 

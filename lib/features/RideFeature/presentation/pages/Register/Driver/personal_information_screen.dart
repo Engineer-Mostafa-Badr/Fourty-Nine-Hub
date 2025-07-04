@@ -409,7 +409,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                       }else{
                                                         showAddNewModelDialog(context: context,brandId: state.selectedBrand?.id ?? '',
                                                             onModelAdded: (String modelName){
-                                                              cubit.addNewModel(context: context, modelName: modelName, brandId: state.selectedBrand?.id ?? '');
+                                                              cubit.addNewModel(context: context, modelName: modelName, brandId: state.selectedBrand?.id ?? '',params: widget.params);
 
                                                             }
                                                         );
@@ -418,8 +418,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                     }
                                                     showAddNewModelDialog(context: context,brandId: state.newBrand?.id ?? '',
                                                         onModelAdded: (String modelName){
-                                                          cubit.addNewModel(context: context, modelName: modelName, brandId: state.newBrand?.id ?? '');
-
+                                                          cubit.addNewModel(context: context, modelName: modelName, brandId: state.newBrand?.id ?? '',params: widget.params);
                                                         }
                                                     );
 

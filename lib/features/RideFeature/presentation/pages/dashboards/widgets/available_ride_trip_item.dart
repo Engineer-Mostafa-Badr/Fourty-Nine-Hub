@@ -162,7 +162,9 @@ class AvailableRideTripItem extends StatelessWidget {
                                 print("tripEntity.isButtonEnabled ${tripEntity.isButtonEnabled}");
                                 if(tripEntity.isPremium==true||tripEntity.isButtonEnabled==true){
                                   if (tripEntity.isAutoAccept == false) {
-                                    cubit.createOffer(tripId: tripEntity.id, price: tripEntity.price ?? 0, context: context, subCategoryId: tripEntity.subcategoryId);
+                                    cubit.createOffer(tripId: tripEntity.id, price: tripEntity.price ?? 0, context: context, subCategoryId: tripEntity.subcategoryId, onSuccess: () {
+                                      context.pop();
+                                    });
                                   } else {
                                     cubit.autoAcceptTrip(context, tripEntity.id);
                                   }
@@ -221,7 +223,9 @@ class AvailableRideTripItem extends StatelessWidget {
                                           tripEntity: tripEntity,
                                           onSendOffer: (num offer) {
                                             context.pop();
-                                            cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId);
+                                            cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId, onSuccess: () {
+                                              context.pop();
+                                            });
                                           },
                                         ),
                                       );

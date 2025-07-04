@@ -2249,6 +2249,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       {required String tripId,
       required num price,
       required BuildContext context,
+        required Function() onSuccess,
       required String subCategoryId}) async {
     showLoadingDialog(context);
     Position currentPosition = await Geolocator.getCurrentPosition(
@@ -2268,7 +2269,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
               : showErrorMessage(context, getFailureMessage(l, context));
       emit(state.copyWith(failure: l, status: DashboardsStates.error));
     }, (data) {
-      context.pop();
+      onSuccess();
       emit(state.copyWith(status: DashboardsStates.success));
     });
   }

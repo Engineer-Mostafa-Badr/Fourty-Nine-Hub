@@ -338,7 +338,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   void listenToNewTrip(BuildContext context,bool enableSound) {
-    CliLogger.info('Listen To New Trip');
+    CliLogger.info('Listen To New Trip123');
     // TripsResponseEntity
     AudioPlayer player = AudioPlayer();
 
