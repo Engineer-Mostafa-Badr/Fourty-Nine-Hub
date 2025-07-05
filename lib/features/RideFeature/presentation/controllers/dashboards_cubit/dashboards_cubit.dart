@@ -2263,12 +2263,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     response.fold((l) {
       final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
       currentContext.pop();
-      String errorName = getFailureName(l, context);
+      String errorName = getFailureName(l, currentContext);
       errorName == 'DebtError'
-          ? showDebtDialog(context, subCategoryId)
+          ? showDebtDialog(currentContext, subCategoryId)
           : errorName == 'SubscribeError'
-              ? showSubscribeDialog(context, subCategoryId)
-              : showErrorMessage(context, getFailureMessage(l, context));
+              ? showSubscribeDialog(currentContext, subCategoryId)
+              : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: DashboardsStates.error));
     }, (data) {
       onSuccess();
