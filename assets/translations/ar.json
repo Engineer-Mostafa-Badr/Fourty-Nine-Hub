@@ -1634,6 +1634,12 @@
   "ago": "منذ",
   "week": "أسبوع",
   "selectCarBrand": "اختر ماركة السيارة",
-  "selectCarModel": "اختر طراز السيارة"
+  "selectCarModel": "اختر طراز السيارة",
+  "checkInternetConnection": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى",
+  "retry": "إعادة المحاولة",
+  "reportClient": "تقرير العميل",
+  "uploadingImage": "جاري تحميل الصورة...",
+  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
+  "watch": "مشاهدة"
 
 }

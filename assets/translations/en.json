@@ -1649,7 +1649,13 @@
   "ago": "Ago",
   "week": "Week",
   "selectCarBrand": "Select Car Brand",
-  "selectCarModel": "Select Car Model"
+  "selectCarModel": "Select Car Model",
+  "checkInternetConnection": "Please check your internet connection and try again",
+  "retry": "Retry",
+  "reportClient": "Report Client",
+  "uploadingImage": "Uploading Image...",
+  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
+  "watch": "Watch"
 
 
 
