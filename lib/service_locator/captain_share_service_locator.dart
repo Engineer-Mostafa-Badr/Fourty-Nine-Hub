@@ -125,6 +125,7 @@ class CaptainShareServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
             ));
 
     serviceLocator.registerFactory<CaptainShareDashboardCubit>(

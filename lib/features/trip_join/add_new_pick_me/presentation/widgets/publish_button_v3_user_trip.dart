@@ -37,14 +37,7 @@ class PublishButtonV3UserTrip extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AddNewPickMeTripCubit, AddNewPickMeTripState>(
       listener: (context, state) {
-        if (state is AddNewPickMeTripSuccess) {
-          Future.delayed(const Duration(seconds: 1)).then((_) {
-            context.pushAndRemoveUntil(Routes.AVAILABLE_TRIPS, (route) => true);
-          });
-        }
-        if (state is AddNewPickMeTripFailure) {
-          showErrorMessage(context, state.errorMessage);
-        }
+
       },
       child: Stack(
         children: [
@@ -80,12 +73,12 @@ class PublishButtonV3UserTrip extends StatelessWidget {
                 buildWhen: (previous, current) =>
                     previous.runtimeType != current.runtimeType,
                 builder: (context, state) {
-                  if (state is AddNewPickMeTripLoading) {
+                  if (state.status==AddNewPickMeTripStateStatus.loading) {
                     return const Center(
                       child: CustomCircularProgressIndicator(color: Colors.white),
                     );
                   }
-                  if (state is AddNewPickMeTripSuccess) {
+                  if (state.status==AddNewPickMeTripStateStatus.success) {
                     return Center(
                       child:
                           Icon(Icons.check, color: Colors.green[400], size: 30),

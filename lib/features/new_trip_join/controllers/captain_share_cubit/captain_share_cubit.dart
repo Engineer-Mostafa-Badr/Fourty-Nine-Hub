@@ -1,10 +1,14 @@
 import 'package:collection/collection.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
@@ -45,7 +49,8 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final JoinToRouteUseCase joinToRouteUseCase;
   final GetRouteDetailsUseCase getRouteDetailsUseCase;
   final ListenToUpdateRouteUseCase listenToUpdateRouteUseCase;
-  CaptainShareCubit(this.createPricePerSeatUseCase,this.getRouteDetailsUseCase,this.listenToUpdateRouteUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
+  final GetSupportDetailsUseCase getSupportDetailsUseCase;
+  CaptainShareCubit(this.createPricePerSeatUseCase,this.getRouteDetailsUseCase,this.listenToUpdateRouteUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase, this.getSupportDetailsUseCase)
       : super(const CaptainShareState());
 
   TextEditingController supportDescriptionController = TextEditingController();
@@ -510,6 +515,30 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
         isLoadingMoreRunning = false;
         emit(state.copyWith(status: CaptainShareStates.success));
+      },
+    );
+  }
+
+
+  getEmergencyDetails(
+      BuildContext context, SupportRideParams mainParams) async {
+    GetSupportDetailsParams params = GetSupportDetailsParams(
+        tripId: mainParams.tripId,
+        tripType: mainParams.tripType,
+        userType: mainParams.userType);
+    emit(state.copyWith(status: CaptainShareStates.loading));
+    final Either<Failure, SupportDetailsEntity> result =
+    await getSupportDetailsUseCase(params);
+
+    result.fold(
+          (failure) {
+        emit(state.copyWith(status: CaptainShareStates.error, failure: failure));
+      },
+          (data) async {
+        emit(state.copyWith(
+            supportDetails: data,
+            supportStatus: data.status,
+            status: CaptainShareStates.success));
       },
     );
   }
