@@ -14,18 +14,19 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:latlong2/latlong.dart';
+// import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
@@ -581,7 +582,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   final MapController _mapController = MapController();
 
   Widget _buildTopMap(BuildContext context, MyBookingEntity? model) {
-    List<LatLng> routePoints = [];
+    List<gmap.LatLng> routePoints = [];
     List<dynamic> polyLine = model?.polyLine ?? [];
 
     List<List<double>> parsedPolyline = polyLine
@@ -591,25 +592,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     routePoints =
         _convertPolylineToLatLng(parsedPolyline);
 
-    if (model != null &&
-        model.startLocation?.location[1] == null &&
-        model.startLocation?.location[0] == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mapController.move(
-          LatLng(model.startLocation?.location[1],
-              model.startLocation?.location[0]),
-          12.0,
-        );
-      });
-    } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mapController.move(
-          LatLng(model?.startLocation?.location[1] ?? 30.033333,
-              model?.startLocation?.location[0] ?? 31.233334),
-          12.0,
-        );
-      });
-    }
+
 
     List<BookingClientEntity> clients = model?.clients ?? [];
     if (clients.isNotEmpty) {
@@ -618,110 +601,17 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
     log("clients ${clients.length}");
 
-    return SizedBox(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height,
-      child: FlutterMap(
-        mapController: _mapController,
-        options: (model != null &&
-            model.startLocation?.location[1] == null &&
-            model.startLocation?.location[0] == null &&
-            model.startLocation?.location[1] != 0 &&
-            model.startLocation?.location[0] != 0)
-            ? MapOptions(
-          initialCenter: LatLng(model.startLocation?.location[1],
-              model.startLocation?.location[0]),
-          initialZoom: 12.0,
-        )
-            : MapOptions(
-          initialCenter: LatLng(30.033333, 31.233334),
-          initialZoom: 12.0,
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: context.isDarkMode
-                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-            subdomains: const ['a', 'b', 'c'],
-            userAgentPackageName: 'com.example.app',
-          ),
-          MarkerLayer(
-            markers: [
-              if (model != null &&
-                  model.startLocation?.location[1] != null &&
-                  model.startLocation?.location[0] != null &&
-                  model.startLocation?.location[1] != 0 &&
-                  model.startLocation?.location[0] != 0)
-                Marker(
-                  point: LatLng(model.startLocation?.location[1],
-                      model.startLocation?.location[0]),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.green, size: 40),
-                ),
-              if (model?.targetLocation?.location != null &&
-                  model?.targetLocation?.location[1] != null &&
-                  model?.targetLocation?.location[0] != null &&
-                  model?.targetLocation?.location[1] != 0 &&
-                  model?.targetLocation?.location[0] != 0)
-                Marker(
-                  point: LatLng(model?.targetLocation?.location[1],
-                      model?.targetLocation?.location[0]),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.blue, size: 40),
-                ),
-              if (clients.isNotEmpty)
-                Marker(
-                  point: LatLng(clients[0].location.location[0],
-                      clients[0].location.location[1]),
-                  width: 30,
-                  height: 30,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.red, size: 30),
-                ),
-              if (clients.length > 1)
-                Marker(
-                  point: LatLng(clients[1].location.location[0],
-                      clients[1].location.location[1]),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.red, size: 40),
-                ),
-            ],
-          ),
-          if (routePoints.isNotEmpty)
-            PolylineLayer(
-              polylines: [
-                Polyline(
-                  points: routePoints,
-                  color: context.isDarkMode ? Colors.blue : Colors.black87,
-                  strokeWidth: 4.0,
-                ),
-              ],
-            ),
-        ],
-      ),
+    return CustomGoogleMap(
+      startLocation: gmap.LatLng(model?.startLocation?.location[1],
+          model?.startLocation?.location[0]),
+      targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
+          model?.targetLocation?.location[0]),
+        polylinePoints:routePoints
     );
   }
 
-  LatLng _getInitialCenter(MyBookingEntity? model) {
-    if (model?.startLocation?.location != null &&
-        model!.startLocation!.location.length >= 2 &&
-        model.startLocation!.location[0] != 0 &&
-        model.startLocation!.location[1] != 0) {
-      return LatLng(
-          model.startLocation!.location[1], model.startLocation!.location[0]);
-    }
-
-    return const LatLng(30.033333, 31.233334);
-  }
-
-  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => LatLng(point[0], point[1])).toList();
+  List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => gmap.LatLng(point[0], point[1])).toList();
   }
 }
 

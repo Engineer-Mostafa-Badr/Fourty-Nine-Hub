@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
@@ -92,13 +93,13 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   text: currentAddress,
                   onPressed: () async {
                     context.push(
-                      Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                      extra: RideOpenStreetMapSearchAndPickParams(
+                      Routes.GoogleMapsSearchAndPick,
+                      extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
-                          currentAddress = pickedData.addressName;
+                          currentAddress = pickedData.address;
                           currentLocation = [
-                            pickedData.latLong.latitude,
-                            pickedData.latLong.longitude
+                            pickedData.latitude,
+                            pickedData.longitude
                           ];
                           context.pop();
                           setState(() {});
@@ -116,25 +117,25 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   color: Colors.blue,
                   text: toAddress,
                   onPressed: () async {
-                    context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                        extra: RideOpenStreetMapSearchAndPickParams(
-                      onPicked: (pickedData) async {
-                        toAddress = pickedData.addressName;
-                        toLocation = [
-                          pickedData.latLong.latitude,
-                          pickedData.latLong.longitude
-                        ];
-                        context.pop();
-                        cubit.createOffer(context: context,params: CreatePricePerSeatParams(
-                          fromLocation: currentLocation??[],
-                          toLocation: toLocation??[],
-                          isComfort: isComfort,
-                          isLadiesPassenger: isLady,
-                            isLadiesDriver: isLadyDriver
-                        ));
-                        setState(() {});
-                      },
-                    ));
+                    // context.push(Routes.RIDEGOOGLEMAPSEARCHANDPICK,
+                    //     extra: RideOpenStreetMapSearchAndPickParams(
+                    //   onPicked: (pickedData) async {
+                    //     toAddress = pickedData.addressName;
+                    //     toLocation = [
+                    //       pickedData.latLong.latitude,
+                    //       pickedData.latLong.longitude
+                    //     ];
+                    //     context.pop();
+                    //     cubit.createOffer(context: context,params: CreatePricePerSeatParams(
+                    //       fromLocation: currentLocation??[],
+                    //       toLocation: toLocation??[],
+                    //       isComfort: isComfort,
+                    //       isLadiesPassenger: isLady,
+                    //         isLadiesDriver: isLadyDriver
+                    //     ));
+                    //     setState(() {});
+                    //   },
+                    // ));
                   },
                 ),
               ),
