@@ -117,25 +117,25 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   color: Colors.blue,
                   text: toAddress,
                   onPressed: () async {
-                    // context.push(Routes.RIDEGOOGLEMAPSEARCHANDPICK,
-                    //     extra: RideOpenStreetMapSearchAndPickParams(
-                    //   onPicked: (pickedData) async {
-                    //     toAddress = pickedData.addressName;
-                    //     toLocation = [
-                    //       pickedData.latLong.latitude,
-                    //       pickedData.latLong.longitude
-                    //     ];
-                    //     context.pop();
-                    //     cubit.createOffer(context: context,params: CreatePricePerSeatParams(
-                    //       fromLocation: currentLocation??[],
-                    //       toLocation: toLocation??[],
-                    //       isComfort: isComfort,
-                    //       isLadiesPassenger: isLady,
-                    //         isLadiesDriver: isLadyDriver
-                    //     ));
-                    //     setState(() {});
-                    //   },
-                    // ));
+                    context.push(Routes.GoogleMapsSearchAndPick,
+                        extra: RideGoogleMapSearchAndPickParams(
+                      onPicked: (pickedData) async {
+                        toAddress = pickedData.address;
+                        toLocation = [
+                          pickedData.latitude,
+                          pickedData.longitude
+                        ];
+                        context.pop();
+                        cubit.createOffer(context: context,params: CreatePricePerSeatParams(
+                          fromLocation: currentLocation??[],
+                          toLocation: toLocation??[],
+                          isComfort: isComfort,
+                          isLadiesPassenger: isLady,
+                            isLadiesDriver: isLadyDriver
+                        ));
+                        setState(() {});
+                      },
+                    ));
                   },
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomGoogleMap extends StatefulWidget {
@@ -31,8 +32,16 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _setMarkersAndPolyline();
   }
 
+
+  Future<void> initMapStyle() async {
+    var lightStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/light_map_style.json');
+    var darkStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/dark_map_style.json');
+    _mapController.setMapStyle(context.isDarkMode?darkStyle:lightStyle);
+  }
+
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    initMapStyle();
   }
 
   void _setMarkersAndPolyline() {
