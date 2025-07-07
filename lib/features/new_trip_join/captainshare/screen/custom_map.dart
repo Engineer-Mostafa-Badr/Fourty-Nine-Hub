@@ -113,9 +113,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         ),
         markers: _markers,
         polylines: _polylines,
-        mapType: Theme.of(context).brightness == Brightness.dark
-            ? MapType.hybrid
-            : MapType.normal,
+        // mapType:MapType.normal,
         myLocationEnabled: true,
         myLocationButtonEnabled: true,
         zoomControlsEnabled: false,
