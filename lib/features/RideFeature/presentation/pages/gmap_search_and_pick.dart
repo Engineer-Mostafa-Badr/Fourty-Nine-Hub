@@ -44,6 +44,7 @@ class RideGoogleMapSearchAndPick extends StatefulWidget {
 class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   final Completer<GoogleMapController> _mapController = Completer();
   final TextEditingController _searchController = TextEditingController();
+  late GoogleMapController _controller;
 
   LatLng? _selectedLatLng;
   String _address = '';
@@ -86,6 +87,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
         final address = '${place.street}, ${place.locality}, ${place.country}';
         setState(() {
           _address = address;
+          _searchController.text = address;
         });
       }
     } catch (_) {}
@@ -114,6 +116,22 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
     _onMapTap(position);
   }
 
+  Future<void> _applyMapStyle(BuildContext context) async {
+    final lightStyle = await DefaultAssetBundle.of(context)
+        .loadString('assets/map_styles/light_map_style.json');
+    final darkStyle = await DefaultAssetBundle.of(context)
+        .loadString('assets/map_styles/dark_map_style.json');
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    await _controller.setMapStyle(isDark ? darkStyle : lightStyle);
+  }
+
+
+  final LatLngBounds egyptBounds = LatLngBounds(
+    southwest: const LatLng(22.0, 24.6),
+    northeast: const LatLng(31.75, 35.0),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +144,11 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
             body: Stack(
               children: [
                 GoogleMap(
-                  onMapCreated: (controller) => _mapController.complete(controller),
+                  onMapCreated: (controller) {
+                    _controller = controller;
+                    _mapController.complete(controller);
+                    _applyMapStyle(context); // 👈 تطبيق الثيم المناسب
+                  },
                   initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 14),
                   onTap: _onMapTap,
                   markers: _selectedLatLng != null
@@ -135,13 +157,14 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                       markerId: const MarkerId('selected'),
                       position: _selectedLatLng!,
                       infoWindow: InfoWindow(
-                        title: context.isArabic ? 'الموقع المحدد' : 'Selected Location',
+                        title:_address,
                       ),
                     )
                   }
                       : {},
                   myLocationEnabled: true,
                   zoomControlsEnabled: true,
+                  cameraTargetBounds: CameraTargetBounds(egyptBounds),
                 ),
 
                 // 🔍 Search Bar
@@ -184,6 +207,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                         _moveToLocation(double.tryParse((prediction.lat??'0'))??0, double.tryParse((prediction.lng??'0'))??0);
                       },
                       itemClick: (prediction) {
+                        print("prediction.description ${prediction.description}");
                         _searchController.text = prediction.description!;
                         _searchController.selection = TextSelection.fromPosition(
                           TextPosition(offset: prediction.description!.length),
