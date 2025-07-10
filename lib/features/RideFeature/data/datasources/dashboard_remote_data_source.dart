@@ -119,6 +119,7 @@ abstract class TripRemoteDataSource {
   void listenToCancelRoute(Function(ListenToCancelRouteParams params) params);
   void listenToUpdateRoute(Function(MyBookingEntity route) params);
   void listenToAcceptRoute(Function(MyBookingEntity route) params);
+  void listenToDriverTheOnWay(Function(MyBookingEntity route) params);
   void listenToJoinAvailableRoutes(Function(bool isJoined) params);
   Future<Either<Failure, bool>> listenToLeaveAvailableRoutes(Function(String routeId) params);
   void listenToNewRoute(Function(MyBookingEntity newBooking) params);
@@ -483,6 +484,23 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       });
     } catch (e) {
       CliLogger.info("can't listen to Accepted Route error $e");
+    }
+  }
+
+
+
+  @override
+  void listenToDriverTheOnWay(Function(MyBookingEntity route) params) {
+    try {
+      CliLogger.info("Listen to Driver on the way ");
+      log("Listen to Driver on the way ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToDriverTheOnWay, (data) {
+        CliLogger.info("Driver on the way data :  $data");
+        log("Driver on the way data :  $data");
+        params(MyBookingModel.fromJson(data['data']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Driver on the way error $e");
     }
   }
 

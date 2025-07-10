@@ -74,6 +74,7 @@ abstract class SocketIOListeners {
   static const String listenToCancelRoute = 'CAPTAIN-SHARE:ROUTE-CANCELLED';
   static const String listenToUpdateRoute = 'captain-share:update-available-route';
   static const String listenToAcceptRoute = 'CAPTAIN_SHARE:TRIP_ACCEPTED';
+  static const String listenToDriverTheOnWay = 'CAPTAIN_SHARE:DRIVER_ON_THE_WAY';
   static const String listenToNewRoute = 'captain-share:new-route-available';
   static const String listenToNewRouteDriver = 'captain-share:new-available-trip';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';

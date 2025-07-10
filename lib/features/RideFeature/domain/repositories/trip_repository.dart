@@ -89,6 +89,7 @@ abstract class TripRepository {
    void listenToUpdateRoute(Function(MyBookingEntity route) params);
    void listenToAcceptRoute(Function(MyBookingEntity route) params);
    void listenToNewRoute(Function(MyBookingEntity newBooking) params);
+   void listenToDriverTheOnWay(Function(MyBookingEntity newBooking) params);
    void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
    void listenToJoinAvailableRoutes(Function(bool isJoined) params);
    void listenToLeaveAvailableRoutes(Function(String routeId) params);
