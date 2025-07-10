@@ -106,10 +106,11 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
-                      color: context.isDarkMode
-                          ? AppColors.LIGHT_COLOR
-                          : AppColors.GREY_DARK_COLOR,
-                      width: 1),
+                    color: context.isDarkMode
+                        ? AppColors.LIGHT_COLOR
+                        : AppColors.GREY_DARK_COLOR,
+                    width: 1,
+                  ),
                 ),
                 child: PageView.builder(
                   onPageChanged: (value) {

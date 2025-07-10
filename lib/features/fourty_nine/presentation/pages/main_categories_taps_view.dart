@@ -367,7 +367,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                             colorFilter: ColorFilter.mode(
                               context.read<SubcategoriesCubit>().isSearchAdsOpen
                                   ? const Color(0xffF33D49)
-                                  : AppColors.getButtonPrimaryWhiteColor(context),
+                                  : AppColors.PRIMARY_COLOR,
                               BlendMode.srcIn,
                             ),
                             // color: context.isDarkMode ? Colors.white : null,
@@ -910,7 +910,7 @@ class _MainCategoriesGridViewCustomPageState
                             colorFilter: ColorFilter.mode(
                               context.read<SubcategoriesCubit>().isSearchAdsOpen
                                   ? const Color(0xffF33D49)
-                                  : AppColors.getButtonPrimaryWhiteColor(context),
+                                  : AppColors.PRIMARY_COLOR,
                               BlendMode.srcIn,
                             ),
                             // color: context.isDarkMode ? Colors.white : null,
