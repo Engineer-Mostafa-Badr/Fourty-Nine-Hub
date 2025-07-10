@@ -48,6 +48,7 @@ class _LoadingDashboardDetailsScreenState
   var form = GlobalKey<FormState>();
   bool isLoading = false;
   String? pdfPath;
+  double? currentTripRating;
 
   @override
   initState() {
@@ -59,6 +60,8 @@ class _LoadingDashboardDetailsScreenState
             tripId: widget.tripEntity.tripDetails?.id ?? '',
             tripType: 'tracking',
             userType: 'driver'));
+    currentTripRating = widget.tripEntity.clientDetails!.rating!.average!.toDouble();
+
     super.initState();
   }
 
@@ -194,7 +197,7 @@ class _LoadingDashboardDetailsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           scrolledUnderElevation: 0,
           leadingWidth: 30,
           title: Label(
@@ -227,27 +230,35 @@ class _LoadingDashboardDetailsScreenState
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Label(
-                                  text: LocaleKeys.trukWithYou,
+                                  text: LocaleKeys.trukWithYou.localize,
                                   //"Bus ride with You",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 20),
                                   maxLines: 3),
                               const SizedBox(height: 8),
-                              const Label(
-                                text: "Feb 13 - 12:41 PM",
+                              Label(
+                                text: formatPickupTime(
+                                    widget.tripEntity.tripDetails!.pickupTime,
+                                    context),
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 14,
                                 ),
                               ),
+                              // Label(
+                              //   text: formatPrice(
+                              //     widget.tripEntity?.tripDetails?.price != null?  widget.tripEntity!.tripDetails!.price! :0,
+                              //     context, // To check current locale
+                              //   ),
                               Label(
-                                  text:
-                                      "${widget.tripEntity.tripDetails!.price} ${LocaleKeys.egp.tr()}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16)),
-                            ]),
+                                text: "${formatPrice(
+                                    widget.tripEntity.tripDetails!.price!,
+                                    context)} ${LocaleKeys.EGP.localize}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 16),
+                              )
+                             ]),
                       ),
                       Expanded(
                         child: Align(
@@ -264,7 +275,7 @@ class _LoadingDashboardDetailsScreenState
                   ),
                 ),
                 Label(
-                    text: "${LocaleKeys.cargoDescription.tr()} : Car",
+                    text: "${LocaleKeys.cargoDescription.tr()} : ${widget.tripEntity.tripDetails?.cargoDescription ?? ""}",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600, fontSize: 16)),
                 Row(
@@ -299,10 +310,10 @@ class _LoadingDashboardDetailsScreenState
                         ],
                       ),
                     ),
-                    const Label(
-                      text: "12:10 PM",
+                     Label(
+                      text:formatTimeOnly( widget.tripEntity.tripDetails?.createdAt,context),
                       style: TextStyle(
-                          color: AppColors.c5A5A5A,
+                          color:context.isDarkMode ? AppColors.whiteColor :  AppColors.c5A5A5A,
                           fontSize: 14,
                           fontWeight: FontWeight.w700),
                     ),
@@ -340,24 +351,42 @@ class _LoadingDashboardDetailsScreenState
                         ],
                       ),
                     ),
-                    const Label(
-                      text: "12:10 PM",
+                     Label(
+                       text:formatTimeOnly( widget.tripEntity.tripDetails?.pickupTime,context),
                       style: TextStyle(
-                          color: AppColors.c5A5A5A,
+                          color:context.isDarkMode ? AppColors.whiteColor :  AppColors.c5A5A5A,
                           fontSize: 14,
                           fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
                 const SizedBox(height: 30),
-                RideDetailsRatingWidget(
-                    isRate: isYourRate,
-                    rate: yourRate,
-                    title: LocaleKeys.youRateClient.tr()),
+                // RideDetailsRatingWidget(
+                //     isRate: isYourRate,
+                //     rate: yourRate,
+                //     title: LocaleKeys.youRateClient.tr()),
+                RideDetailsRatingNonSocketWidget(
+                  // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
+                  // rate: 1,
+                  isRide: false,
+                  rate: currentTripRating ?? 0.0,
+                  title: LocaleKeys.youRateClient.tr(),
+                  tripId: widget.tripEntity.tripDetails?.id ?? '',
+                  cubit: context.read<DashboardsCubit>(),
+                  onRatingUpdated: (newRating) {
+                    setState(() {
+                      currentTripRating = newRating;
+                    });
+                  },
+                ),
                 RideDetailsRatingWidget(
                     isRate: isClientRate,
                     rate: clientRate,
                     title: LocaleKeys.clientRateYou.tr()),
+
+
+
+
                 if (!(state.supportStatus ==
                     RequestEmergencyStatus.approved.status))
                   Form(
@@ -411,16 +440,17 @@ class _LoadingDashboardDetailsScreenState
                                       if (form.currentState!.validate()) {
                                         cubit.requestEmergencySupport(
                                             context: context,
-                                            clientId: widget.tripEntity.clientDetails?.id ?? "",
-                                            driverId: widget.tripEntity.driverDetails?.id??'',
-                                            tripId:widget.tripEntity.tripDetails?.id??'',
+                                            clientId: widget.tripEntity
+                                                    .clientDetails?.id ??
+                                                "",
+                                            driverId: widget.tripEntity
+                                                    .driverDetails?.id ??
+                                                '',
+                                            tripId: widget.tripEntity
+                                                    .tripDetails?.id ??
+                                                '',
                                             userType: "driver",
-                                            tripType: "loading"
-                                        );
-                                        // cubit.requestEmergencySupport(context: context,
-                                        //     clientId: widget.tripEntity.clientDetails?.id??'',
-                                        //     driverId: widget.tripEntity.driverDetails?.id??'',
-                                        //     tripId: widget.tripEntity.tripDetails?.id??'');
+                                            tripType: "loading");
                                       }
                                     }
                                   },
@@ -573,3 +603,133 @@ class _LoadingDashboardDetailsScreenState
     );
   }
 }
+String formatTimeOnlyLoading(String? dateTimeString, BuildContext context) {
+  if (dateTimeString == null) return '--:--';
+
+  try {
+    // Parse and convert to local time
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
+
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    // Format to time only
+    String formattedTime = DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+
+    // Optional: Arabic numeral conversion
+    if (isArabic) {
+      formattedTime = _convertToArabicNumerals(formattedTime);
+    }
+
+    return formattedTime;
+  } catch (e, stackTrace) {
+    // For debugging: log the exception and string
+    debugPrint('Failed to parse: $dateTimeString');
+    debugPrint('Error: $e\n$stackTrace');
+    return '--:--';
+  }
+}
+
+String formatPickupTimeLoading(String? dateTimeString, BuildContext context) {
+  if (dateTimeString == null) return 'No time';
+
+  try {
+    final dateTime = DateTime.parse(dateTimeString).toLocal(); // 👈 convert to local
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    return DateFormat('yyyy-MM-dd hh:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+  } catch (e) {
+    return 'Invalid time';
+  }
+}
+
+String formatTimeOnly(String? dateTimeString, BuildContext context) {
+  if (dateTimeString == null) return '--:--';
+
+  try {
+    final dateTime = DateTime.parse(dateTimeString);
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    // Format with locale
+    String formattedTime = DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+
+    // Force Arabic numerals if needed (some devices need this)
+    if (isArabic) {
+      formattedTime = _convertToArabicNumerals(formattedTime);
+    }
+
+    return formattedTime;
+  } catch (e) {
+    return '--:--';
+  }
+}
+
+String _convertToArabicNumerals(String input) {
+  const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+  for (int i = 0; i < english.length; i++) {
+    input = input.replaceAll(english[i], arabic[i]);
+  }
+  return input;
+}
+
+String formatPrice(num number, BuildContext context) {
+  final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+  if (isArabic) {
+    // Force Eastern Arabic numerals
+    final arabicFormat = NumberFormat.decimalPattern('ar');
+
+    // Some devices need this additional step
+    final westernDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    final arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String formatted = arabicFormat.format(number);
+    for (int i = 0; i < westernDigits.length; i++) {
+      formatted = formatted.replaceAll(westernDigits[i], arabicDigits[i]);
+    }
+    return formatted;
+  } else {
+    return NumberFormat.decimalPattern('en').format(number);
+  }
+}
+
+String formatPickupTime(String? dateTimeString, BuildContext context) {
+  if (dateTimeString == null) return 'No time';
+
+  try {
+    final dateTime = DateTime.parse(dateTimeString);
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    return DateFormat('yyyy-MM-dd hh:mm a', isArabic ? 'ar' : 'en')
+        .format(dateTime);
+  } catch (e) {
+    return 'Invalid time';
+  }
+}
+
+String formatPickupDate(String? dateTimeString, BuildContext context) {
+  if (dateTimeString == null) return 'No date';
+
+  try {
+    final dateTime = DateTime.parse(dateTimeString);
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    return DateFormat('yyyy-MM-dd', isArabic ? 'ar' : 'en')
+        .format(dateTime);
+  } catch (e) {
+    return 'Invalid date';
+  }
+}
+
+// String formatPickupTime(String? dateTimeString) {
+//   if (dateTimeString == null) return 'No time';
+//
+//   try {
+//     final utcTime = DateTime.parse(dateTimeString);
+//     final localTime = utcTime.toLocal(); // Convert to device's timezone
+//     return DateFormat('yyyy-MM-dd hh:mm a').format(localTime);
+//   } catch (e) {
+//     return 'Invalid time';
+//   }
+// }

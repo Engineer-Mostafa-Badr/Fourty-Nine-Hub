@@ -174,7 +174,7 @@ class TripJoinServiceLocator {
     );
 
     serviceLocator.registerFactory<AddNewPickMeTripCubit>(
-      () => AddNewPickMeTripCubit(addNewPickMeUsecase: serviceLocator()),
+      () => AddNewPickMeTripCubit(serviceLocator(),serviceLocator(),serviceLocator()),
     );
 
     //____________FetchMyPickMe_______________//

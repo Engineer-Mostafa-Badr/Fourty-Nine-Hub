@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -150,20 +151,15 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
   }
 
   void _scrollListener() {
-    final currentScroll = _scrollController.offset;
-    // Show when scrolling up, hide when scrolling down
-    if (currentScroll > _lastScrollOffset && currentScroll > 20) {
-      // Scrolling down
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (_isVisible) {
         setState(() => _isVisible = false);
       }
-    } else if (currentScroll < _lastScrollOffset) {
-      // Scrolling up
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!_isVisible) {
         setState(() => _isVisible = true);
       }
     }
-    _lastScrollOffset = currentScroll;
   }
 
   @override
@@ -171,7 +167,6 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
     return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
       var cubit = context.read<CaptainShareCubit>();
       return Stack(
-        alignment: Alignment.bottomCenter,
         children: [
           cubit.isLoadingAvailableBookings?const Center(child: CircularProgressIndicator()):cubit.availableBookings.isEmpty?_emptyMessage():ListView.separated(
             controller: _scrollController,
@@ -183,7 +178,6 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                 statusDriver: cubit.availableBookings[index].status,
                 model: cubit.availableBookings[index],
                 cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.availableBookings[index].creatorId) && cubit.availableBookings[index].status == 'pending',
-                isMyBooking: cubit.availableBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
                 onCancelBooking: () {
                   if (cubit.availableBookings[index].status == 'pending') {
                     cubit.cancelMyBooking(id: cubit.availableBookings[index].id, context: context, from: 'available');
@@ -198,35 +192,47 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
             separatorBuilder: (context, index) => const Sizer(),
             itemCount: cubit.availableBookings.length,
           ),
-          if(_isVisible)Padding(
-            padding: EdgeInsets.only(bottom: 30.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    cubit.onNavigateToCreateRoute(context);
-                  },
-                  child: Container(
-                    height: 48.h,
-                    width: 48.h,
-                    decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(
-                      size: 19,
-                      Icons.question_mark,
-                      color: context.isDarkMode ? AppColors.black : Colors.white,
+      PositionedDirectional(
+        bottom: 0.h,
+        start: 0,
+        end: 0,
+        child: AnimatedSlide(
+        duration: const Duration(milliseconds: 300),
+        offset: _isVisible ? Offset.zero : const Offset(0, 2),
+        child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity: _isVisible ? 1 : 0,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 30.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        context.push(Routes.captainShareInfoScreen);
+                      },
+                      child: Container(
+                        height: 48.h,
+                        width: 48.h,
+                        decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                        child: Icon(
+                          size: 19,
+                          Icons.question_mark,
+                          color: context.isDarkMode ? AppColors.black : Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                    TripJoinFloatingActionButton(
+                      title: LocaleKeys.createRoute.localize,
+                      onTap: () {
+                        cubit.onNavigateToCreateRoute(context);
+                      },
+                    ),
+                  ],
                 ),
-                TripJoinFloatingActionButton(
-                  title: LocaleKeys.createRoute.localize,
-                  onTap: () {
-                    context.push(Routes.newRouteScreen);
-                  },
-                ),
-              ],
-            ),
-          ),
+              ),
+            ),),
+      ),
         ],
       );
 
@@ -245,11 +251,14 @@ class BookingsWidget extends StatefulWidget {
 
 class _BookingsWidgetState extends State<BookingsWidget> {
   late ScrollController _scrollController;
+  bool _isVisible = true;
+  double _lastScrollOffset = 0;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
   }
 
   void _onScroll() {
@@ -258,36 +267,92 @@ class _BookingsWidgetState extends State<BookingsWidget> {
     }
   }
 
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
-      var cubit = context.read<CaptainShareCubit>();
-      if (cubit.isLoadingMyBookings) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (cubit.myBookings.isEmpty) {
-        return _emptyMessage();
-      } else {
-        return ListView.separated(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) => OneWayWidget(
-              requestType: LocaleKeys.regular.localize,
-              statusDriver: cubit.myBookings[index].status,
-              model: cubit.myBookings[index],
-              cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.myBookings[index].creatorId) && cubit.myBookings[index].status == 'pending',
-              isMyBooking: cubit.myBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
-              onCancelBooking: () {
-                if (cubit.myBookings[index].status == 'pending') {
-                  cubit.cancelMyBooking(id: cubit.myBookings[index].id, context: context, from: 'myBookings');
-                }
-              }),
-          separatorBuilder: (context, index) => const Sizer(),
-          itemCount: cubit.myBookings.length,
-        );
-      }
-    });
+    return Stack(
+      children: [
+        BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+          var cubit = context.read<CaptainShareCubit>();
+          if (cubit.isLoadingMyBookings) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (cubit.myBookings.isEmpty) {
+            return _emptyMessage();
+          } else {
+            return ListView.separated(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) => OneWayWidget(
+                  requestType: LocaleKeys.regular.localize,
+                  statusDriver: cubit.myBookings[index].status,
+                  model: cubit.myBookings[index],
+                  cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.myBookings[index].creatorId) && cubit.myBookings[index].status == 'pending',
+                  onCancelBooking: () {
+                    if (cubit.myBookings[index].status == 'pending') {
+                      cubit.cancelMyBooking(id: cubit.myBookings[index].id, context: context, from: 'myBookings');
+                    }
+                  }),
+              separatorBuilder: (context, index) => const Sizer(),
+              itemCount: cubit.myBookings.length,
+            );
+          }
+        }),
+        PositionedDirectional(
+          bottom: 0.h,
+          start: 0,
+          end: 0,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isVisible ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isVisible ? 1 : 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
+                    },
+                    child: Container(
+                      height: 48.h,
+                      width: 48.h,
+                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(
+                        size: 19,
+                        Icons.question_mark,
+                        color: context.isDarkMode ? AppColors.black : Colors.white,
+                      ),
+                    ),
+                  ),
+                  TripJoinFloatingActionButton(
+                    title: LocaleKeys.createRoute.localize,
+                    onTap: () {
+                      context.push(Routes.newRouteScreen);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )),
+      ],
+    );
   }
 }
 
@@ -302,11 +367,14 @@ class RunningTripsWidget extends StatefulWidget {
 
 class _RunningTripsWidgetState extends State<RunningTripsWidget> {
   late ScrollController _scrollController;
+  bool _isVisible = true;
+  double _lastScrollOffset = 0;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
   }
 
   void _onScroll() {
@@ -315,53 +383,92 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
     }
   }
 
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
-      var cubit = context.read<CaptainShareCubit>();
-      if (cubit.isLoadingRunningBookings) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (cubit.runningBookings.isEmpty) {
-        return _emptyMessage();
-      } else {
-        return ListView.separated(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) => OneWayWidget(
-              requestType: LocaleKeys.regular.localize,
-              statusDriver: cubit.runningBookings[index].status,
-              model: cubit.runningBookings[index],
-              cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.runningBookings[index].creatorId) && cubit.runningBookings[index].status == 'pending',
-              isMyBooking: cubit.runningBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
-              onCancelBooking: () {
-                if (cubit.runningBookings[index].status == 'pending') {
-                  cubit.cancelMyBooking(id: cubit.runningBookings[index].id, context: context, from: 'runningBookings');
-                }
-              }),
-          separatorBuilder: (context, index) => const Sizer(),
-          itemCount: cubit.runningBookings.length,
-        );
-      }
-    });
-    return widget.content.isEmpty
-        ? _emptyMessage()
-        : Column(
-            children: [
-              AvailableRideModeWidget(
-                requestType: LocaleKeys.regular.localize,
-                cancelButton: false,
-                statusDriver: LocaleKeys.running.localize,
+    return Stack(
+      children: [
+        BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+          var cubit = context.read<CaptainShareCubit>();
+          if (cubit.isLoadingRunningBookings) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (cubit.runningBookings.isEmpty) {
+            return _emptyMessage();
+          } else {
+            return ListView.separated(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) => OneWayWidget(
+                  requestType: LocaleKeys.regular.localize,
+                  statusDriver: cubit.runningBookings[index].status,
+                  model: cubit.runningBookings[index],
+                  cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.runningBookings[index].creatorId) && cubit.runningBookings[index].status == 'pending',
+                  onCancelBooking: () {
+                    if (cubit.runningBookings[index].status == 'pending') {
+                      cubit.cancelMyBooking(id: cubit.runningBookings[index].id, context: context, from: 'runningBookings');
+                    }
+                  }),
+              separatorBuilder: (context, index) => const Sizer(),
+              itemCount: cubit.runningBookings.length,
+            );
+          }
+        }),
+       PositionedDirectional(
+          bottom: 0.h,
+          start: 0,
+          end: 0,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isVisible ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isVisible ? 1 : 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
+                    },
+                    child: Container(
+                      height: 48.h,
+                      width: 48.h,
+                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(
+                        size: 19,
+                        Icons.question_mark,
+                        color: context.isDarkMode ? AppColors.black : Colors.white,
+                      ),
+                    ),
+                  ),
+                  TripJoinFloatingActionButton(
+                    title: LocaleKeys.createRoute.localize,
+                    onTap: () {
+                      context.push(Routes.newRouteScreen);
+                    },
+                  ),
+                ],
               ),
-              AvailableRideModeWidget(
-                requestType: LocaleKeys.regular.localize,
-                cancelButton: false,
-                statusDriver: LocaleKeys.running.localize,
-              ),
-              SizedBox(height: 100.h),
-            ],
-          );
+            ),
+          ),
+        )),
+      ],
+    );
   }
 }
 
@@ -376,11 +483,14 @@ class ExpiredTripsWidget extends StatefulWidget {
 
 class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
   late ScrollController _scrollController;
+  bool _isVisible = true;
+  double _lastScrollOffset = 0;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
   }
 
   void _onScroll() {
@@ -388,48 +498,87 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
       context.read<CaptainShareCubit>().getExpiredBookings(context);
     }
   }
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
-      var cubit = context.read<CaptainShareCubit>();
-      if (cubit.isLoadingExpiredBookings) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (cubit.expiredBookings.isEmpty) {
-        return _emptyMessage();
-      } else {
-        return ListView.separated(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) => OneWayWidget(
-              requestType: LocaleKeys.regular.localize,
-              statusDriver: cubit.expiredBookings[index].status,
-              model: cubit.expiredBookings[index],
-              cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.expiredBookings[index].creatorId) && cubit.expiredBookings[index].status == 'pending',
-              isMyBooking: cubit.expiredBookings[index].clients?.contains((UserCubit.to.state.data?.id ?? '')),
-              onCancelBooking: () {
-                if (cubit.expiredBookings[index].status == 'pending') {
-                  cubit.cancelMyBooking(id: cubit.expiredBookings[index].id, context: context, from: 'expiredBookings');
-                }
-              }),
-          separatorBuilder: (context, index) => const Sizer(),
-          itemCount: cubit.expiredBookings.length,
-        );
-      }
-    });
-    return widget.content.isEmpty
-        ? _emptyMessage()
-        : Column(
-            children: [
-              AvailableRideModeWidget(
-                requestType: LocaleKeys.regular.localize,
-                cancelButton: false,
-                statusDriver: LocaleKeys.expired.localize,
+    return Stack(
+      children: [
+        BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+          var cubit = context.read<CaptainShareCubit>();
+            return cubit.isLoadingExpiredBookings?const Center(child: CircularProgressIndicator()):
+            cubit.expiredBookings.isEmpty?_emptyMessage():
+            ListView.separated(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) => OneWayWidget(
+                  requestType: LocaleKeys.regular.localize,
+                  statusDriver: cubit.expiredBookings[index].status,
+                  model: cubit.expiredBookings[index],
+                  cancelButton: ((UserCubit.to.state.data?.id ?? '') == cubit.expiredBookings[index].creatorId) && cubit.expiredBookings[index].status == 'pending',
+                  onCancelBooking: () {
+                    if (cubit.expiredBookings[index].status == 'pending') {
+                      cubit.cancelMyBooking(id: cubit.expiredBookings[index].id, context: context, from: 'expiredBookings');
+                    }
+                  }),
+              separatorBuilder: (context, index) => const Sizer(),
+              itemCount: cubit.expiredBookings.length,
+            );
+        }),
+        PositionedDirectional(
+          bottom: 0.h,
+          start: 0,
+          end: 0,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isVisible ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isVisible ? 1 : 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CaptainShareCubit>().onNavigateToCreateRoute(context);
+                    },
+                    child: Container(
+                      height: 48.h,
+                      width: 48.h,
+                      decoration: BoxDecoration(color: AppColors.getButtonPrimaryColor(context), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(
+                        size: 19,
+                        Icons.question_mark,
+                        color: context.isDarkMode ? AppColors.black : Colors.white,
+                      ),
+                    ),
+                  ),
+                  TripJoinFloatingActionButton(
+                    title: LocaleKeys.createRoute.localize,
+                    onTap: () {
+                      context.push(Routes.newRouteScreen);
+                    },
+                  ),
+                ],
               ),
-            ],
-          );
+            ),
+          ),
+        )),
+      ],
+    );
   }
 }
 

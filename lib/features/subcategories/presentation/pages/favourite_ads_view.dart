@@ -98,7 +98,7 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
           onRemoveFav: (id) async {
             bool result = await context
                 .read<AdvertisementCubit>()
-                .unFavouriteAd(controller.myFavouriteAds[i].id);
+                .favouriteAd(controller.myFavouriteAds[i].id);
             return result;
           },
 

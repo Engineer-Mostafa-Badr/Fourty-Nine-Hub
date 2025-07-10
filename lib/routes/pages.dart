@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_t
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
@@ -128,6 +129,7 @@ import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentati
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/route_details_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
@@ -135,6 +137,10 @@ import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/ne
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_all_notifications/delete_all_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_notification/delete_notification_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_seen/notification_seen_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_ride_cubit.dart';
@@ -275,6 +281,7 @@ import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percen
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/ten_percent_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/winners_ten_percent_view.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/cubits/cubit/add_new_pick_me_trip_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/views/add_new_pick_me_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
@@ -625,6 +632,13 @@ class AppPages {
                 ),
               ),
               GoRoute(
+                path: Paths.GoogleMapsSearchAndPick,
+                name: Routes.GoogleMapsSearchAndPick,
+                builder: (context, state) => RideGoogleMapSearchAndPick(
+                  params: state.extra as RideGoogleMapSearchAndPickParams,
+                ),
+              ),
+              GoRoute(
                 path: Paths.EditFoodView,
                 name: Routes.EditFoodView,
                 builder: (context, state) => MultiBlocProvider(
@@ -873,8 +887,15 @@ class AppPages {
               GoRoute(
                 path: Paths.MARRIAGESUBCATEGORIES,
                 name: Routes.MARRIAGESUBCATEGORIES,
-                builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<SubcategoriesCubit>(),
+                builder: (context, state) => MultiBlocProvider(
+                  providers:[
+                    BlocProvider(
+                      create: (context) => serviceLocator<SubcategoriesCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                    ),
+                   ],
                   child: const MarriageSubCategoriesView(
                       // mainCategory: state.extra as MainCategoryEntity,
                       ),
@@ -1218,7 +1239,9 @@ class AppPages {
               GoRoute(
                   path: Paths.ACCOUNT,
                   name: Routes.ACCOUNT,
-                  builder: (context, state) => const NotificationView(),
+                  builder: (context, state) => BlocProvider(
+                      create: (context)=>serviceLocator<NotificationSeenCubit>(),
+                      child: const NotificationView()),
                   routes: [
                     // GoRoute(
                     //   path: Paths.NOTIFICATIONS,
@@ -1252,7 +1275,14 @@ class AppPages {
                     GoRoute(
                       path: Paths.NOTIFICATIONS,
                       name: Routes.NOTIFICATIONS,
-                      builder: (context, state) => const NotificationView(),
+                      builder: (context, state) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider(create: (context)=>serviceLocator<NotificationSeenCubit>(),),
+                            BlocProvider(create: (context)=>serviceLocator<AllNotficationsSeenCubit>(),),
+                            BlocProvider(create: (context)=>serviceLocator<DeleteNotificationCubit>(),),
+                            BlocProvider(create: (context)=>serviceLocator<DeleteAllNotificationsCubit>(),),
+                          ],
+                          child: const NotificationView()),
                     ),
                     GoRoute(
                         path: Paths.SETTINGS,
@@ -2968,64 +2998,11 @@ class AppPages {
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => StartingLocationCubit(
-                        fetchLocationCordinatesUseCase:
-                            serviceLocator<FetchLocationCordinatesUseCase>(),
-                      ),
+                      create: (context) => serviceLocator<AddNewPickMeTripCubit>(),
                     ),
-                    BlocProvider(
-                      create: (_) => DestinationLocationCubit(
-                        fetchLocationCordinatesUseCase:
-                            serviceLocator<FetchLocationCordinatesUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchPriceDistanceCubit(
-                        fetchPriceDistanceUsecase:
-                            serviceLocator<FetchPriceDistanceUsecase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchCarBrandsCubit(
-                        fetchCarBrandUseCase:
-                            serviceLocator<FetchCarBrandUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchCarModelsCubit(
-                        fetchCarModelUseCase:
-                            serviceLocator<FetchCarModelUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchCarYearTypeCubit(
-                        fetchCarYearTypeUseCase:
-                            serviceLocator<FetchCarYearTypeUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => MapBoxCubit(),
-                    ),
-                    BlocProvider(
-                      create: (_) => PublishTripJoinCubit(
-                        publishTripJoinUseCase:
-                            serviceLocator<PublishTripJoinUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => GetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (_) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                    BlocProvider(create: (_) => TripJoinViewCubit()),
                     BlocProvider(
                       create: (context) => serviceLocator<RideCubit>(),
-                    ),
+                    )
                   ],
                   child: const AddNewPickMeView(),
                 ),
@@ -3753,10 +3730,8 @@ class AppPages {
                 builder: (context, state) {
                   return MultiBlocProvider(
                     providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
+                      BlocProvider(
+                        create: (context) => serviceLocator<CaptainShareDashboardCubit>()..loadInitData(context),
                       ),
                     ],
                     child: const RunningAndPastTripsScreen(),

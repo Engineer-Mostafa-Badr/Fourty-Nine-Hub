@@ -45,6 +45,7 @@ class ClientTripsState {
   final ClientTripsStates status;
   final Failure? failure;
   final List<TripEntity>? offers;
+  final String? subCategoryId;
   final List<CityEntity>? cities;
   final List<GovernorateEntity>? governorates;
   final CreateNonTrackTripEntity? createNonTrackTripEntity;
@@ -76,12 +77,14 @@ class ClientTripsState {
     this.rateResponseEntity,
     this.driverAllRating,
     this.clientAllRating,
+    this.subCategoryId,
     this.newOfferCount =0 ,
   });
   ClientTripsState copyWith({
     ClientTripsStates? status,
     Failure? failure,
     String? message,
+    String? subCategoryId,
     List<TripEntity>? offers,
     List<CityEntity>? cities,
     List<GovernorateEntity>? governorates,
@@ -115,6 +118,7 @@ class ClientTripsState {
       driverAllRating: driverAllRating ?? this.driverAllRating,
       clientAllRating: clientAllRating ?? this.clientAllRating,
       newOfferCount: newOfferCount ?? this.newOfferCount,
+      subCategoryId: subCategoryId ?? this.subCategoryId,
     );
   }
 }

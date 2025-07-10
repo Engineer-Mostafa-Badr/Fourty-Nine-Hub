@@ -25,6 +25,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../loading_dashboard/loading_dashboard_details_screen.dart';
 
 class AvailableNonSocketWidget extends StatelessWidget {
   final String modeType;
@@ -126,10 +127,10 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                       width: 8, height: 8),
                                   const Sizer(width: 4),
                                   Label(
-                                      text: offers
+                                      text: formatPrice(offers
                                           ?.clientDetails?.rating?.count
-                                          .toString() ??
-                                          '0',
+                                          ?.toDouble() ??
+                                          0, context),
                                       style: Styles.smallText(
                                         color: AppColors.PRIMARY_COLOR
                                       ))
@@ -196,7 +197,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                 ],
                               ),
                               Label(
-                                  text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
+                                  text: '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1, context)}',
                                   style: Styles.mediumText())
                             ],
                           ),
@@ -233,7 +234,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                            text: "${offers?.tripDetails?.price ?? 300}",
+                            text: "${formatPrice(offers?.tripDetails?.price ?? 0, context)}",
                             style:
                             Styles.mediumText(fontWeight: FontWeight.w700)),
                         const Sizer(width: 4),
@@ -248,13 +249,13 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: formattedTime, //'10 AM',
+                          text: "${formatTimeOnly(offers?.tripDetails?.pickupTime, context)}",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Label(
-                          text: formattedDate, //'20/2/2025',
+                          text: "${formatPickupDate(offers?.tripDetails?.pickupTime, context)}",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
@@ -275,7 +276,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Label(
-                                      text: "${LocaleKeys.Accept.tr()} ${offers?.tripDetails?.price ?? 0}",
+                                      text: "${LocaleKeys.Accept.tr()} ${formatPrice(offers?.tripDetails?.price ?? 0, context)} ${LocaleKeys.egp.localize}",
                                       style:
                                           Styles.mediumText(
                                             color:  Colors.white,

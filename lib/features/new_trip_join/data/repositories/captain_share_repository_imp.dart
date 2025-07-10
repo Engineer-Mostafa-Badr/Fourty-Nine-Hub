@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 
@@ -38,6 +39,12 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
     return await shippingRemoteDataSource.getAvailableBooking(params);
   }
 
+
+  @override
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params) async {
+    return await shippingRemoteDataSource.getDriverAvailableBooking(params);
+  }
+
   @override
   Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params) async {
     return await shippingRemoteDataSource.getRouteDetails(params);
@@ -49,6 +56,11 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
     return await shippingRemoteDataSource.getRunningBooking(params);
   }
 
+  @override
+  Future<Either<Failure, MyBookingEntity>> getDriverRunningRoute() async {
+    return await shippingRemoteDataSource.getDriverRunningRoute();
+  }
+
 
   @override
   Future<Either<Failure, List<MyBookingEntity>>> getExpiredBooking(PaginationParams params) async {
@@ -58,6 +70,12 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   @override
   Future<Either<Failure, bool>> cancelMyBooking(String id) async {
     return await shippingRemoteDataSource.cancelMyBooking(id);
+
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptRoute(String id) async {
+    return await shippingRemoteDataSource.acceptRoute(id);
 
   }
 

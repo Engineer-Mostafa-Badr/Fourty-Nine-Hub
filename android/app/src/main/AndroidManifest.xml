@@ -84,7 +84,7 @@
             android:value="sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc" />
+            android:value="AIzaSyBzNyTPNjG6xSSgwLzpCoic7GSJqXEr9aU" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

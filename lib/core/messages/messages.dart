@@ -408,7 +408,7 @@ void showConfirmDialog(
   // );
 }
 
-showSubscribeDialog(BuildContext context, String subCategoryId) {
+showSubscribeDialog(BuildContext context, String subCategoryId, {String? title}) {
     showCustomDialogTrip(
         context,
         Column(
@@ -423,7 +423,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text('Please Subscribe for more trips',
+            Text(title??'Please Subscribe for more trips',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -436,7 +436,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
               children: [
                 AppButton(
                     width: context.screenWidth / 3.4,
-                    label: 'Close',
+                    label: LocaleKeys.close.localize,
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -444,7 +444,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId) {
                 const SizedBox(width: 16),
                 AppButton(
                     width: context.screenWidth / 3.4,
-                    label: 'Subscribe',
+                    label: LocaleKeys.subscribe.localize,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       Navigator.of(context).pop();

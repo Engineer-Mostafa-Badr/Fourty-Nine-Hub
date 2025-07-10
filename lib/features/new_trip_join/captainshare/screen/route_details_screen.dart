@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/driver_recode_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
@@ -45,13 +46,13 @@ class _RouteDetailsScreenState
   @override
   initState(){
     context.read<CaptainShareCubit>().getRouteDetails(id:widget.tripEntity.id,context: context);
-    // context.read<CaptainShareCubit>().getEmergencyDetails(context, SupportRideParams(
-    //   clientId: state.routeDetails.clientDetails?.id??'',
-    //   driverId: state.routeDetails.driverDetails?.id??'',
-    //   tripId: state.routeDetails.tripDetails?.id??'',
-    //   tripType: 'tracing',
-    //   userType: 'driver'
-    // ));
+    context.read<CaptainShareCubit>().getEmergencyDetails(context, SupportRideParams(
+      clientId: 'state.routeDetails.clientDetails?.id'??'',
+      driverId: 'state.routeDetails.driverDetails?.id'??'',
+      tripId: widget.tripEntity.id,
+      tripType: 'captainShare',
+      userType: 'client'
+    ));
     super.initState();
   }
 

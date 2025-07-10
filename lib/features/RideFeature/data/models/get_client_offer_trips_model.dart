@@ -89,7 +89,7 @@ class TripDetailsModel extends TripDetailsEntity {
   TripDetailsModel({
     super.id,
     super.passengers,
-    super.data,
+    super.date,
     super.location,
     super.subcategory,
   });
@@ -98,7 +98,7 @@ class TripDetailsModel extends TripDetailsEntity {
     return TripDetailsModel(
       id: json['id'],
       passengers: json['passengers'],
-      data: json['data'],
+      date: json['date'],
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,

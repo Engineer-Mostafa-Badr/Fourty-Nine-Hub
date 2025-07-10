@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -16,6 +17,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_of
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_past_shipping_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_shipping_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/refuse_shipping_trip_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -126,7 +129,47 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       emit(state.copyWith(status: ClientTripsStates.success));
     });
   }
-  
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passengerController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  String selectedTime = '';
+  String selectedDate = '';
+  String offerPrice = '';
+  TextEditingController offerPriceController = TextEditingController();
+
+
+  initData(String id){
+    if(id!=state.subCategoryId){
+      print('state.subCategoryId ${state.subCategoryId}');
+      print("id $id");
+      selectedTime = '';
+      selectedDate = '';
+      offerPrice = '';
+      phoneController.clear();
+      passengerController.clear();
+      descController.clear();
+      offerPriceController.clear();
+      emit(state.copyWith(subCategoryId: id));
+      print("montaserrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+    }else{
+      print("montaserrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr2");
+      print('state.subCategoryId ${state.subCategoryId}');
+      print("id $id");
+      selectedTime = '';
+      selectedDate = '';
+      offerPrice = '';
+      phoneController.clear();
+      passengerController.clear();
+      descController.clear();
+      offerPriceController.clear();
+      emit(state.copyWith(subCategoryId: id));
+      return;
+    }
+  }
+  void clearError() {
+    emit(state.copyWith(status: ClientTripsStates.initState, failure: null));
+  }
+
   Future<void> getClientAllRating(
       {required String params,}) async {
     emit(state.copyWith(status: ClientTripsStates.loading));
@@ -929,6 +972,13 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
       },
           (trip) {
+            showCustomSnackBar(
+              context,
+              // "Cart Update Successfully",
+              state.createNonTrackTripEntity?.message ??
+                  LocaleKeys.requestSentSuccess.localize,
+              Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
+            );
         emit(state.copyWith(
           createNonTrackTripEntity: trip,
           status: ClientTripsStates.successCreateTrip,
@@ -953,6 +1003,13 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
       },
           (trip) {
+            showCustomSnackBar(
+              context,
+              // "Cart Update Successfully",
+              state.createNonTrackTripEntity?.message ??
+                  LocaleKeys.requestSentSuccess.localize,
+              Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
+            );
         emit(state.copyWith(
           status: ClientTripsStates.successCreateTrip,
         ));

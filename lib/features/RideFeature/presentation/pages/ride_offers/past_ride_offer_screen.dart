@@ -30,6 +30,7 @@ import '../../../domain/entities/get_client_past_trips_entity.dart';
 import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
+import '../loading_dashboard/loading_dashboard_details_screen.dart';
 import '../ride_details_screen.dart';
 
 class PastRideOfferScreen extends StatefulWidget {
@@ -125,8 +126,7 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
                         ? Center(
                             child: Label(
                                 text: LocaleKeys.youDontHavePastOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -418,7 +418,7 @@ class ClientPastWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                          text: priceText,
+                          text: "${formatPrice(offers?.tripDetails?.price ?? 0, context)}",
                           style: Styles.mediumText(fontWeight: FontWeight.w700),
                         ),
                         const Sizer(width: 4),
@@ -435,13 +435,14 @@ class ClientPastWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: formattedTime,
+                          text: "${formatTimeOnly(offers?.tripDetails?.pickupTime, context)}",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Label(
-                          text: formattedDate,
+                          text: "${formatPickupDate(offers?.tripDetails?.pickupTime, context)}",
+
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),

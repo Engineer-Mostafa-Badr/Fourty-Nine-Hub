@@ -58,6 +58,82 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
     ),
   );
 }
+
+
+Future<dynamic> customBottomSheet2(
+    BuildContext context, {
+      required Widget child,
+      double? height,
+      required String title,
+    }) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppColors.whiteColor,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+    ),
+    builder: (context) => SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: height ?? 750,
+          ),
+          child: IntrinsicHeight(
+            child: Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+                color: AppColors.whiteColor,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(),
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.PRIMARY_COLOR,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        IconButton(
+                          icon: SvgPicture.asset('assets/icons/close.svg'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  child,
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/*
 Future<dynamic> customBottomSheet2(context,
     {required child,double? height , required String title}) {
   return showModalBottomSheet(constraints: BoxConstraints(maxHeight: height ?? 750),
@@ -75,7 +151,7 @@ Future<dynamic> customBottomSheet2(context,
           color: AppColors.whiteColor,
         ),
         padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom + 25,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -117,3 +193,4 @@ Future<dynamic> customBottomSheet2(context,
       ),
   );
 }
+*/

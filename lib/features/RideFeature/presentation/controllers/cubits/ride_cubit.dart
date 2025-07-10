@@ -433,6 +433,11 @@ class RideCubit extends Cubit<RideState> {
     }
   }
 
+
+  void onChangeCategoriesType(String type){
+    emit(state.copyWith(selectedType: type,status: RideStates.success));
+  }
+
   String? lastState;
   void changeTripStatus({required TripState tripState}) {
     if (state.requestedTrip != null) {

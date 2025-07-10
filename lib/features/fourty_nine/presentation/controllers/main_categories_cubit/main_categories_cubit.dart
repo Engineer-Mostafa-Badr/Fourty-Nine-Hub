@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart';
@@ -293,29 +294,25 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getSettings(BuildContext context) async {
-    log("getSettingsgetSettings");
 
 
     final Either<Failure, SettingsDashboardEntityResponse> result =
     await getSettingsDashboardUsecase(const NoParams());
     result.fold(
           (failure) {
-            log("getSettingsError${getFailureMessage(failure, AppPages.router.configuration.navigatorKey.currentContext!)}");
 
         emit(state.copyWith(status: StateStatus.error, failure: failure));
       },
           (settings) {
-        log("Suzccess");
 
         bool isReady = isServiceAvailable(settings);
-        log("SuccessIsReady : $isReady");
         if(isReady){
           updateDriverLocation();
           listenToNewTrip(context,settings.data.enableNotificationSound);
           listenToAcceptOffer(context);
         }
         emit(state.copyWith(
-            status: StateStatus.success,));
+            status: StateStatus.success,setting: settings));
       },
     );
   }
@@ -337,12 +334,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     result.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (r) async {
-          if(r==true)log("Location Updated Successfully");
         });
   }
 
   void listenToNewTrip(BuildContext context,bool enableSound) {
-    CliLogger.info('Listen To New Trip');
+    CliLogger.info('Listen To New Trip123');
     // TripsResponseEntity
     AudioPlayer player = AudioPlayer();
 

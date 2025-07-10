@@ -166,6 +166,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -230,7 +231,7 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
                         isRTL ? MainAxisAlignment.start : MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        flag ? "show more" : "show less",
+                        flag ? context.isArabic?"اظهار المزيد":"show more" :context.isArabic?"اظهر أقل": "show less",
                         style: const TextStyle(color: Colors.blue),
                       ),
                     ],

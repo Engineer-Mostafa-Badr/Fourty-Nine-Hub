@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.5.2"
+  animated_cards_carousel:
+    dependency: "direct main"
+    description:
+      name: animated_cards_carousel
+      sha256: "04d2616d5c38e51933da3981509da88b91b3fa340c4e7c669e9298a577183481"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   animated_custom_dropdown:
     dependency: "direct main"
     description:
@@ -169,6 +177,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.7"
+  auto_size_text:
+    dependency: "direct main"
+    description:
+      name: auto_size_text
+      sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   barcode:
     dependency: transitive
     description:
@@ -1485,6 +1501,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.0"
+  google_places_flutter:
+    dependency: "direct main"
+    description:
+      name: google_places_flutter
+      sha256: "5048f8c3e97dcb8ecfbf478bc336fefd8c4f9b903bfabcd3839c4b17eb8724eb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   google_polyline_algorithm:
     dependency: transitive
     description:
@@ -3074,6 +3098,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  vertical_card_pager:
+    dependency: "direct main"
+    description:
+      name: vertical_card_pager
+      sha256: "6ba8f5243436ff6797d922bc392d3e070cd4c7aace864c992b5d0ad9fd20c2ed"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.3"
   vibration:
     dependency: transitive
     description:

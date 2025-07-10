@@ -42,8 +42,10 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import 'core/service/cache_service.dart';
 import 'core/service/connectivity_service.dart';
+import 'core/service/network_connectivity_cubit.dart';
 import 'core/themes/light_theme.dart';
 import 'core/widget/network_alert_banner.dart';
+import 'core/widget/network_error_screen.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import 'features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
@@ -190,6 +192,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     getToken();
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => NetworkConnectivityCubit(navigatorKey: navigatorKey)),
         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
         BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
@@ -303,66 +306,79 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           //   context.read<ReelsCubit>().fetchReels();
           // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
-            builder: (BuildContext context, state) {
-              return StreamBuilder<bool>(
-                  stream: NetworkManager().onStatusChange,
-                  initialData: true, // assume connected at start
-                  builder: (context, snapshot) {
-                    final bool isConnected = snapshot.data ?? true;
-                    return FutureBuilder<bool>(
-                      future: CacheManager.getMode(),
-                      builder: (context, snapshot) {
-                        return BlocBuilder<CustomPageCubit, CustomPageState>(
-                          builder: (BuildContext context, custom) {
-                            return Directionality(
-                              textDirection: TextDirection.ltr,
-                              child: Stack(
-                                children: [
-                                  MaterialApp.router(
-                                    routerConfig: AppPages.router,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      final mediaQuery = MediaQuery.of(context);
-                                      return MediaQuery(
-                                        data: mediaQuery.copyWith(
-                                          textScaler: TextScaler.noScaling,
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            child!,
-                                            const WhatsAppCallScreen(),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    themeMode: (snapshot.data ?? false)
-                                        ? ThemeMode.dark
-                                        : ThemeMode.light,
-                                    theme: lightTheme,
-                                    darkTheme: darkTheme,
-                                    title: '49',
-                                    debugShowCheckedModeBanner: false,
-                                    localizationsDelegates:
-                                        context.localizationDelegates,
-                                    supportedLocales: context.supportedLocales,
-                                    locale: context.locale,
-                                  ),
-                                  const MinimizedCallOverlay(),
-                                  Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    child: NetworkAlertBanner(
-                                        isConnected: isConnected),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
+            builder: (BuildContext context, themeState) {
+              return BlocBuilder<NetworkConnectivityCubit, NetworkConnectivityState>(
+                builder: (context, networkState) {
+                  // Show full-screen network error when disconnected
+                  if (networkState == NetworkConnectivityState.disconnected) {
+                    return MaterialApp(
+                      theme: lightTheme,
+                      darkTheme: darkTheme,
+                      themeMode: ThemeMode.light,
+                      home: const NetworkErrorScreen(),
+                      debugShowCheckedModeBanner: false,
+                      localizationsDelegates: context.localizationDelegates,
+                      supportedLocales: context.supportedLocales,
+                      locale: context.locale,
                     );
-                  });
+                  }
+
+                  return FutureBuilder<bool>(
+                    future: CacheManager.getMode(),
+                    builder: (context, snapshot) {
+                      return BlocBuilder<CustomPageCubit, CustomPageState>(
+                        builder: (BuildContext context, custom) {
+                          return Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Stack(
+                              children: [
+                                MaterialApp.router(
+                                  routerConfig: AppPages.router,
+                                  builder:
+                                      (BuildContext context, Widget? child) {
+                                    final mediaQuery = MediaQuery.of(context);
+                                    return MediaQuery(
+                                      data: mediaQuery.copyWith(
+                                        textScaler: TextScaler.noScaling,
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          child!,
+                                          const WhatsAppCallScreen(),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  themeMode: (snapshot.data ?? false)
+                                      ? ThemeMode.dark
+                                      : ThemeMode.light,
+                                  theme: lightTheme,
+                                  darkTheme: darkTheme,
+                                  title: '49',
+                                  debugShowCheckedModeBanner: false,
+                                  localizationsDelegates:
+                                      context.localizationDelegates,
+                                  supportedLocales: context.supportedLocales,
+                                  locale: context.locale,
+                                ),
+                                const MinimizedCallOverlay(),
+                                // Keep the network alert banner for connected state
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: NetworkAlertBanner(
+                                      isConnected: networkState == NetworkConnectivityState.connected),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              );
             },
           );
         },

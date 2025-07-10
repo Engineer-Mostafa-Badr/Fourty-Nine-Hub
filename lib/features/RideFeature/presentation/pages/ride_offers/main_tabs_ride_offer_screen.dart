@@ -86,21 +86,25 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                         });
 
                         if (_tabController.index == 2) {
-                          if (widget.type == 'ride') context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
-                          if (widget.type == 'shipping') context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
+                          // if (widget.type == 'ride')
+                            context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
+                          // if (widget.type == 'shipping') context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
                         }
                         if(_tabController.index ==1){
-                          if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
-                          if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
+                          // if (selectedTap == 'ride')
+                            context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
+                          // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
                         }
                         if(_tabController.index ==0){
-                          if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-                          if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+                          // if (selectedTap == 'ride')
+                            context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+                          // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
                         }
                         if(_tabController.index ==3){
                           print("object");
-                          if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
-                          if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
+                          // if (selectedTap == 'ride')
+                            context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+                          // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
                         }
                       }
                     },
@@ -110,7 +114,8 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                 Sizer(),
                 Expanded(
                   child: AppButton(
-                    color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.black,
+                    color:AppColors.whiteColor,
+                    // color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.whiteColor,
                     radius: 15,
                     label: context.isArabic ? 'تحميله' : 'Shipping',
                     onPressed: () {
@@ -119,21 +124,25 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                           selectedTap = 'shipping';
                         });
                         if (_tabController.index == 2) {
-                          if (selectedTap == 'ride') context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
-                          if (selectedTap == 'shipping') context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
+                          // if (selectedTap == 'ride') context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
+                          // if (selectedTap == 'shipping')
+                            context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
                         }
                         if(_tabController.index ==1){
-                          if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
-                          if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
+                          // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
+                          // if (selectedTap == 'shipping')
+                            context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
                         }
                         if(_tabController.index ==0){
-                          if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-                          if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+                          // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+                          // if (selectedTap == 'shipping')
+                            context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
                         }
                         if(_tabController.index ==3){
                           print("object");
-                          if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
-                          if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
+                          // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+                          // if (selectedTap == 'shipping')
+                            context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
                         }
                       }
                     },
@@ -217,7 +226,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
         tabs: List.generate(_tabTitles.length, (index) {
           final isSelected = _tabController.index == index;
           return Padding(
-            padding: const EdgeInsetsDirectional.only(end: 16),
+            padding: const EdgeInsetsDirectional.only(end: 8),
             child: Tab(
               child: Container(
                 width: 200.w,
