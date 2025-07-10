@@ -9,8 +9,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/create_price_per_seat_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
+import 'package:fourtyninehub/features/new_trip_join/data/models/running_route_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
 
@@ -25,6 +27,7 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, List<MyBookingEntity>>> getAvailableBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params);
   Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params);
+  Future<Either<Failure, RunningRouteEntity>> getRunningRoute();
   Future<Either<Failure, List<MyBookingEntity>>> getExpiredBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getRunningBooking(PaginationParams params);
   Future<Either<Failure, MyBookingEntity>> getDriverRunningRoute();
@@ -268,6 +271,23 @@ class CaptainShareRemoteDataSourceImplementation
             (failure) => Left(failure),
             (response) {
           return Right(MyBookingModel.fromJson(response['data']));
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RunningRouteEntity>> getRunningRoute() async {
+    try {
+      final result = await _apiConsumer.get(
+        EndPoints.runningRoute,
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(RunningRouteModel.fromJson(response['data']));
         },
       );
     } catch (e) {

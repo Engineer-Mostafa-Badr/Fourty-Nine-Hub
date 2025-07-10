@@ -502,6 +502,8 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/routes/$id";
   static String routeDetails(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
+  static String runningRoute =
+      "$developmentBaseUrl/captain-share/routes/running/me";
   static String myBooking =
       "$developmentBaseUrl/captain-share/routes/me";
   static String availableBooking =
