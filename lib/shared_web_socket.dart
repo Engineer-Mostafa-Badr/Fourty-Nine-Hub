@@ -8,7 +8,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class SharedWebSocket {
   static IO.Socket? socket;
   static const String _url = 'https://49backend.com';
-  // static const String _url = 'https://cd0d-2a09-bac5-30ca-2541-00-3b6-7a.ngrok-free.app';
+  // static const String _url = 'https://2d41-2a09-bac1-2240-10-00-3b7-42.ngrok-free.app';
 
   static bool _isConnecting = false;
   static Completer<void>? _connectionCompleter;
