@@ -14,7 +14,9 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad_dropdown_menu.dart';
@@ -65,6 +67,8 @@ class _CreateAdViewState extends State<CreateAdView> {
 
   @override
   Widget build(BuildContext context) {
+    var phoneController = TextEditingController();
+    var priceController = TextEditingController();
     return BlocConsumer<CreateAdCubit, CreateAdState>(
         listener: (context, state) {
       if (state.isError) {
@@ -325,7 +329,27 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //     style: Styles.mediumText(fontSize: 32),
                       //   ),
                       // ),
-                      CreateAdTextFormField(
+                      PickUpTextFormField(
+                        controller: phoneController,
+                        onChanged: (v) => controller.phone = v,
+                        fillColor: AppColors.getFillColor(context),
+                        textColor: AppColors.getTextColor(context),
+                        hintText: LocaleKeys.phoneNumber.localize,
+                        fieldType: FieldType.phone,
+                        validator: (value) => validatorPhone(value),
+                        // validator: (value) {
+                        //   if ((value == null || value.isEmpty)) {
+                        //     return LocaleKeys.required.localize;
+                        //   }
+                        //   if (!_phonePattern.hasMatch(value)) {
+                        //     return LocaleKeys.invalidPhoneNumber.localize;
+                        //   }
+                        //
+                        //   return null;
+                        // },
+                        // controller: controller,
+                      ),
+                      /*CreateAdTextFormField(
                         hintText: LocaleKeys.phone.localize,
                         onChanged: (v) => controller.phone = v,
                         keyboardType: TextInputType.phone,
@@ -339,7 +363,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             return null;
                           }
                         },
-                      ),
+                      ),*/
                       const Sizer(
                         height: 10,
                       ),
@@ -369,7 +393,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               style: Styles.mediumText(
                                 fontSize: 32,
                                 height: 1.60,
-                                color: Colors.black,
+                                color: AppColors.getTextColor(context),
                               ),
                             ), // Change to city.nameAr for Arabic
                           );
@@ -482,7 +506,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                             style: Styles.mediumText(
                                               fontSize: 32,
                                               height: 1.60,
-                                              color: Colors.black,
+                                              color: AppColors.getTextColor(context),
                                             ),
                                           ),
                                         );
@@ -573,7 +597,35 @@ class _CreateAdViewState extends State<CreateAdView> {
                         //     style: Styles.mediumText(fontSize: 32),
                         //   ),
                         // ),
-                        CreateAdTextFormField(
+                        PickUpTextFormField(
+                          controller: priceController,
+                          onChanged: (v) => controller.price = v,
+                          fillColor: AppColors.getFillColor(context),
+                          textColor: AppColors.getTextColor(context),
+                          hintText: state.isPrice == true
+                              ? LocaleKeys.price.localize
+                              : LocaleKeys.salary.localize,
+                          fieldType: FieldType.number,
+                          validator: (value) {
+                            if ((value == null || value.isEmpty)) {
+                              return LocaleKeys.required.localize;
+                            } else {
+                              return null;
+                            }
+                          },
+                          // validator: (value) {
+                          //   if ((value == null || value.isEmpty)) {
+                          //     return LocaleKeys.required.localize;
+                          //   }
+                          //   if (!_phonePattern.hasMatch(value)) {
+                          //     return LocaleKeys.invalidPhoneNumber.localize;
+                          //   }
+                          //
+                          //   return null;
+                          // },
+                          // controller: controller,
+                        ),
+                       /* CreateAdTextFormField(
                           onChanged: (v) => controller.price = v,
                           hintText: state.isPrice == true
                               ? LocaleKeys.price.localize
@@ -589,7 +641,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               return null;
                             }
                           },
-                        ),
+                        ),*/
                         // TextFormField(
                         //   maxLines: 1,
                         //   keyboardType: TextInputType.number,

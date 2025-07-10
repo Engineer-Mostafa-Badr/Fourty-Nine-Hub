@@ -1,91 +1,132 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../../../../../res/style/app_colors.dart';
 
 class ReadMoreText extends StatefulWidget {
-  final String username;
-  final String description;
-  final TextStyle? usernameStyle;
-  final TextStyle? descriptionStyle;
-  final int maxLines;
+  final String text;
+  final int trimLines;
+  final TextStyle? style;
+  final TextStyle? moreStyle;
+  final TextStyle? lessStyle;
+  final String moreText;
+  final String lessText;
+  final bool isLoading;
 
   const ReadMoreText({
     super.key,
-    required this.username,
-    required this.description,
-    this.usernameStyle,
-    this.descriptionStyle,
-    this.maxLines = 2,
+    required this.text,
+    this.trimLines = 2,
+    this.style,
+    this.moreStyle,
+    this.lessStyle,
+    this.moreText = '...Read more',
+    this.lessText = 'Read less',
+    this.isLoading = false,
   });
 
   @override
-  _ReadMoreTextState createState() => _ReadMoreTextState();
+  State<ReadMoreText> createState() => _ReadMoreTextState();
 }
 
 class _ReadMoreTextState extends State<ReadMoreText> {
-  bool _expanded = false;
+  bool _isExpanded = false;
+  bool _needsExpandButton = false;
+  double? _lastMaxWidth;
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isLoading) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: SpinKitThreeBounce(
+          color: Theme.of(context).primaryColor,
+          size: 20.0,
+        ),
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
-        final textSpan = TextSpan(
-          text: '${widget.username} ',
-          style: widget.usernameStyle ??
-              const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          children: [
-            TextSpan(
-              text: _expanded
-                  ? widget.description
-                  : _trimText(widget.description, constraints.maxWidth),
-              style: widget.descriptionStyle ??
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-            ),
-            TextSpan(
-              text: _expanded ? ' less' : (_exceedsMaxLines(widget.description, constraints.maxWidth) ? ' more' : ''),
-              style: (widget.descriptionStyle ?? const TextStyle(fontSize: 16))
-                  .copyWith(color: const Color(0xff6E6E6E)),
-            ),
-          ],
-        );
+        if (_lastMaxWidth != constraints.maxWidth) {
+          _lastMaxWidth = constraints.maxWidth;
+          WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _checkTextOverflow(constraints),
+          );
+        }
 
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              _expanded = !_expanded;
-            });
-          },
-          child: RichText(text: textSpan),
+        // For expanded state
+        if (_isExpanded) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.text, style: widget.style),
+              const SizedBox(height: 4),
+              _buildButton(context),
+            ],
+          );
+        }
+
+        // For truncated state
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                widget.text,
+                maxLines: widget.trimLines,
+                overflow: TextOverflow.clip,
+                style: widget.style,
+              ),
+            ),
+            if (_needsExpandButton) _buildButton(context),
+          ],
         );
       },
     );
   }
 
-  bool _exceedsMaxLines(String text, double maxWidth) {
-    final textPainter = TextPainter(
-      text: TextSpan(text: text, style: widget.descriptionStyle),
-      maxLines: widget.maxLines,
-      textDirection: context.isArabic? TextDirection.rtl : TextDirection.ltr,
+  Widget _buildButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => setState(() => _isExpanded = !_isExpanded),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Text(
+          _isExpanded ? widget.lessText : widget.moreText,
+          style: _isExpanded
+              ? widget.lessStyle ?? _defaultLessStyle(context)
+              : widget.moreStyle ?? _defaultMoreStyle(context),
+        ),
+      ),
     );
-    textPainter.layout(maxWidth: maxWidth);
-    return textPainter.didExceedMaxLines;
   }
 
-  String _trimText(String text, double maxWidth) {
+  void _checkTextOverflow(BoxConstraints constraints) {
     final textPainter = TextPainter(
-      text: TextSpan(text: text, style: widget.descriptionStyle),
-      maxLines: widget.maxLines,
-      textDirection: context.isArabic? TextDirection.rtl : TextDirection.ltr,
+      text: TextSpan(text: widget.text, style: widget.style),
+      maxLines: widget.trimLines,
+      textDirection: TextDirection.ltr,
     );
-
-    textPainter.layout(maxWidth: maxWidth);
-
-    int endIndex = text.length;
-    while (endIndex > 0 && textPainter.didExceedMaxLines) {
-      endIndex -= 1;
-      textPainter.text = TextSpan(text: text.substring(0, endIndex) + '...', style: widget.descriptionStyle);
-      textPainter.layout(maxWidth: maxWidth);
+    textPainter.layout(maxWidth: constraints.maxWidth);
+    if (mounted) {
+      setState(() {
+        _needsExpandButton = textPainter.didExceedMaxLines;
+      });
     }
+  }
 
-    return text.substring(0, endIndex) + '...';
+  TextStyle _defaultMoreStyle(BuildContext context) {
+    return TextStyle(
+      color: AppColors.SECONDARY_COLOR,
+      fontWeight: FontWeight.bold,
+
+    );
+  }
+
+  TextStyle _defaultLessStyle(BuildContext context) {
+    return TextStyle(
+      color: AppColors.SECONDARY_COLOR,
+      fontWeight: FontWeight.w500,
+    );
   }
 }

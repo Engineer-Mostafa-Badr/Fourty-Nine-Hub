@@ -12,11 +12,13 @@ Widget buildFloatingAction(BuildContext context, Function() onTap) {
     onPressed: () {
       onTap();
     },
-    backgoundColor: AppColors.PRIMARY_COLOR,
+    backgoundColor: AppColors.getButtonPrimaryColor(context),
     child: Label(
       text: '${LocaleKeys.addAde.localize} +',
-      style:
-          Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),
+      style: Styles.mediumText(
+        fontWeight: FontWeight.bold,
+        color: AppColors.getReversedTextColor(context),
+      ),
     ),
   );
 }

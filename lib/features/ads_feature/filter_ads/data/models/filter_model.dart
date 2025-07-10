@@ -13,6 +13,9 @@ class FilterModel extends FilterEntity {
       super.filter});
 
   Map<String, dynamic> toJson() {
+    print('priceAr==>  ${price?.value.nameAr}');
+    print('priceEn==>  ${price?.value.nameEn}');
+
     Map<String, dynamic> filterCriteria = {};
     for (CreateAdEntity e in props ?? []) {
       if (e.value.nameEn.isNotEmpty) {

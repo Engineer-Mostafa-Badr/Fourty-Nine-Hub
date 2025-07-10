@@ -13,16 +13,22 @@ class CustomHeaderForm extends StatelessWidget {
   const CustomHeaderForm({
     super.key,
     required this.categorization,
+    this.isCreateAd = true,
   });
 
   final CategorizationEntity categorization;
+  final bool isCreateAd;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(LocaleKeys.createAd.localize,style: Styles.headerText(),),
+        if (isCreateAd)
+          Text(
+            LocaleKeys.createAd.localize,
+            style: Styles.headerText(),
+          ),
         Sizer(),
         Row(
           children: [
@@ -48,14 +54,18 @@ class CustomHeaderForm extends StatelessWidget {
                   style: Styles.headerText(fontSize: 32),
                 ),
                 Label(
-                  text:
-                  categorization.mainCategory.name == LocaleKeys.health.localize
+                  text: categorization.mainCategory.name ==
+                          LocaleKeys.health.localize
                       ? LocaleKeys.medicalService.localize
-                      : context.isArabic?categorization.mainCategory.name??'':categorization.mainCategory.nameEn ?? "",
+                      : context.isArabic
+                          ? categorization.mainCategory.name ?? ''
+                          : categorization.mainCategory.nameEn ?? "",
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w500,
                     fontSize: 32,
-                    color: context.isDarkMode?Colors.white:Colors.black.withValues(alpha: 153),
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : Colors.black.withValues(alpha: 153),
                   ),
                 ),
               ],

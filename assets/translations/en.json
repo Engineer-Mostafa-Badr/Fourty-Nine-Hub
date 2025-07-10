@@ -1617,8 +1617,8 @@
   "aboutThisAccount": "About this account",
   "pleaseFillAllRequiredFields": "Please fill all required fields",
   "youCantChoosePastTime": "Please choose a time after a quarter of an hour from now",
-  "chooseTheTime": "Choose The Time",
-  "chooseTheDate": "Choose The Date",
+  "chooseTheTime": "Time",
+  "chooseTheDate": "Date",
   "pleaseSelectDateFirst": "Please select a date first.",
   "errorHappen": "Error Happen",
   "accepted": "Accepted",
@@ -1649,7 +1649,13 @@
   "ago": "Ago",
   "week": "Week",
   "selectCarBrand": "Select Car Brand",
-  "selectCarModel": "Select Car Model"
+  "selectCarModel": "Select Car Model",
+  "checkInternetConnection": "Please check your internet connection and try again",
+  "retry": "Retry",
+  "reportClient": "Report Client",
+  "uploadingImage": "Uploading Image...",
+  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
+  "watch": "Watch"
 
 
 

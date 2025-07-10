@@ -17,10 +17,12 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_card.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -42,6 +44,8 @@ import '../widgets/exit_widget.dart';
 import '../widgets/favourite_screens_view.dart';
 import '../widgets/grid_blocks_widget.dart';
 import 'main_categories_cards_view.dart';
+// import 'package:animated_cards_carousel/animated_cards_carousel.dart';
+// import 'package:vertical_card_pager/vertical_card_pager.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -333,49 +337,27 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     return Shimmer.fromColors(
                       baseColor: Colors.grey[100]!,
                       highlightColor: Colors.white24,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisSpacing: 10,
-                                crossAxisCount: 2,
-                                childAspectRatio: 2 / 3),
-                        itemCount: 6,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Container(
-                              height:
-                                  MediaQuery.of(context).size.height * .15.h,
-                              width: double.infinity,
-                              margin: EdgeInsets.symmetric(horizontal: 10.w),
-                              padding: EdgeInsets.symmetric(horizontal: 10.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.AUTH_CONTAINER_COLOR,
-                                borderRadius: BorderRadius.circular(20.r),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                            ),
-                          );
-                        },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 40,top: 20),
+                        height: MediaQuery.of(context).size.height*0.16,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(color: Colors.grey),
+                        ),
                       ),
                     );
                   }
                   if (state.data != null) {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisSpacing: 10,
-                              crossAxisCount: 2,
-                              childAspectRatio: .9),
-                      itemCount: state.data?.length ?? 0,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: InkWell(
+                    return  Container(
+                      margin: EdgeInsets.only(bottom: 40),
+                      height: MediaQuery.of(context).size.height*(0.5),
+                      width: double.infinity,
+                      child:AnimatedCardsListView(
+                        cardsList: List.generate(
+                          state.data?.length??0,
+                              (index) => InkWell(
                             onTap: () {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
@@ -392,17 +374,18 @@ class _FourtyNineViewState extends State<FourtyNineView>
                             },
                             child: MainCategoryBanner(
                               category: state.data![index],
+                                imageHeight:MediaQuery.sizeOf(context).height * 0.15,
                               onFavorite: () async {
                                 var result = await controller
                                     .toggleFavoriteMedicalService(
-                                        state.data![index].id);
+                                    state.data![index].id);
                                 print("result$result");
                                 return result;
                               },
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     );
                   } else {
                     return const SizedBox.shrink();
