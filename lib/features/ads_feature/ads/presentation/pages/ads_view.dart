@@ -104,7 +104,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       userType = 'user';
       print('user');
     }
-    print(_tabController.index);
+    print('userType index ${_tabController.index}');
+    print('userType hasAuction ${widget.params.subCategory.hasAuction}');
     return CustomScaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(30),
@@ -163,6 +164,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                             subCategoryId: widget.params.subCategory.id,
                             filter: 'female',
                           );
+                          userType = 'female';
                         } else {
                           controller.loadAdsData(
                             subCategoryId: widget.params.subCategory.id,
@@ -170,6 +172,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                 ? 'rent'
                                 : 'user',
                           );
+                          userType = widget.params.subCategory.hasAuction == true
+                              ? 'rent'
+                              : 'user';
                         }
                       } else {
                         if (widget.params.mainCategory.nameEn == 'Dating') {
@@ -177,6 +182,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                             subCategoryId: widget.params.subCategory.id,
                             filter: 'male',
                           );
+                          userType ='male';
                         } else {
                           controller.loadAdsData(
                             subCategoryId: widget.params.subCategory.id,
@@ -184,6 +190,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                 ? 'sale'
                                 : 'provider',
                           );
+                          userType = widget.params.subCategory.hasAuction == true
+                              ? 'sale'
+                              : 'provider';
                         }
                       }
                     },

@@ -19,10 +19,16 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
-class FilterAdsView extends StatefulWidget {
+class FilterAdsParams {
   final CategorizationEntity categorization;
+  final String userType;
+  FilterAdsParams({required this.categorization, required this.userType});
+}
 
-  const FilterAdsView({super.key, required this.categorization});
+class FilterAdsView extends StatefulWidget {
+  final FilterAdsParams filterAdsParams;
+
+  const FilterAdsView({super.key, required this.filterAdsParams});
 
   @override
   State<FilterAdsView> createState() => _FilterAdsViewState();
@@ -32,10 +38,10 @@ class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
     context.read<CreateAdCubit>().loadData(
-        subCategoryId: widget.categorization.fromMarriage == false
-            ? widget.categorization.mainCategory.id
-            : widget.categorization.subCategory.id,
-        fromMarriage: widget.categorization.fromMarriage ?? false);
+        subCategoryId: widget.filterAdsParams.categorization.fromMarriage == false
+            ? widget.filterAdsParams.categorization.mainCategory.id
+            : widget.filterAdsParams.categorization.subCategory.id,
+        fromMarriage: widget.filterAdsParams.categorization.fromMarriage ?? false);
     super.initState();
   }
   String _convertToArabicDigits(String input) {
@@ -100,7 +106,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                   // padding: const EdgeInsets.all(16.0),
                   children: [
                     CustomHeaderForm(
-                      categorization: widget.categorization,
+                      categorization: widget.filterAdsParams.categorization,
                       isCreateAd: false,
                     ),
                     const SizedBox(
@@ -125,11 +131,11 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                           onChanged: (SelectionEntity v) =>
                               controller.onChanged(v: v, index: index),
                           onTextChanged: (String v, bool from, String type) {
-                            if (context.isArabic) {
-                              final englishValue = _convertToEnglishDigits(v);
-                              final arabicValue = _convertToArabicDigits(englishValue);
-                              v = arabicValue;
-                            }
+                            // if (context.isArabic) {
+                            //   final englishValue = _convertToEnglishDigits(v);
+                            //   final arabicValue = _convertToArabicDigits(englishValue);
+                            //   v = arabicValue;
+                            // }
                             print('arabicValue $v');
 
                             controller.onTextChanged(
@@ -150,7 +156,8 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                     ClickableWidget(
                         onTap: () {
                           controller.filterAds(
-                              categorize: widget.categorization,
+                              categorize: widget.filterAdsParams.categorization,
+                              userType: widget.filterAdsParams.userType,
                               context: context);
                         },
                         child: Container(

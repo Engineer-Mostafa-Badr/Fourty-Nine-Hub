@@ -73,7 +73,7 @@ class _MarriageCallMessageButtonsState
           return SizedBox(
             height: 30,
             child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
@@ -321,7 +321,7 @@ class _MarriageCallMessageButtonsState
                     child: Icon(
                       Icons.report,
                       color: AppColors.SECONDARY_COLOR_DARK2,
-                      size: 50.h,
+                      size: 40.h,
                     ),
                   ),
                 ]

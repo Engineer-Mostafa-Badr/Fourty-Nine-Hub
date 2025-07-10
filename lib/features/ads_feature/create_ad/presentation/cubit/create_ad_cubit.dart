@@ -432,8 +432,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   void filterAds({
     required CategorizationEntity categorize,
     required BuildContext context,
+    required String userType,
   }) async {
-    if (true) {
+
       print("ss");
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
@@ -474,6 +475,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           governorateId: state.governorate ?? '',
           limit: 10,
           page: 1,
+          filter: userType,
           subCategoryId: categorize.subCategory.id);
       if (categorize.fromMarriage == true) {
         // final response = await _filterAdUseCase(model);
@@ -490,6 +492,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         return;
       }
       print("model::: not return");
+      print("details::: ${details.length}");
+      print("details::: ${details.first.toJson()}");
+      print("model::: ${model.toJson()}");
 
       final response = await _filterAdUseCase(model);
       response.fold(
@@ -499,11 +504,6 @@ class CreateAdCubit extends Cubit<CreateAdState> {
 
         context.pop(model);
       });
-    } else if (state.governorate == '') {
-      showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
-    } else if (state.city == '') {
-      showErrorMessage(context, LocaleKeys.selectCity.localize);
-    }
   }
 
   void filterGovernorateAds(

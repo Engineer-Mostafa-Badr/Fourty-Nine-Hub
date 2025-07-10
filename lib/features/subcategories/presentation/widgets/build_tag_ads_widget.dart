@@ -29,6 +29,11 @@ class BuildTagAdsWidget extends StatelessWidget {
       // color: status == SubscriptionStatus.premium.status
       //     ? Colors.amber
       //     : Colors.grey,
+      // color: status == SubscriptionStatus.premium.status
+      //     ? Colors.amber
+      //     : status == SubscriptionStatus.regular.status
+      //     ? Colors.blue
+      //     : Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -53,7 +58,8 @@ class BuildTagAdsWidget extends StatelessWidget {
             Label(
               text: LocaleKeys.noViews.localize,
               style: Styles.mediumText(
-                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
+                color:
+                    context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
@@ -62,7 +68,8 @@ class BuildTagAdsWidget extends StatelessWidget {
             Label(
               text: LocaleKeys.oneView.localize,
               style: Styles.mediumText(
-                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
+                color:
+                    context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
@@ -71,16 +78,19 @@ class BuildTagAdsWidget extends StatelessWidget {
             Label(
               text: LocaleKeys.twoViews.localize,
               style: Styles.mediumText(
-                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
+                color:
+                    context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
             ),
           ] else if (views >= 3 && views <= 10) ...[
             Label(
-              text: '${FormatNumbers().formatNumber(views,useArabicNumerals: context.isArabic)} ${LocaleKeys.views.localize}',
+              text:
+                  '${FormatNumbers().formatNumber(views, useArabicNumerals: context.isArabic)} ${LocaleKeys.views.localize}',
               style: Styles.mediumText(
-                color: context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
+                color:
+                    context.isDarkMode ? Colors.white : const Color(0xFF6C6C6C),
                 fontSize: 24,
                 height: 1.60,
               ),
@@ -97,19 +107,31 @@ class BuildTagAdsWidget extends StatelessWidget {
             ),
           ],
           const Spacer(),
-          Label(
-            text: status == SubscriptionStatus.premium.status
-                ? LocaleKeys.premium2.localize
-                : status == SubscriptionStatus.regular.status
-                    ? LocaleKeys.regular.localize
-                    : LocaleKeys.notSubscribed.localize,
-            style: Styles.mediumText(
-              color: AppColors.getTextColor(context),
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-              height: 1.60,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16,),
+            margin: const EdgeInsets.symmetric( vertical: 4),
+            decoration: BoxDecoration(
+              color: status == SubscriptionStatus.premium.status
+                  ? Colors.amber
+                  : status == SubscriptionStatus.regular.status
+                      ? Colors.blue
+                      : Colors.grey,
+              borderRadius: BorderRadius.circular(8),
             ),
-            maxLines: 1,
+            child: Label(
+              text: status == SubscriptionStatus.premium.status
+                  ? LocaleKeys.premium2.localize
+                  : status == SubscriptionStatus.regular.status
+                      ? LocaleKeys.regular.localize
+                      : LocaleKeys.notSubscribed.localize,
+              style: Styles.mediumText(
+                color: AppColors.getTextColor(context),
+                fontSize: 32,
+                fontWeight: FontWeight.w700,
+                height: 1.60,
+              ),
+              maxLines: 1,
+            ),
           ),
         ],
       ),

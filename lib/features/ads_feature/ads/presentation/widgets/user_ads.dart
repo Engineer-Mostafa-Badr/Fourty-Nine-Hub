@@ -145,6 +145,7 @@ class _UserAdsState extends State<UserAds> {
                 .unFavouriteAd(context.read<AdvertisementCubit>().ads[index].id);
             return result;
           },
+
         );
         /*return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

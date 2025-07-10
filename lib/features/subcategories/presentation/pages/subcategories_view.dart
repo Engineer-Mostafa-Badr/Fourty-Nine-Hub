@@ -405,7 +405,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                   child: PaginationView<SubCategoryEntity>(
                     build: (ScrollController scrollController,
                         List<SubCategoryEntity> data) {
-                      print("data.length${data.length}");
+                      print("data.length ${data.length}");
                       return GridView.builder(
                         padding: EdgeInsets.all(24.w),
                         itemCount: data.length,
