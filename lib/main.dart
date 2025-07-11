@@ -38,7 +38,9 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:snacknload/snacknload.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:toastification/toastification.dart';
 
 import 'core/service/cache_service.dart';
 import 'core/service/connectivity_service.dart';
@@ -331,34 +333,36 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             textDirection: TextDirection.ltr,
                             child: Stack(
                               children: [
-                                MaterialApp.router(
-                                  routerConfig: AppPages.router,
-                                  builder:
-                                      (BuildContext context, Widget? child) {
-                                    final mediaQuery = MediaQuery.of(context);
-                                    return MediaQuery(
-                                      data: mediaQuery.copyWith(
-                                        textScaler: TextScaler.noScaling,
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          child!,
-                                          const WhatsAppCallScreen(),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  themeMode: (snapshot.data ?? false)
-                                      ? ThemeMode.dark
-                                      : ThemeMode.light,
-                                  theme: lightTheme,
-                                  darkTheme: darkTheme,
-                                  title: '49',
-                                  debugShowCheckedModeBanner: false,
-                                  localizationsDelegates:
-                                      context.localizationDelegates,
-                                  supportedLocales: context.supportedLocales,
-                                  locale: context.locale,
+                                ToastificationWrapper(
+                                  child: MaterialApp.router(
+                                    routerConfig: AppPages.router,
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      final mediaQuery = MediaQuery.of(context);
+                                      return MediaQuery(
+                                        data: mediaQuery.copyWith(
+                                          textScaler: TextScaler.noScaling,
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            child!,
+                                            const WhatsAppCallScreen(),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    themeMode: (snapshot.data ?? false)
+                                        ? ThemeMode.dark
+                                        : ThemeMode.light,
+                                    theme: lightTheme,
+                                    darkTheme: darkTheme,
+                                    title: '49',
+                                    debugShowCheckedModeBanner: false,
+                                    localizationsDelegates:
+                                        context.localizationDelegates,
+                                    supportedLocales: context.supportedLocales,
+                                    locale: context.locale,
+                                  ),
                                 ),
                                 const MinimizedCallOverlay(),
                                 // Keep the network alert banner for connected state

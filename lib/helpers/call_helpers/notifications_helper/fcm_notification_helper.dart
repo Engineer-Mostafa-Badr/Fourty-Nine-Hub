@@ -5,6 +5,8 @@ import 'package:either_dart/either.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 import '../call_helper/call_with_notification_helper.dart';
 import 'send_notification_params.dart';
 import '../../../service_locator/service_locator.dart';
@@ -216,12 +218,19 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
         textColor: Colors.white,
         fontSize: 16.0,
       );
-      SnackNLoad.showSnackBar(
-        'Welcome in year 2025!\nMay this year fulfill your dreams and bring happiness.',
-        type: SnackNLoadType.success,
-        title: "Hello",
-        showIcon: false,
-        position: SnackNLoadPosition.top,
+      toastification.show(
+        // context: context, // optional if you use ToastificationWrapper
+          title: Text("${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}"),
+          autoCloseDuration: const Duration(seconds: 5),
+          callbacks: ToastificationCallbacks(
+            onTap: (toastItem) {
+              print('Toast ${toastItem.id} tapped');
+              context.pushNamed(message.data['path'] ?? '');
+            },
+            // onCloseButtonTap: (toastItem) => print('Toast ${toastItem.id} close button tapped'),
+            // onAutoCompleteCompleted: (toastItem) => print('Toast ${toastItem.id} auto complete completed'),
+            // onDismissed: (toastItem) => print('Toast ${toastItem.id} dismissed'),
+          )
       );
       // showTopSnackBar(
       //   Overlay.of(context),
