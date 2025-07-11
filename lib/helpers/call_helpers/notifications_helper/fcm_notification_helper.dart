@@ -17,6 +17,7 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../../features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:snacknload/snacknload.dart';
 
 abstract class FcmNotificationHelper {
   Future<void> setup(BuildContext context);
@@ -214,6 +215,13 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
         backgroundColor: Colors.black54,
         textColor: Colors.white,
         fontSize: 16.0,
+      );
+      SnackNLoad.showSnackBar(
+        'Welcome in year 2025!\nMay this year fulfill your dreams and bring happiness.',
+        type: SnackNLoadType.success,
+        title: "Hello",
+        showIcon: false,
+        position: SnackNLoadPosition.top,
       );
       // showTopSnackBar(
       //   Overlay.of(context),

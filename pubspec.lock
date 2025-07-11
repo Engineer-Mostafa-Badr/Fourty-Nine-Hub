@@ -2698,6 +2698,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.12"
+  snacknload:
+    dependency: "direct main"
+    description:
+      name: snacknload
+      sha256: "10eac9b8e99e88d79d2e2b93d797a7d15f03542409321463e614717237ba8265"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.9"
   snapping_bottom_sheet:
     dependency: "direct main"
     description:

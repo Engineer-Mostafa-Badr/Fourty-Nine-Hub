@@ -162,6 +162,7 @@ dependencies:
   auto_size_text: ^3.0.0
   animated_cards_carousel: ^1.0.2
   vertical_card_pager: ^1.6.3
+  snacknload: ^1.0.9
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   record_linux: ^1.1.1
