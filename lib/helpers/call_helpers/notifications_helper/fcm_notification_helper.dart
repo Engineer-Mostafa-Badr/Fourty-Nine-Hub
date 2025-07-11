@@ -209,15 +209,15 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
     final overlayContext = navigatorKey.currentContext!;
 
     if(context!=null){
-      Fluttertoast.showToast(
-        msg: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      // Fluttertoast.showToast(
+      //   msg: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   timeInSecForIosWeb: 1,
+      //   backgroundColor: Colors.black54,
+      //   textColor: Colors.white,
+      //   fontSize: 16.0,
+      // );
       toastification.show(
         // context: context, // optional if you use ToastificationWrapper
           title: Text("${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}"),
@@ -225,6 +225,7 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
           callbacks: ToastificationCallbacks(
             onTap: (toastItem) {
               print('Toast ${toastItem.id} tapped');
+              // Navigator.of(context).pushNamed(message.data['path'] ?? '');
               context.pushNamed(message.data['path'] ?? '');
             },
             // onCloseButtonTap: (toastItem) => print('Toast ${toastItem.id} close button tapped'),
