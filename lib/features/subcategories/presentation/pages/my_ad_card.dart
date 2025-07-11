@@ -30,6 +30,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../core/constants/subscription_status.dart';
+import '../../../social_media/instagram/presentation/widgets/read_more_text.dart';
 
 class MyAdCard extends StatefulWidget {
   final AdEntity item;
@@ -40,7 +43,7 @@ class MyAdCard extends StatefulWidget {
     required this.onFav,
     required this.onRemoveFav,
     this.deleteAd,
-    this.showSubCategory = false,
+    this.showSubCategory = true,
   });
 
   final Function(String) onFav;
@@ -61,402 +64,365 @@ class _MyAdCardState extends State<MyAdCard> {
     List<CreateAdEntity> details = widget.item.details
         .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
         .toList();
-    return InkWell(
-      splashColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        if( widget.item.userId!=userId) {
-          serviceLocator<AdvertisementCubit>().adViewToAds(widget.item.id);
-        }
-        context.push(Routes.ADdetails, extra: widget.item.id);
-      },
-      child: IntrinsicHeight(
-        child: Container(
-          // width: kToolbarHeight * 2.5,
-          // height: 600.h,
-          // margin: EdgeInsetsDirectional.all(10.w),
-          padding: const EdgeInsetsDirectional.only(bottom: 8),
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            // border: Border.all(
-            //     color: context.isDarkMode
-            //         ? AppColors.LIGHT_COLOR
-            //         : AppColors.GREY_DARK_COLOR,
-            //     width: 1),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (context.read<UserCubit>().isLoggedIn)
-                BuildTagAdsWidget(
-                    status: widget.item.ownerSubscriptionStatus ?? '',
-                    views: widget.item.views ?? 0),
-              Expanded(
-                child: ImageAdsWidget(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          splashColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            if (widget.item.userId != userId) {
+              serviceLocator<AdvertisementCubit>().adViewToAds(widget.item.id);
+            }
+            context.push(Routes.ADdetails, extra: widget.item.id);
+          },
+          child: Container(
+            // REMOVED IntrinsicHeight and Column wrapper
+            padding: const EdgeInsetsDirectional.only(bottom: 8),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                  color: context.isDarkMode
+                      ? AppColors.LIGHT_COLOR
+                      : AppColors.GREY_DARK_COLOR,
+                  width: 1),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              // ADDED to prevent unbounded height
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (context.read<UserCubit>().isLoggedIn)
+                  BuildTagAdsWidget(
+                      status: widget.item.ownerSubscriptionStatus ?? '',
+                      views: widget.item.views ?? 0),
+
+                // Fixed height for image
+                ImageAdsWidget(
                   images: widget.item.images,
                   isFavourite: widget.item.isFavourite ?? false,
                   onPressedFavorite: () async {
                     if (widget.item.isFavourite == false) {
                       var result = await widget.onFav(widget.item.id);
                       if (result == true) {
-                        widget.item.isFavourite = !widget.item.isFavourite!;
+                        setState(() {
+                          widget.item.isFavourite = !widget.item.isFavourite!;
+                        });
                       }
                     } else {
                       var result = await widget.onRemoveFav(widget.item.id);
                       if (result == true) {
-                        widget.item.isFavourite = !widget.item.isFavourite!;
+                        setState(() {
+                          widget.item.isFavourite = !widget.item.isFavourite!;
+                        });
                       }
                     }
-                    setState(() {});
                   },
-                  isVerified:  widget.item.user!.isAccountVerified ?? false,
+                  isVerified: widget.item.user!.isAccountVerified ?? false,
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  spacing: 4,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Label(
-                      text:
-                          '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
-                      style: Styles.mediumText(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.PRIMARY_COLOR),
-                      maxLines: 1,
-                    ),
-                    Label(
-                      text: widget.item.title,
-                      style: Styles.headerText(
-                        fontSize: 32,
-                        height: 1.6,
-                      ),
-                    ),
-                    /* Row(
-                      children: [
-                        Label(
-                          text: widget.item.title,
-                          style: Styles.headerText(
-                            fontSize: 32,
-                            height: 1.6,
-                          ),
-                        ),
-                        const Spacer(),
-                        SvgPicture.asset(Assets.adsCashIcon),
-                        const Sizer(width: 5),
-                        Label(
-                          text:
-                              '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.SECONDARY_COLOR),
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),*/
-                    // اذا كان الاعلان من نوع المركبات
-                    if (widget.item.mainCategoryId ==
-                        '62c8b5889332225799fe3316') ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: widget.item.details
-                            .where((e) =>
-                                e.propId == '66ec666f12cfcdf9779dfcc5' ||
-                                e.propId == '66ec666f12cfcdf9779dfd05' ||
-                                e.propId == '66ec666f12cfcdf9779dfcc6')
-                            .map((e) {
-                          return Row(
-                            children: [
-                              ImageFromInternet(
-                                image: e.image ?? '',
-                                width: 24,
-                                height: 24,
-                                defaultLogo: true,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Label(
-                                text: context.isArabic
-                                    ? e.value.nameAr
-                                    : e.value.nameEn,
-                                style: Styles.headerText(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w700,
-                                  height: 1.60,
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ] else
-                      Column(
-                        children: widget.item.details
-                            .where((e) => e.nameEn == 'experience level')
-                            .map((e) {
-                          return Row(
-                            children: [
-                              ImageFromInternet(
-                                image: e.image ?? '',
-                                width: 30.w,
-                                height: 30.h,
-                                defaultLogo: true,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Label(
-                                text: context.isArabic
-                                    ? e.value.nameAr
-                                    : e.value.nameEn,
-                                style: Styles.headerText(
-                                  fontSize: 24,
-                                  height: 1.60,
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset(Assets.adsLocationIcon),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Label(
-                              text:
-                                  '${context.isArabic ? widget.item.address?.addressAr : widget.item.address?.addressEn}',
-                              style: Styles.headerText(
-                                fontSize: 24,
-                                height: 1.60,
-                              ),
-                              maxLines: 1,
-                            ),
-                          ],
-                        ),
-                        if (widget.showSubCategory)
-                          Label(
-                            text: (context.isArabic
-                                    ? widget.item.subCategoryNameAr
-                                    : widget.item.subCategoryNameEn) ??
-                                'N/A',
-                            style: Styles.smallText(
-                              color: const Color(0xFFF33D49),
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              height: 1.60,
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    userId == widget.item.user?.id
-                        ? AppButton(
-                            label: LocaleKeys.deleteAd.localize,
-                            height: 30,
-                            style: Styles.headerText(
-                              fontSize: 24,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              height: 1.60,
-                            ),
-                            onPressed: () {
-                              bottomSheet(
-                                  context: context,
-                                  isFloating: true,
-                                  asAlertDialog: true,
-                                  widget: AreYouSureDeleteAdWidget(
-                                    title: LocaleKeys.alert.localize,
-                                    subTitle: LocaleKeys
-                                        .areYouSureAboutDeletingTheAD.localize,
-                                    action: () {
-                                      if (widget.deleteAd != null) {
-                                        widget.deleteAd!(widget.item.id);
-                                      }
-                                    },
-                                  ));
-                            },
-                          )
-                        : _buildRequestsButton(
-                            adId: widget.item.id,
-                            userIdOfAd: widget.item.user?.id ?? '',
-                            subcategoryId: widget.item.subCategoryId ?? '',
-                            phone: widget.item.user?.phone ?? '',
-                            subscriptionStatus:
-                                widget.item.userSubscriptionStatus ?? '',
-                          )
-                  ],
-                ),
-              ),
-              /*   if (false)
+
+                const SizedBox(height: 8),
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min, // ADDED
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Label(
-                                    text:
-                                        '${NumbersHelper.formatThousands(number: widget.item.price ?? 0)} ${LocaleKeys.currency.localize}',
-                                    style: Styles.mediumText(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.SECONDARY_COLOR),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Sizer(
-                              height: 4.h,
-                            ),
-                            Row(
-                              children: [
-                                Label(
-                                    text: '${LocaleKeys.title.localize} : ',
-                                    style: Styles.mediumText(
-                                        color: AppColors.SECONDARY_COLOR)),
-                                Label(
-                                  text: widget.item.title,
-                                  style: Styles.mediumText(
-                                    fontWeight: FontWeight.w500,
-                                    color: context.isDarkMode
-                                        ? AppColors.LIGHT_COLOR
-                                        : AppColors.GREY_DARK_COLOR,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Label(
-                                    text: '${LocaleKeys.desc.localize} : ',
-                                    style: Styles.mediumText(
-                                        color: AppColors.SECONDARY_COLOR)),
-                                Expanded(
-                                  child: Label(
-                                    text: widget.item.description,
-                                    style: Styles.mediumText(
-                                      fontWeight: FontWeight.w500,
-                                      color: context.isDarkMode
-                                          ? AppColors.LIGHT_COLOR
-                                          : AppColors.GREY_DARK_COLOR,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            RichText(
-                                text: TextSpan(
-                                    children: details.map((e) {
-                              return TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        '${getLang() == 'ar' ? e.nameAr : e.nameEn} : ',
-                                    style: Styles.mediumText(
-                                        color: AppColors.SECONDARY_COLOR),
-                                  ),
-                                  WidgetSpan(
-                                      child: Sizer(
-                                    width: 5.w,
-                                  )),
-                                  WidgetSpan(
-                                      child: ImageFromInternet(
-                                    image: e.image ?? '',
-                                    width: 25.w,
-                                    height: 25.h,
-                                    defaultLogo: true,
-                                  )),
-                                  WidgetSpan(
-                                      child: Sizer(
-                                    width: 5.w,
-                                  )),
-                                  TextSpan(
-                                    text:
-                                        "${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn}    ",
-                                    style: Styles.mediumText(
-                                        color: context.isDarkMode
-                                            ? AppColors.LIGHT_COLOR
-                                            : AppColors.GREY_DARK_COLOR),
-                                  ),
-                                ],
-                              );
-                            }).toList())),
-                            Label(
-                              text: widget.item.formattedRestTime,
-                              style: Styles.mediumText(
-                                color: context.isDarkMode
-                                    ? AppColors.LIGHT_COLOR
-                                    : AppColors.GREY_DARK_COLOR,
-                              ),
-                              maxLines: 1,
-                            ),
-                          ]),
-                      Divider(
-                        color: context.isDarkMode
-                            ? AppColors.LIGHT_COLOR
-                            : AppColors.GREY_DARK_COLOR,
-                      ),
-                      const Sizer(),
                       Row(
                         children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 60.h,
-                              child: AvaialbleTripsButton(
-                                title: LocaleKeys.edit.localize,
-                                color: AppColors.SECONDARY_COLOR,
-                                onTap: () async {},
-                              ),
-                            ),
+                          Label(
+                            text:
+                                '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
+                            style: Styles.headerText(
+                              fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                                color:context.isDarkMode ? AppColors.whiteColor : AppColors.SECONDARY_COLOR),
+                            maxLines: 1,
                           ),
-                          const Sizer(),
-                          Expanded(
-                            child: SizedBox(
-                              height: 60.h,
-                              child: AvaialbleTripsButton(
-                                title: LocaleKeys.subscription.localize,
-                                color: AppColors.SECONDARY_COLOR,
-                                onTap: () async {
-                                  SubscriptionMethod().subscribe(
-                                      subscribeId:
-                                          widget.item.subCategoryId ?? '',
-                                      title: LocaleKeys.ads.localize);
-                                },
-                              ),
+                          Sizer(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.PRIMARY_COLOR.withValues(alpha: .7),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Center(
+                              child: Label(text: '${context.isArabic ? 'مقدم' : 'Deposit'} ${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',style: Styles.mediumText(color: AppColors.whiteColor)),
                             ),
                           )
                         ],
                       ),
+
+                      // ReadMoreText with proper localization
+                      ReadMoreText(
+                        text:
+                            'floor for rent in shubra floor for rent in shubra floor for rent in shubra floor for rent in shubra floor for rent in shubra',
+                        // text: '${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title}',
+                        trimLines: 1,
+                        style: Styles.headerText(
+                          fontWeight: FontWeight.normal
+                        ),
+                        moreText: context.isArabic
+                            ? "...قراءة المزيد"
+                            : '...Read More',
+                        // FIXED localization
+                        lessText: context.isArabic
+                            ? "قراءة اقل"
+                            : 'Read Less', // FIXED localization
+                        // moreStyle: Styles.smallText(
+                        //     fontWeight: FontWeight.bold,
+                        //     color: AppColors.SECONDARY_COLOR),
+
+
+
+                      ),
+
+                      // ... rest of your content (conditionals, buttons, etc.) ...
+                            Sizer(height: 8),
+                      if (widget.item.mainCategoryId ==
+                          '62c8b5849332225799fe3310')
+                        Row(
+                          spacing: 16,
+                          children: List.generate(3, (index) {
+                            return Row(
+                              children: [
+                                Image.asset(
+                                  index == 0
+                                      ? Assets.bedroomIcon
+                                      : index == 1
+                                          ? Assets.bathroomIcon
+                                          : Assets.areaIcon,
+                                  width: index == 1
+                                      ? 18
+                                      : index == 2
+                                          ? 20
+                                          : 24,
+                                  color: AppColors.getTextColor(context),
+                                ),
+                                const Sizer(width: 16),
+                                Label(
+                                  text: index == 0
+                                      ? '3'
+                                      : index == 1
+                                          ? '4'
+                                          : '155',
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.getTextColor(context)),
+                                ),
+                                const Sizer(width: 12),
+                              ],
+                            );
+                          }),
+                        ),
+
+                      if (widget.item.mainCategoryId ==
+                          '62c8b5889332225799fe3316')
+                        Row(
+                          spacing: 8,
+                          children: List.generate(3, (index) {
+                            return Row(
+                              children: [
+                                Image.asset(
+                                  index == 0
+                                      ? Assets.bedroomIcon
+                                      : index == 1
+                                          ? Assets.bathroomIcon
+                                          : Assets.areaIcon,
+                                  height: 24,
+                                  color: AppColors.getTextColor(context),
+                                ),
+                                const Sizer(width: 8),
+                                Label(
+                                  text: index == 0
+                                      ? '3'
+                                      : index == 1
+                                          ? '4'
+                                          : '155',
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.getTextColor(context)),
+                                ),
+                                const Sizer(width: 12),
+                              ],
+                            );
+                          }),
+                        ),
+
+                      if (widget.item.mainCategoryId ==
+                          '62c8b5889332225799fe3316') ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: widget.item.details
+                              .where((e) =>
+                                  e.propId == '66ec666f12cfcdf9779dfcc5' ||
+                                  e.propId == '66ec666f12cfcdf9779dfd05' ||
+                                  e.propId == '66ec666f12cfcdf9779dfcc6')
+                              .map((e) {
+                            return Row(
+                              children: [
+                                ImageFromInternet(
+                                  image: e.image ?? '',
+                                  width: 24,
+                                  height: 24,
+                                  defaultLogo: true,
+                                ),
+                                const SizedBox(width: 4),
+                                Label(
+                                  text: context.isArabic
+                                      ? e.value.nameAr
+                                      : e.value.nameEn,
+                                  style: Styles.headerText(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w700,
+                                    height: 1.60,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ] else
+                        Column(
+                          children: widget.item.details
+                              .where((e) => e.nameEn == 'experience level')
+                              .map((e) {
+                            return Row(
+                              children: [
+                                ImageFromInternet(
+                                  image: e.image ?? '',
+                                  width: 30.w,
+                                  height: 30.h,
+                                  defaultLogo: true,
+                                ),
+                                const SizedBox(width: 4),
+                                Label(
+                                  text: context.isArabic
+                                      ? e.value.nameAr
+                                      : e.value.nameEn,
+                                  style: Styles.headerText(
+                                    fontSize: 24,
+                                    height: 1.60,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                            Sizer(height: 8),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(Assets.adsLocationIcon,
+                                  color: AppColors.getButtonPrimaryWhiteColor(
+                                      context)),
+                              const SizedBox(width: 4),
+                              Label(
+                                text:
+                                    '${context.isArabic ? widget.item.address?.addressAr : widget.item.address?.addressEn}',
+                                style: Styles.headerText(
+                                  fontSize: 24,
+                                  height: 1.60,
+                                ),
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                          // if (widget.showSubCategory)
+                            Label(
+                              text: (context.isArabic
+                                      ? widget.item.subCategoryNameAr
+                                      : widget.item.subCategoryNameEn) ??
+                                  'N/A',
+                              style: Styles.smallText(
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.SECONDARY_COLOR,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                height: 1.60,
+                              ),
+                            ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Label(
+                              text: context.isArabic ? 'منذ ٨ ساعات' : '8 hours ago',
+                              style: Styles.smallText(
+                                  color: AppColors.getButtonPrimaryColor(context),
+                              )),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+
+                      userId == widget.item.user?.id
+                          ? AppButton(
+                              label: LocaleKeys.deleteAd.localize,
+                              height: 30,
+                              style: Styles.headerText(
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                height: 1.60,
+                              ),
+                              onPressed: () {
+                                bottomSheet(
+                                    context: context,
+                                    isFloating: true,
+                                    asAlertDialog: true,
+                                    widget: AreYouSureDeleteAdWidget(
+                                      title: LocaleKeys.alert.localize,
+                                      subTitle: LocaleKeys
+                                          .areYouSureAboutDeletingTheAD
+                                          .localize,
+                                      action: () {
+                                        if (widget.deleteAd != null) {
+                                          widget.deleteAd!(widget.item.id);
+                                        }
+                                      },
+                                    ));
+                              },
+                            )
+                          : _buildRequestsButton(
+                              adId: widget.item.id,
+                              userIdOfAd: widget.item.user?.id ?? '',
+                              subcategoryId: widget.item.subCategoryId ?? '',
+                              phone: widget.item.user?.phone ?? '',
+                              subscriptionStatus:
+                                  widget.item.userSubscriptionStatus ?? '',
+                            ),
                     ],
                   ),
-                ),*/
-            ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
+        // Subscription message at the bottom
+        if (SubscriptionStatus.notSubscribed.status ==
+                widget.item.userSubscriptionStatus &&
+            SubscriptionStatus.notSubscribed.status ==
+                widget.item.ownerSubscriptionStatus)
+          if (userId != widget.item.user?.id)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 10.0, top: 8),
+              child: Label(
+                text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
+                style: Styles.headerText(
+                  fontSize: 28,
+                  color: AppColors.getRedColor(context),
+                  height: 1.57,
+                ),
+              ),
+            ),
+      ],
     );
   }
 
@@ -488,6 +454,7 @@ class _MyAdCardState extends State<MyAdCard> {
                 } else {
                   bottomSheet(
                     context: context,
+                    backColor: Theme.of(context).scaffoldBackgroundColor,
                     widget: BlocProvider(
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                       child: Column(
@@ -559,7 +526,7 @@ class _MyAdCardState extends State<MyAdCard> {
             ),
           ),
           SizedBox(
-            width: 80.w,
+            width: 32,
           ),
           Expanded(
             child: MarriageCallMessageButtons(

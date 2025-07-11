@@ -812,8 +812,8 @@ class AppPages {
                           builder: (context, state) => BlocProvider.value(
                             value: serviceLocator<CreateAdCubit>(),
                             child: FilterAdsView(
-                              categorization:
-                                  state.extra as CategorizationEntity,
+                              filterAdsParams:
+                                  state.extra as FilterAdsParams,
                             ),
                           ),
                         ),

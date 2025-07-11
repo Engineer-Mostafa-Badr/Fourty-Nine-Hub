@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 import '../repositories/fourty_nine_repository.dart';
@@ -26,9 +27,12 @@ class MainCategoriesParams {
 
   MainCategoriesParams(
       {required this.page, required this.limit, required this.userId});
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    String? id = UserCubit.to.state.data?.id??'';
+    return {
         'page': page,
         'limit': limit,
-        if (userId.isNotEmpty) 'userId': userId,
+        if (id.isNotEmpty) 'userId': id,
       };
+  }
 }

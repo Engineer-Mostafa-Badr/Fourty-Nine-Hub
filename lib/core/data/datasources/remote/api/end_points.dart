@@ -1573,7 +1573,6 @@ class EndPoints {
   static const getMostBooking = '/health/doctors';
   static const addCarModel = '/ride/cars/models';
   static const addCarBrand = '/ride/cars/brands';
-
   static const getDoctorList = '/health/doctors';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
