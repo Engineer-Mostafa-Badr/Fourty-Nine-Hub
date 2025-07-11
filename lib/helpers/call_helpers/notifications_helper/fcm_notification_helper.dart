@@ -16,6 +16,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../../features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 abstract class FcmNotificationHelper {
   Future<void> setup(BuildContext context);
@@ -205,18 +206,27 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
     final overlayContext = navigatorKey.currentContext!;
 
     if(context!=null){
-      showTopSnackBar(
-        Overlay.of(context),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed(message.data['path'] ?? '');
-          },
-          child: CustomSnackBar.error(
-            message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
-            maxLines: 3,
-          ),
-        ),
+      Fluttertoast.showToast(
+        msg: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
+      // showTopSnackBar(
+      //   Overlay.of(context),
+      //   GestureDetector(
+      //     onTap: () {
+      //       Navigator.of(context).pushNamed(message.data['path'] ?? '');
+      //     },
+      //     child: CustomSnackBar.error(
+      //       message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+      //       maxLines: 3,
+      //     ),
+      //   ),
+      // );
     }else{
       showTopSnackBar(
         Overlay.of(overlayContext),
