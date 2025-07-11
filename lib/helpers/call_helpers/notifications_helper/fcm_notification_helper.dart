@@ -97,6 +97,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 
   @override
   Future<void> setup(BuildContext context) async {
+    log('+++++ FCM setup Message +++++++++');
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,

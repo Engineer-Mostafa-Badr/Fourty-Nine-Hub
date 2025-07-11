@@ -100,13 +100,15 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     // }
   }
 
-  initNotification(BuildContext context){
-    print("contextinitNotification");
-    serviceLocator<FcmNotificationHelper>().setup(context);
+  initNotification(){
+    log("contextinitNotification");
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    serviceLocator<FcmNotificationHelper>().setup(currentContext);
   }
 
   Future<void> loadData(BuildContext context) async {
     print("loadData");
+    initNotification();
 
     emit(state.copyWith(status: StateStatus.loading));
     // await UserCubit.to.getUser();
