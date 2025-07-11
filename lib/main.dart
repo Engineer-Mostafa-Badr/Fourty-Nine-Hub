@@ -93,7 +93,6 @@ void main() async {
 
   await CacheServiceImpl.init();
   await DI.execute();
-  serviceLocator<FcmNotificationHelper>().setup();
   serviceLocator<FcmNotificationHelper>().getFcmToken();
   await Geolocator.checkPermission().then(
     (value) {
@@ -197,7 +196,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
             create: (context) =>
-                serviceLocator<MainCategoriesCubit>()..getWallet()),
+                serviceLocator<MainCategoriesCubit>()..initNotification(context)..getWallet()),
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(), //..getUser(),
         ),

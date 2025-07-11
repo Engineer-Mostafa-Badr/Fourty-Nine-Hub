@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart';
@@ -34,8 +33,10 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
+import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -97,6 +98,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       ));
     });
     // }
+  }
+
+  initNotification(BuildContext context){
+    print("contextinitNotification");
+    serviceLocator<FcmNotificationHelper>().setup(context);
   }
 
   Future<void> loadData(BuildContext context) async {
@@ -217,8 +223,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   Future<void> getQuestion() async {
     final response = await _getQuestionUseCase(const NoParams());
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (failure) {
+          emit(state.copyWith(failure: failure, status: StateStatus.error));
+        },
         (data) {
       emit(state.copyWith(question: data, status: StateStatus.success));
     });

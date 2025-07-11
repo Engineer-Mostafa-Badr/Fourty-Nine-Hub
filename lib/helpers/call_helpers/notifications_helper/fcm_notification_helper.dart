@@ -11,9 +11,14 @@ import '../../../service_locator/service_locator.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import '../../../firebase_options.dart';
+import 'package:fourtyninehub/main.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import '../../../features/notifications/presentation/widgets/notification_snackbar.dart';
+import 'package:flutter/material.dart';
 
 abstract class FcmNotificationHelper {
-  Future<void> setup();
+  Future<void> setup(BuildContext context);
 
   Future<Either<Exception, String>> getFcmToken();
   Future<String> getFcmUserToken();
@@ -91,7 +96,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   }
 
   @override
-  Future<void> setup() async {
+  Future<void> setup(BuildContext context) async {
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
@@ -104,7 +109,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       log('+++++ FCM Message +++++++++ ${message.data}');
-      await _handleNotification(message);
+      await _handleNotification(message,context:context);
     });
 
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
@@ -188,11 +193,44 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
   await _handleNotification(message);
 }
 
-Future<void> _handleNotification(RemoteMessage message) async {
+Future<void> _handleNotification(RemoteMessage message, {BuildContext? context}) async {
   log('++++++++++++++notification received++ ${message.data}');
 
   try {
+    // Using Future.delayed to ensure the app is more stable when accessing Provider
     await Future.delayed(const Duration(milliseconds: 300));
+
+    //TODO Get Context to show SnackBar
+    final overlayContext = navigatorKey.currentContext!;
+
+    if(context!=null){
+      showTopSnackBar(
+        Overlay.of(context),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed(message.data['path'] ?? '');
+          },
+          child: CustomSnackBar.error(
+            message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+            maxLines: 3,
+          ),
+        ),
+      );
+    }else{
+      showTopSnackBar(
+        Overlay.of(overlayContext),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(overlayContext).pushNamed(message.data['path'] ?? '');
+          },
+          child: CustomSnackBar.error(
+            message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+            maxLines: 3,
+          ),
+        ),
+      );
+    }
+
     if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
