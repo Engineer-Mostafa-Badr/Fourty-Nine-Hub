@@ -119,7 +119,7 @@ class _AnimatedCardsListViewState extends State<AnimatedCardsListView> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.3, // or any fixed height
       child: ListView.separated(
-        separatorBuilder: (context,i)=>SizedBox(height: 5.h,),
+        separatorBuilder: (context,i)=>SizedBox(height: 8.h,),
         controller: _scrollController,
         // physics:const NeverScrollableScrollPhysics(),
         itemCount: widget.cardsList.length,

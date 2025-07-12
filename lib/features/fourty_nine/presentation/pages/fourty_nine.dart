@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
@@ -405,7 +406,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                             },
                             child: MainCategoryBanner(
                               category: state.data![index],
-                                imageHeight:MediaQuery.sizeOf(context).height * 0.15,
+                                imageHeight:MediaQuery.sizeOf(context).height * 0.10,
                               onFavorite: () async {
                                 var result = await controller
                                     .toggleFavoriteMedicalService(

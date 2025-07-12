@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 import '../call_helper/call_with_notification_helper.dart';
@@ -209,42 +213,48 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
     final overlayContext = navigatorKey.currentContext!;
 
     if(context!=null){
-      // Fluttertoast.showToast(
-      //   msg: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.BOTTOM,
-      //   timeInSecForIosWeb: 1,
-      //   backgroundColor: Colors.black54,
-      //   textColor: Colors.white,
-      //   fontSize: 16.0,
-      // );
+      AudioPlayer player = AudioPlayer();
+      player.play(AssetSource("audio/notification.mp3"));
       toastification.show(
-        // context: context, // optional if you use ToastificationWrapper
-          title: Text("${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}"),
-          autoCloseDuration: const Duration(seconds: 5),
-          callbacks: ToastificationCallbacks(
-            onTap: (toastItem) {
-              print('Toast ${toastItem.id} tapped');
-              // Navigator.of(context).pushNamed(message.data['path'] ?? '');
-              context.pushNamed(message.data['path'] ?? '');
-            },
-            // onCloseButtonTap: (toastItem) => print('Toast ${toastItem.id} close button tapped'),
-            // onAutoCompleteCompleted: (toastItem) => print('Toast ${toastItem.id} auto complete completed'),
-            // onDismissed: (toastItem) => print('Toast ${toastItem.id} dismissed'),
-          )
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(message.notification?.title ?? 'Notification Title',
+              style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w700,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(message.notification?.body ??'Notification body',
+              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w400
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+        autoCloseDuration: const Duration(seconds: 5),
+        progressBarTheme: ProgressIndicatorThemeData(
+            color: AppColors.SECONDARY_COLOR
+        ),
+        primaryColor: AppColors.SECONDARY_COLOR,
+        backgroundColor: Theme.of(context).dialogBackgroundColor,
+        callbacks: ToastificationCallbacks(
+          onTap: (toastItem) {
+            print('Toast ${toastItem.id} tapped');
+            context.pushNamed(message.data['path'] ?? '');
+          },
+          // onCloseButtonTap: (toastItem) => print('Toast ${toastItem.id} close button tapped'),
+          // onAutoCompleteCompleted: (toastItem) => print('Toast ${toastItem.id} auto complete completed'),
+          // onDismissed: (toastItem) => print('Toast ${toastItem.id} dismissed'),
+        ),
+        showProgressBar: true,
+
       );
-      // showTopSnackBar(
-      //   Overlay.of(context),
-      //   GestureDetector(
-      //     onTap: () {
-      //       Navigator.of(context).pushNamed(message.data['path'] ?? '');
-      //     },
-      //     child: CustomSnackBar.error(
-      //       message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
-      //       maxLines: 3,
-      //     ),
-      //   ),
-      // );
     }else{
       showTopSnackBar(
         Overlay.of(overlayContext),
