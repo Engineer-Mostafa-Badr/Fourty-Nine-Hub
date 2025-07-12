@@ -69,7 +69,6 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
     return await shippingRemoteDataSource.getDriverRunningRoute();
   }
 
-
   @override
   Future<Either<Failure, List<MyBookingEntity>>> getExpiredBooking(PaginationParams params) async {
     return await shippingRemoteDataSource.getExpiredBooking(params);
@@ -85,7 +84,6 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   Future<Either<Failure, bool>> acceptRoute(String id) async {
     return await shippingRemoteDataSource.acceptRoute(id);
   }
-
 
   @override
   Future<Either<Failure, bool>> pickClient(PickClientParams params) async {
