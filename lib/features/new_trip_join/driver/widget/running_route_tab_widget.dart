@@ -53,11 +53,12 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
             model: cubit.runningRoute,
             cancelButton: false,
           ),
-          ...List.generate(cubit.runningRoute?.clients?.length??0, (i){
-            print("cubit.runningRoute?.clients?.length ${cubit.runningRoute?.clients?.length}");
-            BookingClientEntity client = (cubit.runningRoute?.clients??[])[i];
-            return RunningTripClientWidget(client: client,index: i,);
-          }),
+          if(cubit.runningRoute!=null&&(cubit.runningRoute?.clients?.isNotEmpty??false))RunningTripClientWidget(client: cubit.runningRoute!.clients![0],index: 0,),
+          // ...List.generate(cubit.runningRoute?.clients?.length??0, (i){
+          //   print("cubit.runningRoute?.clients?.length ${cubit.runningRoute?.clients?.length}");
+          //   BookingClientEntity client = (cubit.runningRoute?.clients??[])[i];
+          //   return RunningTripClientWidget(client: client,index: i,);
+          // }),
         ],
       );
 

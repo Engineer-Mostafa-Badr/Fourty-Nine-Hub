@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
-class RunningTripClientWidget extends StatelessWidget {
+class RunningTripClientWidget extends StatefulWidget {
   const RunningTripClientWidget({super.key, required this.client, this.index});
   final BookingClientEntity client;
   final int? index;
+
+  @override
+  State<RunningTripClientWidget> createState() => _RunningTripClientWidgetState();
+}
+
+class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
+
+  final TextEditingController otpController = TextEditingController();
+
+  bool isGoingToClient = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,7 +42,7 @@ class RunningTripClientWidget extends StatelessWidget {
             const SizedBox(width: 4),
             Expanded(
               child: Text(
-                client.location.address,
+                widget.client.location.address,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
@@ -49,20 +62,30 @@ class RunningTripClientWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Container(
-                width: double.infinity,
-                height: 45,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.PRIMARY_COLOR,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  context.isArabic ? "الذهاب الي العميل ${index==0?'الاول':index==1?"الثاني":"الثالث"}" : "Go To ${index==0?'First':index==1?"Second":"Third"} Client",
-                  style: const TextStyle(
-                    fontSize: FontSize.s16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.whiteColor,
+              child: GestureDetector(
+                onTap: (){
+                  if(!isGoingToClient){
+                    setState(() {
+                      isGoingToClient=true;
+                    });
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: isGoingToClient?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    isGoingToClient?context.isArabic?"بدء":"Start":
+                    context.isArabic ? "الذهاب الي العميل ${widget.index==0?'الاول':widget.index==1?"الثاني":"الثالث"}" : "Go To ${widget.index==0?'First':widget.index==1?"Second":"Third"} Client",
+                    style: const TextStyle(
+                      fontSize: FontSize.s16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.whiteColor,
+                    ),
                   ),
                 ),
               ),
@@ -92,7 +115,48 @@ class RunningTripClientWidget extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 15.h,
+          height: (!isGoingToClient?15:25).h,
+        ),
+        if(isGoingToClient)PinCodeTextField(
+          // onTap: () => _showOtpBottomSheet(context),
+          // readOnly: true,
+          appContext: context,
+          length: 6,
+          controller: otpController,
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(8),
+            fieldHeight: 50,
+            fieldWidth: 40,
+            activeColor: context.isDarkMode
+                ? Colors.white
+                : AppColors.PRIMARY_COLOR,
+            inactiveColor: Colors.grey,
+            selectedColor: context.isDarkMode
+                ? Colors.white
+                : AppColors.PRIMARY_COLOR,
+          ),
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(6),
+          ],
+          animationDuration:
+          const Duration(milliseconds: 300),
+          backgroundColor: Colors.transparent,
+          enableActiveFill: false,
+          enablePinAutofill: false,
+          onCompleted: (value) {
+            // widget.onPressed(otpController.text);
+          },
+          onChanged: (value) {},
+          validator: (value) {
+            if (value == null || value.length < 6) {
+              return context.isArabic?'يرجى إدخال رمز التحقيق المكون من 6 أرقام':'Please enter a 6-digit code';
+            }
+            return null;
+          },
         ),
         Container(
           width: double.infinity,
