@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geo;
@@ -55,10 +58,87 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   @override
   void initState() {
     super.initState();
-    _setInitialPosition();
+    // fetchUserLocation();
+  }
+
+
+  Future<void> fetchUserLocation() async {
+
+    try {
+      Position position = await _determinePosition();
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      String address = placemarks.isNotEmpty
+          ? "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.country}"
+          : "Unknown current Location";
+
+      GetLocationFromAddressEntity currentLocation =
+      GetLocationFromAddressEntity(
+        lat: position.latitude,
+        lng: position.longitude,
+        address: address,
+      );
+
+      _moveToLocation(position.latitude, position.longitude);
+      _onMapTap(LatLng(position.latitude, position.longitude));
+    } catch (e) {
+      log('_fetchUserLocation ${e.toString()}');
+    }
+  }
+
+  Future<Position> _determinePosition() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    print(" permanently denied$permission");
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Position(
+        longitude: 31.235457277186548,
+        latitude: 30.047873322617807,
+        timestamp: DateTime.now(),
+        accuracy: 0.2,
+        altitude: 0.5,
+        altitudeAccuracy: 0.6,
+        heading: 0.2,
+        headingAccuracy: 0.1,
+        speed: 20,
+        speedAccuracy: 10,
+      );
+    }
+    if (permission == LocationPermission.denied) {
+      print("objectLocation permissions are permanently denied");
+      // permission = await Geolocator.requestPermission();
+      // if (permission == LocationPermission.deniedForever||permission == LocationPermission.whileInUse) {
+      print("objectLocation permissions are permanently denied");
+      return Position(
+        longitude: 31.235457277186548,
+        latitude: 30.047873322617807,
+        timestamp: DateTime.now(),
+        accuracy: 0.2,
+        altitude: 0.5,
+        altitudeAccuracy: 0.6,
+        heading: 0.2,
+        headingAccuracy: 0.1,
+        speed: 20,
+        speedAccuracy: 10,
+      );
+    }
+    // }
+    return await Geolocator.getCurrentPosition();
   }
 
   Future<void> _setInitialPosition() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        // Show a message to the user
+        setState(() {
+          _selectedLatLng = _initialPosition;
+        });
+        return;
+      }
+    }
     try {
       Position pos = await Geolocator.getCurrentPosition();
       setState(() {
@@ -66,7 +146,6 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
         _selectedLatLng = _initialPosition;
       });
     } catch (_) {
-      // fallback to default
       _selectedLatLng = _initialPosition;
     }
   }
@@ -124,6 +203,8 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     await _controller.setMapStyle(isDark ? darkStyle : lightStyle);
+
+    fetchUserLocation();
   }
 
 

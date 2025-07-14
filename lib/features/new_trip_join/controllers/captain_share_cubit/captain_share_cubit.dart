@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_l
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_update_route_use_case.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -74,6 +77,72 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     listenToCancelRoute(context);
     listenToAcceptedRoute();
     listenToAcceptedRoute();
+  }
+
+  Future<void> fetchUserLocation() async {
+    emit(state.copyWith(status: CaptainShareStates.loading));
+
+    try {
+      Position position = await _determinePosition();
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      String address = placemarks.isNotEmpty
+          ? "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.country}"
+          : "Unknown current Location";
+
+      GetLocationFromAddressEntity currentLocation =
+      GetLocationFromAddressEntity(
+        lat: position.latitude,
+        lng: position.longitude,
+        address: address,
+      );
+
+      emit(state.copyWith(
+          status: CaptainShareStates.success, currentLocation: currentLocation));
+    } catch (e) {
+      log('_fetchUserLocation ${e.toString()}');
+    }
+  }
+
+  Future<Position> _determinePosition() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    print(" permanently denied$permission");
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Position(
+        longitude: 31.235457277186548,
+        latitude: 30.047873322617807,
+        timestamp: DateTime.now(),
+        accuracy: 0.2,
+        altitude: 0.5,
+        altitudeAccuracy: 0.6,
+        heading: 0.2,
+        headingAccuracy: 0.1,
+        speed: 20,
+        speedAccuracy: 10,
+      );
+    }
+    if (permission == LocationPermission.denied) {
+      print("objectLocation permissions are permanently denied");
+      // permission = await Geolocator.requestPermission();
+      // if (permission == LocationPermission.deniedForever||permission == LocationPermission.whileInUse) {
+      print("objectLocation permissions are permanently denied");
+      return Position(
+        longitude: 31.235457277186548,
+        latitude: 30.047873322617807,
+        timestamp: DateTime.now(),
+        accuracy: 0.2,
+        altitude: 0.5,
+        altitudeAccuracy: 0.6,
+        heading: 0.2,
+        headingAccuracy: 0.1,
+        speed: 20,
+        speedAccuracy: 10,
+      );
+    }
+    // }
+    return await Geolocator.getCurrentPosition();
   }
 
   void listenToCancelRoute(BuildContext context) {
@@ -319,14 +388,16 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     emit(state.copyWith(status: CaptainShareStates.success));
   }
 
-  void updateToLocation(
+  updateToLocation(
       {required double lat, required double lng, required String address}) {
     GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
       lat: lat,
       lng: lng,
       address: address,
     );
-
+    print("toLocation.lat ${toLocation.lat}");
+    print("toLocation.lat ${toLocation.lng}");
+    print("toLocation.lat ${toLocation.address}");
     emit(state.copyWith(status: CaptainShareStates.success, toLocation: toLocation));
   }
 

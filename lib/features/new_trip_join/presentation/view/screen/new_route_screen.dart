@@ -61,6 +61,11 @@ class _NewRouteBodyState extends State<NewRouteBody> {
   bool isLadyDriver = false;
   final MapController _mapController = MapController();
 
+  initState() {
+    super.initState();
+    context.read<CaptainShareCubit>().fetchUserLocation();
+  }
+
   // List<double>? currentLocation;
   // List<double>? toLocation;
 
@@ -103,14 +108,14 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                                 lng: pickedData.longitude,
                                 address: pickedData.address,
                               );
-                              if (state.currentLocation == null || state.toLocation == null) {
+                              if (state.toLocation == null) {
                                 context.pop();
                                 return;
                               }
                               await cubit.createOffer(context: context,params: CreatePricePerSeatParams(
                                   fromLocation: [
-                                    state.currentLocation!.lat!,
-                                    state.currentLocation!.lng!
+                                    pickedData.latitude,
+                                    pickedData.longitude
                                   ],
                                   toLocation: [
                                     state.toLocation!.lat!,
@@ -143,12 +148,13 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                           extra: RideGoogleMapSearchAndPickParams(
                             minDistanceReferencePoint: state.currentLocation == null ? null : LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
                             onPicked: (pickedData) async {
-                              cubit.updateToLocation(
+                              await cubit.updateToLocation(
                                 lat: pickedData.latitude,
                                 lng: pickedData.longitude,
                                 address: pickedData.address,
                               );
-                              if (state.currentLocation == null || state.toLocation == null) {
+                              print("state.currentLocation ${state.currentLocation} state.toLocation ${state.toLocation}");
+                              if (state.currentLocation == null) {
                                 context.pop();
                                 return;
                               }
@@ -158,8 +164,8 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                                     state.currentLocation!.lng!
                                   ],
                                   toLocation: [
-                                    state.toLocation!.lat!,
-                                    state.toLocation!.lng!
+                                    pickedData.latitude,
+                                    pickedData.longitude
                                   ],
                                   isComfort: isComfort,
                                   isLadiesPassenger: isLady,
