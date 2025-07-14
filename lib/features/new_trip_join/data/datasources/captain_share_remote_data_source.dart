@@ -28,6 +28,7 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, List<MyBookingEntity>>> getMyBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getAvailableBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params);
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverPastBooking(PaginationParams params);
   Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params);
   Future<Either<Failure, RunningRouteEntity>> getRunningRoute();
   Future<Either<Failure, List<MyBookingEntity>>> getExpiredBooking(PaginationParams params);
@@ -141,6 +142,30 @@ class CaptainShareRemoteDataSourceImplementation
             (response) {
               log('response[''][''] ${response['data']['availableRoutes']}');
               final list = (response['data']['availableRoutes'] as List).map((e) {
+                log('response[''][''] $e');
+                return MyBookingModel.fromJson(e as Map<String, dynamic>);
+              }).toList();
+          return Right(list);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverPastBooking(PaginationParams params) async {
+    try {
+      final result = await _apiConsumer.get(
+        EndPoints.driverPastBooking,
+        queryParameters: params.toJson(),
+      );
+
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+              log('response[''][''] ${response['data']['pastRoutes']}');
+              final list = (response['data']['pastRoutes'] as List).map((e) {
                 log('response[''][''] $e');
                 return MyBookingModel.fromJson(e as Map<String, dynamic>);
               }).toList();

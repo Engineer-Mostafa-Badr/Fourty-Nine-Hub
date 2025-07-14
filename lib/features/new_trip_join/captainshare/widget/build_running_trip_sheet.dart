@@ -1,6 +1,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
@@ -20,6 +21,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class BuildRunningTripSheet extends StatefulWidget {
   const BuildRunningTripSheet({super.key,required this.model});
@@ -30,6 +32,14 @@ class BuildRunningTripSheet extends StatefulWidget {
 }
 
 class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
+
+  final TextEditingController otpController = TextEditingController();
+
+  @override
+  void initState() {
+    otpController.text = widget.model.otp.toString();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +123,55 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  PinCodeTextField(
+                    // onTap: () => _showOtpBottomSheet(context),
+                    // readOnly: true,
+                    appContext: context,
+                    length: 6,
+                    controller: otpController,
+                    enabled: false,
+                    autoDismissKeyboard: true,
+                    autoDisposeControllers: true,
+                    autoUnfocus: true,
+
+                    pinTheme: PinTheme(
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(8),
+                      fieldHeight: 50,
+                      fieldWidth: 40,
+                      activeColor: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                      inactiveColor: Colors.grey,
+                      selectedColor: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(6),
+                    ],
+                    animationDuration:
+                    const Duration(milliseconds: 300),
+                    backgroundColor: Colors.transparent,
+                    enableActiveFill: false,
+                    enablePinAutofill: false,
+                    onCompleted: (value) {
+                      // widget.onPressed(otpController.text);
+                    },
+                    onChanged: (value) {},
+                    validator: (value) {
+                      if (value == null || value.length < 6) {
+                        return context.isArabic?'يرجى إدخال رمز التحقيق المكون من 6 أرقام':'Please enter a 6-digit code';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 20.h,

@@ -8,9 +8,10 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class RunningTripClientWidget extends StatefulWidget {
-  const RunningTripClientWidget({super.key, required this.client, this.index});
+  const RunningTripClientWidget({super.key, required this.client, this.index, required this.onPickClient});
   final BookingClientEntity client;
   final int? index;
+  final Function(String otp) onPickClient;
 
   @override
   State<RunningTripClientWidget> createState() => _RunningTripClientWidgetState();
@@ -68,6 +69,12 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
                     setState(() {
                       isGoingToClient=true;
                     });
+                  }else{
+                    if(otpController.text.isNotEmpty){
+                      if(otpController.text.length==6){
+                        widget.onPickClient(otpController.text);
+                      }
+                    }
                   }
                 },
                 child: Container(
@@ -148,7 +155,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
           enableActiveFill: false,
           enablePinAutofill: false,
           onCompleted: (value) {
-            // widget.onPressed(otpController.text);
+            widget.onPickClient(value);
           },
           onChanged: (value) {},
           validator: (value) {

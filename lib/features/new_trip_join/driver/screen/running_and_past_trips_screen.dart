@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/driver/widget/past_routes_tab_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_route_tab_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
@@ -258,7 +259,7 @@ class _TabBarContentRideModeWidgetState
             clientNumberEn: "Go to first client",
             clientNumberAr: "الذهاب للعميل الأول",
             content: tabContents[0],
-          ):state.tapIndex==1?RunningRouteTabWidget():Container(),)
+          ):state.tapIndex==1?RunningRouteTabWidget():PastRoutesTabWidget(content: [],),)
       ],
     );
   },

@@ -30,14 +30,14 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
   @override
   void initState() {
     super.initState();
-    context.read<CaptainShareDashboardCubit>().getRunningRoute(context);
+    // context.read<CaptainShareDashboardCubit>().getRunningRoute(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(builder: (context, state) {
       var cubit = context.read<CaptainShareDashboardCubit>();
-      if(state.isLoading){
+      if(cubit.isLoadingRunningTrip){
         return const Center(child: CircularProgressIndicator());
       }
       if(cubit.runningRoute==null){
@@ -53,7 +53,11 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
             model: cubit.runningRoute,
             cancelButton: false,
           ),
-          if(cubit.runningRoute!=null&&(cubit.runningRoute?.clients?.isNotEmpty??false))RunningTripClientWidget(client: cubit.runningRoute!.clients![0],index: 0,),
+          if(cubit.runningRoute!=null&&(cubit.runningRoute?.clients?.isNotEmpty??false))RunningTripClientWidget(client: cubit.runningRoute!.clients![0],index: 0,
+          onPickClient: (otp){
+            cubit.goToClient(routeId: cubit.runningRoute?.id??'', passengerId: cubit.runningRoute?.clients?[0].id??'', otp: otp, context: context);
+          },
+          ),
           // ...List.generate(cubit.runningRoute?.clients?.length??0, (i){
           //   print("cubit.runningRoute?.clients?.length ${cubit.runningRoute?.clients?.length}");
           //   BookingClientEntity client = (cubit.runningRoute?.clients??[])[i];

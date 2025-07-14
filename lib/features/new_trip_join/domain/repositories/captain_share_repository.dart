@@ -16,6 +16,7 @@ abstract class CaptainShareRepository {
   Future<Either<Failure, List<MyBookingEntity>>> getMyBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getAvailableBooking(PaginationParams params);
   Future<Either<Failure, List<MyBookingEntity>>> getDriverAvailableBooking(PaginationParams params);
+  Future<Either<Failure, List<MyBookingEntity>>> getDriverPastBooking(PaginationParams params);
   Future<Either<Failure, MyBookingEntity>> getDriverRunningRoute();
   Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params);
   Future<Either<Failure, RunningRouteEntity>> getRunningRoute();
