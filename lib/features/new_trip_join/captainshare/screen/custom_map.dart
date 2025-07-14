@@ -162,8 +162,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
             scrollGesturesEnabled: true,
             cameraTargetBounds: CameraTargetBounds(egyptBounds),
           ),
-
-
         ],
       ),
     );

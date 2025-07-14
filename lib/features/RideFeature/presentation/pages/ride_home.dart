@@ -47,6 +47,8 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/to
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+import 'dart:math' as math;
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -64,6 +66,7 @@ import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../new_trip_join/captainshare/screen/custom_map.dart';
 import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../domain/entities/get_location_from_address_entity.dart';
 import '../../domain/usecases/rating_driver_by_client.dart';
@@ -108,6 +111,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   @override
   void dispose() {
     _scrollController.dispose();
+    _googleMapController?.dispose();
     super.dispose();
   }
 
@@ -855,101 +859,446 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         });
   }
 
+  // Widget _buildTopMap(RideState state, BuildContext context) {
+  //   List<LatLng> routePoints = [];
+  //   if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
+  //     routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+  //   } else {
+  //     routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
+  //   }
+  //
+  //   if (state.currentLocation != null && state.rideExpectedPrice == null && state.requestedTrip == null) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _mapController.move(
+  //         LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+  //         12.0,
+  //       );
+  //     });
+  //   }
+  //
+  //   return SizedBox(
+  //     width: double.infinity,
+  //     height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
+  //     child: FlutterMap(
+  //       mapController: _mapController,
+  //       options: MapOptions(
+  //         initialCenter: LatLng(
+  //           state.currentLocation?.lat ?? 0.0,
+  //           state.currentLocation?.lng ?? 0.0,
+  //         ),
+  //         initialZoom: 12.0,
+  //       ),
+  //       children: [
+  //         TileLayer(
+  //           // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  //           // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  //           // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+  //           urlTemplate: context.isDarkMode
+  //               ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+  //               : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+  //           subdomains: const ['a', 'b', 'c'],
+  //           userAgentPackageName: 'com.example.app',
+  //         ),
+  //         MarkerLayer(
+  //           markers: [
+  //             if (state.currentLocation != null)
+  //               Marker(
+  //                 point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+  //                 width: 40,
+  //                 height: 40,
+  //                 child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
+  //               ),
+  //             if (state.toLocation != null)
+  //               Marker(
+  //                 point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
+  //                 width: 40,
+  //                 height: 40,
+  //                 child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
+  //               ),
+  //             if (state.wayPointOne != null)
+  //               Marker(
+  //                 point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
+  //                 width: 40,
+  //                 height: 40,
+  //                 child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+  //               ),
+  //             if (state.wayPointTwo != null)
+  //               Marker(
+  //                 point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
+  //                 width: 40,
+  //                 height: 40,
+  //                 child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+  //               ),
+  //           ],
+  //         ),
+  //         if (state.requestedTrip != null)
+  //           if (state.requestedTrip!.status == TripState.started.name)
+  //             BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+  //               return const CarMarkerOnClientSideWidget();
+  //             }),
+  //         if (routePoints.isNotEmpty)
+  //           PolylineLayer(
+  //             polylines: [
+  //               Polyline(
+  //                 points: routePoints,
+  //                 color: context.isDarkMode ? Colors.blue : Colors.black87,
+  //                 strokeWidth: 4.0,
+  //               ),
+  //             ],
+  //           ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+  //   return polyline.map((point) => LatLng(point[1], point[0])).toList();
+  // }
+
+
+
+  // المتغيرات المطلوبة لـ Google Maps
+  gmap.GoogleMapController? _googleMapController;
+  Set<gmap.Marker> _markers = {};
+  Set<gmap.Polyline> _polylines = {};
+
+// تحديث الـ _buildTopMap method
   Widget _buildTopMap(RideState state, BuildContext context) {
-    List<LatLng> routePoints = [];
-    if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
+    List<gmap.LatLng> routePoints = [];
+    if (state.requestedTrip == null ||
+        state.requestedTrip!.status == TripState.canceled.name ||
+        state.requestedTrip!.status == TripState.completed.name) {
       routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
     } else {
       routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
     }
 
-    if (state.currentLocation != null && state.rideExpectedPrice == null && state.requestedTrip == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mapController.move(
-          LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-          12.0,
-        );
-      });
+    // إعداد الـ Markers
+    _markers.clear();
+
+    if (state.currentLocation != null) {
+      _markers.add(
+        gmap.Marker(
+          markerId: const gmap.MarkerId('current_location'),
+          position: gmap.LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+          icon: gmap.BitmapDescriptor.defaultMarkerWithHue(gmap.BitmapDescriptor.hueGreen),
+          infoWindow: const gmap.InfoWindow(title: 'Current Location'),
+        ),
+      );
     }
+
+    if (state.toLocation != null) {
+      _markers.add(
+        gmap.Marker(
+          markerId: const gmap.MarkerId('to_location'),
+          position: gmap.LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
+          icon: gmap.BitmapDescriptor.defaultMarkerWithHue(gmap.BitmapDescriptor.hueBlue),
+          infoWindow: const gmap.InfoWindow(title: 'Destination'),
+        ),
+      );
+    }
+
+    if (state.wayPointOne != null) {
+      _markers.add(
+        gmap.Marker(
+          markerId: const gmap.MarkerId('waypoint_one'),
+          position: gmap.LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
+          icon: gmap.BitmapDescriptor.defaultMarkerWithHue(gmap.BitmapDescriptor.hueRed),
+          infoWindow: const gmap.InfoWindow(title: 'Waypoint 1'),
+        ),
+      );
+    }
+
+    if (state.wayPointTwo != null) {
+      _markers.add(
+        gmap.Marker(
+          markerId: const gmap.MarkerId('waypoint_two'),
+          position: gmap.LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
+          icon: gmap.BitmapDescriptor.defaultMarkerWithHue(gmap.BitmapDescriptor.hueRed),
+          infoWindow: const gmap.InfoWindow(title: 'Waypoint 2'),
+        ),
+      );
+    }
+
+    // إعداد الـ Polylines
+    _polylines.clear();
+    if (routePoints.isNotEmpty) {
+      _polylines.add(
+        gmap.Polyline(
+          polylineId: const gmap.PolylineId('route'),
+          points: routePoints,
+          color: context.isDarkMode ? Colors.blue : Colors.black87,
+          width: 4,
+        ),
+      );
+    }
+
+    // إحداثيات القاهرة كـ fallback
+    final fallbackLocation = gmap.LatLng(30.0444, 31.2357);
+    final currentLocation = state.currentLocation != null
+        ? gmap.LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!)
+        : fallbackLocation;
 
     return SizedBox(
       width: double.infinity,
-      height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
-      child: FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          initialCenter: LatLng(
-            state.currentLocation?.lat ?? 0.0,
-            state.currentLocation?.lng ?? 0.0,
-          ),
-          initialZoom: 12.0,
+      height: state.requestedTrip != null
+          ? MediaQuery.of(context).size.height
+          : MediaQuery.of(context).size.height * 0.5,
+      child: gmap.GoogleMap(
+        mapType: gmap.MapType.normal,
+        initialCameraPosition: gmap.CameraPosition(
+          target: currentLocation,
+          zoom: 12.0,
         ),
-        children: [
-          TileLayer(
-            // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-            urlTemplate: context.isDarkMode
-                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
-            subdomains: const ['a', 'b', 'c'],
-            userAgentPackageName: 'com.example.app',
-          ),
-          MarkerLayer(
-            markers: [
-              if (state.currentLocation != null)
-                Marker(
-                  point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
-                ),
-              if (state.toLocation != null)
-                Marker(
-                  point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
-                ),
-              if (state.wayPointOne != null)
-                Marker(
-                  point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-                ),
-              if (state.wayPointTwo != null)
-                Marker(
-                  point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-                ),
-            ],
-          ),
-          if (state.requestedTrip != null)
-            if (state.requestedTrip!.status == TripState.started.name)
-              BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-                return const CarMarkerOnClientSideWidget();
-              }),
-          if (routePoints.isNotEmpty)
-            PolylineLayer(
-              polylines: [
-                Polyline(
-                  points: routePoints,
-                  color: context.isDarkMode ? Colors.blue : Colors.black87,
-                  strokeWidth: 4.0,
-                ),
-              ],
-            ),
-        ],
+        onMapCreated: (gmap.GoogleMapController controller) {
+          _googleMapController = controller;
+          print('Google Map Created Successfully');
+
+          // تطبيق الـ Dark Mode إذا كان مفعل
+          if (context.isDarkMode) {
+            _setMapStyle();
+          }
+        },
+        markers: _markers,
+        polylines: _polylines,
+        myLocationEnabled: false, // تعطيل مؤقت لتجنب مشاكل الـ permission
+        myLocationButtonEnabled: false,
+        zoomControlsEnabled: true,
+        compassEnabled: true,
+        trafficEnabled: false,
+        buildingsEnabled: true,
+        indoorViewEnabled: true,
+        liteModeEnabled: false, // تأكد من أن الـ lite mode معطل
       ),
     );
   }
 
-  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => LatLng(point[1], point[0])).toList();
+// تحديث الـ _convertPolylineToLatLng method
+  List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
+
+// تحديث الـ _buildTopImage method
+//   Widget _buildTopImage() {
+//     return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+//       return Builder(builder: (context) {
+//         return Stack(
+//           children: [
+//             _buildTopMap(state, context),
+//           ],
+//         );
+//       });
+//     });
+//   }
+
+// إضافة method لتطبيق الـ Dark Mode style
+  void _setMapStyle() async {
+    String style = '''
+  [
+    {
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#242f3e"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#746855"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#242f3e"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.locality",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#d59563"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#d59563"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#263c3f"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#6b9a76"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#38414e"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#212a37"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#9ca5b3"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#746855"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#1f2835"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#f3d19c"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#2f3948"
+        }
+      ]
+    },
+    {
+      "featureType": "transit.station",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#d59563"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#17263c"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#515c6d"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#17263c"
+        }
+      ]
+    }
+  ]
+  ''';
+
+    _googleMapController?.setMapStyle(style);
+  }
+
+// إضافة method لتحريك الكاميرا
+  void _moveCameraToLocation(gmap.LatLng location) {
+    _googleMapController?.animateCamera(
+      gmap.CameraUpdate.newCameraPosition(
+        gmap.CameraPosition(
+          target: location,
+          zoom: 12.0,
+        ),
+      ),
+    );
+  }
+
+// إضافة method لتحريك الكاميرا لعرض جميع النقاط
+  void _moveCameraToFitAllMarkers() {
+    if (_markers.isNotEmpty) {
+      double minLat = _markers.first.position.latitude;
+      double maxLat = _markers.first.position.latitude;
+      double minLng = _markers.first.position.longitude;
+      double maxLng = _markers.first.position.longitude;
+
+      for (gmap.Marker marker in _markers) {
+        minLat = math.min(minLat, marker.position.latitude);
+        maxLat = math.max(maxLat, marker.position.latitude);
+        minLng = math.min(minLng, marker.position.longitude);
+        maxLng = math.max(maxLng, marker.position.longitude);
+      }
+
+      _googleMapController?.animateCamera(
+        gmap.CameraUpdate.newLatLngBounds(
+          gmap.LatLngBounds(
+            southwest: gmap.LatLng(minLat, minLng),
+            northeast: gmap.LatLng(maxLat, maxLng),
+          ),
+          100.0, // padding
+        ),
+      );
+    }
+  }
+
 
   Widget _buttonsWidget({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
     return ListView(
