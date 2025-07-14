@@ -88,6 +88,7 @@ class _MyAdsViewState extends State<MyAdsView> {
           ),
         );
       }
+
       return OlxPaginationWidget(
         itemsPerPage: 2,
         loadPage: (page) =>
