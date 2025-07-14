@@ -54,6 +54,7 @@
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:allowBackup="true" android:keepScreenOn="true"
+        android:hardwareAccelerated="true"
         >
         <!--  Add this inside the <application> tag in AndroidManifest.xml  -->
         <service android:name=".CallForegroundService" android:enabled="true" android:exported="false" android:foregroundServiceType="microphone"/>

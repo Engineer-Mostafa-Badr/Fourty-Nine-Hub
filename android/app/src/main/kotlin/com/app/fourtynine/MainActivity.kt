@@ -7,7 +7,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 import android.os.Bundle
 import im.zego.zego_express_engine.ZegoExpressEnginePlugin
 
-class MainActivity: FlutterActivity() {
+class MainActivity: FlutterFragmentActivity() {
     private var deepArPlugin: Any? = null
     
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

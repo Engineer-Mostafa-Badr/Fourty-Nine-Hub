@@ -103,9 +103,6 @@ class PostBodyCreatePostInstagramGridView extends StatelessWidget {
                       ),
                   ],
                 ),
-
-
-
                 //     ImageFromInternet(
                 //   image: galleryPost[index].path,
                 //   fromFile: true,

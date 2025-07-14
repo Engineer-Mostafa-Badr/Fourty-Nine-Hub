@@ -369,7 +369,7 @@ class RideCubit extends Cubit<RideState> {
       });
 
       // trip ended socket event
-      SharedWebSocket.socket!.on("RIDE:DRIVER_COMPLETED_TRIP", (data) {
+      SharedWebSocket.socket!.on("RIDE:DRIVER_COMPLETED_TRIP", (data) async {
         CliLogger.info("RIDE:DRIVER_COMPLETED_TRIP:  $data");
         if (state.requestedTrip != null) {
           state.requestedTrip!.status = TripState.ratingSheet.name;
@@ -379,6 +379,13 @@ class RideCubit extends Cubit<RideState> {
           print(
               "RIDE:RIDE:DRIVER_COMPLETED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
         }
+        state.rideExpectedPrice = null;
+        state.requestedTrip = null;
+        state.currentLocation = null;
+        state.toLocation = null;
+        state.wayPointOne = null;
+        state.wayPointTwo = null;
+        await _fetchUserLocation();
 
         emit(state.copyWith(status: RideStates.success, driverLocation: null, previousDriverLocation: null));
         // RIDE:DRIVER_COMPLETED_TRIP:  {driverCompletedTrip: true}
@@ -473,9 +480,14 @@ class RideCubit extends Cubit<RideState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (isCanceled) {
+      (isCanceled) async {
         state.rideExpectedPrice = null;
         state.requestedTrip = null;
+        state.currentLocation = null;
+        state.toLocation = null;
+        state.wayPointOne = null;
+        state.wayPointTwo = null;
+        await _fetchUserLocation();
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: state.requestedTrip));
       },
@@ -1413,10 +1425,15 @@ class RideCubit extends Cubit<RideState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (isCanceled) {
+      (isCanceled) async {
         if (isCanceled) {
           state.rideExpectedPrice = null;
           state.requestedTrip = null;
+          state.currentLocation = null;
+          state.toLocation = null;
+          state.wayPointOne = null;
+          state.wayPointTwo = null;
+          await _fetchUserLocation();
         }
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: state.requestedTrip));
