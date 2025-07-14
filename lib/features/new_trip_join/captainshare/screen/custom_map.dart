@@ -8,6 +8,7 @@ class CustomGoogleMap extends StatefulWidget {
   final LatLng? targetLocation;
   final List<LatLng> clientLocations;
   final List<LatLng> polylinePoints;
+  final bool enableScrolling; // Add this parameter
 
   const CustomGoogleMap({
     super.key,
@@ -15,6 +16,7 @@ class CustomGoogleMap extends StatefulWidget {
     required this.targetLocation,
     this.clientLocations = const [],
     this.polylinePoints = const [],
+    this.enableScrolling = true, // Default to true for backwards compatibility
   });
 
   @override
@@ -142,28 +144,30 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   Widget build(BuildContext context) {
     print("object widget.startLocation != null ${widget.startLocation}");
     print("object widget.targetLocation != null ${widget.targetLocation}");
+
+    Widget mapWidget = GoogleMap(
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+        target: _getInitialCenter(),
+        zoom: 12.0,
+      ),
+      markers: _markers,
+      polylines: _polylines,
+      myLocationEnabled: false,
+      myLocationButtonEnabled: false,
+      zoomControlsEnabled: false,
+      mapToolbarEnabled: false,
+      scrollGesturesEnabled: widget.enableScrolling,
+      zoomGesturesEnabled: widget.enableScrolling,
+      tiltGesturesEnabled: widget.enableScrolling,
+      rotateGesturesEnabled: widget.enableScrolling,
+      cameraTargetBounds: CameraTargetBounds(egyptBounds),
+    );
+
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
-      child: Stack(
-        children: [
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _getInitialCenter(),
-              zoom: 12.0,
-            ),
-            markers: _markers,
-            polylines: _polylines,
-            myLocationEnabled: false,
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: false,
-            mapToolbarEnabled: false,
-            scrollGesturesEnabled: true,
-            cameraTargetBounds: CameraTargetBounds(egyptBounds),
-          ),
-        ],
-      ),
+      child: widget.enableScrolling ? mapWidget : IgnorePointer(child: mapWidget),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/build_running_trip_sheet.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/header_text_widget.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
@@ -397,9 +398,11 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
+  builder: (context, state) {
     return Stack(
       children: [
-        BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+        BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state1) {
           var cubit = context.read<CaptainShareCubit>();
           if (cubit.isLoadingRunningBookings) {
             return const Center(child: CircularProgressIndicator());
@@ -467,8 +470,11 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
             ),
           ),
         )),
+        if(state.runningRoute!=null&&(state.runningRoute?.yourStatus?.isNotEmpty??false))BuildRunningTripSheet(model: state.runningRoute!,),
       ],
     );
+  },
+);
   }
 }
 

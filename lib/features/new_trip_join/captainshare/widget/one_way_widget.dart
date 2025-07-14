@@ -15,6 +15,7 @@ import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/map_view_details.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -66,7 +67,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   void initState() {
     super.initState();
     _expandableController = ExpandableController(initialExpanded: false);
-    _setupTimer();
+    if(widget.model?.status=='pending')_setupTimer();
   }
 
   @override
@@ -174,7 +175,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     print(
         "widget.model?.startLocation ${widget.model?.startLocation?.location[0]}");
     return GestureDetector(
-      onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
+      // onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
         decoration: BoxDecoration(
@@ -597,24 +598,47 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     List<gmap.LatLng> convertClientsToLatLng(List<BookingClientEntity> clients) {
       return clients.map((client) {
         final coords = client.location.location;
-        return gmap.LatLng(coords[0], coords[1]); // [latitude, longitude]
+        return gmap.LatLng(coords[1], coords[0]); // [latitude, longitude]
       }).toList();
     }
 
     log("clients ${clients.length}");
 
-    return CustomGoogleMap(
-      startLocation: gmap.LatLng(model?.startLocation?.location[1],
-          model?.startLocation?.location[0]),
-      targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
-          model?.targetLocation?.location[0]),
-        polylinePoints:routePoints,
-      clientLocations: convertClientsToLatLng(clients),
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: Text(context.isArabic?'تفاصيل الرحلة':'Route Details')),
+              body: MapViewDetails(
+                startLocation: gmap.LatLng(model?.startLocation?.location[1],
+                    model?.startLocation?.location[0]),
+                targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
+                    model?.targetLocation?.location[0]),
+                polylinePoints:routePoints,
+                clientLocations: convertClientsToLatLng(clients),
+              ),
+            ),
+          ),
+        );
+      },
+      child: AbsorbPointer(
+        absorbing: true,
+        child: CustomGoogleMap(
+          startLocation: gmap.LatLng(model?.startLocation?.location[1],
+              model?.startLocation?.location[0]),
+          targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
+              model?.targetLocation?.location[0]),
+            polylinePoints:routePoints,
+          clientLocations: convertClientsToLatLng(clients),
+        ),
+      ),
     );
   }
 
   List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => gmap.LatLng(point[0], point[1])).toList();
+    return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
 }
 

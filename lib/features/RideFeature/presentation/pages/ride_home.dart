@@ -27,6 +27,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/D
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/client_rate_driver_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
@@ -44,6 +45,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/fo
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/payment_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/top_card_request.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:geolocator/geolocator.dart';
@@ -79,6 +81,7 @@ import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RideHome extends StatefulWidget {
   const RideHome({super.key});
@@ -859,7 +862,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildTopMap(RideState state, BuildContext context) {
-    List<LatLng> routePoints = [];
+    List<gmap.LatLng> routePoints = [];
     if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
       routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
     } else {
@@ -867,91 +870,112 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     }
 
     if (state.currentLocation != null && state.rideExpectedPrice == null && state.requestedTrip == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mapController.move(
-          LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-          12.0,
-        );
-      });
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   _mapController.move(
+      //     gmap.LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+      //     12.0,
+      //   );
+      // });
+    }
+
+    List<gmap.LatLng> clients = [];
+    if (state.wayPointOne != null){
+      clients.add(gmap.LatLng(state.wayPointOne?.lng??0.0, state.wayPointOne?.lat??0.0));
+    }
+
+    if (state.wayPointTwo != null){
+      clients.add(gmap.LatLng(state.wayPointTwo?.lng??0.0, state.wayPointTwo?.lat??0.0));
     }
 
     return SizedBox(
       width: double.infinity,
       height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
-      child: FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          initialCenter: LatLng(
-            state.currentLocation?.lat ?? 0.0,
-            state.currentLocation?.lng ?? 0.0,
-          ),
-          initialZoom: 12.0,
-        ),
-        children: [
-          TileLayer(
-            // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-            urlTemplate: context.isDarkMode
-                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
-            subdomains: const ['a', 'b', 'c'],
-            userAgentPackageName: 'com.example.app',
-          ),
-          MarkerLayer(
-            markers: [
-              if (state.currentLocation != null)
-                Marker(
-                  point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
-                ),
-              if (state.toLocation != null)
-                Marker(
-                  point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
-                ),
-              if (state.wayPointOne != null)
-                Marker(
-                  point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-                ),
-              if (state.wayPointTwo != null)
-                Marker(
-                  point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-                ),
-            ],
-          ),
-          if (state.requestedTrip != null)
-            if (state.requestedTrip!.status == TripState.started.name)
-              BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-                return const CarMarkerOnClientSideWidget();
-              }),
-          if (routePoints.isNotEmpty)
-            PolylineLayer(
-              polylines: [
-                Polyline(
-                  points: routePoints,
-                  color: context.isDarkMode ? Colors.blue : Colors.black87,
-                  strokeWidth: 4.0,
-                ),
-              ],
-            ),
-        ],
+      child: CustomGoogleMap(
+        startLocation: gmap.LatLng(state.currentLocation?.lng??0.0,
+            state.currentLocation?.lat??0.0),
+        targetLocation: gmap.LatLng(state.toLocation?.lng??0.0,
+            state.toLocation?.lat??0.0),
+        polylinePoints:routePoints,
+        clientLocations: clients,
       ),
     );
+    // return SizedBox(
+    //   width: double.infinity,
+    //   height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
+    //   child: FlutterMap(
+    //     mapController: _mapController,
+    //     options: MapOptions(
+    //       initialCenter: LatLng(
+    //         state.currentLocation?.lat ?? 0.0,
+    //         state.currentLocation?.lng ?? 0.0,
+    //       ),
+    //       initialZoom: 12.0,
+    //     ),
+    //     children: [
+    //       TileLayer(
+    //         // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    //         urlTemplate: context.isDarkMode
+    //             ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+    //             : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+    //         subdomains: const ['a', 'b', 'c'],
+    //         userAgentPackageName: 'com.example.app',
+    //       ),
+    //       MarkerLayer(
+    //         markers: [
+    //           if (state.currentLocation != null)
+    //             Marker(
+    //               point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+    //               width: 40,
+    //               height: 40,
+    //               child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
+    //             ),
+    //           if (state.toLocation != null)
+    //             Marker(
+    //               point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
+    //               width: 40,
+    //               height: 40,
+    //               child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
+    //             ),
+    //           if (state.wayPointOne != null)
+    //             Marker(
+    //               point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
+    //               width: 40,
+    //               height: 40,
+    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+    //             ),
+    //           if (state.wayPointTwo != null)
+    //             Marker(
+    //               point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
+    //               width: 40,
+    //               height: 40,
+    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+    //             ),
+    //         ],
+    //       ),
+    //       if (state.requestedTrip != null)
+    //         if (state.requestedTrip!.status == TripState.started.name)
+    //           BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+    //             return const CarMarkerOnClientSideWidget();
+    //           }),
+    //       if (routePoints.isNotEmpty)
+    //         PolylineLayer(
+    //           polylines: [
+    //             Polyline(
+    //               points: routePoints,
+    //               color: context.isDarkMode ? Colors.blue : Colors.black87,
+    //               strokeWidth: 4.0,
+    //             ),
+    //           ],
+    //         ),
+    //     ],
+    //   ),
+    // );
   }
 
-  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => LatLng(point[1], point[0])).toList();
+  List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
 
   Widget _buttonsWidget({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
@@ -1391,14 +1415,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               onPressed: () async {
                                 if (context.isUserLoggedIn) {
                                   context.push(
-                                    Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                                    extra: RideOpenStreetMapSearchAndPickParams(
+                                    Routes.GoogleMapsSearchAndPick,
+                                    extra: RideGoogleMapSearchAndPickParams(
                                       minDistanceReferencePoint: state.toLocation == null ? null : LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                                       onPicked: (pickedData) async {
                                         serviceLocator<RideCubit>().updateFromLocation(
-                                          lat: pickedData.latLong.latitude,
-                                          lng: pickedData.latLong.longitude,
-                                          address: pickedData.addressName,
+                                          lat: pickedData.latitude,
+                                          lng: pickedData.longitude,
+                                          address: pickedData.address,
                                         );
                                         await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
                                         context.pop();
@@ -1419,14 +1443,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               onPressed: () async {
                                 if (context.isUserLoggedIn) {
                                   context.push(
-                                    Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                                    extra: RideOpenStreetMapSearchAndPickParams(
+                                    Routes.GoogleMapsSearchAndPick,
+                                    extra: RideGoogleMapSearchAndPickParams(
                                       minDistanceReferencePoint: state.currentLocation == null ? null : LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
                                       onPicked: (pickedData) async {
                                         serviceLocator<RideCubit>().updateToLocation(
-                                          lat: pickedData.latLong.latitude,
-                                          lng: pickedData.latLong.longitude,
-                                          address: pickedData.addressName,
+                                          lat: pickedData.latitude,
+                                          lng: pickedData.longitude,
+                                          address: pickedData.address,
                                         );
                                         await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
                                         context.pop();

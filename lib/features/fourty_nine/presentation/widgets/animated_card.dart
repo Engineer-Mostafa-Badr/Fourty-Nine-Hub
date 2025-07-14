@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AnimatedCards extends StatefulWidget {
   final List<Widget> cardsList;
@@ -58,8 +60,9 @@ class _AnimatedCardsState extends State<AnimatedCards> {
 
 class AnimatedCardsListView extends StatefulWidget {
   final List<Widget> cardsList;
+  final Function(ScrollController) setupScrollController;
 
-  const AnimatedCardsListView({super.key, required this.cardsList});
+  const AnimatedCardsListView({super.key, required this.cardsList,required this.setupScrollController});
 
   @override
   State<AnimatedCardsListView> createState() => _AnimatedCardsListViewState();
@@ -74,6 +77,7 @@ class _AnimatedCardsListViewState extends State<AnimatedCardsListView> {
   void initState() {
     super.initState();
     _startAutoScroll();
+    widget.setupScrollController(_scrollController);
   }
 
   void _startAutoScroll() {
@@ -101,6 +105,8 @@ class _AnimatedCardsListViewState extends State<AnimatedCardsListView> {
     });
   }
 
+
+
   @override
   void dispose() {
     _timer.cancel();
@@ -113,8 +119,9 @@ class _AnimatedCardsListViewState extends State<AnimatedCardsListView> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.3, // or any fixed height
       child: ListView.separated(
-        separatorBuilder: (context,i)=>SizedBox(height: 10,),
+        separatorBuilder: (context,i)=>SizedBox(height: 8.h,),
         controller: _scrollController,
+        // physics:const NeverScrollableScrollPhysics(),
         itemCount: widget.cardsList.length,
         itemBuilder: (context, index) {
           return widget.cardsList[index];

@@ -50,9 +50,9 @@ class FormatNumbers {
   }
 
   // دالة مساعدة للتقريب إلى الأدنى
-  double _roundDown(double value, int decimals) {
+  int _roundDown(double value, int decimals) {
     final factor = pow(10, decimals).toDouble();
-    return (value * factor).floorToDouble() / factor;
+    return ((value * factor).floorToDouble() / factor).toInt();
   }
 
   String convertNumberToLocalizedString(String number,

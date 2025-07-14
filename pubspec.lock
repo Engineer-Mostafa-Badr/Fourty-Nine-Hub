@@ -1629,6 +1629,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  iconsax_flutter:
+    dependency: transitive
+    description:
+      name: iconsax_flutter
+      sha256: d14b4cec8586025ac15276bdd40f6eea308cb85748135965bb6255f14beb2564
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   image:
     dependency: transitive
     description:
@@ -2698,6 +2706,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.12"
+  snacknload:
+    dependency: "direct main"
+    description:
+      name: snacknload
+      sha256: "10eac9b8e99e88d79d2e2b93d797a7d15f03542409321463e614717237ba8265"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.9"
   snapping_bottom_sheet:
     dependency: "direct main"
     description:
@@ -2946,6 +2962,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  toastification:
+    dependency: "direct main"
+    description:
+      name: toastification
+      sha256: "69db2bff425b484007409650d8bcd5ed1ce2e9666293ece74dcd917dacf23112"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
   top_snackbar_flutter:
     dependency: "direct main"
     description:

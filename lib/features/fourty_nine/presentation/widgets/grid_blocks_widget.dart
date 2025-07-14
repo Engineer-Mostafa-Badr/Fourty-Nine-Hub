@@ -194,7 +194,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.RIDE_HOME);
         },
-        shadowColor: const Color(0xff8000FF),
+        shadowColor: const Color(0xff8000FF).withValues(alpha: 0.25),
         image: Assets.car2Image,
         title: LocaleKeys.ride.localize,
       ),
@@ -205,7 +205,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.VISITA);
         },
-        shadowColor: const Color(0xff4997D0),
+        shadowColor: const Color(0xff4997D0).withValues(alpha: 0.25),
         image: Assets.doctorImage,
         title: LocaleKeys.health.localize,
       ),
@@ -217,7 +217,7 @@ class GridBlocksWidget extends StatelessWidget {
           HandleCashback.setCount('beAStarCount', context);
           context.push(Routes.FOOD);
         },
-        shadowColor: const Color(0xffFF7F00),
+        shadowColor: const Color(0xffFF7F00).withValues(alpha: 0.25),
         image: Assets.mealImage,
         title: LocaleKeys.meal.localize,
       ),
@@ -233,8 +233,8 @@ class GridBlocksWidget extends StatelessWidget {
           context.push(Routes.newRideModeScreen);
         },
         shadowColor: context.isDarkMode
-            ? AppColors.whiteColor.withValues(alpha: .8)
-            : AppColors.PRIMARY_COLOR.withValues(alpha: .8),
+            ? AppColors.whiteColor.withValues(alpha: .25)
+            : AppColors.PRIMARY_COLOR.withValues(alpha: .25),
         image: Assets.joinTrip,
         title: LocaleKeys.tripJoin.localize,
       ),
@@ -246,7 +246,7 @@ class GridBlocksWidget extends StatelessWidget {
           HandleCashback.setCount('beAStarCount', context);
           context.push(Routes.BE_STAR);
         },
-        shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+        shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .25),
         image: Assets.tube1,
         title: LocaleKeys.tube.localize,
       ),
@@ -257,7 +257,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.MARRIAGESUBCATEGORIES);
         },
-        shadowColor: const Color(0xffFFC0CB),
+        shadowColor: const Color(0xffFFC0CB).withValues(alpha: 0.9),
         image: Assets.marriage,
         title: LocaleKeys.marriage.localize,
       ),

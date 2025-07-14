@@ -25,6 +25,7 @@ class CaptainShareState {
   final CreatePricePerSeatEntity? pricePerSeat;
   final MyBookingEntity? routeDetails;
   final SupportDetailsEntity? supportDetails;
+  final RunningRouteEntity? runningRoute;
 
   const CaptainShareState({
     this.failure,
@@ -35,6 +36,7 @@ class CaptainShareState {
     this.pricePerSeat,
     this.routeDetails,
     this.supportDetails,
+    this.runningRoute,
   });
   CaptainShareState copyWith({
     CaptainShareStates? status,
@@ -45,6 +47,7 @@ class CaptainShareState {
     String? supportStatus,
     SupportDetailsEntity? supportDetails,
     MyBookingEntity? routeDetails,
+    RunningRouteEntity? runningRoute,
   }) {
     return CaptainShareState(
       status: status ?? this.status,
@@ -55,6 +58,7 @@ class CaptainShareState {
       supportStatus: supportStatus ?? this.supportStatus,
       routeDetails: routeDetails ?? this.routeDetails,
       supportDetails: supportDetails ?? this.supportDetails,
+      runningRoute: runningRoute ?? this.runningRoute,
     );
   }
 }
