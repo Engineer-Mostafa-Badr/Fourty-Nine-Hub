@@ -11,6 +11,9 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/banner.dart';
+import '../../../../core/widget/olx_pagination_widget.dart';
+
 class AdsSearchView extends StatefulWidget {
   const AdsSearchView({
     super.key,
@@ -92,7 +95,52 @@ class _AdsSearchViewState extends State<AdsSearchView> {
           ),
         );
       }
-      return ListView.separated(
+      return OlxPaginationWidget(
+        itemsPerPage: 2,
+        loadPage: (page) async {
+          if (_scrollController.position.userScrollDirection ==
+              ScrollDirection.reverse) {
+            widget.isFloatingButtonVisible(false);
+          } else {
+            widget.isFloatingButtonVisible(true);
+          }
+        },
+        banners: [
+          BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
+          BannerAdsModel(
+              videoUrl:
+                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+          BannerAdsModel(
+            imageUrl: 'https://i.imgur.com/QCNbOAo.png',
+            videoUrl:
+                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+          ),
+        ],
+        items: List.generate(
+          controller.searchAdsList.length,
+          (i) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            child: MyAdCard(
+              item: controller.searchAdsList[i],
+              showSubCategory: true,
+              onFav: (id) async {
+                bool result = await context
+                    .read<AdvertisementCubit>()
+                    .favouriteAd(controller.searchAdsList[i].id);
+                return result;
+              },
+              onRemoveFav: (id) async {
+                bool result = await context
+                    .read<AdvertisementCubit>()
+                    .unFavouriteAd(controller.searchAdsList[i].id);
+                return result;
+              },
+            ),
+          ),
+        ),
+        totalPages: 10,
+      );
+      /*return ListView.separated(
         padding: const EdgeInsets.all(16),
         shrinkWrap: true,
         controller: _scrollController,
@@ -115,7 +163,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         ),
         separatorBuilder: (BuildContext context, int index) =>
             const SizedBox(height: 16),
-      );
+      );*/
     });
   }
 }

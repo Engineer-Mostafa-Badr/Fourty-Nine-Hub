@@ -99,19 +99,19 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
               //     })),
               //   ),
               // ),
-              Container(
+              SizedBox(
                 height: kToolbarHeight * 4,
                 width: double.infinity,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color: context.isDarkMode
-                        ? AppColors.LIGHT_COLOR
-                        : AppColors.GREY_DARK_COLOR,
-                    width: 1,
-                  ),
-                ),
+                // clipBehavior: Clip.antiAlias,
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(15),
+                //   border: Border.all(
+                //     color: context.isDarkMode
+                //         ? AppColors.LIGHT_COLOR
+                //         : AppColors.GREY_DARK_COLOR,
+                //     width: 1,
+                //   ),
+                // ),
                 child: PageView.builder(
                   onPageChanged: (value) {
                     print(value);
@@ -148,6 +148,20 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                     ],
                   ),
                 ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  // color: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: context.isDarkMode
+                        ? AppColors.LIGHT_COLOR
+                        : AppColors.GREY_DARK_COLOR,
+                    width: 1,
+                  ),
+                ),
+                height: kToolbarHeight * 4,
+                width: double.infinity,
               ),
 
               if (widget.isVerified)

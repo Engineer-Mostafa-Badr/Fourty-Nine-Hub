@@ -10,14 +10,19 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/banner.dart';
+import '../../../../core/widget/olx_pagination_widget.dart';
+
 class AdsRequestLogView extends StatefulWidget {
   const AdsRequestLogView({
     super.key,
     required this.mainCategoryId,
     required this.isFloatingButtonVisible,
   });
+
   final String mainCategoryId;
   final void Function(bool) isFloatingButtonVisible;
+
   @override
   State<AdsRequestLogView> createState() => _AdsRequestLogViewState();
 }
@@ -74,13 +79,39 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
         );
       }
       // if(controller.requestsLog.isEmpty){return Center(child: Label(text: "No Requests Found.",style: Styles.mediumText(color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),),);}
-      return ListView.builder(
+      return OlxPaginationWidget(
+        itemsPerPage: 2,
+        loadPage: (page) => context
+            .read<SubcategoriesCubit>()
+            .getRequestsLogByMainCategory(widget.mainCategoryId),
+        banners: [
+          BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
+          BannerAdsModel(
+              videoUrl:
+                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+          BannerAdsModel(
+            imageUrl: 'https://i.imgur.com/QCNbOAo.png',
+            videoUrl:
+                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+          ),
+        ],
+        items: List.generate(
+          controller.requestsLogByMainCategory.length,
+          (i) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            child: AdsRequestLogCard(
+                requestLog: controller.requestsLogByMainCategory[i]),
+          ),
+        ),
+        totalPages: 10,
+      );
+      /*return ListView.builder(
         shrinkWrap: true,
         controller: _scrollController,
         itemCount: controller.requestsLogByMainCategory.length,
         itemBuilder: (context, i) => AdsRequestLogCard(
             requestLog: controller.requestsLogByMainCategory[i]),
-      );
+      );*/
     });
   }
 }

@@ -221,7 +221,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   bool isLoadingAdsMore = false;
   bool hasMoreAdsData = true;
   int adsPage = 1;
-  int pageSize = 10;
+  int pageSize = 2;
   Future<void> getAds(
       {required String subCategoryId, required String filter}) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';

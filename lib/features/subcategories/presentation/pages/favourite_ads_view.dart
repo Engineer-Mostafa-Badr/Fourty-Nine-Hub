@@ -13,14 +13,19 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/banner.dart';
+import '../../../../core/widget/olx_pagination_widget.dart';
+
 class FavouriteAdsView extends StatefulWidget {
   const FavouriteAdsView({
     super.key,
     required this.id,
     required this.isFloatingButtonVisible,
   });
+
   final String id;
   final void Function(bool) isFloatingButtonVisible;
+
   @override
   State<FavouriteAdsView> createState() => _FavouriteAdsViewState();
 }
@@ -74,7 +79,53 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
           ),
         );
       }
-      return ListView.separated(
+      return OlxPaginationWidget(
+        itemsPerPage: 2,
+        loadPage: (page) =>
+            context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),
+        banners: [
+          BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
+          BannerAdsModel(
+              videoUrl:
+                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+          BannerAdsModel(
+            imageUrl: 'https://i.imgur.com/QCNbOAo.png',
+            videoUrl:
+                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+          ),
+        ],
+        items: List.generate(
+            controller.myFavouriteAds.length,
+            (i) => Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: MyAdCard(
+                    item: controller.myFavouriteAds[i],
+                    showSubCategory: true,
+                    onFav: (id) async {
+                      bool result = await context
+                          .read<AdvertisementCubit>()
+                          .unFavouriteAd(controller.myFavouriteAds[i].id);
+                      controller.myFavouriteAds
+                          .remove(controller.myFavouriteAds[i]);
+                      setState(() {});
+                      return result;
+                      // bool result = await context
+                      //     .read<AdvertisementCubit>()
+                      //     .favouriteAd(controller.myFavouriteAds[i].id);
+                      // return result;
+                    },
+                    onRemoveFav: (id) async {
+                      bool result = await context
+                          .read<AdvertisementCubit>()
+                          .favouriteAd(controller.myFavouriteAds[i].id);
+                      return result;
+                    },
+                  ),
+                )),
+        totalPages: 10,
+      );
+      /* return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         shrinkWrap: true,
         controller: _scrollController,
@@ -103,7 +154,7 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
           },
 
         ),
-      );
+      );*/
     });
   }
 }
