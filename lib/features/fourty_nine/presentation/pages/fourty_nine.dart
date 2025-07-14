@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
@@ -44,8 +45,8 @@ import '../widgets/exit_widget.dart';
 import '../widgets/favourite_screens_view.dart';
 import '../widgets/grid_blocks_widget.dart';
 import 'main_categories_cards_view.dart';
-// import 'package:animated_cards_carousel/animated_cards_carousel.dart';
-// import 'package:vertical_card_pager/vertical_card_pager.dart';
+import 'package:animated_cards_carousel/animated_cards_carousel.dart';
+import 'package:vertical_card_pager/vertical_card_pager.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -169,7 +170,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
             language: true,
             // isHaveLeading: true,
           ),
-          bottomNavigationBar: BottomNavigator(
+          bottomNavigationBar: _isScrollingDown
+              ? null
+              :BottomNavigator(
             scrollController: scrollController,
             isScrollingDown: _isScrollingDown,
             mainCategory: 1,
@@ -191,9 +194,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
             children: [
               const AddBanner(),
               const AnnounceWidget(),
-              const Sizer(),
+              Sizer(
+                height: 5.h,
+              ),
               !context.read<UserCubit>().isLoggedIn
-                  ? const Sizer()
+                  ? Sizer(
+                height: 5.h,
+
+              )
                   : const SizedBox.shrink(),
               ScrollableTextWithAnimation(
                 textDirection:
@@ -218,7 +226,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   );
                 },
                 child: Container(
-                  height: 60.h,
+                  height: 40.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
@@ -236,7 +244,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   ),
                 ),
               ),
-              const Sizer(),
+              Sizer(
+                height: 5.h,
+              ),
               GridBlocksWidget(),
               // Row(children: [
               //   const Sizer(width: 8),
@@ -318,8 +328,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //     const Sizer(width: 8),
               //   ],
               // ),
-              const Sizer(),
-              const Sizer(),
+              Sizer(
+                height: 10.h,
+              ),
               //cats layout
               BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
                 builder: (context, state) {
@@ -328,7 +339,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   return _buildMainCategoriesViews(data);
                 },
               ),
-              const Sizer(),
+              Sizer(
+                height: 10.h,
+              ),
               //main cats
               BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
                 builder: (context, state) {
@@ -355,6 +368,25 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       height: MediaQuery.of(context).size.height*(0.5),
                       width: double.infinity,
                       child:AnimatedCardsListView(
+                        setupScrollController: (controller){
+                          controller.addListener(() {
+                            if (controller.position.userScrollDirection ==
+                                ScrollDirection.reverse) {
+                              if (!_isScrollingDown) {
+                                setState(() {
+                                  _isScrollingDown = true;
+                                });
+                              }
+                            } else if (controller.position.userScrollDirection ==
+                                ScrollDirection.forward) {
+                              if (_isScrollingDown) {
+                                setState(() {
+                                  _isScrollingDown = false;
+                                });
+                              }
+                            }
+                          });
+                        },
                         cardsList: List.generate(
                           state.data?.length??0,
                               (index) => InkWell(
@@ -374,7 +406,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                             },
                             child: MainCategoryBanner(
                               category: state.data![index],
-                                imageHeight:MediaQuery.sizeOf(context).height * 0.15,
+                                imageHeight:MediaQuery.sizeOf(context).height * 0.10,
                               onFavorite: () async {
                                 var result = await controller
                                     .toggleFavoriteMedicalService(
@@ -402,7 +434,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
   Widget _buildMainCategoriesViews(List<MainCategoryEntity>? extra) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      spacing: 16,
+      spacing: 4,
       children: [
         Expanded(
           child: _buildItemTabBar(

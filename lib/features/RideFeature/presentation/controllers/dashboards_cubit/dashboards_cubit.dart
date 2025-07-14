@@ -61,6 +61,7 @@ import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/cre
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -2249,6 +2250,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       {required String tripId,
       required num price,
       required BuildContext context,
+        required Function() onSuccess,
       required String subCategoryId}) async {
     showLoadingDialog(context);
     Position currentPosition = await Geolocator.getCurrentPosition(
@@ -2259,16 +2261,17 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         lat: currentPosition.latitude,
         lng: currentPosition.longitude));
     response.fold((l) {
-      context.pop();
-      String errorName = getFailureName(l, context);
+      final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
       errorName == 'DebtError'
-          ? showDebtDialog(context, subCategoryId)
+          ? showDebtDialog(currentContext, subCategoryId)
           : errorName == 'SubscribeError'
-              ? showSubscribeDialog(context, subCategoryId)
-              : showErrorMessage(context, getFailureMessage(l, context));
+              ? showSubscribeDialog(currentContext, subCategoryId)
+              : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: DashboardsStates.error));
     }, (data) {
-      context.pop();
+      onSuccess();
       emit(state.copyWith(status: DashboardsStates.success));
     });
   }

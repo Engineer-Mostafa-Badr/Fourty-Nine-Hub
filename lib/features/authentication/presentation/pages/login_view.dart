@@ -375,6 +375,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Column(
       children: [
         EmailOrPhoneTextFormField(
+          autofillHints: const [AutofillHints.email],
           currentController: loginCubit.emailTextController,
           borderColor: Colors.black,
           hint:

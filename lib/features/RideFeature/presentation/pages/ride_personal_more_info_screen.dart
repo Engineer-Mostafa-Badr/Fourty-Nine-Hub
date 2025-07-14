@@ -35,13 +35,11 @@ import 'package:flutter/material.dart';
 import 'ride_personal_more_info_screen.dart';
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
-  final bool isTruk;
   final String subCategoryId;
   final String type;
 
   const RidePersonalMoreInfoScreen(
       {super.key,
-      this.isTruk = false,
       required this.subCategoryId,
       required this.type});
 
@@ -64,7 +62,7 @@ class _RidePersonalMoreInfoScreenState
         MakeNonTrackingRequestTripUsecaseParam();
     context.read<ClientTripsCubit>().makeLoadingTripParam =
         MakeLoadingRequestTripUsecaseParam();
-    if (widget.isTruk) {
+    if (widget.type=="shipping") {
       cubit.makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
       log(cubit.makeLoadingTripParam.toJson().toString());
     } else {
@@ -391,7 +389,9 @@ class _RidePersonalMoreInfoScreenState
                 context.isArabic ? "من فضلك ادفع الدين" : 'Please pay the Debt for more trips',
               );
             } else if (errorName == 'SubscribeError') {
-              showSubscribeDialog(context, widget.subCategoryId);
+              showSubscribeDialog(context, widget.subCategoryId,
+               title: context.isArabic ? "من فضلك ادفع الدين" : 'Please pay the Debt for more trips',
+              );
             } else {
               showErrorMessage(context, getFailureMessage(failure, context));
             }
@@ -766,7 +766,7 @@ class _RidePersonalMoreInfoScreenState
                             cubit.selectedTime =
                                 formatTimeWithLocale(selectedTime, context);
 
-                            if (widget.isTruk) {
+                            if (widget.type=="shipping") {
                               cubit.makeLoadingTripParam.date =
                                   selectedDateTime;
                             } else {
@@ -1083,12 +1083,27 @@ class _RidePersonalMoreInfoScreenState
                                     int.tryParse(passengerText) ?? 0;
 
                                 if (widget.type == 'shipping') {
-                                  final p = cubit.makeNonTrackingTripParam
+                                  cubit.makeLoadingTripParam
+                                    ..isPremium = false
                                     ..price = price
-                                    ..desc = cubit.descController.text;
+                                    ..desc = cubit.descController.text
+                                    ..phone = convertToEnglishDigits(cubit
+                                        .phoneController
+                                        .text) // ✅ تحويل الأرقام إلى إنجليزية
+                                    ..date = cubit.makeLoadingTripParam.date;
+                                  //
+                                  // if (!_validateLoadingTripParams(
+                                  //     cubit.makeLoadingTripParam)) {
+                                  //   showErrorMessage(
+                                  //     context,
+                                  //     LocaleKeys
+                                  //         .pleaseFillAllRequiredFields.localize,
+                                  //   );
+                                  //   return;
+                                  // }
 
                                   if (!_validateRequiredShippingFields(
-                                      p, price)) {
+                                      cubit.makeLoadingTripParam, price)) {
                                     showErrorMessage(
                                       context,
                                       LocaleKeys
@@ -1096,20 +1111,30 @@ class _RidePersonalMoreInfoScreenState
                                     );
                                     return;
                                   }
+
                                   final tripParams = CreateLoadingTripParams(
-                                      subcategoryId: widget.subCategoryId,
-                                      fromTitle: p.fromTitle!,
-                                      toTitle: p.toTitle!,
-                                      price: price,
-                                      date: p.date!,
-                                      phone: p.phone!,
-                                      passengers: passengerCount,
-                                      isPremium: true,
-                                      description: p.description ?? '',
-                                      desc: cubit.descController.text);
+                                    subcategoryId: widget.subCategoryId,
+                                    fromTitle:
+                                    cubit.makeLoadingTripParam.fromTitle ??
+                                        '',
+                                    toTitle:
+                                    cubit.makeLoadingTripParam.toTitle ??
+                                        '',
+                                    price: price,
+                                    date: cubit.makeLoadingTripParam.date!,
+                                    phone:
+                                    cubit.makeLoadingTripParam.phone ?? '',
+                                    passengers: passengerCount,
+                                    isPremium: true,
+                                    description: cubit
+                                        .makeLoadingTripParam.desc ??
+                                        '',
+                                    desc: cubit.descController.text,
+                                  );
 
                                   cubit.createShippingTrip(
                                       params: tripParams, context: context);
+
                                 } else {
                                   if (passengerCount > 1000) {
                                     showErrorMessage(
@@ -1191,17 +1216,28 @@ class _RidePersonalMoreInfoScreenState
                                   return;
                                 }
 
-                                if (widget.isTruk) {
+                                if (widget.type=="shipping") {
                                   cubit.makeLoadingTripParam
                                     ..isPremium = false
                                     ..price = price
+                                    ..desc = cubit.descController.text
                                     ..phone = convertToEnglishDigits(cubit
                                         .phoneController
                                         .text) // ✅ تحويل الأرقام إلى إنجليزية
                                     ..date = cubit.makeLoadingTripParam.date;
+                                  //
+                                  // if (!_validateLoadingTripParams(
+                                  //     cubit.makeLoadingTripParam)) {
+                                  //   showErrorMessage(
+                                  //     context,
+                                  //     LocaleKeys
+                                  //         .pleaseFillAllRequiredFields.localize,
+                                  //   );
+                                  //   return;
+                                  // }
 
-                                  if (!_validateLoadingTripParams(
-                                      cubit.makeLoadingTripParam)) {
+                                  if (!_validateRequiredShippingFields(
+                                      cubit.makeLoadingTripParam, price)) {
                                     showErrorMessage(
                                       context,
                                       LocaleKeys
@@ -1225,7 +1261,7 @@ class _RidePersonalMoreInfoScreenState
                                     passengers: passengerCount,
                                     isPremium: false,
                                     description: cubit
-                                            .makeLoadingTripParam.description ??
+                                            .makeLoadingTripParam.desc ??
                                         '',
                                     desc: cubit.descController.text,
                                   );

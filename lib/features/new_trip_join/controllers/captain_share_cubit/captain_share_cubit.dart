@@ -1,14 +1,20 @@
 import 'package:collection/collection.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/cancel_my_booking_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
@@ -17,8 +23,11 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_expired
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_my_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_route_details_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_running_bookings_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_running_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_accept_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_driver_on_way_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_join_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
@@ -45,7 +54,11 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final JoinToRouteUseCase joinToRouteUseCase;
   final GetRouteDetailsUseCase getRouteDetailsUseCase;
   final ListenToUpdateRouteUseCase listenToUpdateRouteUseCase;
-  CaptainShareCubit(this.createPricePerSeatUseCase,this.getRouteDetailsUseCase,this.listenToUpdateRouteUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase)
+  final GetSupportDetailsUseCase getSupportDetailsUseCase;
+  final ListenToDriverOnWayUseCase listenToDriverOnWayUseCase;
+  final ListenToAcceptRouteUseCase listenToAcceptRouteUseCase;
+  final GetRunningRouteUseCase getRunningRouteUseCase;
+  CaptainShareCubit(this.createPricePerSeatUseCase,this.listenToDriverOnWayUseCase,this.getRunningRouteUseCase,this.listenToAcceptRouteUseCase,this.getRouteDetailsUseCase,this.listenToUpdateRouteUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase, this.getSupportDetailsUseCase)
       : super(const CaptainShareState());
 
   TextEditingController supportDescriptionController = TextEditingController();
@@ -58,6 +71,8 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     listenToNewRoute(context);
     listenToUpdateRoute(context);
     listenToCancelRoute(context);
+    listenToAcceptedRoute();
+    listenToAcceptedRoute();
   }
 
   void listenToCancelRoute(BuildContext context) {
@@ -79,15 +94,27 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
   listenToJoinRoute() {
     CliLogger.info('listenToJoinRoute');
-    // TripsResponseEntity
     listenToJoinAvailableRoutesUseCase((isJoined) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToAcceptedRoute() {
+    CliLogger.info('listenToAcceptRoute');
+    listenToAcceptRouteUseCase((data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToDriverOnTheWay() {
+    CliLogger.info('listenToDriverOnTheWay');
+    listenToDriverOnWayUseCase((data) {
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
 
   void listenToLeaveRoute() {
     CliLogger.info('listenToLeaveRoute');
-    // TripsResponseEntity
     listenToLeaveAvailableRoutesUseCase((routeId) {
       emit(state.copyWith(status: CaptainShareStates.success));
     });
@@ -105,7 +132,6 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
   void listenToNewRoute(BuildContext context) {
     CliLogger.info('listenToNewRoute');
-    // TripsResponseEntity
     listenToNewRouteUseCase((route) {
       String userId = UserCubit.to.state.data?.id??'';
       if(userId==route.creatorId){}else{
@@ -124,21 +150,13 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
   void listenToUpdateRoute(BuildContext context) {
     CliLogger.info('listenToNewRoute');
-    // TripsResponseEntity
     listenToUpdateRouteUseCase((route) {
-      String userId = UserCubit.to.state.data?.id??'';
-
         if(state.tapIndex==0){
           availableBookings.removeWhere((e)=>e.id==route.id);
-          // availableBookings.firstWhere((e)=>e.id==route.id).clients = route.clients;
-          // availableBookings.firstWhere((e)=>e.id==route.id).polyLine = route.polyLine;
-          // availableBookings.firstWhere((e)=>e.id==route.id).availableSeats = route.availableSeats;
           availableBookings.insert(0, route);
-          // showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }else if(state.tapIndex==1){
           myBookings.removeWhere((e)=>e.id==route.id);
           myBookings.insert(0, route);
-          // showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }
         emit(state.copyWith(status: CaptainShareStates.success));
     });
@@ -146,8 +164,13 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
 
   onChangeTapIndex(int index,BuildContext context){
+    RunningRouteEntity? runningRoute = state.runningRoute;
+    runningRoute?.yourStatus='';
+    emit(state.copyWith(status: CaptainShareStates.success,runningRoute: runningRoute));
+
     if(index==0) listenToJoinRoute();
     if(index!=0) listenToLeaveRoute();
+    if(index == 2) getRunningRoute(context);
     print("state.tapIndex Cubit : $index");
     emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index,hintText: ''));
   }
@@ -258,6 +281,18 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
       emit(state.copyWith(status: CaptainShareStates.success,routeDetails:data));
+    });
+  }
+
+  Future<void> getRunningRoute(BuildContext context) async {
+    emit(state.copyWith(status: CaptainShareStates.loading));
+    final response = await getRunningRouteUseCase(NoParams());
+    response.fold((l) {
+      String errorName = getFailureMessage(l, context);
+      showErrorMessage(context,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CaptainShareStates.success,runningRoute:data));
     });
   }
 
@@ -510,6 +545,30 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
         isLoadingMoreRunning = false;
         emit(state.copyWith(status: CaptainShareStates.success));
+      },
+    );
+  }
+
+
+  getEmergencyDetails(
+      BuildContext context, SupportRideParams mainParams) async {
+    GetSupportDetailsParams params = GetSupportDetailsParams(
+        tripId: mainParams.tripId,
+        tripType: mainParams.tripType,
+        userType: mainParams.userType);
+    emit(state.copyWith(status: CaptainShareStates.loading));
+    final Either<Failure, SupportDetailsEntity> result =
+    await getSupportDetailsUseCase(params);
+
+    result.fold(
+          (failure) {
+        emit(state.copyWith(status: CaptainShareStates.error, failure: failure));
+      },
+          (data) async {
+        emit(state.copyWith(
+            supportDetails: data,
+            supportStatus: data.status,
+            status: CaptainShareStates.success));
       },
     );
   }

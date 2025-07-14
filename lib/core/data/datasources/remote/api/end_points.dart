@@ -498,16 +498,24 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/routes/$id";
   static String acceptRoute(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/accept";
+  static String pickClient(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/pick-up-passenger";
+  static String dropClient(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/drop-off-passenger";
   static String joinToRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
   static String routeDetails(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
+  static String runningRoute =
+      "$developmentBaseUrl/captain-share/routes/running/me";
   static String myBooking =
       "$developmentBaseUrl/captain-share/routes/me";
   static String availableBooking =
       "$developmentBaseUrl/captain-share/routes/available";
   static String driverAvailableBooking =
       "$developmentBaseUrl/captain-share/driver/routes";
+  static String driverPastBooking =
+      "$developmentBaseUrl/captain-share/driver/routes/past";
   static String expiredBooking =
       "$developmentBaseUrl/captain-share/routes/expired";
   static String runningBooking =

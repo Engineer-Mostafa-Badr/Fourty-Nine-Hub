@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 abstract class Failure {
   const Failure();
@@ -57,32 +58,47 @@ class SocialLoginFailure extends Failure {
 }
 
 String getFailureMessage(Failure failure, BuildContext context) {
-  if (failure is ServerFailure) {
-    final message = failure.message;
-    if (failure.errors != null && failure.errors!.isNotEmpty) {
-      return '$message\n${failure.errors!.join('\n')}';
+  String localizeMessage(String message) {
+    if (message.contains('&&&')) {
+      final parts = message.split('&&&');
+      bool isArabic = context.isArabic;
+      if (isArabic) {
+        return parts.length > 1 ? parts[1].trim() : parts[0].trim();
+      } else {
+        return parts[0].trim();
+      }
     }
-    return failure.message;
+    return message;
+  }
+
+  if (failure is ServerFailure) {
+    final message = localizeMessage(failure.message);
+    if (failure.errors != null && failure.errors!.isNotEmpty) {
+      final errors = failure.errors!.map(localizeMessage).join('\n');
+      return '$message\n$errors';
+    }
+    return message;
   } else if (failure is InvalidOtpFailure) {
-    return failure.message;
+    return localizeMessage(failure.message);
   } else if (failure is UnauthorizedFailure) {
-    return failure.message;
+    return localizeMessage(failure.message);
   } else if (failure is SocialLoginFailure) {
     if (failure.exception is FirebaseException &&
         (failure.exception as FirebaseException).message != null) {
-      return (failure.exception as FirebaseException).message!;
+      return localizeMessage((failure.exception as FirebaseException).message!);
     }
-    return failure.exception.toString();
+    return localizeMessage(failure.exception.toString());
   } else if (failure is CacheFailure) {
-    return 'Cache Failure';
+    return localizeMessage('Cache Failure');
   } else if (failure is ValidationFailure) {
-    return failure.message;
+    return localizeMessage(failure.message);
   } else if (failure is UnknownFailure) {
-    return failure.error;
+    return localizeMessage(failure.error);
   } else {
-    return 'Unknown Failure';
+    return localizeMessage('Unknown Failure');
   }
 }
+
 
 String getFailureName(Failure failure, BuildContext context) {
   if (failure is ServerFailure) {
