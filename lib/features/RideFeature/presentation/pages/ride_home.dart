@@ -863,40 +863,62 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildTopMap(RideState state, BuildContext context) {
     List<gmap.LatLng> routePoints = [];
-    if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
-      routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
-    } else {
-      routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
-    }
 
-    if (state.currentLocation != null && state.rideExpectedPrice == null && state.requestedTrip == null) {
-      // WidgetsBinding.instance.addPostFrameCallback((_) {
-      //   _mapController.move(
-      //     gmap.LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-      //     12.0,
-      //   );
-      // });
+    try {
+      if (state.requestedTrip == null ||
+          state.requestedTrip!.status == TripState.canceled.name ||
+          state.requestedTrip!.status == TripState.completed.name) {
+        routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+      } else {
+        routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
+      }
+    } catch (e) {
+      print('Error processing route points: $e');
+      routePoints = [];
     }
 
     List<gmap.LatLng> clients = [];
-    if (state.wayPointOne != null){
-      clients.add(gmap.LatLng(state.wayPointOne?.lng??0.0, state.wayPointOne?.lat??0.0));
+
+    try {
+      if (state.wayPointOne != null &&
+          state.wayPointOne!.lat != null &&
+          state.wayPointOne!.lng != null) {
+        clients.add(gmap.LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!));
+      }
+
+      if (state.wayPointTwo != null &&
+          state.wayPointTwo!.lat != null &&
+          state.wayPointTwo!.lng != null) {
+        clients.add(gmap.LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!));
+      }
+    } catch (e) {
+      print('Error processing client locations: $e');
     }
 
-    if (state.wayPointTwo != null){
-      clients.add(gmap.LatLng(state.wayPointTwo?.lng??0.0, state.wayPointTwo?.lat??0.0));
-    }
+    // Provide default values to prevent null issues
+    final startLat = state.currentLocation?.lat ?? 30.033333;
+    final startLng = state.currentLocation?.lng ?? 31.233334;
+    final targetLat = state.toLocation?.lat ?? 30.043333;
+    final targetLng = state.toLocation?.lng ?? 31.243334;
 
-    return SizedBox(
+    return Container(
       width: double.infinity,
-      height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
-      child: CustomGoogleMap(
-        startLocation: gmap.LatLng(state.currentLocation?.lng??0.0,
-            state.currentLocation?.lat??0.0),
-        targetLocation: gmap.LatLng(state.toLocation?.lng??0.0,
-            state.toLocation?.lat??0.0),
-        polylinePoints:routePoints,
-        clientLocations: clients,
+      height: state.requestedTrip != null
+          ? MediaQuery.of(context).size.height
+          : MediaQuery.of(context).size.height * 0.5,
+      // Add this to fix rendering issues
+      decoration: const BoxDecoration(
+        color: Colors.grey,
+      ),
+      child: ClipRect(
+        child: CustomGoogleMap(
+          key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
+          startLocation: gmap.LatLng(startLat, startLng),
+          targetLocation: gmap.LatLng(targetLat, targetLng),
+          polylinePoints: routePoints,
+          clientLocations: clients,
+          enableScrolling: true,
+        ),
       ),
     );
     // return SizedBox(
