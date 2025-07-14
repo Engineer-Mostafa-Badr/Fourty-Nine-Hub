@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -294,6 +295,39 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     }, (data) {
       emit(state.copyWith(status: CaptainShareStates.success,runningRoute:data));
     });
+  }
+
+  // setLocation(List<double>? currentLocation, List<double>? toLocation,String? currentAddress,String? toAddress){
+  //   print('objecttoLocation$toLocation');
+  //   emit(state.copyWith(status: CaptainShareStates.success,currentLocation:currentLocation,toLocation:toLocation,currentAddress:currentAddress,toAddress:toAddress));
+  // }
+
+  void updateFromLocation(
+      {required double lat, required double lng, required String address}) {
+    GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+
+    emit(state.copyWith(
+        status: CaptainShareStates.success, currentLocation: currentLocation));
+  }
+
+
+  void emitRefreshState() {
+    emit(state.copyWith(status: CaptainShareStates.success));
+  }
+
+  void updateToLocation(
+      {required double lat, required double lng, required String address}) {
+    GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+
+    emit(state.copyWith(status: CaptainShareStates.success, toLocation: toLocation));
   }
 
   Future<void> createOffer(
