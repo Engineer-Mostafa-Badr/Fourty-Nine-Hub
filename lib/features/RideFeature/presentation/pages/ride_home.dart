@@ -901,6 +901,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     final targetLat = state.toLocation?.lat ?? 30.043333;
     final targetLng = state.toLocation?.lng ?? 31.243334;
 
+    bool isBeforeRequest = state.requestedTrip == null ||
+        state.requestedTrip!.status == TripState.canceled.name ||
+        state.requestedTrip!.status == TripState.completed.name;
+    print("state.requestedTrip ${state.requestedTrip?.status}");
     return Container(
       width: double.infinity,
       height: state.requestedTrip != null
@@ -913,8 +917,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       child: ClipRect(
         child: CustomGoogleMap(
           key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
-          startLocation: gmap.LatLng(startLat, startLng),
-          targetLocation: gmap.LatLng(targetLat, targetLng),
+          startLocation: state.currentLocation==null?null:gmap.LatLng(isBeforeRequest? startLat : startLng,isBeforeRequest? startLng : startLat),
+          targetLocation: state.toLocation==null?null:gmap.LatLng(isBeforeRequest? targetLat : targetLng,isBeforeRequest? targetLng : targetLat),
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,

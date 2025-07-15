@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_r
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
@@ -634,7 +635,7 @@ class AppPages {
               GoRoute(
                 path: Paths.GoogleMapsSearchAndPick,
                 name: Routes.GoogleMapsSearchAndPick,
-                builder: (context, state) => RideGoogleMapSearchAndPick(
+                builder: (context, state) => RideOpenGoogleMapSearchAndPickScreen(
                   params: state.extra as RideGoogleMapSearchAndPickParams,
                 ),
               ),

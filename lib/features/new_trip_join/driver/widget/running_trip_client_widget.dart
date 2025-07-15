@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -124,6 +132,62 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
         SizedBox(
           height: (!isGoingToClient?15:25).h,
         ),
+        Row(
+          children: [
+            Expanded(
+              child: CallMessageButtons(
+                flex: 1,
+                chatFlex: 1,
+                otherUserId: '',
+                subcategoryId: 'Constants',
+                phone: 'widget.item.phone',
+                id: 'widget.item.id',
+                hasReport: false,
+              ),
+            ),
+            SizedBox(
+              width: 30.w,
+            ),
+            Expanded(
+              child: ClickableWidget(
+                onTap:!context.read<UserCubit>().isLoggedIn
+                    ? () {
+                  return pleaseLoginDialog(context);
+                  // context.push(Routes.LOGIN);
+                }
+                    : () {
+                  bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: 'widget.id',
+                        categoryId: 'widget.subcategoryId',
+                      ));
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.SECONDARY_COLOR,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.SECONDARY_COLOR),
+                  ),
+                  child: Text(
+                    context.isArabic ? "تقرير العميل" : "Report Client",
+                    style: const TextStyle(
+                      fontSize: FontSize.s16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.whiteColor,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 15.h,
+        ),
         if(isGoingToClient)PinCodeTextField(
           // onTap: () => _showOtpBottomSheet(context),
           // readOnly: true,
@@ -175,7 +239,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
             border: Border.all(color: AppColors.PRIMARY_COLOR),
           ),
           child: Text(
-            context.isArabic ? "تقرير العميل" : "Report Client",
+            context.isArabic ? "لم يظهر العميل" : "Client not show",
             style: const TextStyle(
               fontSize: FontSize.s16,
               fontWeight: FontWeight.bold,
