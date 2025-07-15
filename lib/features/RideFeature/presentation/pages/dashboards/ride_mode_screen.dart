@@ -27,6 +27,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -54,6 +55,7 @@ import 'widgets/not_ready_available_trips_widget.dart';
 import 'widgets/past_trips_widget.dart';
 import 'widgets/settings_widget.dart';
 import 'widgets/truk_bus_widget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RideModeParams {
   final String modeType;
@@ -863,7 +865,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
   final MapController _mapController = MapController();
 
   Widget _buildTopMap(BuildContext context, DashboardsState state) {
-    List<LatLng> routePoints = [];
+    List<gmap.LatLng> routePoints = [];
     routePoints = _convertPolylineToLatLng(state.activeTrip?.polyline ?? []);
 
     if (state.activeTrip != null &&
@@ -885,116 +887,42 @@ class _RideModeScreenState extends State<RideModeScreen> {
       });
     }
 
-    return SizedBox(
+    List<gmap.LatLng> clients = [];
+    if (state.activeTrip?.wayPointOne != null &&
+        state.activeTrip?.wayPointOne?[0] != null &&
+        state.activeTrip?.wayPointOne?[1] != null &&
+        state.activeTrip?.wayPointOne?[0] != 0 &&
+        state.activeTrip?.wayPointOne?[1] != 0) {
+      clients.add(gmap.LatLng(state.activeTrip!.wayPointOne![0], state.activeTrip!.wayPointOne![1]));
+    }
+
+    if (state.activeTrip?.wayPointTwo != null &&
+        state.activeTrip?.wayPointTwo?[0] != null &&
+        state.activeTrip?.wayPointTwo?[1] != null &&
+        state.activeTrip?.wayPointTwo?[0] != 0 &&
+        state.activeTrip?.wayPointTwo?[1] != 0) {
+      clients.add(gmap.LatLng(state.activeTrip!.wayPointTwo![0], state.activeTrip!.wayPointTwo![1]));
+    }
+    return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
-      child: FlutterMap(
-        mapController: _mapController,
-        options: (state.activeTrip != null &&
-                state.activeTrip?.startCoordinates?[0] == null &&
-                state.activeTrip?.startCoordinates?[1] == null &&
-                state.activeTrip?.startCoordinates?[0] != 0 &&
-                state.activeTrip?.startCoordinates?[1] != 0)
-            ? MapOptions(
-                initialCenter: LatLng(state.activeTrip!.startCoordinates![0],
-                    state.activeTrip!.startCoordinates![1]),
-                initialZoom: 12.0,
-              )
-            : MapOptions(
-                initialCenter: LatLng(30.033333, 31.233334),
-                initialZoom: 12.0,
-              ),
-        children: [
-          TileLayer(
-            // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-            // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-            urlTemplate: context.isDarkMode
-                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-            // Normal mode map
-            subdomains: const ['a', 'b', 'c'],
-            userAgentPackageName: 'com.example.app',
-          ),
-          MarkerLayer(
-            markers: [
-              if (state.activeTrip != null &&
-                  state.activeTrip?.startCoordinates?[0] != null &&
-                  state.activeTrip?.startCoordinates?[1] != null &&
-                  state.activeTrip?.startCoordinates?[0] != 0 &&
-                  state.activeTrip?.startCoordinates?[1] != 0)
-                Marker(
-                  point: LatLng(state.activeTrip!.startCoordinates![0],
-                      state.activeTrip!.startCoordinates![1]),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.green, size: 40),
-                ),
-              if (state.activeTrip?.targetCoordinates != null &&
-                  state.activeTrip?.targetCoordinates?[0] != null &&
-                  state.activeTrip?.targetCoordinates?[1] != null &&
-                  state.activeTrip?.targetCoordinates?[0] != 0 &&
-                  state.activeTrip?.targetCoordinates?[1] != 0)
-                Marker(
-                  point: LatLng(state.activeTrip!.targetCoordinates![0],
-                      state.activeTrip!.targetCoordinates![1]),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.blue, size: 40),
-                ),
-              if (state.activeTrip?.wayPointOne != null &&
-                  state.activeTrip?.wayPointOne?[0] != null &&
-                  state.activeTrip?.wayPointOne?[1] != null &&
-                  state.activeTrip?.wayPointOne?[0] != 0 &&
-                  state.activeTrip?.wayPointOne?[1] != 0)
-                Marker(
-                  point: LatLng(state.activeTrip!.wayPointOne![0],
-                      state.activeTrip!.wayPointOne![1]),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.red, size: 40),
-                ),
-              if (state.activeTrip?.wayPointTwo != null &&
-                  state.activeTrip?.wayPointTwo?[0] != null &&
-                  state.activeTrip?.wayPointTwo?[1] != null &&
-                  state.activeTrip?.wayPointTwo?[0] != 0 &&
-                  state.activeTrip?.wayPointTwo?[1] != 0)
-                Marker(
-                  point: LatLng(state.activeTrip!.wayPointTwo![0],
-                      state.activeTrip!.wayPointTwo![1]),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.red, size: 40),
-                ),
-            ],
-          ),
-          BlocBuilder<DashboardsCubit, DashboardsState>(
-              builder: (context, state) {
-            if (state.tripStatus == TripState.started.name) {
-              return const CarMarkerWidget();
-            }
-            return const SizedBox.shrink();
-          }),
-          if (routePoints.isNotEmpty)
-            PolylineLayer(
-              polylines: [
-                Polyline(
-                  points: routePoints,
-                  color: context.isDarkMode ? Colors.blue : Colors.black87,
-                  strokeWidth: 4.0,
-                ),
-              ],
-            ),
-        ],
+      decoration: const BoxDecoration(
+        color: Colors.grey,
+      ),
+      child: ClipRect(
+        child: CustomGoogleMap(
+          key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
+          startLocation: ((state.activeTrip?.startCoordinates==null)||(state.activeTrip?.startCoordinates==[]))?null:gmap.LatLng(state.activeTrip!.startCoordinates![1],state.activeTrip!.startCoordinates![0]),
+          targetLocation: ((state.activeTrip?.targetCoordinates==null)||(state.activeTrip?.targetCoordinates==[]))?null:gmap.LatLng(state.activeTrip!.targetCoordinates![1],state.activeTrip!.targetCoordinates![0]),
+          polylinePoints: routePoints,
+          clientLocations: clients,
+          enableScrolling: true,
+        ),
       ),
     );
   }
 
-  List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
-    return polyline.map((point) => LatLng(point[1], point[0])).toList();
+  List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
 }
