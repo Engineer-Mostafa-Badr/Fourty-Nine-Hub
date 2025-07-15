@@ -24,6 +24,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 enum RideStates {
   initState,
@@ -110,8 +111,8 @@ class RideState {
   final bool? isChangedMindReason;
   final bool? isOtherReason;
   final bool? isClientNotShownReason;
-  LatLng? driverLocation;
-  LatLng? previousDriverLocation;
+  gmap.LatLng? driverLocation;
+  gmap.LatLng? previousDriverLocation;
 
   RideState({
     this.status = RideStates.initState,
@@ -250,8 +251,8 @@ class RideState {
     bool? isChangedMindReason,
     bool? isOtherReason,
     bool? isClientNotShownReason,
-    LatLng? driverLocation,
-    LatLng? previousDriverLocation
+    gmap.LatLng? driverLocation,
+    gmap.LatLng? previousDriverLocation
   }) {
     return RideState(
       status: status ?? this.status,

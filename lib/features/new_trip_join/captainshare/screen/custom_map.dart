@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+import 'dart:developer';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/gestures.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:io' show Platform;
 
 class CustomGoogleMap extends StatefulWidget {
   final LatLng? startLocation;
@@ -13,6 +12,9 @@ class CustomGoogleMap extends StatefulWidget {
   final List<LatLng> clientLocations;
   final List<LatLng> polylinePoints;
   final bool enableScrolling;
+  final bool showCarMarker;
+  final LatLng? carLocation;
+  final double? carAngle;
 
   const CustomGoogleMap({
     super.key,
@@ -21,6 +23,9 @@ class CustomGoogleMap extends StatefulWidget {
     this.clientLocations = const [],
     this.polylinePoints = const [],
     this.enableScrolling = true,
+    this.showCarMarker = false,
+    this.carLocation,
+    this.carAngle,
   });
 
   @override
@@ -28,20 +33,24 @@ class CustomGoogleMap extends StatefulWidget {
 }
 
 class _CustomGoogleMapState extends State<CustomGoogleMap> with WidgetsBindingObserver {
-  late GoogleMapController _mapController;
+  final Completer<GoogleMapController> _mapController = Completer();
   bool _isMapReady = false;
   String? _currentMapStyle;
+  BitmapDescriptor? _carIcon;
 
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
+
+  final LatLngBounds _egyptBounds = LatLngBounds(
+    southwest: const LatLng(22.0, 24.7),
+    northeast: const LatLng(31.7, 36.0),
+  );
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    print("object widget.startLocation != null ${widget.startLocation}");
-    print("object widget.targetLocation != null ${widget.targetLocation}");
-    _setMarkersAndPolyline();
+    if(widget.showCarMarker)_loadCarIcon();
   }
 
   @override
@@ -52,92 +61,59 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with WidgetsBindingOb
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    // Force re-render when app comes back to foreground (Android fix)
     if (state == AppLifecycleState.resumed && _isMapReady && Platform.isAndroid) {
       _forceMapRerender();
     }
   }
 
-  final LatLngBounds egyptBounds = LatLngBounds(
-    southwest: const LatLng(22.0, 24.7),
-    northeast: const LatLng(31.7, 36.0),
-  );
+  Future<void> _loadCarIcon() async {
+    _carIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(8, 8)),
+      'assets/images/car_for_tracking.png',
+    );
+  }
 
   Future<void> _forceMapRerender() async {
     if (!_isMapReady) return;
-
     try {
-      // Force a map style re-render to fix Android rendering issues
-      await _mapController.setMapStyle(null);
+      final controller = await _mapController.future;
+      await controller.setMapStyle(null);
       await Future.delayed(const Duration(milliseconds: 100));
       if (_currentMapStyle != null) {
-        await _mapController.setMapStyle(_currentMapStyle);
+        await controller.setMapStyle(_currentMapStyle);
       }
     } catch (e) {
-      print('Error forcing map re-render: $e');
+      log('Error forcing map re-render: $e');
     }
   }
 
-  Future<void> initMapStyle() async {
-    try {
-      var lightStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/light_map_style.json');
-      var darkStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/dark_map_style.json');
-
-      _currentMapStyle = context.isDarkMode ? darkStyle : lightStyle;
-
-      if (_isMapReady) {
-        await _mapController.setMapStyle(_currentMapStyle);
-      }
-    } catch (e) {
-      print('Error loading map style: $e');
+  @override
+  void didUpdateWidget(CustomGoogleMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_shouldUpdateMarkers(oldWidget) || _shouldUpdatePolyline(oldWidget)) {
+      _updateMapData();
     }
   }
 
-  void _onMapCreated(GoogleMapController controller) async {
-    _mapController = controller;
-
-    // Add delay to ensure map is fully initialized
-    await Future.delayed(const Duration(milliseconds: 300));
-
-    _isMapReady = true;
-
-    // Initialize map style with additional delay
-    await Future.delayed(const Duration(milliseconds: 200));
-
-
-    _setMarkersAndPolyline();
-
-    // Move camera only if startLocation is not null
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (widget.startLocation != null) {
-        print("object widget.startLocation != null ${widget.startLocation}");
-        try {
-          // Add delay before camera movement
-          await Future.delayed(const Duration(milliseconds: 500));
-          await _mapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: widget.startLocation!,
-                zoom: 12.0,
-              ),
-            ),
-          );
-        } catch (e) {
-          print('Error moving camera: $e');
-        }
-      }
-    });
-    await initMapStyle();
+  bool _shouldUpdateMarkers(CustomGoogleMap oldWidget) {
+    return oldWidget.startLocation != widget.startLocation ||
+        oldWidget.targetLocation != widget.targetLocation ||
+        oldWidget.clientLocations != widget.clientLocations ||
+        oldWidget.carLocation != widget.carLocation ||
+        oldWidget.carAngle != widget.carAngle;
   }
 
+  bool _shouldUpdatePolyline(CustomGoogleMap oldWidget) {
+    return oldWidget.polylinePoints != widget.polylinePoints;
+  }
 
+  Future<void> _updateMapData() async {
+    if (!_isMapReady) return;
 
-  void _setMarkersAndPolyline() {
     _markers.clear();
     _polylines.clear();
 
+    // Add start location marker
     if (widget.startLocation != null) {
       _markers.add(
         Marker(
@@ -148,6 +124,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with WidgetsBindingOb
       );
     }
 
+    // Add target location marker
     if (widget.targetLocation != null) {
       _markers.add(
         Marker(
@@ -158,6 +135,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with WidgetsBindingOb
       );
     }
 
+    // Add client locations markers
     for (int i = 0; i < widget.clientLocations.length; i++) {
       _markers.add(
         Marker(
@@ -168,6 +146,21 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with WidgetsBindingOb
       );
     }
 
+    // Add car marker if available
+    if (widget.carLocation != null && _carIcon != null) {
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('car'),
+          position: widget.carLocation!,
+          icon: _carIcon!,
+          rotation: widget.carAngle ?? 0.0,
+          flat: true,
+          anchor: const Offset(0.5, 0.5),
+        ),
+      );
+    }
+
+    // Add polyline if points exist
     if (widget.polylinePoints.isNotEmpty) {
       _polylines.add(
         Polyline(
@@ -178,75 +171,77 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with WidgetsBindingOb
         ),
       );
     }
+
+    if (mounted) setState(() {});
   }
 
-  LatLng _getInitialCenter() {
-    return widget.startLocation ??
-        widget.targetLocation ??
-        const LatLng(30.033333, 31.233334); // Default to Cairo
-  }
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    _mapController.complete(controller);
+    _isMapReady = true;
+    await _updateMapData();
+    await _initMapStyle();
 
-  Future<void> _openDirections() async {
-    if (widget.startLocation != null && widget.targetLocation != null) {
-      final url = Uri.parse(
-        'https://www.google.com/maps/dir/?api=1'
-            '&origin=${widget.startLocation!.latitude},${widget.startLocation!.longitude}'
-            '&destination=${widget.targetLocation!.latitude},${widget.targetLocation!.longitude}'
-            '&travelmode=driving',
+    // Move camera to start location if available
+    if (widget.startLocation != null) {
+      await controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: widget.startLocation!,
+            zoom: 12.0,
+          ),
+        ),
       );
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تعذر فتح Google Maps')),
-        );
-      }
     }
+  }
+
+  Future<void> _initMapStyle() async {
+    try {
+      final lightStyle = await rootBundle.loadString('assets/map_styles/light_map_style.json');
+      final darkStyle = await rootBundle.loadString('assets/map_styles/dark_map_style.json');
+      _currentMapStyle = context.isDarkMode ? darkStyle : lightStyle;
+      final controller = await _mapController.future;
+      await controller.setMapStyle(_currentMapStyle);
+    } catch (e) {
+      log('Error loading map style: $e');
+    }
+  }
+
+  LatLng _getInitialCameraPosition() {
+    return widget.startLocation ?? widget.targetLocation ?? const LatLng(30.033333, 31.233334);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("object widget.startLocation != null ${widget.startLocation}");
-    print("object widget.targetLocation != null ${widget.targetLocation}");
-
-    Widget mapWidget = GoogleMap(
-      onMapCreated: _onMapCreated,
-      initialCameraPosition: CameraPosition(
-        target: _getInitialCenter(),
-        zoom: 12.0,
-      ),
-      markers: _markers,
-      polylines: _polylines,
-      myLocationEnabled: false,
-      myLocationButtonEnabled: false,
-      zoomControlsEnabled: false,
-      mapToolbarEnabled: false,
-      scrollGesturesEnabled: widget.enableScrolling,
-      zoomGesturesEnabled: widget.enableScrolling,
-      tiltGesturesEnabled: widget.enableScrolling,
-      rotateGesturesEnabled: widget.enableScrolling,
-      cameraTargetBounds: CameraTargetBounds(egyptBounds),
-      // Add these for better Android performance
-      compassEnabled: false,
-      mapType: MapType.normal,
-      buildingsEnabled: false,
-      indoorViewEnabled: false,
-      trafficEnabled: false,
-      // Force hardware acceleration - CRITICAL for Android
-      liteModeEnabled: false,
-      // // Add this to prevent rendering issues
-      // gestureRecognizers: Set()..add(Factory<PanGestureRecognizer>(
-      //       () => PanGestureRecognizer(),
-      // )),
-    );
-
-    // Wrap map in Container with specific constraints to fix rendering
     return Container(
       width: double.infinity,
       height: double.infinity,
       clipBehavior: Clip.hardEdge,
       decoration: const BoxDecoration(),
-      child: widget.enableScrolling ? mapWidget : IgnorePointer(child: mapWidget),
+      child: GoogleMap(
+        key: ValueKey('google_map_${widget.hashCode}'),
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _getInitialCameraPosition(),
+          zoom: 12.0,
+        ),
+        markers: _markers,
+        polylines: _polylines,
+        myLocationEnabled: false,
+        myLocationButtonEnabled: false,
+        zoomControlsEnabled: false,
+        mapToolbarEnabled: false,
+        scrollGesturesEnabled: widget.enableScrolling,
+        zoomGesturesEnabled: widget.enableScrolling,
+        tiltGesturesEnabled: widget.enableScrolling,
+        rotateGesturesEnabled: widget.enableScrolling,
+        cameraTargetBounds: CameraTargetBounds(_egyptBounds),
+        compassEnabled: false,
+        mapType: MapType.normal,
+        buildingsEnabled: false,
+        indoorViewEnabled: false,
+        trafficEnabled: false,
+        liteModeEnabled: false,
+      ),
     );
   }
 }
