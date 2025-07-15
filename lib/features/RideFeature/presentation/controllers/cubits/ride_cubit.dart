@@ -98,6 +98,7 @@ import 'package:record/record.dart';
 import '../../../domain/usecases/partial_payment_in_trip.dart';
 import '../../../domain/usecases/rating_driver_by_client.dart';
 import '../../../domain/usecases/send_ok_iam_coming_message_usecase.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RideCubit extends Cubit<RideState> {
   bool isComfort = false;
@@ -414,11 +415,11 @@ class RideCubit extends Cubit<RideState> {
               final longitude = locationData['longitude'] as double?;
 
               if (latitude != null && longitude != null) {
-                final newDriverLocation = LatLng(latitude, longitude);
+                final newDriverLocation = gmap.LatLng(latitude, longitude);
 
                 // IMPORTANT: Store the current driverLocation as the previousDriverLocation
                 // before updating to the new location.
-                final LatLng? oldDriverLocation = state.driverLocation;
+                final gmap.LatLng? oldDriverLocation = state.driverLocation;
 
                 emit(state.copyWith(
                   driverLocation: newDriverLocation,

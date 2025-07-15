@@ -922,6 +922,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
+          carLocation: state.driverLocation,
+          showCarMarker: state.driverLocation != null &&
+              state.requestedTrip != null &&
+              state.requestedTrip!.status == TripState.started.name,
         ),
       ),
     );
