@@ -35,11 +35,35 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     southwest: const LatLng(22.0, 24.7),
     northeast: const LatLng(31.7, 36.0),
   );
+  LatLng? _latestStartLocation;
 
   @override
   void initState() {
     super.initState();
+    _latestStartLocation = widget.startLocation;
     _setMarkersAndPolyline();
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomGoogleMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.startLocation != null &&
+        widget.startLocation != _latestStartLocation) {
+      _latestStartLocation = widget.startLocation;
+
+      // Move camera to updated start location
+      _mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: widget.startLocation!,
+            zoom: 12.0,
+          ),
+        ),
+      );
+    }
+
+    _setMarkersAndPolyline(); // Update markers/polyline if needed
   }
 
   Future<void> initMapStyle() async {
