@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../core/enums/trip_states_enum.dart';
 import '../../controllers/cubits/ride_cubit.dart';
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
 
 class GoogleMapCarMarkerWidget extends StatefulWidget {
   final Function(Marker?) onCarMarkerUpdated;
@@ -36,12 +38,27 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
     super.dispose();
   }
 
-  void _loadCarIcon() async {
-    _carIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(8, 8)),
-      'assets/images/car_for_tracking.png',
+  Future<BitmapDescriptor> getResizedCarIcon(String assetPath, {int width = 64}) async {
+    final ByteData data = await rootBundle.load(assetPath);
+    final Uint8List bytes = data.buffer.asUint8List();
+
+    final ui.Codec codec = await ui.instantiateImageCodec(
+      bytes,
+      targetWidth: width,
     );
-    setState(() {});
+    final ui.FrameInfo fi = await codec.getNextFrame();
+    final ByteData? resizedData = await fi.image.toByteData(format: ui.ImageByteFormat.png);
+
+    return BitmapDescriptor.fromBytes(resizedData!.buffer.asUint8List());
+  }
+
+  Future<void> _loadCarIcon() async {
+    if (_carIcon != null) return;
+
+    _carIcon = await getResizedCarIcon(
+      'assets/images/car_for_tracking.png',
+      width: 150, // Adjust size as needed
+    );
   }
 
   void _subscribeToRideCubit() {
