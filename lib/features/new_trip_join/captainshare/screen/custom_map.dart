@@ -10,6 +10,7 @@ class CustomGoogleMap extends StatefulWidget {
   final List<LatLng> clientLocations;
   final List<LatLng> polylinePoints;
   final bool enableScrolling;
+  final bool? fromClient;
 
   const CustomGoogleMap({
     super.key,
@@ -18,6 +19,7 @@ class CustomGoogleMap extends StatefulWidget {
     this.clientLocations = const [],
     this.polylinePoints = const [],
     this.enableScrolling = true,
+    this.fromClient = true,
   });
 
   @override
@@ -205,7 +207,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           child: widget.enableScrolling ? mapWidget : IgnorePointer(child: mapWidget),
         ),
         // Overlay widget that handles car tracking
-        GoogleMapCarMarkerWidget(onCarMarkerUpdated: _updateCarMarker),
+        if(widget.fromClient==true)GoogleMapCarMarkerWidget(onCarMarkerUpdated: _updateCarMarker),
       ],
     );
   }

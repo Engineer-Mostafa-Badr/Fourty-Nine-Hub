@@ -917,6 +917,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
+          fromClient: false,
         ),
       ),
     );
