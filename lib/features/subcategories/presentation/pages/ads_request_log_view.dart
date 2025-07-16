@@ -10,8 +10,8 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../core/widget/banner.dart';
-import '../../../../core/widget/olx_pagination_widget.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class AdsRequestLogView extends StatefulWidget {
   const AdsRequestLogView({
@@ -84,17 +84,7 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
         loadPage: (page) => context
             .read<SubcategoriesCubit>()
             .getRequestsLogByMainCategory(widget.mainCategoryId),
-        banners: [
-          BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-          BannerAdsModel(
-              videoUrl:
-                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-          BannerAdsModel(
-            imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-            videoUrl:
-                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-          ),
-        ],
+        banners: bannersList,
         items: List.generate(
           controller.requestsLogByMainCategory.length,
           (i) => Padding(
@@ -103,7 +93,7 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
                 requestLog: controller.requestsLogByMainCategory[i]),
           ),
         ),
-        totalPages: 10,
+
       );
       /*return ListView.builder(
         shrinkWrap: true,

@@ -11,8 +11,8 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../core/widget/banner.dart';
-import '../../../../core/widget/olx_pagination_widget.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class AdsSearchView extends StatefulWidget {
   const AdsSearchView({
@@ -105,17 +105,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
             widget.isFloatingButtonVisible(true);
           }
         },
-        banners: [
-          BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-          BannerAdsModel(
-              videoUrl:
-                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-          BannerAdsModel(
-            imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-            videoUrl:
-                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-          ),
-        ],
+        banners: bannersList,
         items: List.generate(
           controller.searchAdsList.length,
           (i) => Padding(
@@ -138,7 +128,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
             ),
           ),
         ),
-        totalPages: 10,
+
       );
       /*return ListView.separated(
         padding: const EdgeInsets.all(16),

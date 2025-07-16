@@ -14,8 +14,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../ads/native_ad_card.dart';
-import '../../../../../core/widget/banner.dart';
-import '../../../../../core/widget/olx_pagination_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class ProviderAds extends StatefulWidget {
   const ProviderAds({
@@ -135,17 +135,7 @@ class _ProviderAdsState extends State<ProviderAds> {
               );
         }
       },
-      banners: [
-        BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-        BannerAdsModel(
-            videoUrl:
-                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-        BannerAdsModel(
-          imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-          videoUrl:
-              'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-        ),
-      ],
+      banners: bannersList,
       items: List.generate(
           context.read<AdvertisementCubit>().ads.length +
               (context.read<AdvertisementCubit>().isLoadingAdsMore ? 1 : 0),
@@ -156,7 +146,6 @@ class _ProviderAdsState extends State<ProviderAds> {
           child: _buildAdContent(ad),
         );
       }),
-      totalPages: 10,
     );
     /*return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16),

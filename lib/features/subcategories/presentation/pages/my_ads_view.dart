@@ -14,8 +14,8 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/widget/banner.dart';
-import '../../../../core/widget/olx_pagination_widget.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class MyAdsView extends StatefulWidget {
   const MyAdsView(
@@ -92,18 +92,8 @@ class _MyAdsViewState extends State<MyAdsView> {
       return OlxPaginationWidget(
         itemsPerPage: 2,
         loadPage: (page) =>
-            context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),
-        banners: [
-          BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-          BannerAdsModel(
-              videoUrl:
-                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-          BannerAdsModel(
-            imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-            videoUrl:
-                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-          ),
-        ],
+            context.read<SubcategoriesCubit>().getMyAds(widget.id),
+        banners: bannersList,
         items: List.generate(
           controller.myAds.length,
           (i) => Padding(
@@ -150,7 +140,7 @@ class _MyAdsViewState extends State<MyAdsView> {
             ),
           ),
         ),
-        totalPages: 10,
+
       );
       /*return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),

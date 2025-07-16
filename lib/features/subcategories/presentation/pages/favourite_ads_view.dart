@@ -13,8 +13,8 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../core/widget/banner.dart';
-import '../../../../core/widget/olx_pagination_widget.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class FavouriteAdsView extends StatefulWidget {
   const FavouriteAdsView({
@@ -83,17 +83,7 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
         itemsPerPage: 2,
         loadPage: (page) =>
             context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),
-        banners: [
-          BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-          BannerAdsModel(
-              videoUrl:
-                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-          BannerAdsModel(
-            imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-            videoUrl:
-                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-          ),
-        ],
+        banners: bannersList,
         items: List.generate(
             controller.myFavouriteAds.length,
             (i) => Padding(
@@ -123,7 +113,7 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
                     },
                   ),
                 )),
-        totalPages: 10,
+
       );
       /* return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

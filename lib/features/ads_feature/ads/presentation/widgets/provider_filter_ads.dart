@@ -8,8 +8,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
-import '../../../../../core/widget/banner.dart';
-import '../../../../../core/widget/olx_pagination_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class ProviderFilterAds extends StatefulWidget {
   const ProviderFilterAds(
@@ -73,17 +73,7 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
       itemsPerPage: 2,
       loadPage: (page) => widget.controller
           .loadFilterAdsData(model: widget.model, filter: widget.userType),
-      banners: [
-        BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-        BannerAdsModel(
-            videoUrl:
-                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-        BannerAdsModel(
-          imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-          videoUrl:
-              'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-        ),
-      ],
+      banners: bannersList,
       items: List.generate(
           widget.controller.ads.length +
               (widget.controller.isLoadingAdsMore ? 1 : 0), (index) {
@@ -104,7 +94,7 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
           ),
         );
       }),
-      totalPages: 10,
+
     );
     /*return ListView.builder(
       controller: _scrollController,

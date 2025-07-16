@@ -12,8 +12,8 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../../core/widget/banner.dart';
-import '../../../../../core/widget/olx_pagination_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class UserAds extends StatefulWidget {
   const UserAds({
@@ -125,17 +125,7 @@ class _UserAdsState extends State<UserAds> {
               );
         }
       },
-      banners: [
-        BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-        BannerAdsModel(
-            videoUrl:
-                'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-        BannerAdsModel(
-          imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-          videoUrl:
-              'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-        ),
-      ],
+      banners: bannersList,
       items: List.generate(
         context.read<AdvertisementCubit>().ads.length,
         (index) => Padding(
@@ -158,7 +148,7 @@ class _UserAdsState extends State<UserAds> {
           ),
         ),
       ),
-      totalPages: 10,
+
     );
     /*return ListView.separated(
       // controller: _scrollController,

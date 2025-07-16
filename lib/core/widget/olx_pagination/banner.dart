@@ -48,9 +48,9 @@ class _BannerAdsWidgetState extends State<BannerAdsWidget> {
 
     final video = (_controller != null && _controller!.value.isInitialized)
         ? AspectRatio(
-      aspectRatio: _controller!.value.aspectRatio,
-      child: VideoPlayer(_controller!),
-    )
+            aspectRatio: _controller!.value.aspectRatio,
+            child: VideoPlayer(_controller!),
+          )
         : null;
 
     return Stack(
@@ -89,3 +89,14 @@ class _BannerAdsWidgetState extends State<BannerAdsWidget> {
   }
 }
 
+List<BannerAdsModel> bannersList = [
+  BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
+  BannerAdsModel(
+      videoUrl:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+  BannerAdsModel(
+    imageUrl: 'https://i.imgur.com/QCNbOAo.png',
+    videoUrl:
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+  ),
+];

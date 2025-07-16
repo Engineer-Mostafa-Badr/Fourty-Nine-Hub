@@ -6,7 +6,6 @@ import 'banner.dart';
 class OlxPaginationWidget extends StatefulWidget {
   final List<Widget> items;
   final List<BannerAdsModel> banners;
-  final int totalPages;
   final int itemsPerPage;
   final Future<void> Function(int) loadPage; // Callback for loading pages
 
@@ -14,7 +13,6 @@ class OlxPaginationWidget extends StatefulWidget {
     super.key,
     required this.items,
     required this.banners,
-    required this.totalPages,
     required this.loadPage,
     this.itemsPerPage=10,
   });
@@ -39,8 +37,7 @@ class _PaginationBannerDemoState2 extends State<OlxPaginationWidget> {
   void _scrollListener() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 100 &&
-        !_isLoading &&
-        _currentPage < widget.totalPages) {
+        !_isLoading ) {
       _loadNextPage();
     }
   }
