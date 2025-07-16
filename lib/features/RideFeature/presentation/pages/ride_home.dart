@@ -905,6 +905,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         state.requestedTrip!.status == TripState.canceled.name ||
         state.requestedTrip!.status == TripState.completed.name;
     print("state.requestedTrip ${state.requestedTrip?.status}");
+    print("state.driverLocation != null ${state.driverLocation != null}");
     return Container(
       width: double.infinity,
       height: state.requestedTrip != null
@@ -916,92 +917,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       ),
       child: ClipRect(
         child: CustomGoogleMap(
-          key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
           startLocation: state.currentLocation==null?null:gmap.LatLng(isBeforeRequest? startLat : startLng,isBeforeRequest? startLng : startLat),
           targetLocation: state.toLocation==null?null:gmap.LatLng(isBeforeRequest? targetLat : targetLng,isBeforeRequest? targetLng : targetLat),
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
-          carLocation: state.driverLocation,
-          showCarMarker: state.driverLocation != null &&
-              state.requestedTrip != null &&
-              state.requestedTrip!.status == TripState.started.name,
         ),
       ),
     );
-    // return SizedBox(
-    //   width: double.infinity,
-    //   height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
-    //   child: FlutterMap(
-    //     mapController: _mapController,
-    //     options: MapOptions(
-    //       initialCenter: LatLng(
-    //         state.currentLocation?.lat ?? 0.0,
-    //         state.currentLocation?.lng ?? 0.0,
-    //       ),
-    //       initialZoom: 12.0,
-    //     ),
-    //     children: [
-    //       TileLayer(
-    //         // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    //         urlTemplate: context.isDarkMode
-    //             ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-    //             : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
-    //         subdomains: const ['a', 'b', 'c'],
-    //         userAgentPackageName: 'com.example.app',
-    //       ),
-    //       MarkerLayer(
-    //         markers: [
-    //           if (state.currentLocation != null)
-    //             Marker(
-    //               point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
-    //             ),
-    //           if (state.toLocation != null)
-    //             Marker(
-    //               point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
-    //             ),
-    //           if (state.wayPointOne != null)
-    //             Marker(
-    //               point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-    //             ),
-    //           if (state.wayPointTwo != null)
-    //             Marker(
-    //               point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-    //             ),
-    //         ],
-    //       ),
-    //       if (state.requestedTrip != null)
-    //         if (state.requestedTrip!.status == TripState.started.name)
-    //           BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-    //             return const CarMarkerOnClientSideWidget();
-    //           }),
-    //       if (routePoints.isNotEmpty)
-    //         PolylineLayer(
-    //           polylines: [
-    //             Polyline(
-    //               points: routePoints,
-    //               color: context.isDarkMode ? Colors.blue : Colors.black87,
-    //               strokeWidth: 4.0,
-    //             ),
-    //           ],
-    //         ),
-    //     ],
-    //   ),
-    // );
   }
 
   List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
