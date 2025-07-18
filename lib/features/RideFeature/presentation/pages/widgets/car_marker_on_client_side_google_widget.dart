@@ -65,7 +65,8 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
   }
 
   void _subscribeToRideCubit() {
-    _rideSub = context.read<RideCubit>().stream.listen((rideState) {
+    _rideSub = context.read<RideCubit>().stream.listen((rideState) async{
+      final double currentZoom = await widget.mapController.getZoomLevel();
       final trip = rideState.requestedTrip;
       final currentLocation = rideState.driverLocation;
       final previousLocation = rideState.previousDriverLocation;
@@ -94,9 +95,8 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: currentLocation,
-              zoom: 16.0,     // 👈 Set your desired zoom level
+              zoom: currentZoom,     // 👈 Set your desired zoom level
               bearing: newAngle, // 👈 Optional: rotate camera in car's direction
-              tilt: 0,        // 👈 Optional: add tilt for 3D effect
             ),
           ),
         );
