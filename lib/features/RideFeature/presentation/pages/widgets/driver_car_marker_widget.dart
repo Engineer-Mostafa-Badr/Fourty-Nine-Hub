@@ -79,9 +79,9 @@ class _DriverCarMarkerWidgetState extends State<DriverCarMarkerWidget> {
     });
   }
 
-  void _updateCarMarker(Position position) {
+  void _updateCarMarker(Position position) async{
     double newAngle = _lastAngle;
-
+    final double currentZoom = await widget.mapController.getZoomLevel();
     if (_previousPosition != null) {
       newAngle = _calculateBearing(
         LatLng(_previousPosition!.latitude, _previousPosition!.longitude),
@@ -105,7 +105,7 @@ class _DriverCarMarkerWidgetState extends State<DriverCarMarkerWidget> {
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 18.0, // 👈 Adjust this zoom level as needed
+          zoom: currentZoom, // 👈 Adjust this zoom level as needed
           bearing: newAngle, // optional: rotate map to match car direction
         ),
       ),
