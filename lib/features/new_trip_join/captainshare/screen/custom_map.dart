@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_google_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_car_marker_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,6 +11,7 @@ class CustomGoogleMap extends StatefulWidget {
   final List<LatLng> clientLocations;
   final List<LatLng> polylinePoints;
   final bool enableScrolling;
+  final bool? fromClient;
 
   const CustomGoogleMap({
     super.key,
@@ -18,6 +20,7 @@ class CustomGoogleMap extends StatefulWidget {
     this.clientLocations = const [],
     this.polylinePoints = const [],
     this.enableScrolling = true,
+    this.fromClient,
   });
 
   @override
@@ -25,7 +28,7 @@ class CustomGoogleMap extends StatefulWidget {
 }
 
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
-  late GoogleMapController _mapController;
+  GoogleMapController? _mapController;
 
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
@@ -52,18 +55,19 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         widget.startLocation != _latestStartLocation) {
       _latestStartLocation = widget.startLocation;
 
-      // Move camera to updated start location
-      _mapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: widget.startLocation!,
-            zoom: 12.0,
+      if (_mapController != null) {
+        _mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: widget.startLocation!,
+              zoom: 12.0,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
 
-    _setMarkersAndPolyline(); // Update markers/polyline if needed
+    _setMarkersAndPolyline();
   }
 
   Future<void> initMapStyle() async {
@@ -71,7 +75,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         .loadString('assets/map_styles/light_map_style.json');
     var darkStyle = await DefaultAssetBundle.of(context)
         .loadString('assets/map_styles/dark_map_style.json');
-    _mapController.setMapStyle(context.isDarkMode ? darkStyle : lightStyle);
+    _mapController?.setMapStyle(context.isDarkMode ? darkStyle : lightStyle);
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -81,7 +85,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.startLocation != null) {
-        _mapController.moveCamera(
+        _mapController!.moveCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: widget.startLocation!,
@@ -90,6 +94,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           ),
         );
       }
+      setState(() {}); // Trigger re-render to pass controller
     });
   }
 
@@ -148,7 +153,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   void _updateCarMarker(Marker? marker) {
     setState(() {
       _carMarker = marker;
-      _setMarkersAndPolyline(); // Rebuild with car marker
+      _setMarkersAndPolyline();
     });
   }
 
@@ -204,8 +209,16 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           height: double.infinity,
           child: widget.enableScrolling ? mapWidget : IgnorePointer(child: mapWidget),
         ),
-        // Overlay widget that handles car tracking
-        GoogleMapCarMarkerWidget(onCarMarkerUpdated: _updateCarMarker),
+        if (widget.fromClient == true && _mapController != null)
+          GoogleMapCarMarkerWidget(
+            onCarMarkerUpdated: _updateCarMarker,
+            mapController: _mapController!,
+          ),
+        if (widget.fromClient == false && _mapController != null)
+          DriverCarMarkerWidget(
+            onCarMarkerUpdated: _updateCarMarker,
+            mapController: _mapController!,
+          ),
       ],
     );
   }

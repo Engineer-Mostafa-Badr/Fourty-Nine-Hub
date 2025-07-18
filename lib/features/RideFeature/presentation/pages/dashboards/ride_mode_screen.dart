@@ -448,7 +448,16 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         Expanded(
                             child: Stack(
                           children: [
-                            _buildTopMap(context, state),
+                            if((state.activeTrip!=null&&state.tripStatus != TripState.completed.name))_buildTopMap(context, state),
+                            if((state.activeTrip==null||state.tripStatus == TripState.completed.name))Center(
+                              child:Text(
+                                context.isArabic?'لا يوجد لديك رحلة جارية في الوقت الحالي':"You don't have active trip at the moment",
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                  fontSize: 16
+                                )
+                              )
+                            ),
                             // DynamicMapWithPolyline(url: getMapUrl(context, type: "mapBox"), apiKey: getApiKey(context, type: "mapBox")),
                             if (state.tripStatus == TripState.goToClient.name)
                               BuildDriverArrivedSheet(
@@ -868,24 +877,6 @@ class _RideModeScreenState extends State<RideModeScreen> {
     List<gmap.LatLng> routePoints = [];
     routePoints = _convertPolylineToLatLng(state.activeTrip?.polyline ?? []);
 
-    if (state.activeTrip != null &&
-        state.activeTrip?.startCoordinates?[0] == null &&
-        state.activeTrip?.startCoordinates?[1] == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mapController.move(
-          LatLng(state.activeTrip!.startCoordinates![0],
-              state.activeTrip!.startCoordinates![1]),
-          12.0,
-        );
-      });
-    } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mapController.move(
-          LatLng(30.033333, 31.233334),
-          12.0,
-        );
-      });
-    }
 
     List<gmap.LatLng> clients = [];
     if (state.activeTrip?.wayPointOne != null &&
@@ -911,12 +902,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
       ),
       child: ClipRect(
         child: CustomGoogleMap(
-          key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
+          // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
           startLocation: ((state.activeTrip?.startCoordinates==null)||(state.activeTrip?.startCoordinates==[]))?null:gmap.LatLng(state.activeTrip!.startCoordinates![1],state.activeTrip!.startCoordinates![0]),
           targetLocation: ((state.activeTrip?.targetCoordinates==null)||(state.activeTrip?.targetCoordinates==[]))?null:gmap.LatLng(state.activeTrip!.targetCoordinates![1],state.activeTrip!.targetCoordinates![0]),
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
+          fromClient: (state.activeTrip!=null&&state.tripStatus == TripState.started.name)==true?false:null,
         ),
       ),
     );

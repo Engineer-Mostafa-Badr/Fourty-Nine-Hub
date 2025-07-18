@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/client_not_shown_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/drop_client_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/pick_client_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/join_to_route_use_case.dart';
@@ -98,6 +99,16 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   @override
   Future<Either<Failure, bool>> dropClient(DropClientParams params) async {
     return await shippingRemoteDataSource.dropClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> clientNotShown(ClientNotShownParams params) async {
+    return await shippingRemoteDataSource.clientNotShown(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> arrivedToClient(ClientNotShownParams params) async {
+    return await shippingRemoteDataSource.arrivedToClient(params);
   }
 
   @override

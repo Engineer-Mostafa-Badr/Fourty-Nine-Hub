@@ -502,6 +502,10 @@ class EndPoints {
       "$developmentBaseUrl/captain-share/driver/routes/$id/pick-up-passenger";
   static String dropClient(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/drop-off-passenger";
+  static String clientNotShown(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/no-show-passenger";
+  static String captainArrivedToClient(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/arrived";
   static String joinToRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
   static String routeDetails(String id) =>

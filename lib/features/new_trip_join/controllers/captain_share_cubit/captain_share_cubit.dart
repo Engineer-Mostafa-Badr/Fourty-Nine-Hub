@@ -35,6 +35,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_j
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_update_route_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -280,20 +281,21 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
   Future<void> cancelMyBooking(
       {required String id, required BuildContext context, required String from}) async {
-    showLoadingDialog(context);
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     final response = await cancelMyBookingUseCase(id);
     response.fold((l) {
-      context.pop();
-      String errorName = getFailureName(l, context);
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
       // errorName == 'DebtError'
-      //     ? showDebtDialog(context, subCategoryId)
+      //     ? showDebtDialog(currentContext, subCategoryId)
       //     : errorName == 'SubscribeError'
-      //     ? showSubscribeDialog(context, subCategoryId)
-      //     : showErrorMessage(context, getFailureMessage(l, context));
-      showSuccessMessage(context,  errorName);
+      //     ? showSubscribeDialog(currentContext, subCategoryId)
+      //     : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      showSuccessMessage(currentContext,  errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
-      context.pop();
+      currentContext.pop();
       if(from=='available') {
         availableBookings.removeWhere((e)=> e.id==id);
       }
@@ -306,14 +308,15 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       if(from=='runningBookings') {
         runningBookings.firstWhere((e)=> e.id==id).status='cancelled';
       }
-      showSuccessMessage(context, context.isArabic?'تم الغاء الحجز بنجاح':'Booking canceled successfully');
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم الغاء الحجز بنجاح':'Booking canceled successfully');
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
 
   Future<void> joinToRoute(
       {required String id, required BuildContext context}) async {
-    showLoadingDialog(context);
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     Position currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -323,19 +326,19 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       lng: currentPosition.longitude
     ));
     response.fold((l) {
-      context.pop();
-      String errorName = getFailureName(l, context);
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
       // errorName == 'DebtError'
-      //     ? showDebtDialog(context, subCategoryId)
+      //     ? showDebtDialog(currentContext, subCategoryId)
       //     : errorName == 'SubscribeError'
-      //     ? showSubscribeDialog(context, subCategoryId)
-      //     : showErrorMessage(context, getFailureMessage(l, context));
-      showSuccessMessage(context,  errorName);
+      //     ? showSubscribeDialog(currentContext, subCategoryId)
+      //     : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      showSuccessMessage(currentContext,  errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
       availableBookings.firstWhere((e)=>e.id==data.id).clients = data.clients;
       availableBookings.firstWhere((e)=>e.id==data.id).availableSeats = data.availableSeats;
-      context.pop();
+      currentContext.pop();
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }

@@ -462,9 +462,12 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       CliLogger.info("Listen to Update Route ");
       log("Listen to Update Route ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToUpdateRoute, (data) {
-        CliLogger.info("Update Route data :  $data");
-        log("Update Route data :  $data");
-        params(MyBookingModel.fromJson(data['updatedRoute']));
+        CliLogger.info("Update Route data :  ${data['updatedRoute']['formattedResponse']}");
+        log("Update Route data :  ${data['updatedRoute']['formattedResponse']}");
+        MyBookingModel model = MyBookingModel.fromJson(data['updatedRoute']['formattedResponse']);
+        log("model.pricePerSeat :  ${model.pricePerSeat}");
+        log("Update Route data :  ${MyBookingModel.fromJson(data['updatedRoute']['formattedResponse'])}");
+        params(MyBookingModel.fromJson(data['updatedRoute']['formattedResponse']));
       });
     } catch (e) {
       CliLogger.info("can't listen to Update Route error $e");

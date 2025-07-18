@@ -626,9 +626,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
       child: AbsorbPointer(
         absorbing: true,
         child: CustomGoogleMap(
-          startLocation: gmap.LatLng(model?.startLocation?.location[1],
+          startLocation:model?.startLocation==null?null: gmap.LatLng(model?.startLocation?.location[1],
               model?.startLocation?.location[0]),
-          targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
+          targetLocation: model?.targetLocation==null?null:gmap.LatLng(model?.targetLocation?.location[1],
               model?.targetLocation?.location[0]),
             polylinePoints:routePoints,
           clientLocations: convertClientsToLatLng(clients),
