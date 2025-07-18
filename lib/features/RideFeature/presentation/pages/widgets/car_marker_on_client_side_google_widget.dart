@@ -10,14 +10,17 @@ import 'package:flutter/services.dart';
 
 class GoogleMapCarMarkerWidget extends StatefulWidget {
   final Function(Marker?) onCarMarkerUpdated;
+  final GoogleMapController mapController;
 
   const GoogleMapCarMarkerWidget({
     super.key,
     required this.onCarMarkerUpdated,
+    required this.mapController,
   });
 
   @override
-  State<GoogleMapCarMarkerWidget> createState() => _GoogleMapCarMarkerWidgetState();
+  State<GoogleMapCarMarkerWidget> createState() =>
+      _GoogleMapCarMarkerWidgetState();
 }
 
 class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
@@ -38,16 +41,16 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
     super.dispose();
   }
 
-  Future<BitmapDescriptor> getResizedCarIcon(String assetPath, {int width = 64}) async {
+  Future<BitmapDescriptor> getResizedCarIcon(String assetPath,
+      {int width = 64}) async {
     final ByteData data = await rootBundle.load(assetPath);
     final Uint8List bytes = data.buffer.asUint8List();
 
-    final ui.Codec codec = await ui.instantiateImageCodec(
-      bytes,
-      targetWidth: width,
-    );
+    final ui.Codec codec =
+    await ui.instantiateImageCodec(bytes, targetWidth: width);
     final ui.FrameInfo fi = await codec.getNextFrame();
-    final ByteData? resizedData = await fi.image.toByteData(format: ui.ImageByteFormat.png);
+    final ByteData? resizedData =
+    await fi.image.toByteData(format: ui.ImageByteFormat.png);
 
     return BitmapDescriptor.fromBytes(resizedData!.buffer.asUint8List());
   }
@@ -57,7 +60,7 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
 
     _carIcon = await getResizedCarIcon(
       'assets/images/car_for_tracking.png',
-      width: 150, // Adjust size as needed
+      width: 150,
     );
   }
 
@@ -78,14 +81,27 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
           markerId: const MarkerId('car'),
           position: currentLocation,
           rotation: newAngle,
-          icon: _carIcon ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+          icon: _carIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
           flat: true,
           anchor: const Offset(0.5, 0.5),
         );
 
         _lastAngle = newAngle;
 
-        widget.onCarMarkerUpdated(marker); // Notify parent
+        // 👉 Move the camera to follow the car
+        widget.mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: currentLocation,
+              zoom: 16.0,     // 👈 Set your desired zoom level
+              bearing: newAngle, // 👈 Optional: rotate camera in car's direction
+              tilt: 0,        // 👈 Optional: add tilt for 3D effect
+            ),
+          ),
+        );
+
+        widget.onCarMarkerUpdated(marker);
       } else {
         widget.onCarMarkerUpdated(null); // Remove marker
       }
@@ -98,7 +114,8 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
     final double deltaLng = (to.longitude - from.longitude) * (pi / 180);
 
     final double y = sin(deltaLng) * cos(lat2);
-    final double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLng);
+    final double x =
+        cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLng);
     final double bearing = atan2(y, x);
 
     return (bearing * (180 / pi) + 360) % 360;

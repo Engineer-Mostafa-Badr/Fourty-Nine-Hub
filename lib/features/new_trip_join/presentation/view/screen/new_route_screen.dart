@@ -493,7 +493,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
       ),
       child: ClipRect(
         child: CustomGoogleMap(
-          key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
+          // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
           startLocation: state.currentLocation==null?null:gmap.LatLng(startLat, startLng),
           targetLocation: state.toLocation==null?null:gmap.LatLng(targetLat, targetLng),
           polylinePoints: routePoints,

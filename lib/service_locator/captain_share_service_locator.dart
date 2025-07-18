@@ -6,6 +6,8 @@ import 'package:fourtyninehub/features/new_trip_join/domain/repositories/captain
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/cancel_my_booking_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/accept_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/arrived_to_client_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/client_not_shown_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/drop_client_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_available_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_past_bookings_use_case.dart';
@@ -138,6 +140,14 @@ class CaptainShareServiceLocator {
         () => GetDriverPastBookingsUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<CaptainArrivedToClientUseCase>(
+        () => CaptainArrivedToClientUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ClientNotShownUseCase>(
+        () => ClientNotShownUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
@@ -163,6 +173,8 @@ class CaptainShareServiceLocator {
 
     serviceLocator.registerFactory<CaptainShareDashboardCubit>(
         () => CaptainShareDashboardCubit(
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

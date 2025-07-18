@@ -12,6 +12,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/se
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/accept_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/arrived_to_client_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/client_not_shown_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/drop_client_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_available_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_past_bookings_use_case.dart';
@@ -32,9 +34,11 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   final AcceptRouteUseCase acceptRouteUseCase;
   final PickClientUseCase pickClientUseCase;
   final DropClientUseCase dropClientUseCase;
+  final CaptainArrivedToClientUseCase arrivedToClientUseCase;
+  final ClientNotShownUseCase clientNotShownUseCase;
   final GetDriverPastBookingsUseCase getDriverPastBookingsUseCase;
 
-  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
+  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.arrivedToClientUseCase,this.clientNotShownUseCase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
       : super(const CaptainShareDashboardState());
 
 
