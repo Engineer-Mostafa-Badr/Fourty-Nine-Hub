@@ -7,7 +7,7 @@ class ClientNotShownUseCase {
 
   ClientNotShownUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call(ClientNotShownParams params) {
+  Future<Either<Failure, String>> call(ClientNotShownParams params) {
     return repository.clientNotShown(params);
   }
 }

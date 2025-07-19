@@ -28,106 +28,30 @@ import '../../../../core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
-class OneWayWidget extends StatefulWidget {
+class DriverRouteWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
   final bool? hasAcceptButton;
-  final String? requestType;
   final MyBookingEntity? model;
-  final Function? onCancelBooking;
-  final Function? onJoin;
   final Function? onAccept;
 
-  const OneWayWidget({
+  const DriverRouteWidget({
     super.key,
     this.statusDriver,
     this.model,
     this.cancelButton,
     this.hasAcceptButton,
     this.onAccept,
-    this.requestType,
-    this.onCancelBooking,
-    this.onJoin,
   });
 
   @override
-  _OneWayWidgetState createState() => _OneWayWidgetState();
+  _DriverRouteWidgetState createState() => _DriverRouteWidgetState();
 }
 
-class _OneWayWidgetState extends State<OneWayWidget> {
-  bool _showContainer = false;
-  ExpandableController _expandableController = ExpandableController();
+class _DriverRouteWidgetState extends State<DriverRouteWidget> {
 
-  // Timer related variables
-  Timer? _timer;
-  Duration _remainingTime = Duration.zero;
-  bool _showTimer = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _expandableController = ExpandableController(initialExpanded: false);
-    if(widget.model?.status=='pending')_setupTimer();
-  }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _setupTimer() {
-    if (widget.model?.createdAt != null) {
-      try {
-        DateTime createdAt = DateTime.parse(widget.model!.createdAt!);
-        DateTime now = DateTime.now();
-
-        // Check if it's the same day
-        bool isSameDay = createdAt.year == now.year &&
-            createdAt.month == now.month &&
-            createdAt.day == now.day;
-
-        if (isSameDay) {
-          Duration elapsed = now.difference(createdAt);
-          Duration oneHour = const Duration(hours: 1);
-
-          // Check if less than 1 hour has passed
-          if (elapsed < oneHour) {
-            _remainingTime = oneHour - elapsed;
-            _showTimer = true;
-
-            // Start the countdown timer
-            _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-              setState(() {
-                if (_remainingTime.inSeconds > 0) {
-                  _remainingTime = _remainingTime - const Duration(seconds: 1);
-                } else {
-                  _timer?.cancel();
-                  _showTimer = false;
-                  _onTimerFinished();
-                }
-              });
-            });
-          }
-        }
-      } catch (e) {
-        print('Error parsing createdAt: $e');
-      }
-    }
-  }
-
-  // This method will be called when timer finishes
-  void _onTimerFinished() {
-    // Add your logic here when timer finishes
-    print('Timer finished! Add your custom logic here.');
-    // You can add any functionality you need here
-  }
-
-  String _formatRemainingTime(Duration duration) {
-    int minutes = duration.inMinutes;
-    int seconds = duration.inSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-  }
 
   String getBookingStatus(String status) {
     switch (status) {
@@ -165,7 +89,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
   @override
   Widget build(BuildContext context) {
-    bool myRoute = (widget.model?.creatorId == UserCubit.to.state.data?.id)||((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id));
     return GestureDetector(
       // onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
       child: Container(
@@ -242,16 +165,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           ),
                         ),
                         SizedBox(height: 8.h),
-                        if (!(myRoute))
                           SvgPicture.asset(Assets.bookedMan),
-                        if (myRoute)
-                          CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                UserCubit.to.state.data?.profilePicture ??
-                                    UIConst.profilePlaceHolder),
-                          ),
                       ],
                     ),
                     Column(
@@ -266,18 +180,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           ),
                         ),
                         SizedBox(height: 8.h),
-                        if (((widget.model?.availableSeats ?? 0) >= 2))
-                          ClickableWidget(
-                            onTap: () {
-                              if (widget.onJoin != null) {
-                                widget.onJoin!();
-                              }
-                            },
-                            child: SvgPicture.asset(
-                              Assets.freeIcon,
-                              color: AppColors.getTextColor(context),
-                            ),
-                          ),
                         if (((widget.model?.availableSeats ?? 0) < 2))
                           CircleAvatar(
                             radius: 30.w,
@@ -302,18 +204,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           ),
                         ),
                         SizedBox(height: 8.h),
-                        if (((widget.model?.availableSeats ?? 0) >= 1))
-                          ClickableWidget(
-                            onTap: () {
-                              if (widget.onJoin != null) {
-                                widget.onJoin!();
-                              }
-                            },
-                            child: SvgPicture.asset(
-                              Assets.freeIcon,
-                              color: AppColors.getTextColor(context),
-                            ),
-                          ),
                         if (((widget.model?.availableSeats ?? 0) < 1))
                           CircleAvatar(
                             radius: 30.w,
@@ -463,35 +353,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
               Row(
                 children: [
                   // Show timer if conditions are met, otherwise show time ago
-                  _showTimer
-                      ? Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.orange),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.timer,
-                          size: 16,
-                          color: Colors.orange,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatRemainingTime(_remainingTime),
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.orange,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                      : Text(
+                  Text(
                     TimeUtils.formatTimeAgo(
                         widget.model?.createdAt ?? DateTime.now().toString(),
                         context.isArabic),
@@ -519,34 +381,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 5),
-                  widget.cancelButton == true
-                      ? GestureDetector(
-                    onTap: () {
-                      if (widget.onCancelBooking != null) {
-                        widget.onCancelBooking!();
-                      }
-                    },
-                    child: Container(
-                      width: 120.w,
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        color: AppColors.SECONDARY_COLOR_DARK,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(
-                        child: Text(
-                          LocaleKeys.cancel.localize,
-                          style: TextStyle(
-                            fontSize: 22.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                      : const SizedBox(),
                 ],
               ),
               SizedBox(height: 8),
@@ -582,7 +416,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
 
 
-    List<BookingClientEntity> clients = model?.clients ?? [];
+    List<BookingClientEntity> clients = List.from(model?.clients ?? []);
     if (clients.isNotEmpty) {
       clients.removeWhere((e) => e.id == model?.creatorId);
     }
@@ -622,7 +456,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
               model?.startLocation?.location[0]),
           targetLocation: model?.targetLocation==null?null:gmap.LatLng(model?.targetLocation?.location[1],
               model?.targetLocation?.location[0]),
-            polylinePoints:routePoints,
+          polylinePoints:routePoints,
           clientLocations: convertClientsToLatLng(clients),
         ),
       ),

@@ -8,7 +8,7 @@ class CaptainArrivedToClientUseCase {
 
   CaptainArrivedToClientUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call(ClientNotShownParams params) {
-    return repository.clientNotShown(params);
+  Future<Either<Failure, String>> call(ClientNotShownParams params) {
+    return repository.arrivedToClient(params);
   }
 }

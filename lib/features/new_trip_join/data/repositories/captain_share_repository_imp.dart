@@ -102,12 +102,12 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> clientNotShown(ClientNotShownParams params) async {
+  Future<Either<Failure, String>> clientNotShown(ClientNotShownParams params) async {
     return await shippingRemoteDataSource.clientNotShown(params);
   }
 
   @override
-  Future<Either<Failure, bool>> arrivedToClient(ClientNotShownParams params) async {
+  Future<Either<Failure, String>> arrivedToClient(ClientNotShownParams params) async {
     return await shippingRemoteDataSource.arrivedToClient(params);
   }
 
