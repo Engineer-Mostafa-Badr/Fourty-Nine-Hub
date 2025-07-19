@@ -448,8 +448,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         Expanded(
                             child: Stack(
                           children: [
-                            if((state.activeTrip!=null&&state.tripStatus != TripState.completed.name))_buildTopMap(context, state),
-                            if((state.activeTrip==null||state.tripStatus == TripState.completed.name))Center(
+                            if(state.tripStatus == TripState.accepted.name||state.tripStatus == TripState.goToClient.name||state.tripStatus == TripState.inLocation.name||state.tripStatus == TripState.started.name||state.tripStatus == TripState.support.name)_buildTopMap(context, state),
+                            if((cubit.activeTrip==null||state.tripStatus == TripState.completed.name||state.tripStatus == TripState.canceled.name||state.tripStatus == ''))Center(
                               child:Text(
                                 context.isArabic?'لا يوجد لديك رحلة جارية في الوقت الحالي':"You don't have active trip at the moment",
                                 style: TextStyle(
@@ -464,20 +464,30 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   onPressed: (String message) {
                                     cubit.arrivedToClient(
                                         context,
-                                        state.activeTrip?.tripId ?? '',
+                                        cubit.activeTrip?.tripId ?? '',
                                         message);
                                   },
                                   onSafety: () {
                                     cubit.showSafety(state.tripStatus ?? '');
                                   },
-                                  activeTrip: state.activeTrip),
+                                  onReport: () {
+                                    bottomSheet(
+                                        context: context,
+                                        widget: ReportView(
+                                          id: cubit.activeTrip?.tripId ?? '',
+                                          categoryId:
+                                          cubit.activeTrip?.subCategoryId ??
+                                              '',
+                                        ));
+                                  },
+                                  activeTrip: cubit.activeTrip),
                             if (state.tripStatus == TripState.accepted.name)
                               BuildGoToClientSheet(
                                 onGoingToClient: () {
                                   cubit.goingToClient(
-                                      context, state.activeTrip?.tripId ?? '');
+                                      context, cubit.activeTrip?.tripId ?? '');
                                 },
-                                activeTrip: state.activeTrip,
+                                activeTrip: cubit.activeTrip,
                                 onSafety: () {
                                   cubit.showSafety(state.tripStatus ?? '');
                                 },
@@ -485,9 +495,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   bottomSheet(
                                       context: context,
                                       widget: ReportView(
-                                        id: state.activeTrip?.tripId ?? '',
+                                        id: cubit.activeTrip?.tripId ?? '',
                                         categoryId:
-                                            state.activeTrip?.subCategoryId ??
+                                            cubit.activeTrip?.subCategoryId ??
                                                 '',
                                       ));
                                 },
@@ -496,7 +506,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               BuildDriverOtpSheet(
                                 onPressed: (String otp) {
                                   cubit.startDriverTrip(context,
-                                      state.activeTrip?.tripId ?? '', otp);
+                                      cubit.activeTrip?.tripId ?? '', otp);
                                 },
                                 onSafety: () {
                                   cubit.showSafety(state.tripStatus ?? '');
@@ -508,21 +518,21 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 onFinalizeTrip: () {
                                   cubit.finalizeTripByRider(
                                       context: context,
-                                      tripId: state.activeTrip?.tripId ?? '');
+                                      tripId: cubit.activeTrip?.tripId ?? '');
                                 },
                                 onReport: () {
                                   print("object");
                                   bottomSheet(
                                       context: context,
                                       widget: ReportView(
-                                        id: state.activeTrip?.tripId ?? '',
+                                        id: cubit.activeTrip?.tripId ?? '',
                                         categoryId:
-                                            state.activeTrip?.subCategoryId ??
+                                            cubit.activeTrip?.subCategoryId ??
                                                 '',
                                       ));
                                 },
                                 remainingTime: state.remainingTime,
-                                activeTrip: state.activeTrip,
+                                activeTrip: cubit.activeTrip,
                               ),
                             if (state.tripStatus == TripState.started.name)
                               BuildDriverCompleteTripSheet(
@@ -534,16 +544,16 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   cubit.stopRecord(
                                       context: context,
                                       subcategoryId:
-                                          state.activeTrip?.subCategoryId ?? '',
-                                      tripId: state.activeTrip?.tripId ?? '');
+                                          cubit.activeTrip?.subCategoryId ?? '',
+                                      tripId: cubit.activeTrip?.tripId ?? '');
                                 },
                                 onCompleteRide: () {
                                   cubit.completeDriverTrip(context,
-                                      state.activeTrip?.tripId ?? '', '');
+                                      cubit.activeTrip?.tripId ?? '', '');
                                 },
                                 onCompleteRideWithPrice: (String price) {
                                   cubit.completeDriverTripWithPrice(context,
-                                      state.activeTrip?.tripId ?? '', price);
+                                      cubit.activeTrip?.tripId ?? '', price);
                                 },
                                 onSafety: () {
                                   cubit.showSafety(state.tripStatus ?? '');
@@ -552,13 +562,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   bottomSheet(
                                       context: context,
                                       widget: ReportView(
-                                        id: state.activeTrip?.tripId ?? '',
+                                        id: cubit.activeTrip?.tripId ?? '',
                                         categoryId:
-                                            state.activeTrip?.subCategoryId ??
+                                            cubit.activeTrip?.subCategoryId ??
                                                 '',
                                       ));
                                 },
-                                tripId: state.activeTrip?.tripId ?? '',
+                                tripId: cubit.activeTrip?.tripId ?? '',
                               ),
                             if (state.tripStatus == TripState.completed.name)
                               BuildDriverRateClientSheet(
@@ -566,7 +576,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   print("message $message ||| rate $rate");
                                   cubit.rateTheClient(
                                       context: context,
-                                      tripId: state.activeTrip?.tripId ?? '',
+                                      tripId: cubit.activeTrip?.tripId ?? '',
                                       comment: message,
                                       rate: rate);
                                 },
@@ -574,11 +584,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if (state.tripStatus == TripState.support.name)
                               BuildSafetySheet(
                                 params: SupportRideParams(
-                                    tripId: state.activeTrip?.tripId ?? '',
+                                    tripId: cubit.activeTrip?.tripId ?? '',
                                     tripType: 'tracing',
                                     userType: 'driver',
-                                    driverId: state.activeTrip?.driverId ?? '',
-                                    clientId: state.activeTrip?.clientId ?? ''),
+                                    driverId: cubit.activeTrip?.driverId ?? '',
+                                    clientId: cubit.activeTrip?.clientId ?? ''),
                                 onClose: () {
                                   cubit.closeSafety();
                                 },
@@ -586,13 +596,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   context.push(
                                     Routes.supportRideScreen,
                                     extra: SupportRideParams(
-                                      tripId: state.activeTrip?.tripId ?? '',
+                                      tripId: cubit.activeTrip?.tripId ?? '',
                                       tripType: 'tracing',
                                       userType: 'driver',
                                       driverId:
-                                          state.activeTrip?.driverId ?? '',
+                                          cubit.activeTrip?.driverId ?? '',
                                       clientId:
-                                          state.activeTrip?.clientId ?? '',
+                                          cubit.activeTrip?.clientId ?? '',
                                     ),
                                   );
                                 },
@@ -829,7 +839,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
           decoration: BoxDecoration(
             color: currentIndex == index
                 ? AppColors.PRIMARY_COLOR
-                : AppColors.GREYBG,
+                : context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
@@ -839,7 +849,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
             style: TextStyle(
                 color: currentIndex == index
                     ? AppColors.whiteColor
-                    : AppColors.black,
+                    :context.isDarkMode?AppColors.whiteColor:AppColors.black,
                 fontSize: 10,
                 fontWeight: FontWeight.w600),
           ),
@@ -859,12 +869,12 @@ class _RideModeScreenState extends State<RideModeScreen> {
           height: 30,
           decoration: BoxDecoration(
             color:
-                selectedIndex == 3 ? AppColors.PRIMARY_COLOR : AppColors.GREYBG,
+                selectedIndex == 3 ? AppColors.PRIMARY_COLOR : context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Image.asset(
             Assets.option,
-            color: selectedIndex == 3 ? AppColors.whiteColor : AppColors.black,
+            color: selectedIndex == 3 ? AppColors.whiteColor : context.isDarkMode?AppColors.whiteColor:AppColors.black,
           ),
         ),
       ),
@@ -875,24 +885,24 @@ class _RideModeScreenState extends State<RideModeScreen> {
 
   Widget _buildTopMap(BuildContext context, DashboardsState state) {
     List<gmap.LatLng> routePoints = [];
-    routePoints = _convertPolylineToLatLng(state.activeTrip?.polyline ?? []);
+    routePoints = _convertPolylineToLatLng(context.read<DashboardsCubit>().activeTrip?.polyline ?? []);
 
 
     List<gmap.LatLng> clients = [];
-    if (state.activeTrip?.wayPointOne != null &&
-        state.activeTrip?.wayPointOne?[0] != null &&
-        state.activeTrip?.wayPointOne?[1] != null &&
-        state.activeTrip?.wayPointOne?[0] != 0 &&
-        state.activeTrip?.wayPointOne?[1] != 0) {
-      clients.add(gmap.LatLng(state.activeTrip!.wayPointOne![0], state.activeTrip!.wayPointOne![1]));
+    if (context.read<DashboardsCubit>().activeTrip?.wayPointOne != null &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointOne?[0] != null &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointOne?[1] != null &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointOne?[0] != 0 &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointOne?[1] != 0) {
+      clients.add(gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.wayPointOne![0], context.read<DashboardsCubit>().activeTrip!.wayPointOne![1]));
     }
 
-    if (state.activeTrip?.wayPointTwo != null &&
-        state.activeTrip?.wayPointTwo?[0] != null &&
-        state.activeTrip?.wayPointTwo?[1] != null &&
-        state.activeTrip?.wayPointTwo?[0] != 0 &&
-        state.activeTrip?.wayPointTwo?[1] != 0) {
-      clients.add(gmap.LatLng(state.activeTrip!.wayPointTwo![0], state.activeTrip!.wayPointTwo![1]));
+    if (context.read<DashboardsCubit>().activeTrip?.wayPointTwo != null &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[0] != null &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[1] != null &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[0] != 0 &&
+        context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[1] != 0) {
+      clients.add(gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.wayPointTwo![0], context.read<DashboardsCubit>().activeTrip!.wayPointTwo![1]));
     }
     return Container(
       width: double.infinity,
@@ -903,12 +913,12 @@ class _RideModeScreenState extends State<RideModeScreen> {
       child: ClipRect(
         child: CustomGoogleMap(
           // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
-          startLocation: ((state.activeTrip?.startCoordinates==null)||(state.activeTrip?.startCoordinates==[]))?null:gmap.LatLng(state.activeTrip!.startCoordinates![1],state.activeTrip!.startCoordinates![0]),
-          targetLocation: ((state.activeTrip?.targetCoordinates==null)||(state.activeTrip?.targetCoordinates==[]))?null:gmap.LatLng(state.activeTrip!.targetCoordinates![1],state.activeTrip!.targetCoordinates![0]),
+          startLocation: ((context.read<DashboardsCubit>().activeTrip?.startCoordinates==null)||(context.read<DashboardsCubit>().activeTrip?.startCoordinates==[]))?null:gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.startCoordinates![1],context.read<DashboardsCubit>().activeTrip!.startCoordinates![0]),
+          targetLocation: ((context.read<DashboardsCubit>().activeTrip?.targetCoordinates==null)||(context.read<DashboardsCubit>().activeTrip?.targetCoordinates==[]))?null:gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.targetCoordinates![1],context.read<DashboardsCubit>().activeTrip!.targetCoordinates![0]),
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
-          fromClient: (state.activeTrip!=null&&state.tripStatus == TripState.started.name)==true?false:null,
+          fromClient: (context.read<DashboardsCubit>().activeTrip!=null&&state.tripStatus == TripState.started.name)==true?false:null,
         ),
       ),
     );
