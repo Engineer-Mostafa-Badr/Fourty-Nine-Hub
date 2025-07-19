@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'banner.dart';
 
-
 class OlxPaginationWidget extends StatefulWidget {
   final List<Widget> items;
   final List<BannerAdsModel> banners;
@@ -14,7 +13,7 @@ class OlxPaginationWidget extends StatefulWidget {
     required this.items,
     required this.banners,
     required this.loadPage,
-    this.itemsPerPage=10,
+    this.itemsPerPage = 10,
   });
 
   @override
@@ -36,15 +35,14 @@ class _PaginationBannerDemoState2 extends State<OlxPaginationWidget> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 100 &&
-        !_isLoading ) {
+            _scrollController.position.maxScrollExtent - 100 &&
+        !_isLoading) {
       _loadNextPage();
     }
   }
 
   Future<void> _loadPage(int page) async {
     if (_isLoading) return;
-
     setState(() => _isLoading = true);
     await widget.loadPage(page);
     setState(() {
@@ -71,54 +69,53 @@ class _PaginationBannerDemoState2 extends State<OlxPaginationWidget> {
     // const  = 3;
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 
-    return
-      CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          // First page items
-          if (widget.items.isNotEmpty)
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) => widget.items[index],
-                childCount: widget.items.length > widget.itemsPerPage
-                    ? widget.itemsPerPage
-                    : widget.items.length,
-              ),
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        // First page items
+        if (widget.items.isNotEmpty)
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => widget.items[index],
+              childCount: widget.items.length > widget.itemsPerPage
+                  ? widget.itemsPerPage
+                  : widget.items.length,
             ),
+          ),
 
-          // Subsequent pages with banners
-          for (int page = 1; page < pageCount; page++) ...[
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              pinned: false,
-              expandedHeight: screenHeight, // Reduced height for banner
-              flexibleSpace: BannerAdsWidget(
-                key: Key('banner_$page'),
-                banner: widget.banners[(page - 1) % widget.banners.length],
-              ),
+        // Subsequent pages with banners
+        for (int page = 1; page < pageCount; page++) ...[
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            pinned: false,
+            expandedHeight: screenHeight, // Reduced height for banner
+            flexibleSpace: BannerAdsWidget(
+              key: Key('banner_$page'),
+              banner: widget.banners[(page - 1) % widget.banners.length],
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                  final itemIndex = page * widget.itemsPerPage + index;
-                  return itemIndex < widget.items.length
-                      ? widget.items[itemIndex]
-                      : null;
-                },
-                childCount: widget.itemsPerPage,
-              ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final itemIndex = page * widget.itemsPerPage + index;
+                return itemIndex < widget.items.length
+                    ? widget.items[itemIndex]
+                    : null;
+              },
+              childCount: widget.itemsPerPage,
             ),
-          ],
-
-          // Loading indicator
-          if (_isLoading)
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(child: CircularProgressIndicator()),
-              ),
-            ),
+          ),
         ],
-      );
+
+        // Loading indicator
+        if (_isLoading)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+      ],
+    );
   }
 }
