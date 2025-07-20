@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
 class PostsSearchView extends StatefulWidget {
@@ -20,7 +22,7 @@ class PostsSearchView extends StatefulWidget {
 }
 
 class _PostsSearchViewState extends State<PostsSearchView> {
-  late final ScrollController _scrollController;
+  // late final ScrollController _scrollController;
   late final SearchCubit _cubit;
   static const _scrollThreshold = 200.0;
 
@@ -28,10 +30,10 @@ class _PostsSearchViewState extends State<PostsSearchView> {
   void initState() {
     super.initState();
     _cubit = context.read<SearchCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    // _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  void _onScroll() async {
+ /* void _onScroll() async {
     final max = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
     if (current >= max - _scrollThreshold &&
@@ -46,15 +48,15 @@ class _PostsSearchViewState extends State<PostsSearchView> {
       );
       _cubit.getPaginatedPostsSearch(params: params);
     }
-  }
+  }*/
 
-  @override
+/*  @override
   void dispose() {
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
     super.dispose();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,40 @@ class _PostsSearchViewState extends State<PostsSearchView> {
           print("${posts.first.name}");
           print(posts.first.user.firstName);
           print("${posts.first.id}");
-          return ListView.builder(
+          return OlxPaginationWidget(
+            itemsPerPage: 2,
+            loadPage: (page) async{
+              {
+                final prefs = await SharedPreferences.getInstance();
+                final filter = prefs.getString('filter') ?? '';
+                final params = SearchParams(
+                  search: _cubit.searchController.text.trim(),
+                  filter: filter,
+                  params: PaginationParams(page: _cubit.postsSearchPage),
+                );
+                _cubit.getPaginatedPostsSearch(params: params);
+              }
+            },
+            banners: bannersList,
+            items: List.generate(
+              posts.length,
+                  (index) {
+                    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+                      listener: (context, state) {},
+                      builder: (context, state) {
+                        return NormalPostScreen(
+                          postEntity: posts[index],
+                        );
+                      },
+                    );
+
+                    return ListTile(
+                      title: Text(posts[index].user.firstName),
+                    );
+                  },
+            ),
+          );
+          /*return ListView.builder(
             controller: _scrollController, // Add this line
             itemCount: posts.length,
             itemBuilder: (context, index) {
@@ -102,7 +137,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
                 title: Text(posts[index].user.firstName),
               );
             },
-          );
+          );*/
         }
 
         // Handle error state

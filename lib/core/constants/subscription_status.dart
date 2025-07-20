@@ -6,7 +6,7 @@ extension SubscriptionStatusExtension on SubscriptionStatus {
       case SubscriptionStatus.notSubscribed:
         return 'not subscribed';
       case SubscriptionStatus.regular:
-        return 'Regular';
+        return 'regular';
       case SubscriptionStatus.premium:
         return 'premium';
     }

@@ -223,7 +223,7 @@ class _ScrollableTextWithAnimationState
                                       .question
                                       ?.enableAnswers ==
                                   true
-                              ? AppColors.SECONDARY_COLOR
+                              ? AppColors.PRIMARY_COLOR
                               : (context.isDarkMode
                                   ? Colors.white
                                   : AppColors.PRIMARY_COLOR)),

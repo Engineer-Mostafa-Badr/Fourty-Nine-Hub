@@ -24,7 +24,7 @@ class NetworkManager {
     });
   }
 
-  Future<bool> _checkActualInternetAccess() async {
+  Future<bool> checkActualInternetAccess() async {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -33,6 +33,10 @@ class NetworkManager {
       return false;
     } catch (_) {}
     return false;
+  }
+
+  Future<bool> _checkActualInternetAccess() async {
+    return checkActualInternetAccess();
   }
 
   void dispose() {

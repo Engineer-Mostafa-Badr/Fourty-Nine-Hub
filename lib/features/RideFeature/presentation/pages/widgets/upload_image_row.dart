@@ -33,14 +33,14 @@ class UploadImageRow extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                 decoration: BoxDecoration(
-                  border: Border.all(),
+                  border: Border.all(color:context.isDarkMode ? AppColors.GREY_DARK_COLOR :AppColors.PRIMARY_COLOR),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Container(
                   padding: const EdgeInsets.all(6),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black,
+                    color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :Colors.black,
                   ),
                   child: const Icon(
                     Icons.arrow_upward,

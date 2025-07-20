@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/search/presentation/pages/widget/build_it
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
 class AdsSearchView extends StatefulWidget {
@@ -62,62 +64,103 @@ class _AdsSearchViewState extends State<AdsSearchView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
-      child: BlocBuilder<SearchCubit, SearchState>(
-        buildWhen: (prev, curr) =>
-            prev.adsSearch != curr.adsSearch || prev.status != curr.status,
-        builder: (context, state) {
-          print('==> 0');
-          // final ads = _cubit.adsSearch;
-          if (_cubit.searchController.text.trim().isEmpty) {
-            print('==> 1');
-            return CustomEmptyWidget(
-              label: LocaleKeys.noData.localize,
-            );
-          }
-          if (state.status == SearchStates.loading) {
-            print('==> 2');
-
-            return const Center(child: CupertinoActivityIndicator());
-          }
-
-          // if (ads.isEmpty) {
-          //   print('==> 3');
-          //
-          //   return CustomEmptyWidget(
-          //     label: LocaleKeys.noResultsFound.localize,
-          //   );
-          // }
-          print('==> 4');
-          return ListView.builder(
-            controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount:
-                _cubit.adsSearch.length + (_cubit.isLoadingAdsMore ? 1 : 0),
-            itemBuilder: (context, index) {
-              print('==> 5');
-              if (index >= _cubit.adsSearch.length) {
-                print('==> 6');
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Center(child: CupertinoActivityIndicator()),
-                );
-              }
-              print('==> 7');
-              return BuildItemAdsSearch(
-                item: _cubit.adsSearch[index],
-                onFav: (String id) async {
-                  // return await controllerAdvertise.favouriteAd(id);
-                },
-                onRemoveFav: (String id) async {
-                  // return await controllerAdvertise.unFavouriteAd(id);
-                },
-              );
-            },
+    return BlocBuilder<SearchCubit, SearchState>(
+      buildWhen: (prev, curr) =>
+          prev.adsSearch != curr.adsSearch || prev.status != curr.status,
+      builder: (context, state) {
+        print('==> 0');
+        // final ads = _cubit.adsSearch;
+        if (_cubit.searchController.text.trim().isEmpty) {
+          print('==> 1');
+          return CustomEmptyWidget(
+            label: LocaleKeys.noData.localize,
           );
-        },
-      ),
+        }
+        if (state.status == SearchStates.loading) {
+          print('==> 2');
+
+          return const Center(child: CupertinoActivityIndicator());
+        }
+
+        // if (ads.isEmpty) {
+        //   print('==> 3');
+        //
+        //   return CustomEmptyWidget(
+        //     label: LocaleKeys.noResultsFound.localize,
+        //   );
+        // }
+        print('==> 4');
+        return OlxPaginationWidget(
+          itemsPerPage: 2,
+          loadPage: (page) async{
+            {
+              final searchText = _cubit.searchController.text.trim();
+              if (searchText.isEmpty) return;
+              final prefs = await SharedPreferences.getInstance();
+              final filter = prefs.getString('filter') ?? '';
+              final params = SearchParams(
+                search: searchText,
+                filter: filter,
+                params: PaginationParams(page: _cubit.adsSearchPage),
+              );
+              _cubit.getPaginatedAdsSearch(params: params);
+            }
+          },
+          banners: bannersList,
+          items: List.generate(
+            _cubit.adsSearch.length + (_cubit.isLoadingAdsMore ? 1 : 0),
+                (index) {
+                  print('==> 5');
+                  if (index >= _cubit.adsSearch.length) {
+                    print('==> 6');
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Center(child: CupertinoActivityIndicator()),
+                    );
+                  }
+                  print('==> 7');
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                    child: BuildItemAdsSearch(
+                      item: _cubit.adsSearch[index],
+                      onFav: (String id) async {
+                        // return await controllerAdvertise.favouriteAd(id);
+                      },
+                      onRemoveFav: (String id) async {
+                        // return await controllerAdvertise.unFavouriteAd(id);
+                      },
+                    ),
+                  );
+            },
+          ),
+        );
+       /* return ListView.builder(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount:
+              _cubit.adsSearch.length + (_cubit.isLoadingAdsMore ? 1 : 0),
+          itemBuilder: (context, index) {
+            print('==> 5');
+            if (index >= _cubit.adsSearch.length) {
+              print('==> 6');
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Center(child: CupertinoActivityIndicator()),
+              );
+            }
+            print('==> 7');
+            return BuildItemAdsSearch(
+              item: _cubit.adsSearch[index],
+              onFav: (String id) async {
+                // return await controllerAdvertise.favouriteAd(id);
+              },
+              onRemoveFav: (String id) async {
+                // return await controllerAdvertise.unFavouriteAd(id);
+              },
+            );
+          },
+        );*/
+      },
     );
   }
 }

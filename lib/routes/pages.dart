@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_t
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
@@ -280,6 +281,7 @@ import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percen
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/ten_percent_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/winners_ten_percent_view.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/cubits/cubit/add_new_pick_me_trip_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/views/add_new_pick_me_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
@@ -627,6 +629,13 @@ class AppPages {
                 name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                 builder: (context, state) => RideOpenStreetMapSearchAndPick(
                   params: state.extra as RideOpenStreetMapSearchAndPickParams,
+                ),
+              ),
+              GoRoute(
+                path: Paths.GoogleMapsSearchAndPick,
+                name: Routes.GoogleMapsSearchAndPick,
+                builder: (context, state) => RideGoogleMapSearchAndPick(
+                  params: state.extra as RideGoogleMapSearchAndPickParams,
                 ),
               ),
               GoRoute(
@@ -2989,64 +2998,11 @@ class AppPages {
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => StartingLocationCubit(
-                        fetchLocationCordinatesUseCase:
-                            serviceLocator<FetchLocationCordinatesUseCase>(),
-                      ),
+                      create: (context) => serviceLocator<AddNewPickMeTripCubit>(),
                     ),
-                    BlocProvider(
-                      create: (_) => DestinationLocationCubit(
-                        fetchLocationCordinatesUseCase:
-                            serviceLocator<FetchLocationCordinatesUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchPriceDistanceCubit(
-                        fetchPriceDistanceUsecase:
-                            serviceLocator<FetchPriceDistanceUsecase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchCarBrandsCubit(
-                        fetchCarBrandUseCase:
-                            serviceLocator<FetchCarBrandUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchCarModelsCubit(
-                        fetchCarModelUseCase:
-                            serviceLocator<FetchCarModelUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => FetchCarYearTypeCubit(
-                        fetchCarYearTypeUseCase:
-                            serviceLocator<FetchCarYearTypeUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => MapBoxCubit(),
-                    ),
-                    BlocProvider(
-                      create: (_) => PublishTripJoinCubit(
-                        publishTripJoinUseCase:
-                            serviceLocator<PublishTripJoinUseCase>(),
-                      ),
-                    ),
-                    BlocProvider(
-                      create: (_) => GetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (_) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                    BlocProvider(create: (_) => TripJoinViewCubit()),
                     BlocProvider(
                       create: (context) => serviceLocator<RideCubit>(),
-                    ),
+                    )
                   ],
                   child: const AddNewPickMeView(),
                 ),

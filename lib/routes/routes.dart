@@ -15,6 +15,8 @@ abstract class Routes {
   static const RIDEACTIVITY = '/RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       '/RIDEOPENSTREETMAPSEARCHANDPICK';
+  static const GoogleMapsSearchAndPick =
+      '/GoogleMapsSearchAndPick';
   static const RIDERUNNINGTRIPS = '/RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = '/RIDEEXPIREDTRIPS';
   static const RIDEHISTORYTRIPS = '/RIDEHISTORYTRIPS';
@@ -323,6 +325,8 @@ abstract class Paths {
   static const RIDEACTIVITY = 'RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       'RIDEOPENSTREETMAPSEARCHANDPICK';
+  static const GoogleMapsSearchAndPick =
+      'GoogleMapsSearchAndPick';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
   static const RIDEHISTORYTRIPS = 'RIDEHISTORYTRIPS';

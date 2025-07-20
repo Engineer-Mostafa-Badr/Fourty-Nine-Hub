@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'ad_helper.dart';
@@ -55,9 +56,9 @@ class _AddBannerState extends State<AddBanner> {
         child: AdWidget(ad: bannerAd!),
       );
     } else {
-      return const SizedBox(
+      return SizedBox(
         width: double.infinity,
-        height: 15,
+        height: 5.h,
       );
     }
   }

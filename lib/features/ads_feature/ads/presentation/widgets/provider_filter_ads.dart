@@ -8,6 +8,9 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+
 class ProviderFilterAds extends StatefulWidget {
   const ProviderFilterAds(
       {super.key,
@@ -15,6 +18,7 @@ class ProviderFilterAds extends StatefulWidget {
       required this.params,
       required this.model,
       required this.controller});
+
   final AdsViewParams params;
   final String userType;
   final FilterModel model;
@@ -35,32 +39,70 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
   // }
 
   late ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-
   }
-
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-        widget.controller.loadFilterAdsData(
-            model: widget.model, filter: widget.userType
-        );
+      widget.controller
+          .loadFilterAdsData(model: widget.model, filter: widget.userType);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    if (widget.controller.ads.isEmpty) {
+      return Center(
+        child: Text(
+          LocaleKeys.noAds.localize,
+          style: TextStyle(
+            color: context.isDarkMode
+                ? AppColors.LIGHT_COLOR
+                : AppColors.DARK_BLUE_COLOR,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }
+    return OlxPaginationWidget(
+      itemsPerPage: 2,
+      loadPage: (page) => widget.controller
+          .loadFilterAdsData(model: widget.model, filter: widget.userType),
+      banners: bannersList,
+      items: List.generate(
+          widget.controller.ads.length +
+              (widget.controller.isLoadingAdsMore ? 1 : 0), (index) {
+        final ad = widget.controller.ads[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+          child: CategoriesExtension.fromId(widget.params.mainCategory.id ?? '')
+              .view(
+            item: ad,
+            onFav: (String id) async {
+              var result = await widget.controller.favouriteAd(id);
+              return result;
+            },
+            onRemoveFav: (String id) async {
+              var result = await widget.controller.unFavouriteAd(id);
+              return result;
+            },
+          ),
+        );
+      }),
+
+    );
+    /*return ListView.builder(
       controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: widget.controller.ads.length +
           (widget.controller.isLoadingAdsMore ? 1 : 0),
       itemBuilder: (context, index) {
-        if(widget.controller.ads.isEmpty) {
+        if (widget.controller.ads.isEmpty) {
           return Center(
             child: Text(
               LocaleKeys.noAds.localize,
@@ -74,10 +116,8 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
           );
         }
 
-        final ad =
-        widget.controller.ads[index];
-        return CategoriesExtension.fromId(
-            widget.params.mainCategory.id ?? '')
+        final ad = widget.controller.ads[index];
+        return CategoriesExtension.fromId(widget.params.mainCategory.id ?? '')
             .view(
           item: ad,
           onFav: (String id) async {
@@ -90,6 +130,6 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
           },
         );
       },
-    );
+    );*/
   }
 }

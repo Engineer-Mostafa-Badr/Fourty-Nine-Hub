@@ -22,6 +22,7 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'edit_price_widget.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class AvailableRideTripItem extends StatelessWidget {
   final AvailableRideTripEntity tripEntity;
@@ -162,7 +163,10 @@ class AvailableRideTripItem extends StatelessWidget {
                                 print("tripEntity.isButtonEnabled ${tripEntity.isButtonEnabled}");
                                 if(tripEntity.isPremium==true||tripEntity.isButtonEnabled==true){
                                   if (tripEntity.isAutoAccept == false) {
-                                    cubit.createOffer(tripId: tripEntity.id, price: tripEntity.price ?? 0, context: context, subCategoryId: tripEntity.subcategoryId);
+                                    cubit.createOffer(tripId: tripEntity.id, price: tripEntity.price ?? 0, context: context, subCategoryId: tripEntity.subcategoryId, onSuccess: () {
+                                      final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                                      currentContext.pop();
+                                    });
                                   } else {
                                     cubit.autoAcceptTrip(context, tripEntity.id);
                                   }
@@ -221,7 +225,10 @@ class AvailableRideTripItem extends StatelessWidget {
                                           tripEntity: tripEntity,
                                           onSendOffer: (num offer) {
                                             context.pop();
-                                            cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId);
+                                            cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId, onSuccess: () {
+                                              final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                                              currentContext.pop();
+                                            });
                                           },
                                         ),
                                       );

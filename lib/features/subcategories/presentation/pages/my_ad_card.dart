@@ -136,34 +136,42 @@ class _MyAdCardState extends State<MyAdCard> {
                             text:
                                 '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
                             style: Styles.headerText(
-                              fontSize: 50,
+                                fontSize: 50,
                                 fontWeight: FontWeight.bold,
-                                color:context.isDarkMode ? AppColors.whiteColor : AppColors.SECONDARY_COLOR),
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.SECONDARY_COLOR),
                             maxLines: 1,
                           ),
-                          Sizer(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.PRIMARY_COLOR.withValues(alpha: .7),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Center(
-                              child: Label(text: '${context.isArabic ? 'مقدم' : 'Deposit'} ${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',style: Styles.mediumText(color: AppColors.whiteColor)),
-                            ),
-                          )
+                          Sizer(width: 16),
+                          if (widget.item.mainCategoryId ==
+                              '62c8b5849332225799fe3310')
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.getButtonPrimaryColor(context)
+                                    .withValues(alpha: .7),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Center(
+                                child: Label(
+                                    text:
+                                        '${context.isArabic ? 'مقدم' : 'Deposit'} ${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
+                                    style: Styles.mediumText(
+                                        color: AppColors.getReversedTextColor(context))),
+                              ),
+                            )
                         ],
                       ),
 
                       // ReadMoreText with proper localization
                       ReadMoreText(
-                        text:
-                            'floor for rent in shubra floor for rent in shubra floor for rent in shubra floor for rent in shubra floor for rent in shubra',
-                        // text: '${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title} ${widget.item.title}',
+                        // text:
+                        //     'floor for rent in shubra floor for rent in shubra floor for rent in shubra floor for rent in shubra floor for rent in shubra',
+                        text: widget.item.title,
                         trimLines: 1,
-                        style: Styles.headerText(
-                          fontWeight: FontWeight.normal
-                        ),
+                        style: Styles.headerText(fontWeight: FontWeight.normal),
                         moreText: context.isArabic
                             ? "...قراءة المزيد"
                             : '...Read More',
@@ -174,13 +182,10 @@ class _MyAdCardState extends State<MyAdCard> {
                         // moreStyle: Styles.smallText(
                         //     fontWeight: FontWeight.bold,
                         //     color: AppColors.SECONDARY_COLOR),
-
-
-
                       ),
 
                       // ... rest of your content (conditionals, buttons, etc.) ...
-                            Sizer(height: 8),
+                      Sizer(height: 8),
                       if (widget.item.mainCategoryId ==
                           '62c8b5849332225799fe3310')
                         Row(
@@ -311,7 +316,7 @@ class _MyAdCardState extends State<MyAdCard> {
                             );
                           }).toList(),
                         ),
-                            Sizer(height: 8),
+                      Sizer(height: 8),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -334,29 +339,31 @@ class _MyAdCardState extends State<MyAdCard> {
                             ],
                           ),
                           // if (widget.showSubCategory)
-                            Label(
-                              text: (context.isArabic
-                                      ? widget.item.subCategoryNameAr
-                                      : widget.item.subCategoryNameEn) ??
-                                  'N/A',
-                              style: Styles.smallText(
-                                color: context.isDarkMode
-                                    ? AppColors.whiteColor
-                                    : AppColors.SECONDARY_COLOR,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                height: 1.60,
-                              ),
+                          Label(
+                            text: (context.isArabic
+                                    ? widget.item.subCategoryNameAr
+                                    : widget.item.subCategoryNameEn) ??
+                                'N/A',
+                            style: Styles.smallText(
+                              color: context.isDarkMode
+                                  ? AppColors.whiteColor
+                                  : AppColors.SECONDARY_COLOR,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              height: 1.60,
                             ),
+                          ),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Label(
-                              text: context.isArabic ? 'منذ ٨ ساعات' : '8 hours ago',
+                              text: context.isArabic
+                                  ? 'منذ ٨ ساعات'
+                                  : '8 hours ago',
                               style: Styles.smallText(
-                                  color: AppColors.getButtonPrimaryColor(context),
+                                color: AppColors.getButtonPrimaryColor(context),
                               )),
                         ],
                       ),

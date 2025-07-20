@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -176,71 +177,7 @@ class ClientPendingWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-              flex: 2,
-              child: Column(children: [
-                Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Container(
-                        width: avatarSize,
-                        height: avatarSize,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: (offers?.yourDetails?.pictureUrl == null ||
-                            offers!.yourDetails!.pictureUrl!.isEmpty)
-                            ? Image.asset(
-                          Assets.maleImagePlaceholder,
-                          fit: BoxFit.cover,
-                        )
-                            : ImageFromInternet(
-                          image: offers!.yourDetails!.pictureUrl!,
-                        ),
-                      ),
-                    ),
-                    PositionedDirectional(
-                      top: badgeTopOffset,
-                      end: badgeEndOffset,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.grey,
-                          // color: AppColors.cF5F5F5,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                Assets.star2,
-                                width: 8,
-                                height: 8,
-                              ),
-                              const SizedBox(width: 4),
-                              Label(
-                                text: offers?.yourDetails?.rating?.count.toString() ?? '0',
-                                style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Label(
-                  text: offers?.yourDetails?.firstName ?? '',
-                  style: Styles.mediumText(),
-                ),
-                Label(
-                  text: '(${offers?.yourDetails?.rating?.average ?? 0})',
-                  style: Styles.smallText(),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 32),
+
           // Trip Details Column
           Expanded(
             flex: 8,
@@ -249,9 +186,75 @@ class ClientPendingWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Expanded(
+                        flex: 2,
+                        child: Column(children: [
+                          Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                child: Container(
+                                  width: avatarSize,
+                                  height: avatarSize,
+                                  decoration: const BoxDecoration(shape: BoxShape.circle),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: (offers?.yourDetails?.pictureUrl == null ||
+                                      offers!.yourDetails!.pictureUrl!.isEmpty)
+                                      ? Image.asset(
+                                    Assets.maleImagePlaceholder,
+                                    fit: BoxFit.cover,
+                                  )
+                                      : ImageFromInternet(
+                                    image: offers!.yourDetails!.pictureUrl!,
+                                  ),
+                                ),
+                              ),
+                              if((offers?.yourDetails?.rating?.count??0)>0)PositionedDirectional(
+                                top: badgeTopOffset,
+                                end: badgeEndOffset,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.grey,
+                                    // color: AppColors.cF5F5F5,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          Assets.star2,
+                                          width: 8,
+                                          height: 8,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Label(
+                                          text: offers?.yourDetails?.rating?.count.toString() ?? '0',
+                                          style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Label(
+                            text: offers?.yourDetails?.firstName ?? '',
+                            style: Styles.mediumText(),
+                          ),
+                          if((offers?.yourDetails?.rating?.average??0)>0)Label(
+                            text: '(${offers?.yourDetails?.rating?.average ?? 0})',
+                            style: Styles.smallText(),
+                          ),
+                        ],
+                        ),
+                      ),
+                      const SizedBox(width: 32),
                       Expanded(
                         flex: 7,
                         child: Column(
@@ -293,8 +296,9 @@ class ClientPendingWidget extends StatelessWidget {
                             ),
                             Label(
                               text:
-                              '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1,context)}',
+                              modeType=='shipping'?'':'${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1,context)}',
                               style: Styles.mediumText(),
+                              maxLines: 2,
                             ),
                           ],
                         ),
@@ -320,6 +324,11 @@ class ClientPendingWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if(modeType=='shipping')...[
+                    ReadMoreLabel(text: modeType=='shipping'?'${context.isArabic ? 'وصف الشحنة' : 'Cargo Description'} : ${offers?.tripDetails?.note??''} ':'',
+                        style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)
+                    )
+                  ],
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

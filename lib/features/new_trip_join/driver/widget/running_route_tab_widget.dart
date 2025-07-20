@@ -6,9 +6,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/one_way_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_trip_client_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -27,22 +30,21 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
   @override
   void initState() {
     super.initState();
-    context.read<CaptainShareDashboardCubit>().getRunningRoute(context);
+    // context.read<CaptainShareDashboardCubit>().getRunningRoute(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(builder: (context, state) {
       var cubit = context.read<CaptainShareDashboardCubit>();
-      if(state.isLoading){
+      if(cubit.isLoadingRunningTrip){
         return const Center(child: CircularProgressIndicator());
       }
       if(cubit.runningRoute==null){
         return _emptyMessage();
       }
       return ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
         children: [
           OneWayWidget(
             requestType: LocaleKeys.regular.localize,
@@ -51,6 +53,16 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
             model: cubit.runningRoute,
             cancelButton: false,
           ),
+          if(cubit.runningRoute!=null&&(cubit.runningRoute?.clients?.isNotEmpty??false))RunningTripClientWidget(client: cubit.runningRoute!.clients![0],index: 0,
+          onPickClient: (otp){
+            cubit.goToClient(routeId: cubit.runningRoute?.id??'', passengerId: cubit.runningRoute?.clients?[0].id??'', otp: otp, context: context);
+          },
+          ),
+          // ...List.generate(cubit.runningRoute?.clients?.length??0, (i){
+          //   print("cubit.runningRoute?.clients?.length ${cubit.runningRoute?.clients?.length}");
+          //   BookingClientEntity client = (cubit.runningRoute?.clients??[])[i];
+          //   return RunningTripClientWidget(client: client,index: i,);
+          // }),
         ],
       );
 

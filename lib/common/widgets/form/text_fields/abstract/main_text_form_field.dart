@@ -48,6 +48,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final VoidCallback? onTap;
   final VoidCallback? onEditComplete;
   final Widget? labelWidget;
+  final Iterable<String>? autofillHints;
 
   const MainTextFormField({
     super.key,
@@ -87,6 +88,7 @@ abstract class MainTextFormField extends StatefulWidget {
     this.prefixIcon,
     this.onTap,
     this.onEditComplete,
+    this.autofillHints,
   });
 
   @override
@@ -110,6 +112,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
                     TextSelection.fromPosition(TextPosition(offset: length));
               }
             },
+        autofillHints: widget.autofillHints,
         onEditingComplete: widget.onEditComplete,
         cursorColor: widget.cursorColor,
         textDirection: _currentDir,

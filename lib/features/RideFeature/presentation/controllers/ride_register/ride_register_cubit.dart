@@ -510,13 +510,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   TextEditingController modelNameController = TextEditingController();
   var modelFormKey = GlobalKey<FormState>();
-  Future<void> addNewModel({required BuildContext context,required String modelName,required String brandId}) async {
+  Future<void> addNewModel({required BuildContext context,required String modelName,required String brandId,required RideFeatureRegisterParams params}) async {
+    bool isScooter = params.subCategoriesId.contains(scooter);
     //addCarModelUseCase
     showLoadingDialog(context);
     emit(state.copyWith(status: RideRegisterStates.initState,selectedModel: RideModelEntity(id: '',modelAr: '',modelEn: '')));
     final Either<Failure, String> result = await addCarModelUseCase(AddCarModelParams(
       modelName: modelName,
-        type:"car",
+        type:isScooter?'scooter':params.isShipping?'truck':params.isSocket?"car":'bus',
+        //
         carBrandId: brandId
     ));
 
@@ -1339,6 +1341,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       }
 
       isLoadingSubmitRegister = true;
+      showLoadingDialog(context);
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
 
       RegisterRideSpecialEntity params = RegisterRideSpecialEntity(
@@ -1366,6 +1369,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
             (failure) {
           showErrorMessage(context, getFailureMessage(failure, context));
           isLoadingSubmitRegister = false;
+          context.pop();
           emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
         },
             (data) async {
@@ -1393,6 +1397,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           });
           await fetchRideDriverInfo(context,false);
           await fetchRideDriverPictureOptional(context);
+          context.pop();
           showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
           context.pushReplacement(Routes.completeRegisterScreen,extra: UploadRiderImagesParams(isSocket: isSocket,isShipping: isShipping));
           isLoadingSubmitRegister = false;
@@ -1409,6 +1414,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         return;
       }
       isLoadingSubmitRegister = true;
+      showLoadingDialog(context);
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
 
       RegisterRideNotSpecialEntity params = RegisterRideNotSpecialEntity(
@@ -1431,6 +1437,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
       result.fold(
             (failure) {
+              context.pop();
           showErrorMessage(context, getFailureMessage(failure, context));
           isLoadingSubmitRegister = false;
           emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
@@ -1447,6 +1454,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
               showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
             }
           });
+          context.pop();
           await fetchRideDriverInfo(context,false);
           emit(state.copyWith(status: RideRegisterStates.success));
           showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
@@ -1479,14 +1487,17 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         vehicleModel: (state.newModel?.id.isNotEmpty??false)?state.newModel?.id??'':state.selectedModel?.id ?? '',
         vehicleYear: rideVehicleProductionYearController.text,
       );
+      showLoadingDialog(context);
       final Either<Failure, bool> result = await loadingRegisterUseCase(params);
 
       result.fold(
             (failure) {
+              context.pop();
           showErrorMessage(context, getFailureMessage(failure, context));
           isLoadingSubmitRegister = false;
           emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
         },
+
             (data) async {
               await LoadingMethodHelper().uploadDriverImage(driverImage: state.personalPicture!, onSuccessUploaded: (bool isSuccess) async{
                 if (isSuccess) {
@@ -1498,6 +1509,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                 }
               });
           isLoadingSubmitRegister = false;
+              context.pop();
           await fetchLoaderInfo(context,false);
           emit(state.copyWith(status: RideRegisterStates.success));
           showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");

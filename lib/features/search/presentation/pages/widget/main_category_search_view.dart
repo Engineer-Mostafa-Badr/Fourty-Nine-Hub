@@ -61,6 +61,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
         params: PaginationParams(page: _cubit.paginatedSearchPage),
       );
       _cubit.loadPaginatedSearchData(params: params);
+      print('mainCategory length ${_cubit.paginatedSearch.length}');
     }
   }
 
