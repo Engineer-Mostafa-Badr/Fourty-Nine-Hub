@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 
@@ -15,7 +17,8 @@ class LocationService {
   void startLocationTracking() {
     stopLocationTracking();
 
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      log('Checking location...');
       _checkAndUpdateLocation();
     });
 
@@ -35,11 +38,12 @@ class LocationService {
       Position currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+      _locationController.add(currentPosition);
 
-      if (lastPosition == null || _hasMovedEnoughDistance(currentPosition)) {
-        lastPosition = currentPosition;
-        _locationController.add(currentPosition);
-      }
+      // if (lastPosition == null || _hasMovedEnoughDistance(currentPosition)) {
+      //   lastPosition = currentPosition;
+      //   _locationController.add(currentPosition);
+      // }
     } catch (e) {
       print('Error getting location: $e');
     }
