@@ -7,7 +7,7 @@ class ClientNotShownUseCase {
 
   ClientNotShownUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call(ClientNotShownParams params) {
+  Future<Either<Failure, String>> call(ClientNotShownParams params) {
     return repository.clientNotShown(params);
   }
 }
@@ -24,8 +24,8 @@ class ClientNotShownParams {
   Map<String, dynamic> toJson() => {
     "passengerId": passengerId,
     "location": {
-      "longitude": longitude,
-      "latitude": latitude
+      "longitude": 31.23498,
+      "latitude": 30.02484
     }
   };
 }

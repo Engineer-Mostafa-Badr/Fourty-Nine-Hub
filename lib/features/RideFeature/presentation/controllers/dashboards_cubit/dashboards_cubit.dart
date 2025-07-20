@@ -1546,8 +1546,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   showPartialPaymentDialog(BuildContext context,num amountPaidCash) {
-    bool showRemaining = (state.activeTrip?.price??0)>(amountPaidCash);
-    num remaining = (state.activeTrip?.price??0)-(amountPaidCash);
+    bool showRemaining = (activeTrip?.price??0)>(amountPaidCash);
+    num remaining = (activeTrip?.price??0)-(amountPaidCash);
     showCustomDialogTrip(
         context,
         Column(
@@ -1814,10 +1814,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
     );
   }
-
+  RunningTripEntity? activeTrip;
   Future<void> getActiveTrip(BuildContext context) async {
+    activeTrip = null;
     showLoadingDialog(context);
-    emit(state.copyWith(status: DashboardsStates.loadingPast));
+    emit(state.copyWith(status: DashboardsStates.loadingPast,tripStatus: ''));
+    log("state.tripStatusstate.tripStatus ${state.tripStatus}");
 
     final Either<Failure, RunningTripEntity> result =
         await getRunningTripUseCase(const NoParams());
@@ -1833,12 +1835,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
             failure: failure,
             tripStatus: TripState.pending.name));
       },
-      (activeTrip) {
+      (trip) {
+        activeTrip =trip;
         context.pop();
         emit(state.copyWith(
             status: DashboardsStates.success,
-            activeTrip: activeTrip,
-            tripStatus: activeTrip.status));
+            tripStatus: trip.status));
       },
     );
   }
@@ -2024,9 +2026,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         showErrorMessage(context, getFailureMessage(failure, context));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
-      (activeTrip) {
-        log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+      (trip) {
+        activeTrip = null;
+        emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.canceled.name));
       },
     );
   }

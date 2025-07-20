@@ -14,11 +14,16 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+
 class MyAdsView extends StatefulWidget {
   const MyAdsView(
       {super.key, required this.id, required this.isFloatingButtonVisible});
+
   final String id;
   final void Function(bool) isFloatingButtonVisible;
+
   @override
   State<MyAdsView> createState() => _MyAdsViewState();
 }
@@ -83,7 +88,61 @@ class _MyAdsViewState extends State<MyAdsView> {
           ),
         );
       }
-      return ListView.separated(
+
+      return OlxPaginationWidget(
+        itemsPerPage: 2,
+        loadPage: (page) =>
+            context.read<SubcategoriesCubit>().getMyAds(widget.id),
+        banners: bannersList,
+        items: List.generate(
+          controller.myAds.length,
+          (i) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            child: MyAdCard(
+              showSubCategory: true,
+              item: controller.myAds[i],
+              onFav: (id) async {
+                bool result = await context
+                    .read<AdvertisementCubit>()
+                    .favouriteAd(controller.myAds[i].id);
+                return result;
+              },
+              onRemoveFav: (id) async {
+                bool result = await context
+                    .read<AdvertisementCubit>()
+                    .unFavouriteAd(controller.myAds[i].id);
+                return result;
+              },
+              deleteAd: (adId) async {
+                showLoadingDialog(context);
+                await context.read<SubcategoriesCubit>().deleteAd(adId);
+                if (!context.mounted) return;
+                context.pop();
+                context.pop();
+                if (controller.state.deleteAdStatus ==
+                    SubcategoriesStates.adsSuccess) {
+                  context.read<SubcategoriesCubit>().loadMyAds(id: widget.id);
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم حذف اعلانك'
+                          : 'Your ad has been deleted');
+                }
+                if (controller.state.deleteAdStatus ==
+                    SubcategoriesStates.error) {
+                  showErrorMessage(
+                      context,
+                      getFailureMessage(
+                          controller.state.failure ?? UnknownFailure(''),
+                          context));
+                }
+              },
+            ),
+          ),
+        ),
+
+      );
+      /*return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         shrinkWrap: true,
         controller: _scrollController,
@@ -96,6 +155,7 @@ class _MyAdsViewState extends State<MyAdsView> {
                 .read<AdvertisementCubit>()
                 .favouriteAd(controller.myAds[i].id);
             return result;
+
           },
           onRemoveFav: (id) async {
             bool result = await context
@@ -128,7 +188,7 @@ class _MyAdsViewState extends State<MyAdsView> {
         ),
         separatorBuilder: (BuildContext context, int index) =>
             const SizedBox(height: 16),
-      );
+      );*/
     });
   }
 }

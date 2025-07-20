@@ -102,6 +102,16 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
               SizedBox(
                 height: kToolbarHeight * 4,
                 width: double.infinity,
+                // clipBehavior: Clip.antiAlias,
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(15),
+                //   border: Border.all(
+                //     color: context.isDarkMode
+                //         ? AppColors.LIGHT_COLOR
+                //         : AppColors.GREY_DARK_COLOR,
+                //     width: 1,
+                //   ),
+                // ),
                 child: PageView.builder(
                   onPageChanged: (value) {
                     print(value);
@@ -112,35 +122,46 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                     }
                   },
                   itemCount: length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(bottom: 5.h),
-                    child: Stack(
-                      children: [
-                        ImageFromInternet(
-                          width: double.infinity,
-                          image: widget.images[index],
-                          defaultLogo: true,
-                          fit: BoxFit.cover,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5.r),
-                              topRight: Radius.circular(5.r)),
-                        ),
-                        if (index == 3)
-                          Positioned.fill(
-                              child: Container(
-                            color: Colors.black.withOpacity(0.8),
-                            alignment: AlignmentDirectional.center,
-                            child: Label(
-                              text: LocaleKeys.seeAll.localize,
-                              style: Styles.headerText(
-                                  color: Colors.white,
-                                  decoration: TextDecoration.underline),
-                            ),
-                          ))
-                      ],
-                    ),
+                  itemBuilder: (context, index) => Stack(
+                    children: [
+                      ImageFromInternet(
+                        width: double.infinity,
+                        image: widget.images[index],
+                        defaultLogo: true,
+                        fit: BoxFit.cover,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5.r),
+                            topRight: Radius.circular(5.r)),
+                      ),
+                      if (index == 3)
+                        Positioned.fill(
+                            child: Container(
+                          color: Colors.black.withOpacity(0.8),
+                          alignment: AlignmentDirectional.center,
+                          child: Label(
+                            text: LocaleKeys.seeAll.localize,
+                            style: Styles.headerText(
+                                color: Colors.white,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ))
+                    ],
                   ),
                 ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  // color: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: context.isDarkMode
+                        ? AppColors.LIGHT_COLOR
+                        : AppColors.GREY_DARK_COLOR,
+                    width: 1,
+                  ),
+                ),
+                height: kToolbarHeight * 4,
+                width: double.infinity,
               ),
 
               if (widget.isVerified)
@@ -176,14 +197,28 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                 ),
               PositionedDirectional(
                 end: 16,
-                bottom: 16,
-                child: IconAppButton(
-                  size: 32,
-                  icon: widget.isFavourite == false
-                      ? Icons.favorite_border
-                      : Icons.favorite,
-                  color: AppColors.SECONDARY_COLOR,
-                  onPressed: widget.onPressedFavorite,
+                top: 16,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.black45,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: IconAppButton(
+                    size: 32,
+                    icon: widget.isFavourite == false
+                        ? Icons.favorite_border
+                        : Icons.favorite,
+                    // shadows: [
+                    //   Shadow(
+                    //     color: Colors.black,
+                    //     offset: const Offset(1, 1),
+                    //     blurRadius: 10,
+                    //   ),
+                    // ],
+                    color: AppColors.whiteColor,
+                    onPressed: widget.onPressedFavorite,
+                  ),
                 ),
               ),
             ],
@@ -205,7 +240,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                     ? Colors.white
                     : AppColors.SECONDARY_COLOR,
                 dotColor:
-                context.isDarkMode ? const Color(0x26FFFFFF) : Colors.grey,
+                    context.isDarkMode ? const Color(0x26FFFFFF) : Colors.grey,
               ),
             ),
           ),

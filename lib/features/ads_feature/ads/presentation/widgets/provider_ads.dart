@@ -14,6 +14,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../ads/native_ad_card.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class ProviderAds extends StatefulWidget {
   const ProviderAds({
@@ -23,10 +25,12 @@ class ProviderAds extends StatefulWidget {
     required this.controller,
     required this.onScrollChanged,
   });
+
   final AdsViewParams params;
   final String userType;
   final AdvertisementCubit controller;
   final Function(bool) onScrollChanged;
+
   @override
   State<ProviderAds> createState() => _ProviderAdsState();
 }
@@ -44,8 +48,9 @@ class _ProviderAdsState extends State<ProviderAds> {
   //   // super.initState();
   // }
   final AdsManager _adsManager = AdsManager();
-  late ScrollController _scrollController;
+  // late ScrollController _scrollController;
   late AdvertisementCubit _cubit;
+
   @override
   void initState() {
     // scrollController.addListener(() {
@@ -60,40 +65,40 @@ class _ProviderAdsState extends State<ProviderAds> {
     super.initState();
     _adsManager.preloadAds();
     _cubit = context.read<AdvertisementCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    // _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  void _onScroll() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      widget.onScrollChanged(false);
-    } else {
-      widget.onScrollChanged(true);
-    }
-    // setState(() {});
-
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      if (widget.params.mainCategory.nameEn == 'Dating') {
-        context.read<AdvertisementCubit>().getAds(
-              subCategoryId: widget.params.subCategory.id,
-              filter: 'male',
-            );
-      } else {
-        context.read<AdvertisementCubit>().getAds(
-              subCategoryId: widget.params.subCategory.id,
-              filter: widget.params.subCategory.hasAuction == true
-                  ? 'sale'
-                  : 'provider',
-            );
-      }
-    }
-  }
+  // void _onScroll() {
+  //   if (_scrollController.position.userScrollDirection ==
+  //       ScrollDirection.reverse) {
+  //     widget.onScrollChanged(false);
+  //   } else {
+  //     widget.onScrollChanged(true);
+  //   }
+  //   // setState(() {});
+  //
+  //   if (_scrollController.position.pixels >=
+  //       _scrollController.position.maxScrollExtent - 200) {
+  //     if (widget.params.mainCategory.nameEn == 'Dating') {
+  //       context.read<AdvertisementCubit>().getAds(
+  //             subCategoryId: widget.params.subCategory.id,
+  //             filter: 'male',
+  //           );
+  //     } else {
+  //       context.read<AdvertisementCubit>().getAds(
+  //             subCategoryId: widget.params.subCategory.id,
+  //             filter: widget.params.subCategory.hasAuction == true
+  //                 ? 'sale'
+  //                 : 'provider',
+  //           );
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    // _scrollController.removeListener(_onScroll);
+    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -113,7 +118,36 @@ class _ProviderAdsState extends State<ProviderAds> {
         ),
       );
     }
-    return ListView.separated(
+    return OlxPaginationWidget(
+      itemsPerPage: 2,
+      loadPage: (page) {
+        if (widget.params.mainCategory.nameEn == 'Dating') {
+          return context.read<AdvertisementCubit>().getAds(
+                subCategoryId: widget.params.subCategory.id,
+                filter: 'male',
+              );
+        } else {
+          return context.read<AdvertisementCubit>().getAds(
+                subCategoryId: widget.params.subCategory.id,
+                filter: widget.params.subCategory.hasAuction == true
+                    ? 'sale'
+                    : 'provider',
+              );
+        }
+      },
+      banners: bannersList,
+      items: List.generate(
+          context.read<AdvertisementCubit>().ads.length +
+              (context.read<AdvertisementCubit>().isLoadingAdsMore ? 1 : 0),
+          (index) {
+        final ad = context.read<AdvertisementCubit>().ads[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+          child: _buildAdContent(ad),
+        );
+      }),
+    );
+    /*return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -139,18 +173,19 @@ class _ProviderAdsState extends State<ProviderAds> {
 
         final ad = context.read<AdvertisementCubit>().ads[index];
         // return // if (index > 0 && index % 3 == 0) {
-/*
+*//*
    if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
               return getAdIfNeeded(index, _adsManager);
             }
  */
+    /*
         // return MyAdCard(
         //   item: ad,
         //   onFav: (id) {},
         //   onRemoveFav: (id) {},
         // );
         //TODO: Montaser add google ads
-        /*if (index > 0 && index % 2 == 0) {
+        *//*if (index > 0 && index % 2 == 0) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -163,10 +198,11 @@ class _ProviderAdsState extends State<ProviderAds> {
             ],
           );
         }*/
+    /*
 
         return _buildAdContent(ad);
       },
-    );
+    );*/
   }
 
   Widget _buildAdContent(AdEntity item) {

@@ -1,12 +1,21 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class CounterWidget extends StatelessWidget {
-  const CounterWidget({super.key, required this.unreadCount, this.width, this.height, this.borderWidth, this.fontSize, this.bgColor, this.txtColor, this.borderColor});
+  const CounterWidget(
+      {super.key,
+      required this.unreadCount,
+      this.width,
+      this.height,
+      this.borderWidth,
+      this.fontSize,
+      this.bgColor,
+      this.txtColor,
+      this.borderColor});
+
   final int unreadCount;
   final double? width;
   final double? height;
@@ -24,20 +33,22 @@ class CounterWidget extends StatelessWidget {
       // padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
           border: Border.all(
-            color: AppColors.whiteColor,
-            width: borderWidth??3.w
-          ),
-          shape: BoxShape.circle, color:bgColor?? AppColors.getRedColor(context)),
+              color: borderColor ?? AppColors.getReversedTextColor(context),
+              width: borderWidth ?? 1.w),
+          shape: BoxShape.circle,
+          color: bgColor ?? AppColors.getRedColor(context)),
       alignment: AlignmentDirectional.center,
       child: AutoSizeText(
-        formatNumber(unreadCount,isArabic: context.isArabic),
-          style: TextStyle(fontSize: 16.sp,color:txtColor??AppColors.getReversedTextColor(context),),
-          maxLines: 1,
+        formatNumber(unreadCount, isArabic: context.isArabic),
+        style: TextStyle(
+          fontSize: fontSize ?? 4.sp,
+          color: txtColor ?? AppColors.getReversedTextColor(context),
+        ),
+        maxLines: 1,
         minFontSize: 6,
         stepGranularity: 0.5,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
-
       ),
     );
   }
@@ -47,19 +58,21 @@ class CounterWidget extends StatelessWidget {
     String result = '';
 
     if (number >= 1e9) {
-      result = (number / 1e9).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '');
-      suffix =  'B';
+      result =
+          (number / 1e9).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '');
+      suffix = 'B';
     } else if (number >= 1e6) {
-      result = (number / 1e6).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '');
+      result =
+          (number / 1e6).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '');
       suffix = 'M';
     } else if (number >= 1e3) {
-      result = (number / 1e3).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '');
-      suffix ='K';
+      result =
+          (number / 1e3).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '');
+      suffix = 'K';
     } else {
       result = number.toString();
     }
 
     return '$result$suffix';
   }
-
 }

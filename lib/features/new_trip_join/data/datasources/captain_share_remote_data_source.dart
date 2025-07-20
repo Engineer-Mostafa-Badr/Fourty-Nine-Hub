@@ -39,8 +39,8 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, bool>> acceptRoute(String id);
   Future<Either<Failure, bool>> pickClient(PickClientParams params);
   Future<Either<Failure, bool>> dropClient(DropClientParams params);
-  Future<Either<Failure, bool>> clientNotShown(ClientNotShownParams params);
-  Future<Either<Failure, bool>> arrivedToClient(ClientNotShownParams params);
+  Future<Either<Failure, String>> clientNotShown(ClientNotShownParams params);
+  Future<Either<Failure, String>> arrivedToClient(ClientNotShownParams params);
   Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params);
 }
 
@@ -313,16 +313,16 @@ class CaptainShareRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> clientNotShown(ClientNotShownParams params) async {
+  Future<Either<Failure, String>> clientNotShown(ClientNotShownParams params) async {
     try {
-      final result = await _apiConsumer.put(
+      final result = await _apiConsumer.post(
         EndPoints.clientNotShown(params.routeId),
         data:params.toJson()
       );
       return result.fold(
             (failure) => Left(failure),
             (response) {
-          return Right(response['status']??false);
+              return Right(response['data']['waitingTime']??'');
         },
       );
     } catch (e) {
@@ -331,16 +331,16 @@ class CaptainShareRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> arrivedToClient(ClientNotShownParams params) async {
+  Future<Either<Failure, String>> arrivedToClient(ClientNotShownParams params) async {
     try {
-      final result = await _apiConsumer.put(
+      final result = await _apiConsumer.post(
         EndPoints.captainArrivedToClient(params.routeId),
         data:params.toJson()
       );
       return result.fold(
             (failure) => Left(failure),
             (response) {
-          return Right(response['status']??false);
+          return Right(response['data']['waitingTime']??'');
         },
       );
     } catch (e) {

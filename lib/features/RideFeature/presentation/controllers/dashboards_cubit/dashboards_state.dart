@@ -52,7 +52,6 @@ class DashboardsState
   final List<AvailableRideTripEntity>? availableRideTrips;
   final String? tripStatus;
   final String? lastStatus;
-  final RunningTripEntity? activeTrip;
   final bool? isChangedMindReason;
   final bool? isOtherReason;
   final bool? isClientNotShownReason;
@@ -103,7 +102,6 @@ class DashboardsState
       this.tripStatus,
       this.remainingTime,
       this.lastStatus,
-      this.activeTrip,
       this.supportDetails,
       this.supportStatus,
       this.emergencyContacts,
@@ -146,7 +144,6 @@ class DashboardsState
         String? tripStatus,
         DateTime? remainingTime,
         String? lastStatus,
-        RunningTripEntity? activeTrip,
         bool? isChangedMindReason,
         bool? isOtherReason,
         bool? isClientNotShownReason,
@@ -196,7 +193,6 @@ class DashboardsState
       availableRideNonSocketTrips: availableRideNonSocketTrips ?? this.availableRideNonSocketTrips,
       acceptedRideNonSocketTrips: acceptedRideNonSocketTrips ?? this.acceptedRideNonSocketTrips,
       pastRideNonSocketTrips: pastRideNonSocketTrips ?? this.pastRideNonSocketTrips,
-      activeTrip: activeTrip ?? this.activeTrip,
       tripStatus: tripStatus ?? this.tripStatus,
       lastStatus: lastStatus ?? this.lastStatus,
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,

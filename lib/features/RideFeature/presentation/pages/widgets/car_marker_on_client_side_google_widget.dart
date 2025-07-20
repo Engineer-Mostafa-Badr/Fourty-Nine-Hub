@@ -95,8 +95,8 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: currentLocation,
-              zoom: currentZoom,     // 👈 Set your desired zoom level
-              bearing: newAngle, // 👈 Optional: rotate camera in car's direction
+              zoom: currentZoom,
+              bearing: newAngle,
             ),
           ),
         );

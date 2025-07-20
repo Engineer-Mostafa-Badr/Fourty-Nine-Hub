@@ -73,6 +73,7 @@ class AdModel extends AdEntity {
       statistics: json['statistics'] == null
           ? null
           : AdStatisticsModel.fromJson(json['statistics']),
+      // TODO: add the address model
       address: AdsAddressModel.fromJson(json['address']),
       user: user,
       details: json['props'] == null

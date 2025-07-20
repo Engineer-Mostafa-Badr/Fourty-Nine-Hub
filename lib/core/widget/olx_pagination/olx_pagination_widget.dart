@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+
+import 'banner.dart';
+
+class OlxPaginationWidget extends StatefulWidget {
+  final List<Widget> items;
+  final List<BannerAdsModel> banners;
+  final int itemsPerPage;
+  final Future<void> Function(int) loadPage; // Callback for loading pages
+
+  const OlxPaginationWidget({
+    super.key,
+    required this.items,
+    required this.banners,
+    required this.loadPage,
+    this.itemsPerPage = 10,
+  });
+
+  @override
+  _PaginationBannerDemoState2 createState() => _PaginationBannerDemoState2();
+}
+
+class _PaginationBannerDemoState2 extends State<OlxPaginationWidget> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
+  int _currentPage = 1; // Start at page 1
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+    // Load initial page if items are empty
+    if (widget.items.isEmpty) _loadPage(_currentPage);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 100 &&
+        !_isLoading) {
+      _loadNextPage();
+    }
+  }
+
+  Future<void> _loadPage(int page) async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+    await widget.loadPage(page);
+    setState(() {
+      _isLoading = false;
+      _currentPage = page;
+    });
+  }
+
+  Future<void> _loadNextPage() async {
+    await _loadPage(_currentPage + 1);
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_scrollListener)
+      ..dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    // const  = 3;
+    final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
+
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        // First page items
+        if (widget.items.isNotEmpty)
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => widget.items[index],
+              childCount: widget.items.length > widget.itemsPerPage
+                  ? widget.itemsPerPage
+                  : widget.items.length,
+            ),
+          ),
+
+        // Subsequent pages with banners
+        for (int page = 1; page < pageCount; page++) ...[
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            pinned: false,
+            expandedHeight: screenHeight, // Reduced height for banner
+            flexibleSpace: BannerAdsWidget(
+              key: Key('banner_$page'),
+              banner: widget.banners[(page - 1) % widget.banners.length],
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final itemIndex = page * widget.itemsPerPage + index;
+                return itemIndex < widget.items.length
+                    ? widget.items[itemIndex]
+                    : null;
+              },
+              childCount: widget.itemsPerPage,
+            ),
+          ),
+        ],
+
+        // Loading indicator
+        if (_isLoading)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+      ],
+    );
+  }
+}

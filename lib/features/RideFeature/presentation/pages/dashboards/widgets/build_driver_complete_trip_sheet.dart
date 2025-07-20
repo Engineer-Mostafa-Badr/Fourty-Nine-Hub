@@ -86,7 +86,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                                 height: 45,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[100],
+                                  color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
@@ -142,15 +142,15 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                       const SizedBox(height: 20),
                       Container(
                         height: 40,
-                        decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
-                        child: const Row(
+                        decoration: BoxDecoration(color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.info_outline, color: Colors.black54),
+                            Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                             SizedBox(width: 5),
                             Text(
                               "Travel time: ~14 min. Distance: 6.58 Km.",
-                              style: TextStyle(color: Colors.black54, fontSize: 14),
+                              style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                             ),
                           ],
                         ),
@@ -172,13 +172,13 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                         },
                         child: Container(
                           height: 40,
-                          decoration: BoxDecoration(color: _isRecording ? Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
+                          decoration: BoxDecoration(color: _isRecording ? context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
                           padding: EdgeInsets.all(20.w),
                           child: Row(
                             children: [
                               SvgPicture.asset(
                                 Assets.rideRecord,
-                                color: _isRecording ? null : Colors.black,
+                                color: _isRecording ? null : context.isDarkMode?AppColors.whiteColor:Colors.black,
                               ),
                               SizedBox(width: 30.w),
                               if (!_isRecording) Text(context.isArabic?'تسجيل صوتي':'Record', style: TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else Expanded(child: _buildWaveform()),
@@ -268,7 +268,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                           height: 45,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
@@ -378,15 +378,15 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                           height: 45,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             context.isArabic ? "لا" : "No",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: FontSize.s16,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.PRIMARY_COLOR,
+                              color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                             ),
                           ),
                         ),
@@ -412,7 +412,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
           height: height,
           margin: EdgeInsets.symmetric(horizontal: 1),
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: context.isDarkMode?AppColors.whiteColor:Colors.black,
             borderRadius: BorderRadius.circular(2),
           ),
         );
@@ -495,18 +495,18 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                       border: state.isClientNotShownReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "لم يظهر العميل" : "The client did not show up",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -520,18 +520,18 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                       border: state.isChangedMindReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "لقد قمت بتغيير رأيي" : "I changed my mind",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -544,15 +544,25 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                   },
                   child: Container(
                     height: 40,
-                    decoration: BoxDecoration(color: state.isOtherReason == true ? Colors.transparent : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(
+                      color: state.isOtherReason == true
+                          ? context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : Colors.transparent
+                          : context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                      border: state.isOtherReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "أخري" : "Other",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),

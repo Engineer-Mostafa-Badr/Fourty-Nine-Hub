@@ -24,7 +24,11 @@ class MyBookingLocationEntity{
 
 class BookingClientEntity{
   final String id;
+  String? status;
+  String? driverArrivalTime;
+  num? pickupDistanceFromStart;
+  String? driverWaitingTime;
   final MyBookingLocationEntity location;
 
-  BookingClientEntity({required this.id, required this.location});
+  BookingClientEntity( {required this.id, required this.location, this.status,this.pickupDistanceFromStart, this.driverArrivalTime, this.driverWaitingTime,});
 }

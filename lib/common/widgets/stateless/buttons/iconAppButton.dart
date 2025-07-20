@@ -11,6 +11,7 @@ class IconAppButton extends StatelessWidget {
   final IconData icon;
   final TextStyle? style;
   final bool isCircle;
+  final List<Shadow>? shadows;
 
   const IconAppButton(
       {super.key,
@@ -27,7 +28,7 @@ class IconAppButton extends StatelessWidget {
       this.color,
       this.style,
       this.isCircle = false,
-      this.width});
+      this.width, this.shadows});
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +53,17 @@ class IconAppButton extends StatelessWidget {
         backgroundColor: backColor,
         child: Icon(
           icon,
+          shadows: shadows,
+
           size: size ?? 50.h,
           color: color,
         ),
       );
     } else {
       return Icon(
+
         icon,
+        shadows: shadows,
         color: color,
         size: size ?? 45.h,
       );

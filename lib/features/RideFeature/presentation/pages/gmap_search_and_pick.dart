@@ -93,20 +93,36 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
     }
 
     try {
+      final apiKey = 'AIzaSyDQqf_i02Uh6HoNp46HJnCr7_LIjrnLCuc'; // Add this to your params
       final url =
-          '${widget.params.baseUri}/reverse?format=json&lat=$lat&lon=$lon&zoom=10&addressdetails=1';
-      log(url);
+          'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lon&key=$apiKey';
+
+      debugPrint(url);
+
       final response = await http.get(Uri.parse(url));
       final decoded = jsonDecode(utf8.decode(response.bodyBytes));
 
-      final countryCode = decoded['address']?['country_code'];
-
-      return countryCode?.toString().toLowerCase() ==
-          widget.params.allowedCountryCode!.toLowerCase();
+      if (decoded['status'] == 'OK') {
+        final results = decoded['results'] as List<dynamic>;
+        for (var result in results) {
+          final addressComponents = result['address_components'] as List<dynamic>;
+          for (var component in addressComponents) {
+            final types = component['types'] as List<dynamic>;
+            if (types.contains('country')) {
+              final countryCode = component['short_name'];
+              return countryCode.toLowerCase() ==
+                  widget.params.allowedCountryCode!.toLowerCase();
+            }
+          }
+        }
+      } else {
+        debugPrint('Geocoding failed with status: ${decoded['status']}');
+      }
     } catch (e) {
       debugPrint('Error checking location: $e');
-      return false;
     }
+
+    return false;
   }
 
   Future<void> fetchUserLocation() async {

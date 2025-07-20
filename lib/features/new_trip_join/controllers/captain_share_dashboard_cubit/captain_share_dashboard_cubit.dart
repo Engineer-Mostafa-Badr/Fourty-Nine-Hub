@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/route_client_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -20,6 +22,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_running_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_new_route_driver_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/pick_client_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -89,7 +92,11 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   }
 
   changeTapIndex(int index,BuildContext context){
-    runningRoute=null;
+    MyBookingEntity? runningRoute = state.runningRoute;
+    if(runningRoute!=null){
+      runningRoute.status=='';
+      emit(state.copyWith(runningRoute: runningRoute));
+    }
     if(index==0)loadInitialAvailableData(context);
     if(index==1)getRunningRoute(context);
     if(index==2)loadInitialPastData(context);
@@ -97,9 +104,35 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   }
 
 
+  BookingClientEntity? getCurrentClient(List<BookingClientEntity> clients){
+    clients.sort((a, b) => (a.pickupDistanceFromStart??0).compareTo(b.pickupDistanceFromStart??0));
+    BookingClientEntity? currentClient;
+      if(clients.isNotEmpty&&(clients[0].status==RouteClientStatus.acceptedByDriver.name||clients[0].status==RouteClientStatus.driverNoShowPassenger.name)){
+        currentClient= clients[0];
+      }else if(clients.length>1&&(clients[1].status==RouteClientStatus.acceptedByDriver.name||clients[1].status==RouteClientStatus.driverNoShowPassenger.name)){
+        currentClient= clients[1];
+      } else if(clients.length>=2&&(clients[2].status==RouteClientStatus.acceptedByDriver.name||clients[2].status==RouteClientStatus.driverNoShowPassenger.name)){
+        currentClient= clients[2];
+      }
+    return currentClient;
+  }
+
+  int getCurrentClientIndex(List<BookingClientEntity> clients){
+    clients.sort((a, b) => (a.pickupDistanceFromStart??0).compareTo(b.pickupDistanceFromStart??0));
+    int index=0;
+    if(clients.isNotEmpty&&(clients[0].status==RouteClientStatus.acceptedByDriver.name||clients[0].status==RouteClientStatus.driverNoShowPassenger.name)){
+      index=0;
+    }else if(clients.length>1&&(clients[1].status==RouteClientStatus.acceptedByDriver.name||clients[1].status==RouteClientStatus.driverNoShowPassenger.name)){
+      index=1;
+    } else if(clients.length>=2&&(clients[2].status==RouteClientStatus.acceptedByDriver.name||clients[2].status==RouteClientStatus.driverNoShowPassenger.name)){
+      index=2;
+    }
+    return index;
+  }
+
 
   List<MyBookingEntity> availableBookings = [];
-  MyBookingEntity? runningRoute;
+  // MyBookingEntity? runningRoute;
   bool isLoadingMoreAvailable = false;
   bool isLoadingAvailableBookings = false;
   bool hasMoreAvailableData = true;
@@ -208,10 +241,16 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   }
 
   bool isLoadingRunningTrip = false;
+  bool isGoingToClient = false;
+  bool showArrived = false;
+  bool showClientNotShown = false;
+  bool showEndTrip = false;
 
   Future<void> getRunningRoute(BuildContext context) async {
     isLoadingRunningTrip = true;
-    emit(state.copyWith(status: CaptainShareDashboardStates.loading));
+    MyBookingEntity? runningRoute = state.runningRoute;
+    runningRoute?.status = '';
+    emit(state.copyWith(status: CaptainShareDashboardStates.loading,runningRoute: runningRoute));
 
     final response = await getDriverRunningRouteUseCase(NoParams());
 
@@ -224,7 +263,6 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       },
           (data) {
             isLoadingRunningTrip = false;
-        runningRoute = data;
         emit(state.copyWith(status: CaptainShareDashboardStates.success,runningRoute:data));
       },
     );
@@ -249,6 +287,25 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
     });
   }
 
+  Future<void> startClientRoute(
+      {required String id,required String passengerId,required String otp, required BuildContext context}) async {
+    showLoadingDialog(context);
+    final response = await pickClientUseCase(PickClientParams(routeId: id,passengerId: passengerId,otp: otp));
+    response.fold((l) {
+      context.pop();
+      String errorName = getFailureName(l, context);
+      showSuccessMessage(context,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
+    }, (data) {
+      context.pop();
+      MyBookingEntity? runningRoute = state.runningRoute;
+      runningRoute?.clients?.firstWhereOrNull((e)=>e.id==passengerId)?.status=RouteClientStatus.pickedUp.name;
+
+      showSuccessMessage(context, context.isArabic?'تم بدء الرحله بنجاح':'Trip Started Successfully');
+      emit(state.copyWith(status: CaptainShareDashboardStates.success,runningRoute: runningRoute));
+    });
+  }
+
   Future<void> goToClient(
       {required String routeId,required String passengerId,required String otp, required BuildContext context}) async {
     showLoadingDialog(context);
@@ -266,6 +323,71 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       context.pop();
       showSuccessMessage(context, context.isArabic?'تم التقاط الراكب بنجاح':'Client Picked Successfully');
       emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    });
+  }
+
+  Future<void> onDriverArrivedToClient(
+      {required String routeId,required String passengerId}) async {
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnabled){
+      currentContext.pop();
+      showErrorMessage(currentContext, currentContext.isArabic?'يرجى الموافقة على إذن الموقع':'Please Allow Location Permission');
+      return;
+    }
+    Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    final response = await arrivedToClientUseCase(ClientNotShownParams(
+        routeId:routeId,
+        passengerId:passengerId,
+      latitude: currentPosition.latitude,
+      longitude: currentPosition.longitude
+    ));
+    response.fold((l) {
+      currentContext.pop();
+      String errorName = getFailureMessage(l, currentContext);
+      showErrorMessage(currentContext,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
+    }, (data) {
+      currentContext.pop();
+      MyBookingEntity? runningRoute = state.runningRoute;
+      runningRoute?.clients?.firstWhereOrNull((e)=>e.id==passengerId)?.driverArrivalTime=data;
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم الوصول للراكب بنجاح':'Arrived Successfully');
+      emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    });
+  }
+
+  Future<void> onClientNotShown(
+      {required String routeId,required String passengerId}) async {
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnabled){
+      currentContext.pop();
+      showErrorMessage(currentContext, currentContext.isArabic?'يرجى الموافقة على إذن الموقع':'Please Allow Location Permission');
+      return;
+    }
+    Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    final response = await clientNotShownUseCase(ClientNotShownParams(
+        routeId:routeId,
+        passengerId:passengerId,
+      latitude: currentPosition.latitude,
+      longitude: currentPosition.longitude
+    ));
+    response.fold((l) {
+      currentContext.pop();
+      String errorName = getFailureMessage(l, currentContext);
+      showErrorMessage(currentContext,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
+    }, (data) {
+      currentContext.pop();
+      MyBookingEntity? runningRoute = state.runningRoute;
+      runningRoute?.clients?.firstWhereOrNull((e)=>e.id==passengerId)?.driverWaitingTime=data;
+      emit(state.copyWith(status: CaptainShareDashboardStates.success,runningRoute:runningRoute));
     });
   }
 

@@ -10,6 +10,9 @@ abstract class Assets {
   static String rideRecord = 'assets/icons/ride_record.svg';
   static String cameraAddTalent = 'assets/49-New-icons/camera.png';
   static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
+  static String areaIcon = 'assets/49-New-icons/area.png';
+  static String bathroomIcon = 'assets/49-New-icons/bathroom.png';
+  static String bedroomIcon = 'assets/49-New-icons/bedroom.png';
   // static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';

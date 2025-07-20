@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/custom_notification_badge.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/header_button_widget.dart';
@@ -20,11 +21,11 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../filter_ads/presentation/pages/filter_ads.dart';
 
 class MarriageAdsViewBody extends StatefulWidget {
   const MarriageAdsViewBody({
@@ -201,15 +202,19 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                 onTap: () async {
                   dynamic data = await context.push(
                     Routes.FILTERADS,
-                    extra: CategorizationEntity(
-                      mainCategory: widget.state.mainCategory!,
-                      fromMarriage: true,
-                      subCategory: widget.state.subCategories![
-                          widget.state.subCategories?.indexWhere(
-                                  (element) => element.isSelected == true) ??
-                              0],
+                    extra: FilterAdsParams(
+                      categorization: CategorizationEntity(
+                        mainCategory: widget.state.mainCategory!,
+                        fromMarriage: true,
+                        subCategory: widget.state.subCategories![
+                            widget.state.subCategories?.indexWhere(
+                                    (element) => element.isSelected == true) ??
+                                0],
+                      ),
+                      userType: '',
                     ),
                   );
+
                   if (data != null) {
                     print("objectsdaa");
                     widget.controller.changeFilterModel(data);
@@ -532,7 +537,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
 
     return MarriageAdsListView(
-      scrollController: widget._scrollController,
+      // scrollController: widget._scrollController,
       controller: widget.controller,
       state: widget.state,
     );
