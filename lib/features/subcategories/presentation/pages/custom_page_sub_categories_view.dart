@@ -506,7 +506,7 @@ class _CustomPageSubCategoriesViewState
                       colorFilter: ColorFilter.mode(
                         context.read<SubcategoriesCubit>().isSearchAdsOpen
                             ? const Color(0xffF33D49)
-                            : AppColors.PRIMARY_COLOR,
+                            : AppColors.getButtonPrimaryWhiteColor(context),
                         BlendMode.srcIn,
                       ),
                       // color: context.isDarkMode ? Colors.white : null,

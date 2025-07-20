@@ -1,14 +1,14 @@
 import 'package:fourtyninehub/core/utils/duration_helper.dart';
 import 'package:intl/intl.dart';
 
-import '../../../health_feature/health/domain/entities/booking_entity.dart';
+import '../../../ads_feature/ads/domain/entities/ads_address_entity.dart';
 import 'create_ad_search_entity.dart';
 
 class AdsSearchEntity {
   final String id;
   String? userId;
   final String subCategoryId;
-  // final AddressEntity address;
+  // final AdsAddressEntity address;
   final String mainCategoryId;
   final String title;
   final String description;

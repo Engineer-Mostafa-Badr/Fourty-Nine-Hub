@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -12,6 +10,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/provider_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/provider_filter_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +33,8 @@ class ProviderAdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('userType $userType');
+
     return controller.state.status == AdsStates.loading
         ? const CustomLoading()
         : Column(children: [
@@ -57,9 +58,12 @@ class ProviderAdsView extends StatelessWidget {
                           textColor: AppColors.getReversedTextColor(context),
                           onTap: () async {
                             dynamic data = await context.push(Routes.FILTERADS,
-                                extra: CategorizationEntity(
-                                    mainCategory: params.mainCategory,
-                                    subCategory: params.subCategory));
+                                extra: FilterAdsParams(
+                                  categorization: CategorizationEntity(
+                                      mainCategory: params.mainCategory,
+                                      subCategory: params.subCategory),
+                                  userType: userType,
+                                ));
                             if (data != null) {
                               print("objectsdaa");
                               // Future.delayed(const Duration(seconds: 1), () =>

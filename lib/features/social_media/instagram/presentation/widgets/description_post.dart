@@ -17,15 +17,15 @@ class DescriptionPost extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
       child: ReadMoreText(
-        username: instagramPostEntity.username,
-        description: instagramPostEntity.content,
-        usernameStyle: Styles.mediumText(
+        text: '${instagramPostEntity.username} ${instagramPostEntity.content}',
+        // description: instagramPostEntity.content,
+        style: Styles.mediumText(
           fontWeight: FontWeight.w600,
           color: AppColors.getTextColor(context),
         ),
-        descriptionStyle: Styles.mediumText(
-          color: AppColors.getTextColor(context),
-        ),
+        // descriptionStyle: Styles.mediumText(
+        //   color: AppColors.getTextColor(context),
+        // ),
       ),
     );
   }

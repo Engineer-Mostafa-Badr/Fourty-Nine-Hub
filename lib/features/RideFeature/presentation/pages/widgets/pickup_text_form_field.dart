@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
-enum FieldType { text, phone }
-
+enum FieldType { text, phone, number }
 
 class PickUpTextFormField extends StatefulWidget {
   const PickUpTextFormField({
@@ -18,6 +18,8 @@ class PickUpTextFormField extends StatefulWidget {
     this.validator,
     this.icon,
     this.isArabic = false,
+    this.fillColor,
+    this.textColor,
   });
 
   final String hintText;
@@ -28,6 +30,8 @@ class PickUpTextFormField extends StatefulWidget {
   final FieldType fieldType;
   final String? Function(String?)? validator;
   final Widget? icon;
+  final Color? fillColor;
+  final Color? textColor;
   final bool isArabic;
 
   @override
@@ -56,7 +60,9 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
   }
 
   void _updateControllerText() {
-    if (widget.controller != null && widget.fieldType == FieldType.phone) {
+    if (widget.controller != null &&
+        (widget.fieldType == FieldType.phone ||
+            widget.fieldType == FieldType.number)) {
       final currentText = widget.controller!.text;
       final updatedText = _isArabic
           ? _convertToArabicDigits(currentText)
@@ -95,37 +101,49 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      maxLines: widget.maxLines ?? (widget.fieldType == FieldType.phone ? 1 :  1),
-      keyboardType: widget.fieldType == FieldType.phone
+      maxLines: widget.maxLines ??
+          (widget.fieldType == FieldType.phone ||
+                  widget.fieldType == FieldType.number
+              ? 1
+              : 1),
+      keyboardType: widget.fieldType == FieldType.phone ||
+              widget.fieldType == FieldType.number
           ? TextInputType.phone
           : TextInputType.multiline,
       validator: widget.validator != null
           ? (value) {
-        final englishValue =
-        value != null ? _convertToEnglishDigits(value) : null;
-        return widget.validator!(englishValue);
-      }
+              final englishValue =
+                  value != null ? _convertToEnglishDigits(value) : null;
+              return widget.validator!(englishValue);
+            }
           : null,
       inputFormatters: widget.fieldType == FieldType.phone
           ? [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
-        LengthLimitingTextInputFormatter(11),
-      ]
-          : [],
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
+              LengthLimitingTextInputFormatter(11),
+            ]
+          : widget.fieldType == FieldType.number
+              ? [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
+                ]
+              : [],
       enableInteractiveSelection: false,
       contextMenuBuilder: (context, editableTextState) =>
-      const SizedBox.shrink(),
-      cursorColor: AppColors.PRIMARY_COLOR,
+          const SizedBox.shrink(),
+      cursorColor: widget.textColor ?? AppColors.PRIMARY_COLOR,
       decoration: InputDecoration(
         prefixIcon: widget.icon,
-        hintText: _isArabic && widget.fieldType == FieldType.phone
+        hintText: _isArabic &&
+                (widget.fieldType == FieldType.phone ||
+                    widget.fieldType == FieldType.number)
             ? _convertToArabicDigits(widget.hintText)
             : widget.hintText,
-        labelStyle: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
-        hintStyle: const TextStyle(
+        labelStyle: Styles.mediumText(
+            color: widget.textColor ?? AppColors.PRIMARY_COLOR),
+        hintStyle: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16,
-          color: AppColors.black,
+          color: widget.textColor ?? AppColors.black,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -149,11 +167,13 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
         ),
         contentPadding: const EdgeInsetsDirectional.only(start: 16, top: 10),
         filled: true,
-        fillColor: const Color(0xFFF5F5F5),
+        fillColor: widget.fillColor ?? const Color(0xFFF5F5F5),
       ),
       onChanged: (value) {
         if (widget.onChanged != null) {
-          if (widget.fieldType == FieldType.phone && _isArabic) {
+          if ((widget.fieldType == FieldType.phone ||
+                  widget.fieldType == FieldType.number) &&
+              _isArabic) {
             final newValue = _convertToArabicDigits(value);
             if (newValue != value && widget.controller != null) {
               widget.controller!.value = widget.controller!.value.copyWith(
@@ -168,10 +188,10 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
         }
       },
       onFieldSubmitted: widget.onFieldSubmitted,
-      style: const TextStyle(
+      style: TextStyle(
         fontWeight: FontWeight.w500,
         fontSize: 16,
-        color: AppColors.PRIMARY_COLOR,
+        color: widget.textColor ?? AppColors.PRIMARY_COLOR,
       ),
     );
   }
@@ -281,8 +301,6 @@ class PickUpTextFormField extends StatelessWidget {
   }
 }
 */
-
-
 
 // class PickUpTextFormField extends StatelessWidget {
 //   const PickUpTextFormField({
