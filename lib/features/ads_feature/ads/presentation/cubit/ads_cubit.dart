@@ -234,13 +234,13 @@ class AdvertisementCubit extends Cubit<AdsState> {
         subCategoryId: subCategoryId,
         filter: filter,
         page: adsPage,
-        limit: 10,
+        limit: 3,
         userId: userId));
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
       ads.addAll(data);
-      if (data.length < pageSize) {
+      if (data.length < 3) {
         hasMoreAdsData = false;
       } else {
         adsPage++;

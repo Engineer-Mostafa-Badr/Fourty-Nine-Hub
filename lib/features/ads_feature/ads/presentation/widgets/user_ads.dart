@@ -109,7 +109,7 @@ class _UserAdsState extends State<UserAds> {
       );
     }
     return OlxPaginationWidget(
-      itemsPerPage: 2,
+      itemsPerPage: 3,
       loadPage: (page) {
         if (widget.params.mainCategory.nameEn == 'Dating') {
           return context.read<AdvertisementCubit>().getAds(
