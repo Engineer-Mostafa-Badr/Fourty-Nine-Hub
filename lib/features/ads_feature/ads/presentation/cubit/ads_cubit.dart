@@ -229,18 +229,18 @@ class AdvertisementCubit extends Cubit<AdsState> {
     print(isLoadingAdsMore);
     if (!hasMoreAdsData || isLoadingAdsMore) return;
     isLoadingAdsMore = true;
-    emit(state.copyWith(status: AdsStates.loading));
+    // emit(state.copyWith(status: AdsStates.loading));
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId,
         filter: filter,
         page: adsPage,
-        limit: 3,
+        limit: 10,
         userId: userId));
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
       ads.addAll(data);
-      if (data.length < 3) {
+      if (data.length < 10) {
         hasMoreAdsData = false;
       } else {
         adsPage++;
