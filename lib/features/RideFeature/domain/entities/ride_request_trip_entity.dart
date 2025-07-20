@@ -22,7 +22,7 @@ class RideRequestTripEntity {
   final bool? isPremium;
   final DateTime? createdAt;
   final double? rating;
-  final double? driverIsArrivingIn;
+  final DateTime? driverIsArrivingIn;
   final String? driverId;
   final String? driverUserId;
   final String? driverFirstName;
@@ -62,7 +62,7 @@ class RideRequestTripEntity {
     bool? isPremium,
     DateTime? createdAt,
     double? rating,
-    double? driverIsArrivingIn,
+    DateTime? driverIsArrivingIn,
     String? driverId,
     String? driverUserId,
     String? driverFirstName,

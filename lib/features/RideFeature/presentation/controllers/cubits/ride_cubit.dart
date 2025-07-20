@@ -1311,8 +1311,10 @@ class RideCubit extends Cubit<RideState> {
       (rideRequestTrip) {
         if (rideRequestTrip.status == TripState.canceled.name ||
             rideRequestTrip.status == TripState.completed.name) {
+          log("state.requestedTrip?.status from ride request ${rideRequestTrip.status}");
           _fetchUserLocation();
         } else {
+          log("state.requestedTrip?.status from ride request ${rideRequestTrip.status}");
           if (rideRequestTrip.targetCoordinates != null &&
               rideRequestTrip.targetCoordinates!.length >= 2) {
             updateToLocation(

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -199,6 +199,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }) {
     showCustomDialogTrip(
         context,
+
         BlocProvider.value(
           value: serviceLocator<RideCubit>(),
           child: BlocBuilder<RideCubit, RideState>(builder: (context, state) {
@@ -375,7 +376,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             builder: (context, scrollController) {
               return Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : Colors.white,
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(16),
                   ),
@@ -406,7 +409,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 )
                               : DriverArrivalCountdown(
                                   key: ValueKey("${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
-                                  arrivalTimestampMs: state.requestedTrip?.driverIsArrivingIn ?? 0,
+                                  arrivalDateTime: state.requestedTrip?.driverIsArrivingIn,
                                   isCountdown: state.requestedTrip?.status == TripState.goToClient.name,
                                   isInLocation: state.requestedTrip?.status == TripState.inLocation.name,
                                 ),
@@ -519,8 +522,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 ),
                                 child: Container(
                                   padding: const EdgeInsets.all(20.0),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
+                                  decoration:  BoxDecoration(
+                                    color:  context.isDarkMode
+                                        ? AppColors.QUANTITY_COLOR
+                                        :  AppColors.whiteColor,
                                     borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                                   ),
                                   child: Form(
@@ -736,6 +741,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return BlocConsumer<RideCubit, RideState>(
         listener: (context, state) {},
         builder: (context, state) {
+          dev.log("state.requestedTrip?.status ${state.requestedTrip?.status}");
           var cubit = serviceLocator<RideCubit>();
           return PopScope(
             canPop: false,
@@ -1547,8 +1553,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                         ),
                                                         child: Container(
                                                           padding: const EdgeInsets.all(20.0),
-                                                          decoration: const BoxDecoration(
-                                                            color: Colors.white,
+                                                          decoration:  BoxDecoration(
+                                                            color: context.isDarkMode
+                                                                ? AppColors.QUANTITY_COLOR
+                                                                : Colors.white,
                                                             borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                                                           ),
                                                           child: Form(
@@ -1711,8 +1719,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                           ),
                                                           child: Container(
                                                             padding: const EdgeInsets.all(20.0),
-                                                            decoration: const BoxDecoration(
-                                                              color: Colors.white,
+                                                            decoration:  BoxDecoration(
+                                                              color: context.isDarkMode
+                                                                  ? AppColors.QUANTITY_COLOR
+                                                                  : Colors.white,
                                                               borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                                                             ),
                                                             child: Form(
@@ -2370,7 +2380,9 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with Single
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: isLastMinute ? Colors.red : Colors.black,
+                    color: isLastMinute ? Colors.red : context.isDarkMode
+                  ? AppColors.whiteColor
+                      :   Colors.black,
                   ),
                 ),
               ),
@@ -2385,7 +2397,9 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with Single
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: isLastMinute ? Colors.red : Colors.black,
+                    color: isLastMinute ? Colors.red : context.isDarkMode
+                        ? AppColors.whiteColor
+                        :   Colors.black,
                   ),
                 ),
               ),

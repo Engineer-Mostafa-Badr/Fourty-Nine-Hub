@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../core/utils/format_numbers.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'font_manager.dart';
 
 class DriverHeaderWidget extends StatelessWidget {
@@ -180,34 +181,46 @@ class DriverHeaderWidget extends StatelessWidget {
                     if (carName != null)
                       Text(
                         '$carName',
-                        style: const TextStyle(
-                          fontSize: FontSize.s12,
-                          color: Colors.grey,
+                        style:  TextStyle(
+                          fontSize: FontSize.s14,
+                          fontWeight: FontWeight.bold,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              :  AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     if (carModel != null && carName != null)
-                      const Text(
+                       Text(
                         ' - ',
-                        style: TextStyle(
-                          fontSize: FontSize.s12,
-                          color: Colors.grey,
+                        style:  TextStyle(
+                          fontSize: FontSize.s14,
+                          fontWeight: FontWeight.bold,
+                          color:  context.isDarkMode
+                              ? AppColors.whiteColor
+                              :  AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     if (carModel != null)
                       Text(
                         '$carModel',
-                        style: const TextStyle(
-                          fontSize: FontSize.s12,
-                          color: Colors.grey,
+                        style:  TextStyle(
+                          fontSize: FontSize.s14,
+                          fontWeight: FontWeight.bold,
+                          color:  context.isDarkMode
+                              ? AppColors.whiteColor
+                              :  AppColors.PRIMARY_COLOR,
                         ),
                       ),
 
                     if (carColor != null && carModel != null)
-                      const Text(
+                       Text(
                         ' - ',
-                        style: TextStyle(
-                          fontSize: FontSize.s12,
-                          color: Colors.grey,
+                        style:  TextStyle(
+                          fontSize: FontSize.s14,
+                          fontWeight: FontWeight.bold,
+                          color:  context.isDarkMode
+                              ? AppColors.whiteColor
+                              :  AppColors.PRIMARY_COLOR,
                         ),
                       ),
 
@@ -216,9 +229,12 @@ class DriverHeaderWidget extends StatelessWidget {
                         // '$carColor',
                         // '${HexColor(carColor!)}',
                         '${getColorNameById(id: carColor!, isArabic: context.isArabic)}',
-                        style: const TextStyle(
-                          fontSize: FontSize.s12,
-                          color: Colors.grey,
+                        style:  TextStyle(
+                          fontSize: FontSize.s14,
+                          fontWeight: FontWeight.bold,
+                          color:  context.isDarkMode
+                        ? AppColors.whiteColor
+                            :  AppColors.PRIMARY_COLOR,
                         ),
                       ),
                   ],
@@ -228,11 +244,26 @@ class DriverHeaderWidget extends StatelessWidget {
           ),
           Column(
             children: [
-              Image.network(
-                carImageUrl,
-                width: 50,
-                height: 30,
-                fit: BoxFit.cover,
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 0.2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    carImageUrl,
+                    width: 50,
+                    height: 30,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               const SizedBox(height: 4),
               Text(
@@ -251,13 +282,13 @@ class DriverHeaderWidget extends StatelessWidget {
 }
 
 class DriverArrivalCountdown extends StatefulWidget {
-  final double? arrivalTimestampMs;
+  final DateTime? arrivalDateTime;
   final bool isCountdown;
   final bool isInLocation;
 
   const DriverArrivalCountdown({
     super.key,
-    required this.arrivalTimestampMs,
+    required this.arrivalDateTime,
     required this.isCountdown,
     required this.isInLocation,
   });
@@ -283,7 +314,7 @@ class _DriverArrivalCountdownState extends State<DriverArrivalCountdown> {
   void didUpdateWidget(covariant DriverArrivalCountdown oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isCountdown &&
-        widget.arrivalTimestampMs?.toInt() != oldWidget.arrivalTimestampMs?.toInt()) {
+        widget.arrivalDateTime != oldWidget.arrivalDateTime) {
       _timer?.cancel();
       _updateRemaining();
       _startTimer();
@@ -292,7 +323,7 @@ class _DriverArrivalCountdownState extends State<DriverArrivalCountdown> {
 
   void _updateRemaining() {
     final now = DateTime.now();
-    final arrival = DateTime.fromMillisecondsSinceEpoch(widget.arrivalTimestampMs?.toInt() ?? 0);
+    final arrival = widget.arrivalDateTime ?? now;
     remaining = arrival.difference(now);
     if (remaining.isNegative) {
       remaining = Duration.zero;
