@@ -928,6 +928,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
+          fromClient:true,
         ),
       ),
     );
