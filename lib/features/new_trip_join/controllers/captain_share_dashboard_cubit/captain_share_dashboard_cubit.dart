@@ -248,7 +248,9 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
 
   Future<void> getRunningRoute(BuildContext context) async {
     isLoadingRunningTrip = true;
-    emit(state.copyWith(status: CaptainShareDashboardStates.loading));
+    MyBookingEntity? runningRoute = state.runningRoute;
+    runningRoute?.status = '';
+    emit(state.copyWith(status: CaptainShareDashboardStates.loading,runningRoute: runningRoute));
 
     final response = await getDriverRunningRouteUseCase(NoParams());
 
@@ -282,6 +284,25 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
         availableBookings.removeWhere((e)=> e.id==id);
       showSuccessMessage(context, context.isArabic?'تم قبول الحجز بنجاح':'Booking Accepted Successfully');
       emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    });
+  }
+
+  Future<void> startClientRoute(
+      {required String id,required String passengerId,required String otp, required BuildContext context}) async {
+    showLoadingDialog(context);
+    final response = await pickClientUseCase(PickClientParams(routeId: id,passengerId: passengerId,otp: otp));
+    response.fold((l) {
+      context.pop();
+      String errorName = getFailureName(l, context);
+      showSuccessMessage(context,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
+    }, (data) {
+      context.pop();
+      MyBookingEntity? runningRoute = state.runningRoute;
+      runningRoute?.clients?.firstWhereOrNull((e)=>e.id==passengerId)?.status=RouteClientStatus.pickedUp.name;
+
+      showSuccessMessage(context, context.isArabic?'تم بدء الرحله بنجاح':'Trip Started Successfully');
+      emit(state.copyWith(status: CaptainShareDashboardStates.success,runningRoute: runningRoute));
     });
   }
 

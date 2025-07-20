@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/enums/route_client_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
@@ -73,6 +75,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
       }
 
       DateTime arrivalTime = DateTime.parse(arrivalTimeStr).toLocal();
+      log('arrivalTimeConverted $arrivalTime');
       DateTime arrivalDeadline = arrivalTime.add(const Duration(minutes: 5));
 
       if (arrivalDeadline.isAfter(now)) {
@@ -132,12 +135,12 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
   @override
   void dispose() {
     _countdownTimer?.cancel();
+    otpController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     print("widget.client?.driverWaitingTime ${widget.client?.driverWaitingTime}");
     print("widget.client?.driverArrivalTime ${widget.client?.driverArrivalTime}");
     return Column(
@@ -200,10 +203,16 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
                     if (context.read<CaptainShareDashboardCubit>().showArrived) {
                       widget.onDriverArrived();
                     }
-                    if (widget.client?.driverArrivalTime != null &&
-                        (widget.client?.driverArrivalTime?.isNotEmpty ?? false)) {
-                      if (otpController.text.length == 6) {
-                        widget.onPickClient(otpController.text);
+                    if (context.read<CaptainShareDashboardCubit>().showArrived==false && context.read<CaptainShareDashboardCubit>().isGoingToClient==false) {
+                      if(context.read<CaptainShareDashboardCubit>().showClientNotShown||remainingTime!=null){
+                        if (otpController.text.length == 6) {
+                          widget.onPickClient(otpController.text);
+                        }
+                        if(otpController.text.length<6){
+                          showErrorMessage(context,context.isArabic?'يرجى إدخال كود التأكيد':'Please Enter OTP');
+                        }
+                      }else if(context.read<CaptainShareDashboardCubit>().showClientNotShown==false&&remainingTime==null){
+                        widget.onPickClient('');
                       }
                     }
                   }
@@ -216,6 +225,8 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
+    context.read<CaptainShareDashboardCubit>().showClientNotShown==false&&remainingTime==null?
+                    (context.isArabic ? "انهاء الرحله" : "End Trip"):
                     context.read<CaptainShareDashboardCubit>().isGoingToClient
                         ? (context.isArabic
                         ? "الذهاب الي العميل ${widget.index == 0 ? 'الاول' : widget.index == 1 ? 'الثاني' : 'الثالث'}"
@@ -330,6 +341,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
             backgroundColor: Colors.transparent,
             enableActiveFill: false,
             enablePinAutofill: false,
+            enabled: context.read<CaptainShareDashboardCubit>().showClientNotShown||remainingTime!=null,
             onCompleted: (value) => widget.onPickClient(value),
             onChanged: (value) {},
             validator: (value) {
