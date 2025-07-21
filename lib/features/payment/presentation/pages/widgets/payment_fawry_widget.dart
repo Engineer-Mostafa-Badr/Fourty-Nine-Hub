@@ -48,6 +48,7 @@ class _FawryPaymentState extends State<FawryPayment> {
   bool _showNumber = false;
   bool _isAddingNewCard = false;
   final TextEditingController _cardNumberController = TextEditingController();
+  final FocusNode _cardNumberFocusNode = FocusNode();
   final TextEditingController _cvvController = TextEditingController();
   final FocusNode _cvvFocusNode = FocusNode();
   final TextEditingController _expiryMonthController = TextEditingController();
@@ -61,6 +62,22 @@ class _FawryPaymentState extends State<FawryPayment> {
     _cvvFocusNode.addListener(() {
       setState(() {});
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _cardNumberFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _cardNumberController.dispose();
+    _cvvController.dispose();
+    _cvvFocusNode.dispose();
+    _cardNumberFocusNode.dispose();
+    _expiryMonthController.dispose();
+    _expiryYearController.dispose();
+    _cardAlias.dispose();
+    super.dispose();
   }
 
   @override
@@ -438,6 +455,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                     color: context.isDarkMode ? Colors.white : Colors.black),
               ),
             ),
+            focusNode: _cardNumberFocusNode,
             maxLength: 16,
             keyboardType: TextInputType.number,
             inputFormatters: [

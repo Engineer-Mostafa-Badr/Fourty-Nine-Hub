@@ -44,12 +44,21 @@ class CreateRestaurantForm extends StatefulWidget {
 
 class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
   bool editFood = false;
+  final FocusNode nameFocusNode = FocusNode();
 
   @override
   initState() {
     context.read<CreateRestaurantCubit>().loadData();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      nameFocusNode.requestFocus();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -140,7 +149,9 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 32.h),
                     const CreateResturantSubcategoryDropdown(),
                     Sizer(height: 20.h),
-                    const CreateRestaurantNameField(),
+                     CreateRestaurantNameField(
+                      focusNode: nameFocusNode,
+                    ),
                     Sizer(height: 20.h),
                      CreateRestaurantNumberField(restaurantNumber: '' ),
                     Sizer(height: 20.h),

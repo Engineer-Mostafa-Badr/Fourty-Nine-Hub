@@ -30,10 +30,31 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class CreateDoctorViewBody extends StatelessWidget {
+class CreateDoctorViewBody extends StatefulWidget {
   const CreateDoctorViewBody({
     super.key,
   });
+
+  @override
+  State<CreateDoctorViewBody> createState() => _CreateDoctorViewBodyState();
+}
+
+class _CreateDoctorViewBodyState extends State<CreateDoctorViewBody> {
+  final FocusNode nameFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      nameFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    nameFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +83,9 @@ class CreateDoctorViewBody extends StatelessWidget {
             const SizedBox(height: 8),
             const CreateDoctorOptionsCheckbox(),
             const SizedBox(height: 8),
-            const CreateDoctorNameField(),
+            CreateDoctorNameField(
+              focusNode: nameFocusNode,
+            ),
             const SizedBox(height: 8),
             const CreateDoctorPhoneNumberField(),
             const SizedBox(height: 8),
@@ -129,7 +152,8 @@ class CreateDoctorViewBody extends StatelessWidget {
             SizedBox(height: 20.h),
             AppInfoText(
                 text: context.isArabic
-                    ? 'سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا.'.toArabicNumbers(context)
+                    ? 'سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا.'
+                        .toArabicNumbers(context)
                     : 'You will get EGP 3,650 per year if you subscribe daily.'),
             SizedBox(height: 20.h),
             const CreateDoctorSubmitButton(),

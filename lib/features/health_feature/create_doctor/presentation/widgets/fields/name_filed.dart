@@ -6,7 +6,8 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_text_field_health.dart';
 
 class CreateDoctorNameField extends StatelessWidget {
-  const CreateDoctorNameField({super.key});
+  CreateDoctorNameField({super.key, this.focusNode});
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class CreateDoctorNameField extends StatelessWidget {
       children: [
         Expanded(
           child: CustomTextFieldHealth(
+            focusNode: focusNode,
             hintText: LocaleKeys.firstName.localize,
             controller: doctorLoginCubit.firstNameController,
             keyboardType: TextInputType.name,
