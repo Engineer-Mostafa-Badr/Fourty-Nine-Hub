@@ -9,9 +9,16 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/crea
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 
-class CreateRestaurantNameField extends StatelessWidget {
-  const CreateRestaurantNameField({super.key});
+class CreateRestaurantNameField extends StatefulWidget {
+  const CreateRestaurantNameField({super.key, this.focusNode});
 
+  final FocusNode? focusNode;
+
+  @override
+  State<CreateRestaurantNameField> createState() => _CreateRestaurantNameFieldState();
+}
+
+class _CreateRestaurantNameFieldState extends State<CreateRestaurantNameField> {
   @override
   Widget build(BuildContext context) {
     final restaurantLoginCubit = context.read<CreateRestaurantCubit>();
@@ -29,6 +36,7 @@ class CreateRestaurantNameField extends StatelessWidget {
               }
               return null;
             },
+            focusNode: widget.focusNode,
             style: Styles.mediumText(),
             controller: restaurantLoginCubit.name,
             decoration: InputDecoration(

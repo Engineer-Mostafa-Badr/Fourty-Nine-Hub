@@ -20,6 +20,8 @@ class PickUpTextFormField extends StatefulWidget {
     this.isArabic = false,
     this.fillColor,
     this.textColor,
+    this.textInputAction,
+    this.focusNode,
   });
 
   final String hintText;
@@ -33,6 +35,8 @@ class PickUpTextFormField extends StatefulWidget {
   final Color? fillColor;
   final Color? textColor;
   final bool isArabic;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
 
   @override
   State<PickUpTextFormField> createState() => _PickUpTextFormFieldState();
@@ -45,6 +49,9 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
   void initState() {
     super.initState();
     _isArabic = widget.isArabic;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.focusNode?.requestFocus();
+    });
   }
 
   @override
@@ -101,6 +108,7 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      focusNode: widget.focusNode,
       maxLines: widget.maxLines ??
           (widget.fieldType == FieldType.phone ||
                   widget.fieldType == FieldType.number
@@ -193,6 +201,7 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
         fontSize: 16,
         color: widget.textColor ?? AppColors.PRIMARY_COLOR,
       ),
+      textInputAction: widget.textInputAction ?? TextInputAction.next,
     );
   }
 }

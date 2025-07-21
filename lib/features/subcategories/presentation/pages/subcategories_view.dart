@@ -53,8 +53,13 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
 
   late Debouncer _debounce;
 
+  final FocusNode focusNode = FocusNode();
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
     _debounce = Debouncer();
     context
         .read<SubcategoriesCubit>()
@@ -71,6 +76,13 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       setState(() {});
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   List<SubCategoryEntity> subCategories = [];
@@ -218,7 +230,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
-          label:context.isArabic ? widget.mainCategory.name: widget.mainCategory.nameEn,
+          label: context.isArabic
+              ? widget.mainCategory.name
+              : widget.mainCategory.nameEn,
           textColor: Colors.white,
           iconColor: Colors.white,
           enableCustomAppBar: true,
@@ -349,6 +363,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           );
                     });
                   },
+                  focusNode: focusNode,
                 ),
               if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen)
                 Expanded(

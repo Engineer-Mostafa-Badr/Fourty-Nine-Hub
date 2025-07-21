@@ -36,10 +36,20 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   File? _selectedVideo;
   VideoPlayerController? _videoController;
   String? _mediaUrl;
+  final FocusNode _titleFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _titleFocusNode.requestFocus();
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
     _titleController.dispose();
+    _titleFocusNode.dispose();
     _descriptionController.dispose();
     _videoController?.dispose();
     super.dispose();
@@ -282,6 +292,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   borderSide: BorderSide.none,
                 ),
               ),
+              focusNode: _titleFocusNode,
             ),
             const SizedBox(height: 16),
 

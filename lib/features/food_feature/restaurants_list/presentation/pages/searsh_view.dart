@@ -28,6 +28,7 @@ class SearchRestaurantView extends StatelessWidget {
   const SearchRestaurantView({super.key, this.onClose});
 
   final VoidCallback? onClose; // Callback to hide search UI
+  final FocusNode? focusNode;
   @override
   Widget build(BuildContext context) {
     final searchCubit = context.read<SearchRestaurantsCubit>();
@@ -99,6 +100,7 @@ class SearchRestaurantView extends StatelessWidget {
                       width: 2),
                 ),
               ),
+              focusNode: focusNode,
             ),
 
             /// data

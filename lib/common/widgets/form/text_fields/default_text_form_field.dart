@@ -39,6 +39,7 @@ class DefaultTextFormField extends MainTextFormField {
     super.constraints,
     super.hintColor,
     super.hintStyle,
+    super.textInputAction,
   }) : super(
           validator:
               validator ?? (isRequired ? Validator().validateEmptyField : null),

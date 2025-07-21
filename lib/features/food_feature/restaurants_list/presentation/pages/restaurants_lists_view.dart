@@ -51,6 +51,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   bool isFirstSearchListenerCall = true;
 
   final AdsManager _adsManager = AdsManager();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   bool get wantKeepAlive => true;
@@ -58,6 +59,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   @override
   void initState() {
     _adsManager.preloadAds();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     context.read<RestaurantsCubit>().loadData();
@@ -125,6 +129,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               )..loadData(),
               child: SearchRestaurantView(
                 onClose: () => setState(() => _showSearch = false),
+                focusNode: _focusNode,
               ),
             ),
           if (_showExpire)
@@ -298,111 +303,111 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (context.read<UserCubit>().isLoggedIn)
-            GestureDetector(
-              child: Stack(
-                children: [
-                  Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: state.isResturant?.isRestaurant == false
-                            ? [
-                                Color(0xFF0B1035),
-                                Color(0xFF161F68),
-                                Color(0xFF1B2781),
-                                Color(0xFF1E2B8E),
-                                Color(0xFF1F2D95),
-                                Color(0xFF0B1035),
-                              ]
-                            : [
-                                Color(0xFFF33D49),
-                                Color(0xFFC0303A),
-                                Color(0xFFA72A32),
-                                Color(0xFF9A272E),
-                                Color(0xFF93252C),
-                                Color(0xFF90242B),
-                              ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
+          GestureDetector(
+            child: Stack(
+              children: [
+                Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: state.isResturant?.isRestaurant == false
+                          ? [
+                              Color(0xFF0B1035),
+                              Color(0xFF161F68),
+                              Color(0xFF1B2781),
+                              Color(0xFF1E2B8E),
+                              Color(0xFF1F2D95),
+                              Color(0xFF0B1035),
+                            ]
+                          : [
+                              Color(0xFFF33D49),
+                              Color(0xFFC0303A),
+                              Color(0xFFA72A32),
+                              Color(0xFF9A272E),
+                              Color(0xFF93252C),
+                              Color(0xFF90242B),
+                            ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    child: ElevatedButton(
-                      onPressed: (state.isResturant?.approved == false)
-                          ? null // Disabled
-                          : (state.isResturant?.approved == true)
-                              ? () async {
-                                  var result = await context.push(
-                                    Routes.RestaurantDashboard,
-                                    extra: state.isResturant!.restaurantId!,
-                                  );
-                                  if (result == true) {
-                                    context.read<RestaurantsCubit>().loadData();
-                                  }
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: (state.isResturant?.approved == false)
+                        ? null // Disabled
+                        : (state.isResturant?.approved == true)
+                            ? () async {
+                                var result = await context.push(
+                                  Routes.RestaurantDashboard,
+                                  extra: state.isResturant!.restaurantId!,
+                                );
+                                if (result == true) {
+                                  context.read<RestaurantsCubit>().loadData();
                                 }
-                              : () {
-                                  if (context.read<UserCubit>().isLoggedIn) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            BlocProvider<CreateRestaurantCubit>(
-                                          create: (context) => serviceLocator<
-                                              CreateRestaurantCubit>()
-                                            ..loadData(),
-                                          child: CreateRestaurantForm(
-                                            from: 'create',
-                                            restaurantId: state.isResturant
-                                                    ?.restaurantId ??
-                                                '',
-                                          ),
+                              }
+                            : () {
+                                if (context.read<UserCubit>().isLoggedIn) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          BlocProvider<CreateRestaurantCubit>(
+                                        create: (context) => serviceLocator<
+                                            CreateRestaurantCubit>()
+                                          ..loadData(),
+                                        child: CreateRestaurantForm(
+                                          from: 'create',
+                                          restaurantId:
+                                              state.isResturant?.restaurantId ??
+                                                  '',
                                         ),
                                       ),
-                                    );
-                                  } else {
-                                    return pleaseLoginDialog(context);
-                                    // context.push(Routes.REGISTER);
-                                  }
-                                },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
+                                    ),
+                                  );
+                                } else {
+                                  return pleaseLoginDialog(context);
+                                  // context.push(Routes.REGISTER);
+                                }
+                              },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          // padding: const EdgeInsets.symmetric(
-                          //     horizontal: 16.0, vertical: 12.0),
-                          child: Text(
-                            state.isResturant?.isRestaurant == false
-                                ? LocaleKeys.serveClientsByClickRegister.tr()
-                                : LocaleKeys.restaurantMode.localize,
-                            style: Styles.mediumText(color: Colors.white),
-                          ),
+                    ),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Container(
+                        alignment: Alignment.center,
+                        // padding: const EdgeInsets.symmetric(
+                        //     horizontal: 16.0, vertical: 12.0),
+                        child: Text(
+                          state.isResturant?.isRestaurant == false
+                              ? LocaleKeys.serveClientsByClickRegister.tr()
+                              : LocaleKeys.restaurantMode.localize,
+                          style: Styles.mediumText(color: Colors.white),
                         ),
                       ),
                     ),
                   ),
-                  if (state.isResturant?.approved == false &&
-                      state.isResturant?.approved != null)
-                    Positioned.fill(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.5),
-                          // Optional opacity for transparency
-                          borderRadius: BorderRadius.circular(15),
-                        ),
+                ),
+                if (state.isResturant?.approved == false &&
+                    state.isResturant?.approved != null)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        // Optional opacity for transparency
+                        borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
+            ),
 
               // ElevatedButton(
               //   onPressed: (){},

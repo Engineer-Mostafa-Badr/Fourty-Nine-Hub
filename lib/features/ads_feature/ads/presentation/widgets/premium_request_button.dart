@@ -22,7 +22,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../routes/routes.dart';
 
-class PremiumRequestButton extends StatelessWidget {
+class PremiumRequestButton extends StatefulWidget {
   const PremiumRequestButton({
     super.key,
     required this.subscriptionStatus,
@@ -36,6 +36,19 @@ class PremiumRequestButton extends StatelessWidget {
   final String adId;
   final bool dontPop;
 
+  @override
+  State<PremiumRequestButton> createState() => _PremiumRequestButtonState();
+}
+
+class _PremiumRequestButtonState extends State<PremiumRequestButton> {
+
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
@@ -51,15 +64,15 @@ class PremiumRequestButton extends StatelessWidget {
         radius: 15,
         height: 38,
         onPressed: () {
-          if (!dontPop) context.pop();
+          if (!widget.dontPop) context.pop();
           if (context.read<UserCubit>().isLoggedIn) {
             // TODO: change
             // if (subscriptionStatus != 'premium') {
             if (false) {
               SubscriptionMethod().subscribe(
-                subscribeId: subCategoryId,
+                subscribeId: widget.subCategoryId,
                 showRegular: false,
-                title: subCategoryId,
+                title: widget.subCategoryId,
               );
             } else {
               showModalBottomSheet(
@@ -88,7 +101,7 @@ class PremiumRequestButton extends StatelessWidget {
                       onChanged: (c) => controller.changePhone(v: c),
                       onTap: () async {
                         if (controller.formKey.currentState!.validate()) {
-                          await controller.makeAdPremiumRequest(id: adId);
+                          await controller.makeAdPremiumRequest(id: widget.adId);
                           //     .then((value) {
                           //   if (value == true) {
                           //     context.pop();
@@ -149,7 +162,7 @@ class PremiumRequestButton extends StatelessWidget {
                                       if (controller.formKey.currentState!
                                           .validate()) {
                                         await controller
-                                            .makeAdPremiumRequest(id: adId)
+                                            .makeAdPremiumRequest(id: widget.adId)
                                             .then((value) {
                                           if (value == true) {
                                             context.pop();
