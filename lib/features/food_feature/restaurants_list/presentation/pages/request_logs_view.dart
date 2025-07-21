@@ -19,6 +19,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../cubit/restaurants_list_cubit.dart';
@@ -96,7 +98,25 @@ class _RestaurantRequestLogsScreenState
           }
 
           if (!state.isLoading) {
-            return ListView.separated(
+            return OlxPaginationWidget(
+              itemsPerPage: 2,
+              loadPage: (page) async {},
+              banners: bannersList,
+              items: List.generate(
+                controller.reqLogs.length,
+                    (index) {
+                      final request = controller.reqLogs[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TripLogRequestCard(
+                          orderData: request,
+                          index: index,
+                        ),
+                      );
+                    },
+              ),
+            );
+           /* return ListView.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: controller.reqLogs.length,
@@ -113,14 +133,14 @@ class _RestaurantRequestLogsScreenState
               separatorBuilder: (BuildContext context, int index) {
                 return const Sizer();
               },
-            );
+            );*/
           } else {
             return SizedBox(
               height: MediaQuery
                   .of(context)
                   .size
                   .height *
-                  .65, // Make sure it takes up full height
+                  .7, // Make sure it takes up full height
               child: const Center(
                 child: CustomCircularProgressIndicator(),
               ),

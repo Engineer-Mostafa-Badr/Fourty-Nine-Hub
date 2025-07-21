@@ -109,8 +109,9 @@ class _UserAdsState extends State<UserAds> {
       );
     }
     return OlxPaginationWidget(
-      itemsPerPage: 2,
+      itemsPerPage: 3,
       loadPage: (page) {
+        print('sale ${widget.params.subCategory.hasAuction}');
         if (widget.params.mainCategory.nameEn == 'Dating') {
           return context.read<AdvertisementCubit>().getAds(
                 subCategoryId: widget.params.subCategory.id,
@@ -121,7 +122,7 @@ class _UserAdsState extends State<UserAds> {
                 subCategoryId: widget.params.subCategory.id,
                 filter: widget.params.subCategory.hasAuction == true
                     ? 'sale'
-                    : 'provider',
+                    : 'user',
               );
         }
       },

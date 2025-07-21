@@ -21,11 +21,15 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class SearchRestaurantView extends StatelessWidget {
   const SearchRestaurantView({super.key, this.onClose, this.focusNode});
+
   final VoidCallback? onClose; // Callback to hide search UI
   final FocusNode? focusNode;
+
   @override
   Widget build(BuildContext context) {
     final searchCubit = context.read<SearchRestaurantsCubit>();
@@ -126,7 +130,59 @@ class SearchRestaurantView extends StatelessWidget {
                   /// ------- search sub categories
                   else if (state.status ==
                       SearchRestaurantStates.loadingSubCategories) {
-                    return ListView.separated(
+                    return Expanded(
+                      child: OlxPaginationWidget(
+                        itemsPerPage: 3,
+                        loadPage: (page) async {},
+                        banners: bannersList,
+                        items: List.generate(
+                          state.mealCategories?.length ?? 0,
+                          (index) {
+                            FoodCategoryEntity? category =
+                                state.mealCategories?[index];
+                            return GestureDetector(
+                              onTap: () =>
+                                  searchCubit.selectSubcategory(category),
+                              child: Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl: category?.picture ?? "",
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      width: 150.w,
+                                      height: 150.h,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey.shade300,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: AppColors.PRIMARY_COLOR
+                                                  .withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 3,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          )),
+                                    ),
+                                    width: 150.w,
+                                  ),
+                                  const Sizer(),
+                                  Text(getLang() == "ar"
+                                      ? (category?.nameAr ?? "")
+                                      : (category?.nameEn ?? "")),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                    /* return ListView.separated(
                       itemCount: state.mealCategories?.length ?? 0,
                       padding: EdgeInsets.all(10.w),
                       separatorBuilder: (context, index) => Sizer(
@@ -181,56 +237,109 @@ class SearchRestaurantView extends StatelessWidget {
                           ),
                         );
                       },
-                    );
+                    );*/
                   } else if (state.status ==
                       SearchRestaurantStates.loadingSearchSubCategory) {
-                    return RefreshIndicator(
-                      onRefresh: () async => searchCubit.refreshState(),
-                      child: ListView.builder(
-                        itemCount: state.searchMealCategories?.length,
-                        padding: EdgeInsets.all(15.w),
-                        itemBuilder: (context, index) {
-                          FoodCategoryEntity? category =
-                              state.searchMealCategories?[index];
-                          return GestureDetector(
-                            onTap: () =>
-                                searchCubit.selectSubcategory(category),
-                            child: Row(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: category?.picture ?? "",
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    width: 150.w,
-                                    height: 150.h,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.grey.shade300,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: AppColors.PRIMARY_COLOR
-                                                .withOpacity(0.5),
-                                            spreadRadius: 2,
-                                            blurRadius: 3,
-                                            offset: const Offset(0, 3),
-                                          ),
-                                        ],
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        )),
-                                  ),
-                                  width: 150.w,
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * .7,
+                      child: RefreshIndicator(
+                        onRefresh: () async => searchCubit.refreshState(),
+                        child: OlxPaginationWidget(
+                          itemsPerPage: 3,
+                          loadPage: (page) async {},
+                          banners: bannersList,
+                          items: List.generate(
+                            state.searchMealCategories!.length,
+                            (index) {
+                              FoodCategoryEntity? category =
+                                  state.searchMealCategories?[index];
+                              return GestureDetector(
+                                onTap: () =>
+                                    searchCubit.selectSubcategory(category),
+                                child: Row(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: category?.picture ?? "",
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        width: 150.w,
+                                        height: 150.h,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.grey.shade300,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: AppColors.PRIMARY_COLOR
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 3,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ],
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            )),
+                                      ),
+                                      width: 150.w,
+                                    ),
+                                    const Sizer(),
+                                    Text(getLang() == "ar"
+                                        ? (category?.nameAr ?? "")
+                                        : (category?.nameEn ?? "")),
+                                  ],
                                 ),
-                                const Sizer(),
-                                Text(getLang() == "ar"
-                                    ? (category?.nameAr ?? "")
-                                    : (category?.nameEn ?? "")),
-                              ],
-                            ),
-                          );
-                        },
+                              );
+                            },
+                          ),
+                        ),
+                        /* ListView.builder(
+                          itemCount: state.searchMealCategories?.length,
+                          padding: EdgeInsets.all(15.w),
+                          itemBuilder: (context, index) {
+                            FoodCategoryEntity? category =
+                            state.searchMealCategories?[index];
+                            return GestureDetector(
+                              onTap: () =>
+                                  searchCubit.selectSubcategory(category),
+                              child: Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl: category?.picture ?? "",
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          width: 150.w,
+                                          height: 150.h,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.grey.shade300,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: AppColors.PRIMARY_COLOR
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 2,
+                                                  blurRadius: 3,
+                                                  offset: const Offset(0, 3),
+                                                ),
+                                              ],
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              )),
+                                        ),
+                                    width: 150.w,
+                                  ),
+                                  const Sizer(),
+                                  Text(getLang() == "ar"
+                                      ? (category?.nameAr ?? "")
+                                      : (category?.nameEn ?? "")),
+                                ],
+                              ),
+                            );
+                          },
+                        ),*/
                       ),
                     );
                   }
