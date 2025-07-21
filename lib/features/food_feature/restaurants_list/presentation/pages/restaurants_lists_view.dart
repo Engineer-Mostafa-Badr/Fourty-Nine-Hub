@@ -49,6 +49,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   bool isFirstSearchListenerCall = true;
 
   final AdsManager _adsManager = AdsManager();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   bool get wantKeepAlive => true;
@@ -56,6 +57,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   @override
   void initState() {
     _adsManager.preloadAds();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     context.read<RestaurantsCubit>().loadData();
@@ -124,6 +128,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               )..loadData(),
               child: SearchRestaurantView(
                 onClose: () => setState(() => _showSearch = false),
+                focusNode: _focusNode,
               ),
             ),
           if (_showExpire)

@@ -25,17 +25,36 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
   late TabController tabController;
   List confirmedIndexes = [];
   List requestsIndexes = [];
+  final FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    widget.scrollController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   bool _showSearch = false;
   bool _showPeople = true;
   bool _showBlocked = false;
   bool _showSuggestion = false;
+
+  // دالة لإغلاق الكيبورد
+  void _dismissKeyboard() {
+    if (focusNode.hasFocus) {
+      focusNode.unfocus();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +70,9 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+                    // إغلاق الكيبورد عند الانتقال لتاب People
+                    _dismissKeyboard();
+
                     // if (context.read<UserCubit>().isLoggedIn) {
                     setState(() {
                       _showPeople = true;
@@ -74,6 +96,9 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                     onTap: () {
+                      // إغلاق الكيبورد عند الانتقال لتاب Blocked
+                      _dismissKeyboard();
+
                       // if (context.read<UserCubit>().isLoggedIn) {
                       setState(() {
                         _showBlocked = true;
@@ -95,6 +120,9 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+                    // إغلاق الكيبورد عند الانتقال لتاب Suggestion
+                    _dismissKeyboard();
+
                     // if (context.read<UserCubit>().isLoggedIn) {
                     setState(() {
                       _showSuggestion = true;
@@ -124,6 +152,13 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                       _showPeople = false;
                       _showBlocked = false;
                       _showSuggestion = false;
+                      // التركيز على حقل البحث عند فتحه
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        focusNode.requestFocus();
+                      });
+                    } else {
+                      // إغلاق الكيبورد عند إغلاق البحث
+                      _dismissKeyboard();
                     }
                   });
                   // } else {
@@ -141,10 +176,13 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
             if (_showPeople) friendTile(),
             if (_showBlocked) blockedFriendTile(),
             if (_showSuggestion) suggestionTile(),
-            if (_showSearch) searchTile(),
+            if (_showSearch) searchTile(focusNode),
           ],
         ),
-        onRefresh: () async {});
+        onRefresh: () async {
+          // إغلاق الكيبورد عند السحب للتحديث
+          _dismissKeyboard();
+        });
   }
 
   Widget _tabButton(String title, bool category) {
@@ -451,37 +489,44 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
         itemCount: 10);
   }
 
-  Widget searchTile() {
+  Widget searchTile(FocusNode focusNode) {
     return Column(children: [
       TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.text,
-        style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
+        style: Styles.mediumText(
+            fontSize: 32,
+            color: context.isDarkMode ? AppColors.whiteColor : Colors.black),
         decoration: InputDecoration(
-          contentPadding: const EdgeInsetsDirectional.only(start: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          hintStyle: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:Colors.black),
-          hintText: LocaleKeys.search.localize,
-          prefixIcon: Icon(Icons.search,)
-        ),
+            contentPadding: const EdgeInsetsDirectional.only(start: 16),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide.none,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide.none,
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide.none,
+            ),
+            hintStyle: Styles.mediumText(
+                fontSize: 32,
+                color:
+                    context.isDarkMode ? AppColors.whiteColor : Colors.black),
+            hintText: LocaleKeys.search.localize,
+            prefixIcon: Icon(
+              Icons.search,
+            )),
+        focusNode: focusNode,
       ),
       const Sizer(),
       SizedBox(

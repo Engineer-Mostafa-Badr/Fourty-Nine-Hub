@@ -20,12 +20,17 @@ class AdDynamicInputWidget extends StatefulWidget {
   final Function(SelectionEntity) onChanged;
   final Function(String) onTextChanged;
   final String selectedProp;
-  const AdDynamicInputWidget(
-      {super.key,
-      required this.property,
-      required this.onChanged,
-      required this.onTextChanged,
-      required this.selectedProp});
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  const AdDynamicInputWidget({
+    super.key,
+    required this.property,
+    required this.onChanged,
+    required this.onTextChanged,
+    required this.selectedProp,
+    this.focusNode,
+    this.textInputAction,
+  });
 
   @override
   State<AdDynamicInputWidget> createState() => _AdDynamicInputWidgetState();
@@ -38,6 +43,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     if (widget.property.values.isNotEmpty) {
       value = widget.property.values.first;
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.focusNode?.requestFocus();
+    });
+
     super.initState();
   }
 
@@ -47,10 +56,22 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
-        if (widget.property.adPropertyType.isText) ...[const Sizer(),_buildTextFieldWidget()],
-        if (widget.property.adPropertyType.isSelect) ...[const Sizer(),_buildSelectFieldWidget()],
-        if (widget.property.adPropertyType.isNumber) ...[const Sizer(),_buildNumberFieldWidget()],
-        if (widget.property.adPropertyType.isDropDown) ...[const Sizer(),_buildDropDownWidget()],
+        if (widget.property.adPropertyType.isText) ...[
+          const Sizer(),
+          _buildTextFieldWidget()
+        ],
+        if (widget.property.adPropertyType.isSelect) ...[
+          const Sizer(),
+          _buildSelectFieldWidget()
+        ],
+        if (widget.property.adPropertyType.isNumber) ...[
+          const Sizer(),
+          _buildNumberFieldWidget()
+        ],
+        if (widget.property.adPropertyType.isDropDown) ...[
+          const Sizer(),
+          _buildDropDownWidget()
+        ],
       ],
     );
   }
@@ -60,12 +81,16 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 8,start:15,),
+          padding: const EdgeInsetsDirectional.only(
+            bottom: 8,
+            start: 15,
+          ),
           child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+            style: Styles.mediumText(
+                fontSize: 32, color: AppColors.getTextColor(context)),
           ),
         ),
         const SizedBox(
@@ -84,6 +109,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               return null;
             }
           },
+          focusNode: widget.focusNode,
+          textInputAction: widget.textInputAction ?? TextInputAction.next,
         ),
         // TextFormField(
         //   maxLines: null,
@@ -122,7 +149,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr.replaceAll('_', ' ')
                 : widget.property.nameEn.replaceAll('_', ' '),
-            style: Styles.mediumText(fontSize: 32,color: AppColors.getTextColor(context)),
+            style: Styles.mediumText(
+                fontSize: 32, color: AppColors.getTextColor(context)),
           ),
         ),
         const SizedBox(
@@ -141,7 +169,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           items: widget.property.values
               .map<DropdownMenuItem<SelectionEntity>>((e) => DropdownMenuItem(
                     value: e,
-                    child: Text(context.isArabic?e.nameAr:e.nameEn),
+                    child: Text(context.isArabic ? e.nameAr : e.nameEn),
                   ))
               .toList(),
           onChange: (SelectionEntity? newValue) {
@@ -224,7 +252,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
+            style: Styles.mediumText(
+                fontSize: 32,
+                color:
+                    context.isDarkMode ? AppColors.whiteColor : Colors.black),
           ),
         ),
         const SizedBox(
@@ -236,7 +267,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               ? widget.property.nameAr
               : widget.property.nameEn,
           keyboardType: TextInputType.number,
-          inputFormatters:[FilteringTextInputFormatter.digitsOnly],
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           validator: (value) {
             if ((value == null || value.isEmpty)) {
               return LocaleKeys.required.localize;
@@ -268,7 +299,11 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn,
-            style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
+            style: Styles.mediumText(
+                fontSize: 32,
+                color: context.isDarkMode
+                    ? AppColors.whiteColor
+                    : AppColors.black),
           ),
         ),
         const SizedBox(
@@ -278,42 +313,45 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-              childAspectRatio: 3.4
-
-          ),
-          itemCount: widget.property.values.length,
-          itemBuilder: (context,index)=>ClickableWidget(
-            onTap: () {
-              widget.onChanged(widget.property.values[index]);
-              value = widget.property.values[index];
-              setState(() {});
-            },
-            child: Container(
-              height: 42,
-              width: MediaQuery.of(context).size.width * 0.52,
-              margin: EdgeInsets.symmetric(vertical: 5.h),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(5),
-              // margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: AppColors.getFillColor(context),
-                border: value == widget.property.values[index]
-                    ? Border.all(
-                  color: AppColors.SECONDARY_COLOR_DARK2,
-                )
-                    : null,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Label(
-                text: getLang() == 'ar' ? widget.property.values[index].nameAr : widget.property.values[index].nameEn,
-                style: Styles.mediumText(fontSize: 28,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
-              ),
-            ),
-          )
-        ),
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 3.4),
+            itemCount: widget.property.values.length,
+            itemBuilder: (context, index) => ClickableWidget(
+                  onTap: () {
+                    widget.onChanged(widget.property.values[index]);
+                    value = widget.property.values[index];
+                    setState(() {});
+                  },
+                  child: Container(
+                    height: 42,
+                    width: MediaQuery.of(context).size.width * 0.52,
+                    margin: EdgeInsets.symmetric(vertical: 5.h),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(5),
+                    // margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: AppColors.getFillColor(context),
+                      border: value == widget.property.values[index]
+                          ? Border.all(
+                              color: AppColors.SECONDARY_COLOR_DARK2,
+                            )
+                          : null,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Label(
+                      text: getLang() == 'ar'
+                          ? widget.property.values[index].nameAr
+                          : widget.property.values[index].nameEn,
+                      style: Styles.mediumText(
+                          fontSize: 28,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.black),
+                    ),
+                  ),
+                )),
         // Row(
         //   spacing: 8,
         //   children: widget.property.values.map((e) {
