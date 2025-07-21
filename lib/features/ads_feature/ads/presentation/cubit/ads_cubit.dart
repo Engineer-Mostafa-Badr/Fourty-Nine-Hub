@@ -229,7 +229,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
     print(isLoadingAdsMore);
     if (!hasMoreAdsData || isLoadingAdsMore) return;
     isLoadingAdsMore = true;
-    emit(state.copyWith(status: AdsStates.loading));
+    // emit(state.copyWith(status: AdsStates.loading));
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId,
         filter: filter,
