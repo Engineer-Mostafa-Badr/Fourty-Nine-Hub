@@ -10,12 +10,15 @@ import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_mod
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import '../../domain/entities/favourite_subcategory_entity.dart';
+import '../models/favouite_category_model/favouite_category_model.dart';
 import '../models/favourite_ad_model.dart';
+import '../models/favourite_subcategory_model.dart';
 
 abstract class AccountRemoteDataSource {
-  Future<Either<Failure, List<MainCategoryEntity>>> getFavouriteCategories();
+  Future<Either<Failure, List<FavouriteCategoryModel>>> getFavouriteCategories();
 
-  Future<Either<Failure, List<SubCategoryEntity>>> getFavouriteSubcategories();
+  Future<Either<Failure, List<FavouriteSubcategoryEntity>>> getFavouriteSubcategories();
 
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds();
   Future<Either<Failure, List<FavouriteAdDrawerEntity>>>
@@ -28,13 +31,13 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   AccountRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>>
+  Future<Either<Failure, List<FavouriteCategoryModel>>>
       getFavouriteCategories() async {
     final response = await _apiConsumer.get(EndPoints.favouriteCategories);
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['favorites'] as List)
-            .map((e) => MainCategoryModel.fromJson(e))
+            .map((e) => FavouriteCategoryModel.fromJson(e))
             .toList()));
   }
 
@@ -49,13 +52,13 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>>
+  Future<Either<Failure, List<FavouriteSubcategoryEntity>>>
       getFavouriteSubcategories() async {
     final response = await _apiConsumer.get(EndPoints.favouriteSubCategories);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data'] as List)
-            .map((e) => SubCategoryModel.fromJson(e))
+        (data) => Right((data['data']['favoritesSubcategories'] as List)
+            .map((e) => FavouriteSubcategoryModel.fromJson(e))
             .toList()));
   }
 

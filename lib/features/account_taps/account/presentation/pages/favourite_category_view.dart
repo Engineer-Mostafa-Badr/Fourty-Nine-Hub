@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/main_category_favorit_banner.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -64,17 +65,16 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
 
                         print('state.data![i]: ${state.data![i].id}');
                       },
-                      child: MainCategoryBanner(
-                        fromFavorite: true,
+                      child: MainCategoryFavoriteBanner(
                         category: state.data![i],
                         canRegister: false,
                         onFavorite: () async {
-                          var result = await controller
-                              .removeFavorite(state.data![i].id);
-                          if (result == true) {
-                            state.data?.removeWhere(
-                                (element) => element.id == state.data![i].id);
-                          }
+                          // var result = await controller
+                          //     .removeFavorite(state.data![i].id);
+                          // if (result == true) {
+                          //   state.data?.removeWhere(
+                          //       (element) => element.id == state.data![i].id);
+                          // }
                         },
                       ),
                     ),

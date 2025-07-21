@@ -89,7 +89,9 @@ class MarriageMyAdsListViewItem extends StatelessWidget {
                         width: 4,
                       ),
                       Label(
-                        text:context.isArabic?'الجيزة، مصر' :'Giza , Egypt',
+                        text: context.isArabic
+                            ? marriageAds.address!.addressAr!
+                            : marriageAds.address!.addressEn!,
                         style: Styles.headerText(
                           fontSize: 24,
                           color: Colors.black,
