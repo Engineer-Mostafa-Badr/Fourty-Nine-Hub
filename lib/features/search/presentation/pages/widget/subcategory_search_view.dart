@@ -21,6 +21,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -105,7 +106,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
-          return const Center(child: CustomCircularProgressIndicator());
+          return const Center(child: CustomLoadingSearchWidget());
         }
 
         // No results
@@ -134,7 +135,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
             if (index >= _cubit.subCategoriesSearch.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CustomCircularProgressIndicator()),
+                child: Center(child: CustomLoadingSearchWidget()),
               );
             }
             final subCategory = _cubit.subCategoriesSearch[index];

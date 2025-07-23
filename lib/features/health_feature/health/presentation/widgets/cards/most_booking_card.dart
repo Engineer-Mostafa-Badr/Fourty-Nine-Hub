@@ -19,10 +19,10 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:flutter/src/services/text_formatter.dart';
 
-
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
@@ -72,7 +72,7 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
         if (state.status == HealthStates.loading) {
           return SizedBox(
               height: MediaQuery.of(context).size.height * .6,
-              child: Center(child: CustomLoading()));
+              child: Center(child: CustomLoadingSearchWidget()));
         }
         // if (cubit.mostBooking.isEmpty) {
         //   return Center(
@@ -153,7 +153,7 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
               if (state.isLoadingMoreMostBooking ?? false)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CustomCircularProgressIndicator(),
+                  child: CustomLoadingSearchWidget(),
                 ),
             ],
           ),
@@ -483,9 +483,9 @@ class _MostBookingCardState extends State<MostBookingCard> {
                       ),
                       Label(
                         text:
-                            '${FormatNumbers().formatNumberByComma(widget.data.price.toString()).toArabicNumbers(context)} ${context.isArabic ? widget.data.currencyAr??'' : widget.data.currencyEn??''}',
+                            '${FormatNumbers().formatNumberByComma(widget.data.price.toString()).toArabicNumbers(context)} ${context.isArabic ? widget.data.currencyAr ?? '' : widget.data.currencyEn ?? ''}',
                         style: Styles.mediumText(
-                          fontSize: 32,
+                            fontSize: 32,
                             color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.w500),
                       )
@@ -586,8 +586,10 @@ class PremiumAndRequestButtons extends StatelessWidget {
         margin: 0,
         label: label,
         backColor: color,
-        style:
-            Styles.mediumText(color: AppColors.getReversedTextColor(context),fontSize: 32,),
+        style: Styles.mediumText(
+          color: AppColors.getReversedTextColor(context),
+          fontSize: 32,
+        ),
         onPressed: onPressed,
       ),
     );
@@ -607,68 +609,67 @@ class CallMessageReportButtons extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: SvgPicture.asset(
-              Assets.phoneIconRed,
-              width: 22,
-              height: 22,
+              icon: SvgPicture.asset(
+                Assets.phoneIconRed,
+                width: 22,
+                height: 22,
+                color: isChatEnabled == true
+                    ? AppColors.getRedColor(context)
+                    : AppColors.GREY_DARK_COLOR,
+              ),
               color: isChatEnabled == true
-                  ? AppColors.getRedColor(context)
+                  ? AppColors.PRIMARY_COLOR
                   : AppColors.GREY_DARK_COLOR,
-            ),
-            color: isChatEnabled == true
-                ? AppColors.PRIMARY_COLOR
-                : AppColors.GREY_DARK_COLOR,
-            onPressed:
-            // isChatEnabled == true
-            //     ?
-                () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: AppColors.getFindFillColor(context),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(16)),
-                      ),
-                      builder: (_) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            spacing: 16,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AppButton(
-                                backColor:
-                                    AppColors.getButtonPrimaryColor(context),
-                                color: AppColors.getReversedTextColor(context),
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  // _showFreeCallBottomSheet(context, item);
-                                },
-                                label: LocaleKeys.freeCall.localize,
-                              ),
-                              AppButton(
-                                backColor: AppColors.cD9D9D9,
-                                color: AppColors.black,
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  _showRegularCallBottomSheet(
-                                      context, item); // Open second
-                                },
-                                label: LocaleKeys.regularCall.localize,
-                              ),
-                            ],
+              onPressed:
+                  // isChatEnabled == true
+                  //     ?
+                  () {
+                showModalBottomSheet(
+                  context: context,
+                  backgroundColor: AppColors.getFindFillColor(context),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  builder: (_) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        spacing: 16,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppButton(
+                            backColor: AppColors.getButtonPrimaryColor(context),
+                            color: AppColors.getReversedTextColor(context),
+                            onPressed: () {
+                              Navigator.pop(context); // Close first sheet
+                              // _showFreeCallBottomSheet(context, item);
+                            },
+                            label: LocaleKeys.freeCall.localize,
                           ),
-                        );
-                      },
+                          AppButton(
+                            backColor: AppColors.cD9D9D9,
+                            color: AppColors.black,
+                            onPressed: () {
+                              Navigator.pop(context); // Close first sheet
+                              _showRegularCallBottomSheet(
+                                  context, item); // Open second
+                            },
+                            label: LocaleKeys.regularCall.localize,
+                          ),
+                        ],
+                      ),
                     );
-                  }
-                // : () {
-                //     SubscriptionMethod().subscribe(
-                //       subscribeId: item.subCategory?.first.id ?? '',
-                //       title: item.firstName ?? '',
-                //     );
-                //   },
-          ),
+                  },
+                );
+              }
+              // : () {
+              //     SubscriptionMethod().subscribe(
+              //       subscribeId: item.subCategory?.first.id ?? '',
+              //       title: item.firstName ?? '',
+              //     );
+              //   },
+              ),
 
           // const SizedBox(width: 4),
           IconButton(
@@ -697,7 +698,10 @@ class CallMessageReportButtons extends StatelessWidget {
           ),
           // const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.report,size: 26,),
+            icon: const Icon(
+              Icons.report,
+              size: 26,
+            ),
             color: AppColors.getRedColor(context),
             onPressed: () async {
               await showModalBottomSheet(
@@ -793,7 +797,8 @@ class CallMessageReportButtons extends StatelessWidget {
                   DefaultTextFormField(
                     contentPadding: EdgeInsets.symmetric(horizontal: 4),
                     inputFormatter: [
-                      FilteringTextInputFormatter.digitsOnly, // يسمح بالأرقام فقط
+                      FilteringTextInputFormatter
+                          .digitsOnly, // يسمح بالأرقام فقط
                     ],
                     fillColor: Colors.transparent,
                     borderColor: AppColors.getTextColor(context),
@@ -805,11 +810,15 @@ class CallMessageReportButtons extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             borderRadius: BorderRadius.circular(10)),
                         child: Icon(
                           Icons.phone,
-                          color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
+                          color: context.isDarkMode
+                              ? AppColors.PRIMARY_COLOR
+                              : Colors.white,
                           // size: 27,
                         ),
                       ),

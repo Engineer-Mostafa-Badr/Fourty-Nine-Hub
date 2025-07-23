@@ -5,37 +5,46 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CurrentHistoryBooking extends StatelessWidget {
-  const CurrentHistoryBooking({super.key, required this.title, required this.isSelected, required this.onTap});
+  const CurrentHistoryBooking(
+      {super.key,
+      required this.title,
+      required this.isSelected,
+      required this.onTap});
   final String title;
   final bool isSelected;
-  final void Function() onTap ;
+  final void Function() onTap;
   @override
-  Widget build(BuildContext context, ) {
+  Widget build(
+    BuildContext context,
+  ) {
     return GestureDetector(
-      onTap:onTap ,
+      onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(top:10.h),
+        margin: EdgeInsets.only(top: 10.h),
         width: 230.w,
         padding: EdgeInsets.symmetric(
           vertical: 12.h,
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40.h),
-            color: isSelected?AppColors.getButtonPrimaryWhiteColor(context):AppColors.getFindFillColor(context),
-            // border: Border.all(
-            //     color:isSelected?AppColors.SECONDARY_COLOR:AppColors.getButtonPrimaryWhiteColor(context),
-            //     width: 1)
+          borderRadius: BorderRadius.circular(40.h),
+          color: isSelected
+              ? AppColors.getButtonPrimaryWhiteColor(context)
+              : AppColors.getFindFillColor(context),
+          // border: Border.all(
+          //     color:isSelected?AppColors.SECONDARY_COLOR:AppColors.getButtonPrimaryWhiteColor(context),
+          //     width: 1)
         ),
         child: Center(
           child: Text(
             title.localize,
             style: Styles.headerText(
                 fontSize: 24,
-                color:isSelected?AppColors.getReversedTextColor(context):AppColors.getTextColor(context)),
+                color: isSelected
+                    ? AppColors.getReversedTextColor(context)
+                    : AppColors.getTextColor(context)),
           ),
         ),
       ),
     );
   }
-
 }
