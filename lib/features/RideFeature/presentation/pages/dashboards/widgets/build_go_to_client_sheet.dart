@@ -14,7 +14,9 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/bottom_sheet_helper.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
@@ -34,11 +36,13 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../../../authentication/data/models/user_model.dart';
 
 class BuildGoToClientSheet extends StatefulWidget {
-  const BuildGoToClientSheet({super.key, this.onGoingToClient, this.activeTrip, required this.onSafety, required this.onReport});
+  const BuildGoToClientSheet({super.key, this.onGoingToClient,required this.params, this.activeTrip, required this.onSafety, required this.onReport, required this.onCancelTrip});
   final GestureTapCallback? onGoingToClient;
   final RunningTripEntity? activeTrip;
   final VoidCallback onSafety;
   final VoidCallback onReport;
+  final RideModeParams params;
+  final Function(CancelTripByRiderUseCaseParams params) onCancelTrip;
 
   @override
   State<BuildGoToClientSheet> createState() => _BuildGoToClientSheetState();
@@ -73,7 +77,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                 children: [
                   ActionButtonsWidget(
                     driverImageUrl: widget.activeTrip?.clientPicture ?? '',
-                    driverRating: 12.2,
+                    driverRating: (widget.activeTrip?.clientRaiting??0).toDouble(),
                     driverName: widget.activeTrip?.clientName ?? '',
                     onSafety: widget.onSafety,
                     is_show_message: true,
@@ -201,7 +205,8 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                               _isChangedMindReason = false;
                               _isOtherReason = !_isOtherReason;
                             });
-                          });
+                          },
+                          onCancelTrip: (CancelTripByRiderUseCaseParams params)=>widget.onCancelTrip(params));
                     },
                     child: Container(
                       width: double.infinity,
@@ -238,6 +243,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
     required Function onSelectOtherReason,
     required Function onSelectChangedMindReason,
     required Function onSelectClientNotShownReason,
+    required Function(CancelTripByRiderUseCaseParams params) onCancelTrip,
   }) {
     showCustomDialogTrip(
         context,
@@ -378,27 +384,26 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                         width: context.screenWidth / 3.4,
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
-                        onPressed: () {
+                        onPressed: () async {
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
-                            cubit.cancelDriverTrip(
-                              context: context,
-                              tripId: widget.activeTrip?.tripId ?? '',
-                              note: state.isOtherReason == true
-                                  ? cubit.reasonController.text
-                                  : state.isClientNotShownReason == true
-                                      ? 'client-no-show'
-                                      : state.isChangedMindReason == true
-                                          ? 'change-my-mind'
-                                          : '',
+                            onCancelTrip(CancelTripByRiderUseCaseParams(
                               reasonId: state.isOtherReason == true
                                   ? '6693d4723aa4a25077cdbc7b'
                                   : state.isClientNotShownReason == true
-                                      ? '665eec12ce3725d6bc6f40ca'
-                                      : state.isChangedMindReason == true
-                                          ? '665ef7118e67e46ce6498fef'
-                                          : '',
-                            );
+                                  ? '665eec12ce3725d6bc6f40ca'
+                                  : state.isChangedMindReason == true
+                                  ? '665ef7118e67e46ce6498fef'
+                                  : '',
+                              note: state.isOtherReason == true
+                                  ? cubit.reasonController.text
+                                  : state.isClientNotShownReason == true
+                                  ? 'client-no-show'
+                                  : state.isChangedMindReason == true
+                                  ? 'change-my-mind'
+                                  : '',
+                              tripId: widget.activeTrip?.tripId ?? '',
+                            ));
                           } else {
                             showErrorMessage(context, context.isArabic ? "يرجى تحديد سبب" : 'Please select a reason');
                           }

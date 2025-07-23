@@ -10,7 +10,9 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/bottom_sheet_helper.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
@@ -23,11 +25,13 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class BuildDriverArrivedSheet extends StatefulWidget {
-  const BuildDriverArrivedSheet({super.key, required this.onPressed,required this.onReport, required this.onSafety,this.activeTrip});
+  const BuildDriverArrivedSheet({super.key, required this.onPressed,required this.onCancelTrip,required this.params,required this.onReport, required this.onSafety,this.activeTrip});
   final Function(String) onPressed;
   final RunningTripEntity? activeTrip;
+  final RideModeParams params;
   final VoidCallback onSafety;
   final VoidCallback onReport;
+  final Function(CancelTripByRiderUseCaseParams params) onCancelTrip;
 
   @override
   State<BuildDriverArrivedSheet> createState() => _BuildDriverArrivedSheetState();
@@ -62,7 +66,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                 children: [
                   ActionButtonsWidget(
                     driverImageUrl: widget.activeTrip?.clientPicture??'',
-                    driverRating: 12.2,
+                    driverRating: (widget.activeTrip?.clientRaiting??0).toDouble(),
                     driverName: widget.activeTrip?.clientName??'',
                     onSafety: widget.onSafety,
                     is_show_message: true,
@@ -104,7 +108,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                         style: TextStyle(
                           fontSize: FontSize.s16,
                           fontWeight: FontWeight.bold,
-                          color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
+                          color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     ),
@@ -117,6 +121,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                   LocationInfoWidget(
                     from: widget.activeTrip?.from??'',
                     to: widget.activeTrip?.to??'',
+                    hasTitle: true,
                   ),
                   CustomRideButton(text: context.isArabic?"انا وصلت":"I've Arrived",onPressed: (){
                     widget.onPressed('iveArrived');
@@ -192,7 +197,9 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                               _isChangedMindReason = false;
                               _isOtherReason = !_isOtherReason;
                             });
-                          });
+                          },
+                          onCancelTrip: (CancelTripByRiderUseCaseParams params)=>widget.onCancelTrip(params)
+                      );
                     },
                     child: Container(
                       width: double.infinity,
@@ -229,6 +236,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
     required Function onSelectOtherReason,
     required Function onSelectChangedMindReason,
     required Function onSelectClientNotShownReason,
+    required Function(CancelTripByRiderUseCaseParams params) onCancelTrip,
   }) {
     showCustomDialogTrip(
         context,
@@ -367,19 +375,10 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                         width: context.screenWidth / 3.4,
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
-                        onPressed: () {
+                        onPressed: () async {
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
-                            cubit.cancelDriverTrip(
-                              context: context,
-                              tripId: widget.activeTrip?.tripId??'',
-                              note: state.isOtherReason == true
-                                  ? cubit.reasonController.text
-                                  : state.isClientNotShownReason == true
-                                  ? 'client-no-show'
-                                  : state.isChangedMindReason == true
-                                  ? 'change-my-mind'
-                                  : '',
+                            onCancelTrip(CancelTripByRiderUseCaseParams(
                               reasonId: state.isOtherReason == true
                                   ? '6693d4723aa4a25077cdbc7b'
                                   : state.isClientNotShownReason == true
@@ -387,7 +386,15 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                                   : state.isChangedMindReason == true
                                   ? '665ef7118e67e46ce6498fef'
                                   : '',
-                            );
+                              note: state.isOtherReason == true
+                                  ? cubit.reasonController.text
+                                  : state.isClientNotShownReason == true
+                                  ? 'client-no-show'
+                                  : state.isChangedMindReason == true
+                                  ? 'change-my-mind'
+                                  : '',
+                              tripId: widget.activeTrip?.tripId ?? '',
+                            ));
                           } else {
                             showErrorMessage(context, context.isArabic ? "يرجى تحديد سبب" : 'Please select a reason');
                           }

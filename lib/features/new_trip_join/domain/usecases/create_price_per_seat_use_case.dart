@@ -19,16 +19,18 @@ class CreatePricePerSeatUseCase {
 class CreatePricePerSeatParams {
   final List<double> fromLocation;
   final List<double> toLocation;
+  final String phoneNumber;
   final bool? isLadiesDriver;
   final bool? isLadiesPassenger;
   final bool? isComfort;
   final bool? isPremium;
 
   CreatePricePerSeatParams( {
-    required this.fromLocation, required this.toLocation, this.isLadiesDriver,this.isPremium, this.isLadiesPassenger, this.isComfort,
+    required this.fromLocation,required this.phoneNumber, required this.toLocation, this.isLadiesDriver,this.isPremium, this.isLadiesPassenger, this.isComfort,
   });
   toJson() => {
     if(isPremium!=null)"isPremium" : isPremium,
+    if(phoneNumber.isNotEmpty)"phoneNumber":phoneNumber,
     "startLocation": {
       "longitude": fromLocation[1],
       "latitude": fromLocation[0]

@@ -348,6 +348,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   void listenToNewTrip(BuildContext context,bool enableSound) {
+    final currentLocation = GoRouter.of(context).state.path;
+    if('$currentLocation' == Paths.rideModeScreen){
+      return;
+    }
     CliLogger.info('Listen To New Trip123');
     // TripsResponseEntity
     AudioPlayer player = AudioPlayer();
