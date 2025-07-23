@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -33,7 +34,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
     // _scrollController = ScrollController()..addListener(_onScroll);
   }
 
- /* void _onScroll() async {
+  /* void _onScroll() async {
     final max = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
     if (current >= max - _scrollThreshold &&
@@ -70,7 +71,10 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         }
         // Handle loading state
         if (state.status == SearchStates.loading) {
-          return const Center(child: CustomCircularProgressIndicator());
+          return const Center(
+            // child: CustomCircularProgressIndicator(),
+            child: CustomLoadingSearchWidget(),
+          );
         }
 
         // Handle success state
@@ -89,7 +93,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
           print("${posts.first.id}");
           return OlxPaginationWidget(
             itemsPerPage: 2,
-            loadPage: (page) async{
+            loadPage: (page) async {
               {
                 final prefs = await SharedPreferences.getInstance();
                 final filter = prefs.getString('filter') ?? '';
@@ -104,20 +108,20 @@ class _PostsSearchViewState extends State<PostsSearchView> {
             banners: bannersList,
             items: List.generate(
               posts.length,
-                  (index) {
-                    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
-                      listener: (context, state) {},
-                      builder: (context, state) {
-                        return NormalPostScreen(
-                          postEntity: posts[index],
-                        );
-                      },
-                    );
-
-                    return ListTile(
-                      title: Text(posts[index].user.firstName),
+              (index) {
+                return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return NormalPostScreen(
+                      postEntity: posts[index],
                     );
                   },
+                );
+
+                return ListTile(
+                  title: Text(posts[index].user.firstName),
+                );
+              },
             ),
           );
           /*return ListView.builder(

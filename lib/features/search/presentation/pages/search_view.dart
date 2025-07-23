@@ -186,7 +186,7 @@ class _SearchViewState extends State<SearchView>
         ),
         title: Card(
           elevation: 0,
-          color: Colors.white,
+          color: Colors.red,
           shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(40.r),
             borderSide: BorderSide.none,

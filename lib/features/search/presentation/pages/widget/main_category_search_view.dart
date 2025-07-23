@@ -17,6 +17,7 @@ import '../../../../../ads/interstitial_ad_model.dart';
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../common/widgets/stateful/banners/main_category_banner.dart';
 import '../../../../../core/utils/handle_cashback.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'build_Item_search_main_category.dart';
 
@@ -87,7 +88,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
-          return const Center(child: CustomCircularProgressIndicator());
+          return const Center(child: CustomLoadingSearchWidget(),);
         }
 
         // No results
@@ -113,7 +114,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
             if (index >= _cubit.paginatedSearch.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CustomCircularProgressIndicator()),
+                child: Center(child: CustomLoadingSearchWidget()),
               );
             }
             return Padding(

@@ -23,6 +23,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../filter_ads/presentation/pages/filter_ads.dart';
@@ -449,10 +450,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
 
   Widget _selectWidget(BuildContext context) {
     if (widget.state.status == SubcategoriesStates.loadingAds) {
-      return const CustomLoading();
+      return const CustomLoadingSearchWidget();
     }
     if (widget.state.status == SubcategoriesStates.loadingAds) {
-      return const CustomCircularProgressIndicator();
+      return const CustomLoadingSearchWidget();
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
