@@ -8,8 +8,10 @@ import 'package:fourtyninehub/features/account_taps/account/domain/entities/favo
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
+import '../../domain/entities/favourite_subcategory_entity.dart';
 import '../../domain/repositories/account_repo.dart';
 import '../datasources/account_remote_datasource.dart';
+import '../models/favouite_category_model/favouite_category_model.dart';
 
 class AccountRepoImpl implements AccountRepo {
   final AccountRemoteDataSource _remoteDataSource;
@@ -20,12 +22,12 @@ class AccountRepoImpl implements AccountRepo {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> getFavouriteCategories() {
+  Future<Either<Failure, List<FavouriteCategoryModel>>> getFavouriteCategories() {
     return _remoteDataSource.getFavouriteCategories();
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>> getFavouriteSubcategories() {
+  Future<Either<Failure, List<FavouriteSubcategoryEntity>>> getFavouriteSubcategories() {
     return _remoteDataSource.getFavouriteSubcategories();
   }
 

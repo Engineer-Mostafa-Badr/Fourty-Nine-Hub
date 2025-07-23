@@ -17,10 +17,10 @@ class OlxPaginationWidget extends StatefulWidget {
   });
 
   @override
-  _PaginationBannerDemoState2 createState() => _PaginationBannerDemoState2();
+  _OlxPaginationWidget createState() => _OlxPaginationWidget();
 }
 
-class _PaginationBannerDemoState2 extends State<OlxPaginationWidget> {
+class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   int _currentPage = 1; // Start at page 1

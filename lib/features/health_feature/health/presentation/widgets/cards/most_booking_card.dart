@@ -21,6 +21,8 @@ import 'package:flutter/src/services/text_formatter.dart';
 
 
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
@@ -83,7 +85,43 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
         //     ),
         //   );
         // }
+        if (cubit.mostBooking.isEmpty) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * .6,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomEmptyWidget(
+                  label: context.isArabic
+                      ? 'لا يوجد حجوزات سابقة'
+                      : 'No booking history',
+                ),
+              ],
+            ),
+          );
+        }
         return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.67,
+          child: OlxPaginationWidget(
+            itemsPerPage: 2,
+            loadPage: (page) =>
+                context.read<HealthCubit>().getMostBookings(),
+            banners: bannersList,
+            items: List.generate(
+              cubit.mostBooking.length,
+                  (index)  {
+                    final booking = cubit.mostBooking[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: MostBookingCard(
+                        data: booking,
+                      ),
+                    );
+                  },
+            ),
+          ),
+        );
+        /*return SizedBox(
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
@@ -119,7 +157,7 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
                 ),
             ],
           ),
-        );
+        );*/
       },
     );
   }
