@@ -138,7 +138,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           Polyline(
             polylineId: const PolylineId('route'),
             points: widget.polylinePoints,
-            color: Colors.black87,
+            color: Colors.blue,
             width: 4,
           ),
         );

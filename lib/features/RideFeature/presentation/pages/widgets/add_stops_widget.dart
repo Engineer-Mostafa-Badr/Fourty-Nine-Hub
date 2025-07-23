@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 class AddStopsWidget extends StatefulWidget {
   const AddStopsWidget({super.key, required this.rideCubit});
@@ -40,7 +41,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     context.push(Routes.GoogleMapsSearchAndPick,
                         extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
-                        context.read<RideCubit>().updateFromLocation(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
+                        serviceLocator<RideCubit>().updateFromLocation(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
                         context.pop();
                         },
                     ));
@@ -54,20 +55,20 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     context.push(Routes.GoogleMapsSearchAndPick,
                         extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
-                        context.read<RideCubit>().updateToLocation(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
-                        await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                        serviceLocator<RideCubit>().updateToLocation(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
+                        await serviceLocator<RideCubit>().fetchRideExpectedPrice(id: 'id');
                         context.pop();
                       },
                     ));
                   },
                   onAddPressed: () {
                     setState(() {
-                      context.read<RideCubit>().showWaypointOne = true;
+                      serviceLocator<RideCubit>().showWaypointOne = true;
                     });
                   },
-                  showAddIcon: state.toLocation != null && !context.read<RideCubit>().showWaypointOne,
+                  showAddIcon: state.toLocation != null && !serviceLocator<RideCubit>().showWaypointOne,
                 ),
-                if (context.read<RideCubit>().showWaypointOne)
+                if (serviceLocator<RideCubit>().showWaypointOne)
                   _customLocationField(
                     isTo: true,
                     color: Colors.blue,
@@ -76,21 +77,21 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                       context.push(Routes.GoogleMapsSearchAndPick,
                           extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
-                          context.read<RideCubit>().updateWayPointOne(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
-                          await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                          serviceLocator<RideCubit>().updateWayPointOne(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
+                          await serviceLocator<RideCubit>().fetchRideExpectedPrice(id: 'id');
                           context.pop();
                         },
                       ));
                     },
                     onAddPressed: () {
                       setState(() {
-                        context.read<RideCubit>().showWaypointTwo = true;
+                        serviceLocator<RideCubit>().showWaypointTwo = true;
                       });
                     },
-                    showAddIcon: state.wayPointOne != null && !context.read<RideCubit>().showWaypointTwo,
+                    showAddIcon: state.wayPointOne != null && !serviceLocator<RideCubit>().showWaypointTwo,
                   ),
 
-                if (context.read<RideCubit>().showWaypointTwo)
+                if (serviceLocator<RideCubit>().showWaypointTwo)
                   _customLocationField(
                     isTo: true,
                     color: Colors.blue,
@@ -99,17 +100,17 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                       context.push(Routes.GoogleMapsSearchAndPick,
                           extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
-                          context.read<RideCubit>().updateWayPointTwo(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
-                          await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                          serviceLocator<RideCubit>().updateWayPointTwo(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
+                          await serviceLocator<RideCubit>().fetchRideExpectedPrice(id: 'id');
                           context.pop();
                         },
                       ));
                     },
                   ),
                 _locationInfoBox(state.toLocation?.address),
-          if (context.read<RideCubit>().showWaypointOne)
+          if (serviceLocator<RideCubit>().showWaypointOne)
           _locationInfoBox(state.wayPointOne?.address),
-          if (context.read<RideCubit>().showWaypointTwo)
+          if (serviceLocator<RideCubit>().showWaypointTwo)
           _locationInfoBox(state.wayPointTwo?.address),
                 const SizedBox(height: 10),
                 AppButton(

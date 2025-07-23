@@ -103,7 +103,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
       driverId: json['driverDetails']?['driverId'],
       driverUserId: json['driverDetails']?['driverUserId'],
       driverFirstName: json['driverDetails']?['driverFirstName'],
-      driverIsArrivingIn: (json['driverDetails']?['driverIsArrivingIn']) != null ? DateTime.parse(json['driverDetails']!['driverIsArrivingIn']) : null,
+      driverIsArrivingIn: (json['driverDetails']?['driverIsArrivingIn']) != null ? DateTime.parse(json['driverDetails']!['driverIsArrivingIn']).toLocal() : null,
       driverPhoneNumber: json['driverDetails']?['driverPhoneNumber'] ?? '',
       driverProfilePicture: json['driverDetails']?['driverProfilePictureUrl'],
       driverRating: (json['driverDetails']?['rating']?['averageRating'] as num?)?.toDouble() ?? 0.0,
