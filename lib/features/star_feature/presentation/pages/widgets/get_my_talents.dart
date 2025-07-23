@@ -16,6 +16,8 @@ import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/t
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 
 class GetMyTalents extends StatelessWidget {
@@ -53,8 +55,207 @@ class GetMyTalents extends StatelessWidget {
               ),
             );
           }
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.67,
+            child: OlxPaginationWidget(
+              itemsPerPage: 1,
+              loadPage: (page) =>
+                  cubit.getMyTalents(),
+              banners: bannersList,
+              items: List.generate(
+                cubit.myTalents.length +
+                    (state.status == StarStates.loading ? 1 : 0),
+                    (index) {
+                  if (index == cubit.myTalents.length) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CustomCircularProgressIndicator(),
+                      ),
+                    );
+                  }
 
-          return ListView.builder(
+                  final talent = cubit.myTalents[index];
+                  final user = talent.user;
+                  final mediaUrl = talent.mediaUrl.isNotEmpty
+                      ? talent.mediaUrl.first.mediaKey
+                      : '';
+                  final createdAt = talent.createdAt ?? DateTime.now();
+                  final isVideo = mediaUrl.toLowerCase().contains('.mp4') ||
+                      mediaUrl.toLowerCase().contains('.mov') ||
+                      mediaUrl.toLowerCase().contains('.avi');
+                  return Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          GestureDetector(
+                            onTap: isVideo
+                                ? () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TalentVideoPlayer(
+                                    videoUrl: mediaUrl,
+                                    talent: talent,
+                                  ),
+                                ),
+                              );
+                            }
+                                : null,
+                            child: isVideo
+                                ? TalentVideo(
+                              path: mediaUrl,
+                            )
+                                : Container(
+                              height: 300.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                // borderRadius: BorderRadius.circular(12),
+                                image: mediaUrl.isNotEmpty
+                                    ? DecorationImage(
+                                  image: NetworkImage(mediaUrl),
+                                  fit: BoxFit.cover,
+                                )
+                                    : null,
+                              ),
+                              // child:
+                              // mediaUrl.isEmpty
+                              //     ?
+                              //     const Center(
+                              //   child: Icon(Icons.image_not_supported, size: 50),
+                              // )
+                              // :
+                              // _buildMediaContent(context, mediaUrl, isVideo),
+                            ),
+                          ),
+                          // isVideo
+                          //     ? Padding(
+                          //         padding: const EdgeInsets.only(
+                          //             right: 16.0,
+                          //             top: 8.0,
+                          //             bottom: 8.0,
+                          //             left: 8.0),
+                          //         child: Container(
+                          //           padding: const EdgeInsets.symmetric(
+                          //             horizontal: 8,
+                          //             vertical: 4,
+                          //           ),
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.black.withOpacity(0.7),
+                          //             borderRadius: BorderRadius.circular(4),
+                          //           ),
+                          //           child: Text(
+                          //             talent.totalViews.toString(),
+                          //             style: const TextStyle(
+                          //               color: Colors.white,
+                          //               fontSize: 12,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       )
+                          //     : const SizedBox(),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 32,
+                              height: 32,
+                              child: ProfileWithStoriesBorder(
+                                profilePictureUrl: talent.user.image ?? '',
+                                storiesCount: talent.storyCount ?? 0,
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    talent.title,
+                                    style: TextStyle(
+                                      fontSize: 28.sp,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
+                                    style: TextStyle(
+                                      fontSize: 26.sp,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ...List.generate(
+                              5,
+                                  (index) => Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: Image.asset(
+                                  index < talent.averageRating.floor()
+                                      ? "assets/49-New-icons/star_gold.png"
+                                      : "assets/49-New-icons/star.png",
+                                  color: context.isDarkMode ? Colors.white : null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      if (!isMyTalent)
+                        const SizedBox()
+                      else
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              showAreYouSure(
+                                context: context,
+                                title: LocaleKeys.alert.localize,
+                                subTitle: LocaleKeys.remove.localize,
+                                action: () {
+                                  context.read<StarCubit>().deleteMyTalent(
+                                    id: talent.id,
+                                  );
+                                  Navigator.pop(context);
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 70.h),
+                              backgroundColor: Colors.red,
+                            ),
+                            child: Text(
+                              LocaleKeys.delete_talent.localize,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 36.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 8),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+         /* return ListView.builder(
             controller: scrollController,
             itemCount: cubit.myTalents.length +
                 (state.status == StarStates.loading ? 1 : 0),
@@ -245,7 +446,7 @@ class GetMyTalents extends StatelessWidget {
                 ],
               );
             },
-          );
+          );*/
         },
       ),
     );
