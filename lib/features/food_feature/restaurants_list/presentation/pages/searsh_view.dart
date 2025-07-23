@@ -20,6 +20,7 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -111,7 +112,7 @@ class SearchRestaurantView extends StatelessWidget {
                 builder: (context) {
                   if (state.status == SearchRestaurantStates.loading) {
                     return const Center(
-                      child: CustomCircularProgressIndicator(),
+                      child: CustomLoadingSearchWidget(),
                     );
                   } else if (state.status == SearchRestaurantStates.error) {
                     return ListView(

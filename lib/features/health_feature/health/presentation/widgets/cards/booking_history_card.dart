@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
 class BookingHistoryScreen extends StatefulWidget {
   const BookingHistoryScreen({super.key, this.onClose});
@@ -56,8 +57,9 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
         final cubit = context.read<HealthCubit>();
 
         if (state.status == HealthStates.loading && cubit.historyBookings.isEmpty) {
-          return SizedBox(
-              height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
+          // return SizedBox(
+          //     height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
+          return const CustomLoadingSearchWidget();
         }
 
         return SizedBox(
@@ -88,7 +90,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
               if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CustomCircularProgressIndicator(),
+                  child: CustomLoadingSearchWidget(),
                 ),
             ],
           ),

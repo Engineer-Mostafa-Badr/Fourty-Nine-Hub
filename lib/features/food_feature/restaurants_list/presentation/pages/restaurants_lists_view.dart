@@ -30,6 +30,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/constants/registration_status.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -104,7 +105,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           }
         },
         child: state.isLoading
-            ? const Center(child: CustomCircularProgressIndicator())
+            ? const Center(child: CustomLoadingSearchWidget())
             : _buildLoggedInView(state),
       ),
     );
