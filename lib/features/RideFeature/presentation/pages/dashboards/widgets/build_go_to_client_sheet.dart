@@ -118,7 +118,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                         style: TextStyle(
                           fontSize: FontSize.s16,
                           fontWeight: FontWeight.bold,
-                          color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
+                          color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     ),
@@ -221,7 +221,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                         style: TextStyle(
                           fontSize: FontSize.s16,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.PRIMARY_COLOR_DARK,
+                          color: context.isDarkMode ? AppColors.whiteColor :AppColors.PRIMARY_COLOR_DARK,
                         ),
                       ),
                     ),
