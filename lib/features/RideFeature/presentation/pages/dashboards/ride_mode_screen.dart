@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -27,8 +28,11 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -81,7 +85,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
   late ScrollController _pastTripsScrollController;
 
   @override
+  dispose(){
+    SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    currentContext.read<MainCategoriesCubit>().listenToNewTrip(currentContext,currentContext.read<MainCategoriesCubit>().state.setting?.data.enableNotificationSound??false);
+    print("dispose REID:NEW_AVAILABLE_TRIP");
+    super.dispose();
+  }
+
+  @override
   void initState() {
+    SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
     print("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
     _availableTripsScrollController = ScrollController()
@@ -100,8 +114,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToUpdateTripAutoAccept(),
               dashboardCubit.listenToUpdateTripPrice(),
               dashboardCubit.listenToAcceptOffer(context, widget.params),
-              dashboardCubit.listenToNewTrip(),
+              dashboardCubit.listenToNewTrip(widget.params),
               dashboardCubit.listenToRemoveTrip(),
+              dashboardCubit.listenToClientComing(),
               dashboardCubit.listenToEndTrip(context, widget.params),
               dashboardCubit.listenToPartialPaymentDriver(context),
             ]
@@ -175,6 +190,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
               },
               builder: (context, state) {
                 var cubit = context.read<DashboardsCubit>();
+                print("state.tripStatus ${state.tripStatus}");
                 return DefaultTabController(
                   length: 4,
                   child: Column(
@@ -331,7 +347,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                                                 tripEntity: cubit.availableRideTrips[index],
                                                                                 onRefuseTrip: (String id) {
                                                                                   cubit.refuseTripOffer(id);
-                                                                                },
+                                                                                }, params: widget.params,
                                                                               ),
                                                                       itemCount: cubit
                                                                           .availableRideTrips
@@ -470,6 +486,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   onSafety: () {
                                     cubit.showSafety(state.tripStatus ?? '');
                                   },
+                                  onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
                                   onReport: () {
                                     bottomSheet(
                                         context: context,
@@ -480,6 +497,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                               '',
                                         ));
                                   },
+                                  params: widget.params,
                                   activeTrip: cubit.activeTrip),
                             if (state.tripStatus == TripState.accepted.name)
                               BuildGoToClientSheet(
@@ -501,6 +519,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                 '',
                                       ));
                                 },
+                                onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
+                                params: widget.params,
                               ),
                             if (state.tripStatus == TripState.inLocation.name)
                               BuildDriverOtpSheet(
@@ -508,6 +528,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   cubit.startDriverTrip(context,
                                       cubit.activeTrip?.tripId ?? '', otp);
                                 },
+                                onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
                                 onSafety: () {
                                   cubit.showSafety(state.tripStatus ?? '');
                                 },
@@ -518,7 +539,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 onFinalizeTrip: () {
                                   cubit.finalizeTripByRider(
                                       context: context,
-                                      tripId: cubit.activeTrip?.tripId ?? '');
+                                      tripId: cubit.activeTrip?.tripId ?? '',params: widget.params);
                                 },
                                 onReport: () {
                                   print("object");
@@ -533,6 +554,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 },
                                 remainingTime: state.remainingTime,
                                 activeTrip: cubit.activeTrip,
+                                params: widget.params,
                               ),
                             if (state.tripStatus == TripState.started.name)
                               BuildDriverCompleteTripSheet(
@@ -555,6 +577,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   cubit.completeDriverTripWithPrice(context,
                                       cubit.activeTrip?.tripId ?? '', price);
                                 },
+                                onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
                                 onSafety: () {
                                   cubit.showSafety(state.tripStatus ?? '');
                                 },
@@ -569,6 +592,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                       ));
                                 },
                                 tripId: cubit.activeTrip?.tripId ?? '',
+                                params: widget.params,
                               ),
                             if (state.tripStatus == TripState.completed.name)
                               BuildDriverRateClientSheet(

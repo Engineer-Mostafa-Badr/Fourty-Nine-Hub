@@ -21,16 +21,16 @@ class LocationInfoWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.isArabic?'رحلتك الحالية':'Your current ride',style: TextStyle(fontSize: FontSize.s16),),
-          const SizedBox(height: 8),
+          if(hasTitle==true)...[Text(context.isArabic?'رحلتك الحالية':'Your current ride',style: TextStyle(fontSize: FontSize.s16),),
+          const SizedBox(height: 8)],
           Row(
             children: [
               Container(
-                width: 10,
-                height: 10,
+                width: 12,
+                height: 12,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.blue, width: 2),
+                  border: Border.all(color: Colors.green, width: 2),
                 ),
               ),
               const SizedBox(width: 8),
@@ -46,11 +46,11 @@ class LocationInfoWidget extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 10,
-                height: 10,
+                width: 12,
+                height: 12,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.red, width: 2),
+                  border: Border.all(color: Colors.blue, width: 2),
                 ),
               ),
               const SizedBox(width: 8),

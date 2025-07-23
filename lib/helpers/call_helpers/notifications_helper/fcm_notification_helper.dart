@@ -248,9 +248,6 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
             print('Toast ${toastItem.id} tapped');
             context.pushNamed(message.data['path'] ?? '');
           },
-          // onCloseButtonTap: (toastItem) => print('Toast ${toastItem.id} close button tapped'),
-          // onAutoCompleteCompleted: (toastItem) => print('Toast ${toastItem.id} auto complete completed'),
-          // onDismissed: (toastItem) => print('Toast ${toastItem.id} dismissed'),
         ),
         showProgressBar: true,
 

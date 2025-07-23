@@ -7,6 +7,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/support_status_enum.dart';
@@ -41,6 +42,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
@@ -69,6 +71,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../../common/functions/global/upload_image.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/utils/loading_method_helper.dart';
@@ -186,6 +189,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToRemoveLoadingUseCase listenToRemoveLoadingUseCase;
 
   final ListenToAvailableLoadingUseCase listenToAvailableLoadingUseCase;
+  final ListenToClientComingUseCase listenToClientComingUseCase;
 
 
 
@@ -242,6 +246,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToPartialPaymentDriverUseCase,
       this.getRideGovernoratesUseCase,
       this.addRateWithDriverUseCase,
+      this.listenToClientComingUseCase,
       this.getAcceptedNonSocketLoadingUseCase, this.createOfferLoadingUseCase,
       this.getAvailableNonSocketLoadingUseCase, this.getHistoryNonSocketLoadingUseCase,
       this.updateDriverRateNonSocketUseCase, this.getDriverLoadingSettingsUseCase,
@@ -469,6 +474,50 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       emit(state.copyWith(loadingAvailableNonSocket: list));
       log(trip.toString());
     });
+  }
+
+  void listenToClientComing() {
+    CliLogger.info('Listen To Client Coming');
+    // TripsResponseEntity
+    listenToClientComingUseCase((trip) async {
+      final prefs = await SharedPreferences.getInstance();
+      final futureTime = DateTime.now().add(Duration(minutes: 5));
+      await prefs.setString('remaining_time', futureTime.toIso8601String());
+
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      toastification.show(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(currentContext.isArabic?"تنبيه!":"Alert!",
+              style: TextStyle(color: currentContext.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                fontSize: 32.sp,
+                fontWeight: FontWeight.w700,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(currentContext.isArabic?"العميل في الطريق اليك.":"The client is on the way to you.",
+              style: TextStyle(color: Theme.of(currentContext).textTheme.bodyLarge?.color,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w400
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+        autoCloseDuration: const Duration(seconds: 5),
+        progressBarTheme: ProgressIndicatorThemeData(
+            color: AppColors.SECONDARY_COLOR
+        ),
+        primaryColor: AppColors.SECONDARY_COLOR,
+        backgroundColor: Theme.of(currentContext).dialogBackgroundColor,
+        showProgressBar: true,
+
+      );
+    });
+    emit(state.copyWith(status: DashboardsStates.success));
   }
 
   List<GetLoadingAvailableEntity> availableLoadingNonSocketData = [];
@@ -880,6 +929,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   void listenToAcceptTripOfferTrip(
       int index, BuildContext context, RideModeParams params) {
     CliLogger.info('Remove Trip');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     // TripsResponseEntity
     listenToAcceptUntrackedTripOfferUseCase((tripId) {
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
@@ -892,7 +942,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           // currentIndex: 4,
           status: DashboardsStates.success,
         ));
-        changeIndex(4, context, params);
+        changeIndex(4, currentContext, params);
         // loadInitialAcceptedNonSocketTrips();
       }
     });
@@ -1449,7 +1499,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     // Index 0: Available Trips
     if (index == 0) {
       if (params.isSocket == true) {
-        fetchGovs();
         loadAvailableRideTrips(context);
       } else if (params.modeType == "ride" && settings?.isReady == true) {
         loadInitialAvailableNonSocketTrips();
@@ -1464,7 +1513,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       loadPastRideTrips(
           context, params.isSocket == true ? "tracking" : 'non-tracking');
     }
-    if (index == 3 && params.isSocket == true) getSettings(context);
+    if (index == 3 && params.isSocket == true) [fetchGovs(),getSettings(context)];
 
     // Index 2: Past Trips
     if (index == 2 && params.isSocket == false  ) {
@@ -1479,6 +1528,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
     // Index 3: Settings
     if (index == 3 && params.isSocket == false ) {
+      fetchGovs();
       if(params.modeType == "ride"){
         getDriverSettings(context);
       }else if(params.modeType == "truck"){
@@ -1523,24 +1573,26 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   void listenToEndTrip(BuildContext context,RideModeParams params) {
     CliLogger.info('End Trip');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     // TripsResponseEntity
     listenToEndTripUseCase((tripId) {
       log("messageTripId $tripId");
       showErrorMessage(
-          context,
-          context.isArabic
+          currentContext,
+          currentContext.isArabic
               ? 'تم إلغاء الرحلة من قبل العميل'
               : 'Trip has been canceled by the customer');
-      changeIndex(0, context, params);
+      changeIndex(0, currentContext, params);
       emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
     });
   }
 
   void listenToPartialPaymentDriver(BuildContext context) {
     CliLogger.info('PartialPaymentDriver');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     // TripsResponseEntity
     listenToPartialPaymentDriverUseCase((amountPaidCash) {
-      showPartialPaymentDialog(context,amountPaidCash);
+      showPartialPaymentDialog(currentContext,amountPaidCash);
       emit(state.copyWith(status: DashboardsStates.success));
     });
   }
@@ -1582,15 +1634,20 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
 
-  void listenToNewTrip() {
+  void listenToNewTrip(RideModeParams params) {
     CliLogger.info('Listen To New Trip');
     // TripsResponseEntity
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     listenToNewTripUseCase((trip) {
-      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.insert(0, trip);
-      emit(state.copyWith(availableRideTrips: list));
-      log(trip.toString());
-      emitWatchingTrips([trip.id]);
+      if(state.currentIndex == 0){
+        List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+        list.insert(0, trip);
+        emit(state.copyWith(availableRideTrips: list));
+        log(trip.toString());
+        emitWatchingTrips([trip.id]);
+      }else{
+        changeIndex(0, currentContext, params);
+      }
     });
   }
 
@@ -1653,8 +1710,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   void listenToAcceptOffer(BuildContext context, RideModeParams params) {
     CliLogger.info('Listen To Update Trip Auto Accept');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     listenToAcceptOfferUseCase((trip) {
-      changeIndex(1, context, params);
+      if(state.currentIndex ==1 ){
+        getActiveTrip(context);
+      }else{
+        changeIndex(1, currentContext, params);
+      }
       // List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
       // list.firstWhere((e)=>e.id==trip.id).isAutoAccept = trip.isAutoAccept;
       // log(trip.toString());
@@ -1817,7 +1879,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   RunningTripEntity? activeTrip;
   Future<void> getActiveTrip(BuildContext context) async {
     activeTrip = null;
-    showLoadingDialog(context);
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     emit(state.copyWith(status: DashboardsStates.loadingPast,tripStatus: ''));
     log("state.tripStatusstate.tripStatus ${state.tripStatus}");
 
@@ -1827,9 +1890,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     result.fold(
       (failure) {
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
+        currentContext.pop();
+        log("Failure ${getFailureMessage(failure, currentContext)}");
+        showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             status: DashboardsStates.error,
             failure: failure,
@@ -1837,7 +1900,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (trip) {
         activeTrip =trip;
-        context.pop();
+        currentContext.pop();
         emit(state.copyWith(
             status: DashboardsStates.success,
             tripStatus: trip.status));
@@ -1918,7 +1981,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (activeTrip) async {
         final prefs = await SharedPreferences.getInstance();
-        final futureTime = DateTime.now().add(Duration(minutes: 5));
+        final futureTime = DateTime.now().add(Duration(minutes: 1));
         await prefs.setString('remaining_time', futureTime.toIso8601String());
         log("Suzccess");
         context.pop();
@@ -2012,9 +2075,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       {required BuildContext context,
       required String tripId,
       required String note,
-      required String reasonId}) async {
+      required String reasonId,
+      required RideModeParams params,
+      }) async {
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+   showLoadingDialog(currentContext);
     final Either<Failure, bool> result = await cancelTripByRiderUseCase(
         CancelTripByRiderUseCaseParams(
             tripId: tripId, note: note, reasonId: reasonId));
@@ -2022,11 +2089,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     result.fold(
       (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
+        currentContext.pop();
+        log("Failure ${getFailureMessage(failure, currentContext)}");
+        showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (trip) {
+        currentContext.pop();
+        print("tripCancelled");
+        changeIndex(0, currentContext, params);
         activeTrip = null;
         emit(state.copyWith(status: DashboardsStates.success, tripStatus: TripState.canceled.name));
       },
@@ -2034,8 +2105,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> finalizeTripByRider(
-      {required BuildContext context, required String tripId}) async {
-    showLoadingDialog(context);
+      {required BuildContext context, required String tripId,required RideModeParams params}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
     final Either<Failure, bool> result =
@@ -2044,14 +2116,14 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     result.fold(
       (failure) {
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
+        currentContext.pop();
+        log("Failure ${getFailureMessage(failure, currentContext)}");
+        showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (activeTrip) {
-        context.pop();
-        log("Suzccess");
+        currentContext.pop();
+        changeIndex(0, currentContext, params);
         emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
       },
     );
@@ -2182,36 +2254,65 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) {
       return;
     }
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     // emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
-    showLoadingDialog(context);
+    showLoadingDialog(currentContext);
     final Either<Failure, bool> result =
         await createNewOfferDashboardUsecase(param);
 
     if (isClosed) return;
     result.fold(
       (failure) {
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
+        currentContext.pop();
+        log("Failure ${getFailureMessage(failure, currentContext)}");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (settings) {
-        context.pop();
+        currentContext.pop();
+        toastification.show(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(currentContext.isArabic?"تم ارسال العرض بنجاح":"Offer sent successfully",
+                style: TextStyle(color: currentContext.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          autoCloseDuration: const Duration(seconds: 5),
+          progressBarTheme: ProgressIndicatorThemeData(
+              color: AppColors.SECONDARY_COLOR
+          ),
+          primaryColor: AppColors.SECONDARY_COLOR,
+          backgroundColor: Theme.of(currentContext).dialogBackgroundColor,
+          showProgressBar: true,
+
+        );
         log("Suzccess");
         emit(state.copyWith(status: DashboardsStates.successOffer));
       },
     );
   }
 
-  Future<void> autoAcceptTrip(BuildContext context, String id) async {
+  Future<void> autoAcceptTrip(BuildContext context, String id,RideModeParams params) async {
     emit(state.copyWith(status: DashboardsStates.loadingAcceptTrip));
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     final Either<Failure, bool> result = await autoAcceptTripUseCase(id);
     result.fold(
       (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
+        currentContext.pop();
+        log("Failure ${getFailureMessage(failure, currentContext)}");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (data) {
+        currentContext.pop();
         log("Suzccess");
+        changeIndex(1, currentContext, params);
         emit(state.copyWith(status: DashboardsStates.successAcceptTrip));
       },
     );

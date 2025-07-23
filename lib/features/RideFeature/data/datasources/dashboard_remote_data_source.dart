@@ -224,7 +224,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       final response = await _apiConsumer.put(EndPoints.acceptTripRider(params));
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']);
+        return Right(data['status']??false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -428,12 +428,12 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToClientComing(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to End Trip ");
-      log("Listen to End Trip ");
+      CliLogger.info("Listen to Client Coming ");
+      log("Listen to Client Coming ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToClientComing, (data) {
-        CliLogger.info("End Trip data :  $data");
-        log("End Trip data :  $data");
-        params(data['trip']['_id']);
+        CliLogger.info("Client Coming data :  $data");
+        log("Client Coming data :  $data");
+        params(data['message']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

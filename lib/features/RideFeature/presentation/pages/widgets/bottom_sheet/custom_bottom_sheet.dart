@@ -69,7 +69,7 @@ Future<dynamic> customBottomSheet2(
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: AppColors.whiteColor,
+    backgroundColor: context.isDarkMode?AppColors.QUANTITY_COLOR:AppColors.whiteColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
     ),
@@ -84,12 +84,12 @@ Future<dynamic> customBottomSheet2(
           ),
           child: IntrinsicHeight(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
-                color: AppColors.whiteColor,
+                color: context.isDarkMode?AppColors.QUANTITY_COLOR:AppColors.whiteColor,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -103,10 +103,10 @@ Future<dynamic> customBottomSheet2(
                         Expanded(
                           child: Text(
                             title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.PRIMARY_COLOR,
+                              color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                             ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
