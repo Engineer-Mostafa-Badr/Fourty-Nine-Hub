@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/update_fare_bottom_sheet_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -92,6 +93,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
               valuee: isReady,
               onChanged: (value) {
+                ManageVibration.vibrate();
                 setState(() {
                   isReady = value;
                 });
@@ -102,6 +104,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 subText: enableSound ? context.isArabic?'تفعيل':'Enabled' : context.isArabic?'تعطيل':'Disabled', //'Disable',
                 valuee: enableSound,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     enableSound = value;
                   });
@@ -113,6 +116,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isCaptainShare ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
                 valuee: isCaptainShare,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isCaptainShare = value;
                   });
@@ -127,6 +131,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         .nameEn, //LocaleKeys.captain.tr(),
                 valuee: isCaptain,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isCaptain = value;
                   });
@@ -141,6 +146,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         .nameEn, //LocaleKeys.intercity.tr(),
                 valuee: isIntercity,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isIntercity = value;
                   });
@@ -155,6 +161,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         .nameEn, //LocaleKeys.premium.tr(), //'Premium',
                 valuee: isPremium,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isPremium = value;
                   });
@@ -167,6 +174,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 subscriptionPlans.length,
                 (index) => InkWell(
                   onTap: () {
+                    ManageVibration.vibrate();
                     setState(() {
                       planTrailing = subscriptionPlans[index];
                       planController.collapse();
@@ -188,6 +196,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 context.read<DashboardsCubit>().state.govs?.length??0,
                 (index) => InkWell(
                   onTap: () {
+                    ManageVibration.vibrate();
                     context.read<DashboardsCubit>().onSelectGovernorate(context.read<DashboardsCubit>().state.govs?[index]);
                     cityController.collapse();
                   },
@@ -212,6 +221,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           fontSize: 14, fontWeight: FontWeight.w500)),
                   GestureDetector(
                       onTap: () {
+                        ManageVibration.vibrate();
                         customBottomSheet2(context,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -221,6 +231,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                 lowCostPerKm: widget.settings?.lowCostPerKm ?? 0,
                                 selectedCategoryName: 'aaa',
                                 onChange: (price){
+                                  ManageVibration.vibrate();
                                   context.read<DashboardsCubit>().updateSettings(
                                       context,
                                       UpdateSettingsDashboardUsecaseParam(
@@ -310,6 +321,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),
           ClickableWidget(
               onTap: () async {
+                ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                     value: serviceLocator<DashboardsCubit>(),
                     child: const PersonalDocumentsNonSocketScreen())));
@@ -318,6 +330,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
           ClickableWidget(
             onTap: () async {
+              ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: const DriversLicenseNonSocketScreen())));
@@ -328,6 +341,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           if (widget.modeType == 'ride') ...[
             ClickableWidget(
               onTap: () async {
+                ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                     value: serviceLocator<DashboardsCubit>(),
                     child: const VehicleInformationNonSocketScreen())));
@@ -338,6 +352,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             if(widget.settings?.isCriminalRecordEnabled == true)
               ClickableWidget(
                 onTap: () async {
+                  ManageVibration.vibrate();
                   await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                       value: serviceLocator<DashboardsCubit>(),
                       child: const CriminalRecordNonSocketScreen())));
@@ -348,6 +363,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             if(widget.settings?.isDrugAnalysisRecordEnabled == true)
             ClickableWidget(
               onTap: () async {
+                ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                     value: serviceLocator<DashboardsCubit>(),
                     child: const DragAnalyticsNonSocketScreen())));
@@ -359,6 +375,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           if(widget.settings?.isVehicleRecordEnabled == true)
           ClickableWidget(
             onTap: () async {
+              ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: const TechnicalExaminationNonSocketScreen())));
@@ -375,7 +392,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 child: AppButton(
                     label: LocaleKeys.deleteRegistration.tr(),
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {}),
+                    onPressed: () {
+                      ManageVibration.vibrate();
+
+                    }),
               ),
               Expanded(
                 flex: 2,
@@ -383,6 +403,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     label: LocaleKeys.update.tr(),
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+                      ManageVibration.vibrate();
                       context.read<DashboardsCubit>().updateSettings(
                           context,
                           UpdateSettingsDashboardUsecaseParam(
@@ -471,6 +492,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               inactiveTrackColor: AppColors.whiteColor,
               onChanged: onChanged ??
                   (value) {
+                    ManageVibration.vibrate();
                     setState(() {
                       valuee = value;
                     });

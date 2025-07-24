@@ -31,6 +31,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/fo
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
@@ -229,6 +230,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               0,
                               LocaleKeys.available.tr(),
                               () {
+
+                                ManageVibration.vibrate();
                                 cubit.changeIndex(0, context, widget.params);
                                 // setState(() {
                                 //   _selectedIndex = 0;
@@ -241,6 +244,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 1,
                                 LocaleKeys.running.tr(),
                                 () {
+                                  ManageVibration.vibrate();
                                   cubit.changeIndex(1, context, widget.params);
                                   // setState(() {
                                   //   _selectedIndex = 1;
@@ -256,6 +260,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 4,
                                 LocaleKeys.current.localize,
                                 () {
+                                  ManageVibration.vibrate();
                                   cubit.changeIndex(4, context, widget.params);
                                   // setState(() {
                                   //   _selectedIndex = 1;
@@ -267,6 +272,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               2,
                               LocaleKeys.past.tr(),
                               () {
+                                ManageVibration.vibrate();
                                 cubit.changeIndex(2, context, widget.params);
                                 // setState(() {
                                 //   _selectedIndex = 2;
@@ -274,6 +280,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               },
                             ),
                             _buildFilterIcon(() {
+                              ManageVibration.vibrate();
                               cubit.changeIndex(3, context, widget.params);
                               // setState(() {
                               //   _selectedIndex = 3;
@@ -346,6 +353,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                                               AvailableRideTripItem(
                                                                                 tripEntity: cubit.availableRideTrips[index],
                                                                                 onRefuseTrip: (String id) {
+                                                                                  ManageVibration.vibrate();
                                                                                   cubit.refuseTripOffer(id);
                                                                                 }, params: widget.params,
                                                                               ),
@@ -478,16 +486,22 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if (state.tripStatus == TripState.goToClient.name)
                               BuildDriverArrivedSheet(
                                   onPressed: (String message) {
+                                    ManageVibration.vibrate();
                                     cubit.arrivedToClient(
                                         context,
                                         cubit.activeTrip?.tripId ?? '',
                                         message);
                                   },
                                   onSafety: () {
+                                    ManageVibration.vibrate();
                                     cubit.showSafety(state.tripStatus ?? '');
                                   },
-                                  onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
+                                  onCancelTrip: (CancelTripByRiderUseCaseParams params) {
+                                    ManageVibration.vibrate();
+                                    cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params);
+                                  },
                                   onReport: () {
+                                    ManageVibration.vibrate();
                                     bottomSheet(
                                         context: context,
                                         widget: ReportView(
@@ -502,14 +516,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if (state.tripStatus == TripState.accepted.name)
                               BuildGoToClientSheet(
                                 onGoingToClient: () {
+                                  ManageVibration.vibrate();
                                   cubit.goingToClient(
                                       context, cubit.activeTrip?.tripId ?? '');
                                 },
                                 activeTrip: cubit.activeTrip,
                                 onSafety: () {
+                                  ManageVibration.vibrate();
                                   cubit.showSafety(state.tripStatus ?? '');
                                 },
                                 onReport: () {
+                                  ManageVibration.vibrate();
                                   bottomSheet(
                                       context: context,
                                       widget: ReportView(
@@ -519,17 +536,33 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                 '',
                                       ));
                                 },
-                                onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
+                                onCancelTrip: (CancelTripByRiderUseCaseParams params) {
+                                  ManageVibration.vibrate();
+                                  cubit.cancelDriverTrip(context: context,
+                                      tripId: params.tripId,
+                                      note: params.note,
+                                      reasonId: params.reasonId,
+                                      params: widget.params);
+                                },
                                 params: widget.params,
                               ),
                             if (state.tripStatus == TripState.inLocation.name)
                               BuildDriverOtpSheet(
                                 onPressed: (String otp) {
+                                  ManageVibration.vibrate();
                                   cubit.startDriverTrip(context,
                                       cubit.activeTrip?.tripId ?? '', otp);
                                 },
-                                onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
+                                onCancelTrip: (CancelTripByRiderUseCaseParams params) {
+                                  ManageVibration.vibrate();
+                                  cubit.cancelDriverTrip(context: context,
+                                      tripId: params.tripId,
+                                      note: params.note,
+                                      reasonId: params.reasonId,
+                                      params: widget.params);
+                                },
                                 onSafety: () {
+                                  ManageVibration.vibrate();
                                   cubit.showSafety(state.tripStatus ?? '');
                                 },
                                 onTick: (Duration time) {
@@ -537,11 +570,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   cubit.updateRemainingTime(future);
                                 },
                                 onFinalizeTrip: () {
+                                  ManageVibration.vibrate();
                                   cubit.finalizeTripByRider(
                                       context: context,
                                       tripId: cubit.activeTrip?.tripId ?? '',params: widget.params);
                                 },
                                 onReport: () {
+                                  ManageVibration.vibrate();
                                   print("object");
                                   bottomSheet(
                                       context: context,
@@ -558,11 +593,15 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               ),
                             if (state.tripStatus == TripState.started.name)
                               BuildDriverCompleteTripSheet(
-                                onPressed: (String) {},
+                                onPressed: (String) {
+                                  ManageVibration.vibrate();
+                                },
                                 onStartRecord: () {
+                                  ManageVibration.vibrate();
                                   cubit.startRecord();
                                 },
                                 onStopRecord: () {
+                                  ManageVibration.vibrate();
                                   cubit.stopRecord(
                                       context: context,
                                       subcategoryId:
@@ -570,18 +609,29 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                       tripId: cubit.activeTrip?.tripId ?? '');
                                 },
                                 onCompleteRide: () {
+                                  ManageVibration.vibrate();
                                   cubit.completeDriverTrip(context,
                                       cubit.activeTrip?.tripId ?? '', '');
                                 },
                                 onCompleteRideWithPrice: (String price) {
+                                  ManageVibration.vibrate();
                                   cubit.completeDriverTripWithPrice(context,
                                       cubit.activeTrip?.tripId ?? '', price);
                                 },
-                                onCancelTrip: (CancelTripByRiderUseCaseParams params)=>cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params),
+                                onCancelTrip: (CancelTripByRiderUseCaseParams params){
+                                  ManageVibration.vibrate();
+                                  cubit.cancelDriverTrip(context: context,
+                                      tripId: params.tripId,
+                                      note: params.note,
+                                      reasonId: params.reasonId,
+                                      params: widget.params);
+                                },
                                 onSafety: () {
+                                  ManageVibration.vibrate();
                                   cubit.showSafety(state.tripStatus ?? '');
                                 },
                                 onReport: () {
+                                  ManageVibration.vibrate();
                                   bottomSheet(
                                       context: context,
                                       widget: ReportView(
@@ -597,6 +647,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if (state.tripStatus == TripState.completed.name)
                               BuildDriverRateClientSheet(
                                 onPressed: (message, rate) {
+                                  ManageVibration.vibrate();
                                   print("message $message ||| rate $rate");
                                   cubit.rateTheClient(
                                       context: context,
@@ -614,9 +665,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                     driverId: cubit.activeTrip?.driverId ?? '',
                                     clientId: cubit.activeTrip?.clientId ?? ''),
                                 onClose: () {
+                                  ManageVibration.vibrate();
                                   cubit.closeSafety();
                                 },
                                 supportRideScreen: () {
+                                  ManageVibration.vibrate();
                                   context.push(
                                     Routes.supportRideScreen,
                                     extra: SupportRideParams(
@@ -631,9 +684,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   );
                                 },
                                 emergencyContactsScreen: () {
+                                  ManageVibration.vibrate();
                                   context.push(Routes.emergencyContactsScreen);
                                 },
                                 rideFindingScreen: () {
+                                  ManageVibration.vibrate();
                                   context.push(Routes.rideFindingScreen);
                                 },
                               ),
@@ -685,6 +740,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                 itemBuilder: (context, index) {
                                                   return ClickableWidget(
                                                     onTap: () {
+                                                      ManageVibration.vibrate();
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(

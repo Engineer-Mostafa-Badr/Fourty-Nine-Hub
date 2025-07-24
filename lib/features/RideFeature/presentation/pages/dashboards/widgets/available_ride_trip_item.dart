@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/av
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -195,6 +196,7 @@ class AvailableRideTripItem extends StatelessWidget {
                   flex: 2,
                     child: ClickableWidget(
                       onTap: () {
+                        ManageVibration.vibrate();
                         print("tripEntity.isPremium ${tripEntity.isPremium}");
                         print("tripEntity.isButtonEnabled ${tripEntity.isButtonEnabled}");
                         if(tripEntity.isPremium==true||tripEntity.isButtonEnabled==true){
@@ -273,6 +275,7 @@ class AvailableRideTripItem extends StatelessWidget {
                     label: tripEntity.isAutoAccept == false ? LocaleKeys.acceptAnothePrice.tr() : LocaleKeys.refuse.tr(),
                     style: Styles.mediumText(color: Colors.white, fontSize: tripEntity.isAutoAccept == false ? 28 : 28),
                     onPressed: () {
+                      ManageVibration.vibrate();
                       if(tripEntity.isPremium||tripEntity.isButtonEnabled){
                         if (tripEntity.isAutoAccept == false) {
                           showModalBottomSheet(
