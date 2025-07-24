@@ -1982,7 +1982,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (activeTrip) async {
         final prefs = await SharedPreferences.getInstance();
-        final futureTime = DateTime.now().add(Duration(minutes: 1));
+        final futureTime = DateTime.now().add(Duration(minutes: 10));
         await prefs.setString('remaining_time', futureTime.toIso8601String());
         log("Suzccess");
         context.pop();

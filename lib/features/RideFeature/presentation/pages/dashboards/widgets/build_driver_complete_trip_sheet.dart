@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,9 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
@@ -26,7 +29,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 class BuildDriverCompleteTripSheet extends StatefulWidget {
   const BuildDriverCompleteTripSheet(
-      {super.key, required this.onPressed,required this.onSafety,required this.onCancelTrip,required this.params,required this.onReport, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.onCompleteRideWithPrice, required this.tripId});
+      {super.key, required this.onPressed,this.activeTrip,required this.onSafety,required this.onCancelTrip,required this.params,required this.onReport, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.onCompleteRideWithPrice, required this.tripId});
   final Function(String) onPressed;
   final Function onStartRecord;
   final Function onStopRecord;
@@ -37,6 +40,7 @@ class BuildDriverCompleteTripSheet extends StatefulWidget {
   final VoidCallback onReport;
   final RideModeParams params;
   final Function(CancelTripByRiderUseCaseParams params) onCancelTrip;
+  final RunningTripEntity? activeTrip;
 
   @override
   State<BuildDriverCompleteTripSheet> createState() => _BuildDriverCompleteTripSheetState();
@@ -54,6 +58,22 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
   TextEditingController otherController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
+
+  Future<void> openGoogleMapsWithDirections({
+    required double startLat,
+    required double startLng,
+    required double targetLat,
+    required double targetLng,
+  }) async {
+    final googleMapsUrl =
+        'https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$targetLat,$targetLng&travelmode=driving';
+
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch Google Maps';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,12 +137,11 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+
                     // PaymentInfoWidget(price: price),
                     //
                     LocationInfoWidget(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       hasTitle: !_isComplete,
                       from: 'أول العاشر من رمضان',
                       to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
@@ -153,7 +172,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                             Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                             SizedBox(width: 5),
                             Text(
-                              "Travel time: ~14 min. Distance: 6.58 Km.",
+                              "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${FormatNumbers().convertNumberToLocalizedString('${widget.activeTrip?.duration??''}', isArabic: context.isArabic)} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${FormatNumbers().convertNumberToLocalizedString(((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${LocaleKeys.KM.tr()}.",
                               style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                             ),
                           ],

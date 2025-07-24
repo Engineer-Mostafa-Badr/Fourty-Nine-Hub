@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/bottom_sheet_helper.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
@@ -54,6 +55,22 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
   bool _isClientNotShownReason = false;
 
   TextEditingController otherController = TextEditingController();
+
+  Future<void> openGoogleMapsWithDirections({
+    required double startLat,
+    required double startLng,
+    required double targetLat,
+    required double targetLng,
+  }) async {
+    final googleMapsUrl =
+        'https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$targetLat,$targetLng&travelmode=driving';
+
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch Google Maps';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +169,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                           Icon(Icons.info_outline, color: context.isDarkMode ? AppColors.whiteColor : Colors.black54),
                           SizedBox(width: 5),
                           Text(
-                            "${context.isArabic ? 'وقت الرحلة' : "Travel time"}: ~${widget.activeTrip?.duration ?? ''} ${context.isArabic ? "دقيقة" : "min"}. ${context.isArabic ? "مسافة" : "Distance"}: ${((widget.activeTrip?.distance ?? 0) / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}.",
+                            "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${FormatNumbers().convertNumberToLocalizedString('${widget.activeTrip?.duration??''}', isArabic: context.isArabic)} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${FormatNumbers().convertNumberToLocalizedString(((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${LocaleKeys.KM.tr()}.",
                             style: TextStyle(color: context.isDarkMode ? AppColors.whiteColor : Colors.black54, fontSize: 14),
                           ),
                         ],

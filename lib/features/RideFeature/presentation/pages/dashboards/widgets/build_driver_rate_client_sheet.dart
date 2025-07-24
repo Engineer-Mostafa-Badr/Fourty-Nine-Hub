@@ -36,6 +36,14 @@ class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet>
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(16),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3), // changes position of shadow
+              ),
+            ]
           ),
           child: SingleChildScrollView(
             controller: scrollController,
