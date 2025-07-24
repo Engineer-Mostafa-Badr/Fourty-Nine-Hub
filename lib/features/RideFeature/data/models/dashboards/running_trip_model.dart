@@ -12,6 +12,7 @@ class RunningTripModel extends RunningTripEntity {
     required super.targetCoordinates,
     required super.wayPointOneTitle,
     required super.wayPointTwoTitle,
+    required super.clientRaiting,
     super.wayPointOne,
     super.wayPointTwo,
     required super.polyline,
@@ -77,6 +78,7 @@ class RunningTripModel extends RunningTripEntity {
       clientId: clientDetails['id'] ?? '',
       clientGender: clientDetails['gender'] ?? '',
       clientPicture: clientDetails['profilePicture'] ?? '',
+      clientRaiting: clientDetails['rating']!=null?clientDetails['rating']['average'] ?? 0:0,
     );
   }
 

@@ -71,7 +71,7 @@ class MediaCreatePostInstagramParams {
   });
 
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic>    toJson() {
     return {
       'itemId': itemId,
       'type': type,

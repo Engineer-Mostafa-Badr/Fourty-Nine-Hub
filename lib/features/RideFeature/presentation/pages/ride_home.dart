@@ -46,9 +46,12 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/lo
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/payment_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/top_card_request.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+import 'dart:math' as math;
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -66,6 +69,7 @@ import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../new_trip_join/captainshare/screen/custom_map.dart';
 import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../domain/entities/get_location_from_address_entity.dart';
 import '../../domain/usecases/rating_driver_by_client.dart';
@@ -221,6 +225,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isClientNotShown: true);
                   },
                   child: Container(
@@ -246,6 +251,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isChangedMind: true);
                   },
                   child: Container(
@@ -271,6 +277,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isOther: true);
                   },
                   child: Container(
@@ -315,6 +322,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         label: context.isArabic ? 'الغاء' : 'Close',
                         backColor: AppColors.SECONDARY_COLOR_DARK2,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           // cubit
                         }),
@@ -324,6 +332,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             cubit.cancleNonPendingTripByClient(
@@ -434,6 +443,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     const SizedBox(height: 16),
                                     GestureDetector(
                                       onTap: () async {
+                                        ManageVibration.vibrate();
                                         await serviceLocator<RideCubit>().sendIamOkMessage(context);
                                       },
                                       child: Container(
@@ -479,6 +489,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       // const Divider(height: 2),
                       GestureDetector(
                         onTap: () {
+                          ManageVibration.vibrate();
                           bottomSheet(
                               context: context,
                               widget: ReportView(
@@ -538,7 +549,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                             ),
                                             IconButton(
                                               icon: const Icon(Icons.close),
-                                              onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                              onPressed: () {
+                                                ManageVibration.vibrate();
+                                                Navigator.of(context).pop(false);
+                                              }, // Pass false if dismissed without validation
                                             ),
                                           ],
                                         ),
@@ -627,6 +641,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           width: double.infinity,
                                           child: ElevatedButton(
                                             onPressed: () async {
+                                              ManageVibration.vibrate();
                                               if (_partialPaymentFormKey.currentState!.validate()) {
                                                 context.pop();
                                                 await serviceLocator<RideCubit>().partialPayment(
@@ -780,6 +795,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     : state.requestedTrip!.status == TripState.ratingSheet.name
                                                         ? BuildClientRateDriverSheet(
                                                             onPressed: (String message, double rate) async {
+                                                              ManageVibration.vibrate();
                                                               await serviceLocator<RideCubit>().ratingDriverByClient(
                                                                 context,
                                                                 RatingDriverByClientUseCaseParams(
@@ -837,6 +853,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                         driverInfo: state.driverInfo,
                                         loadingInfo: state.loaderInfo,
                                         openDrawer: () {
+                                          ManageVibration.vibrate();
                                           showModalBottomSheet(
                                             backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                                             context: context,
@@ -860,115 +877,69 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildTopMap(RideState state, BuildContext context) {
     List<gmap.LatLng> routePoints = [];
-    if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
-      routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
-    } else {
-      routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
-    }
 
-    if (state.currentLocation != null && state.rideExpectedPrice == null && state.requestedTrip == null) {
-      // WidgetsBinding.instance.addPostFrameCallback((_) {
-      //   _mapController.move(
-      //     gmap.LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-      //     12.0,
-      //   );
-      // });
+    try {
+      if (state.requestedTrip == null ||
+          state.requestedTrip!.status == TripState.canceled.name ||
+          state.requestedTrip!.status == TripState.completed.name) {
+        routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+      } else {
+        routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
+      }
+    } catch (e) {
+      print('Error processing route points: $e');
+      routePoints = [];
     }
 
     List<gmap.LatLng> clients = [];
-    if (state.wayPointOne != null){
-      clients.add(gmap.LatLng(state.wayPointOne?.lng??0.0, state.wayPointOne?.lat??0.0));
+
+    try {
+      if (state.wayPointOne != null &&
+          state.wayPointOne!.lat != null &&
+          state.wayPointOne!.lng != null) {
+        clients.add(gmap.LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!));
+      }
+
+      if (state.wayPointTwo != null &&
+          state.wayPointTwo!.lat != null &&
+          state.wayPointTwo!.lng != null) {
+        clients.add(gmap.LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!));
+      }
+    } catch (e) {
+      print('Error processing client locations: $e');
     }
 
-    if (state.wayPointTwo != null){
-      clients.add(gmap.LatLng(state.wayPointTwo?.lng??0.0, state.wayPointTwo?.lat??0.0));
-    }
+    // Provide default values to prevent null issues
+    final startLat = state.currentLocation?.lat ?? 30.033333;
+    final startLng = state.currentLocation?.lng ?? 31.233334;
+    final targetLat = state.toLocation?.lat ?? 30.043333;
+    final targetLng = state.toLocation?.lng ?? 31.243334;
 
-    return SizedBox(
+    bool isBeforeRequest = state.requestedTrip == null ||
+        state.requestedTrip!.status == TripState.canceled.name ||
+        state.requestedTrip!.status == TripState.completed.name;
+    print("state.requestedTrip ${state.requestedTrip?.status}");
+    print("state.driverLocation != null ${state.driverLocation != null}");
+    return Container(
       width: double.infinity,
-      height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
-      child: CustomGoogleMap(
-        startLocation: gmap.LatLng(state.currentLocation?.lng??0.0,
-            state.currentLocation?.lat??0.0),
-        targetLocation: gmap.LatLng(state.toLocation?.lng??0.0,
-            state.toLocation?.lat??0.0),
-        polylinePoints:routePoints,
-        clientLocations: clients,
+      height: state.requestedTrip != null
+          ? MediaQuery.of(context).size.height
+          : MediaQuery.of(context).size.height * 0.5,
+      // Add this to fix rendering issues
+      decoration: const BoxDecoration(
+        color: Colors.grey,
+      ),
+      child: ClipRect(
+        child: CustomGoogleMap(
+          startLocation: state.currentLocation==null?null:gmap.LatLng(isBeforeRequest? startLat : startLng,isBeforeRequest? startLng : startLat),
+          targetLocation: state.toLocation==null?null:gmap.LatLng(isBeforeRequest? targetLat : targetLng,isBeforeRequest? targetLng : targetLat),
+          polylinePoints: routePoints,
+          clientLocations: clients,
+          enableScrolling: true,
+          fromClient:true,
+        ),
       ),
     );
-    // return SizedBox(
-    //   width: double.infinity,
-    //   height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
-    //   child: FlutterMap(
-    //     mapController: _mapController,
-    //     options: MapOptions(
-    //       initialCenter: LatLng(
-    //         state.currentLocation?.lat ?? 0.0,
-    //         state.currentLocation?.lng ?? 0.0,
-    //       ),
-    //       initialZoom: 12.0,
-    //     ),
-    //     children: [
-    //       TileLayer(
-    //         // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    //         urlTemplate: context.isDarkMode
-    //             ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-    //             : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
-    //         subdomains: const ['a', 'b', 'c'],
-    //         userAgentPackageName: 'com.example.app',
-    //       ),
-    //       MarkerLayer(
-    //         markers: [
-    //           if (state.currentLocation != null)
-    //             Marker(
-    //               point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
-    //             ),
-    //           if (state.toLocation != null)
-    //             Marker(
-    //               point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
-    //             ),
-    //           if (state.wayPointOne != null)
-    //             Marker(
-    //               point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-    //             ),
-    //           if (state.wayPointTwo != null)
-    //             Marker(
-    //               point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
-    //               width: 40,
-    //               height: 40,
-    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-    //             ),
-    //         ],
-    //       ),
-    //       if (state.requestedTrip != null)
-    //         if (state.requestedTrip!.status == TripState.started.name)
-    //           BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-    //             return const CarMarkerOnClientSideWidget();
-    //           }),
-    //       if (routePoints.isNotEmpty)
-    //         PolylineLayer(
-    //           polylines: [
-    //             Polyline(
-    //               points: routePoints,
-    //               color: context.isDarkMode ? Colors.blue : Colors.black87,
-    //               strokeWidth: 4.0,
-    //             ),
-    //           ],
-    //         ),
-    //     ],
-    //   ),
-    // );
   }
 
   List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
@@ -983,7 +954,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         Align(
           alignment: AlignmentDirectional.topStart,
           child: ClickableWidget(
-              onTap: () => context.pop(),
+              onTap: () {
+                ManageVibration.vibrate();
+                context.pop();
+              },
               child: const Icon(
                 Icons.close,
                 color: AppColors.black,
@@ -992,6 +966,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         const Sizer(),
         GestureDetector(
           onTap: () {
+            ManageVibration.vibrate();
             if (!context.read<UserCubit>().isLoggedIn) {
               return pleaseLoginDialog(context);
             }
@@ -1064,9 +1039,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         GestureDetector(
           onTap: () {
             if (!context.read<UserCubit>().isLoggedIn) {
+              ManageVibration.vibrate();
               context.pop();
               return pleaseLoginDialog(context);
             }
+            ManageVibration.vibrate();
             context.pop();
             if (loadingInfo == null || (loadingInfo.status?.isEmpty ?? false)) {
               print("object");
@@ -1138,9 +1115,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         GestureDetector(
           onTap: () {
             if (context.isUserLoggedIn) {
+              ManageVibration.vibrate();
               context.pop();
               context.push(Routes.rideOffer, extra: 'ride');
             } else {
+              ManageVibration.vibrate();
               context.pop();
               return pleaseLoginDialog(context);
             }
@@ -1172,12 +1151,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         GestureDetector(
           onTap: () {
             if (context.isUserLoggedIn) {
+              ManageVibration.vibrate();
               context.pop();
               context.push(Routes.RIDEHISTORYTRIPS,
                   extra: HistoryTripsScreenParams(
                     rideCubit: serviceLocator<RideCubit>(),
                   ));
             } else {
+              ManageVibration.vibrate();
               context.pop();
               pleaseLoginDialog(context);
               // context.push(Routes.LOGIN);
@@ -1219,7 +1200,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClickableWidget(
-            onTap: () => openDrawer(),
+            onTap: () {
+              ManageVibration.vibrate();
+              openDrawer();
+            },
             child: Container(
               width: 85.w,
               height: kToolbarHeight * 1.2.h,
@@ -1240,6 +1224,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               height: 50,
               child: GestureDetector(
                 onTap: () {
+                  ManageVibration.vibrate();
                   if ((driverInfo?.status != RegistrationStatus.approved.status) && (loadingInfo?.status != RegistrationStatus.approved.status)) {
                     openDrawer();
                   } else if (driverInfo?.status == RegistrationStatus.approved.status && loadingInfo?.status == RegistrationStatus.approved.status) {
@@ -1340,6 +1325,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       Expanded(
                         child: ClickableWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               context.push(Routes.RIDERUNNINGTRIPS,
                                   extra: RunningTripParams(
                                     rideCubit: serviceLocator<RideCubit>(),
@@ -1350,6 +1336,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       Expanded(
                         child: ClickableWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               context.push(Routes.RIDEEXPIREDTRIPE,
                                   extra: ExpiredTripsScreenParams(
                                     rideCubit: serviceLocator<RideCubit>(),
@@ -1410,6 +1397,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               color: Colors.green,
                               text: state.currentLocation?.address,
                               onPressed: () async {
+                                ManageVibration.vibrate();
                                 if (context.isUserLoggedIn) {
                                   context.push(
                                     Routes.GoogleMapsSearchAndPick,
@@ -1438,6 +1426,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               color: Colors.blue,
                               text: state.toLocation?.address,
                               onPressed: () async {
+                                ManageVibration.vibrate();
                                 if (context.isUserLoggedIn) {
                                   context.push(
                                     Routes.GoogleMapsSearchAndPick,
@@ -1559,6 +1548,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           //   }
                                           // },
                                           onPressed: () async {
+                                            ManageVibration.vibrate();
                                             if (context.isUserLoggedIn) {
                                               if (state.toLocation != null && state.currentLocation != null) {
                                                 bool isSubscribed = await context.read<RideCubit>().isSubscribed(
@@ -1613,7 +1603,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     ),
                                                                     IconButton(
                                                                       icon: const Icon(Icons.close),
-                                                                      onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                      onPressed: () {
+                                                                        ManageVibration.vibrate();
+                                                                        Navigator.of(context).pop(false);
+                                                                      }, // Pass false if dismissed without validation
                                                                     ),
                                                                   ],
                                                                 ),
@@ -1629,6 +1622,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                   width: double.infinity,
                                                                   child: ElevatedButton(
                                                                     onPressed: () {
+                                                                      ManageVibration.vibrate();
                                                                       if (_phoneNumberFormKey.currentState!.validate()) {
                                                                         Navigator.of(context).pop(true); // Pass true if validated
                                                                       }
@@ -1713,6 +1707,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               radius: 15,
                                               label: LocaleKeys.request.tr(),
                                               onPressed: () async {
+                                                ManageVibration.vibrate();
                                                 if (context.isUserLoggedIn) {
                                                   if (state.toLocation != null && state.currentLocation != null) {
                                                     // showModalBottomSheet(
@@ -1777,7 +1772,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                       ),
                                                                       IconButton(
                                                                         icon: const Icon(Icons.close),
-                                                                        onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                        onPressed: () {
+                                                                          ManageVibration.vibrate();
+                                                                          Navigator.of(context).pop(false);
+                                                                        }, // Pass false if dismissed without validation
                                                                       ),
                                                                     ],
                                                                   ),
@@ -1793,6 +1791,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     width: double.infinity,
                                                                     child: ElevatedButton(
                                                                       onPressed: () {
+                                                                        ManageVibration.vibrate();
                                                                         if (_phoneNumberFormKey.currentState!.validate()) {
                                                                           Navigator.of(context).pop(true); // Pass true if validated
                                                                         }
@@ -1916,6 +1915,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 final bool isSelected = context.read<RideCubit>().selectedCategoryType == type && context.read<RideCubit>().selectedCategoryIndex == index;
                 return GestureDetector(
                   onTap: () {
+                    ManageVibration.vibrate();
                     context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
                     context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
                     context.read<ClientTripsCubit>().makeNonTrackingTripParam = MakeNonTrackingRequestTripUsecaseParam();
@@ -1951,6 +1951,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           flex: 1,
           child: GestureDetector(
             onTap: () {
+              ManageVibration.vibrate();
               _scrollRight(type);
             },
             child: const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.SECONDARY_COLOR_DARK),
@@ -2032,6 +2033,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               if (isTo == true && text != 'To')
                 GestureDetector(
                   onTap: () {
+                    ManageVibration.vibrate();
                     customBottomSheet(context, serviceLocator<RideCubit>(),
                         isDarkMode: context.isDarkMode,
                         child: AddStopsWidget(
@@ -2078,6 +2080,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       }
       return GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
           if (state.rideExpectedPrice == null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -2141,6 +2144,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
+                    ManageVibration.vibrate();
                     if (state.rideExpectedPrice == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

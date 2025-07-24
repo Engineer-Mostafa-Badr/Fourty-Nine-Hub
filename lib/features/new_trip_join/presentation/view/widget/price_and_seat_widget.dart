@@ -37,10 +37,10 @@ class _PriceAndSeatWidgetState extends State<PriceAndSeatWidget> {
         RichText(
           text: TextSpan(
             text: widget.price!=null? "${widget.price?.toInt()} ":" ",
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: context.isDarkMode?Colors.white:Colors.black,
             ),
             children: [
               TextSpan(

@@ -166,6 +166,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../ads/interstitial_ad_model.dart';
@@ -190,6 +191,7 @@ class GridBlocksWidget extends StatelessWidget {
       _buildStarWidget(
         context,
         onTap: () {
+          ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.RIDE_HOME);
@@ -201,6 +203,7 @@ class GridBlocksWidget extends StatelessWidget {
       _buildStarWidget(
         context,
         onTap: () {
+          ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.VISITA);
@@ -212,6 +215,7 @@ class GridBlocksWidget extends StatelessWidget {
       _buildStarWidget(
         context,
         onTap: () {
+          ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('beAStarCount', context);
@@ -227,6 +231,7 @@ class GridBlocksWidget extends StatelessWidget {
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);
           }
+          ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('tripJoinCount', context);
@@ -241,6 +246,7 @@ class GridBlocksWidget extends StatelessWidget {
       _buildStarWidget(
         context,
         onTap: () {
+          ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('beAStarCount', context);
@@ -253,6 +259,7 @@ class GridBlocksWidget extends StatelessWidget {
       _buildStarWidget(
         context,
         onTap: () {
+          ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.MARRIAGESUBCATEGORIES);

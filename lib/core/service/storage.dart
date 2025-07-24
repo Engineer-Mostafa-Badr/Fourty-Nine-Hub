@@ -153,5 +153,17 @@ class Storage{
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(Constants.refuseTrips);
   }
+
+  /// Sets the boolean value
+  static Future<void> setVibrationValue(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(Constants.vibrationKey, value);
+  }
+
+  /// Gets the boolean value (default is true if not set)
+  static Future<bool> getVibrationValue() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(Constants.vibrationKey) ?? true;
+  }
 }
 

@@ -8,7 +8,7 @@ class MyBookingModel extends MyBookingEntity {
     return MyBookingModel(
       id: json['id'] ?? '',
       creatorId: json['creatorId'] ?? '',
-      pricePerSeat: (json['pricePerSeat']??0).ceil() ?? 0,
+      pricePerSeat: (json['pricePerSeat'] is num) ? (json['pricePerSeat'] as num).ceil() : 0,
       clients: json['clients'] != null
           ? (json['clients'] as List)
           .map((e) => BookingClientModel.fromJson(e as Map<String, dynamic>))
@@ -39,11 +39,15 @@ class MyBookingLocationModel extends MyBookingLocationEntity{
 }
 
 class BookingClientModel extends BookingClientEntity{
-  BookingClientModel({required super.id, required super.location});
+  BookingClientModel( {required super.id, required super.location, super.driverArrivalTime,super.pickupDistanceFromStart, super.driverWaitingTime,required super.status});
 
   factory BookingClientModel.fromJson(Map<String, dynamic> json) {
     return BookingClientModel(
       id: json['id'] ?? '',
+        status: json['status'] ?? '',
+        pickupDistanceFromStart: json['pickupDistanceFromStart'] ?? 0,
+        driverArrivalTime: json['driverArrivalTime'],
+        driverWaitingTime: json['driverWaitingTime'],
       location: MyBookingLocationModel.fromJson(json['pickupLocation'])
     );
   }

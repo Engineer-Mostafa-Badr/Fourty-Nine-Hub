@@ -43,6 +43,7 @@ class CallMessageButtons extends StatefulWidget {
       required this.id,
       this.hasReport = false,
       this.flex,
+      this.chatFlex,
       this.clientId});
 
   final String otherUserId;
@@ -54,6 +55,7 @@ class CallMessageButtons extends StatefulWidget {
   final String? senderImage;
   final bool? hasReport;
   final int? flex;
+  final int? chatFlex;
 
   @override
   State<CallMessageButtons> createState() => _CallMessageButtonsState();
@@ -81,6 +83,8 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                       : AppColors.DARK_GRAY_COLOR,
                   icon: SvgPicture.asset(
                     Assets.phoneIcon,
+                    width: 50.w,
+                    height: 35.h,
                     color: snap.data == true
                         ? AppColors.SECONDARY_COLOR
                         : context.isDarkMode
@@ -200,13 +204,15 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
               ),
               const Sizer(width: 5),
               Expanded(
-                flex: 3,
+                flex: widget.chatFlex??3,
                 child: IconButton(
                   color: (snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
                   icon: SvgPicture.asset(Assets.mailIcon,
+                      width: 50.w,
+                      height: 30.h,
                       color: snap.data == true
                           ? AppColors.SECONDARY_COLOR
                           : context.isDarkMode

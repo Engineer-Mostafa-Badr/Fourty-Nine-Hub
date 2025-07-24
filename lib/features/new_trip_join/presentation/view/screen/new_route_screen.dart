@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -38,11 +40,11 @@ class NewRouteScreen extends StatefulWidget {
 }
 
 class _NewRouteScreenState extends State<NewRouteScreen> {
-
   @override
   Widget build(BuildContext context) {
     return const SharedScaffold(
-      mainCategoryId: 1,isWithBackArrow: true,
+      mainCategoryId: 1,
+      isWithBackArrow: true,
       body: NewRouteBody(),
     );
   }
@@ -60,18 +62,39 @@ class _NewRouteBodyState extends State<NewRouteBody> {
   bool isLady = false;
   bool isLadyDriver = false;
   final MapController _mapController = MapController();
+  final TextEditingController phoneController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
 
-  List<double>? currentLocation;
-  List<double>? toLocation;
-  String? currentAddress;
-  String? toAddress;
+  @override
+  initState() {
+    super.initState();
+    context.read<CaptainShareCubit>().fetchUserLocation();
+  }
+
+
+  String convertDigits(String input, {bool toArabic = false}) {
+    const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const eastern = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    final from = toArabic ? western : eastern;
+    final to = toArabic ? eastern : western;
+
+    for (int i = 0; i < from.length; i++) {
+      input = input.replaceAll(from[i], to[i]);
+    }
+
+    return input;
+  }
+  // List<double>? currentLocation;
+  // List<double>? toLocation;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit,CaptainShareState>(
-      builder: (context,state) {
-        var cubit = context.read<CaptainShareCubit>();
-        return Column(
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+      var cubit = context.read<CaptainShareCubit>();
+      return Form(
+        key: formKey,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20.h),
@@ -82,8 +105,9 @@ class _NewRouteBodyState extends State<NewRouteBody> {
               child: WelcomeTextWidget(),
             ),
             const SizedBox(height: 10),
-            _buildTopImage(state.pricePerSeat?.polyline??[]),
-            Expanded(child: ListView(
+            _buildTopImage(state.pricePerSeat?.polyline ?? [], state),
+            Expanded(
+                child: ListView(
               children: [
                 SizedBox(height: 10.h),
                 Padding(
@@ -92,39 +116,38 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     isTo: false,
                     context: context,
                     color: Colors.green,
-                    text: currentAddress,
+                    text: state.currentLocation?.address,
                     onPressed: () async {
-                      context.push(
-                        Routes.GoogleMapsSearchAndPick,
-                        extra: RideGoogleMapSearchAndPickParams(
-                          onPicked: (pickedData) async {
-                            currentAddress = pickedData.address;
-                            currentLocation = [
-                              pickedData.latitude,
-                              pickedData.longitude
-                            ];
-                            context.pop();
-                            print("object pickedData ${pickedData.address}");
-                            print("object pickedData ${pickedData.latitude}");
-                            print("object pickedData ${pickedData.longitude}");
-
-                            setState(() {});
-                            print("object currentLocation ${currentLocation}");
-                            print("object toLocation ${toLocation}");
-                            print("object currentAddress ${currentAddress}");
-                            print("object toAddress ${toAddress}");
-                            if(toLocation!=null){
-                              cubit.createOffer(context: context,params: CreatePricePerSeatParams(
-                                  fromLocation: currentLocation??[],
-                                  toLocation: toLocation??[],
-                                  isComfort: isComfort,
-                                  isLadiesPassenger: isLady,
-                                  isLadiesDriver: isLadyDriver
-                              ));
-                            }
-                          },
-                        ),
-                      );
+                      if (context.isUserLoggedIn) {
+                        context.push(
+                          Routes.GoogleMapsSearchAndPick,
+                          extra: RideGoogleMapSearchAndPickParams(
+                            minDistanceReferencePoint: state.toLocation == null ? null : LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
+                            onPicked: (pickedData) async {
+                              cubit.updateFromLocation(
+                                lat: pickedData.latitude,
+                                lng: pickedData.longitude,
+                                address: pickedData.address,
+                              );
+                              if (state.toLocation == null) {
+                                context.pop();
+                                return;
+                              }
+                              await cubit.createOffer(
+                                  context: context,
+                                  params: CreatePricePerSeatParams(
+                                      fromLocation: [pickedData.latitude, pickedData.longitude],
+                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
+                                      isComfort: isComfort,
+                                      isLadiesPassenger: isLady,
+                                      isLadiesDriver: isLadyDriver, phoneNumber:''));
+                              context.pop();
+                            },
+                          ),
+                        );
+                      } else {
+                        context.push(Routes.LOGIN);
+                      }
                     },
                   ),
                 ),
@@ -134,35 +157,81 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     isTo: true,
                     context: context,
                     color: Colors.blue,
-                    text: toAddress,
+                    text: state.toLocation?.address,
                     onPressed: () async {
-                      context.push(Routes.GoogleMapsSearchAndPick,
+                      if (context.isUserLoggedIn) {
+                        context.push(
+                          Routes.GoogleMapsSearchAndPick,
                           extra: RideGoogleMapSearchAndPickParams(
+                            minDistanceReferencePoint: state.currentLocation == null ? null : LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
                             onPicked: (pickedData) async {
-                              print("object pickedData ${pickedData.address}");
-                              print("object pickedData ${pickedData.latitude}");
-                              print("object pickedData ${pickedData.longitude}");
-                              toAddress = pickedData.address;
-                              toLocation = [
-                                pickedData.latitude,
-                                pickedData.longitude
-                              ];
+                              await cubit.updateToLocation(
+                                lat: pickedData.latitude,
+                                lng: pickedData.longitude,
+                                address: pickedData.address,
+                              );
+                              print("state.currentLocation ${state.currentLocation} state.toLocation ${state.toLocation}");
+                              if (state.currentLocation == null) {
+                                context.pop();
+                                return;
+                              }
+
+                              await cubit.createOffer(
+                                  context: context,
+                                  params: CreatePricePerSeatParams(
+                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
+                                      toLocation: [pickedData.latitude, pickedData.longitude],
+                                      isComfort: isComfort,
+                                      isLadiesPassenger: isLady,
+                                      isLadiesDriver: isLadyDriver, phoneNumber: ''));
                               context.pop();
-                              cubit.createOffer(context: context,params: CreatePricePerSeatParams(
-                                  fromLocation: currentLocation??[],
-                                  toLocation: toLocation??[],
-                                  isComfort: isComfort,
-                                  isLadiesPassenger: isLady,
-                                  isLadiesDriver: isLadyDriver
-                              ));
-                              setState(() {});
                             },
-                          ));
+                          ),
+                        );
+                      } else {
+                        context.push(Routes.LOGIN);
+                      }
                     },
                   ),
                 ),
-                PriceAndSeatWidget(price: state.pricePerSeat?.finalPricePerSeat,),
+                PriceAndSeatWidget(
+                  price: state.pricePerSeat?.finalPricePerSeat,
+                ),
                 SizedBox(height: 10.h),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: CustomPhoneTextFormField(
+                      currentFocusNode: FocusNode(),
+                      nextFocusNode: FocusNode(),
+                      currentController: phoneController,
+                      onInputChanged: (value) =>formKey.currentState!.validate(),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(11),
+                      ],
+                      validator: (value) {
+                        final input = value?.trim() ?? '';
+
+                        if (input.isEmpty) return LocaleKeys.required.localize;
+
+                        final numericValue = convertDigits(input, toArabic: false)
+                            .replaceAll(RegExp(r'[^0-9]'), '');
+
+                        if (numericValue.length != 11) {
+                          return context.isArabic
+                              ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
+                              : 'Phone number must be exactly 11 digits.';
+                        }
+
+                        if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
+                          return context.isArabic
+                              ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
+                              : 'Phone number must start with 010, 011, 012, or 015.';
+                        }
+
+                        return null;
+                      },
+                    )),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
@@ -171,50 +240,95 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                           title: LocaleKeys.comfort.localize,
                           value: isComfort,
                           onChanged: (val) {
-                            setState(() => isComfort = val);
-                            cubit.createOffer(context: context,params: CreatePricePerSeatParams(
-                                fromLocation: currentLocation??[],
-                                toLocation: toLocation??[],
-                                isComfort: isComfort,
-                                isLadiesPassenger: isLady,
-                                isLadiesDriver: isLadyDriver
-                            ));
+                            if(formKey.currentState!.validate()) {
+                              if (state.currentLocation == null) {
+                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
+                                return;
+                              }
+                              if (state.toLocation == null) {
+                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
+                                return;
+                              }
+                              setState(() => isComfort = val);
+
+                              cubit.createOffer(
+                                  context: context,
+                                  params: CreatePricePerSeatParams(
+                                      phoneNumber:phoneController.text,
+                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
+                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
+                                      isComfort: isComfort,
+                                      isLadiesPassenger: isLady,
+                                      isLadiesDriver: isLadyDriver));
+                            }
                           }),
                       SwitchWidget(
-                          title: context.isArabic?'راكبات سيدات':'Lady Passengers',
+                          title: context.isArabic ? 'راكبات سيدات' : 'Lady Passengers',
                           value: isLady,
                           onChanged: (val) {
-                            bool gender = UserCubit.to.state.data?.gender=='male';
-                            if(gender){
-                              showErrorMessage(context, context.isArabic?'أنت رجل و لا يمكنك تحديد هذا الخيار':'You are a man and you can not select this option');
-                              return;
+                            if(formKey.currentState!.validate()) {
+                              if (state.currentLocation == null) {
+                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
+                                return;
+                              }
+                              if (state.toLocation == null) {
+                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
+                                return;
+                              }
+                              bool gender = UserCubit.to.state.data?.gender == 'male';
+                              if (gender) {
+                                showErrorMessage(context, context.isArabic ? 'أنت رجل و لا يمكنك تحديد هذا الخيار' : 'You are a man and you can not select this option');
+                                return;
+                              }
+                              if (state.currentLocation == null || state.toLocation == null) {
+                                return;
+                              }
+                              setState(() => isLady = val);
+
+                              cubit.createOffer(
+                                  context: context,
+                                  params: CreatePricePerSeatParams(
+                                      phoneNumber:phoneController.text,
+                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
+                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
+                                      isComfort: isComfort,
+                                      isLadiesPassenger: isLady,
+                                      isLadiesDriver: isLadyDriver));
                             }
-                            setState(() => isLady = val);
-                            cubit.createOffer(context: context,params: CreatePricePerSeatParams(
-                                fromLocation: currentLocation??[],
-                                toLocation: toLocation??[],
-                                isComfort: isComfort,
-                                isLadiesPassenger: isLady,
-                                isLadiesDriver: isLadyDriver
-                            ));
+
+
                           }),
                       SwitchWidget(
-                          title: context.isArabic?'سائقة':'Lady Driver',
+                          title: context.isArabic ? 'سائقة' : 'Lady Driver',
                           value: isLadyDriver,
                           onChanged: (val) {
-                            bool gender = UserCubit.to.state.data?.gender=='male';
-                            if(gender){
-                              showErrorMessage(context, context.isArabic?'أنت رجل و لا يمكنك تحديد هذا الخيار':'You are a man and you can not select this option');
-                              return;
+                            if(formKey.currentState!.validate()) {
+                              if (state.currentLocation == null) {
+                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
+                                return;
+                              }
+                              if (state.toLocation == null) {
+                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
+                                return;
+                              }
+                              bool gender = UserCubit.to.state.data?.gender == 'male';
+                              if (gender) {
+                                showErrorMessage(context, context.isArabic ? 'أنت رجل و لا يمكنك تحديد هذا الخيار' : 'You are a man and you can not select this option');
+                                return;
+                              }
+                              setState(() => isLadyDriver = val);
+
+                              cubit.createOffer(
+                                  context: context,
+                                  params: CreatePricePerSeatParams(
+                                      phoneNumber:phoneController.text,
+                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
+                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
+                                      isComfort: isComfort,
+                                      isLadiesPassenger: isLady,
+                                      isLadiesDriver: isLadyDriver));
                             }
-                            setState(() => isLadyDriver = val);
-                            cubit.createOffer(context: context,params: CreatePricePerSeatParams(
-                                fromLocation: currentLocation??[],
-                                toLocation: toLocation??[],
-                                isComfort: isComfort,
-                                isLadiesPassenger: isLady,
-                                isLadiesDriver: isLadyDriver
-                            ));
+
                           }),
                     ],
                   ),
@@ -223,9 +337,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Text(
-                      context.isArabic
-                          ? "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار"
-                          : 'You will find fewer drivers if you select this option!',
+                      context.isArabic ? "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار" : 'You will find fewer drivers if you select this option!',
                       style: TextStyle(
                         fontSize: 10,
                         color: AppColors.getRedColor(context),
@@ -258,40 +370,70 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                           ),
                         ],
                       ),
-                      SvgPicture.asset(Assets.visaIcon, width: 40,color: context.isDarkMode?AppColors.Floating_Button_COLOR_DARK:null,),
+                      SvgPicture.asset(
+                        Assets.visaIcon,
+                        width: 40,
+                        color: context.isDarkMode ? AppColors.Floating_Button_COLOR_DARK : null,
+                      ),
                     ],
                   ),
                 ),
                 SizedBox(height: 15.h),
                 PremiumAndRequestWidget(
-                  onPremiumRequest: (){
-                    cubit.createRoute(context: context,params: CreatePricePerSeatParams(
-                        isPremium: true,
-                        fromLocation: currentLocation??[],
-                        toLocation: toLocation??[],
-                        isComfort: isComfort,
-                        isLadiesPassenger: isLady,
-                        isLadiesDriver: isLadyDriver
-                    ));
+                  onPremiumRequest: () {
+                    if(formKey.currentState!.validate()) {
+                      if (state.currentLocation == null) {
+                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
+                        return;
+                      }
+                      if (state.toLocation == null) {
+                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
+                        return;
+                      }
+
+                      cubit.createRoute(
+                          context: context,
+                          params: CreatePricePerSeatParams(
+                              isPremium: true,
+                              phoneNumber:phoneController.text,
+                              fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
+                              toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
+                              isComfort: isComfort,
+                              isLadiesPassenger: isLady,
+                              isLadiesDriver: isLadyDriver));
+                    }
                   },
-                  onRequest: (){
-                    cubit.createRoute(context: context,params: CreatePricePerSeatParams(
-                        isPremium: false,
-                        fromLocation: currentLocation??[],
-                        toLocation: toLocation??[],
-                        isComfort: isComfort,
-                        isLadiesPassenger: isLady,
-                        isLadiesDriver: isLadyDriver
-                    ));
+                  onRequest: () {
+                    if(formKey.currentState!.validate()) {
+                      if (state.currentLocation == null) {
+                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
+                        return;
+                      }
+                      if (state.toLocation == null) {
+                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
+                        return;
+                      }
+
+                      cubit.createRoute(
+                          context: context,
+                          params: CreatePricePerSeatParams(
+                              isPremium: false,
+                              phoneNumber:phoneController.text,
+                              fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
+                              toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
+                              isComfort: isComfort,
+                              isLadiesPassenger: isLady,
+                              isLadiesDriver: isLadyDriver));
+                    }
                   },
                 ),
                 SizedBox(height: 30.h),
               ],
             ))
           ],
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 
   void showPaymentAlert(BuildContext context) {
@@ -321,18 +463,11 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   ),
                   SizedBox(height: 16.h),
                   AlertTextWidget(
-                    text: context.isArabic
-                        ? "الدفع مقدمًا وشحن محفظتك."
-                        : "Payment in advance, charge your wallet.",
+                    text: context.isArabic ? "الدفع مقدمًا وشحن محفظتك." : "Payment in advance, charge your wallet.",
                   ),
+                  AlertTextWidget(text: context.isArabic ? "سيتم الاحتفاظ بالمال حتى انتهاء الرحلة." : "Money will be holding till the ride ends."),
                   AlertTextWidget(
-                      text: context.isArabic
-                          ? "سيتم الاحتفاظ بالمال حتى انتهاء الرحلة."
-                          : "Money will be holding till the ride ends."),
-                  AlertTextWidget(
-                    text: context.isArabic
-                        ? "لا يوجد أموال للكابتن."
-                        : "No cash for the captain.",
+                    text: context.isArabic ? "لا يوجد أموال للكابتن." : "No cash for the captain.",
                   ),
                   const SizedBox(height: 20),
                   Center(
@@ -343,9 +478,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     },
                     color: AppColors.getButtonPrimaryColor(context),
                     text: LocaleKeys.cancel.localize,
-                    textStyle: TextStyle(
-                        color:
-                            context.isDarkMode ? Colors.black : Colors.white),
+                    textStyle: TextStyle(color: context.isDarkMode ? Colors.black : Colors.white),
                   )),
                 ],
               ),
@@ -384,9 +517,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
               child: CircleAvatar(
                 backgroundColor: color,
                 radius: 10,
-                child: CircleAvatar(
-                    backgroundColor: AppColors.getFillColor(context),
-                    radius: 5),
+                child: CircleAvatar(backgroundColor: AppColors.getFillColor(context), radius: 5),
               ),
             ),
             Expanded(
@@ -411,47 +542,58 @@ class _NewRouteBodyState extends State<NewRouteBody> {
     );
   }
 
-  Widget _buildTopMap(BuildContext context,List<List<double>> routePoints) {
-    List<gmap.LatLng> routePoyLine = [];
-    List<dynamic> polyLine = routePoints;
+  Widget _buildTopMap(CaptainShareState state, BuildContext context) {
+    List<gmap.LatLng> routePoints = [];
 
-    List<List<double>> parsedPolyline = polyLine
-        .map<List<double>>((item) =>
-        (item as List).map((e) => (e as num).toDouble()).toList())
-        .toList();
-    routePoyLine =
-        convertPolylineToLatLng(parsedPolyline);
+    try {
+      routePoints = _convertPolylineToLatLng(state.pricePerSeat?.polyline ?? []);
+    } catch (e) {
+      print('Error processing route points: $e');
+      routePoints = [];
+    }
 
+    List<gmap.LatLng> clients = [];
 
+    // Provide default values to prevent null issues
+    final startLat = state.currentLocation?.lat ?? 30.033333;
+    final startLng = state.currentLocation?.lng ?? 31.233334;
+    final targetLat = state.toLocation?.lat ?? 30.043333;
+    final targetLng = state.toLocation?.lng ?? 31.243334;
 
-    return SizedBox(
+    return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.5,
-      child: CustomGoogleMap(
-        startLocation:currentLocation==null?null: gmap.LatLng(currentLocation?[0] ?? 30.0596113,
-            currentLocation?[1] ?? 31.1760625),
-        targetLocation:toLocation==null?null: gmap.LatLng(toLocation?[0] ?? 30.0596113,
-        toLocation?[1] ?? 31.1760625),
-        polylinePoints:routePoyLine,
-        // clientLocations: convertClientsToLatLng(clients),
+      decoration: const BoxDecoration(
+        color: Colors.grey,
+      ),
+      child: ClipRect(
+        child: CustomGoogleMap(
+          // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
+          startLocation: state.currentLocation == null ? null : gmap.LatLng(startLat, startLng),
+          targetLocation: state.toLocation == null ? null : gmap.LatLng(targetLat, targetLng),
+          polylinePoints: routePoints,
+          clientLocations: clients,
+          enableScrolling: true,
+        ),
       ),
     );
-
-
     // return SizedBox(
     //   width: double.infinity,
-    //   height: MediaQuery.of(context).size.height * 0.5,
+    //   height: state.requestedTrip != null ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.5,
     //   child: FlutterMap(
     //     mapController: _mapController,
     //     options: MapOptions(
     //       initialCenter: LatLng(
-    //         currentLocation?[0] ?? 30.0596113,
-    //         currentLocation?[1] ?? 31.1760625,
+    //         state.currentLocation?.lat ?? 0.0,
+    //         state.currentLocation?.lng ?? 0.0,
     //       ),
     //       initialZoom: 12.0,
     //     ),
     //     children: [
     //       TileLayer(
+    //         // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    //         // urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
     //         urlTemplate: context.isDarkMode
     //             ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
     //             : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
@@ -460,33 +602,47 @@ class _NewRouteBodyState extends State<NewRouteBody> {
     //       ),
     //       MarkerLayer(
     //         markers: [
-    //           if (currentLocation != null && currentLocation!.isNotEmpty)
+    //           if (state.currentLocation != null)
     //             Marker(
-    //               point: LatLng(
-    //                 currentLocation?[0] ?? 0.0,
-    //                 currentLocation?[1] ?? 0.0,
-    //               ),
+    //               point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
     //               width: 40,
     //               height: 40,
-    //               child: const Icon(Icons.location_pin,
-    //                   color: Colors.green, size: 40),
+    //               child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
     //             ),
-    //           if (toLocation != null)
+    //           if (state.toLocation != null)
     //             Marker(
-    //               point: LatLng(toLocation![0], toLocation![1]),
+    //               point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
     //               width: 40,
     //               height: 40,
-    //               child: const Icon(Icons.location_pin,
-    //                   color: Colors.blue, size: 40),
+    //               child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
+    //             ),
+    //           if (state.wayPointOne != null)
+    //             Marker(
+    //               point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
+    //               width: 40,
+    //               height: 40,
+    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+    //             ),
+    //           if (state.wayPointTwo != null)
+    //             Marker(
+    //               point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
+    //               width: 40,
+    //               height: 40,
+    //               child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
     //             ),
     //         ],
     //       ),
+    //       if (state.requestedTrip != null)
+    //         if (state.requestedTrip!.status == TripState.started.name)
+    //           BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+    //             return const CarMarkerOnClientSideWidget();
+    //           }),
     //       if (routePoints.isNotEmpty)
     //         PolylineLayer(
     //           polylines: [
     //             Polyline(
-    //               points: convertPolylineToLatLng(routePoints),
-    //               color: context.isDarkMode ? Colors.blue :  Colors.black87,
+    //               points: routePoints,
+    //               color: context.isDarkMode ? Colors.blue : Colors.black87,
     //               strokeWidth: 4.0,
     //             ),
     //           ],
@@ -495,12 +651,12 @@ class _NewRouteBodyState extends State<NewRouteBody> {
     //   ),
     // );
   }
-  //
-  List<gmap.LatLng> convertPolylineToLatLng(List<List<double>> polyline) {
+
+  List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
     return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
 
-  Widget _buildTopImage(List<List<double>> routePoints) {
-    return _buildTopMap(context,routePoints);
+  Widget _buildTopImage(List<List<double>> routePoints, CaptainShareState state) {
+    return _buildTopMap(state, context);
   }
 }

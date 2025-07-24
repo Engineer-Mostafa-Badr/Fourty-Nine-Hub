@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -17,6 +18,8 @@ class CustomPhoneTextFormField extends StatefulWidget {
   final String? hint;
   final Color? fillColor;
   final Color? codeColor;
+  final FormFieldValidator<dynamic>? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomPhoneTextFormField({
     super.key,
@@ -24,6 +27,8 @@ class CustomPhoneTextFormField extends StatefulWidget {
     required this.nextFocusNode,
     required this.currentController,
     this.margin,
+    this.validator,
+    this.inputFormatters,
     this.initialCountryCode,
     required this.onInputChanged,
     this.isEnabled = true,
@@ -65,6 +70,8 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
               cursorColor: Colors.blue,
               style: textStyle,
               keyboardType: TextInputType.phone,
+              validator: widget.validator,
+              inputFormatters: widget.inputFormatters,
               decoration: InputDecoration(
                 fillColor: widget.fillColor ??
                     (widget.isEnabled

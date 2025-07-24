@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -36,9 +37,10 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   color: Colors.green,
                   text: state.currentLocation?.address,
                   onPressed: () async {
-                    context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
+                    context.push(Routes.GoogleMapsSearchAndPick,
+                        extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
-                        context.read<RideCubit>().updateFromLocation(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                        context.read<RideCubit>().updateFromLocation(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
                         context.pop();
                         },
                     ));
@@ -49,9 +51,10 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   color: Colors.blue,
                   text: state.toLocation?.address,
                   onPressed: () async {
-                    context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
+                    context.push(Routes.GoogleMapsSearchAndPick,
+                        extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
-                        context.read<RideCubit>().updateToLocation(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                        context.read<RideCubit>().updateToLocation(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
                         await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
                         context.pop();
                       },
@@ -70,9 +73,10 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     color: Colors.blue,
                     text: state.wayPointOne?.address,
                     onPressed: () async {
-                      context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
+                      context.push(Routes.GoogleMapsSearchAndPick,
+                          extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
-                          context.read<RideCubit>().updateWayPointOne(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                          context.read<RideCubit>().updateWayPointOne(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
                           await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
                           context.pop();
                         },
@@ -92,9 +96,10 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     color: Colors.blue,
                     text: state.wayPointTwo?.address,
                     onPressed: () async {
-                      context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
+                      context.push(Routes.GoogleMapsSearchAndPick,
+                          extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
-                          context.read<RideCubit>().updateWayPointTwo(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                          context.read<RideCubit>().updateWayPointTwo(lat: pickedData.latitude, lng: pickedData.longitude, address: pickedData.address,);
                           await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
                           context.pop();
                         },
