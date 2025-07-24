@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -150,11 +151,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                     fontSize: 35.sp,
                                     color: AppColors.AUTH_CONTAINER_COLOR),
                                 onPressed: () {
-                                  Vibration.hasVibrator().then((hasVibrator) {
-                                    if (hasVibrator ?? false) {
-                                      Vibration.vibrate(duration: 100); // vibration for 100ms
-                                    }
-                                  });
+                                  ManageVibration.vibrate();
                                   HapticFeedback.lightImpact();
                                   HapticFeedback.vibrate();
                                   changeLang(

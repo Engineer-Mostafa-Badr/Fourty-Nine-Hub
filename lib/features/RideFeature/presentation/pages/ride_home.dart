@@ -46,6 +46,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/lo
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/payment_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/top_card_request.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:geolocator/geolocator.dart';
@@ -224,6 +225,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isClientNotShown: true);
                   },
                   child: Container(
@@ -249,6 +251,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isChangedMind: true);
                   },
                   child: Container(
@@ -274,6 +277,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isOther: true);
                   },
                   child: Container(
@@ -318,6 +322,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         label: context.isArabic ? 'الغاء' : 'Close',
                         backColor: AppColors.SECONDARY_COLOR_DARK2,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           // cubit
                         }),
@@ -327,6 +332,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             cubit.cancleNonPendingTripByClient(
@@ -437,6 +443,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     const SizedBox(height: 16),
                                     GestureDetector(
                                       onTap: () async {
+                                        ManageVibration.vibrate();
                                         await serviceLocator<RideCubit>().sendIamOkMessage(context);
                                       },
                                       child: Container(
@@ -482,6 +489,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       // const Divider(height: 2),
                       GestureDetector(
                         onTap: () {
+                          ManageVibration.vibrate();
                           bottomSheet(
                               context: context,
                               widget: ReportView(
@@ -541,7 +549,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                             ),
                                             IconButton(
                                               icon: const Icon(Icons.close),
-                                              onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                              onPressed: () {
+                                                ManageVibration.vibrate();
+                                                Navigator.of(context).pop(false);
+                                              }, // Pass false if dismissed without validation
                                             ),
                                           ],
                                         ),
@@ -630,6 +641,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           width: double.infinity,
                                           child: ElevatedButton(
                                             onPressed: () async {
+                                              ManageVibration.vibrate();
                                               if (_partialPaymentFormKey.currentState!.validate()) {
                                                 context.pop();
                                                 await serviceLocator<RideCubit>().partialPayment(
@@ -783,6 +795,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     : state.requestedTrip!.status == TripState.ratingSheet.name
                                                         ? BuildClientRateDriverSheet(
                                                             onPressed: (String message, double rate) async {
+                                                              ManageVibration.vibrate();
                                                               await serviceLocator<RideCubit>().ratingDriverByClient(
                                                                 context,
                                                                 RatingDriverByClientUseCaseParams(
@@ -840,6 +853,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                         driverInfo: state.driverInfo,
                                         loadingInfo: state.loaderInfo,
                                         openDrawer: () {
+                                          ManageVibration.vibrate();
                                           showModalBottomSheet(
                                             backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                                             context: context,
@@ -940,7 +954,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         Align(
           alignment: AlignmentDirectional.topStart,
           child: ClickableWidget(
-              onTap: () => context.pop(),
+              onTap: () {
+                ManageVibration.vibrate();
+                context.pop();
+              },
               child: const Icon(
                 Icons.close,
                 color: AppColors.black,
@@ -949,6 +966,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         const Sizer(),
         GestureDetector(
           onTap: () {
+            ManageVibration.vibrate();
             if (!context.read<UserCubit>().isLoggedIn) {
               return pleaseLoginDialog(context);
             }
@@ -1021,9 +1039,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         GestureDetector(
           onTap: () {
             if (!context.read<UserCubit>().isLoggedIn) {
+              ManageVibration.vibrate();
               context.pop();
               return pleaseLoginDialog(context);
             }
+            ManageVibration.vibrate();
             context.pop();
             if (loadingInfo == null || (loadingInfo.status?.isEmpty ?? false)) {
               print("object");
@@ -1095,9 +1115,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         GestureDetector(
           onTap: () {
             if (context.isUserLoggedIn) {
+              ManageVibration.vibrate();
               context.pop();
               context.push(Routes.rideOffer, extra: 'ride');
             } else {
+              ManageVibration.vibrate();
               context.pop();
               return pleaseLoginDialog(context);
             }
@@ -1129,12 +1151,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         GestureDetector(
           onTap: () {
             if (context.isUserLoggedIn) {
+              ManageVibration.vibrate();
               context.pop();
               context.push(Routes.RIDEHISTORYTRIPS,
                   extra: HistoryTripsScreenParams(
                     rideCubit: serviceLocator<RideCubit>(),
                   ));
             } else {
+              ManageVibration.vibrate();
               context.pop();
               pleaseLoginDialog(context);
               // context.push(Routes.LOGIN);
@@ -1176,7 +1200,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClickableWidget(
-            onTap: () => openDrawer(),
+            onTap: () {
+              ManageVibration.vibrate();
+              openDrawer();
+            },
             child: Container(
               width: 85.w,
               height: kToolbarHeight * 1.2.h,
@@ -1197,6 +1224,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               height: 50,
               child: GestureDetector(
                 onTap: () {
+                  ManageVibration.vibrate();
                   if ((driverInfo?.status != RegistrationStatus.approved.status) && (loadingInfo?.status != RegistrationStatus.approved.status)) {
                     openDrawer();
                   } else if (driverInfo?.status == RegistrationStatus.approved.status && loadingInfo?.status == RegistrationStatus.approved.status) {
@@ -1297,6 +1325,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       Expanded(
                         child: ClickableWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               context.push(Routes.RIDERUNNINGTRIPS,
                                   extra: RunningTripParams(
                                     rideCubit: serviceLocator<RideCubit>(),
@@ -1307,6 +1336,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       Expanded(
                         child: ClickableWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               context.push(Routes.RIDEEXPIREDTRIPE,
                                   extra: ExpiredTripsScreenParams(
                                     rideCubit: serviceLocator<RideCubit>(),
@@ -1367,6 +1397,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               color: Colors.green,
                               text: state.currentLocation?.address,
                               onPressed: () async {
+                                ManageVibration.vibrate();
                                 if (context.isUserLoggedIn) {
                                   context.push(
                                     Routes.GoogleMapsSearchAndPick,
@@ -1395,6 +1426,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               color: Colors.blue,
                               text: state.toLocation?.address,
                               onPressed: () async {
+                                ManageVibration.vibrate();
                                 if (context.isUserLoggedIn) {
                                   context.push(
                                     Routes.GoogleMapsSearchAndPick,
@@ -1516,6 +1548,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           //   }
                                           // },
                                           onPressed: () async {
+                                            ManageVibration.vibrate();
                                             if (context.isUserLoggedIn) {
                                               if (state.toLocation != null && state.currentLocation != null) {
                                                 bool isSubscribed = await context.read<RideCubit>().isSubscribed(
@@ -1570,7 +1603,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     ),
                                                                     IconButton(
                                                                       icon: const Icon(Icons.close),
-                                                                      onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                      onPressed: () {
+                                                                        ManageVibration.vibrate();
+                                                                        Navigator.of(context).pop(false);
+                                                                      }, // Pass false if dismissed without validation
                                                                     ),
                                                                   ],
                                                                 ),
@@ -1586,6 +1622,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                   width: double.infinity,
                                                                   child: ElevatedButton(
                                                                     onPressed: () {
+                                                                      ManageVibration.vibrate();
                                                                       if (_phoneNumberFormKey.currentState!.validate()) {
                                                                         Navigator.of(context).pop(true); // Pass true if validated
                                                                       }
@@ -1670,6 +1707,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               radius: 15,
                                               label: LocaleKeys.request.tr(),
                                               onPressed: () async {
+                                                ManageVibration.vibrate();
                                                 if (context.isUserLoggedIn) {
                                                   if (state.toLocation != null && state.currentLocation != null) {
                                                     // showModalBottomSheet(
@@ -1734,7 +1772,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                       ),
                                                                       IconButton(
                                                                         icon: const Icon(Icons.close),
-                                                                        onPressed: () => Navigator.of(context).pop(false), // Pass false if dismissed without validation
+                                                                        onPressed: () {
+                                                                          ManageVibration.vibrate();
+                                                                          Navigator.of(context).pop(false);
+                                                                        }, // Pass false if dismissed without validation
                                                                       ),
                                                                     ],
                                                                   ),
@@ -1750,6 +1791,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     width: double.infinity,
                                                                     child: ElevatedButton(
                                                                       onPressed: () {
+                                                                        ManageVibration.vibrate();
                                                                         if (_phoneNumberFormKey.currentState!.validate()) {
                                                                           Navigator.of(context).pop(true); // Pass true if validated
                                                                         }
@@ -1873,6 +1915,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 final bool isSelected = context.read<RideCubit>().selectedCategoryType == type && context.read<RideCubit>().selectedCategoryIndex == index;
                 return GestureDetector(
                   onTap: () {
+                    ManageVibration.vibrate();
                     context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
                     context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
                     context.read<ClientTripsCubit>().makeNonTrackingTripParam = MakeNonTrackingRequestTripUsecaseParam();
@@ -1908,6 +1951,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           flex: 1,
           child: GestureDetector(
             onTap: () {
+              ManageVibration.vibrate();
               _scrollRight(type);
             },
             child: const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.SECONDARY_COLOR_DARK),
@@ -1989,6 +2033,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               if (isTo == true && text != 'To')
                 GestureDetector(
                   onTap: () {
+                    ManageVibration.vibrate();
                     customBottomSheet(context, serviceLocator<RideCubit>(),
                         isDarkMode: context.isDarkMode,
                         child: AddStopsWidget(
@@ -2035,6 +2080,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       }
       return GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
           if (state.rideExpectedPrice == null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -2098,6 +2144,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
+                    ManageVibration.vibrate();
                     if (state.rideExpectedPrice == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
