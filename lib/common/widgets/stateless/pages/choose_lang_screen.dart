@@ -17,6 +17,8 @@ import '../../../theme/cubit/states.dart';
 import '../../dynamic/sizer.dart';
 import '../buttons/default_button.dart';
 import '../labels/label.dart';
+import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
 
 class ChooseLangScreen extends StatefulWidget {
   const ChooseLangScreen({super.key});
@@ -148,6 +150,13 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                     fontSize: 35.sp,
                                     color: AppColors.AUTH_CONTAINER_COLOR),
                                 onPressed: () {
+                                  Vibration.hasVibrator().then((hasVibrator) {
+                                    if (hasVibrator ?? false) {
+                                      Vibration.vibrate(duration: 100); // vibration for 100ms
+                                    }
+                                  });
+                                  HapticFeedback.lightImpact();
+                                  HapticFeedback.vibrate();
                                   changeLang(
                                       locale: Locales.english,
                                       context: context);
@@ -155,7 +164,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                   setState(() {
                                     isChooseLang = true;
                                   });
-                                  // context.go(Routes.onBoardingScreen);
+                                  context.go(Routes.onBoardingScreen);
                                 },
                               ),
                             ),
