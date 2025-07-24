@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:go_router/go_router.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -33,7 +34,8 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        
+        ManageVibration.vibrate();
+
         context.push(Routes.rideDashboardDetailsScreen, extra: widget.tripEntity);
       },
       child: Padding(

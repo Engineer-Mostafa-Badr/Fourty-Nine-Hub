@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/shared_pref.dart';
@@ -39,6 +40,8 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () async {
+          ManageVibration.vibrate();
+
                 HandleCashback.setCount('socialCount', context);
                 if (changeView == 1) {
                   context.read<CreatePostCubit>().loadData();

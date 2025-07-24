@@ -98,6 +98,7 @@ import 'package:record/record.dart';
 import '../../../domain/usecases/partial_payment_in_trip.dart';
 import '../../../domain/usecases/rating_driver_by_client.dart';
 import '../../../domain/usecases/send_ok_iam_coming_message_usecase.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RideCubit extends Cubit<RideState> {
   bool isComfort = false;
@@ -369,7 +370,7 @@ class RideCubit extends Cubit<RideState> {
       });
 
       // trip ended socket event
-      SharedWebSocket.socket!.on("RIDE:DRIVER_COMPLETED_TRIP", (data) {
+      SharedWebSocket.socket!.on("RIDE:DRIVER_COMPLETED_TRIP", (data) async {
         CliLogger.info("RIDE:DRIVER_COMPLETED_TRIP:  $data");
         if (state.requestedTrip != null) {
           state.requestedTrip!.status = TripState.ratingSheet.name;
@@ -379,6 +380,13 @@ class RideCubit extends Cubit<RideState> {
           print(
               "RIDE:RIDE:DRIVER_COMPLETED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
         }
+        state.rideExpectedPrice = null;
+        state.requestedTrip = null;
+        state.currentLocation = null;
+        state.toLocation = null;
+        state.wayPointOne = null;
+        state.wayPointTwo = null;
+        await _fetchUserLocation();
 
         emit(state.copyWith(status: RideStates.success, driverLocation: null, previousDriverLocation: null));
         // RIDE:DRIVER_COMPLETED_TRIP:  {driverCompletedTrip: true}
@@ -407,11 +415,11 @@ class RideCubit extends Cubit<RideState> {
               final longitude = locationData['longitude'] as double?;
 
               if (latitude != null && longitude != null) {
-                final newDriverLocation = LatLng(latitude, longitude);
+                final newDriverLocation = gmap.LatLng(latitude, longitude);
 
                 // IMPORTANT: Store the current driverLocation as the previousDriverLocation
                 // before updating to the new location.
-                final LatLng? oldDriverLocation = state.driverLocation;
+                final gmap.LatLng? oldDriverLocation = state.driverLocation;
 
                 emit(state.copyWith(
                   driverLocation: newDriverLocation,
@@ -473,9 +481,14 @@ class RideCubit extends Cubit<RideState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (isCanceled) {
+      (isCanceled) async {
         state.rideExpectedPrice = null;
         state.requestedTrip = null;
+        state.currentLocation = null;
+        state.toLocation = null;
+        state.wayPointOne = null;
+        state.wayPointTwo = null;
+        await _fetchUserLocation();
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: state.requestedTrip));
       },
@@ -1413,10 +1426,15 @@ class RideCubit extends Cubit<RideState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (isCanceled) {
+      (isCanceled) async {
         if (isCanceled) {
           state.rideExpectedPrice = null;
           state.requestedTrip = null;
+          state.currentLocation = null;
+          state.toLocation = null;
+          state.wayPointOne = null;
+          state.wayPointTwo = null;
+          await _fetchUserLocation();
         }
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: state.requestedTrip));

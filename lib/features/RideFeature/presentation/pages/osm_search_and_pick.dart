@@ -48,7 +48,7 @@ class _RideOpenStreetMapSearchAndPickState extends State<RideOpenStreetMapSearch
               locationPinIconColor: Colors.red,
               locationPinText: context.isArabic? 'الموقع المحدد' : 'Selected Location',
               locationPinTextStyle:
-               const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.PRIMARY_COLOR),
+                TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR),
               zoomInIcon: Icons.zoom_in,
               zoomOutIcon: Icons.zoom_out,
               minAllowedDistanceKm: widget.params.minAllowedDistanceKm,

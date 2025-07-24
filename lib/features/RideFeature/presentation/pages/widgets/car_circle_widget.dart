@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -20,9 +22,10 @@ class CarContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cE8E8E8,
+        color: currentContext.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.cE8E8E8,
         borderRadius: BorderRadius.circular(10),
       ),
       padding: EdgeInsets.symmetric(horizontal: 4),
@@ -46,10 +49,10 @@ class CarContainer extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Label(
                 text: title!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
-                  color: AppColors.black,
+                  color: currentContext.isDarkMode?AppColors.whiteColor:AppColors.black,
                 ),
               ),
             ),

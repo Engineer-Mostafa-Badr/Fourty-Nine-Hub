@@ -63,6 +63,7 @@ class _CreatePostSecondPageInstagramViewBodyState
             builder: (context, state) {
               return Column(
                 children: [
+
                   const Padding(
                     padding: EdgeInsets.only(right: 8.0, left: 8.0, top: 24.0),
                     child: ShowImagesCreatePostSecond(

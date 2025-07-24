@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -39,7 +41,7 @@ class _UpdatePersonalInfoWidgetState extends State<UpdatePersonalInfoWidget> {
            Text(LocaleKeys.update.tr(),//'Update',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           const SizedBox(width: 8),
-          Image.asset(Assets.update),
+          Image.asset(Assets.update,color: context.isDarkMode?AppColors.PRIMARY_COLOR_DARK:null,),
         ],
       ),
     );

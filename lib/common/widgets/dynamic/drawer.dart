@@ -13,6 +13,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
@@ -59,15 +60,24 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   var widgejsonData;
-
+  bool hasVibration = false;
   @override
   void initState() {
+    initVibrationValue();
     AdInterstitialTop.loadIntersitialAd();
     super.initState();
   }
 
+  initVibrationValue() async {
+    bool vibration = await Storage.getVibrationValue();
+    setState(() {
+      hasVibration = vibration;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         // context.read<GetWalletCubit>();
@@ -77,6 +87,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+
                   // context
                   //     .read<UserCubit>()
                   //     .isLoggedIn
@@ -345,59 +356,81 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20.h.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                IconAppButton(
-                  width: 100.h,
-                  height: 100.h,
-                  isCircle: true,
-                  backColor: Colors.red.withValues(alpha: 0.1),
-                  icon: Icons.person,
-                  color: context.isDarkMode
-                      ? Colors.white
-                      : AppColors.PRIMARY_COLOR,
-                  onPressed: () {
-                    context.pop();
-                    context.push(Routes.LOGIN);
-                  },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    IconAppButton(
+                      width: 100.h,
+                      height: 100.h,
+                      isCircle: true,
+                      backColor: Colors.red.withValues(alpha: 0.1),
+                      icon: Icons.person,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                      onPressed: () {
+                        context.pop();
+                        context.push(Routes.LOGIN);
+                      },
+                    ),
+                    Label(
+                      text: LocaleKeys.login.localize,
+                      style: Styles.mediumText(
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-                Label(
-                  text: LocaleKeys.login.localize,
-                  style: Styles.mediumText(
-                    color: context.isDarkMode ? Colors.white : Colors.black,
-                  ),
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    IconAppButton(
+                        width: 100.h,
+                        height: 100.h,
+                        isCircle: true,
+                        icon: Icons.person_add,
+                        backColor: Colors.red.withValues(alpha: 0.1),
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                        onPressed: () {
+                          context.pop();
+                          context.push(Routes.REGISTER);
+                        }),
+                    Label(
+                      text: LocaleKeys.register.localize,
+                      style: Styles.mediumText(
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Column(
-              children: [
-                IconAppButton(
-                    width: 100.h,
-                    height: 100.h,
-                    isCircle: true,
-                    icon: Icons.person_add,
-                    backColor: Colors.red.withValues(alpha: 0.1),
-                    color: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      context.pop();
-                      context.push(Routes.REGISTER);
-                    }),
-                Label(
-                  text: LocaleKeys.register.localize,
-                  style: Styles.mediumText(
-                    color: context.isDarkMode ? Colors.white : Colors.black,
-                  ),
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CustomSwitchButton(
+                value: hasVibration,
+                onChanged: (value) async {
+                  Storage.setVibrationValue(value);
+                  setState(() {
+                    hasVibration = value;
+                  });
+                },
+              ),
+              SizedBox(
+                width: 4.w,
+              ),
+              Label(text: context.isArabic?"تفعيل وضع الاهتزاز":"Enable Vibration"),
+            ],
           ),
         ],
       ),
@@ -1188,6 +1221,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ],
               );
             },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CustomSwitchButton(
+                value: hasVibration,
+                onChanged: (value) async {
+                  Storage.setVibrationValue(value);
+                  setState(() {
+                    hasVibration = value;
+                  });
+                },
+              ),
+              SizedBox(
+                width: 4.w,
+              ),
+              Label(text: context.isArabic?"تفعيل وضع الاهتزاز":"Enable Vibration"),
+            ],
           ),
         ],
       ),

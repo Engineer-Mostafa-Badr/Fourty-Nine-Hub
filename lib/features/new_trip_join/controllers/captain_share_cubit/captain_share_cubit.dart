@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -32,7 +35,9 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_j
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_leave_available_routes_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_new_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_update_route_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -73,6 +78,72 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     listenToCancelRoute(context);
     listenToAcceptedRoute();
     listenToAcceptedRoute();
+  }
+
+  Future<void> fetchUserLocation() async {
+    emit(state.copyWith(status: CaptainShareStates.loading));
+
+    try {
+      Position position = await _determinePosition();
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      String address = placemarks.isNotEmpty
+          ? "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.country}"
+          : "Unknown current Location";
+
+      GetLocationFromAddressEntity currentLocation =
+      GetLocationFromAddressEntity(
+        lat: position.latitude,
+        lng: position.longitude,
+        address: address,
+      );
+
+      emit(state.copyWith(
+          status: CaptainShareStates.success, currentLocation: currentLocation));
+    } catch (e) {
+      log('_fetchUserLocation ${e.toString()}');
+    }
+  }
+
+  Future<Position> _determinePosition() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    print(" permanently denied$permission");
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Position(
+        longitude: 31.235457277186548,
+        latitude: 30.047873322617807,
+        timestamp: DateTime.now(),
+        accuracy: 0.2,
+        altitude: 0.5,
+        altitudeAccuracy: 0.6,
+        heading: 0.2,
+        headingAccuracy: 0.1,
+        speed: 20,
+        speedAccuracy: 10,
+      );
+    }
+    if (permission == LocationPermission.denied) {
+      print("objectLocation permissions are permanently denied");
+      // permission = await Geolocator.requestPermission();
+      // if (permission == LocationPermission.deniedForever||permission == LocationPermission.whileInUse) {
+      print("objectLocation permissions are permanently denied");
+      return Position(
+        longitude: 31.235457277186548,
+        latitude: 30.047873322617807,
+        timestamp: DateTime.now(),
+        accuracy: 0.2,
+        altitude: 0.5,
+        altitudeAccuracy: 0.6,
+        heading: 0.2,
+        headingAccuracy: 0.1,
+        speed: 20,
+        speedAccuracy: 10,
+      );
+    }
+    // }
+    return await Geolocator.getCurrentPosition();
   }
 
   void listenToCancelRoute(BuildContext context) {
@@ -210,20 +281,21 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
   Future<void> cancelMyBooking(
       {required String id, required BuildContext context, required String from}) async {
-    showLoadingDialog(context);
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     final response = await cancelMyBookingUseCase(id);
     response.fold((l) {
-      context.pop();
-      String errorName = getFailureName(l, context);
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
       // errorName == 'DebtError'
-      //     ? showDebtDialog(context, subCategoryId)
+      //     ? showDebtDialog(currentContext, subCategoryId)
       //     : errorName == 'SubscribeError'
-      //     ? showSubscribeDialog(context, subCategoryId)
-      //     : showErrorMessage(context, getFailureMessage(l, context));
-      showSuccessMessage(context,  errorName);
+      //     ? showSubscribeDialog(currentContext, subCategoryId)
+      //     : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      showSuccessMessage(currentContext,  errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
-      context.pop();
+      currentContext.pop();
       if(from=='available') {
         availableBookings.removeWhere((e)=> e.id==id);
       }
@@ -236,14 +308,15 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       if(from=='runningBookings') {
         runningBookings.firstWhere((e)=> e.id==id).status='cancelled';
       }
-      showSuccessMessage(context, context.isArabic?'تم الغاء الحجز بنجاح':'Booking canceled successfully');
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم الغاء الحجز بنجاح':'Booking canceled successfully');
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
 
   Future<void> joinToRoute(
       {required String id, required BuildContext context}) async {
-    showLoadingDialog(context);
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     Position currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -253,19 +326,19 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       lng: currentPosition.longitude
     ));
     response.fold((l) {
-      context.pop();
-      String errorName = getFailureName(l, context);
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
       // errorName == 'DebtError'
-      //     ? showDebtDialog(context, subCategoryId)
+      //     ? showDebtDialog(currentContext, subCategoryId)
       //     : errorName == 'SubscribeError'
-      //     ? showSubscribeDialog(context, subCategoryId)
-      //     : showErrorMessage(context, getFailureMessage(l, context));
-      showSuccessMessage(context,  errorName);
+      //     ? showSubscribeDialog(currentContext, subCategoryId)
+      //     : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      showSuccessMessage(currentContext,  errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
       availableBookings.firstWhere((e)=>e.id==data.id).clients = data.clients;
       availableBookings.firstWhere((e)=>e.id==data.id).availableSeats = data.availableSeats;
-      context.pop();
+      currentContext.pop();
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
@@ -294,6 +367,41 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     }, (data) {
       emit(state.copyWith(status: CaptainShareStates.success,runningRoute:data));
     });
+  }
+
+  // setLocation(List<double>? currentLocation, List<double>? toLocation,String? currentAddress,String? toAddress){
+  //   print('objecttoLocation$toLocation');
+  //   emit(state.copyWith(status: CaptainShareStates.success,currentLocation:currentLocation,toLocation:toLocation,currentAddress:currentAddress,toAddress:toAddress));
+  // }
+
+  void updateFromLocation(
+      {required double lat, required double lng, required String address}) {
+    GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+
+    emit(state.copyWith(
+        status: CaptainShareStates.success, currentLocation: currentLocation));
+  }
+
+
+  void emitRefreshState() {
+    emit(state.copyWith(status: CaptainShareStates.success));
+  }
+
+  updateToLocation(
+      {required double lat, required double lng, required String address}) {
+    GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+    print("toLocation.lat ${toLocation.lat}");
+    print("toLocation.lat ${toLocation.lng}");
+    print("toLocation.lat ${toLocation.address}");
+    emit(state.copyWith(status: CaptainShareStates.success, toLocation: toLocation));
   }
 
   Future<void> createOffer(
