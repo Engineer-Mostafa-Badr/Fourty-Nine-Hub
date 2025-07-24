@@ -1,24 +1,26 @@
-import 'category_id.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
-class FavouriteCategoryModel {
-String? id;
-CategoryId? categoryId;
+import '../../../../../fourty_nine/data/models/main_category_model.dart';
+import '../../../domain/entities/favourite_category_entity.dart';
 
-
+class FavouriteCategoryModel extends FavouriteCategoryEntity {
   FavouriteCategoryModel({
-    this.id,
-    this.categoryId,
-
+    required super.id,
+    required super.categoryEntity,
   });
 
   factory FavouriteCategoryModel.fromJson(Map<String, dynamic> json) {
-return FavouriteCategoryModel(
-  id: json['_id'] as String?,
-  categoryId: json['mainCategoryDetails'] == null
-      ? null
-      : CategoryId.fromJson(json['mainCategoryDetails'] as Map<String, dynamic>),
-
-);
+    return FavouriteCategoryModel(
+      id: json['id'],
+      categoryEntity: MainCategoryModel(
+          id: json['mainCategoryDetails']['id'],
+          name: json['mainCategoryDetails']['nameAr'],
+          nameEn: json['mainCategoryDetails']['nameEn'],
+          image: json['mainCategoryDetails']['coverUrl'],
+          banner: json['mainCategoryDetails']['bannerUrl'],
+          cover: json['mainCategoryDetails']['coverUrl'],
+          isFavorite: true,
+          total: 0,),
+    );
   }
-
 }

@@ -99,7 +99,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-   
   }
 
   void _setupScrollController() {
@@ -143,6 +142,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           MainCategoriesCubit controller, MainCategoriesState state) =>
       [
         MainCategoriesListView(controller: controller, state: state),
+        // SliverToBoxAdapter(child: Label(text: state.customPage![0].name!)),
+        // ...List.generate(state.customPage?.length??0, (index)=>Label(text: state.customPage![index].name!)),
         SliverToBoxAdapter(
             child: MainCategoriesGrideViewSection(
                 controller: controller, state: state)),
@@ -150,6 +151,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           child: BlocProvider(
             create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
             child: Builder(builder: (context) {
+              print(
+                  '==> mainCategories ${context.read<MainCategoriesTapsCubit>().mainCategories}');
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(
@@ -194,273 +197,270 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
   @override
   Widget build(BuildContext context) {
     print("objectUser${UserCubit.to.state.data?.id}");
-    return 
-    // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
-    //   listener: (context, state) {
-    //     if (state is NotificationSocketIoNewNotification) {
-    //       // pr('new notfication is recieved by the bloc listner');
-    //       // pr(state.notificationEntity);
-    //       notificationSnackBar(
-    //           context: context,
-    //           notificationEntity: state.notificationEntity,
-    //           isAppNotification: state.notificationEntity.filterType == 'app');
-    //     } else if (state is NotificationSocketIoFailed) {
-    //       // pr('Failed to recieve the new notfication ');
-    //       // pr(state.message);
-    //     }
-    //   },
-    //   child: 
-      Scaffold(
-        key: _scaffoldKey,
-        bottomNavigationBar: widget.noNavBar
-            ? null
-            : BottomNavigator(
-                scrollController: scrollController,
-                isScrollingDown: _isScrollingDown,
-                mainCategory: 1,
-                index: 2,
+    return
+        // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
+        //   listener: (context, state) {
+        //     if (state is NotificationSocketIoNewNotification) {
+        //       // pr('new notfication is recieved by the bloc listner');
+        //       // pr(state.notificationEntity);
+        //       notificationSnackBar(
+        //           context: context,
+        //           notificationEntity: state.notificationEntity,
+        //           isAppNotification: state.notificationEntity.filterType == 'app');
+        //     } else if (state is NotificationSocketIoFailed) {
+        //       // pr('Failed to recieve the new notfication ');
+        //       // pr(state.message);
+        //     }
+        //   },
+        //   child:
+        Scaffold(
+      key: _scaffoldKey,
+      bottomNavigationBar: widget.noNavBar
+          ? null
+          : BottomNavigator(
+              scrollController: scrollController,
+              isScrollingDown: _isScrollingDown,
+              mainCategory: 1,
+              index: 2,
+            ),
+      floatingActionButton: _isScrollingDown || widget.noNavBar
+          ? null
+          : const FloatingButton(
+              changeView: 1,
+              icon: Icons.person,
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      drawer: const DrawerWidget(),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            controller: scrollController,
+            // padding: EdgeInsets.symmetric(horizontal: 20.w),
+            slivers: [
+              // const SliverToBoxAdapter(child: AddBanner()),
+              //wallet
+              SliverToBoxAdapter(
+                child: context.read<UserCubit>().isLoggedIn
+                    ? const WalletWidget()
+                    : const SizedBox.shrink(),
               ),
-        floatingActionButton: _isScrollingDown || widget.noNavBar
-            ? null
-            : const FloatingButton(
-                changeView: 1,
-                icon: Icons.person,
+              // SliverToBoxAdapter(child: _buildStarWidget()),
+              const SliverToBoxAdapter(child: Sizer()),
+              SliverToBoxAdapter(
+                child: ScrollableTextWithAnimation(
+                  textDirection:
+                      context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                ),
               ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        drawer: const DrawerWidget(),
-        body: Stack(
-          children: [
-            CustomScrollView(
-              controller: scrollController,
-              // padding: EdgeInsets.symmetric(horizontal: 20.w),
-              slivers: [
-                // const SliverToBoxAdapter(child: AddBanner()),
-                //wallet
-                SliverToBoxAdapter(
-                  child: context.read<UserCubit>().isLoggedIn
-                      ? const WalletWidget()
-                      : const SizedBox.shrink(),
+              const SliverToBoxAdapter(child: Sizer()),
+              // SliverToBoxAdapter(
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 10),
+              //     child: Row(children: [
+              //       const Sizer(width: 8),
+              //       Expanded(
+              //         child: _buildStarWidget(
+              //           onTap: () {
+              //             AdInterstitialTop.loadIntersitialAd();
+              //             AdInterstitialTop.showInterstitialAd();
+              //             context.push(Routes.RIDE_HOME);
+              //           },
+              //           shadowColor: Color(0xff8000FF),
+              //           image: Assets.car2Image,
+              //           title: LocaleKeys.ride.localize,
+              //         ),
+              //       ),
+              //       const Sizer(width: 32),
+              //       Expanded(
+              //         child: _buildStarWidget(
+              //           onTap: () {
+              //             AdInterstitialTop.loadIntersitialAd();
+              //             AdInterstitialTop.showInterstitialAd();
+              //             context.push(Routes.VISITA);
+              //           },
+              //           shadowColor: Color(0xff4997D0),
+              //           image: Assets.doctorImage,
+              //           title: LocaleKeys.health.localize,
+              //         ),
+              //       ),
+              //       const Sizer(width: 32),
+              //       Expanded(
+              //         child: _buildStarWidget(
+              //           onTap: () {
+              //             AdInterstitialTop.loadIntersitialAd();
+              //             AdInterstitialTop.showInterstitialAd();
+              //             HandleCashback.setCount('beAStarCount', context);
+              //             context.push(Routes.FOOD);
+              //           },
+              //           shadowColor: Color(0xffFF7F00),
+              //           image: Assets.mealImage,
+              //           title: LocaleKeys.meal.localize,
+              //         ),
+              //       ),
+              //       const Sizer(width: 8),
+              //     ]),
+              //   ),
+              // ),
+              // const SliverToBoxAdapter(child: Sizer()),
+              // const SliverToBoxAdapter(child: Sizer()),
+              // SliverToBoxAdapter(
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 10),
+              //     child: Row(
+              //       children: [
+              //         const Sizer(width: 8),
+              //         Expanded(child: _pickMeAndComeWithUWidget()),
+              //         const Sizer(width: 32),
+              //         Expanded(
+              //           child: _buildStarWidget(
+              //             onTap: () {
+              //               AdInterstitialTop.loadIntersitialAd();
+              //               AdInterstitialTop.showInterstitialAd();
+              //               HandleCashback.setCount('beAStarCount', context);
+              //               context.push(Routes.BE_STAR);
+              //             },
+              //             shadowColor:
+              //                 AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+              //             image: Assets.tube1,
+              //             title: LocaleKeys.tube.localize,
+              //           ),
+              //         ),
+              //         const Sizer(width: 32),
+              //         Expanded(
+              //           child: _buildStarWidget(
+              //             onTap: () {
+              //               AdInterstitialTop.loadIntersitialAd();
+              //               AdInterstitialTop.showInterstitialAd();
+              //               context.push(Routes.MARRIAGESUBCATEGORIES);
+              //             },
+              //             shadowColor: const Color(0xffFFC0CB),
+              //             image: Assets.marriage,
+              //             title: LocaleKeys.marriage.localize,
+              //           ),
+              //         ),
+              //         const Sizer(width: 8),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: const GridBlocksWidget(),
                 ),
-                // SliverToBoxAdapter(child: _buildStarWidget()),
-                const SliverToBoxAdapter(child: Sizer()),
-                SliverToBoxAdapter(
-                  child: ScrollableTextWithAnimation(
-                    textDirection: context.isArabic
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                  ),
+              ),
+              const SliverToBoxAdapter(child: Sizer()),
+              SliverToBoxAdapter(
+                child: CustomAnimatedText(
+                  text: LocaleKeys.youCanDeActivatePage.localize,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const CustomDeActivateDialog();
+                      },
+                    );
+                  },
                 ),
-                const SliverToBoxAdapter(child: Sizer()),
-                // SliverToBoxAdapter(
-                //   child: Padding(
-                //     padding: const EdgeInsets.symmetric(horizontal: 10),
-                //     child: Row(children: [
-                //       const Sizer(width: 8),
-                //       Expanded(
-                //         child: _buildStarWidget(
-                //           onTap: () {
-                //             AdInterstitialTop.loadIntersitialAd();
-                //             AdInterstitialTop.showInterstitialAd();
-                //             context.push(Routes.RIDE_HOME);
-                //           },
-                //           shadowColor: Color(0xff8000FF),
-                //           image: Assets.car2Image,
-                //           title: LocaleKeys.ride.localize,
-                //         ),
-                //       ),
-                //       const Sizer(width: 32),
-                //       Expanded(
-                //         child: _buildStarWidget(
-                //           onTap: () {
-                //             AdInterstitialTop.loadIntersitialAd();
-                //             AdInterstitialTop.showInterstitialAd();
-                //             context.push(Routes.VISITA);
-                //           },
-                //           shadowColor: Color(0xff4997D0),
-                //           image: Assets.doctorImage,
-                //           title: LocaleKeys.health.localize,
-                //         ),
-                //       ),
-                //       const Sizer(width: 32),
-                //       Expanded(
-                //         child: _buildStarWidget(
-                //           onTap: () {
-                //             AdInterstitialTop.loadIntersitialAd();
-                //             AdInterstitialTop.showInterstitialAd();
-                //             HandleCashback.setCount('beAStarCount', context);
-                //             context.push(Routes.FOOD);
-                //           },
-                //           shadowColor: Color(0xffFF7F00),
-                //           image: Assets.mealImage,
-                //           title: LocaleKeys.meal.localize,
-                //         ),
-                //       ),
-                //       const Sizer(width: 8),
-                //     ]),
-                //   ),
-                // ),
-                // const SliverToBoxAdapter(child: Sizer()),
-                // const SliverToBoxAdapter(child: Sizer()),
-                // SliverToBoxAdapter(
-                //   child: Padding(
-                //     padding: const EdgeInsets.symmetric(horizontal: 10),
-                //     child: Row(
-                //       children: [
-                //         const Sizer(width: 8),
-                //         Expanded(child: _pickMeAndComeWithUWidget()),
-                //         const Sizer(width: 32),
-                //         Expanded(
-                //           child: _buildStarWidget(
-                //             onTap: () {
-                //               AdInterstitialTop.loadIntersitialAd();
-                //               AdInterstitialTop.showInterstitialAd();
-                //               HandleCashback.setCount('beAStarCount', context);
-                //               context.push(Routes.BE_STAR);
-                //             },
-                //             shadowColor:
-                //                 AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                //             image: Assets.tube1,
-                //             title: LocaleKeys.tube.localize,
-                //           ),
-                //         ),
-                //         const Sizer(width: 32),
-                //         Expanded(
-                //           child: _buildStarWidget(
-                //             onTap: () {
-                //               AdInterstitialTop.loadIntersitialAd();
-                //               AdInterstitialTop.showInterstitialAd();
-                //               context.push(Routes.MARRIAGESUBCATEGORIES);
-                //             },
-                //             shadowColor: const Color(0xffFFC0CB),
-                //             image: Assets.marriage,
-                //             title: LocaleKeys.marriage.localize,
-                //           ),
-                //         ),
-                //         const Sizer(width: 8),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: const GridBlocksWidget(),
-                  ),
-                ),
-                const SliverToBoxAdapter(child: Sizer()),
-                SliverToBoxAdapter(
-                  child: CustomAnimatedText(
-                    text: LocaleKeys.youCanDeActivatePage.localize,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const CustomDeActivateDialog();
-                        },
-                      );
-                    },
-                  ),
-                ),
-                // SliverToBoxAdapter(child: _buildTenPercentWidget()),
-                const SliverToBoxAdapter(child: Sizer()),
-                // _buildMainCategoriesViews(),
-                // const Sizer(),
-                //main cats
-                BlocProvider(
-                  create: (BuildContext context) =>
-                      serviceLocator<MainCategoriesCubit>()
-                        ..getMainCategoryCustomPage(),
-                  child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                    builder: (context, state) {
-                      final controller = context.read<MainCategoriesCubit>();
-                      if (state.status == StateStatus.loading) {
-                        if (CacheManager.getInt(
-                                    CacheManager.selectedCategoryView) ==
-                                1 ||
-                            CacheManager.getInt(
-                                    CacheManager.selectedCategoryView) ==
-                                3) {
-                          return SliverPadding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            sliver: SliverGrid(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return Shimmer.fromColors(
-                                    baseColor: Colors.grey[100]!,
-                                    highlightColor: Colors.white24,
-                                    child: Container(
-                                      height: 200,
-                                      width: double.infinity,
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 10.w),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10.w),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                childCount: 10,
-                              ),
+              ),
+              // SliverToBoxAdapter(child: _buildTenPercentWidget()),
+              const SliverToBoxAdapter(child: Sizer()),
+              // _buildMainCategoriesViews(),
+              // const Sizer(),
+              //main cats
+              BlocProvider(
+                create: (BuildContext context) =>
+                    serviceLocator<MainCategoriesCubit>()
+                      ..getMainCategoryCustomPage(),
+                child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                  builder: (context, state) {
+                    final controller = context.read<MainCategoriesCubit>();
+                    if (state.status == StateStatus.loading) {
+                      if (CacheManager.getInt(
+                                  CacheManager.selectedCategoryView) ==
+                              1 ||
+                          CacheManager.getInt(
+                                  CacheManager.selectedCategoryView) ==
+                              3) {
+                        return SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          sliver: SliverGrid(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
                             ),
-                          );
-                        }
-                        if (CacheManager.getInt(
-                                CacheManager.selectedCategoryView) ==
-                            2) {
-                          return SliverToBoxAdapter(
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.grey[100]!,
-                              highlightColor: Colors.white24,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Container(
-                                  height: 400,
-                                  width: double.infinity,
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.AUTH_CONTAINER_COLOR,
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    border: Border.all(color: Colors.grey),
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey[100]!,
+                                  highlightColor: Colors.white24,
+                                  child: Container(
+                                    height: 200,
+                                    width: double.infinity,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(20.r),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
                                   ),
+                                );
+                              },
+                              childCount: 10,
+                            ),
+                          ),
+                        );
+                      }
+                      if (CacheManager.getInt(
+                              CacheManager.selectedCategoryView) ==
+                          2) {
+                        return SliverToBoxAdapter(
+                          child: Shimmer.fromColors(
+                            baseColor: Colors.grey[100]!,
+                            highlightColor: Colors.white24,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Container(
+                                height: 400,
+                                width: double.infinity,
+                                margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  border: Border.all(color: Colors.grey),
                                 ),
                               ),
                             ),
-                          );
-                        } else {
-                          return const MainCategoriesShimmerLoading();
-                        }
-                      }
-                      if (state.customPage != null) {
-                        return getMainCategoryWidgets(controller, state)[
-                            CacheManager.getInt(
-                                    CacheManager.selectedCategoryView) ??
-                                0];
+                          ),
+                        );
                       } else {
-                        return const SliverToBoxAdapter(
-                            child: SizedBox.shrink());
+                        return const MainCategoriesShimmerLoading();
                       }
-                    },
-                  ),
+                    }
+                    print('==> state.customPage ${state.customPage}');
+                    print('==> selectedCategoryView ${CacheManager.getInt(
+                        CacheManager.selectedCategoryView)}');
+                    if (state.customPage != null) {
+                      return getMainCategoryWidgets(controller, state)[
+                          CacheManager.getInt(
+                                  CacheManager.selectedCategoryView) ??
+                              0];
+                    } else {
+                      return const SliverToBoxAdapter(child: SizedBox.shrink());
+                    }
+                  },
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
+      ),
       // ),
     );
   }
