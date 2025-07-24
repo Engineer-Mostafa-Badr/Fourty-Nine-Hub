@@ -318,7 +318,7 @@ class GridBlocksWidget extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Container(color: Colors.black38),
+            Container(color: Colors.black12),
             Label(
               text: title,
               style: Styles.mediumText(
