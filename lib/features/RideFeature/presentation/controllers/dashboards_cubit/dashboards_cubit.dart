@@ -2133,9 +2133,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   Future<bool> rateTheClient(
       {required BuildContext context,
       required String tripId,
-      required String comment,
+      required String comment, RideModeParams? params,
       required double rate}) async {
-    showLoadingDialog(context);
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
     bool value = true;
 
@@ -2145,14 +2146,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     result.fold(
       (failure) {
         value=false;
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
+        currentContext.pop();
+        log("Failure ${getFailureMessage(failure, currentContext)}");
+        showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (activeTrip) {
         log("Suzccess");
-        context.pop();
+        currentContext.pop();
+        if(params!=null)changeIndex(0, context, params);
         value=true;
         emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
       },

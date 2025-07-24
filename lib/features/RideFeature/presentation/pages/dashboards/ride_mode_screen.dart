@@ -537,7 +537,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 onPressed: (message, rate) {
                                   ManageVibration.vibrate();
                                   print("message $message ||| rate $rate");
-                                  cubit.rateTheClient(context: context, tripId: cubit.activeTrip?.tripId ?? '', comment: message, rate: rate);
+                                  cubit.rateTheClient(context: context, tripId: cubit.activeTrip?.tripId ?? '', comment: message, rate: rate, params: widget.params);
                                 },
                               ),
                             if (state.tripStatus == TripState.support.name)

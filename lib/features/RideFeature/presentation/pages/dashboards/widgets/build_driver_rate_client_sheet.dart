@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class BuildDriverRateClientSheet extends StatefulWidget {
@@ -91,6 +92,7 @@ class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet>
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
+                        ManageVibration.vibrate();
                         setState(() {
                           _rating = rating;
                         });
@@ -125,6 +127,8 @@ class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet>
                         onPressed: () {
                           if(formKey.currentState!.validate()){
                             widget.onPressed(otherController.text, _rating);
+                          }else{
+                            ManageVibration.vibrate();
                           }
                           // context.push(Routes.connectionCallScreen);
                         },

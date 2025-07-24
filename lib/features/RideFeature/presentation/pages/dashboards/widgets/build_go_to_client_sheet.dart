@@ -28,11 +28,13 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../authentication/data/models/user_model.dart';
 
@@ -99,6 +101,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                     onSafety: widget.onSafety,
                     is_show_message: true,
                     onMessage: () async {
+                      ManageVibration.vibrate();
                       BottomSheetHelper.startChatAndNavigate(
                           context: context,
                         otherUserId: widget.activeTrip?.clientId??'',
@@ -106,6 +109,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                       );
                     },
                     onContactDriver: () {
+                      ManageVibration.vibrate();
                       BottomSheetHelper.showCallOptionsBottomSheet(
                           context: context,
                           senderId: widget.activeTrip?.driverId ?? '',
@@ -143,17 +147,28 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 45,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
-                    child: Text(
-                      context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
-                      style: const TextStyle(
-                        fontSize: FontSize.s16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.whiteColor,
+                  ClickableWidget(
+                    onTap: ()
+                    {
+                      ManageVibration.vibrate();
+                      openGoogleMapsWithDirections(
+                        startLat: widget.activeTrip?.startCoordinates?[1] ?? 0.0,
+                        startLng: widget.activeTrip?.startCoordinates?[0] ?? 0.0,
+                        targetLat: widget.activeTrip?.targetCoordinates?[1] ?? 0.0,
+                        targetLng: widget.activeTrip?.targetCoordinates?[0] ?? 0.0,
+                      );},
+                    child: Container(
+                      width: double.infinity,
+                      height: 45,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                      child: Text(
+                        context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
+                        style: const TextStyle(
+                          fontSize: FontSize.s16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.whiteColor,
+                        ),
                       ),
                     ),
                   ),
@@ -197,10 +212,12 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                   const SizedBox(height: 12),
                   ClickableWidget(
                     onTap: () {
+                      ManageVibration.vibrate();
                       showCancelTripDialog(
                           context: context,
                           isChangedMindReason: _isChangedMindReason,
                           onSelectChangedMindReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = false;
                               _isChangedMindReason = !_isChangedMindReason;
@@ -209,6 +226,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                           },
                           isClientNotShownReason: _isClientNotShownReason,
                           onSelectClientNotShownReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = !_isClientNotShownReason;
                               _isChangedMindReason = false;
@@ -217,6 +235,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                           },
                           isOtherReason: _isOtherReason,
                           onSelectOtherReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = false;
                               _isChangedMindReason = false;
@@ -289,6 +308,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isClientNotShown: true);
                   },
                   child: Container(
@@ -314,6 +334,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isChangedMind: true);
                   },
                   child: Container(
@@ -339,6 +360,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isOther: true);
                   },
                   child: Container(
@@ -393,6 +415,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                         label: context.isArabic ? 'الغاء' : 'Close',
                         backColor: AppColors.SECONDARY_COLOR_DARK2,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           // cubit
                         }),
@@ -402,6 +425,7 @@ class _BuildGoToClientSheetState extends State<BuildGoToClientSheet> {
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () async {
+                          ManageVibration.vibrate();
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             onCancelTrip(CancelTripByRiderUseCaseParams(

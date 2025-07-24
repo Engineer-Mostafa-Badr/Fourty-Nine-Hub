@@ -20,10 +20,12 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/di
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BuildDriverArrivedSheet extends StatefulWidget {
   const BuildDriverArrivedSheet({super.key, required this.onPressed,required this.onCancelTrip,required this.params,required this.onReport, required this.onSafety,this.activeTrip});
@@ -88,6 +90,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                     onSafety: widget.onSafety,
                     is_show_message: true,
                     onMessage: () async {
+                      ManageVibration.vibrate();
                       BottomSheetHelper.startChatAndNavigate(
                         context: context,
                         otherUserId: widget.activeTrip?.clientId??'',
@@ -95,6 +98,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                       );
                     },
                     onContactDriver: () {
+                      ManageVibration.vibrate();
                       BottomSheetHelper.showCallOptionsBottomSheet(
                           context: context,
                           senderId: widget.activeTrip?.driverId ?? '',
@@ -185,10 +189,12 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                   const SizedBox(height: 12),
                   ClickableWidget(
                     onTap: (){
+                      ManageVibration.vibrate();
                       showCancelTripDialog(
                           context: context,
                           isChangedMindReason: _isChangedMindReason,
                           onSelectChangedMindReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = false;
                               _isChangedMindReason = !_isChangedMindReason;
@@ -197,6 +203,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                           },
                           isClientNotShownReason: _isClientNotShownReason,
                           onSelectClientNotShownReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = !_isClientNotShownReason;
                               _isChangedMindReason = false;
@@ -205,6 +212,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                           },
                           isOtherReason: _isOtherReason,
                           onSelectOtherReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = false;
                               _isChangedMindReason = false;
@@ -279,6 +287,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isClientNotShown: true);
                   },
                   child: Container(
@@ -304,6 +313,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isChangedMind: true);
                   },
                   child: Container(
@@ -329,6 +339,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isOther: true);
                   },
                   child: Container(
@@ -380,6 +391,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                         label: context.isArabic ? 'الغاء' : 'Close',
                         backColor: AppColors.SECONDARY_COLOR_DARK2,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           // cubit
                         }),
@@ -389,6 +401,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () async {
+                          ManageVibration.vibrate();
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             onCancelTrip(CancelTripByRiderUseCaseParams(
