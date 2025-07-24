@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -13,6 +14,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../../../account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -81,7 +83,8 @@ class _FavouriteScreensViewState extends State<FavouriteScreensView> {
                         index = value;
                         setState(() {});
                       },
-                      indicatorColor: Colors.transparent,
+                      indicatorColor: AppColors.SECONDARY_COLOR,
+                      dividerColor: Colors.transparent,
                       tabs: [
                         CustomNotificationWidget(
                           icon: SvgPicture.asset(
