@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../routes/routes.dart';
@@ -126,12 +127,13 @@ class _RestaurantFavAdsScreenState
             );
 
           } else {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
-              child: const Center(
-                child: CustomCircularProgressIndicator(),
-              ),
-            );
+            return  const CustomLoadingSearchWidget();
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+            //   child: const Center(
+            //     child: CustomCircularProgressIndicator(),
+            //   ),
+            // );
           }
         });
   }

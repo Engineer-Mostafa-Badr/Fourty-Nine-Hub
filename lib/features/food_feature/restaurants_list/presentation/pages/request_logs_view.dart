@@ -18,6 +18,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -68,16 +69,17 @@ class _RestaurantRequestLogsScreenState
         builder: (context, state) {
           final controller = context.read<RestaurantsCubit>();
           if (state.isLoading) {
-            return SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height *
-                  .65, // Make sure it takes up full height
-              child: const Center(
-                child: CustomCircularProgressIndicator(),
-              ),
-            );
+            return  const CustomLoadingSearchWidget();
+            // SizedBox(
+            //   height: MediaQuery
+            //       .of(context)
+            //       .size
+            //       .height *
+            //       .65, // Make sure it takes up full height
+            //   child: const Center(
+            //     child: CustomCircularProgressIndicator(),
+            //   ),
+            // );
           }
           if (controller.reqLogs.isEmpty) {
             return Center(
@@ -135,16 +137,17 @@ class _RestaurantRequestLogsScreenState
               },
             );*/
           } else {
-            return SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height *
-                  .7, // Make sure it takes up full height
-              child: const Center(
-                child: CustomCircularProgressIndicator(),
-              ),
-            );
+            return  const CustomLoadingSearchWidget();
+            // SizedBox(
+            //   height: MediaQuery
+            //       .of(context)
+            //       .size
+            //       .height *
+            //       .7, // Make sure it takes up full height
+            //   child: const Center(
+            //     child: CustomCircularProgressIndicator(),
+            //   ),
+            // );
           }
         });
   }

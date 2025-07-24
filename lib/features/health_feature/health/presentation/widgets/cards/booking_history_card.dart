@@ -66,7 +66,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
             cubit.historyBookings.isEmpty) {
           return SizedBox(
               height: MediaQuery.of(context).size.height * .6,
-              child: Center(child: CustomLoading()));
+              child: Center(child: CustomLoadingSearchWidget()));
         }
         if (cubit.historyBookings.isEmpty) {
           return SizedBox(
@@ -83,7 +83,8 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
             ),
           );
         }
-        if (state.status == HealthStates.loading && cubit.historyBookings.isEmpty) {
+        if (state.status == HealthStates.loading &&
+            cubit.historyBookings.isEmpty) {
           // return SizedBox(
           //     height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
           return const CustomLoadingSearchWidget();

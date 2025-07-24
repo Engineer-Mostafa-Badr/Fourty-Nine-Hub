@@ -17,6 +17,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -111,11 +112,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
           builder: (context, state) {
             return state.isLoading
-                ? Center(
-                    child: CustomCircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
+                ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
                         child: Label(

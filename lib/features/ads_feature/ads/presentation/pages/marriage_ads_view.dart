@@ -29,6 +29,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class MarriageSubCategoriesView extends StatefulWidget {
@@ -162,7 +163,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                     )),
         ),
         body: state.isLoading
-            ? CustomLoading()
+            ? CustomLoadingSearchWidget()
             : MarriageAdsViewBody(
                 controller: controller,
                 state: state,

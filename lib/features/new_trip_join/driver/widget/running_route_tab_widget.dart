@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/one_way
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_trip_client_widget.dart';
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -35,12 +36,13 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(builder: (context, state) {
+    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
+        builder: (context, state) {
       var cubit = context.read<CaptainShareDashboardCubit>();
-      if(cubit.isLoadingRunningTrip){
-        return const Center(child: CircularProgressIndicator());
+      if (cubit.isLoadingRunningTrip) {
+        return const Center(child: CustomLoadingSearchWidget());
       }
-      if(cubit.runningRoute==null){
+      if (cubit.runningRoute == null) {
         return _emptyMessage();
       }
       return ListView(
@@ -48,16 +50,24 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
         children: [
           OneWayWidget(
             requestType: LocaleKeys.regular.localize,
-            hasAcceptButton:false,
-            statusDriver: cubit.runningRoute?.status??'',
+            hasAcceptButton: false,
+            statusDriver: cubit.runningRoute?.status ?? '',
             model: cubit.runningRoute,
             cancelButton: false,
           ),
-          if(cubit.runningRoute!=null&&(cubit.runningRoute?.clients?.isNotEmpty??false))RunningTripClientWidget(client: cubit.runningRoute!.clients![0],index: 0,
-          onPickClient: (otp){
-            cubit.goToClient(routeId: cubit.runningRoute?.id??'', passengerId: cubit.runningRoute?.clients?[0].id??'', otp: otp, context: context);
-          },
-          ),
+          if (cubit.runningRoute != null &&
+              (cubit.runningRoute?.clients?.isNotEmpty ?? false))
+            RunningTripClientWidget(
+              client: cubit.runningRoute!.clients![0],
+              index: 0,
+              onPickClient: (otp) {
+                cubit.goToClient(
+                    routeId: cubit.runningRoute?.id ?? '',
+                    passengerId: cubit.runningRoute?.clients?[0].id ?? '',
+                    otp: otp,
+                    context: context);
+              },
+            ),
           // ...List.generate(cubit.runningRoute?.clients?.length??0, (i){
           //   print("cubit.runningRoute?.clients?.length ${cubit.runningRoute?.clients?.length}");
           //   BookingClientEntity client = (cubit.runningRoute?.clients??[])[i];
@@ -65,7 +75,6 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
           // }),
         ],
       );
-
     });
   }
 
@@ -83,6 +92,4 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
       ),
     );
   }
-
 }
-

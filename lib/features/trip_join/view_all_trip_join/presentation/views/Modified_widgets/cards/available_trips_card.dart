@@ -21,6 +21,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import '../../../../domain/entities/available_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
@@ -108,7 +109,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
         BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
         if(context.read<ViewAllTripJoinCubit>().isLoadingTripJoin==true){
-          return const Center(child: CircularProgressIndicator(),);
+          return const Center(child: CustomLoadingSearchWidget(),);
         }
         if(context.read<ViewAllTripJoinCubit>().tripJoinData.isEmpty){
           return  Center(child: Text(LocaleKeys.noData.localize));
