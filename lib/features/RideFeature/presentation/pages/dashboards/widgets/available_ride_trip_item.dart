@@ -276,7 +276,7 @@ class AvailableRideTripItem extends StatelessWidget {
                       if(tripEntity.isPremium||tripEntity.isButtonEnabled){
                         if (tripEntity.isAutoAccept == false) {
                           showModalBottomSheet(
-                            backgroundColor: AppColors.whiteColor,
+                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                             context: context,
                             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
                             isScrollControlled: true,

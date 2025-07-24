@@ -1500,6 +1500,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (index == 0) {
       if (params.isSocket == true) {
         loadAvailableRideTrips(context);
+        getSettings(context);
       } else if (params.modeType == "ride" && settings?.isReady == true) {
         loadInitialAvailableNonSocketTrips();
       }else if(params.modeType == "truck"){

@@ -14,4 +14,7 @@ class Constants {
   static String loaderRegister = 'loaderRegister';
   static const String refuseTrips = 'refuse_models';
 
+
+  static const String vibrationKey = 'vibration_key';
+
 }

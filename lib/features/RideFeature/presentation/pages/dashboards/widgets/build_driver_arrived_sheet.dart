@@ -211,10 +211,10 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                       ),
                       child: Text(
                         LocaleKeys.cancelTheRide.localize,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: FontSize.s16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.PRIMARY_COLOR_DARK,
+                          color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR_DARK,
                         ),
                       ),
                     ),

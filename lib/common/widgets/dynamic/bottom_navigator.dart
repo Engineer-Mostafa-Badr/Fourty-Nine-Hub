@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -90,6 +91,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
     return CustomBottomNavigationBar(
       currentIndex: index,
       onTap: (index) {
+        ManageVibration.vibrate();
+
         if (index == 4) {
           Scaffold.of(context).openDrawer();
         } else if (index == 0) {

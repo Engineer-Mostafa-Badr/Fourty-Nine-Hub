@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -203,10 +204,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
               )
                   : const SizedBox.shrink(),
-              ScrollableTextWithAnimation(
+              context.read<UserCubit>().isLoggedIn
+                  ?ScrollableTextWithAnimation(
                 textDirection:
                     context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-              ),
+              ) : const SizedBox.shrink(),
 
               //wallet
 
@@ -215,6 +217,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   : const SizedBox.shrink(),
               ClickableWidget(
                 onTap: () {
+                  ManageVibration.vibrate();
                   if (!context.read<UserCubit>().isLoggedIn) {
                     return pleaseLoginDialog(context);
                   }
@@ -391,6 +394,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                           state.data?.length??0,
                               (index) => InkWell(
                             onTap: () {
+                              ManageVibration.vibrate();
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount(
@@ -408,6 +412,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               category: state.data![index],
                                 imageHeight:MediaQuery.sizeOf(context).height * 0.10,
                               onFavorite: () async {
+                                ManageVibration.vibrate();
                                 var result = await controller
                                     .toggleFavoriteMedicalService(
                                     state.data![index].id);
