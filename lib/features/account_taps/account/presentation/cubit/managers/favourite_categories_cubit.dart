@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
+import '../../../data/models/favouite_category_model/favouite_category_model.dart';
 import '../../../domain/usecases/get_favourite_categories_usecase.dart';
 
 part 'favourite_categories_state.dart';

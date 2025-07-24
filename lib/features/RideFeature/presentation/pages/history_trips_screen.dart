@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/ra
 import 'package:latlong2/latlong.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../res/assets/assets.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
@@ -98,7 +99,7 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
 
-                  return const Center(child: CustomCircularProgressIndicator());
+                  return const Center(child: CustomLoadingSearchWidget());
                 } else if (state.status == RideStates.error) {
 
                   return const SizedBox();
@@ -112,7 +113,7 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
                     itemCount: (state.historyTrips?.length ?? 0) + (isFetching ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == state.historyTrips?.length) {
-                        return const Center(child: CustomCircularProgressIndicator());
+                        return const Center(child: CustomLoadingSearchWidget());
                       }
                       final trip = state.historyTrips?[index];
                       if (trip == null) return const SizedBox.shrink();

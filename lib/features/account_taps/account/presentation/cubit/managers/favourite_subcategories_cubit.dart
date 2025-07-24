@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_c
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
+import '../../../domain/entities/favourite_subcategory_entity.dart';
+
 part 'favourite_sub_categories_state.dart';
 
 class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {

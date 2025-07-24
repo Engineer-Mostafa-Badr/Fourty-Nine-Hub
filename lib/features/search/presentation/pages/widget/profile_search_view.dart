@@ -11,11 +11,13 @@ import 'package:fourtyninehub/features/search/presentation/controller/cubit/sear
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -84,7 +86,11 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
 
           // Loading during search
           if (state.status == SearchStates.loading) {
-            return const Center(child: CustomCircularProgressIndicator());
+            return Center(
+              // child: CustomCircularProgressIndicator(
+              // ),
+              child: CustomLoadingSearchWidget(),
+            );
           }
           return OlxPaginationWidget(
             itemsPerPage: 10,

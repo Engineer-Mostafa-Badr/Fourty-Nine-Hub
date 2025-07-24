@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/search/presentation/pages/widget/build_it
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -79,7 +80,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         if (state.status == SearchStates.loading) {
           print('==> 2');
 
-          return const Center(child: CupertinoActivityIndicator());
+          return const Center(child: CustomLoadingSearchWidget());
         }
 
         // if (ads.isEmpty) {
@@ -115,7 +116,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
                     print('==> 6');
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Center(child: CupertinoActivityIndicator()),
+                      child: Center(child: CustomLoadingSearchWidget()),
                     );
                   }
                   print('==> 7');

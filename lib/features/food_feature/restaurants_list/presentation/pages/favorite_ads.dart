@@ -17,6 +17,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/restaurant.dart';
@@ -78,8 +81,27 @@ class _RestaurantFavAdsScreenState
             return context.read<RestaurantsCubit>().foodAdData.isNotEmpty ? Padding(
               padding: EdgeInsets.symmetric(vertical:  16,horizontal: 10),
               child: SizedBox(
-                // height: MediaQuery.sizeOf(context).height * .8,
-                child: ListView.separated(
+                height: MediaQuery.of(context).size.height*.7,
+                child:
+                OlxPaginationWidget(
+                itemsPerPage: 2,
+                loadPage: (page) async {},
+                banners: bannersList,
+                items: List.generate(
+                  context
+                      .read<RestaurantsCubit>()
+                      .foodAdData
+                      .length,
+                      (index) {
+                        var data =  context.read<RestaurantsCubit>().foodAdData[index];
+                        return  Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FavFoodCard(data: data,index: index,),
+                        );
+                      },
+                ),
+              ),
+                /*ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount:  context
@@ -91,7 +113,7 @@ class _RestaurantFavAdsScreenState
                     return  FavFoodCard(data: data,index: index,);
                   }, separatorBuilder: (BuildContext context, int index) =>const Sizer(),
 
-                ),
+                ),*/
               ),
             ): Center(
               child: SizedBox(
@@ -105,12 +127,13 @@ class _RestaurantFavAdsScreenState
             );
 
           } else {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
-              child: const Center(
-                child: CustomCircularProgressIndicator(),
-              ),
-            );
+            return  const CustomLoadingSearchWidget();
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+            //   child: const Center(
+            //     child: CustomCircularProgressIndicator(),
+            //   ),
+            // );
           }
         });
   }

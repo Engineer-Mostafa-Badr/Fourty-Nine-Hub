@@ -63,7 +63,10 @@ class TripOptionWidget extends StatelessWidget {
               ),
             ],
           ),
-          SvgPicture.asset(Assets.shadowTripIcon,color: context.isDarkMode?const Color(0xFF333333):null,),
+          SvgPicture.asset(
+            Assets.shadowTripIcon,
+            color: context.isDarkMode ? const Color(0xFF333333) : null,
+          ),
           Text(
             title,
             textAlign: TextAlign.center,

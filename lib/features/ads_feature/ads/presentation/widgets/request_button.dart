@@ -291,7 +291,7 @@ class RequestButton extends StatelessWidget {
   }
 }
 
-class RequestNumberBottomSheet extends StatelessWidget {
+class RequestNumberBottomSheet extends StatefulWidget {
   RequestNumberBottomSheet({
     super.key,
     // required this.controller,
@@ -310,11 +310,36 @@ class RequestNumberBottomSheet extends StatelessWidget {
   final void Function(String)? onChanged;
   final TextEditingController textController;
   final bool isLoading;
+
+  @override
+  State<RequestNumberBottomSheet> createState() =>
+      _RequestNumberBottomSheetState();
+}
+
+class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
   final RegExp _phonePattern =
       RegExp(r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'
           r'\d{10}|'
           r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'
           r'\+\d{10,}');
+
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.textController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +366,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
 
             InkWell(
               onTap: () {
+                focusNode.unfocus();
                 context.pop();
               },
               child: Container(
@@ -382,10 +408,11 @@ class RequestNumberBottomSheet extends StatelessWidget {
             Container(
               constraints: BoxConstraints(maxHeight: 180.h),
               child: Form(
-                key: formKey,
+                key: widget.formKey,
                 child: PickUpTextFormField(
-                  controller: textController,
-                  onChanged: onChanged,
+                  controller: widget.textController,
+                  focusNode: focusNode,
+                  onChanged: widget.onChanged,
                   fillColor: AppColors.getFillColor(context),
                   textColor: AppColors.getTextColor(context),
                   hintText: LocaleKeys.phoneNumber.localize,
@@ -408,10 +435,10 @@ class RequestNumberBottomSheet extends StatelessWidget {
             const SizedBox(
               height: 24,
             ),
-            isLoading
+            widget.isLoading
                 ? const CustomLoading()
                 : InkWell(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: Container(
                       // width: 100,
                       // height: 40,

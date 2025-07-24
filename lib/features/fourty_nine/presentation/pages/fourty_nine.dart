@@ -251,86 +251,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 height: 5.h,
               ),
               GridBlocksWidget(),
-              // Row(children: [
-              //   const Sizer(width: 8),
-              //   Expanded(
-              //     child: _buildStarWidget(
-              //       onTap: () {
-              //         AdInterstitialTop.loadIntersitialAd();
-              //         AdInterstitialTop.showInterstitialAd();
-              //         context.push(Routes.RIDE_HOME);
-              //       },
-              //       shadowColor: Color(0xff8000FF),
-              //       image: Assets.car2Image,
-              //       title: LocaleKeys.ride.localize,
-              //     ),
-              //   ),
-              //   const Sizer(width: 32),
-              //   Expanded(
-              //     child: _buildStarWidget(
-              //       onTap: () {
-              //         AdInterstitialTop.loadIntersitialAd();
-              //         AdInterstitialTop.showInterstitialAd();
-              //         context.push(Routes.VISITA);
-              //       },
-              //       shadowColor: Color(0xff4997D0),
-              //       image: Assets.doctorImage,
-              //       title: LocaleKeys.health.localize,
-              //     ),
-              //   ),
-              //   const Sizer(width: 32),
-              //   Expanded(
-              //     child: _buildStarWidget(
-              //       onTap: () {
-              //         AdInterstitialTop.loadIntersitialAd();
-              //         AdInterstitialTop.showInterstitialAd();
-              //         HandleCashback.setCount('beAStarCount', context);
-              //         context.push(Routes.FOOD);
-              //       },
-              //       shadowColor: Color(0xffFF7F00),
-              //       image: Assets.mealImage,
-              //       title: LocaleKeys.meal.localize,
-              //     ),
-              //   ),
-              //   const Sizer(width: 8),
-              // ]),
-              // const Sizer(),
-              // const Sizer(),
-              // Row(
-              //   children: [
-              //     const Sizer(width: 8),
-              //     Expanded(child: _pickMeAndComeWithUWidget()),
-              //     const Sizer(width: 32),
-              //     Expanded(
-              //       child: _buildStarWidget(
-              //         onTap: () {
-              //           AdInterstitialTop.loadIntersitialAd();
-              //           AdInterstitialTop.showInterstitialAd();
-              //           HandleCashback.setCount('beAStarCount', context);
-              //           context.push(Routes.BE_STAR);
-              //         },
-              //         shadowColor:
-              //             AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-              //         image: Assets.tube1,
-              //         title: LocaleKeys.tube.localize,
-              //       ),
-              //     ),
-              //     const Sizer(width: 32),
-              //     Expanded(
-              //       child: _buildStarWidget(
-              //         onTap: () {
-              //           AdInterstitialTop.loadIntersitialAd();
-              //           AdInterstitialTop.showInterstitialAd();
-              //           context.push(Routes.MARRIAGESUBCATEGORIES);
-              //         },
-              //         shadowColor: Color(0xffFFC0CB),
-              //         image: Assets.marriage,
-              //         title: LocaleKeys.marriage.localize,
-              //       ),
-              //     ),
-              //     const Sizer(width: 8),
-              //   ],
-              // ),
               Sizer(
                 height: 10.h,
               ),
@@ -408,7 +328,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                                     extra: state.data![index]);
                               }
                             },
-                            child: MainCategoryBanner(
+                            child: HomeMainCategoryBanner(
                               category: state.data![index],
                                 imageHeight:MediaQuery.sizeOf(context).height * 0.10,
                               onFavorite: () async {

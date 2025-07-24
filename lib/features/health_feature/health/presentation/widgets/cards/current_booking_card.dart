@@ -17,10 +17,15 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../domain/entities/booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
+
 class CurrentBookingsScreen extends StatefulWidget {
   const CurrentBookingsScreen({super.key, this.onClose});
+
   final VoidCallback? onClose;
 
   @override
@@ -56,48 +61,56 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
       builder: (context, state) {
         final cubit = context.read<HealthCubit>();
 
-        if (state.status == HealthStates.loading && cubit.currentBookings.isEmpty) {
+        // Show loading indicator when initially loading and no bookings exist
+        if (state.status == HealthStates.loading &&
+            cubit.currentBookings.isEmpty) {
           return SizedBox(
-              height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
+            height: MediaQuery.of(context).size.height * .6,
+            child: const Center(child: CustomLoadingSearchWidget()),
+          );
         }
 
+        // Show empty state when no bookings exist
+        if (cubit.currentBookings.isEmpty) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * .6,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomEmptyWidget(
+                  label: context.isArabic
+                      ? 'لا توجد حجوزات حالية'
+                      : 'No current bookings',
+                ),
+              ],
+            ),
+          );
+        }
+
+        // Show bookings list with pagination
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.67,
           child: Column(
             children: [
-              // if (widget.onClose != null)
-              //   Align(
-              //     alignment: Alignment.topRight,
-              //     child: IconButton(
-              //       icon: const Icon(Icons.close),
-              //       onPressed: widget.onClose,
-              //     ),
-              //   ),
-              Expanded(
-                child: cubit.currentBookings.isEmpty
-                    ? Center(
-                  child:CustomEmptyWidget(label: context.isArabic ? 'لا توجد حجوزات حالية' : 'No current bookings',
-                  )
-                )
-                    : ListView.separated(
-                  controller: _scrollController,
-                  itemCount: cubit.currentBookings.length,
-                  itemBuilder: (context, index) {
-                    final booking = cubit.currentBookings[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: CurrentBookingCard(
-                        booking: booking,
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(),
-                ),
+              OlxPaginationWidget(
+                itemsPerPage: 2,
+                loadPage: (page) =>
+                    context.read<HealthCubit>().getBookings('current'),
+                banners: bannersList,
+                items: List.generate(cubit.currentBookings.length, (index) {
+                  final booking = cubit.currentBookings[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: CurrentBookingCard(
+                      booking: booking,
+                    ),
+                  );
+                }),
               ),
               if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CustomCircularProgressIndicator(),
+                  child: CustomLoadingSearchWidget(),
                 ),
             ],
           ),
@@ -106,7 +119,6 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
     );
   }
 }
-
 
 class CurrentBookingCard extends StatefulWidget {
   const CurrentBookingCard({
@@ -141,9 +153,12 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                 children: [
                   const Sizer(),
                   _tripCardInfoWidget(
-                    title: '${doctor?.firstName ?? ''} ${doctor?.lastName ?? ''}',
+                    title:
+                        '${doctor?.firstName ?? ''} ${doctor?.lastName ?? ''}',
                     icon: doctor?.profilePicture ?? Assets.maleUser,
-                    specialty: subCategory?.nameAr ?? subCategory?.nameEn ?? 'Specialty',
+                    specialty: subCategory?.nameAr ??
+                        subCategory?.nameEn ??
+                        'Specialty',
                     date: widget.booking.day ?? 'N/A',
                     time: widget.booking.startTime ?? 'N/A',
                     rating: rating?.average?.toStringAsFixed(1) ?? '0.0',
@@ -158,7 +173,10 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                       ),
                       const Sizer(),
                       Label(
-                        text: address?.address ??(context.isArabic?'عنوان غير معروف':'Address not available'),
+                        text: address?.address ??
+                            (context.isArabic
+                                ? 'عنوان غير معروف'
+                                : 'Address not available'),
                         style: Styles.mediumText(fontWeight: FontWeight.w500),
                       )
                     ],
@@ -176,28 +194,33 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                       Expanded(
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
-                          style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.w500, fontSize: 32),
                         ),
                       ),
                       Label(
-                        text: doctor?.callsPrice?.toArabicNumbers(context) ?? '120'.toArabicNumbers(context)+ (context.isArabic?' ج.م':' EGP'),
-                            //(context.isArabic?'سعر غير متوفر':'Price not available'),
-                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
+                        text: doctor?.callsPrice?.toArabicNumbers(context) ??
+                            '120'.toArabicNumbers(context) +
+                                (context.isArabic ? ' ج.م' : ' EGP'),
+                        //(context.isArabic?'سعر غير متوفر':'Price not available'),
+                        style: Styles.mediumText(
+                            fontWeight: FontWeight.w500, fontSize: 32),
                       )
                     ],
                   ),
                   const Sizer(),
                   Row(
                     children: [
-                      Icon(
-                          Icons.watch_later_outlined,
+                      Icon(Icons.watch_later_outlined,
                           color: AppColors.getButtonPrimaryWhiteColor(context),
-                          size: 48.h
-                      ),
+                          size: 48.h),
                       const Sizer(),
                       Label(
-                        text: '${context.isArabic?'وقت الانتظار':'Waiting time'}: ${doctor?.waitingTime ?? (context.isArabic?'':'N/A')} ${context.isArabic?'دقيقة':'min'}'.toArabicNumbers(context),
-                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
+                        text:
+                            '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${doctor?.waitingTime ?? (context.isArabic ? '' : 'N/A')} ${context.isArabic ? 'دقيقة' : 'min'}'
+                                .toArabicNumbers(context),
+                        style: Styles.mediumText(
+                            fontWeight: FontWeight.w500, fontSize: 32),
                       )
                     ],
                   ),
@@ -206,7 +229,7 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                     isButton: false,
                     isSubscribed: doctor?.isPremium ?? false,
                     buttonTitle: '',
-                    onTap: (){},
+                    onTap: () {},
                   ),
                   const Sizer(),
                 ],
@@ -242,14 +265,15 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                   ),
                   child: icon.startsWith('http')
                       ? Image.network(
-                    icon,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Image.asset(Assets.maleUser),
-                  )
+                          icon,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              Image.asset(Assets.maleUser),
+                        )
                       : Image.asset(
-                    icon,
-                    fit: BoxFit.cover,
-                  ),
+                          icon,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 const Sizer(),
               ],
@@ -264,13 +288,13 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Row(
-                      children: [
-                        SvgPicture.asset(Assets.star2, width: 8, height: 8),
-                        const Sizer(width: 4),
-                        Label(text: rating.toArabicNumbers(context), style: Styles.smallText(color: Colors.black))
-                      ]
-                  ),
+                  child: Row(children: [
+                    SvgPicture.asset(Assets.star2, width: 8, height: 8),
+                    const Sizer(width: 4),
+                    Label(
+                        text: rating.toArabicNumbers(context),
+                        style: Styles.smallText(color: Colors.black))
+                  ]),
                 ),
               ),
             ),
@@ -283,7 +307,8 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
             children: [
               Label(
                 text: title,
-                style: Styles.headerText(fontWeight: FontWeight.w600, fontSize: 32),
+                style: Styles.headerText(
+                    fontWeight: FontWeight.w600, fontSize: 32),
               ),
               Label(
                 text: specialty,

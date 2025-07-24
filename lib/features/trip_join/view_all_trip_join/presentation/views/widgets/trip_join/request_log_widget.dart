@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
@@ -113,7 +114,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
         BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
         if(context.read<ViewAllTripJoinCubit>().isLoadingRequestTripJoin==true){
-          return const Center(child: CircularProgressIndicator(),);
+          return const Center(child: CustomLoadingSearchWidget(),);
         }
 
         if(context.read<ViewAllTripJoinCubit>().requestTripJoinData.isEmpty){

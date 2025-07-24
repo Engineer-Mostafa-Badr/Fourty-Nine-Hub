@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -62,7 +63,7 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
         builder: (context, state) {
       final controller = context.read<SubcategoriesCubit>();
       if (controller.isLoadingRequestsLogByMainCategory == true) {
-        return const CustomLoading();
+        return const CustomLoadingSearchWidget();
       }
       if (controller.requestsLogByMainCategory.isEmpty) {
         return Center(
@@ -88,12 +89,11 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
         items: List.generate(
           controller.requestsLogByMainCategory.length,
           (i) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: AdsRequestLogCard(
                 requestLog: controller.requestsLogByMainCategory[i]),
           ),
         ),
-
       );
       /*return ListView.builder(
         shrinkWrap: true,

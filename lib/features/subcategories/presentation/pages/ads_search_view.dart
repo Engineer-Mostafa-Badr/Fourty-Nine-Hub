@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
@@ -54,7 +55,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         builder: (context, state) {
       final controller = context.read<SubcategoriesCubit>();
       if (state.isLoadingAds) {
-        return const CustomLoading();
+        return const CustomLoadingSearchWidget();
       }
       if (controller.initalSearchAds) {
         return Column(
@@ -109,7 +110,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         items: List.generate(
           controller.searchAdsList.length,
           (i) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: MyAdCard(
               item: controller.searchAdsList[i],
               showSubCategory: true,
@@ -128,7 +129,6 @@ class _AdsSearchViewState extends State<AdsSearchView> {
             ),
           ),
         ),
-
       );
       /*return ListView.separated(
         padding: const EdgeInsets.all(16),

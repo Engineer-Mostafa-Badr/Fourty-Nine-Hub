@@ -22,7 +22,7 @@ class PercentageCompetitionWidget extends StatefulWidget {
 
   final num price;
   final String currency;
-  final int totalPoints;
+  final num totalPoints;
   final num currentPoints;
   final double percentage;
 

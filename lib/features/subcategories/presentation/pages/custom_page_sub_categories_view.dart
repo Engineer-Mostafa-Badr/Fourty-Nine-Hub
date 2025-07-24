@@ -290,10 +290,15 @@ class _CustomPageSubCategoriesViewState
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
   late Debouncer _debounce;
+  FocusNode focusNode = FocusNode();
+
   @override
   void initState() {
     _debounce = Debouncer();
     print('widget.mainCategory.id ${widget.params.mainCategory.nameEn}');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
     context
         .read<SubcategoriesCubit>()
         .init(mainCategoryId: widget.params.mainCategory.id);
@@ -309,6 +314,13 @@ class _CustomPageSubCategoriesViewState
       setState(() {});
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   List<SubCategoryEntity> subCategories = [];
@@ -552,11 +564,12 @@ class _CustomPageSubCategoriesViewState
                       onChanged: (value) {
                         _debounce.run(() {
                           context.read<SubcategoriesCubit>().searchAds(
-                            value: value,
-                            mainCategoryId: widget.params.mainCategory.id,
-                          );
+                                value: value,
+                                mainCategoryId: widget.params.mainCategory.id,
+                              );
                         });
                       },
+                      focusNode: focusNode,
                     ),
                   Expanded(
                     child: CustomNotificationBadge(
@@ -646,20 +659,23 @@ class _CustomPageSubCategoriesViewState
                 onChanged: (value) {
                   _debounce.run(() {
                     context.read<SubcategoriesCubit>().searchAds(
-                      value: value,
-                      mainCategoryId: widget.params.mainCategory.id,
-                    );
+                          value: value,
+                          mainCategoryId: widget.params.mainCategory.id,
+                        );
                   });
                 },
+                focusNode: focusNode,
               ),
             if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
-            //kslkfjslkfjslkfsldfkjlsfld
+              //kslkfjslkfjslkfsldfkjlsfld
               Expanded(
                 child: BlocProvider(
                   create: (context) => serviceLocator<AdvertisementCubit>(),
                   child: AdsSearchView(
-                    mainCategoryNameAr: widget.params.mainCategory.name ?? 'N/A',
-                    mainCategoryNameEn: widget.params.mainCategory.nameEn ?? 'N/A',
+                    mainCategoryNameAr:
+                        widget.params.mainCategory.name ?? 'N/A',
+                    mainCategoryNameEn:
+                        widget.params.mainCategory.nameEn ?? 'N/A',
                     isFloatingButtonVisible: (value) {
                       isFloatingButtonVisible = value;
                       setState(() {});
@@ -669,7 +685,7 @@ class _CustomPageSubCategoriesViewState
               ),
             if (!controller.isMyAdsOpen &&
                 !controller.isFavouriteAdsOpen &&
-                !controller.isRequestLogOpen&&
+                !controller.isRequestLogOpen &&
                 !controller.isSearchAdsOpen)
               Expanded(
                 child: PaginationView<SubCategoryEntity>(

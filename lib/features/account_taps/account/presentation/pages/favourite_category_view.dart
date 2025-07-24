@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/main_category_favorit_banner.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -38,57 +39,58 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
           // }
           return state.data!.isNotEmpty && state.data != null
               ? GridView.builder(
-                  padding: EdgeInsets.all(24.w),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: .65,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                  ),
-                  itemCount: state.data?.length ?? 0,
-                  itemBuilder: (context, i) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: InkWell(
-                      onTap: () {
-                        if (state.data![i].id == '62c8b5b09332225799fe335e') {
-                          context.push(
-                            Routes.MARRIAGESUBCATEGORIES,
-                            extra: state.data![i],
-                          );
-                        } else {
-                          context.push(
-                            Routes.SUBCATEGORIES,
-                            extra: state.data![i],
-                          );
-                        }
+            padding: EdgeInsets.all(24.w),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: .65,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+            ),
+            itemCount: state.data?.length ?? 0,
+            itemBuilder: (context, i) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: InkWell(
+                  onTap: () {
+                    if (state.data![i].id == '62c8b5b09332225799fe335e') {
+                      context.push(
+                        Routes.MARRIAGESUBCATEGORIES,
+                        extra: state.data![i],
+                      );
+                    } else {
+                      context.push(
+                        Routes.SUBCATEGORIES,
+                        extra: state.data![i],
+                      );
+                    }
 
-                        print('state.data![i]: ${state.data![i].id}');
-                      },
-                      child: MainCategoryBanner(
-                        fromFavorite: true,
-                        category: state.data![i],
-                        canRegister: false,
-                        onFavorite: () async {
-                          var result = await controller
-                              .removeFavorite(state.data![i].id);
-                          if (result == true) {
-                            state.data?.removeWhere(
-                                (element) => element.id == state.data![i].id);
-                          }
-                        },
-                      ),
-                    ),
+                    print('state.data![i]: ${state.data![i].id}');
+                  },
+                  child: MainCategoryBanner(
+                    category: state.data![i].categoryEntity,
+                    canRegister: false,
+                    onFavorite: () async {
+                      var result = await controller
+                          .removeFavorite(state.data![i].categoryEntity.id);
+                      if (result == true) {
+                        state.data?.removeWhere(
+                            (element) => element.id == state.data![i].categoryEntity.id);
+                      }
+                    },
                   ),
-                )
+                ),
+              );
+            },
+          )
               : Center(
-                  child: Label(
-                      style: Styles.mediumText(
-                        fontSize: 60.sp,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
-                      ),
-                      maxLines: 3,
-                      textAlign: TextAlign.center,
-                      text: LocaleKeys.noFavouriteCategory.localize));
+              child: Label(
+                  style: Styles.mediumText(
+                    fontSize: 60.sp,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  ),
+                  maxLines: 3,
+                  textAlign: TextAlign.center,
+                  text: LocaleKeys.noFavouriteCategory.localize));
         },
       ),
     );

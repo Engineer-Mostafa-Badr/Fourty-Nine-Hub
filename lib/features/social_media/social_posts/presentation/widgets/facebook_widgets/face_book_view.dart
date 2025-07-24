@@ -123,7 +123,8 @@ class _FaceBookViewState extends State<FaceBookView>
                               );
                             }),
                         if (controller.isLoadingFaceMore)
-                          const Center(child: CustomCircularProgressIndicator()),
+                          const Center(
+                              child: CustomCircularProgressIndicator()),
                       ],
                     ),
             ]),

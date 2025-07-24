@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_d
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/driver_route_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_trip_client_widget.dart';
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -37,10 +38,11 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(builder: (context, state) {
+    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
+        builder: (context, state) {
       var cubit = context.read<CaptainShareDashboardCubit>();
-      if(cubit.isLoadingRunningTrip){
-        return const Center(child: CircularProgressIndicator());
+      if (cubit.isLoadingRunningTrip) {
+        return const Center(child: CustomLoadingSearchWidget());
       }
       if(state.runningRoute==null||state.runningRoute?.status==''){
         return _emptyMessage();
@@ -70,7 +72,6 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
           ),
         ],
       );
-
     });
   }
 
@@ -88,6 +89,4 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
       ),
     );
   }
-
 }
-

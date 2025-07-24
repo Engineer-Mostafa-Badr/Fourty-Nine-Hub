@@ -10,6 +10,7 @@ import '../../../../res/style/app_colors.dart';
 
 class FormTextField extends StatelessWidget {
   final String? initialValue;
+  final FocusNode? currentFocusNode;
   final bool? obsecure;
   final bool? enabled;
   final bool? required;
@@ -39,43 +40,43 @@ class FormTextField extends StatelessWidget {
   final Color? borderColor;
   final Color? borderSide;
   final List<TextInputFormatter>? inputFormatters;
-  FormTextField(
-      {super.key,
-        this.initialValue,
-        this.action,
-        this.maxLength,
-        this.obsecure,
-        this.borderRadius,
-        this.prefix,
-        this.noBorder = false,
-        this.readOnly = false,
-        this.constraints,
-        this.fillColor,
-        this.hint,
-        this.label,
-        this.info,
-        this.autofill,
-        this.suffix,
-        this.type,
-        this.isEmail,
-        this.enabled,
-        this.onConfirm,
-        this.textAlignVertical,
-        this.extraValidationMessage,
-        this.extraValidation,
-        this.onTap,
-        this.height,
-        this.maxLines,
-        this.style,
-        this.validator,
-        this.required,
-        this.controller,
-        this.textStyle,
-        this.borderColor,
-        this.borderSide,
-        this.inputFormatters,
-
-      });
+  FormTextField({
+    super.key,
+    this.initialValue,
+    this.currentFocusNode,
+    this.action,
+    this.maxLength,
+    this.obsecure,
+    this.borderRadius,
+    this.prefix,
+    this.noBorder = false,
+    this.readOnly = false,
+    this.constraints,
+    this.fillColor,
+    this.hint,
+    this.label,
+    this.info,
+    this.autofill,
+    this.suffix,
+    this.type,
+    this.isEmail,
+    this.enabled,
+    this.onConfirm,
+    this.textAlignVertical,
+    this.extraValidationMessage,
+    this.extraValidation,
+    this.onTap,
+    this.height,
+    this.maxLines,
+    this.style,
+    this.validator,
+    this.required,
+    this.controller,
+    this.textStyle,
+    this.borderColor,
+    this.borderSide,
+    this.inputFormatters,
+  });
 
   bool validate = false;
 
@@ -84,6 +85,7 @@ class FormTextField extends StatelessWidget {
     return Column(children: [
       SizedBox(
         height: height ?? 40,
+
         child: TextFormField(
           readOnly: readOnly ?? false,
           style:
@@ -91,13 +93,14 @@ class FormTextField extends StatelessWidget {
           textAlignVertical: textAlignVertical,
           maxLines: maxLines ?? 1,
           maxLength: maxLength,
+          focusNode: currentFocusNode,
           onFieldSubmitted: (v) {
             if (onConfirm != null) {
               onConfirm!(v);
             }
           },
           validator: validator ??
-                  (value) {
+              (value) {
                 validate = true;
                 final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
@@ -145,19 +148,19 @@ class FormTextField extends StatelessWidget {
             enabledBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-              borderSide: BorderSide(
-                color: borderSide ?? AppColors.GREYFIELD,
-              ),
-              borderRadius: borderRadius ?? BorderRadius.circular(5),
-            ),
+                    borderSide: BorderSide(
+                      color: borderSide ?? AppColors.GREYFIELD,
+                    ),
+                    borderRadius: borderRadius ?? BorderRadius.circular(5),
+                  ),
             focusedBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-              borderSide: BorderSide(
-                color: borderColor ?? AppColors.GREYFIELD,
-              ),
-              borderRadius: borderRadius ?? BorderRadius.circular(5),
-            ),
+                    borderSide: BorderSide(
+                      color: borderColor ?? AppColors.GREYFIELD,
+                    ),
+                    borderRadius: borderRadius ?? BorderRadius.circular(5),
+                  ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.red,
@@ -167,11 +170,11 @@ class FormTextField extends StatelessWidget {
             focusedErrorBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.red,
-              ),
-              borderRadius: borderRadius ?? BorderRadius.circular(5),
-            ),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                    ),
+                    borderRadius: borderRadius ?? BorderRadius.circular(5),
+                  ),
           ),
           cursorColor: Colors.grey,
         ),

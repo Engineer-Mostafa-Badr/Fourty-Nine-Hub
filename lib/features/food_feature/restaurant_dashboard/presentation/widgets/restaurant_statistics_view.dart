@@ -27,6 +27,7 @@ class RestaurantStatisticsView extends StatefulWidget {
 class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
   String? selectedGovernorateId;
   String? selectedCityId;
+  final FocusNode numberFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -34,6 +35,16 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
     context
         .read<RestaurantDashboardCubit>()
         .getGovernorates(); // Fetch governorates on init
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      numberFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    numberFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,7 +58,9 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
             // Text("${state.info?.government.toString()}"),
             // Text("${state.info?.city.toString()}"),
             _buildStatisticColumn(
-              context.isArabic?'اجمالي الأرباح':LocaleKeys.totalProfit.localize,
+              context.isArabic
+                  ? 'اجمالي الأرباح'
+                  : LocaleKeys.totalProfit.localize,
               state.statistics?.data.totalRevenue.toString() ?? "N/A",
             ),
             _buildStatisticColumn(
@@ -60,21 +73,21 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               state.info?.phone?.toString() ?? "N/A",
             ),
             GestureDetector(
-              onTap: () => _showUpdateNumberBottomSheet(context, state.info?.phone),
+              onTap: () => _showUpdateNumberBottomSheet(
+                  context, state.info?.phone, numberFocusNode), 
               // Call bottom sheet method
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color:AppColors.getRedColor(context),
+                  color: AppColors.getRedColor(context),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 padding: const EdgeInsets.all(10),
-                child:   Label(
-                  text:LocaleKeys.modify.localize,
+                child: Label(
+                  text: LocaleKeys.modify.localize,
                   style: Styles.mediumText(
-                    fontWeight: FontWeight.w700,
-                      color: AppColors.getReversedTextColor(context)
-                  ),
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.getReversedTextColor(context)),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -85,32 +98,46 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.location_on_rounded,size: 16,color: AppColors.getButtonPrimaryWhiteColor(context),),
-                    const Sizer(width: 8,),
-                    Label(text: LocaleKeys.location.localize,
+                    Icon(
+                      Icons.location_on_rounded,
+                      size: 16,
+                      color: AppColors.getButtonPrimaryWhiteColor(context),
+                    ),
+                    const Sizer(
+                      width: 8,
+                    ),
+                    Label(
+                      text: LocaleKeys.location.localize,
                       style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
                           fontSize: 32,
-                          color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR
-
-                      ),
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.PRIMARY_COLOR),
                     )
                   ],
                 ),
                 Row(
                   children: [
-                    Label(text:"${context.isArabic?state.info?.government?.governorateNameAr :state.info?.government?.governorateNameEn ?? ""} ".toArabicNumbers(context),
+                    Label(
+                      text:
+                          "${context.isArabic ? state.info?.government?.governorateNameAr : state.info?.government?.governorateNameEn ?? ""} "
+                              .toArabicNumbers(context),
                       style: Styles.mediumText(
-                        fontWeight: FontWeight.w500,
-                          color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
-                      ),
+                          fontWeight: FontWeight.w500,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.PRIMARY_COLOR),
                     ),
-                    Label(text:", ${context.isArabic?state.info?.city?.cityNameAr:state.info?.city?.cityNameEn ?? ""}".toArabicNumbers(context),
+                    Label(
+                      text:
+                          ", ${context.isArabic ? state.info?.city?.cityNameAr : state.info?.city?.cityNameEn ?? ""}"
+                              .toArabicNumbers(context),
                       style: Styles.mediumText(
-                        fontWeight: FontWeight.w500,
-                          color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR
-
-                      ),
+                          fontWeight: FontWeight.w500,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.PRIMARY_COLOR),
                     ),
                   ],
                 ),
@@ -122,16 +149,15 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color:AppColors.getRedColor(context),
+                  color: AppColors.getRedColor(context),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 padding: const EdgeInsets.all(10),
-                child:   Label(
-                  text:LocaleKeys.modify.localize,
+                child: Label(
+                  text: LocaleKeys.modify.localize,
                   style: Styles.mediumText(
-                    fontWeight: FontWeight.w700,
-                    color:AppColors.getReversedTextColor(context)
-                  ),
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.getReversedTextColor(context)),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -141,7 +167,9 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
       },
     );
   }
-  void _showUpdateNumberBottomSheet(BuildContext context, String? currentNumber) {
+
+  void _showUpdateNumberBottomSheet(
+      BuildContext context, String? currentNumber, FocusNode numberFocusNode) {
     final TextEditingController numberController = TextEditingController(
       text: currentNumber ?? '',
     );
@@ -150,12 +178,13 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent, // For bottom padding to work properly
+      backgroundColor:
+          Colors.transparent, // For bottom padding to work properly
       builder: (context) {
         return Container(
           // margin: const EdgeInsets.only(bottom: 20), // Adds padding at the bottom
           decoration: BoxDecoration(
-            color:AppColors.getFindFillColor(context),
+            color: AppColors.getFindFillColor(context),
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(20),
             ),
@@ -167,42 +196,49 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom, // Extra space for keyboard
+                bottom: MediaQuery.of(context)
+                    .viewInsets
+                    .bottom, // Extra space for keyboard
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     LocaleKeys.phoneNumber.localize,
-                    style:  Styles.mediumText(
-                      color:AppColors.getRedColor(context),
+                    style: Styles.mediumText(
+                      color: AppColors.getRedColor(context),
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 24),
-
                   NewPhoneNumberTextFormField(
                     currentController: numberController,
                     keyboardType: TextInputType.phone,
                     isRequired: true,
+                    currentFocusNode: numberFocusNode,
                   ),
-
                   const SizedBox(height: 32),
-
                   SizedBox(
                     width: double.infinity,
                     height: 50, // Fixed height for button
                     child: AppButton(
                       color: AppColors.getReversedTextColor(context),
-                      backColor:AppColors.getRedColor(context),
-                      style: Styles.mediumText(fontSize: 32,color: AppColors.getReversedTextColor(context)),
+                      backColor: AppColors.getRedColor(context),
+                      style: Styles.mediumText(
+                          fontSize: 32,
+                          color: AppColors.getReversedTextColor(context)),
                       onPressed: () async {
                         if (numberController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(
-                              backgroundColor: AppColors.getFindFillColor(context),
-                              content: Text('Phone number cannot be empty',style: TextStyle(color: AppColors.getTextColor(context)),),
+                            SnackBar(
+                              backgroundColor:
+                                  AppColors.getFindFillColor(context),
+                              content: Text(
+                                'Phone number cannot be empty',
+                                style: TextStyle(
+                                    color: AppColors.getTextColor(context)),
+                              ),
                             ),
                           );
                           return;
@@ -222,9 +258,12 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
 
                         // Show success message
                         ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(
-                             backgroundColor: AppColors.getFindFillColor(context),
-                             content: Text('Phone number updated successfully',style: TextStyle(color: AppColors.getTextColor(context))),
+                          SnackBar(
+                            backgroundColor:
+                                AppColors.getFindFillColor(context),
+                            content: Text('Phone number updated successfully',
+                                style: TextStyle(
+                                    color: AppColors.getTextColor(context))),
                           ),
                         );
                       },
@@ -261,7 +300,6 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
     }
   }
 
-
   // Build Statistics UI
   Widget _buildStatisticColumn(String label, String value) {
     return Row(
@@ -269,25 +307,17 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 16
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
         ),
         const Spacer(),
         Text(
           value.toArabicNumbers(context),
-          style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 16
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
         ),
       ],
     );
   }
 }
-
-
 
 class ModifyBottomSheet extends StatefulWidget {
   final String? selectedGovernorateId;
@@ -320,13 +350,15 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-      serviceLocator<RestaurantDashboardCubit>()..getGovernorates(),
+          serviceLocator<RestaurantDashboardCubit>()..getGovernorates(),
       child: BlocBuilder<RestaurantDashboardCubit, RestaurantDashboardState>(
         builder: (context, state) {
           return Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color:context.isDarkMode ?AppColors.getFindFillColor(context):Colors.white ,
+              color: context.isDarkMode
+                  ? AppColors.getFindFillColor(context)
+                  : Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
@@ -339,7 +371,8 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                 const SizedBox(height: 16),
 
                 // Governorate Selection Custom List
-                if (state.governorates != null && state.governorates!.isNotEmpty)
+                if (state.governorates != null &&
+                    state.governorates!.isNotEmpty)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -350,10 +383,13 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
                           decoration: BoxDecoration(
                             // color: AppColors.cD9D9D9,
-                            color:context.isDarkMode ? Theme.of(context).scaffoldBackgroundColor : AppColors.cF3F3F3,
+                            color: context.isDarkMode
+                                ? Theme.of(context).scaffoldBackgroundColor
+                                : AppColors.cF3F3F3,
 
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
@@ -363,24 +399,40 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                             children: [
                               Text(
                                 _selectedGovernorateId != null
-                                    ? context.isArabic?state.governorates!.firstWhere((gov) => gov.id == _selectedGovernorateId).nameAr:state.governorates!.firstWhere((gov) => gov.id == _selectedGovernorateId).nameEn
+                                    ? context.isArabic
+                                        ? state.governorates!
+                                            .firstWhere((gov) =>
+                                                gov.id ==
+                                                _selectedGovernorateId)
+                                            .nameAr
+                                        : state.governorates!
+                                            .firstWhere((gov) =>
+                                                gov.id ==
+                                                _selectedGovernorateId)
+                                            .nameEn
                                     : LocaleKeys.governorate.localize,
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              Icon(_isGovernorateExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                              Icon(_isGovernorateExpanded
+                                  ? Icons.arrow_drop_up
+                                  : Icons.arrow_drop_down),
                             ],
                           ),
                         ),
                       ),
                       if (_isGovernorateExpanded)
-                        const SizedBox(height: 4,),
+                        const SizedBox(
+                          height: 4,
+                        ),
                       if (_isGovernorateExpanded)
                         Container(
                           height: 255, // Fixed size container
                           decoration: BoxDecoration(
-                            color:context.isDarkMode ? Theme.of(context).scaffoldBackgroundColor : AppColors.cF3F3F3,
+                            color: context.isDarkMode
+                                ? Theme.of(context).scaffoldBackgroundColor
+                                : AppColors.cF3F3F3,
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -388,12 +440,16 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                             shrinkWrap: true,
                             children: state.governorates!.map((gov) {
                               return ListTile(
-                                title: Label(text:context.isArabic?gov.nameAr:gov.nameEn,
-                                  style:  TextStyle(
-                                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                                title: Label(
+                                  text: context.isArabic
+                                      ? gov.nameAr
+                                      : gov.nameEn,
+                                  style: TextStyle(
+                                      color: context.isDarkMode
+                                          ? AppColors.whiteColor
+                                          : AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 14
-                                  ),
+                                      fontSize: 14),
                                 ),
                                 onTap: () {
                                   setState(() {
@@ -402,7 +458,9 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                                     _isGovernorateExpanded = false;
                                     _isCityExpanded = false;
                                   });
-                                  context.read<RestaurantDashboardCubit>().getCities(gov.id);
+                                  context
+                                      .read<RestaurantDashboardCubit>()
+                                      .getCities(gov.id);
                                 },
                               );
                             }).toList(),
@@ -425,9 +483,12 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
                           decoration: BoxDecoration(
-                            color:context.isDarkMode ? Theme.of(context).scaffoldBackgroundColor : AppColors.cF3F3F3,
+                            color: context.isDarkMode
+                                ? Theme.of(context).scaffoldBackgroundColor
+                                : AppColors.cF3F3F3,
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -436,22 +497,36 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                             children: [
                               Text(
                                 _selectedCityId != null
-                                    ? context.isArabic?state.cities!.firstWhere((city) => city.id == _selectedCityId).nameAr:state.cities!.firstWhere((city) => city.id == _selectedCityId).nameEn
-                                    :LocaleKeys.selectCity.localize,
+                                    ? context.isArabic
+                                        ? state.cities!
+                                            .firstWhere((city) =>
+                                                city.id == _selectedCityId)
+                                            .nameAr
+                                        : state.cities!
+                                            .firstWhere((city) =>
+                                                city.id == _selectedCityId)
+                                            .nameEn
+                                    : LocaleKeys.selectCity.localize,
                                 style: const TextStyle(fontSize: 16),
                               ),
-                              Icon(_isCityExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                              Icon(_isCityExpanded
+                                  ? Icons.arrow_drop_up
+                                  : Icons.arrow_drop_down),
                             ],
                           ),
                         ),
                       ),
                       if (_isCityExpanded)
-                        const SizedBox(height: 4,),
+                        const SizedBox(
+                          height: 4,
+                        ),
                       if (_isCityExpanded)
                         Container(
                           height: 255, // Fixed size container
                           decoration: BoxDecoration(
-                            color:context.isDarkMode ? Theme.of(context).scaffoldBackgroundColor : AppColors.cF3F3F3,
+                            color: context.isDarkMode
+                                ? Theme.of(context).scaffoldBackgroundColor
+                                : AppColors.cF3F3F3,
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -459,11 +534,13 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                             shrinkWrap: true,
                             children: state.cities!.map((city) {
                               return ListTile(
-                                title: Label(text:context.isArabic?city.nameAr:city.nameEn,
+                                title: Label(
+                                  text: context.isArabic
+                                      ? city.nameAr
+                                      : city.nameEn,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 14
-                                  ),
+                                      fontSize: 14),
                                 ),
                                 onTap: () {
                                   setState(() {
@@ -471,16 +548,19 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                                     _isCityExpanded = false;
                                   });
 
-                                  context.read<RestaurantDashboardCubit>().updateRestaurant1(
-                                    params: UpdateRestaurantParams(
-                                      city: city.id,
-                                      government: _selectedGovernorateId,
-                                      subcategoryId: null,
-                                      name: null,
-                                      number: null,
-                                      restaurantMedia: null,
-                                    ),
-                                  ).then((_) {
+                                  context
+                                      .read<RestaurantDashboardCubit>()
+                                      .updateRestaurant1(
+                                        params: UpdateRestaurantParams(
+                                          city: city.id,
+                                          government: _selectedGovernorateId,
+                                          subcategoryId: null,
+                                          name: null,
+                                          number: null,
+                                          restaurantMedia: null,
+                                        ),
+                                      )
+                                      .then((_) {
                                     if (mounted) {
                                       Navigator.pop(context, true);
                                     }
@@ -492,7 +572,6 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                         ),
                     ],
                   ),
-
               ],
             ),
           );
@@ -501,6 +580,3 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
     );
   }
 }
-
-
-
