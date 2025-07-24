@@ -69,7 +69,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
           Sizer(
             height: 10.h,
           ),
-          Expanded(child:_buildCardForCategory()),
+          Expanded(child: _buildCardForCategory()),
           // Expanded(
           //   child: ListView.builder(
           //       physics: const NeverScrollableScrollPhysics(),
@@ -158,9 +158,12 @@ class _AllPickMeViewState extends State<AllPickMeView>
       ],
     );
   }
-  Widget _buildCardForCategory( ) {
+
+  Widget _buildCardForCategory() {
     switch (_displayedCategory) {
       case LocaleKeys.availableTrips:
+        //TODO: Dont forget to add CustomLoadingSearchWidget for loading state in every DisplayTripJoinCard
+        // اياك تنسى 🙂🔪
         return AvailablePickMeCard();
       case LocaleKeys.requestLog:
         return SizedBox();
@@ -171,6 +174,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
         return const SizedBox.shrink();
     }
   }
+
   _buildStatusCategories() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,11 +221,11 @@ class _AllPickMeViewState extends State<AllPickMeView>
       // },
       onTap: () {
         tabController.animateTo(index);
-        if(index==0){
+        if (index == 0) {
           // context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
           print("Fiiiiiiiiiirst");
         }
-        if(index == 1){
+        if (index == 1) {
           print("Seeeeeecond");
 
           // context.read<ViewAllTripJoinCubit>().loadInitialRequestTripJoin();

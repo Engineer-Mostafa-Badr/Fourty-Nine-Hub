@@ -19,6 +19,7 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 
 import '../../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../domain/entities/booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
 
@@ -60,12 +61,16 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
       builder: (context, state) {
         final cubit = context.read<HealthCubit>();
 
+        // Show loading indicator when initially loading and no bookings exist
         if (state.status == HealthStates.loading &&
             cubit.currentBookings.isEmpty) {
           return SizedBox(
-              height: MediaQuery.of(context).size.height * .6,
-              child: Center(child: CustomLoading()));
+            height: MediaQuery.of(context).size.height * .6,
+            child: const Center(child: CustomLoadingSearchWidget()),
+          );
         }
+
+        // Show empty state when no bookings exist
         if (cubit.currentBookings.isEmpty) {
           return SizedBox(
             height: MediaQuery.of(context).size.height * .6,
@@ -73,59 +78,20 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomEmptyWidget(
-                                  label: context.isArabic
-                  ? 'لا توجد حجوزات حالية'
-                  : 'No current bookings',
-                                ),
+                  label: context.isArabic
+                      ? 'لا توجد حجوزات حالية'
+                      : 'No current bookings',
+                ),
               ],
             ),
           );
         }
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.67,
-          child: OlxPaginationWidget(
-            itemsPerPage: 2,
-            loadPage: (page) =>
-                context.read<HealthCubit>().getBookings('current'),
-            banners: bannersList,
-            items: List.generate(cubit.currentBookings.length, (index) {
-              final booking = cubit.currentBookings[index];
-              return Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: CurrentBookingCard(
-                  booking: booking,
-                ),
-              );
-            }),
-          ),
-        );
+
+        // Show bookings list with pagination
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.67,
           child: Column(
             children: [
-              // Expanded(
-              //   child: cubit.currentBookings.isEmpty
-              //       ? Center(
-              //       child: CustomEmptyWidget(label: context.isArabic
-              //           ? 'لا توجد حجوزات حالية'
-              //           : 'No current bookings',
-              //       )
-              //   )
-              //       : ListView.separated(
-              //     controller: _scrollController,
-              //     itemCount: cubit.currentBookings.length,
-              //     itemBuilder: (context, index) {
-              //       final booking = cubit.currentBookings[index];
-              //       return Padding(
-              //         padding: const EdgeInsets.all(4.0),
-              //         child: CurrentBookingCard(
-              //           booking: booking,
-              //         ),
-              //       );
-              //     },
-              //     separatorBuilder: (context, index) => const Sizer(),
-              //   ),
-              // ),
               OlxPaginationWidget(
                 itemsPerPage: 2,
                 loadPage: (page) =>
@@ -144,7 +110,7 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
               if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CustomCircularProgressIndicator(),
+                  child: CustomLoadingSearchWidget(),
                 ),
             ],
           ),

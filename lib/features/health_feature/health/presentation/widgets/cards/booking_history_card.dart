@@ -19,6 +19,7 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 
 import '../../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
 
 class BookingHistoryScreen extends StatefulWidget {
@@ -65,7 +66,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
             cubit.historyBookings.isEmpty) {
           return SizedBox(
               height: MediaQuery.of(context).size.height * .6,
-              child: Center(child: CustomLoading()));
+              child: Center(child: CustomLoadingSearchWidget()));
         }
         if (cubit.historyBookings.isEmpty) {
           return SizedBox(
@@ -81,6 +82,12 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
               ],
             ),
           );
+        }
+        if (state.status == HealthStates.loading &&
+            cubit.historyBookings.isEmpty) {
+          // return SizedBox(
+          //     height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
+          return const CustomLoadingSearchWidget();
         }
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.67,
@@ -138,7 +145,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
               if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CustomCircularProgressIndicator(),
+                  child: CustomLoadingSearchWidget(),
                 ),
             ],
           ),

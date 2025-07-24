@@ -28,13 +28,23 @@ class FilterAdDynamicInputWidget extends StatefulWidget {
 class _FilterAdDynamicInputWidgetState
     extends State<FilterAdDynamicInputWidget> {
   SelectionEntity? value;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     if (widget.property.values.isNotEmpty) {
       value = widget.property.values.first;
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,6 +79,7 @@ class _FilterAdDynamicInputWidgetState
             height: 42,
             child: TextFormField(
               maxLines: null,
+
               onChanged: (v) {
                 widget.onTextChanged(v, true, widget.property.type);
               },
@@ -299,6 +310,7 @@ class _FilterAdDynamicInputWidgetState
                   height: 42,
                   child: TextFormField(
                     maxLines: 1,
+                    focusNode: _focusNode,
                     onChanged: (v) =>
                         widget.onTextChanged(v, true, widget.property.type),
                     keyboardType: TextInputType.number,

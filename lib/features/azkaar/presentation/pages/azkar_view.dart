@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/features/azkaar/domain/entity/azkar_entity.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
@@ -28,6 +29,7 @@ class AzkarView extends StatefulWidget {
 class _AzkarViewState extends State<AzkarView> {
   late ScrollController _scrollController;
   late AzkarCubit _cubit;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -35,6 +37,9 @@ class _AzkarViewState extends State<AzkarView> {
     _cubit = context.read<AzkarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
     _cubit.loadInitialData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
   }
 
   void _onScroll() {
@@ -48,6 +53,7 @@ class _AzkarViewState extends State<AzkarView> {
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -65,7 +71,7 @@ class _AzkarViewState extends State<AzkarView> {
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
           if (state.status == AzkarStates.loading) {
-            return const Center(child: CustomCircularProgressIndicator());
+            return const Center(child: CustomLoadingSearchWidget());
           }
           final isSearching = state.azkarSearch != null &&
               state.azkarSearch!.isNotEmpty &&
@@ -76,6 +82,7 @@ class _AzkarViewState extends State<AzkarView> {
                 padding: const EdgeInsets.all(16),
                 child: TextField(
                   textDirection: TextDirection.rtl,
+                  focusNode: _focusNode,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: AppColors.getFillColor(context),
@@ -129,7 +136,7 @@ class _AzkarViewState extends State<AzkarView> {
                         isSearching ? state.azkarSearch! : state.akar!;
 
                     if (index >= items.length) {
-                      return const Center(child: CustomCircularProgressIndicator());
+                      return const Center(child: CustomLoadingSearchWidget());
                     }
 
                     return _buildAzkarItem(context, items[index], isSearching);

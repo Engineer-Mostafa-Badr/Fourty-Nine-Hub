@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -118,7 +119,7 @@ class _RestaurantExpiredRequestsScreenState
           );
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height*.7,
+            height: MediaQuery.of(context).size.height * .7,
             child: OlxPaginationWidget(
               itemsPerPage: 2,
               loadPage: (page) async {},
@@ -127,13 +128,14 @@ class _RestaurantExpiredRequestsScreenState
                 controller.expiredOrders.length,
                 (index) {
                   if (controller.isLoadingExpiredOrdersMore) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          .65, // Make sure it takes up full height
-                      child: const Center(
-                        child: CustomCircularProgressIndicator(),
-                      ),
-                    );
+                    return CustomLoadingSearchWidget();
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height *
+                    //       .65, // Make sure it takes up full height
+                    //   child: const Center(
+                    //     child: CustomCircularProgressIndicator(),
+                    //   ),
+                    // );
                   }
                   final request = controller.expiredOrders[index];
                   return Padding(
@@ -146,13 +148,14 @@ class _RestaurantExpiredRequestsScreenState
           );
         }
       } else {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height *
-              .65, // Make sure it takes up full height
-          child: const Center(
-            child: CustomCircularProgressIndicator(),
-          ),
-        );
+        return CustomLoadingSearchWidget();
+        // SizedBox(
+        //   height: MediaQuery.of(context).size.height *
+        //       .65, // Make sure it takes up full height
+        //   child: const Center(
+        //     child: CustomCircularProgressIndicator(),
+        //   ),
+        // );
       }
     });
   }
