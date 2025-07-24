@@ -87,6 +87,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+
                   // context
                   //     .read<UserCubit>()
                   //     .isLoggedIn
