@@ -16,6 +16,9 @@ class CustomGoogleMap extends StatefulWidget {
   final List<LatLng> polylinePoints;
   final bool enableScrolling;
   final bool? fromClient;
+  final String? startAddress;
+  final String? targetAddress;
+  final List<String> clientAddresses;
 
   const CustomGoogleMap({
     super.key,
@@ -25,6 +28,9 @@ class CustomGoogleMap extends StatefulWidget {
     this.polylinePoints = const [],
     this.enableScrolling = true,
     this.fromClient,
+    this.startAddress,
+    this.targetAddress,
+    this.clientAddresses = const [],
   });
 
   @override
@@ -43,11 +49,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   );
 
   LatLng? _latestStartLocation;
-
   BitmapDescriptor? _startMarkerIcon;
   BitmapDescriptor? _targetMarkerIcon;
   BitmapDescriptor? _clientMarkerIcon;
-
   double _currentZoom = 12.0;
 
   @override
@@ -61,18 +65,34 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   void didUpdateWidget(covariant CustomGoogleMap oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.startLocation != null && widget.startLocation != _latestStartLocation) {
+    bool shouldUpdate = false;
+
+    if (widget.startLocation != oldWidget.startLocation) {
       _latestStartLocation = widget.startLocation;
-      if (_mapController != null) {
+      shouldUpdate = true;
+      if (_mapController != null && _latestStartLocation != null) {
         _mapController!.animateCamera(
           CameraUpdate.newCameraPosition(
-            CameraPosition(target: widget.startLocation!, zoom: _currentZoom),
+            CameraPosition(target: _latestStartLocation!, zoom: _currentZoom),
           ),
         );
       }
     }
-    _setMarkersAndPolyline();
+
+    if (widget.targetLocation != oldWidget.targetLocation ||
+        widget.clientLocations != oldWidget.clientLocations ||
+        widget.polylinePoints != oldWidget.polylinePoints ||
+        widget.startAddress != oldWidget.startAddress ||
+        widget.targetAddress != oldWidget.targetAddress ||
+        widget.clientAddresses != oldWidget.clientAddresses) {
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate) {
+      _setMarkersAndPolyline();
+    }
   }
+
 
   Future<void> _createCustomMarkerIcons(double size) async {
     _startMarkerIcon = await _createLocationGlowMarker(Colors.green, size);
@@ -86,9 +106,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     const maxZoom = 20.0;
     final clampedZoom = zoom.clamp(minZoom, maxZoom);
     final normalized = (clampedZoom - minZoom) / (maxZoom - minZoom);
-    return 20 + (normalized * (35 - 20)); // 👈 now zoom in → size increases
+    return 20 + (normalized * (35 - 20));
   }
-
 
   void _updateMarkerIconsByZoom() {
     final size = _calculateMarkerSizeByZoom(_currentZoom);
@@ -104,19 +123,16 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     double size = 35.0,
   }) async {
     final double glowSize = size;
-
     final widget = Container(
       width: glowSize,
       height: glowSize,
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-      ),
+      decoration: const BoxDecoration(shape: BoxShape.circle),
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: glowColor.withValues(alpha: 0.2),
+          color: glowColor.withAlpha(50),
         ),
         child: Container(
           width: glowSize * 0.6,
@@ -124,14 +140,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: glowColor,
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: glowColor.withOpacity(0.6),
-            //     blurRadius: glowSize * 0.6, // More blur
-            //     spreadRadius: glowSize * 0.1,
-            //     offset: Offset(0, 0), // Centered glow
-            //   ),
-            // ],
           ),
         ),
       ),
@@ -139,7 +147,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
     return await _widgetToBitmapDescriptor(widget, glowSize);
   }
-
 
   Future<BitmapDescriptor> _widgetToBitmapDescriptor(Widget widget, double size) async {
     final RenderRepaintBoundary boundary = RenderRepaintBoundary();
@@ -200,10 +207,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   void initMapStyle() async {
-    var lightStyle = await DefaultAssetBundle.of(context)
-        .loadString('assets/map_styles/light_map_style.json');
-    var darkStyle = await DefaultAssetBundle.of(context)
-        .loadString('assets/map_styles/dark_map_style.json');
+    var lightStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/light_map_style.json');
+    var darkStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/dark_map_style.json');
     _mapController?.setMapStyle(context.isDarkMode ? darkStyle : lightStyle);
   }
 
@@ -211,11 +216,13 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _markers.clear();
     _polylines.clear();
 
+    print("startAddress marker ${widget.startAddress}");
     if (widget.startLocation != null && _startMarkerIcon != null) {
       _markers.add(Marker(
         markerId: const MarkerId('start'),
         position: widget.startLocation!,
         icon: _startMarkerIcon!,
+        infoWindow: (widget.startAddress!=null&&(widget.startAddress?.isNotEmpty??false))?InfoWindow(title: widget.startAddress ?? ''):InfoWindow(),
       ));
     }
 
@@ -224,6 +231,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         markerId: const MarkerId('target'),
         position: widget.targetLocation!,
         icon: _targetMarkerIcon!,
+        infoWindow:  (widget.targetAddress!=null&&(widget.targetAddress?.isNotEmpty??false))?InfoWindow( title: widget.targetAddress ?? ''):InfoWindow(),
       ));
     }
 
@@ -233,15 +241,17 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           markerId: MarkerId('client_$i'),
           position: widget.clientLocations[i],
           icon: _clientMarkerIcon!,
+          infoWindow: i < widget.clientAddresses.length ?InfoWindow(
+            // title: 'العميل ${i + 1}',
+            title: i < widget.clientAddresses.length ? widget.clientAddresses[i] : '',
+          ):InfoWindow(),
         ));
       }
     }
 
     if (widget.polylinePoints.isNotEmpty) {
       final clientsCount = widget.clientLocations.length;
-
       List<Color> gradientColors;
-
       if (clientsCount == 0) {
         gradientColors = [Colors.green, Colors.blue];
       } else if (clientsCount == 1) {
@@ -249,12 +259,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       } else {
         gradientColors = [Colors.green, Colors.red, Colors.red, Colors.blue];
       }
-
-      _polylines.addAll(
-        _buildGradientPolyline(widget.polylinePoints, gradientColors),
-      );
+      _polylines.addAll(_buildGradientPolyline(widget.polylinePoints, gradientColors));
     }
-
 
     if (_carMarker != null) {
       _markers.add(_carMarker!);
@@ -265,28 +271,19 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   List<Polyline> _buildGradientPolyline(List<LatLng> points, List<Color> colors) {
     List<Polyline> gradientPolylines = [];
-
     if (points.length < 2 || colors.length < 2) return gradientPolylines;
-
     final int segmentCount = points.length - 1;
-
     for (int i = 0; i < segmentCount; i++) {
-      // Normalized t value for color interpolation
       final double t = i / segmentCount;
-
-      // Determine the position between color stops
       final double colorIndex = t * (colors.length - 1);
       final int startColorIndex = colorIndex.floor();
       final int endColorIndex = colorIndex.ceil();
-
       final double localT = colorIndex - startColorIndex;
-
       final Color interpolatedColor = Color.lerp(
         colors[startColorIndex],
         colors[endColorIndex],
         localT,
       )!;
-
       gradientPolylines.add(
         Polyline(
           polylineId: PolylineId('gradient_$i'),
@@ -296,11 +293,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         ),
       );
     }
-
     return gradientPolylines;
   }
-
-
 
   void _updateCarMarker(Marker? marker) {
     setState(() {
@@ -340,6 +334,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
+    print('widget.startAddress ${widget.startAddress}');
     Widget mapWidget = GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(target: _getInitialCenter(), zoom: _currentZoom),

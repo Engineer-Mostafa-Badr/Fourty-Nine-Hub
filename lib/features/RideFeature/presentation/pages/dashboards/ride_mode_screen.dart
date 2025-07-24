@@ -913,6 +913,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
 
 
     List<gmap.LatLng> clients = [];
+    List<String> clientsAddress = [];
     if (context.read<DashboardsCubit>().activeTrip?.wayPointOne != null &&
         context.read<DashboardsCubit>().activeTrip?.wayPointOne?[0] != null &&
         context.read<DashboardsCubit>().activeTrip?.wayPointOne?[1] != null &&
@@ -928,6 +929,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
         context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[1] != 0) {
       clients.add(gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.wayPointTwo![0], context.read<DashboardsCubit>().activeTrip!.wayPointTwo![1]));
     }
+
+    if(context.read<DashboardsCubit>().activeTrip?.wayPointOneTitle?.isNotEmpty??false){
+      clientsAddress.add(context.read<DashboardsCubit>().activeTrip?.wayPointOneTitle??'');
+    }
+    if(context.read<DashboardsCubit>().activeTrip?.wayPointTwoTitle?.isNotEmpty??false){
+      clientsAddress.add(context.read<DashboardsCubit>().activeTrip?.wayPointTwoTitle??'');
+    }
+
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
@@ -943,6 +952,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
           clientLocations: clients,
           enableScrolling: true,
           fromClient: (context.read<DashboardsCubit>().activeTrip!=null&&state.tripStatus == TripState.started.name)==true?false:null,
+          startAddress: context.read<DashboardsCubit>().activeTrip?.from,
+          targetAddress: context.read<DashboardsCubit>().activeTrip?.to,
+          clientAddresses: clientsAddress,
         ),
       ),
     );
