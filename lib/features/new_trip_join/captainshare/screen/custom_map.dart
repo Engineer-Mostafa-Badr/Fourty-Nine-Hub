@@ -304,6 +304,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return gradientPolylines;
   }
 
+
   void _updateCarMarker(Marker? marker) {
     setState(() {
       _carMarker = marker;

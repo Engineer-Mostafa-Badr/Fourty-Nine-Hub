@@ -626,7 +626,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       final response = await _apiConsumer.put(EndPoints.startDriverTrip(params.tripId), data: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['tripStartedAt']??'');
+        return Right(data['data']['tripStartedAt']??'');
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

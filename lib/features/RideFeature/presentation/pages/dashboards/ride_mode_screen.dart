@@ -845,7 +845,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
           startAddress: context.read<DashboardsCubit>().activeTrip?.from,
           targetAddress: context.read<DashboardsCubit>().activeTrip?.to,
           clientAddresses: clientsAddress,
-          estimatedTime: context.read<DashboardsCubit>().state.tripStatus!=TripState.goToClient.name ? DateFormat('HH:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.driverIsArrivingIn??'').toLocal()) : '',
+          estimatedTime: (context.read<DashboardsCubit>().state.tripStatus==TripState.goToClient.name||context.read<DashboardsCubit>().state.tripStatus==TripState.inLocation.name) ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.driverIsArrivingIn??'').toLocal()) :context.read<DashboardsCubit>().state.tripStatus==TripState.started.name ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.tripStartTime??'').toLocal().add(Duration(minutes:context.read<DashboardsCubit>().activeTrip?.duration??0 ))): '',
         ),
       ),
     );

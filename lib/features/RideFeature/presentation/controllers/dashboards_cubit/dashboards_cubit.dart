@@ -2014,7 +2014,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (time) {
         log("Suzccess");
         context.pop();
-        activeTrip?.tripStartTime = TripState.goToClient.name;
+        activeTrip?.tripStartTime = time;
         emit(state.copyWith(
             status: DashboardsStates.success,
             tripStatus: TripState.started.name));
