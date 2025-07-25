@@ -172,8 +172,7 @@ abstract class Assets {
   static String instagramMusicIcon = 'assets/icons/instagram_music_icon.svg';
   static String instagramMusicIconDark =
       'assets/icons/instagram_music_icon_dark.svg';
-  static String instagramMusicRedIcon =
-      'assets/icons/instagram_music_red_icon.svg';
+
   static String instagramTriangleBlackIcon =
       'assets/icons/instagram_triangle_black_icon.svg';
   static String instagramTriangleBlackIconDark =
