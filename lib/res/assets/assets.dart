@@ -654,7 +654,6 @@ abstract class Assets {
   static String car2Image = "assets/images/car.png";
   static String doctorImage = "assets/images/doctor.png";
   static String marriage = "assets/images/marriage.png";
-  static String ellipsis = "assets/icons/ellipsis.svg";
   static String reelBar = "assets/icons/reelBar.svg";
   static String reelBarPng = "assets/icons/reelBar.png";
   static String gridIcon = "assets/icons/gridIcon.png";
@@ -671,11 +670,9 @@ abstract class Assets {
   static String searchLoading = 'assets/lottie/special_loading.json';
 
   //SpotLight
-  static String bitmoji = "assets/images/bitmoji.png";
   static String spotlight_profile = "assets/images/spotlight_profile.png";
 
   //Find
-  static String find_inbox = "assets/icons/find_inbox.png";
   static String hotelFilter = "assets/icons/hotel.png";
   static String comingSoon = "assets/icons/comingSoon.png";
   static String login = "assets/icons/login.png";
@@ -701,7 +698,6 @@ abstract class Assets {
   static String pet = 'assets/icons/tinder/pet.png';
   static String pin = 'assets/icons/tinder/pin.png';
   static String profile_card = 'assets/icons/tinder/profile_card.png';
-  static String tinder_ruler = 'assets/icons/tinder/ruler.png';
   static String setting = 'assets/icons/tinder/setting.png';
   static String tinder_search = 'assets/icons/tinder/search.png';
   static String shield = 'assets/icons/tinder/shield.png';
