@@ -18,7 +18,7 @@ class CustomGoogleMap extends StatefulWidget {
   final bool? fromClient;
   final String? startAddress;
   final String? targetAddress;
-  final num? estimatedTime;
+  final String? estimatedTime;
   final List<String> clientAddresses;
 
   const CustomGoogleMap({
@@ -89,6 +89,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         widget.clientAddresses != oldWidget.clientAddresses) {
       shouldUpdate = true;
     }
+    if (widget.fromClient != oldWidget.fromClient ) {
+      shouldUpdate = true;
+    }
+    if (widget.estimatedTime != oldWidget.estimatedTime ) {
+          shouldUpdate = true;
+        }
 
     if (shouldUpdate) {
       _setMarkersAndPolyline();
@@ -359,6 +365,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       },
     );
 
+    print("widget.fromClient ${widget.fromClient}");
     return Stack(
       children: [
         SizedBox(

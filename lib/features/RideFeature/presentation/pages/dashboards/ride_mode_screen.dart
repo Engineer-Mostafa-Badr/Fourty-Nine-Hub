@@ -16,6 +16,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_dashboard_non_socket_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/available_ride_trip_item.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_arrival_timer_card.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_arrived_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_otp_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_complete_trip_sheet.dart';
@@ -181,6 +182,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
               builder: (context, state) {
                 var cubit = context.read<DashboardsCubit>();
                 print("state.tripStatus ${state.tripStatus}");
+                print("cubit.activeTrip?.driverIsArrivingIn ${cubit.activeTrip?.driverIsArrivingIn}");
+
                 return DefaultTabController(
                   length: 4,
                   child: Column(
@@ -398,6 +401,12 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 state.tripStatus == TripState.started.name ||
                                 state.tripStatus == TripState.support.name)
                               _buildTopMap(context, state),
+                            if(state.tripStatus == TripState.goToClient.name&&cubit.activeTrip?.driverIsArrivingIn!=null&&(cubit.activeTrip?.driverIsArrivingIn?.isNotEmpty??false)&&(DateTime.parse(cubit.activeTrip?.driverIsArrivingIn??'').toLocal().isAfter(DateTime.now())))
+                              PositionedDirectional(
+                                  top: 20.h,
+                                  start: 60.w,
+                                  end: 60.w,
+                                  child: CountdownTimerCard(targetTime: DateTime.parse(cubit.activeTrip?.driverIsArrivingIn??'').toLocal(),)),
                             if ((cubit.activeTrip == null  || state.tripStatus == TripState.canceled.name || state.tripStatus == ''))
                               Center(
                                   child: Text(context.isArabic ? 'لا يوجد لديك رحلة جارية في الوقت الحالي' : "You don't have active trip at the moment",
@@ -832,11 +841,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
-          fromClient: (context.read<DashboardsCubit>().activeTrip != null && state.tripStatus == TripState.started.name) == true ? false : null,
+          fromClient: (context.read<DashboardsCubit>().activeTrip != null && (state.tripStatus == TripState.started.name|| state.tripStatus == TripState.goToClient.name|| state.tripStatus == TripState.inLocation.name)) == true ? false : null,
           startAddress: context.read<DashboardsCubit>().activeTrip?.from,
           targetAddress: context.read<DashboardsCubit>().activeTrip?.to,
           clientAddresses: clientsAddress,
-          estimatedTime: context.read<DashboardsCubit>().activeTrip?.duration,
+          estimatedTime: context.read<DashboardsCubit>().state.tripStatus!=TripState.goToClient.name ? DateFormat('HH:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.driverIsArrivingIn??'').toLocal()) : '',
         ),
       ),
     );

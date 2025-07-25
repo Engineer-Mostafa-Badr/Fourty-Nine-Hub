@@ -11,7 +11,7 @@ class DriverCarMarkerWidget extends StatefulWidget {
   final Function(Marker?) onCarMarkerUpdated;
   final GoogleMapController mapController;
   final double size;
-  final num? time;
+  final String? time;
   const DriverCarMarkerWidget({
     super.key,
     required this.onCarMarkerUpdated,
@@ -100,7 +100,7 @@ class _DriverCarMarkerWidgetState extends State<DriverCarMarkerWidget> {
       icon: _carIcon ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
       flat: true,
       anchor: const Offset(0.5, 0.5),
-      infoWindow:  (widget.time!=null&&((widget.time??0)>0))?InfoWindow( title: "ETA ${widget.time}"):InfoWindow(),
+      infoWindow:  (widget.time!=null&&(widget.time?.isNotEmpty??false))?InfoWindow( title: "ETA ${widget.time}"):InfoWindow(),
     );
 
     _lastAngle = newAngle;
