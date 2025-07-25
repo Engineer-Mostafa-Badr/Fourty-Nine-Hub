@@ -3,16 +3,20 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DriverCarMarkerWidget extends StatefulWidget {
   final Function(Marker?) onCarMarkerUpdated;
   final GoogleMapController mapController;
-
+  final double size;
+  final num? time;
   const DriverCarMarkerWidget({
     super.key,
     required this.onCarMarkerUpdated,
+    required this.size,
+    this.time,
     required this.mapController,
   });
 
@@ -51,7 +55,7 @@ class _DriverCarMarkerWidgetState extends State<DriverCarMarkerWidget> {
 
   Future<void> _loadCarIcon() async {
     if (_carIcon != null) return;
-    _carIcon = await getResizedCarIcon('assets/images/car_for_tracking.png', width: 150);
+    _carIcon = await getResizedCarIcon('assets/images/car_for_tracking.png', width: (widget.size).toInt()*8);
   }
 
   void _startLocationTracking() async {
@@ -96,6 +100,7 @@ class _DriverCarMarkerWidgetState extends State<DriverCarMarkerWidget> {
       icon: _carIcon ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
       flat: true,
       anchor: const Offset(0.5, 0.5),
+      infoWindow:  (widget.time!=null&&((widget.time??0)>0))?InfoWindow( title: "ETA ${widget.time}"):InfoWindow(),
     );
 
     _lastAngle = newAngle;

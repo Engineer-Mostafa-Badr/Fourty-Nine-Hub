@@ -836,6 +836,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
           startAddress: context.read<DashboardsCubit>().activeTrip?.from,
           targetAddress: context.read<DashboardsCubit>().activeTrip?.to,
           clientAddresses: clientsAddress,
+          estimatedTime: context.read<DashboardsCubit>().activeTrip?.duration,
         ),
       ),
     );

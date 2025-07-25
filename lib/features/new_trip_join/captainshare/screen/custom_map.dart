@@ -18,6 +18,7 @@ class CustomGoogleMap extends StatefulWidget {
   final bool? fromClient;
   final String? startAddress;
   final String? targetAddress;
+  final num? estimatedTime;
   final List<String> clientAddresses;
 
   const CustomGoogleMap({
@@ -30,6 +31,7 @@ class CustomGoogleMap extends StatefulWidget {
     this.fromClient,
     this.startAddress,
     this.targetAddress,
+    this.estimatedTime,
     this.clientAddresses = const [],
   });
 
@@ -372,7 +374,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         if (widget.fromClient == false && _mapController != null)
           DriverCarMarkerWidget(
             onCarMarkerUpdated: _updateCarMarker,
-            mapController: _mapController!,
+            mapController: _mapController!, size: _currentZoom,
+            time: widget.estimatedTime,
           ),
       ],
     );
