@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
@@ -130,6 +131,7 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<ListenToPartialPaymentDriverUseCase>(() => ListenToPartialPaymentDriverUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateDriverRateLoadingNonSocketUseCase>(() => UpdateDriverRateLoadingNonSocketUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AddRateWithDriverLoadingUseCase>(() => AddRateWithDriverLoadingUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToClientComingUseCase>(() => ListenToClientComingUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
@@ -192,7 +194,7 @@ class RideDashboardServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-
+          serviceLocator(),
         ));
   }
 }

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -67,6 +68,7 @@ class _WalletWidgetState extends State<WalletWidget> {
               children: [
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     setState(() {
                       isOpen = !isOpen;
                     });
@@ -88,6 +90,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                       ),
                       const Sizer(),
                       buildItem(() {
+                        ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
                         // context.push(Routes.BALANCE);
@@ -114,6 +117,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                       ),
                       const Sizer(),
                       buildItem(() {
+                        ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
                         context.push(Routes.GIFT);
@@ -139,6 +143,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                       ),
                       const Sizer(),
                       buildItem(() {
+                        ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
                         context.push(Routes.WALLET);

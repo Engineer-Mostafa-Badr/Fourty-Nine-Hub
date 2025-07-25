@@ -26,6 +26,8 @@ class CaptainShareState {
   final MyBookingEntity? routeDetails;
   final SupportDetailsEntity? supportDetails;
   final RunningRouteEntity? runningRoute;
+  final GetLocationFromAddressEntity? currentLocation;
+  final GetLocationFromAddressEntity? toLocation;
 
   const CaptainShareState({
     this.failure,
@@ -37,6 +39,8 @@ class CaptainShareState {
     this.routeDetails,
     this.supportDetails,
     this.runningRoute,
+    this.currentLocation,
+    this.toLocation,
   });
   CaptainShareState copyWith({
     CaptainShareStates? status,
@@ -48,6 +52,8 @@ class CaptainShareState {
     SupportDetailsEntity? supportDetails,
     MyBookingEntity? routeDetails,
     RunningRouteEntity? runningRoute,
+    GetLocationFromAddressEntity? currentLocation,
+    GetLocationFromAddressEntity? toLocation,
   }) {
     return CaptainShareState(
       status: status ?? this.status,
@@ -59,6 +65,8 @@ class CaptainShareState {
       routeDetails: routeDetails ?? this.routeDetails,
       supportDetails: supportDetails ?? this.supportDetails,
       runningRoute: runningRoute ?? this.runningRoute,
+      currentLocation: currentLocation ?? this.currentLocation,
+      toLocation: toLocation ?? this.toLocation,
     );
   }
 }

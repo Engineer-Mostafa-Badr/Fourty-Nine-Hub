@@ -15,13 +15,13 @@ class PickClientUseCase {
 class PickClientParams {
   final String routeId;
   final String passengerId;
-  final String otp;
+  final String? otp;
 
-  PickClientParams({required this.routeId, required this.passengerId, required this.otp});
+  PickClientParams({required this.routeId, required this.passengerId, this.otp});
 
   //toJson
   Map<String, dynamic> toJson() => {
         'passengerId': passengerId,
-        'otp': otp,
+        if (otp != null&& otp!.isNotEmpty) 'otp': otp,
       };
 }

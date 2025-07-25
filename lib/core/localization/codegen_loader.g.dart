@@ -2201,7 +2201,7 @@ static const Map<String,dynamic> _en = {
   "dontOwnCar": "You don't own a car!\nSomeone will share trip with you / pay half price",
   "startingPoint": "From",
   "destinationPoint": "To",
-  "KM": "KM",
+  "KM": "Km",
   "repeat": "Repeat",
   "totalPrice": "Total Price",
   "brand": "Brand",

@@ -91,6 +91,7 @@ class RideArrivedScreen extends StatelessWidget {
                             LocationInfoWidget(
                               from: 'أول العاشر من رمضان',
                               to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                              hasTitle: true,
                             ),
                             CustomRideButton(text: "I've Arrived",onPressed: (){},),
                             const SizedBox(height: 10),
