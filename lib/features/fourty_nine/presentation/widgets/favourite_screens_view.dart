@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -60,67 +59,68 @@ class _FavouriteScreensViewState extends State<FavouriteScreensView> {
         child: DefaultTabController(
           length: 2,
           child: CustomScaffold(
-              appBar: const PreferredSize(
-                preferredSize: Size.fromHeight(30),
-                child: HomeAppbar(
-                  color: Colors.red,
-                  inNotifications: true,
-                  isWithBackArrow: true,
-                ),
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(30),
+              child: HomeAppbar(
+                color: Colors.red,
+                inNotifications: true,
+                isWithBackArrow: true,
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Label(
-                      text: titles[index],
-                      style: Styles.headerText(),
-                    ),
-                    const Sizer(),
-                    TabBar(
-                      onTap: (value) {
-                        index = value;
-                        setState(() {});
-                      },
-                      indicatorColor: AppColors.SECONDARY_COLOR,
-                      dividerColor: Colors.transparent,
-                      tabs: [
-                        CustomNotificationWidget(
-                          icon: SvgPicture.asset(
-                            Assets.saveIcon,
-                            height: 30,
-                          ),
-                          unreadCount: 0,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Label(
+                    text: titles[index],
+                    style: Styles.headerText(),
+                  ),
+                  const Sizer(),
+                  TabBar(
+                    onTap: (value) {
+                      index = value;
+                      setState(() {});
+                    },
+                    indicatorColor: AppColors.SECONDARY_COLOR,
+                    dividerColor: Colors.transparent,
+                    tabs: [
+                      CustomNotificationWidget(
+                        icon: SvgPicture.asset(
+                          Assets.saveIcon,
+                          height: 30,
                         ),
-                        CustomNotificationWidget(
-                          icon: SvgPicture.asset(
-                            Assets.starRedIcon,
-                            height: 30,
-                          ),
-                          unreadCount: 0,
+                        unreadCount: 0,
+                      ),
+                      CustomNotificationWidget(
+                        icon: SvgPicture.asset(
+                          Assets.starRedIcon,
+                          height: 30,
+                        ),
+                        unreadCount: 0,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        GestureDetector(
+                          onHorizontalDragStart: (_) {},
+                          onHorizontalDragEnd: (_) {},
+                          child: const FavouriteCategoryView(),
+                        ),
+                        GestureDetector(
+                          onHorizontalDragStart: (_) {},
+                          onHorizontalDragEnd: (_) {},
+                          child: const FavSubCategoryView(),
                         ),
                       ],
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          GestureDetector(
-                            onHorizontalDragStart: (_) {},
-                            onHorizontalDragEnd: (_) {},
-                            child: const FavouriteCategoryView(),
-                          ),
-                          GestureDetector(
-                            onHorizontalDragStart: (_) {},
-                            onHorizontalDragEnd: (_) {},
-                            child: const FavSubCategoryView(),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )),
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

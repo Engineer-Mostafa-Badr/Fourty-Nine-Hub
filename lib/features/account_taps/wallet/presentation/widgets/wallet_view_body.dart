@@ -181,7 +181,7 @@ class _WalletViewBodyState extends State<WalletViewBody> {
                                 //   subCategories: state,
                                 // ),
                                 Label(
-                                  text: LocaleKeys.history.localize,
+                                  text: context.isArabic?"سجل التحويلات":"Transfer History",
                                   style: Styles.headerText(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w700,
