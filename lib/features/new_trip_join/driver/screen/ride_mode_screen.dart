@@ -81,6 +81,7 @@ class NewRideModeBody extends StatelessWidget {
                     context.push(Routes.runningAndPastTripsScreen);
                   },
                   isCaptain: state.isCaptain??false,
+                  isReady:state.setting?.data?.isReady==true
                 ),
                 SizedBox(height: 20.h),
                 Row(
@@ -127,11 +128,13 @@ class NewRideModeBody extends StatelessWidget {
 class RideModeButton extends StatelessWidget {
   final void Function()? onTap;
   final bool isCaptain;
+  final bool isReady;
 
   const RideModeButton({
     super.key,
     this.onTap,
     required this.isCaptain,
+    required this.isReady,
   });
 
   // bool isServiceAvailable() {
@@ -200,7 +203,7 @@ class RideModeButton extends StatelessWidget {
         ),
         isCaptain==false ? Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0),
-          child: Text(context.isArabic?'يجب التسجيل في توصيله كابتن او سيدة اولا ':'You must register as a captain or lady first (From Ride).',
+          child: Text(context.isArabic?(isReady==true?"يجب عليك تفعيل استقبال رحلات من الداشبورد الخاص بك في توصيلة":'يجب التسجيل في توصيله'):(isReady==true?"You need to enable the pick up of trips from your dashboard.":'You need to register as a Rider'),
             style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
           ),
         ):SizedBox.shrink()

@@ -75,7 +75,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     perKm = widget.settings?.pricingPerKm ?? 0;
     isReady = widget.settings?.isReady ?? false;
     enableSound =  widget.settings?.enableNotificationSound ?? false;
-    isCaptainShare = false;
+    isCaptainShare =  widget.settings?.isCaptainShareEnabled ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 0)isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 1)isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 2)isPremium = widget.settings?.categoryIds[2].isActive ?? false;
@@ -237,6 +237,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       UpdateSettingsDashboardUsecaseParam(
                                           isReady: isReady,
                                           enableSound: enableSound,
+                                          isCaptainShare: isCaptainShare,
                                           subscriptionPlan: planTrailing,
                                           perKm:price,
                                           favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
@@ -409,6 +410,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           UpdateSettingsDashboardUsecaseParam(
                               isReady: isReady,
                               enableSound: enableSound,
+                              isCaptainShare: isCaptainShare,
                               subscriptionPlan: planTrailing,
                               perKm:perKm,
                               favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
