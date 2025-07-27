@@ -796,7 +796,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
 
   Widget _buildTopMap(BuildContext context, DashboardsState state) {
     List<gmap.LatLng> routePoints = [];
+    List<gmap.LatLng> driverRoutePoints = [];
     routePoints = _convertPolylineToLatLng(context.read<DashboardsCubit>().activeTrip?.polyline ?? []);
+    driverRoutePoints = _convertPolylineToLatLng(context.read<DashboardsCubit>().activeTrip?.driverPolyline ?? []);
 
     List<gmap.LatLng> clients = [];
     List<String> clientsAddress = [];
@@ -832,13 +834,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
       child: ClipRect(
         child: CustomGoogleMap(
           // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
-          startLocation: ((context.read<DashboardsCubit>().activeTrip?.startCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.startCoordinates == []))
+          startLocation:context.read<DashboardsCubit>().state.tripStatus== TripState.goToClient.name?((context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == []))
+              ? null
+              : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.driverStartCoordinates![0], context.read<DashboardsCubit>().activeTrip!.driverStartCoordinates![1]):((context.read<DashboardsCubit>().activeTrip?.startCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.startCoordinates == []))
               ? null
               : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.startCoordinates![1], context.read<DashboardsCubit>().activeTrip!.startCoordinates![0]),
-          targetLocation: ((context.read<DashboardsCubit>().activeTrip?.targetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.targetCoordinates == []))
+          targetLocation: context.read<DashboardsCubit>().state.tripStatus== TripState.goToClient.name?((context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == []))
+              ? null
+              : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.driverTargetCoordinates![0], context.read<DashboardsCubit>().activeTrip!.driverTargetCoordinates![1]):((context.read<DashboardsCubit>().activeTrip?.targetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.targetCoordinates == []))
               ? null
               : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.targetCoordinates![1], context.read<DashboardsCubit>().activeTrip!.targetCoordinates![0]),
-          polylinePoints: routePoints,
+          polylinePoints: context.read<DashboardsCubit>().state.tripStatus== TripState.goToClient.name?driverRoutePoints:routePoints,
           clientLocations: clients,
           enableScrolling: true,
           fromClient: (context.read<DashboardsCubit>().activeTrip != null && (state.tripStatus == TripState.started.name|| state.tripStatus == TripState.goToClient.name|| state.tripStatus == TripState.inLocation.name)) == true ? false : null,
