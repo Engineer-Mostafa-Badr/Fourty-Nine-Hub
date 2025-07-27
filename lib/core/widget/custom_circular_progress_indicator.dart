@@ -17,6 +17,7 @@ final Color? backgroundColor;
   Widget build(BuildContext context) {
     return  Lottie.asset(
       Assets.customLoading,
+
       width: value,
       height: value,
       fit: BoxFit.fill,
