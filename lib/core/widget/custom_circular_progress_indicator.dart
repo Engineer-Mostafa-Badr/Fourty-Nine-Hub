@@ -17,9 +17,10 @@ final Color? backgroundColor;
   Widget build(BuildContext context) {
     return  Lottie.asset(
       Assets.customLoading,
-
-      width: value,
-      height: value,
+      // width: value,
+      // height: value,
+      width: 50,
+      height: 50,
       fit: BoxFit.fill,
     );
     // CircularProgressIndicator(
