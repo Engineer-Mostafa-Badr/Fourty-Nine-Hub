@@ -182,7 +182,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Either<Failure, String>> goingToClient(String id) async{
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id) async{
     return await remoteDataSource.goingToClient(id);
   }
 
