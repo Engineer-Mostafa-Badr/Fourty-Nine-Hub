@@ -10,23 +10,26 @@ environment:
 
 dependencies:
   agora_rtc_engine: ^6.5.0
-  open_street_map_search_and_pick: ^0.1.1
+  animated_cards_carousel: ^1.0.2
   animated_custom_dropdown: ^3.1.1
+  animated_notch_bottom_bar: ^1.0.3
   audio_video_progress_bar: ^1.0.0
   audioplayers: ^6.1.0
+  auto_size_text: ^3.0.0
+  avatar_glow: ^3.0.1
   cached_network_image: ^3.3.1
   camera: ^0.10.5+5
   card_swiper: ^3.0.1
   carousel_slider: ^5.0.0
   chewie: ^1.5.0
-  flutter_date_pickers:
-#  printing: ^5.13.2
-  pdf: ^3.10.0
+  circular_menu: ^4.0.0
   collection: ^1.17.2
   connectivity_plus: ^4.0.1
   country_pickers: ^3.0.1
   cupertino_icons: ^1.0.6
   dartz: ^0.10.1
+  # deepar_flutter: ^0.0.4
+  deepar_flutter_plus: ^0.2.0
   device_info_plus: ^10.0.1
   device_preview: null
   dio: 5.4.3+1
@@ -35,8 +38,9 @@ dependencies:
   elegant_notification: ^2.3.0
   emoji_picker_flutter: any
   equatable: ^2.0.5
-#  ffmpeg_kit_flutter: ^6.0.1
-#  ffmpeg_kit_flutter_new: ^1.2.1
+  expandable: ^5.0.1
+  #  ffmpeg_kit_flutter: ^6.0.1
+  #  ffmpeg_kit_flutter_new: ^1.2.1
   file_picker: ^8.0.6
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
@@ -51,15 +55,15 @@ dependencies:
   flutter_card_swiper: ^7.0.1
   flutter_contacts: ^1.1.9+2
   flutter_countdown_timer: ^4.1.0
-#  flutter_credit_card: ^4.0.1
+  flutter_date_pickers: null
+  #  flutter_credit_card: ^4.0.1
   flutter_emoji: null
   flutter_fortune_wheel: ^1.3.1
   flutter_image_compress: null
   flutter_local_notifications: ^17.1.2
-  flutter_map:
+  flutter_map: null
   flutter_osm_plugin: ^0.70.4
   flutter_pdfview: ^1.3.4
-  printing: ^5.14.0
   flutter_phoenix: null
   flutter_polyline_points: ^2.1.0
   flutter_rating: ^2.0.2
@@ -72,18 +76,21 @@ dependencies:
   flutter_staggered_grid_view: ^0.7.0
   flutter_svg: ^2.0.10+1
   flutter_typeahead: null
+  # video_thumbnail: ^0.5.5
+  flutter_video_thumbnail_plus: ^1.0.5
+  fluttertoast: null
   font_awesome_flutter: ^10.7.0
   geocode: null
   geocoding: ^3.0.0
-  google_places_flutter: ^2.1.0
   geocoding_resolver: null
-  geolocator:
+  geolocator: null
   get_it: ^7.7.0
   giphy_get: ^3.6.0
   go_router: ^14.1.2
   google_fonts: null
   google_maps_flutter: ^2.6.1
   google_mobile_ads: ^5.0.0
+  google_places_flutter: ^2.1.0
   google_sign_in: ^6.2.1
   google_static_maps_controller: ^1.1.0
   googleapis_auth: ^1.6.0
@@ -97,7 +104,7 @@ dependencies:
   json_annotation: ^4.8.1
   just_audio: null
   jwt_decoder: null
-  latlong2:
+  latlong2: null
   liquid_progress_indicator_v2: ^0.5.0
   local_auth: ^2.3.0
   lottie: ^3.1.2
@@ -106,15 +113,19 @@ dependencies:
   multi_select_flutter: ^4.1.3
   native_device_orientation: ^2.0.3
   open_file: ^3.5.4
-  path:
+  open_street_map_search_and_pick: ^0.1.1
+  path: null
   path_drawing: null
   path_provider: ^2.0.11
+  #  printing: ^5.13.2
+  pdf: ^3.10.0
   permission_handler: ^11.3.1
   photo_manager: ^3.6.3
   photo_view: null
   pin_code_fields: ^8.0.1
   pinput: ^5.0.0
   pretty_dio_logger: ^1.3.1
+  printing: ^5.14.0
   quran: ^1.3.1
   readmore: ^3.0.0
   record: ^5.1.0
@@ -125,6 +136,7 @@ dependencies:
   shared_preferences: ^2.0.6
   shimmer: ^3.0.0
   slide_countdown: null
+  snacknload: ^1.0.9
   snapping_bottom_sheet: ^1.0.4
   social_media_recorder: ^1.1.13
   socket_io_client: ^2.0.3+1
@@ -133,12 +145,17 @@ dependencies:
   step_progress_indicator: null
   story_view: ^0.16.5
   swipe_to: ^1.0.6
+  tf_dio_cache: ^1.0.2
+  timeago: ^3.7.0
+  toastification: ^3.0.3
   top_snackbar_flutter: ^3.1.0
   transparent_image: ^2.0.1
   url_launcher: 6.2.6
+  vertical_card_pager: ^1.6.3
+  vibration: ^1.8.4
+  # percent_indicator: ^4.2.2
+  video_compress: ^3.1.4
   video_player: ^2.9.3
-  # video_thumbnail: ^0.5.5
-  flutter_video_thumbnail_plus: ^1.0.5
   visibility_detector: ^0.4.0+2
   voice_message_package: ^2.2.1
   web_socket_channel: ^2.4.0
@@ -147,32 +164,15 @@ dependencies:
   wechat_assets_picker: ^9.5.0
   widget_and_text_animator: null
   zego_express_engine: ^3.16.2
-  zego_uikit_signaling_plugin: ^2.8.8
   zego_uikit_prebuilt_call: ^4.16.22
-  circular_menu: ^4.0.0
-  timeago: ^3.7.0
-  fluttertoast:
-  tf_dio_cache: ^1.0.2
-  animated_notch_bottom_bar: ^1.0.3
-  expandable: ^5.0.1
-  # deepar_flutter: ^0.0.4
-  deepar_flutter_plus: ^0.2.0
-  # percent_indicator: ^4.2.2
-  video_compress: ^3.1.4
-  auto_size_text: ^3.0.0
-  animated_cards_carousel: ^1.0.2
-  vertical_card_pager: ^1.6.3
-  snacknload: ^1.0.9
-  toastification: ^3.0.3
-  avatar_glow: ^3.0.1
-  vibration: ^1.8.4
+  zego_uikit_signaling_plugin: ^2.8.8
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   record_linux: ^1.1.1
   http: ^0.13.3
   text_scroll: null
   auto_scroll_text: null
-  flutter_date_pickers:
+  flutter_date_pickers: null
   web: ^1.0.0
 #  wakelock_plus: ^1.2.8
 dev_dependencies:

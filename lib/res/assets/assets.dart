@@ -638,7 +638,7 @@ abstract class Assets {
 //   static String castIcon = 'assets/images/castIcon.svg';
   static String reportSheet = 'assets/images/reportSheet.svg';
 //   static String photoIcon = 'assets/images/photoIcon.svg';
-  static String locationReel = 'asظsets/images/locationReel.svg';
+  static String locationReel = 'assets/images/locationReel.svg';
   static String fullScreenIcon = 'assets/images/fullScreenIcon.svg';
   static String songIcon = 'assets/images/songIcon.svg';
   static String layoutIcon = 'assets/images/layoutIcon.svg';
