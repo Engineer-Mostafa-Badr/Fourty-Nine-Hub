@@ -81,6 +81,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     if((widget.settings?.categoryIds.length ?? 0) > 2)isPremium = widget.settings?.categoryIds[2].isActive ?? false;
   }
 
+  int calculateDaysUntilExpiry(String expiryDateString) {
+    final expiryDate = DateTime.parse(expiryDateString).toUtc();
+    final now = DateTime.now().toUtc();
+    return expiryDate.difference(now).inDays;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -328,7 +335,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     child: const PersonalDocumentsNonSocketScreen())));
               },
 
-              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
+              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.idExpiryDate??''))),
           ClickableWidget(
             onTap: () async {
               ManageVibration.vibrate();
@@ -337,7 +344,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   child: const DriversLicenseNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
-                title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+                title: LocaleKeys.driversLicense.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.drivingLicenseExpiryDate??'')),
           ),
           if (widget.modeType == 'ride') ...[
             ClickableWidget(
@@ -348,7 +355,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     child: const VehicleInformationNonSocketScreen())));
               },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.carLicense.tr(), exdIn: 6),
+                  title: LocaleKeys.carLicense.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.carLicenseExpiryDate??'')),
             ),
             if(widget.settings?.isCriminalRecordEnabled == true)
               ClickableWidget(
@@ -359,7 +366,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: const CriminalRecordNonSocketScreen())));
                 },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
+                  title: LocaleKeys.criminalRecord.tr(), exdIn: 4),
             ),
             if(widget.settings?.isDrugAnalysisRecordEnabled == true)
             ClickableWidget(
@@ -370,7 +377,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     child: const DragAnalyticsNonSocketScreen())));
               },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
+                  title: LocaleKeys.drugAnalysis.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.drugAnalysisExpiryDate??'')),
             ),
           ],
           if(widget.settings?.isVehicleRecordEnabled == true)
@@ -382,7 +389,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   child: const TechnicalExaminationNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
-                title: LocaleKeys.vehicleInspection.tr(), exdIn: 6),
+                title: LocaleKeys.vehicleInspection.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.technicalExaminationExpiryDate??'')),
           ),
           const SizedBox(height: 16),
           Row(

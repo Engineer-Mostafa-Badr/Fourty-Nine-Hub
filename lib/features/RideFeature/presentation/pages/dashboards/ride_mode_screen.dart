@@ -404,8 +404,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if(state.tripStatus == TripState.goToClient.name&&cubit.activeTrip?.driverIsArrivingIn!=null&&(cubit.activeTrip?.driverIsArrivingIn?.isNotEmpty??false)&&(DateTime.parse(cubit.activeTrip?.driverIsArrivingIn??'').toLocal().isAfter(DateTime.now())))
                               PositionedDirectional(
                                   top: 20.h,
-                                  start: 60.w,
-                                  end: 60.w,
+                                  start: 100.w,
+                                  end: 100.w,
                                   child: CountdownTimerCard(targetTime: DateTime.parse(cubit.activeTrip?.driverIsArrivingIn??'').toLocal(),)),
                             if ((cubit.activeTrip == null  || state.tripStatus == TripState.canceled.name || state.tripStatus == ''))
                               Center(

@@ -71,11 +71,11 @@ class _CountdownTimerCardState extends State<CountdownTimerCard> {
     if(_isExpired) return SizedBox.shrink();
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(6.0),
         child: Center(
           child: Text(
             _isExpired ? 'Expired' : _formatDuration(_remaining),
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
       ),
