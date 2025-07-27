@@ -79,7 +79,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
         emit(state.copyWith(status: CaptainShareDashboardStates.error, failure: failure,isCaptain:false));
       },
           (settings) {
-        bool isCaptain = (settings.data.isReady==true&&settings.data.isCaptainShareEnabled==true);
+        bool isCaptain = settings.data.isCaptainShareEnabled==true;
         emit(state.copyWith(
             status: CaptainShareDashboardStates.success,setting: settings,isCaptain:isCaptain));
       },

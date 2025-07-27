@@ -83,7 +83,7 @@ abstract class TripRemoteDataSource {
 
   Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params);
   Future<Either<Failure, RunningTripEntity>> getRunningTrip();
-  Future<Either<Failure, String>> goingToClient(String id);
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id);
   Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
   Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts();
   Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params);
@@ -592,15 +592,14 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, String>> goingToClient(String id) async {
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.goingToClient(id),
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        log("data['driverIsArrivingIn'] ${data['data']['driverIsArrivingIn']}");
-        return Right(data['data']['driverIsArrivingIn']??'');
+        return Right(RunningTripModel.fromJson(data['data']['driverIsArrivingIn']));
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

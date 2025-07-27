@@ -1913,7 +1913,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     showLoadingDialog(context);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, String> result = await goingToClientUseCase(id);
+    final Either<Failure, RunningTripEntity> result = await goingToClientUseCase(id);
 
     if (isClosed) return;
     result.fold(
@@ -1926,7 +1926,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (time) {
         log("Suzccess time = $time");
         context.pop();
-        activeTrip?.driverIsArrivingIn = time;
+        activeTrip = time;
         emit(state.copyWith(
             status: DashboardsStates.success,
             tripStatus: TripState.goToClient.name));
