@@ -49,30 +49,28 @@ class RunningTripModel extends RunningTripEntity {
 
     if (location['polyline'] != null) {
       if (location['polyline'] is String) {
-        // Decode the encoded polyline string
         PolylinePoints polylinePoints = PolylinePoints();
         List<PointLatLng> decoded = polylinePoints.decodePolyline(location['polyline']);
-        parsedDriverPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
+        parsedPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
       } else if (location['polyline'] is List) {
-        // Use the list directly
-        parsedDriverPolyline = (location['polyline'] as List)
+        parsedPolyline = (location['polyline'] as List)
             .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
             .toList();
       }
     }
+
     if (driverLocation['polyline'] != null) {
       if (driverLocation['polyline'] is String) {
-        // Decode the encoded polyline string
         PolylinePoints polylinePoints = PolylinePoints();
         List<PointLatLng> decoded = polylinePoints.decodePolyline(driverLocation['polyline']);
-        parsedPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
+        parsedDriverPolyline = decoded.map((e) => [e.longitude,e.latitude]).toList();
       } else if (driverLocation['polyline'] is List) {
-        // Use the list directly
-        parsedPolyline = (driverLocation['polyline'] as List)
+        parsedDriverPolyline = (driverLocation['polyline'] as List)
             .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
             .toList();
       }
     }
+
 
     if (location['polyline'] != null) {
       if (location['polyline'] is String) {

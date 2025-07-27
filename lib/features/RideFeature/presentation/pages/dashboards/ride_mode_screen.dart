@@ -825,6 +825,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
       clientsAddress.add(context.read<DashboardsCubit>().activeTrip?.wayPointTwoTitle ?? '');
     }
 
+    print("context.read<DashboardsCubit>().activeTrip?.driverPolyline ${context.read<DashboardsCubit>().activeTrip?.driverPolyline}");
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
