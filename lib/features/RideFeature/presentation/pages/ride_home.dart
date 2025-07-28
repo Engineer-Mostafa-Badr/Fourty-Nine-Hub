@@ -1212,7 +1212,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             },
             child: Container(
               width: 85.w,
-              height: kToolbarHeight * 1.2.h,
+              height: 45,
               decoration: BoxDecoration(
     color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :AppColors.whiteColor,
                 borderRadius: BorderRadius.circular(10),
@@ -1225,9 +1225,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               ),
             ),
           ),
+          Sizer(),
           Expanded(
             child: SizedBox(
-              height: 50,
+              height: 45,
               child: GestureDetector(
                 onTap: () {
                   ManageVibration.vibrate();
@@ -1244,9 +1245,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   }
                 },
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                  // margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                   width: double.infinity,
-                  height: 50,
+                  // height: 50,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: (driverInfo?.status == RegistrationStatus.approved.status || (loadingInfo?.status == RegistrationStatus.approved.status))
@@ -1315,17 +1316,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
-                        padding: const EdgeInsets.all(10),
+                        height: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                         decoration: BoxDecoration(
                           color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :AppColors.whiteColor,
                           borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
+                          ]
                         ),
                         alignment: Alignment.center,
                         child: Image.asset(
                           Assets.targetLocation,
                           color: context.isDarkMode ? AppColors.whiteColor :null,
+                          width: 35.w,
+                          height: 35.w,
                         ),
                       ),
                       Expanded(
@@ -1894,10 +1899,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _tripsWidget(String text, {required Color color}) {
     return Container(
-      height: 40,
+      height: 30,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : color, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
+          color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : color,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColors.DARK_BLUE_COLOR),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
+          ]
+      ),
       child: Center(
         child: Text(
           text,

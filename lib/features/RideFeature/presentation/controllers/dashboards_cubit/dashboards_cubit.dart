@@ -384,7 +384,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           createNonTrackOfferEntity: rateData,
           status: DashboardsStates.success,
         ));
-        showSuccessMessage(context, rateData.message ?? LocaleKeys.successSubmit.localize);
+        showSuccessMessage(context, rateData.message);
 
       },
     );
@@ -1913,7 +1913,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     showLoadingDialog(context);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, bool> result = await goingToClientUseCase(id);
+    final Either<Failure, RunningTripEntity> result = await goingToClientUseCase(id);
 
     if (isClosed) return;
     result.fold(
@@ -1923,9 +1923,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         showErrorMessage(context, getFailureMessage(failure, context));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
-      (activeTrip) {
-        log("Suzccess");
+      (time) {
+        log("Suzccess time = $time");
         context.pop();
+        activeTrip = time;
         emit(state.copyWith(
             status: DashboardsStates.success,
             tripStatus: TripState.goToClient.name));
@@ -1982,7 +1983,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (activeTrip) async {
         final prefs = await SharedPreferences.getInstance();
-        final futureTime = DateTime.now().add(Duration(minutes: 1));
+        final futureTime = DateTime.now().add(Duration(minutes: 10));
         await prefs.setString('remaining_time', futureTime.toIso8601String());
         log("Suzccess");
         context.pop();
@@ -1999,7 +2000,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     showLoadingDialog(context);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, bool> result = await startDriverTripUseCase(
+    final Either<Failure, String> result = await startDriverTripUseCase(
         StartDriverTripParams(tripId: id, otp: otp));
 
     if (isClosed) return;
@@ -2010,9 +2011,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         showErrorMessage(context, getFailureMessage(failure, context));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
-      (activeTrip) {
+      (time) {
         log("Suzccess");
         context.pop();
+        activeTrip?.tripStartTime = time;
         emit(state.copyWith(
             status: DashboardsStates.success,
             tripStatus: TripState.started.name));
@@ -2133,9 +2135,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   Future<bool> rateTheClient(
       {required BuildContext context,
       required String tripId,
-      required String comment,
+      required String comment, RideModeParams? params,
       required double rate}) async {
-    showLoadingDialog(context);
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     emit(state.copyWith(status: DashboardsStates.loadingPast));
     bool value = true;
 
@@ -2145,14 +2148,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     result.fold(
       (failure) {
         value=false;
-        context.pop();
-        log("Failure ${getFailureMessage(failure, context)}");
-        showErrorMessage(context, getFailureMessage(failure, context));
+        currentContext.pop();
+        log("Failure ${getFailureMessage(failure, currentContext)}");
+        showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (activeTrip) {
         log("Suzccess");
-        context.pop();
+        currentContext.pop();
+        if(params!=null)changeIndex(0, context, params);
         value=true;
         emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
       },

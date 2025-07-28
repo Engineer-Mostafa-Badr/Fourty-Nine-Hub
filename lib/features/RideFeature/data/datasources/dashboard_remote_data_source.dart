@@ -83,13 +83,13 @@ abstract class TripRemoteDataSource {
 
   Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params);
   Future<Either<Failure, RunningTripEntity>> getRunningTrip();
-  Future<Either<Failure, bool>> goingToClient(String id);
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id);
   Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
   Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts();
   Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params);
   Future<Either<Failure, EmergencyContactEntity>> editEmergencyContacts(EmergencyContactEntity params);
   Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params);
-  Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
+  Future<Either<Failure, String>> startDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params);
@@ -592,14 +592,14 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> goingToClient(String id) async {
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.goingToClient(id),
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']);
+        return Right(RunningTripModel.fromJson(data['data']['driverIsArrivingIn']));
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -620,12 +620,12 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params) async {
+  Future<Either<Failure, String>> startDriverTrip(StartDriverTripParams params) async {
     try {
       final response = await _apiConsumer.put(EndPoints.startDriverTrip(params.tripId), data: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']);
+        return Right(data['data']['tripStartedAt']??'');
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

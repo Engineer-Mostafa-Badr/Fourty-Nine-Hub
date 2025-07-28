@@ -76,15 +76,10 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
           (failure) {
         log("getSettingsError${getFailureMessage(failure, context)}");
 
-        emit(state.copyWith(status: CaptainShareDashboardStates.error, failure: failure));
+        emit(state.copyWith(status: CaptainShareDashboardStates.error, failure: failure,isCaptain:false));
       },
           (settings) {
-        log("Suzccess $settings");
-        String captain = '62c8ba9f8e28a58a3edf57eb';
-        String lady = '62ea012a69ea29c91dfc3917';
-        log("settings.data.categoryIds.any((e)=>e.id==captain||e.id==lady) ${(settings.data.categoryIds.any((e)=>e.id==captain||e.id==lady))}");
-        log("settings.data.isReady==true ${(settings.data.isReady==true&&(settings.data.categoryIds.any((e)=>e.id==captain||e.id==lady)))}");
-        bool isCaptain = (settings.data.isReady==true&&settings.data.categoryIds.any((e)=>e.id==captain||e.id==lady));
+        bool isCaptain = settings.data.isCaptainShareEnabled==true;
         emit(state.copyWith(
             status: CaptainShareDashboardStates.success,setting: settings,isCaptain:isCaptain));
       },

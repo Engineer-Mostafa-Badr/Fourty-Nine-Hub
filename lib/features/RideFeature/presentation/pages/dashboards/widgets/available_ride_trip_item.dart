@@ -8,12 +8,14 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -76,7 +78,7 @@ class AvailableRideTripItem extends StatelessWidget {
                               start: -28.w,
                               child: Row(
                                 children: [
-                                  Container(
+                                  if((tripEntity.clientRatingAverage??0)>0)Container(
                                     // height: 32.h,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.r),
@@ -89,7 +91,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                           baseline: 22.h,
                                           baselineType: TextBaseline.alphabetic,
 
-                                          child: Text('4.0',style: TextStyle(
+                                          child: Text(FormatNumbers().convertNumberToLocalizedString('${tripEntity.clientRatingAverage}', isArabic: context.isArabic),style: TextStyle(
                                             fontSize: FontSize.s14,
                                             color: context.isDarkMode?AppColors.black:AppColors.black
                                           ),),
@@ -183,7 +185,7 @@ class AvailableRideTripItem extends StatelessWidget {
                     text: TextSpan(
                       style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
                       children: <TextSpan>[
-                        TextSpan(text: '${(tripEntity.distance / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}',
+                        TextSpan(text: '${FormatNumbers().convertNumberToLocalizedString((tripEntity.distance / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${LocaleKeys.KM.tr()}',
                             style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:AppColors.black)
                         ),
                       ],
@@ -195,6 +197,7 @@ class AvailableRideTripItem extends StatelessWidget {
                   flex: 2,
                     child: ClickableWidget(
                       onTap: () {
+                        ManageVibration.vibrate();
                         print("tripEntity.isPremium ${tripEntity.isPremium}");
                         print("tripEntity.isButtonEnabled ${tripEntity.isButtonEnabled}");
                         if(tripEntity.isPremium==true||tripEntity.isButtonEnabled==true){
@@ -250,7 +253,7 @@ class AvailableRideTripItem extends StatelessWidget {
                             style: const TextStyle(color: AppColors.black),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: '${LocaleKeys.Accept.tr()} ${(tripEntity.price??0).ceil()}  ',
+                                  text: '${LocaleKeys.Accept.tr()} ${FormatNumbers().convertNumberToLocalizedString((tripEntity.price??0).ceil().toString(), isArabic: context.isArabic)}  ',
                                   style: Styles.mediumText(
                                     color: Colors.white,
                                   )),
@@ -273,6 +276,7 @@ class AvailableRideTripItem extends StatelessWidget {
                     label: tripEntity.isAutoAccept == false ? LocaleKeys.acceptAnothePrice.tr() : LocaleKeys.refuse.tr(),
                     style: Styles.mediumText(color: Colors.white, fontSize: tripEntity.isAutoAccept == false ? 28 : 28),
                     onPressed: () {
+                      ManageVibration.vibrate();
                       if(tripEntity.isPremium||tripEntity.isButtonEnabled){
                         if (tripEntity.isAutoAccept == false) {
                           showModalBottomSheet(

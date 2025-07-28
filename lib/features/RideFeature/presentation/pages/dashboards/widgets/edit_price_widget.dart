@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -52,7 +54,7 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              _fareButton("-3", () {
+              _fareButton("-${FormatNumbers().convertNumberToLocalizedString('3', isArabic: context.isArabic)}", () {
                 if (price > 3) {
                   price = price - 3;
                   setState(() {});
@@ -66,13 +68,13 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
                         fontSize: FontSize.s14, fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    "${LocaleKeys.egp.tr()} $price",
+                    "${LocaleKeys.egp.tr()} ${FormatNumbers().convertNumberToLocalizedString('$price', isArabic: context.isArabic)}",
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
-              _fareButton("+3", () {
+              _fareButton("+${FormatNumbers().convertNumberToLocalizedString('3', isArabic: context.isArabic)}", () {
                 price = price + 3;
                 setState(() {});
               }),
@@ -110,7 +112,7 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
               SvgPicture.asset(Assets.cash, width: 10, height: 10),
               const SizedBox(width: 8),
               Text(
-                '${LocaleKeys.egp.tr()} $price ${LocaleKeys.cash.tr()}',
+                '${LocaleKeys.egp.tr()} ${FormatNumbers().convertNumberToLocalizedString('$price', isArabic: context.isArabic)} ${LocaleKeys.cash.tr()}',
                 style: const TextStyle(
                     fontSize: FontSize.s12, fontWeight: FontWeight.w600),
               ),

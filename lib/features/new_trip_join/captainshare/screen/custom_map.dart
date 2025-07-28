@@ -18,6 +18,7 @@ class CustomGoogleMap extends StatefulWidget {
   final bool? fromClient;
   final String? startAddress;
   final String? targetAddress;
+  final String? estimatedTime;
   final List<String> clientAddresses;
 
   const CustomGoogleMap({
@@ -30,6 +31,7 @@ class CustomGoogleMap extends StatefulWidget {
     this.fromClient,
     this.startAddress,
     this.targetAddress,
+    this.estimatedTime,
     this.clientAddresses = const [],
   });
 
@@ -87,6 +89,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         widget.clientAddresses != oldWidget.clientAddresses) {
       shouldUpdate = true;
     }
+    if (widget.fromClient != oldWidget.fromClient ) {
+      shouldUpdate = true;
+    }
+    if (widget.estimatedTime != oldWidget.estimatedTime ) {
+          shouldUpdate = true;
+        }
 
     if (shouldUpdate) {
       _setMarkersAndPolyline();
@@ -296,6 +304,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return gradientPolylines;
   }
 
+
   void _updateCarMarker(Marker? marker) {
     setState(() {
       _carMarker = marker;
@@ -357,6 +366,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       },
     );
 
+    print("widget.fromClient ${widget.fromClient}");
     return Stack(
       children: [
         SizedBox(
@@ -372,7 +382,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         if (widget.fromClient == false && _mapController != null)
           DriverCarMarkerWidget(
             onCarMarkerUpdated: _updateCarMarker,
-            mapController: _mapController!,
+            mapController: _mapController!, size: _currentZoom,
+            time: widget.estimatedTime,
           ),
       ],
     );

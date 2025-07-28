@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/bottom_sheet_helper.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
@@ -19,10 +20,12 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/di
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BuildDriverArrivedSheet extends StatefulWidget {
   const BuildDriverArrivedSheet({super.key, required this.onPressed,required this.onCancelTrip,required this.params,required this.onReport, required this.onSafety,this.activeTrip});
@@ -43,6 +46,22 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
   bool _isClientNotShownReason = false;
 
   TextEditingController otherController = TextEditingController();
+
+  Future<void> openGoogleMapsWithDirections({
+    required double startLat,
+    required double startLng,
+    required double targetLat,
+    required double targetLng,
+  }) async {
+    final googleMapsUrl =
+        'https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$targetLat,$targetLng&travelmode=driving';
+
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch Google Maps';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +90,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                     onSafety: widget.onSafety,
                     is_show_message: true,
                     onMessage: () async {
+                      ManageVibration.vibrate();
                       BottomSheetHelper.startChatAndNavigate(
                         context: context,
                         otherUserId: widget.activeTrip?.clientId??'',
@@ -78,6 +98,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                       );
                     },
                     onContactDriver: () {
+                      ManageVibration.vibrate();
                       BottomSheetHelper.showCallOptionsBottomSheet(
                           context: context,
                           senderId: widget.activeTrip?.driverId ?? '',
@@ -88,10 +109,6 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                           phoneNumber: '01145152315'
                       );
                     },
-                  ),
-
-                  const SizedBox(
-                    height: 8,
                   ),
                   GestureDetector(
                     onTap: ()=>widget.onReport(),
@@ -161,7 +178,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                               color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                           SizedBox(width: 5),
                           Text(
-                            "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${widget.activeTrip?.duration??''} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}.",
+                            "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${FormatNumbers().convertNumberToLocalizedString('${widget.activeTrip?.duration??''}', isArabic: context.isArabic)} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${FormatNumbers().convertNumberToLocalizedString(((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${LocaleKeys.KM.tr()}.",
                             style: TextStyle(
                                 color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                           ),
@@ -172,10 +189,12 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                   const SizedBox(height: 12),
                   ClickableWidget(
                     onTap: (){
+                      ManageVibration.vibrate();
                       showCancelTripDialog(
                           context: context,
                           isChangedMindReason: _isChangedMindReason,
                           onSelectChangedMindReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = false;
                               _isChangedMindReason = !_isChangedMindReason;
@@ -184,6 +203,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                           },
                           isClientNotShownReason: _isClientNotShownReason,
                           onSelectClientNotShownReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = !_isClientNotShownReason;
                               _isChangedMindReason = false;
@@ -192,6 +212,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                           },
                           isOtherReason: _isOtherReason,
                           onSelectOtherReason: () {
+                            ManageVibration.vibrate();
                             setState(() {
                               _isClientNotShownReason = false;
                               _isChangedMindReason = false;
@@ -266,6 +287,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isClientNotShown: true);
                   },
                   child: Container(
@@ -291,6 +313,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isChangedMind: true);
                   },
                   child: Container(
@@ -316,6 +339,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isOther: true);
                   },
                   child: Container(
@@ -367,6 +391,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                         label: context.isArabic ? 'الغاء' : 'Close',
                         backColor: AppColors.SECONDARY_COLOR_DARK2,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           // cubit
                         }),
@@ -376,6 +401,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () async {
+                          ManageVibration.vibrate();
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             onCancelTrip(CancelTripByRiderUseCaseParams(

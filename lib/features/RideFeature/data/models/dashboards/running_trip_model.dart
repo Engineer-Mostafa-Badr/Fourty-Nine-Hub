@@ -9,13 +9,20 @@ class RunningTripModel extends RunningTripEntity {
     required super.from,
     required super.to,
     required super.startCoordinates,
+    required super.driverStartCoordinates,
     required super.targetCoordinates,
+    required super.driverTargetCoordinates,
     required super.wayPointOneTitle,
     required super.wayPointTwoTitle,
     required super.clientRaiting,
     super.wayPointOne,
     super.wayPointTwo,
+    super.tripStartTime,
+    super.acceptedOfferAt,
+    super.driverArrivalAt,
+    super.driverIsArrivingIn,
     required super.polyline,
+    required super.driverPolyline,
     required super.subCategoryId,
     required super.subCategoryNameAr,
     required super.subCategoryNameEn,
@@ -33,10 +40,37 @@ class RunningTripModel extends RunningTripEntity {
   factory RunningTripModel.fromJson(Map<String, dynamic> json) {
     final tripDetails = json['tripDetails'] as Map<String, dynamic>? ?? {};
     final location = tripDetails['location'] as Map<String, dynamic>? ?? {};
+    final driverLocation = tripDetails['driverLocation'] as Map<String, dynamic>? ?? {};
     final subCategory = tripDetails['subCategory'] as Map<String, dynamic>? ?? {};
     final clientDetails = json['clientDetails'] as Map<String, dynamic>? ?? {};
 
     List<List<double>> parsedPolyline = [];
+    List<List<double>> parsedDriverPolyline = [];
+
+    if (location['polyline'] != null) {
+      if (location['polyline'] is String) {
+        PolylinePoints polylinePoints = PolylinePoints();
+        List<PointLatLng> decoded = polylinePoints.decodePolyline(location['polyline']);
+        parsedPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
+      } else if (location['polyline'] is List) {
+        parsedPolyline = (location['polyline'] as List)
+            .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
+            .toList();
+      }
+    }
+
+    if (driverLocation['polyline'] != null) {
+      if (driverLocation['polyline'] is String) {
+        PolylinePoints polylinePoints = PolylinePoints();
+        List<PointLatLng> decoded = polylinePoints.decodePolyline(driverLocation['polyline']);
+        parsedDriverPolyline = decoded.map((e) => [e.longitude,e.latitude]).toList();
+      } else if (driverLocation['polyline'] is List) {
+        parsedDriverPolyline = (driverLocation['polyline'] as List)
+            .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
+            .toList();
+      }
+    }
+
 
     if (location['polyline'] != null) {
       if (location['polyline'] is String) {
@@ -58,17 +92,23 @@ class RunningTripModel extends RunningTripEntity {
       duration: tripDetails['duration'] ?? 0,
       distance: tripDetails['distance'] ?? 0,
       status: tripDetails['status'] ?? '',
+      tripStartTime: tripDetails['tripStartTime'] ?? '',
+      acceptedOfferAt: tripDetails['acceptedOfferAt'] ?? '',
+      driverArrivalAt: tripDetails['driverArrivalAt'] ?? '',
+      driverIsArrivingIn: tripDetails['driverIsArrivingIn'] ?? '',
       price: tripDetails['price'] ?? 0,
-
       from: location['start']?['title'],
       to: location['target']?['title'],
       wayPointOneTitle: location['wayPointOne']?['title'],
       wayPointTwoTitle: location['wayPointTwo']?['title'],
       startCoordinates: [location["start"]?['latitude'] ?? 0.0, location["start"]?['longitude'] ?? 0.0],
+      driverStartCoordinates: [driverLocation["start"]?['latitude'] ?? 0.0, driverLocation["start"]?['longitude'] ?? 0.0],
       targetCoordinates: [location["target"]?['latitude'] ?? 0.0, location["target"]?['longitude'] ?? 0.0],
+      driverTargetCoordinates: [driverLocation["target"]?['latitude'] ?? 0.0, driverLocation["target"]?['longitude'] ?? 0.0],
       wayPointOne: [location["wayPointOne"]?['latitude'] ?? 0.0, location["wayPointOne"]?['longitude'] ?? 0.0],
       wayPointTwo: [location["wayPointTwo"]?['latitude'] ?? 0.0, location["wayPointTwo"]?['longitude'] ?? 0.0],
       polyline: parsedPolyline,
+      driverPolyline: parsedDriverPolyline,
 
       subCategoryId: subCategory['id'] ?? 0,
       subCategoryNameAr: subCategory['nameAr'] ?? '',

@@ -833,7 +833,7 @@ class EndPoints {
   }
 
   static String cancelTripRider(String id) {
-    return '/ride/trips/cancel-by-rider/$id';
+    return '/trips/cancel-by-rider/';
   }
 
   static String cancelTripClient(String id) {
@@ -1540,7 +1540,7 @@ class EndPoints {
   }
 
   static String cancelTripByRider(String tripId) {
-    return '/ride/trips/cancel-by-rider/$tripId';
+    return '/ride/driver/tracking/trips/$tripId/cancel';
   }
 
   static String finalizeTripByRider(String tripId) {

@@ -182,7 +182,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> goingToClient(String id) async{
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id) async{
     return await remoteDataSource.goingToClient(id);
   }
 
@@ -192,7 +192,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params) async{
+  Future<Either<Failure, String>> startDriverTrip(StartDriverTripParams params) async{
     return await remoteDataSource.startDriverTrip(params);
   }
 

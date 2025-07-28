@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/update_fare_bottom_sheet_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -74,11 +75,18 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     perKm = widget.settings?.pricingPerKm ?? 0;
     isReady = widget.settings?.isReady ?? false;
     enableSound =  widget.settings?.enableNotificationSound ?? false;
-    isCaptainShare = false;
+    isCaptainShare =  widget.settings?.isCaptainShareEnabled ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 0)isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 1)isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 2)isPremium = widget.settings?.categoryIds[2].isActive ?? false;
   }
+
+  int calculateDaysUntilExpiry(String expiryDateString) {
+    final expiryDate = DateTime.parse(expiryDateString).toUtc();
+    final now = DateTime.now().toUtc();
+    return expiryDate.difference(now).inDays;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +100,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
               valuee: isReady,
               onChanged: (value) {
+                ManageVibration.vibrate();
                 setState(() {
                   isReady = value;
                 });
@@ -102,6 +111,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 subText: enableSound ? context.isArabic?'تفعيل':'Enabled' : context.isArabic?'تعطيل':'Disabled', //'Disable',
                 valuee: enableSound,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     enableSound = value;
                   });
@@ -113,6 +123,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     isCaptainShare ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
                 valuee: isCaptainShare,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isCaptainShare = value;
                   });
@@ -127,6 +138,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         .nameEn, //LocaleKeys.captain.tr(),
                 valuee: isCaptain,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isCaptain = value;
                   });
@@ -141,6 +153,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         .nameEn, //LocaleKeys.intercity.tr(),
                 valuee: isIntercity,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isIntercity = value;
                   });
@@ -155,6 +168,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         .nameEn, //LocaleKeys.premium.tr(), //'Premium',
                 valuee: isPremium,
                 onChanged: (value) {
+                  ManageVibration.vibrate();
                   setState(() {
                     isPremium = value;
                   });
@@ -167,6 +181,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 subscriptionPlans.length,
                 (index) => InkWell(
                   onTap: () {
+                    ManageVibration.vibrate();
                     setState(() {
                       planTrailing = subscriptionPlans[index];
                       planController.collapse();
@@ -188,6 +203,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 context.read<DashboardsCubit>().state.govs?.length??0,
                 (index) => InkWell(
                   onTap: () {
+                    ManageVibration.vibrate();
                     context.read<DashboardsCubit>().onSelectGovernorate(context.read<DashboardsCubit>().state.govs?[index]);
                     cityController.collapse();
                   },
@@ -212,6 +228,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           fontSize: 14, fontWeight: FontWeight.w500)),
                   GestureDetector(
                       onTap: () {
+                        ManageVibration.vibrate();
                         customBottomSheet2(context,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -221,11 +238,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                 lowCostPerKm: widget.settings?.lowCostPerKm ?? 0,
                                 selectedCategoryName: 'aaa',
                                 onChange: (price){
+                                  ManageVibration.vibrate();
                                   context.read<DashboardsCubit>().updateSettings(
                                       context,
                                       UpdateSettingsDashboardUsecaseParam(
                                           isReady: isReady,
                                           enableSound: enableSound,
+                                          isCaptainShare: isCaptainShare,
                                           subscriptionPlan: planTrailing,
                                           perKm:price,
                                           favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
@@ -310,61 +329,67 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),
           ClickableWidget(
               onTap: () async {
+                ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                     value: serviceLocator<DashboardsCubit>(),
                     child: const PersonalDocumentsNonSocketScreen())));
               },
 
-              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
+              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.idExpiryDate??''))),
           ClickableWidget(
             onTap: () async {
+              ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: const DriversLicenseNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
-                title: LocaleKeys.driversLicense.tr(), exdIn: 6),
+                title: LocaleKeys.driversLicense.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.drivingLicenseExpiryDate??'')),
           ),
           if (widget.modeType == 'ride') ...[
             ClickableWidget(
               onTap: () async {
+                ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                     value: serviceLocator<DashboardsCubit>(),
                     child: const VehicleInformationNonSocketScreen())));
               },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.carLicense.tr(), exdIn: 6),
+                  title: LocaleKeys.carLicense.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.carLicenseExpiryDate??'')),
             ),
             if(widget.settings?.isCriminalRecordEnabled == true)
               ClickableWidget(
                 onTap: () async {
+                  ManageVibration.vibrate();
                   await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                       value: serviceLocator<DashboardsCubit>(),
                       child: const CriminalRecordNonSocketScreen())));
                 },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
+                  title: LocaleKeys.criminalRecord.tr(), exdIn: 4),
             ),
             if(widget.settings?.isDrugAnalysisRecordEnabled == true)
             ClickableWidget(
               onTap: () async {
+                ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                     value: serviceLocator<DashboardsCubit>(),
                     child: const DragAnalyticsNonSocketScreen())));
               },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
+                  title: LocaleKeys.drugAnalysis.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.drugAnalysisExpiryDate??'')),
             ),
           ],
           if(widget.settings?.isVehicleRecordEnabled == true)
           ClickableWidget(
             onTap: () async {
+              ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: const TechnicalExaminationNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
-                title: LocaleKeys.vehicleInspection.tr(), exdIn: 6),
+                title: LocaleKeys.vehicleInspection.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.technicalExaminationExpiryDate??'')),
           ),
           const SizedBox(height: 16),
           Row(
@@ -375,7 +400,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 child: AppButton(
                     label: LocaleKeys.deleteRegistration.tr(),
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {}),
+                    onPressed: () {
+                      ManageVibration.vibrate();
+
+                    }),
               ),
               Expanded(
                 flex: 2,
@@ -383,11 +411,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     label: LocaleKeys.update.tr(),
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+                      ManageVibration.vibrate();
                       context.read<DashboardsCubit>().updateSettings(
                           context,
                           UpdateSettingsDashboardUsecaseParam(
                               isReady: isReady,
                               enableSound: enableSound,
+                              isCaptainShare: isCaptainShare,
                               subscriptionPlan: planTrailing,
                               perKm:perKm,
                               favoriteCity: context.isArabic?context.read<DashboardsCubit>().state.selectedGov?.nameAr??'':context.read<DashboardsCubit>().state.selectedGov?.nameEn??'',
@@ -471,6 +501,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               inactiveTrackColor: AppColors.whiteColor,
               onChanged: onChanged ??
                   (value) {
+                    ManageVibration.vibrate();
                     setState(() {
                       valuee = value;
                     });
