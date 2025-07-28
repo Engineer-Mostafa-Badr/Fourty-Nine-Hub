@@ -217,7 +217,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   @override
   Future<Either<Failure, bool>> requestDocument(
       {required TwitterDocumentationParams params}) async {
-    final response = await _apiConsumer.post(EndPoints.documentRequest,
+    final response = await _apiConsumer.post(EndPoints.userVerification,
         data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }

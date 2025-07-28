@@ -141,8 +141,12 @@ class AccountServiceLocator {
     serviceLocator.registerFactory<FavouriteSubCategoryCubit>(() =>
         FavouriteSubCategoryCubit(
             serviceLocator(), serviceLocator(), serviceLocator()));
-    serviceLocator.registerFactory<FavouriteCategoryCubit>(() =>
-        FavouriteCategoryCubit(serviceLocator(), serviceLocator()));
+    serviceLocator
+        .registerFactory<FavouriteCategoryCubit>(() => FavouriteCategoryCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            ));
     serviceLocator
         .registerFactory<ShareAppCubit>(() => ShareAppCubit(serviceLocator()));
 
@@ -161,15 +165,16 @@ class AccountServiceLocator {
               serviceLocator(),
               serviceLocator(),
             ));
-    serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        ),//..loadData()
+    serviceLocator.registerFactory<WalletCubit>(
+      () => WalletCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      ), //..loadData()
     );
 
     serviceLocator.registerFactory<WalletTwoCubit>(

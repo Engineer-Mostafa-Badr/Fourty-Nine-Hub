@@ -51,7 +51,7 @@ class GetAllTalents extends StatelessWidget {
             );
           }
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.67,
+            height: MediaQuery.of(context).size.height * 0.61,
             child: OlxPaginationWidget(
               itemsPerPage: 1,
               loadPage: (page) =>

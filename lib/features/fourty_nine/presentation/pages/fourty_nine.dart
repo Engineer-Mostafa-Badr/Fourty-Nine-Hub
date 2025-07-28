@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:auto_scroll_text/auto_scroll_text.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -147,211 +148,262 @@ class _FourtyNineViewState extends State<FourtyNineView>
   Widget build(BuildContext context) {
     // context.push(Routes.REELS);
     print("objectUser${UserCubit.to.state.data?.id}");
-    return 
-    // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
-    //   listener: (context, state) {
-    //     if (state is NotificationSocketIoNewNotification) {
-    //       // pr('new notfication is recieved by the bloc listner');
-    //       // pr(state.notificationEntity);
-    //       notificationSnackBar(
-    //           context: context,
-    //           notificationEntity: state.notificationEntity,
-    //           isAppNotification: state.notificationEntity.filterType == 'app');
-    //     } else if (state is NotificationSocketIoFailed) {
-    //       // pr('Failed to recieve the new notfication ');
-    //       // pr(state.message);
-    //     }
-    //   },
-    //   child:
-       ExitWidget(
-        child: CustomScaffold(
-          key: _scaffoldKey,
-          appBar: const HomeAppbar(
-            isWithBackArrow: false,
-            language: true,
-            // isHaveLeading: true,
-          ),
-          bottomNavigationBar: _isScrollingDown
-              ? null
-              :BottomNavigator(
-            scrollController: scrollController,
-            isScrollingDown: _isScrollingDown,
-            mainCategory: 1,
-            index: 2,
-          ),
-          floatingActionButton: _isScrollingDown
-              ? null
-              : const FloatingButton(
-                  changeView: 1,
-                  icon: Icons.person,
-                ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          // drawer: const DrawerWidget(),
-          body: ListView(
-            controller: scrollController,
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            children: [
-              const AddBanner(),
-              const AnnounceWidget(),
-              Sizer(
-                height: 5.h,
+    return
+        // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
+        //   listener: (context, state) {
+        //     if (state is NotificationSocketIoNewNotification) {
+        //       // pr('new notfication is recieved by the bloc listner');
+        //       // pr(state.notificationEntity);
+        //       notificationSnackBar(
+        //           context: context,
+        //           notificationEntity: state.notificationEntity,
+        //           isAppNotification: state.notificationEntity.filterType == 'app');
+        //     } else if (state is NotificationSocketIoFailed) {
+        //       // pr('Failed to recieve the new notfication ');
+        //       // pr(state.message);
+        //     }
+        //   },
+        //   child:
+        ExitWidget(
+      child: CustomScaffold(
+        key: _scaffoldKey,
+        appBar: const HomeAppbar(
+          isWithBackArrow: false,
+          language: true,
+          // isHaveLeading: true,
+        ),
+        bottomNavigationBar: _isScrollingDown
+            ? null
+            : BottomNavigator(
+                scrollController: scrollController,
+                isScrollingDown: _isScrollingDown,
+                mainCategory: 1,
+                index: 2,
               ),
-              !context.read<UserCubit>().isLoggedIn
-                  ? Sizer(
-                height: 5.h,
-
-              )
-                  : const SizedBox.shrink(),
-              context.read<UserCubit>().isLoggedIn
-                  ?ScrollableTextWithAnimation(
-                textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-              ) : const SizedBox.shrink(),
-
-              //wallet
-
-              context.read<UserCubit>().isLoggedIn
-                  ? const WalletWidget()
-                  : const SizedBox.shrink(),
-              ClickableWidget(
-                onTap: () {
-                  ManageVibration.vibrate();
-                  if (!context.read<UserCubit>().isLoggedIn) {
-                    return pleaseLoginDialog(context);
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditPage(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 40.h,
-                  alignment: Alignment.center,
-                  child: AutoScrollText(
-                    velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
-                    style: Styles.headerText(
-                        fontSize: 30,
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.SECONDARY_COLOR),
+        floatingActionButton: _isScrollingDown
+            ? null
+            : const FloatingButton(
+                changeView: 1,
+                icon: Icons.person,
+              ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // drawer: const DrawerWidget(),
+        body: ListView(
+          controller: scrollController,
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          children: [
+            const AddBanner(),
+            const AnnounceWidget(),
+            Sizer(
+              height: 5.h,
+            ),
+            !context.read<UserCubit>().isLoggedIn
+                ? Sizer(
+                    height: 5.h,
+                  )
+                : const SizedBox.shrink(),
+            context.read<UserCubit>().isLoggedIn
+                ? ScrollableTextWithAnimation(
                     textDirection: context.isArabic
                         ? TextDirection.rtl
                         : TextDirection.ltr,
-                    selectable: true,
-                    // textStyle: TextStyle(fontSize: 24),
+                  )
+                : const SizedBox.shrink(),
+
+            //wallet
+
+            context.read<UserCubit>().isLoggedIn
+                ? const WalletWidget()
+                : const SizedBox.shrink(),
+            ClickableWidget(
+              onTap: () {
+                ManageVibration.vibrate();
+                if (!context.read<UserCubit>().isLoggedIn) {
+                  return pleaseLoginDialog(context);
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditPage(),
                   ),
+                );
+              },
+              child: Container(
+                height: 40.h,
+                alignment: Alignment.center,
+                child: AutoScrollText(
+                  velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+                  "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
+                  style: Styles.headerText(
+                      fontSize: 30,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.SECONDARY_COLOR),
+                  textDirection:
+                      context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                  selectable: true,
+                  // textStyle: TextStyle(fontSize: 24),
                 ),
               ),
-              Sizer(
-                height: 5.h,
-              ),
-              GridBlocksWidget(),
-              Sizer(
-                height: 10.h,
-              ),
-              //cats layout
-              BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                builder: (context, state) {
-                  var data = state.data;
-                  print('MainCategoriesCubit data is $data');
-                  return _buildMainCategoriesViews(data);
-                },
-              ),
-              Sizer(
-                height: 10.h,
-              ),
-              //main cats
-              BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                builder: (context, state) {
-                  final controller = context.read<MainCategoriesCubit>();
-                  if (state.status == StateStatus.loading) {
-                    return Shimmer.fromColors(
-                      baseColor: Colors.grey[100]!,
-                      highlightColor: Colors.white24,
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 40,top: 20),
-                        height: MediaQuery.of(context).size.height*0.16,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.AUTH_CONTAINER_COLOR,
-                          borderRadius: BorderRadius.circular(20.r),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                      ),
-                    );
-                  }
-                  if (state.data != null) {
-                    return  Container(
-                      margin: EdgeInsets.only(bottom: 40),
-                      height: MediaQuery.of(context).size.height*(0.5),
+            ),
+            Sizer(
+              height: 5.h,
+            ),
+            GridBlocksWidget(),
+            Sizer(
+              height: 10.h,
+            ),
+            //cats layout
+            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+              builder: (context, state) {
+                var data = state.data;
+                print('MainCategoriesCubit data is $data');
+                return _buildMainCategoriesViews(data);
+              },
+            ),
+            Sizer(
+              height: 10.h,
+            ),
+            //main cats
+            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+              builder: (context, state) {
+                final controller = context.read<MainCategoriesCubit>();
+                if (state.status == StateStatus.loading) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 40, top: 20),
+                      height: MediaQuery.of(context).size.height * 0.16,
                       width: double.infinity,
-                      child:AnimatedCardsListView(
-                        setupScrollController: (controller){
-                          controller.addListener(() {
-                            if (controller.position.userScrollDirection ==
-                                ScrollDirection.reverse) {
-                              if (!_isScrollingDown) {
-                                setState(() {
-                                  _isScrollingDown = true;
-                                });
-                              }
-                            } else if (controller.position.userScrollDirection ==
-                                ScrollDirection.forward) {
-                              if (_isScrollingDown) {
-                                setState(() {
-                                  _isScrollingDown = false;
-                                });
-                              }
-                            }
-                          });
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                    ),
+                  );
+                }
+                if (state.data != null) {
+                  List<Widget> items = List.generate(
+                    state.data?.length ?? 0,
+                        (index) => InkWell(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        HandleCashback.setCount('mainCategoriesCount', context);
+                        if (state.data![index].id == '62c8b5b09332225799fe335e') {
+                          context.push(Routes.MARRIAGESUBCATEGORIES,
+                              extra: state.data![index]);
+                        } else {
+                          context.push(Routes.SUBCATEGORIES,
+                              extra: state.data![index]);
+                        }
+                      },
+                      child: HomeMainCategoryBanner(
+                        category: state.data![index],
+                        imageHeight: MediaQuery.sizeOf(context).height * 0.10,
+                        onFavorite: () async {
+                          ManageVibration.vibrate();
+                          var result =
+                          await controller.toggleFavoriteMedicalService(
+                              state.data![index].id);
+                          print("result$result");
+                          return result;
                         },
-                        cardsList: List.generate(
-                          state.data?.length??0,
-                              (index) => InkWell(
-                            onTap: () {
+                      ),
+                    ),
+                  );
+                  return CarouselSlider(
+                    options: CarouselOptions(
+                      height:  MediaQuery.of(context).size.height * (0.4),
+                      // Adjust depending on card height
+                      autoPlay: true,
+                      enlargeCenterPage: false,
+                      enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                      viewportFraction: 0.31,
+                      enlargeFactor:0.5,
+                      enableInfiniteScroll: true,
+                      autoPlayInterval: const Duration(seconds: 3),
+                      scrollDirection: Axis.vertical,
+                    ),
+                    items: items.map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: item,
+                      );
+                    }).toList(),
+                  );
+                 /* return Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    height: MediaQuery.of(context).size.height * (0.6),
+                    width: double.infinity,
+                    child: AnimatedCardsListView(
+                      setupScrollController: (controller) {
+                        controller.addListener(() {
+                          if (controller.position.userScrollDirection ==
+                              ScrollDirection.reverse) {
+                            if (!_isScrollingDown) {
+                              setState(() {
+                                _isScrollingDown = true;
+                              });
+                            }
+                          } else if (controller.position.userScrollDirection ==
+                              ScrollDirection.forward) {
+                            if (_isScrollingDown) {
+                              setState(() {
+                                _isScrollingDown = false;
+                              });
+                            }
+                          }
+                        });
+                      },
+                      cardsList: List.generate(
+                        state.data?.length ?? 0,
+                        (index) => InkWell(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount(
+                                'mainCategoriesCount', context);
+                            if (state.data![index].id ==
+                                '62c8b5b09332225799fe335e') {
+                              context.push(Routes.MARRIAGESUBCATEGORIES,
+                                  extra: state.data![index]);
+                            } else {
+                              context.push(Routes.SUBCATEGORIES,
+                                  extra: state.data![index]);
+                            }
+                          },
+                          child: HomeMainCategoryBanner(
+                            category: state.data![index],
+                            imageHeight:
+                                MediaQuery.sizeOf(context).height * 0.10,
+                            onFavorite: () async {
                               ManageVibration.vibrate();
-                              AdInterstitialTop.loadIntersitialAd();
-                              AdInterstitialTop.showInterstitialAd();
-                              HandleCashback.setCount(
-                                  'mainCategoriesCount', context);
-                              if (state.data![index].id ==
-                                  '62c8b5b09332225799fe335e') {
-                                context.push(Routes.MARRIAGESUBCATEGORIES,
-                                    extra: state.data![index]);
-                              } else {
-                                context.push(Routes.SUBCATEGORIES,
-                                    extra: state.data![index]);
-                              }
+                              var result =
+                                  await controller.toggleFavoriteMedicalService(
+                                      state.data![index].id);
+                              print("result$result");
+                              return result;
                             },
-                            child: HomeMainCategoryBanner(
-                              category: state.data![index],
-                                imageHeight:MediaQuery.sizeOf(context).height * 0.10,
-                              onFavorite: () async {
-                                ManageVibration.vibrate();
-                                var result = await controller
-                                    .toggleFavoriteMedicalService(
-                                    state.data![index].id);
-                                print("result$result");
-                                return result;
-                              },
-                            ),
                           ),
                         ),
                       ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
-            ],
-          ),
+                    ),
+                  );*/
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+          ],
         ),
+      ),
       // ),
     );
   }
@@ -420,7 +472,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
       onTap: () {
         onTab();
         if (routeName == Routes.MAINCATEGORIESCARDS) {
-          context.push(routeName, extra: MainCategoriesCardsParams(data: extra,isCustomPage: false));
+          context.push(routeName,
+              extra:
+                  MainCategoriesCardsParams(data: extra, isCustomPage: false));
         } else {
           context.push(routeName, extra: extra);
         }
@@ -437,454 +491,3 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 }
-// BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-/*  _pickMeAndComeWithUWidget() {
-    return _buildRideSubCategoryItem(
-      title: context.isArabic ? 'جاي معاك' : 'Trip Join',
-      // image: '',
-
-      route: Routes.newRideModeScreen,
-      onTab: () {
-        AdInterstitialTop.loadIntersitialAd();
-        AdInterstitialTop.showInterstitialAd();
-        return HandleCashback.setCount('tripJoinCount', context);
-      },
-      // isFavorite: state.data![1].isFavorite,
-      // numberOfAds: state.data![1].numberOfAds?.toInt(),
-    );
-  }
-
-  Widget _buildStarWidget({
-    void Function()? onTap,
-    required Color shadowColor,
-    required String title,
-    required String image,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        // height: kToolbarHeight * 2.h,
-        height: 64,
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(40.r),
-          image: DecorationImage(
-            image: AssetImage(image),
-            fit: BoxFit.fill,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: shadowColor,
-              spreadRadius: 5,
-              blurRadius: 5,
-              offset: const Offset(1, 1),
-            )
-          ],
-        ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Image.asset(
-            //   image,
-            //   fit: BoxFit.fill,
-            //   // width: double.infinity,
-            //   // height: double.infinity,
-            // ),
-            Container(
-              color: Colors.black38,
-            ),
-            Label(
-              text: title,
-              style: Styles.mediumText(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 45,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-    // return SizedBox(
-    //   height: kToolbarHeight * 2.h,
-    //   width: double.infinity,
-    //   child: GestureDetector(
-    //     onTap: () {
-    //       AdInterstitialTop.loadIntersitialAd();
-    //       AdInterstitialTop.showInterstitialAd();
-    //       HandleCashback.setCount('beAStarCount', context);
-    //       context.push(Routes.BE_STAR);
-    //     },
-    //     child: Container(
-    //       height: kToolbarHeight * 2.h,
-    //       decoration: BoxDecoration(
-    //         color: Theme
-    //             .of(context)
-    //             .scaffoldBackgroundColor,
-    //         borderRadius: BorderRadius.circular(40.r),
-    //         boxShadow: [
-    //           BoxShadow(
-    //             color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-    //             spreadRadius: 5,
-    //             blurRadius: 5,
-    //             offset: const Offset(1, 1),
-    //           )
-    //         ],
-    //         image: DecorationImage(
-    //             image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-    //       ),
-    //       child: Center(
-    //         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    //           Label(
-    //             text: LocaleKeys.tube.localize,
-    //             style: Styles.mediumText(
-    //               color: Colors.white,
-    //               fontWeight: FontWeight.bold,
-    //               fontSize: 45,
-    //             ),
-    //           )
-    //         ]),
-    //       ),
-    //     ),
-    //   ),
-    // );
-  }
-
-  Widget _buildRideSubCategoryItem(
-      {required String title, String? route, required Function() onTab}) {
-    return InkWell(
-      // onTap: () => context.push(Routes.ADS, extra: service.value()),
-      onTap: () {
-        onTab();
-        route != null ? context.push(route) : null;
-      },
-      child: Container(
-        height: 64,
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(40.r),
-          image: DecorationImage(
-            image: AssetImage(Assets.joinTrip),
-            fit: BoxFit.fill,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
-              spreadRadius: 5,
-              blurRadius: 5,
-              offset: const Offset(1, 1),
-            )
-          ],
-          // image: DecorationImage(
-          //     image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
-        ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Image.asset(
-            //   Assets.joinTrip,
-            //   fit: BoxFit.fill,
-            //   width: double.infinity,
-            // ),
-            Container(
-              color: Colors.black38,
-            ),
-            Label(
-              text: title,
-              style: Styles.mediumText(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 45,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}*/
-
-/*  Row _auctionAndInstallmentWidget() {
-    return Row(
-      children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
-          HandleCashback.setCount('mazadat', context);
-          context.push(Routes.MAZADAT);
-        }, Icons.group),
-        const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize, () {
-          HandleCashback.setCount('installments', context);
-          context.push(Routes.INSTALLMENT);
-        }, Icons.list),
-      ],
-    );
-  }*/
-
-/*  Widget _buildBookingWidget() {
-    return SizedBox(
-      height: kToolbarHeight * .9.h,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: AppButton(
-                color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.booking.localize,
-                style: Styles.mediumText(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  fontWeight: FontWeight.bold,
-                ),
-                icon: Icons.auto_awesome,
-                iconSize: 50.h,
-                onPressed: () async {
-                  HandleCashback.setCount('booking', context);
-                  int? num = CacheManager.getInt('booking');
-                  print(num);
-                }),
-          ),
-          Positioned(
-              bottom: 5,
-              left: 5,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 0,
-              left: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 15,
-              right: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              ))
-        ],
-      ),
-    );
-  }*/
-
-/*  Widget _walletsWidget() {
-    return SizedBox(
-      height: kToolbarHeight * .9.h,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: AppButton(
-                color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.wallets.localize,
-                style: Styles.mediumText(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  fontWeight: FontWeight.bold,
-                ),
-                icon: Icons.star,
-                iconSize: 50.h,
-                onPressed: () {
-                  // AdInterstitialTop.loadIntersitialAd();
-                  // AdInterstitialTop.showInterstitialAd();
-                  // HandleCashback.setCount('beAStarCount', context);
-                  context.push(Routes.WALLET);
-                }),
-          ),
-          Positioned(
-              bottom: 5,
-              left: 5,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 0,
-              left: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 15,
-              right: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              ))
-        ],
-      ),
-    );
-  }*/
-
-/*  Widget _buildTenPercentWidget() {
-    return SizedBox(
-      height: kToolbarHeight * .9.h,
-      width: double.infinity,
-      child: Row(
-        children: [
-          // Expanded(
-          //   child: Stack(
-          //     children: [
-          //       Positioned.fill(
-          //         child: AppButton(
-          //             color: AppColors.AUTH_CONTAINER_COLOR,
-          //             label: LocaleKeys.billCashback.localize,
-          //             style: Styles.mediumText(
-          //               color: AppColors.AUTH_CONTAINER_COLOR,
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //             icon: Icons.star,
-          //             iconSize: 50.h,
-          //             onPressed: () {
-          //               HandleCashback.setCount('tenPercentCount', context);
-          //               context.push(Routes.TenPercent);
-          //             }),
-          //       ),
-          //       Positioned(
-          //           bottom: 5,
-          //           left: 5,
-          //           child: Icon(
-          //             Icons.star,
-          //             size: 20.h,
-          //             color: AppColors.ACCENT_COLOR,
-          //           )),
-          //       Positioned(
-          //           top: 0,
-          //           left: 10,
-          //           child: Icon(
-          //             Icons.star,
-          //             size: 20.h,
-          //             color: AppColors.ACCENT_COLOR,
-          //           )),
-          //       Positioned(
-          //           top: 15,
-          //           right: 10,
-          //           child: Icon(
-          //             Icons.star,
-          //             size: 20.h,
-          //             color: AppColors.ACCENT_COLOR,
-          //           ))
-          //     ],
-          //   ),
-          // ),
-          // const Sizer(),
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: AppButton(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      label: LocaleKeys.marriage.localize,
-                      style: Styles.mediumText(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      icon: Icons.star,
-                      iconSize: 50.h,
-                      onPressed: () {
-                        //HandleCashback.setCount('tenPercentCount',context);
-                        context.push(Routes.MARRIAGESUBCATEGORIES,
-                            extra: MainCategoryEntity(
-                                id: '62c8b5b09332225799fe335e',
-                                nameEn: 'Marriage',
-                                name: 'زواج',
-                                image: "",
-                                banner: '',
-                                cover: '',
-                                total: 0));
-                      }),
-                ),
-                Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                    top: 0,
-                    left: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                  top: 15,
-                  right: 10,
-                  child: Icon(
-                    Icons.star,
-                    size: 20.h,
-                    color: AppColors.ACCENT_COLOR,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }*/
-
-/*  Widget itemAuctionAndInstallmentWidget(
-      String label, Function function, IconData icon) {
-    return Expanded(
-      child: InkWell(
-        onTap: () => context.go(Routes.MAZADAT),
-        child: SizedBox(
-          height: kToolbarHeight * .9.h,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: AppButton(
-                    color: AppColors.AUTH_CONTAINER_COLOR,
-                    backColor: AppColors.PRIMARY_COLOR,
-                    label: label,
-                    style: Styles.mediumText(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    icon: icon,
-                    iconSize: 50.h,
-                    onPressed: () => function()),
-              ),
-              Positioned(
-                  bottom: 5,
-                  left: 5,
-                  child: Icon(
-                    Icons.star,
-                    size: 20.h,
-                    color: AppColors.ACCENT_COLOR,
-                  )),
-              Positioned(
-                  top: 0,
-                  left: 10,
-                  child: Icon(
-                    Icons.star,
-                    size: 20.h,
-                    color: AppColors.ACCENT_COLOR,
-                  )),
-              Positioned(
-                  top: 15,
-                  right: 10,
-                  child: Icon(
-                    Icons.star,
-                    size: 20.h,
-                    color: AppColors.ACCENT_COLOR,
-                  ))
-            ],
-          ),
-        ),
-      ),
-    );
-  }*/

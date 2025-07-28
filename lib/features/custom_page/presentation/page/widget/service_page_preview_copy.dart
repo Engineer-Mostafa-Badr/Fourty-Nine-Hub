@@ -1,4 +1,5 @@
 import 'package:auto_scroll_text/auto_scroll_text.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -444,8 +445,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                       }
                     }
                     print('==> state.customPage ${state.customPage}');
-                    print('==> selectedCategoryView ${CacheManager.getInt(
-                        CacheManager.selectedCategoryView)}');
+                    print(
+                        '==> selectedCategoryView ${CacheManager.getInt(CacheManager.selectedCategoryView)}');
                     if (state.customPage != null) {
                       return getMainCategoryWidgets(controller, state)[
                           CacheManager.getInt(
@@ -993,7 +994,67 @@ class MainCategoriesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
+    List<Widget> items = List.generate(
+      state.customPage?.length ?? 0,
+      (index) {
+
+        final category = state.customPage![index];
+
+        return InkWell(
+          onTap: () {
+            AdInterstitialTop.loadIntersitialAd();
+            AdInterstitialTop.showInterstitialAd();
+            HandleCashback.setCount('mainCategoriesCount', context);
+            print('category.id ${category.id}');
+            print('category $category');
+            if (category.id == '62c8b5b09332225799fe335e') {
+              context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
+            } else {
+              context.push(
+                Routes.CustomPageSubCategoriesView,
+                extra: CustomPageSubCategoriesParams(
+                    mainCategory: category, isCustomPage: true),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: MainCategoryBanner(
+              category: category,
+              onFavorite: () async {
+                final result =
+                    await controller.toggleFavoriteMedicalService(category.id);
+                print("result $result");
+                return result;
+              },
+            ),
+          ),
+        );
+      },
+    );
+    return SliverToBoxAdapter(
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: MediaQuery.of(context).size.height * (0.4),
+          // Adjust depending on card height
+          autoPlay: true,
+          enlargeCenterPage: false,
+          enlargeStrategy: CenterPageEnlargeStrategy.scale,
+          viewportFraction: 0.31,
+          // enlargeFactor: 0.3,
+          // padEnds: false,
+          // disableCenter: true,
+          // Show 3 cards: center + partial sides
+          enableInfiniteScroll: true,
+          autoPlayInterval: const Duration(seconds: 3),
+          scrollDirection: Axis.vertical,
+        ),
+        items: items.map((item) {
+          return item;
+        }).toList(),
+      ),
+    );
+   /* return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final isLastItem = index == (state.customPage?.length ?? 0) * 2 - 1;
@@ -1039,6 +1100,6 @@ class MainCategoriesListView extends StatelessWidget {
         childCount:
             (state.customPage?.length ?? 0) * 2 - 1, // account for separators
       ),
-    );
+    );*/
   }
 }

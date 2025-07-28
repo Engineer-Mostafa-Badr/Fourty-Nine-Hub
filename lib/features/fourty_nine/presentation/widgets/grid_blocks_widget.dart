@@ -196,7 +196,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.RIDE_HOME);
         },
-        shadowColor: const Color(0xff8000FF).withValues(alpha: 0.25),
+        shadowColor: const Color(0xff8000FF).withValues(alpha: 0.4),
         image: Assets.car2Image,
         title: LocaleKeys.ride.localize,
       ),
@@ -208,7 +208,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.showInterstitialAd();
           context.push(Routes.VISITA);
         },
-        shadowColor: const Color(0xff4997D0).withValues(alpha: 0.25),
+        shadowColor: const Color(0xff4997D0).withValues(alpha: 0.4),
         image: Assets.doctorImage,
         title: LocaleKeys.health.localize,
       ),
@@ -221,7 +221,7 @@ class GridBlocksWidget extends StatelessWidget {
           HandleCashback.setCount('beAStarCount', context);
           context.push(Routes.FOOD);
         },
-        shadowColor: const Color(0xffFF7F00).withValues(alpha: 0.25),
+        shadowColor: const Color(0xffFF7F00).withValues(alpha: 0.4),
         image: Assets.mealImage,
         title: LocaleKeys.meal.localize,
       ),
@@ -238,8 +238,8 @@ class GridBlocksWidget extends StatelessWidget {
           context.push(Routes.newRideModeScreen);
         },
         shadowColor: context.isDarkMode
-            ? AppColors.whiteColor.withValues(alpha: .25)
-            : AppColors.PRIMARY_COLOR.withValues(alpha: .25),
+            ? AppColors.whiteColor.withValues(alpha: .4)
+            : AppColors.PRIMARY_COLOR.withValues(alpha: .4),
         image: Assets.joinTrip,
         title: LocaleKeys.tripJoin.localize,
       ),
@@ -252,7 +252,7 @@ class GridBlocksWidget extends StatelessWidget {
           HandleCashback.setCount('beAStarCount', context);
           context.push(Routes.BE_STAR);
         },
-        shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .25),
+        shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .4),
         image: Assets.tube1,
         title: LocaleKeys.tube.localize,
       ),
