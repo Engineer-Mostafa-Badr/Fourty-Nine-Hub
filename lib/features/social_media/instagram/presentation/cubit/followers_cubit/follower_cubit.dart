@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_all_following_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/followers_state.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 
 class FollowCubit extends Cubit<FollowState> {
   final GetAllFollowersUseCase _allFollowersUseCase;

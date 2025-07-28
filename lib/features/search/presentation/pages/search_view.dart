@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/ads_search_view.dart';
-import 'package:fourtyninehub/features/search/presentation/pages/widget/come_with_me_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/main_category_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/posts_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/profile_search_view.dart';

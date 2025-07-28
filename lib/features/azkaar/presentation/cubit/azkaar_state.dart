@@ -2,7 +2,6 @@ import 'package:fourtyninehub/features/azkaar/domain/entity/azkar_details_entity
 import 'package:fourtyninehub/features/azkaar/domain/entity/azkar_entity.dart';
 
 import '../../../../../../core/error/failure.dart';
-import '../../domain/entity/azkar_search_entity.dart';
 
 enum AzkarStates { loading, initial, error, success }
 

@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_posts_use_case.dart';
 

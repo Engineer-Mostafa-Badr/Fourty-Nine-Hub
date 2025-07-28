@@ -9,14 +9,14 @@ class CallControlButton extends StatelessWidget {
   final double? iconSize;
 
   const CallControlButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.onPressed,
     this.backgroundColor,
     this.iconColor,
     this.size,
     this.iconSize
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

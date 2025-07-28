@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/creminal_record_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drivers_license_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drug_analysis_non_socket.dart';
@@ -24,10 +23,8 @@ import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
-import '../../../../widget_record.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
-import '../../widgets/fare_bottom_sheet_widget.dart';
 import 'update_personal_info_widget.dart';
 
 class SettingsWidget extends StatefulWidget {

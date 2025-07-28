@@ -10,7 +10,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
-import 'edit_page.dart';
 
 class ChooseCategoriesViwBody extends StatefulWidget {
   const ChooseCategoriesViwBody({super.key});

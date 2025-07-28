@@ -1,5 +1,4 @@
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
-import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 
 class HistoryTripModel extends HistoryTripEntity {
   HistoryTripModel({

@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
-import '../entities/booking_entity.dart';
 import '../entities/most_booking_entity.dart';
 import '../repositories/health_repo.dart';
 

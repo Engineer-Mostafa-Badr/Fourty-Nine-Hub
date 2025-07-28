@@ -3,11 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../../core/utils/handle_cashback.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';

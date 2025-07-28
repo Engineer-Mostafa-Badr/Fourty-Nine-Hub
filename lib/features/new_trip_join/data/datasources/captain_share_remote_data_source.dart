@@ -2,11 +2,6 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/create_price_per_seat_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/running_route_model.dart';

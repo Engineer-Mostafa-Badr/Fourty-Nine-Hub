@@ -10,7 +10,6 @@ import '../../../doctor_details/data/models/doctor_model.dart';
 import '../../../health/data/models/most_booking_model.dart';
 import '../../../health/domain/entities/most_booking_entity.dart';
 import '../../domain/usecases/get_doctor_list_use_case.dart';
-import '../../domain/usecases/get_doctor_list_usecase.dart';
 
 abstract class DoctorListRemoteDataSource {
   Future<Either<Failure, List<MostBookingEntity>>> getDoctorsList(

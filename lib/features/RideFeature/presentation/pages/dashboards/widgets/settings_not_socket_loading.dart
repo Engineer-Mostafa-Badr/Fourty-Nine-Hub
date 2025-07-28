@@ -6,31 +6,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_loading_screen.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_loading_screen.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
 
-import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../service_locator/service_locator.dart';
-import '../../../../domain/entities/dashboards/driver_settings_entity.dart';
-import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../../domain/entities/loading/settings_driver_loading_entity.dart';
 import '../../../../domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
-import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../loading_dashboard/loading_dashboard_details_screen.dart';
-import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
-import '../../widgets/fare_bottom_sheet_widget.dart';
-import 'creminal_record_non_socket_screen.dart';
 import 'drivers_license_loading_screen.dart';
-import 'drivers_license_non_socket_screen.dart';
-import 'drug_analysis_non_socket.dart';
 import 'update_personal_info_widget.dart';
 
 

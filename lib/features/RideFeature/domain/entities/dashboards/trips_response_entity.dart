@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 
-import 'pagination_entity.dart';
 
 class TripsResponseEntity {
   final bool status;

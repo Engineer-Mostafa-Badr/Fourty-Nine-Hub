@@ -12,7 +12,6 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controller/cubit/star_cubit.dart';
-import 'get_all_talents.dart';
 
 class MyTalentView extends StatefulWidget {
   const MyTalentView({super.key});

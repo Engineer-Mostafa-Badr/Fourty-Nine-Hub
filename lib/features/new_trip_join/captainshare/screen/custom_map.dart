@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_google_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_car_marker_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 

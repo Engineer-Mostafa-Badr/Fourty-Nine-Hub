@@ -4,9 +4,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';

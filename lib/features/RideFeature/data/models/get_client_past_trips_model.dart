@@ -129,20 +129,13 @@ class ClientDetailsModel extends ClientDetailsEntity {
 
 class DriverDetailsModel extends DriverDetailsEntity {
   DriverDetailsModel({
-    String? id,
-    String? userId,
-    String? firstName,
-    String? pictureUrl,
-    RatingModel? rating,
-    VehicleDetailsModel? vehicleDetails, // ✅ NEW
-  }) : super(
-    id: id,
-    userId: userId,
-    firstName: firstName,
-    pictureUrl: pictureUrl,
-    rating: rating,
-    vehicleDetails: vehicleDetails, // ✅ NEW
-  );
+    super.id,
+    super.userId,
+    super.firstName,
+    super.pictureUrl,
+    RatingModel? super.rating,
+    VehicleDetailsModel? super.vehicleDetails, // ✅ NEW
+  });
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
@@ -162,20 +155,13 @@ class DriverDetailsModel extends DriverDetailsEntity {
 
 class VehicleDetailsModel extends VehicleDetailsEntity {
   VehicleDetailsModel({
-    String? brandAr,
-    String? brandEn,
-    String? modelAr,
-    String? modelEn,
-    String? color,
-    int? year,
-  }) : super(
-    brandAr: brandAr,
-    brandEn: brandEn,
-    modelAr: modelAr,
-    modelEn: modelEn,
-    color: color,
-    year: year,
-  );
+    super.brandAr,
+    super.brandEn,
+    super.modelAr,
+    super.modelEn,
+    super.color,
+    super.year,
+  });
 
   factory VehicleDetailsModel.fromJson(Map<String, dynamic> json) {
     return VehicleDetailsModel(

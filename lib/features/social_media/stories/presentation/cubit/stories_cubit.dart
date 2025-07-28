@@ -754,6 +754,8 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
 }
 
 class HeartAnimationWidget extends StatefulWidget {
+  const HeartAnimationWidget({super.key});
+
   @override
   _HeartAnimationWidgetState createState() => _HeartAnimationWidgetState();
 }

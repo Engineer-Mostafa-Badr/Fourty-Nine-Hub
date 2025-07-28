@@ -226,8 +226,9 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> getPaginatedSubCategorySearch(
       {required SearchParams params}) async {
-    if (!hasMoreSubCategoriesSearchData || isLoadingSubCategoriesSearchMore)
+    if (!hasMoreSubCategoriesSearchData || isLoadingSubCategoriesSearchMore) {
       return;
+    }
     isLoadingSubCategoriesSearchMore = true;
     emit(state.copyWith(status: SearchStates.loading));
     final response = await _fetchSearchSubCategoryUseCase.call(params);

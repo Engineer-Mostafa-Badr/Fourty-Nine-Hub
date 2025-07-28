@@ -606,7 +606,7 @@ class Stories extends StatelessWidget {
                 child: Label(
                   text: context.isArabic ? 'مخفية' :  serviceLocator<UserCubit>().state.data != null &&
                       serviceLocator<UserCubit>().state.data!.profilePicture != null
-                      ? serviceLocator<UserCubit>().state.data!.fullName! :"",
+                      ? serviceLocator<UserCubit>().state.data!.fullName :"",
                   style:const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 12,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomSupportTextField extends StatelessWidget {
@@ -10,7 +9,7 @@ class CustomSupportTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Function(String?) validator;
 
-  const CustomSupportTextField({Key? key, required this.hintText, required this.controller, required this.validator, this.enabled, this.keyboardType, this.inputFormatters}) : super(key: key);
+  const CustomSupportTextField({super.key, required this.hintText, required this.controller, required this.validator, this.enabled, this.keyboardType, this.inputFormatters});
 
   @override
   Widget build(BuildContext context) {

@@ -50,7 +50,7 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
             profileStatus: LoadingStatus.failure, profileFailure: f));
       },
       (data) {
-        print('==> data ${data} ${data.postsEntity.length}');
+        print('==> data $data ${data.postsEntity.length}');
         emit(state.copyWith(
             profileStatus: LoadingStatus.success,
             profileData: data,

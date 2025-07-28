@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/conn
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/exclusion_entity.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/media_privacy_entity.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/only_with_entity.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_entity.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/remove_response_allowed_entity.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/remove_response_forbidden_entity.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/search_users_entity.dart';

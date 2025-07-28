@@ -133,7 +133,7 @@ class _LoveButtonState extends State<LoveButton>
           ),
           const SizedBox(height: 4),
           MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
             child: Text(
               widget.count,
               style: widget.countTextStyle ??

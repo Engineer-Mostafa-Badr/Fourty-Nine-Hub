@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../res/style/app_colors.dart';

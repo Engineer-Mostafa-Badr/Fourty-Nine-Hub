@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -212,6 +211,7 @@ class MixVoiceVideoRecordingScreenState
     ];
 
     log("Executing FFmpeg command: ${commandArgs.join(' ')}");
+    return null;
 
     //  final session = await FFmpegKit.executeWithArguments(commandArgs);
     // var returned = await session.getReturnCode();

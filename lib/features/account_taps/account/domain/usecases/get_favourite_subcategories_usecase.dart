@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/favourite_subcategory_entity.dart';

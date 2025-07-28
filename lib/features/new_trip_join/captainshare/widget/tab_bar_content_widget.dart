@@ -17,10 +17,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_loading_search_widget.dart';
-import '../../driver/widget/available_ride_mode_widget.dart';
 import '../../presentation/view/widget/taps/tab_bar_row_widget.dart';
 import 'one_way_widget.dart';
-import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 
 class TabBarContentWidget extends StatefulWidget {
   const TabBarContentWidget({super.key, required TabController tabController})
@@ -51,7 +49,7 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
     [""], // Ongoing Trips
     [""], // Past Trips
   ];
-  bool _hasTappedTab = false;
+  final bool _hasTappedTab = false;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +140,7 @@ class AvailableTripsWidget extends StatefulWidget {
 class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
   late ScrollController _scrollController;
   bool _isVisible = true;
-  double _lastScrollOffset = 0;
+  final double _lastScrollOffset = 0;
 
   @override
   void initState() {
@@ -283,7 +281,7 @@ class BookingsWidget extends StatefulWidget {
 class _BookingsWidgetState extends State<BookingsWidget> {
   late ScrollController _scrollController;
   bool _isVisible = true;
-  double _lastScrollOffset = 0;
+  final double _lastScrollOffset = 0;
 
   @override
   void initState() {
@@ -414,7 +412,7 @@ class RunningTripsWidget extends StatefulWidget {
 class _RunningTripsWidgetState extends State<RunningTripsWidget> {
   late ScrollController _scrollController;
   bool _isVisible = true;
-  double _lastScrollOffset = 0;
+  final double _lastScrollOffset = 0;
 
   @override
   void initState() {
@@ -555,7 +553,7 @@ class ExpiredTripsWidget extends StatefulWidget {
 class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
   late ScrollController _scrollController;
   bool _isVisible = true;
-  double _lastScrollOffset = 0;
+  final double _lastScrollOffset = 0;
 
   @override
   void initState() {

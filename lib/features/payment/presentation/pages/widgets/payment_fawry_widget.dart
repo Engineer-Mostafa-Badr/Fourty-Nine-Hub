@@ -17,10 +17,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_save_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_saved_cards_entity.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';

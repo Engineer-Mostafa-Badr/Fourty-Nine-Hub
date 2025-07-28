@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/helper/launch_url.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -12,7 +11,6 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../helpers/subscription_method.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
@@ -211,8 +209,6 @@ class DoctorContactButtons extends StatelessWidget {
                 const Sizer(),
                 Expanded(
                   child: InkWell(
-                    child: Icon(Icons.mail_sharp,
-                        color: AppColors.colorRed, size: 48.sp),
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
                       pleaseLoginDialog(context);
@@ -226,6 +222,8 @@ class DoctorContactButtons extends StatelessWidget {
                                         state.doctor?.subCategory.id ?? '',
                                     title: LocaleKeys.ads.localize);
                               },
+                    child: Icon(Icons.mail_sharp,
+                        color: AppColors.colorRed, size: 48.sp),
                   ),
                 ),
                 const Sizer(),

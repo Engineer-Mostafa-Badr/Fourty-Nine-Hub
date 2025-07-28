@@ -24,8 +24,6 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 

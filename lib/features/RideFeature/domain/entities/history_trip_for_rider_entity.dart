@@ -23,7 +23,7 @@ class HistoryTripForRiderEntity {
   final bool? isRiderGetCashback;
   final String? otp;
   final bool? freeTripForDriver;
-  final dynamic? holdMoneyForTrip;
+  final dynamic holdMoneyForTrip;
   final String? recordingVoice;
   final DateTime? createdAt;
   final DateTime? updatedAt;

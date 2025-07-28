@@ -22,7 +22,7 @@ class SinglePostInstagramCubit extends Cubit<SinglePostInstagramState> {
       )),
       (postData)
       {
-        print('POST is ${postData}');
+        print('POST is $postData');
 
         emit(state.copyWith(
           status: SinglePostInstagramStatus.success,

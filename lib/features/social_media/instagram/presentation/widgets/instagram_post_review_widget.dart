@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/description_post.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/icon_action_post_insta.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/liked_by_widget.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 

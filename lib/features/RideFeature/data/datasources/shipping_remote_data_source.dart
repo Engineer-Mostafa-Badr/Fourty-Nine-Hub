@@ -4,12 +4,10 @@ import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
-import '../models/create_loading_trip_model.dart';
 
 abstract class ShippingRemoteDataSource {
   Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(

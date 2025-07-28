@@ -21,8 +21,6 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/useca
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/routes/pages.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../restaurants_list/presentation/cubit/restaurants_list_cubit.dart';

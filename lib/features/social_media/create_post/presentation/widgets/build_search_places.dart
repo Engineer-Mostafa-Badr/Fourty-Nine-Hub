@@ -1,12 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 

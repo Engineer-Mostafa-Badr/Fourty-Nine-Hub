@@ -133,7 +133,7 @@ class ZegoVideoTimingManager {
     };
     
     ZegoExpressEngine.onPublisherVideoSizeChanged = (width, height, channel) {
-      log('📐 Video size changed: ${width}x${height}');
+      log('📐 Video size changed: ${width}x$height');
     };
   }
   

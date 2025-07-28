@@ -126,7 +126,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                     itemCount: controller
                                         .globalFeedPagingController
                                         .itemList![index]
-                                        .images!
+                                        .images
                                         .length,
                                     onPageChanged: (i) {
                                       controller.changeIndex(i);
@@ -136,12 +136,12 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                         image: controller
                                             .globalFeedPagingController
                                             .itemList![index]
-                                            .images![i],
+                                            .images[i],
                                         index: i + 1,
                                         length: controller
                                             .globalFeedPagingController
                                             .itemList![index]
-                                            .images!
+                                            .images
                                             .length,
                                         // onDoubleTap: () {
                                         //   controller.globalFeedPagingController
@@ -159,7 +159,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                 height: 10.h,
                               ),
                               if (controller.globalFeedPagingController
-                                      .itemList![index].images!.length >
+                                      .itemList![index].images.length >
                                   1) ...[
                                 Center(
                                   child: SizedBox(
@@ -170,7 +170,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                         itemCount: controller
                                             .globalFeedPagingController
                                             .itemList![index]
-                                            .images!
+                                            .images
                                             .length,
                                         separatorBuilder: (context, index) =>
                                             const Sizer(

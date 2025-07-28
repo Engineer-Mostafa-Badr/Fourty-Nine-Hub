@@ -7,11 +7,8 @@ import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_d
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/past_routes_tab_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_route_tab_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/assets/assets.dart';
 import '../widget/available_routes_tab_widget.dart';
-import '../widget/past_trips_widget.dart';
-import '../../../../core/widget/custom_scaffold.dart';
 
 class RunningAndPastTripsScreen extends StatefulWidget {
   const RunningAndPastTripsScreen({super.key});
@@ -41,6 +38,7 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return SharedScaffold(
     mainCategoryId: 1,isWithBackArrow: true,

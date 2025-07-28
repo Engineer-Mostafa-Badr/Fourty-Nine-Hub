@@ -11,9 +11,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -148,7 +146,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                               ],
                             ),
                             Label(
-                                text: '${widget.offers?.tripDetails?.cargoDescription ?? ""}',
+                                text: widget.offers?.tripDetails?.cargoDescription ?? "",
                                 style: Styles.mediumText())
                           ],
                         ),
@@ -226,7 +224,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
 
                             final price = widget.offers?.tripDetails?.price ?? 0;
                             final tripId = widget.offers?.tripDetails?.id ?? '';
-                            print("XXQ ${tripId}");
+                            print("XXQ $tripId");
                             print("XXQ ${widget.offers?.tripDetails?.id}");
 
                             context.read<DashboardsCubit>().createLoadingOffer(

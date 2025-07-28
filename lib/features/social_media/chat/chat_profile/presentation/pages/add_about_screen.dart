@@ -191,7 +191,7 @@ class _AddAboutScreenState extends State<AddAboutScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: InkWell(
                         onTap: () async {
-                          currentController.text = selectedText!;
+                          currentController.text = selectedText;
                           await context.read<UserCubit>().updateUserBio(bio: selectedText);
                           await context.read<UserCubit>().getUser();
                           setState(() {});

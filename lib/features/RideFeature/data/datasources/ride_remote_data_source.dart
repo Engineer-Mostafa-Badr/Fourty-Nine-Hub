@@ -117,7 +117,6 @@ import '../models/client/driver_all_rating_model.dart';
 import '../models/create_no_track_trip_model.dart';
 import '../models/dashboards/create_non_track_offer_model.dart';
 import '../models/dashboards/get_offers_response_model.dart';
-import '../../../../shared_web_socket.dart';
 import '../../../account_taps/my_adds/data/model/click_model.dart';
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../models/dashboards/update_driver_settings_model.dart';
@@ -1235,7 +1234,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
 
   @override
   Future<Either<Failure, CreateNonTrackTripEntity>> createNonTrackTrip(CreateNonTrackTripParams params) async{
-    final url = "${EndPoints.createNonTrackTrip}";
+    final url = EndPoints.createNonTrackTrip;
 
     final response = await _apiConsumer.post(url,data: params.toJson());
 
@@ -1568,7 +1567,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateOfferUntrackedClientTrip, (data) {
         CliLogger.info(" Update Offer Trip data :  $data");
         log(" Update Offer Trip data :  $data");
-        print(" Update Offer Trip data :  ${data}");
+        print(" Update Offer Trip data :  $data");
         params(ClientOfferTripModel.fromJson(data["offersUpdated"]));
       });
     } catch (e) {
@@ -1584,7 +1583,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateOfferShippingClientTrip, (data) {
         CliLogger.info(" Update Offer Trip data :  $data");
         log(" Update Offer Trip data :  $data");
-        print(" Update Offer Trip data :  ${data}");
+        print(" Update Offer Trip data :  $data");
         params(ClientOfferTripModel.fromJson(data["offersUpdated"]));
       });
     } catch (e) {
@@ -1624,7 +1623,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
 
   @override
   Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params)async {
-    final url = "${EndPoints.addRateToDriverWithClientNonSocket}";
+    final url = EndPoints.addRateToDriverWithClientNonSocket;
 
     final response = await _apiConsumer.post(url,data: params.toJson());
 
@@ -1639,7 +1638,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
 
   @override
   Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params) async {
-    final url = "${EndPoints.updateClientRating}";
+    final url = EndPoints.updateClientRating;
 
     final response = await _apiConsumer.put(url,data: params.toJson());
 

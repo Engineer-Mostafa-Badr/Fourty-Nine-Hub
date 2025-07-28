@@ -1,30 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/custom_floating_button_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_view_body.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
@@ -140,7 +125,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                   ? null
                   : CustomFloatingButtonAds(
                       title:
-                          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? ''}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}"}",
+                          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
                       onPressed: () {
                         if (AuthHelper().isLoggedIn()) {
                           context.push(

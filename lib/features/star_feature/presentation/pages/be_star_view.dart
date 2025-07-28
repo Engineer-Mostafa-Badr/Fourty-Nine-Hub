@@ -9,7 +9,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';

@@ -38,7 +38,6 @@ import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../account_taps/my_adds/domain/usecases/fetch_my_ads_by_id_usecase.dart';
 import '../../domain/entities/categorization_entity.dart';
 import '../../domain/usecases/create_ad_usecase.dart';

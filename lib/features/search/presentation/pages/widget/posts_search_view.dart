@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -16,7 +15,7 @@ import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
 class PostsSearchView extends StatefulWidget {
-  const PostsSearchView({Key? key}) : super(key: key);
+  const PostsSearchView({super.key});
 
   @override
   State<PostsSearchView> createState() => _PostsSearchViewState();
@@ -90,7 +89,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
           print("${posts.first.content}");
           print("${posts.first.name}");
           print(posts.first.user.firstName);
-          print("${posts.first.id}");
+          print(posts.first.id);
           return OlxPaginationWidget(
             itemsPerPage: 2,
             loadPage: (page) async {

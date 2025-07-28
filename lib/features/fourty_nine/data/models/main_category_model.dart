@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 
 import '../../../../res/style/const.dart';

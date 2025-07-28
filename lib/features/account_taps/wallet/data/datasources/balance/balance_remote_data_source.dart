@@ -7,7 +7,6 @@ import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/balance/balance_history_entity.dart';
 import '../../../domain/entities/balance/request_withdraw_entity.dart';
 import '../../../domain/entities/data_winners_cashback_entity.dart';
-import '../../../domain/entities/winners_cashback_entity.dart';
 import '../../../domain/usecases/get_balance_history_use_case.dart';
 import '../../../domain/usecases/get_winners_cashback_use_case.dart';
 import '../../models/balance/balance_data_model.dart';

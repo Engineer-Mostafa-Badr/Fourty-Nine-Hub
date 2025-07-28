@@ -6,7 +6,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../font_manager.dart';
 class ClientCancelTripDialog extends StatelessWidget {
-  const ClientCancelTripDialog({Key? key}) : super(key: key);
+  const ClientCancelTripDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

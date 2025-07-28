@@ -10,11 +10,9 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
-import '../../../../../routes/routes.dart';
 
 class EnterEmailForgotPasswordView extends StatelessWidget {
   const EnterEmailForgotPasswordView({super.key});

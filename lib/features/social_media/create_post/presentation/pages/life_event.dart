@@ -21,6 +21,7 @@ class LifeEvent extends StatefulWidget {
 
 class _LifeEventState extends State<LifeEvent> {
 
+  @override
   initState() {
     context.read<CreatePostCubit>().getLifeEventCategories();
     super.initState();
@@ -123,8 +124,8 @@ class CachedSvgImage extends StatefulWidget {
     this.color, // Default fallback SVG
     this.width = 100,
     this.height = 100,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _CachedSvgImageState createState() => _CachedSvgImageState();

@@ -17,7 +17,6 @@ import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import '../../../../notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 
 class ChangePasswordSecondViewBody extends StatefulWidget {
   const ChangePasswordSecondViewBody({super.key});

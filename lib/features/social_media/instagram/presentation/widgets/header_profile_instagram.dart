@@ -10,11 +10,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../pages/followers_screen.dart';
 
 class HeaderProfileInstagram extends StatelessWidget {
   const HeaderProfileInstagram({super.key});

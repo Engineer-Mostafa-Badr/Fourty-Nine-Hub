@@ -404,7 +404,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     if (subCategories.isNotEmpty) {
       selectedCategory =
           subCategories.firstWhere((element) => element.id == id);
-      print("Elmonx ${selectedCategory}");
+      print("Elmonx $selectedCategory");
     } else {
       selectedCategory = FoodCategoryEntity(
         id: '',
@@ -560,7 +560,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       (data) {
         expiredOrders.addAll(data.data ?? []);
 
-        if ((data.data?.length ?? 0) < 5) {
+        if ((data.data.length ?? 0) < 5) {
           hasMoreExpiredOrders = false;
           emit(state.copyWith(isLoadingMore: false));
         } else {

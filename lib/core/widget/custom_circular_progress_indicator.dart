@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../res/assets/assets.dart';
-import '../../res/style/app_colors.dart';
 import 'package:lottie/lottie.dart';
 
 class CustomCircularProgressIndicator extends StatelessWidget {

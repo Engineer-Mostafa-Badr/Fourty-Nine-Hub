@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../data/models/client/driver_all_rating_model.dart';
 import '../../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 
@@ -81,7 +78,7 @@ class AllDriverRatingScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  ...ratings.map((review) => ReviewCard(review: review)).toList(),
+                  ...ratings.map((review) => ReviewCard(review: review)),
                 ],
               ),
             );
@@ -99,7 +96,7 @@ class InfoTile extends StatelessWidget {
   final String label;
   final String value;
 
-  const InfoTile({required this.label, required this.value});
+  const InfoTile({super.key, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {

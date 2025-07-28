@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
@@ -15,13 +14,10 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 

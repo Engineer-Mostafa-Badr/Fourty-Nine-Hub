@@ -185,25 +185,25 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     children: [
                       if (myPost.likesCount != 0)
                         _buildCounterWidget(
-                            value: myPost.likesCount!, image: Assets.like),
+                            value: myPost.likesCount, image: Assets.like),
                       if (myPost.hahaCount != 0)
                         _buildCounterWidget(
-                            value: myPost.hahaCount!, image: Assets.haha),
+                            value: myPost.hahaCount, image: Assets.haha),
                       if (myPost.loveCount != 0)
                         _buildCounterWidget(
-                            value: myPost.loveCount!, image: Assets.heart),
+                            value: myPost.loveCount, image: Assets.heart),
                       if (myPost.wowCount != 0)
                         _buildCounterWidget(
-                            value: myPost.wowCount!, image: Assets.wow),
+                            value: myPost.wowCount, image: Assets.wow),
                       if (myPost.sadCount != 0)
                         _buildCounterWidget(
-                            value: myPost.sadCount!, image: Assets.sad),
+                            value: myPost.sadCount, image: Assets.sad),
                       if (myPost.angryCount != 0)
                         _buildCounterWidget(
-                            value: myPost.angryCount!, image: Assets.angry),
+                            value: myPost.angryCount, image: Assets.angry),
                       const Spacer(),
                       InkWell(
-                        onTap: () => widget.showPostComments(myPost.id!),
+                        onTap: () => widget.showPostComments(myPost.id),
                         child: Row(
                           children: [
                             Label(
@@ -241,7 +241,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                               icon: FontAwesomeIcons.comment,
                               label: LocaleKeys.comment.localize,
                               // image: Assets.comment,
-                              onTap: () => widget.showPostComments(myPost.id!)),
+                              onTap: () => widget.showPostComments(myPost.id)),
                         ),
                       Expanded(
                         child: _buildReactionPlaceHolder(
@@ -422,25 +422,25 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount!, image: Assets.like),
+                          value: myPost.likesCount, image: Assets.like),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount!, image: Assets.haha),
+                          value: myPost.hahaCount, image: Assets.haha),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount!, image: Assets.heart),
+                          value: myPost.loveCount, image: Assets.heart),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount!, image: Assets.wow),
+                          value: myPost.wowCount, image: Assets.wow),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount!, image: Assets.sad),
+                          value: myPost.sadCount, image: Assets.sad),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount!, image: Assets.angry),
+                          value: myPost.angryCount, image: Assets.angry),
                     const Spacer(),
                     InkWell(
-                      onTap: () => widget.showPostComments(myPost.id!),
+                      onTap: () => widget.showPostComments(myPost.id),
                       child: Row(
                         children: [
                           Label(
@@ -478,7 +478,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                             icon: FontAwesomeIcons.message,
                             image: Assets.comment,
                             label: LocaleKeys.comments.localize,
-                            onTap: () => widget.showPostComments(myPost.id!)),
+                            onTap: () => widget.showPostComments(myPost.id)),
                       ),
                     Expanded(
                       child: _buildReactionPlaceHolder(
@@ -542,7 +542,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     bottomSheet(
                         context: context,
                         widget: ReportView(
-                          id: widget.post.id!,
+                          id: widget.post.id,
                           categoryId: '66a3583454e6e337915514db',
                         ));
                   });
@@ -554,7 +554,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                 title: LocaleKeys.deletePost.localize,
                 subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
-                  widget.deletePost(post.id!);
+                  widget.deletePost(post.id);
                   if (fromDetails == true) {
                     context.pop();
                   }
@@ -565,7 +565,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
-                widget.hidePost(post.id!);
+                widget.hidePost(post.id);
                 if (fromDetails == true) {
                   context.pop();
                 }
@@ -613,11 +613,11 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               InkWell(
                 onTap: () {
                   if (widget.fromProfile == false) {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.user!.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
                 child: ImageFromInternet(
-                  image: post.user?.image ?? '',
+                  image: post.user.image ?? '',
                   isCircle: true,
                   width: 60.w,
                   height: 60.h,
@@ -632,7 +632,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                       onTap: () {
                         if (widget.fromProfile == false) {
                           context.push(Routes.OTHERSACCOUNT,
-                              extra: post.user!.id);
+                              extra: post.user.id);
                         }
                       },
                       child: Column(
@@ -640,12 +640,12 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                         children: [
                           TextAppButton(
                               label:
-                                  "${post.user?.firstName ?? ''} ${post.user?.lastName ?? ''}",
+                                  "${post.user.firstName ?? ''} ${post.user.lastName ?? ''}",
                               style: Styles.headerText(fontSize: 32),
                               onPressed: () {
                                 if (widget.fromProfile == false) {
                                   context.push(Routes.OTHERSACCOUNT,
-                                      extra: post.user!.id);
+                                      extra: post.user.id);
                                 }
                               }),
                           RichText(
@@ -979,7 +979,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               width: 10,
             ),
           ],
-          if (post.users != null && post.users!.isNotEmpty)
+          if (post.users.isNotEmpty)
             Row(
               children: [
                 Label(
@@ -989,27 +989,27 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                 GestureDetector(
                   onTap: () {
                     context.push(Routes.OTHERSACCOUNT,
-                        extra: post.users![0].id);
+                        extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                        "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style: Styles.smallText(
                         decoration: TextDecoration.underline,
                         color: AppColors.GREY_NORMAL_COLOR),
                   ),
                 ),
-                if (post.users!.length > 1)
+                if (post.users.length > 1)
                   GestureDetector(
                       onTap: () {
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                                  users: post.users!,
+                                  users: post.users,
                                 ));
                       },
                       child: Label(
-                        text: '+${post.users!.length - 1}',
+                        text: '+${post.users.length - 1}',
                         style: Styles.mediumText(
                             color: AppColors.GREY_NORMAL_COLOR),
                       ))

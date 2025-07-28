@@ -1,25 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_loading_search_widget.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../service_locator/service_locator.dart';

@@ -1,7 +1,6 @@
 import 'package:fourtyninehub/core/utils/duration_helper.dart';
 import 'package:intl/intl.dart';
 
-import '../../../ads_feature/ads/domain/entities/ads_address_entity.dart';
 import 'create_ad_search_entity.dart';
 
 class AdsSearchEntity {

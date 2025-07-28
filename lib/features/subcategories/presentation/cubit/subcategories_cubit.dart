@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_c
 import 'package:fourtyninehub/features/subcategories/domain/usecases/search_ads_use_case.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
 import '../../../ads_feature/ad_requests/domain/usecases/get_ad_requests_usecase.dart';
 import '../../../ads_feature/ads/domain/usecases/get_my_ad_by_id_usecase.dart';
 import '../../domain/entities/sub_category_entity.dart';
@@ -199,7 +198,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         (failure) => emit(state.copyWith(
             failure: failure, status: SubcategoriesStates.error)), (r) {
       data = r;
-      print("customPageSubCategories data ${r}");
+      print("customPageSubCategories data $r");
       emit(state.copyWith(customPageSubCategories: r));
     });
 
@@ -249,11 +248,12 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: SubcategoriesStates.error)), (r) async {
-      if (r.isNotEmpty)
+      if (r.isNotEmpty) {
         // await loadFilterData(
         //     model: FilterModel(limit: 15, page: 1, subCategoryId: r[0].id),
         //     filter: "user");
         data = r;
+      }
       r.first.isSelected = true;
       emit(state.copyWith(subCategories: r));
     });
@@ -672,7 +672,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
 
   getRequestsLogByMainCategory(String mainCategoryId) async {
     if (!hasMoreRequestsLogByMainCategory ||
-        isLoadingRequestsLogByMainCategoryMore) return;
+        isLoadingRequestsLogByMainCategoryMore) {
+      return;
+    }
 
     emit(state.copyWith(status: SubcategoriesStates.loading));
     isLoadingRequestsLogByMainCategoryMore = true;

@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/servic
 import 'package:fourtyninehub/features/notifications/presentation/widgets/services_notification_builder.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/social_icon_builder.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/social_notification_builder.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';

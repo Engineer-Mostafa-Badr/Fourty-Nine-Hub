@@ -11,8 +11,6 @@ import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/follower_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/followers_state.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
@@ -36,7 +34,7 @@ class InstagramViewBody extends StatefulWidget {
 }
 
 class _InstagramViewBodyState extends State<InstagramViewBody> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   // للتحكم بالتمرير
   // final ScrollController _scrollController = ScrollController();

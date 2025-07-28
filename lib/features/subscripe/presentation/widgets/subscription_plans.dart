@@ -13,9 +13,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 

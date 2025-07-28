@@ -95,7 +95,7 @@ class LuckyWheelView extends StatelessWidget {
                                       : MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                      '${FormatNumbers().formatNumber(state.data?.amount.round()??0 , useArabicNumerals: context.isArabic)}',
+                                      FormatNumbers().formatNumber(state.data?.amount.round()??0 , useArabicNumerals: context.isArabic),
                                       style: Styles.mediumText(
                                         color: AppColors.getReversedTextColor(context),
                                       ),
@@ -141,7 +141,7 @@ class LuckyWheelView extends StatelessWidget {
                                       : MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${FormatNumbers().formatNumber(state.data?.points.round()??0 , useArabicNumerals: context.isArabic)}',
+                                      FormatNumbers().formatNumber(state.data?.points.round()??0 , useArabicNumerals: context.isArabic),
                                       style: Styles.mediumText(
                                         color:AppColors.getReversedTextColor(context),
                                       ),

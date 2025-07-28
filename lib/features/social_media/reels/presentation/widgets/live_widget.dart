@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
 import '../../data/models/new_reels_model.dart';
-import '../pages/reel_actions.dart';
 import 'sound_option_bottom_sheet.dart';
 
 class LiveWidget extends StatefulWidget {
@@ -50,7 +48,7 @@ class _LiveWidgetState extends State<LiveWidget>
     final iconSize = baseSize * 0.1;
 
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,

@@ -15,7 +15,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/states/basic_state.dart';
 import '../../../../routes/routes.dart';
-import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../payment/presentation/pages/widgets/payment_yellow_card.dart';
 
 class AnnounceWidget extends StatelessWidget {

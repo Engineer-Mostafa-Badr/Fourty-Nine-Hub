@@ -16,14 +16,14 @@ class ConfirmationSheet extends StatelessWidget {
   final bool isPay;
 
   const ConfirmationSheet({
-    Key? key,
+    super.key,
     @required this.btnTitle,
     this.onSafeAsDraft,
     this.onDiscardPost,
     this.description,
     this.title,
     this.isPay = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

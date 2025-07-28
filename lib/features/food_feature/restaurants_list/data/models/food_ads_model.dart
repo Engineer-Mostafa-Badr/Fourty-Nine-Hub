@@ -3,30 +3,18 @@ import '../../domain/entities/food_ads_entity.dart';
 
 class FoodAdModel extends FoodAdEntity {
   FoodAdModel({
-    String? adId,
-    AddressModel? address,
-    int? views,
-    SubCategoryModel? subCategory,
-    MainCategoryModel? mainCategory,
-    String? title,
-    String? desc,
-    List<ImageModel>? images,
-    bool? isPremium,
-    String? phone,
-    int? totalRating,
-  }) : super(
-    adId: adId,
-    address: address,
-    views: views,
-    subCategory: subCategory,
-    mainCategory: mainCategory,
-    title: title,
-    desc: desc,
-    images: images,
-    isPremium: isPremium,
-    phone: phone,
-    totalRating: totalRating,
-  );
+    super.adId,
+    AddressModel? super.address,
+    super.views,
+    SubCategoryModel? super.subCategory,
+    MainCategoryModel? super.mainCategory,
+    super.title,
+    super.desc,
+    List<ImageModel>? super.images,
+    super.isPremium,
+    super.phone,
+    super.totalRating,
+  });
 
   factory FoodAdModel.fromJson(Map<String, dynamic> json) {
     return FoodAdModel(
@@ -47,8 +35,7 @@ class FoodAdModel extends FoodAdEntity {
 }
 
 class AddressModel extends FoodAdsAddressEntity {
-  AddressModel({String? type, List<double>? coordinates})
-      : super(type: type, coordinates: coordinates);
+  AddressModel({super.type, super.coordinates});
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
@@ -66,8 +53,7 @@ class AddressModel extends FoodAdsAddressEntity {
 }
 
 class SubCategoryModel extends FoodAdsSubCategoryEntity {
-  SubCategoryModel({String? id, String? nameAr, String? nameEn})
-      : super(id: id, nameAr: nameAr, nameEn: nameEn);
+  SubCategoryModel({super.id, super.nameAr, super.nameEn});
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
@@ -87,8 +73,7 @@ class SubCategoryModel extends FoodAdsSubCategoryEntity {
 }
 
 class MainCategoryModel extends FoodAdsMainCategoryEntity {
-  MainCategoryModel({String? id, String? nameAr, String? nameEn})
-      : super(id: id, nameAr: nameAr, nameEn: nameEn);
+  MainCategoryModel({super.id, super.nameAr, super.nameEn});
 
   factory MainCategoryModel.fromJson(Map<String, dynamic> json) {
     return MainCategoryModel(
@@ -109,28 +94,17 @@ class MainCategoryModel extends FoodAdsMainCategoryEntity {
 
 class ImageModel extends FoodAdsImageEntity {
   ImageModel({
-    String? fileName,
-    String? id,
-    String? user,
-    String? subcategoryId,
-    String? mimetype,
-    int? size,
-    String? mediaKey,
-    bool? successUpload,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) : super(
-    fileName: fileName,
-    id: id,
-    user: user,
-    subcategoryId: subcategoryId,
-    mimetype: mimetype,
-    size: size,
-    mediaKey: mediaKey,
-    successUpload: successUpload,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-  );
+    super.fileName,
+    super.id,
+    super.user,
+    super.subcategoryId,
+    super.mimetype,
+    super.size,
+    super.mediaKey,
+    super.successUpload,
+    super.createdAt,
+    super.updatedAt,
+  });
 
   factory ImageModel.fromJson(Map<String, dynamic> json) {
     return ImageModel(

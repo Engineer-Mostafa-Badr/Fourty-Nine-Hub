@@ -728,10 +728,10 @@ class FlutterProjectCleaner {
     final stopwatch = Stopwatch()..start();
 
     await deleteUnreferencedAssets();
-    print('\n' + '=' * 50 + '\n');
+    print('\n${'=' * 50}\n');
 
     await deleteUnreferencedDartFiles();
-    print('\n' + '=' * 50 + '\n');
+    print('\n${'=' * 50}\n');
 
     await removeUnreferencedDependencies();
 
@@ -931,14 +931,14 @@ class FlutterProjectCleaner {
 
     // إنشاء النسخة الاحتياطية المنظمة أولاً
     await createOrganizedBackup();
-    print('\n' + '=' * 50 + '\n');
+    print('\n${'=' * 50}\n');
 
     // تنظيف المشروع
     await deleteUnreferencedAssets();
-    print('\n' + '=' * 50 + '\n');
+    print('\n${'=' * 50}\n');
 
     await deleteUnreferencedDartFiles();
-    print('\n' + '=' * 50 + '\n');
+    print('\n${'=' * 50}\n');
 
     await removeUnreferencedDependencies();
 

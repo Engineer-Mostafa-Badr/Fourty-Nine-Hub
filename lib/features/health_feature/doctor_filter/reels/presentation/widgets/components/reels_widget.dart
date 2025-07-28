@@ -11,9 +11,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/c
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/full_screen_widget.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 

@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';

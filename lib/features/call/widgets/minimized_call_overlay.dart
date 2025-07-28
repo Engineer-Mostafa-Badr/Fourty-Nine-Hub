@@ -41,7 +41,7 @@ class CallOverlayManager {
     // Ensure we have a valid context before inserting overlay
     final context = navigatorKey.currentContext;
     if (context != null) {
-      Overlay.of(context)?.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
       _isVisible = true;
       print("Call overlay successfully shown");
     } else {
@@ -62,7 +62,7 @@ class CallOverlayManager {
 
 // The actual call overlay widget
 class MinimizedCallOverlay extends StatefulWidget {
-  const MinimizedCallOverlay({Key? key}) : super(key: key);
+  const MinimizedCallOverlay({super.key});
 
   @override
   State<MinimizedCallOverlay> createState() => _MinimizedCallOverlayState();
@@ -477,7 +477,7 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
                 },
                 child: hasVideo
                     ? _buildVideoCallBubble(
-                        context, minimizeState, callState as HasCall)
+                        context, minimizeState, callState)
                     : _buildCallBubble(context, minimizeState),
               ),
             );
@@ -634,9 +634,9 @@ class CallAwareApp extends StatelessWidget {
   final Widget child;
 
   const CallAwareApp({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
