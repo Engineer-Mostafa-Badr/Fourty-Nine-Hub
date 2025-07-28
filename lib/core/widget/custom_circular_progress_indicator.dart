@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../res/assets/assets.dart';
 import '../../res/style/app_colors.dart';
+import 'package:lottie/lottie.dart';
 
 class CustomCircularProgressIndicator extends StatelessWidget {
   const CustomCircularProgressIndicator(
@@ -13,12 +15,20 @@ final Animation<Color?>? valueColor;
 final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator(
-      color: color ?? AppColors.getButtonPrimaryWhiteColor(context),
-      value: value,
-      strokeWidth: strokeWidth ?? 4,
-      valueColor: valueColor,
-      backgroundColor: backgroundColor,
+    return  Lottie.asset(
+      Assets.customLoading,
+      // width: value,
+      // height: value,
+      width: 50,
+      height: 50,
+      fit: BoxFit.fill,
     );
+    // CircularProgressIndicator(
+    //   color: color ?? AppColors.getButtonPrimaryWhiteColor(context),
+    //   value: value,
+    //   strokeWidth: strokeWidth ?? 4,
+    //   valueColor: valueColor,
+    //   backgroundColor: backgroundColor,
+    // );
   }
 }

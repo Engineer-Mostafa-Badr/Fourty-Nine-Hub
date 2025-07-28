@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
@@ -77,7 +78,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         // context.read<GetWalletCubit>();
@@ -87,7 +87,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-
                   // context
                   //     .read<UserCubit>()
                   //     .isLoggedIn
@@ -115,6 +114,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.customPage,
                                   label: LocaleKeys.customPage.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     if (!context.read<UserCubit>().isLoggedIn) {
                                       return pleaseLoginDialog(context);
                                     }
@@ -132,6 +132,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.quran,
                                   label: LocaleKeys.quraan.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     AdInterstitialTop.loadIntersitialAd();
                                     AdInterstitialTop.showInterstitialAd();
                                     context.pop();
@@ -141,6 +142,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.azkar,
                                   label: LocaleKeys.azkar.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     AdInterstitialTop.loadIntersitialAd();
                                     AdInterstitialTop.showInterstitialAd();
                                     context.pop();
@@ -152,6 +154,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.settings_icon,
                                   label: LocaleKeys.settings.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     context.pop();
                                     context.push(Routes.SETTINGS);
                                   }),
@@ -160,6 +163,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               //     image: Assets.privacy_icon,
                               //     label: LocaleKeys.privacy.localize,
                               //     onTap: () {
+
                               //       if (!context.read<UserCubit>().isLoggedIn) {
                               //         return pleaseLoginDialog(context);
                               //       } else {
@@ -174,6 +178,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.policy,
                                   label: LocaleKeys.policies.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     AdInterstitialTop.loadIntersitialAd();
                                     AdInterstitialTop.showInterstitialAd();
                                     context.pop();
@@ -185,6 +190,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.share_app_icon,
                                   label: LocaleKeys.shareApp.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     if (!context.read<UserCubit>().isLoggedIn) {
                                       return pleaseLoginDialog(context);
                                     }
@@ -196,6 +202,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.contact_us_icon,
                                   label: LocaleKeys.contactUs.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     if (!context.read<UserCubit>().isLoggedIn) {
                                       return pleaseLoginDialog(context);
                                     }
@@ -208,10 +215,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   requireLogin: true,
                                   label: LocaleKeys.logout.localize,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     showAnimatedDialog(
                                       context,
                                       AlertDialog(
-                                        backgroundColor: Theme.of(context).drawerTheme.backgroundColor,
+                                        backgroundColor: Theme.of(context)
+                                            .drawerTheme
+                                            .backgroundColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -232,6 +242,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   label: LocaleKeys.ride.localize,
                                   image: Assets.rideIcon,
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     context.pop();
                                     context.push(Routes.RIDE_HOME);
                                   }),
@@ -249,6 +260,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.health.localize,
                                 image: Assets.healthIcon,
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   context.pop();
                                   context.push(Routes.VISITA);
                                 },
@@ -257,6 +269,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.meal.localize,
                                 image: Assets.meal,
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   context.pop();
                                   context.push(Routes.FOOD);
                                 },
@@ -265,6 +278,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.marriage.localize,
                                 image: Assets.married,
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   context.pop();
                                   context.push(Routes.MARRIAGESUBCATEGORIES);
                                 },
@@ -273,6 +287,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.find.localize,
                                 image: Assets.find,
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   context.pop();
                                   context.push(Routes.Tinder);
                                 },
@@ -281,6 +296,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.reel.localize,
                                 image: Assets.reel,
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   context.pop();
                                   context.push(Routes.REELS);
                                 },
@@ -289,7 +305,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.spotlight.localize,
                                 image: Assets.spotlight,
                                 onTap: () {
-                                  if(!context.read<UserCubit>().isLoggedIn){
+                                  ManageVibration.vibrate();
+                                  if (!context.read<UserCubit>().isLoggedIn) {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
@@ -300,6 +317,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               //   label: LocaleKeys.meet.localize,
                               //   image: Assets.meet,
                               //   onTap: () {
+
                               //     context.pop();
                               //     context.push(Routes.MEETINGROOM);
                               //   },
@@ -308,7 +326,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.live.localize,
                                 image: Assets.liveIcon,
                                 onTap: () {
-                                  if(!context.read<UserCubit>().isLoggedIn){
+                                  ManageVibration.vibrate();
+                                  if (!context.read<UserCubit>().isLoggedIn) {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
@@ -328,7 +347,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.chat.localize,
                                 image: Assets.whatsApp,
                                 onTap: () {
-                                  if(!context.read<UserCubit>().isLoggedIn){
+                                  ManageVibration.vibrate();
+                                  if (!context.read<UserCubit>().isLoggedIn) {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
@@ -429,7 +449,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               SizedBox(
                 width: 4.w,
               ),
-              Label(text: context.isArabic?"تفعيل وضع الاهتزاز":"Enable Vibration"),
+              Label(
+                  text: context.isArabic
+                      ? "تفعيل وضع الاهتزاز"
+                      : "Enable Vibration"),
             ],
           ),
         ],
@@ -494,6 +517,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 value:
                                     '${state.competition?[10].countOfRequest}',
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -511,6 +535,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 value:
                                     '${state.competition?[0].countOfRequest}',
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -529,6 +554,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     '${state.competition?[9].countOfRequest}',
                                 context: context,
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -544,6 +570,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.more.localize,
                                 value: '${calculateSumOfRequests()}',
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -687,6 +714,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget competitionSubscription({required BuildContext context}) {
     return InkWell(
       onTap: () {
+        ManageVibration.vibrate();
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();
         if (context.read<UserCubit>().isLoggedIn) {
@@ -861,7 +889,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             );
                           }
                           return ClickableWidget(
-                            onTap:(){
+                            onTap: () {
+                              ManageVibration.vibrate();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -880,7 +909,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               image: user?.profilePicture ??
                                   UIConst.profilePlaceHolder,
                               fit: BoxFit.fill,
-                              border:Border.all(color: AppColors.GRAY_LIGHT_COLOR3),
+                              border: Border.all(
+                                  color: AppColors.GRAY_LIGHT_COLOR3),
                             ),
                           );
                         },
@@ -1009,10 +1039,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         // );
                       },
                       child: Container(
-                        margin: EdgeInsetsDirectional.only(end: 5,bottom: 5),
+                        margin: EdgeInsetsDirectional.only(end: 5, bottom: 5),
                         child: Image.asset(
                           Assets.cameraOutlined,
-                          color: context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.SECONDARY_COLOR,
                           width: 40.w,
                         ),
                       ),
@@ -1056,6 +1088,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        ManageVibration.vibrate();
                         // context.push(
                         //   Routes.WALLET,
                         // );
@@ -1193,8 +1226,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           ),
           BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, theme) {
-              var themeCubit =
-              context.read<ThemeCubit>();
+              var themeCubit = context.read<ThemeCubit>();
               return Row(
                 children: [
                   CustomSwitchButton(
@@ -1213,11 +1245,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   ),
                   themeCubit.isDarkTheme
                       ? Label(
-                    text: LocaleKeys.lightMode.localize,
-                  )
+                          text: LocaleKeys.lightMode.localize,
+                        )
                       : Label(
-                    text: LocaleKeys.darkMode.localize,
-                  ),
+                          text: LocaleKeys.darkMode.localize,
+                        ),
                 ],
               );
             },
@@ -1237,7 +1269,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               SizedBox(
                 width: 4.w,
               ),
-              Label(text: context.isArabic?"تفعيل وضع الاهتزاز":"Enable Vibration"),
+              Label(
+                  text: context.isArabic
+                      ? "تفعيل وضع الاهتزاز"
+                      : "Enable Vibration"),
             ],
           ),
         ],
