@@ -412,114 +412,109 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
               width: double.infinity,
               imageUrl: widget.category.banner,
               height: widget.imageHeight,
-              imageBuilder: (context, i) => Column(
+              imageBuilder: (context, i) => Stack(
                 children: [
                   Stack(
+                    alignment: AlignmentDirectional.center,
                     children: [
-                      Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Container(
-                            height: widget.imageHeight,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15.w),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30.r),
-                              color: widget.category.banner.isNotEmpty
-                                  ? Colors.transparent
-                                  : AppColors.PRIMARY_COLOR,
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: CachedNetworkImageProvider(
-                                  widget.category.banner,
-                                ),
-                                // colorFilter: ColorFilter.mode(
-                                //   Colors.black.withOpacity(0.3),
-                                //   BlendMode.darken,
-                                // ),
-                              ),
+                      Container(
+                        height: widget.imageHeight,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.r),
+                          color: widget.category.banner.isNotEmpty
+                              ? Colors.transparent
+                              : AppColors.PRIMARY_COLOR,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: CachedNetworkImageProvider(
+                              widget.category.banner,
                             ),
+                            // colorFilter: ColorFilter.mode(
+                            //   Colors.black.withOpacity(0.3),
+                            //   BlendMode.darken,
+                            // ),
                           ),
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30.r),
-                                color: Colors.black38
-                              ),
-                              child: Center(
-                                child: Label(
-                                  overflow: TextOverflow.ellipsis,
-                                  text: !context.isArabic
-                                      ? widget.category.nameEn!
-                                      : widget.category.name ?? "",
-                                  style: Styles.mediumText(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 45,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Positioned(
-                        right: 0,
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            PositionedDirectional(
-                                end: 0, child: _buildRegisterButton()),
-                          ],
                         ),
                       ),
-                      context.read<UserCubit>().isLoggedIn
-                          ? widget.removeFavorite
-                          ? Container()
-                          : PositionedDirectional(
-                        top: 10.h,
-                        start: 10.w,
+                      Positioned.fill(
                         child: Container(
                           decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                spreadRadius: 1,
-                                blurRadius: 1,
-                                offset: const Offset(1, 1),
-                              )
-                            ]
+                              borderRadius: BorderRadius.circular(30.r),
+                            color: Colors.black38
                           ),
-                          child: IconAppButton(
-                            icon: widget.category.isFavorite == false
-                                ? Icons.favorite_outline
-                                : Icons.favorite,
-                            onPressed: () async {
-                              final result =
-                              await widget.onFavorite();
-                              print("resutlt=$result");
-                              if (result == true) {
-                                print(result);
-                                setState(() {
-                                  widget.category.isFavorite =
-                                  !widget.category.isFavorite!;
-                                  print(widget.category.isFavorite);
-                                  widget.isFavorite = result;
-                                  print("===================$result");
-                                });
-                              }
-                            },
-                            color: AppColors.SECONDARY_COLOR,
+                          child: Center(
+                            child: Label(
+                              overflow: TextOverflow.ellipsis,
+                              text: !context.isArabic
+                                  ? widget.category.nameEn!
+                                  : widget.category.name ?? "",
+                              style: Styles.mediumText(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 45,
+                              ),
+                            ),
                           ),
                         ),
-                      )
-                          : const SizedBox.shrink(),
+                      ),
                     ],
                   ),
-
+                  Positioned(
+                    right: 0,
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        PositionedDirectional(
+                            end: 0, child: _buildRegisterButton()),
+                      ],
+                    ),
+                  ),
+                  context.read<UserCubit>().isLoggedIn
+                      ? widget.removeFavorite
+                      ? Container()
+                      : PositionedDirectional(
+                    top: 10.h,
+                    start: 10.w,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: const Offset(1, 1),
+                          )
+                        ]
+                      ),
+                      child: IconAppButton(
+                        icon: widget.category.isFavorite == false
+                            ? Icons.favorite_outline
+                            : Icons.favorite,
+                        onPressed: () async {
+                          final result =
+                          await widget.onFavorite();
+                          print("resutlt=$result");
+                          if (result == true) {
+                            print(result);
+                            setState(() {
+                              widget.category.isFavorite =
+                              !widget.category.isFavorite!;
+                              print(widget.category.isFavorite);
+                              widget.isFavorite = result;
+                              print("===================$result");
+                            });
+                          }
+                        },
+                        color: AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                  )
+                      : const SizedBox.shrink(),
                 ],
               ),
               placeholder: (context, u) => Shimmer.fromColors(

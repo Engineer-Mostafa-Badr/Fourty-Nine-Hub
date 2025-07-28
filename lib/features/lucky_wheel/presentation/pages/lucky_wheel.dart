@@ -61,7 +61,7 @@ class LuckyWheelView extends StatelessWidget {
                 children: [
                   BlocBuilder<WheelWalletCubit, BasicState<WheelWalletEntity>>(
                     builder: (_, state) => Row(
-                       textDirection: TextDirection.ltr,
+                      textDirection: TextDirection.ltr,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
@@ -85,7 +85,8 @@ class LuckyWheelView extends StatelessWidget {
                                 Text(
                                   LocaleKeys.cash.localize,
                                   style: Styles.mediumText(
-                                    color:AppColors.getReversedTextColor(context),
+                                    color:
+                                        AppColors.getReversedTextColor(context),
                                   ),
                                 ),
                                 const Spacer(),
@@ -95,9 +96,14 @@ class LuckyWheelView extends StatelessWidget {
                                       : MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                      FormatNumbers().formatNumber(state.data?.amount.round()??0 , useArabicNumerals: context.isArabic),
+                                      FormatNumbers().formatNumber(
+                                        state.data?.amount.round() ?? 0,
+                                        useArabicNumerals: context.isArabic,
+                                        decimals: 2,
+                                      ),
                                       style: Styles.mediumText(
-                                        color: AppColors.getReversedTextColor(context),
+                                        color: AppColors.getReversedTextColor(
+                                            context),
                                       ),
                                     ),
                                   ],
@@ -131,7 +137,8 @@ class LuckyWheelView extends StatelessWidget {
                                 Text(
                                   LocaleKeys.points.localize,
                                   style: Styles.mediumText(
-                                    color: AppColors.getReversedTextColor(context),
+                                    color:
+                                        AppColors.getReversedTextColor(context),
                                   ),
                                 ),
                                 const Spacer(),
@@ -141,9 +148,14 @@ class LuckyWheelView extends StatelessWidget {
                                       : MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      FormatNumbers().formatNumber(state.data?.points.round()??0 , useArabicNumerals: context.isArabic),
+                                      FormatNumbers().formatNumber(
+                                        state.data?.points.round() ?? 0,
+                                        useArabicNumerals: context.isArabic,
+                                        decimals: 2,
+                                      ),
                                       style: Styles.mediumText(
-                                        color:AppColors.getReversedTextColor(context),
+                                        color: AppColors.getReversedTextColor(
+                                            context),
                                       ),
                                     ),
                                   ],

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:auto_scroll_text/auto_scroll_text.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,211 +142,262 @@ class _FourtyNineViewState extends State<FourtyNineView>
   Widget build(BuildContext context) {
     // context.push(Routes.REELS);
     print("objectUser${UserCubit.to.state.data?.id}");
-    return 
-    // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
-    //   listener: (context, state) {
-    //     if (state is NotificationSocketIoNewNotification) {
-    //       // pr('new notfication is recieved by the bloc listner');
-    //       // pr(state.notificationEntity);
-    //       notificationSnackBar(
-    //           context: context,
-    //           notificationEntity: state.notificationEntity,
-    //           isAppNotification: state.notificationEntity.filterType == 'app');
-    //     } else if (state is NotificationSocketIoFailed) {
-    //       // pr('Failed to recieve the new notfication ');
-    //       // pr(state.message);
-    //     }
-    //   },
-    //   child:
-       ExitWidget(
-        child: CustomScaffold(
-          key: _scaffoldKey,
-          appBar: const HomeAppbar(
-            isWithBackArrow: false,
-            language: true,
-            // isHaveLeading: true,
-          ),
-          bottomNavigationBar: _isScrollingDown
-              ? null
-              :BottomNavigator(
-            scrollController: scrollController,
-            isScrollingDown: _isScrollingDown,
-            mainCategory: 1,
-            index: 2,
-          ),
-          floatingActionButton: _isScrollingDown
-              ? null
-              : const FloatingButton(
-                  changeView: 1,
-                  icon: Icons.person,
-                ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          // drawer: const DrawerWidget(),
-          body: ListView(
-            controller: scrollController,
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            children: [
-              const AddBanner(),
-              const AnnounceWidget(),
-              Sizer(
-                height: 5.h,
+    return
+        // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
+        //   listener: (context, state) {
+        //     if (state is NotificationSocketIoNewNotification) {
+        //       // pr('new notfication is recieved by the bloc listner');
+        //       // pr(state.notificationEntity);
+        //       notificationSnackBar(
+        //           context: context,
+        //           notificationEntity: state.notificationEntity,
+        //           isAppNotification: state.notificationEntity.filterType == 'app');
+        //     } else if (state is NotificationSocketIoFailed) {
+        //       // pr('Failed to recieve the new notfication ');
+        //       // pr(state.message);
+        //     }
+        //   },
+        //   child:
+        ExitWidget(
+      child: CustomScaffold(
+        key: _scaffoldKey,
+        appBar: const HomeAppbar(
+          isWithBackArrow: false,
+          language: true,
+          // isHaveLeading: true,
+        ),
+        bottomNavigationBar: _isScrollingDown
+            ? null
+            : BottomNavigator(
+                scrollController: scrollController,
+                isScrollingDown: _isScrollingDown,
+                mainCategory: 1,
+                index: 2,
               ),
-              !context.read<UserCubit>().isLoggedIn
-                  ? Sizer(
-                height: 5.h,
-
-              )
-                  : const SizedBox.shrink(),
-              context.read<UserCubit>().isLoggedIn
-                  ?ScrollableTextWithAnimation(
-                textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-              ) : const SizedBox.shrink(),
-
-              //wallet
-
-              context.read<UserCubit>().isLoggedIn
-                  ? const WalletWidget()
-                  : const SizedBox.shrink(),
-              ClickableWidget(
-                onTap: () {
-                  ManageVibration.vibrate();
-                  if (!context.read<UserCubit>().isLoggedIn) {
-                    return pleaseLoginDialog(context);
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditPage(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 40.h,
-                  alignment: Alignment.center,
-                  child: AutoScrollText(
-                    velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
-                    style: Styles.headerText(
-                        fontSize: 30,
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.SECONDARY_COLOR),
+        floatingActionButton: _isScrollingDown
+            ? null
+            : const FloatingButton(
+                changeView: 1,
+                icon: Icons.person,
+              ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // drawer: const DrawerWidget(),
+        body: ListView(
+          controller: scrollController,
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          children: [
+            const AddBanner(),
+            const AnnounceWidget(),
+            Sizer(
+              height: 5.h,
+            ),
+            !context.read<UserCubit>().isLoggedIn
+                ? Sizer(
+                    height: 5.h,
+                  )
+                : const SizedBox.shrink(),
+            context.read<UserCubit>().isLoggedIn
+                ? ScrollableTextWithAnimation(
                     textDirection: context.isArabic
                         ? TextDirection.rtl
                         : TextDirection.ltr,
-                    selectable: true,
-                    // textStyle: TextStyle(fontSize: 24),
+                  )
+                : const SizedBox.shrink(),
+
+            //wallet
+
+            context.read<UserCubit>().isLoggedIn
+                ? const WalletWidget()
+                : const SizedBox.shrink(),
+            ClickableWidget(
+              onTap: () {
+                ManageVibration.vibrate();
+                if (!context.read<UserCubit>().isLoggedIn) {
+                  return pleaseLoginDialog(context);
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditPage(),
                   ),
+                );
+              },
+              child: Container(
+                height: 40.h,
+                alignment: Alignment.center,
+                child: AutoScrollText(
+                  velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+                  "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
+                  style: Styles.headerText(
+                      fontSize: 30,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.SECONDARY_COLOR),
+                  textDirection:
+                      context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                  selectable: true,
+                  // textStyle: TextStyle(fontSize: 24),
                 ),
               ),
-              Sizer(
-                height: 5.h,
-              ),
-              GridBlocksWidget(),
-              Sizer(
-                height: 10.h,
-              ),
-              //cats layout
-              BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                builder: (context, state) {
-                  var data = state.data;
-                  print('MainCategoriesCubit data is $data');
-                  return _buildMainCategoriesViews(data);
-                },
-              ),
-              Sizer(
-                height: 10.h,
-              ),
-              //main cats
-              BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                builder: (context, state) {
-                  final controller = context.read<MainCategoriesCubit>();
-                  if (state.status == StateStatus.loading) {
-                    return Shimmer.fromColors(
-                      baseColor: Colors.grey[100]!,
-                      highlightColor: Colors.white24,
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 40,top: 20),
-                        height: MediaQuery.of(context).size.height*0.16,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.AUTH_CONTAINER_COLOR,
-                          borderRadius: BorderRadius.circular(20.r),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                      ),
-                    );
-                  }
-                  if (state.data != null) {
-                    return  Container(
-                      margin: EdgeInsets.only(bottom: 40),
-                      height: MediaQuery.of(context).size.height*(0.6),
+            ),
+            Sizer(
+              height: 5.h,
+            ),
+            GridBlocksWidget(),
+            Sizer(
+              height: 10.h,
+            ),
+            //cats layout
+            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+              builder: (context, state) {
+                var data = state.data;
+                print('MainCategoriesCubit data is $data');
+                return _buildMainCategoriesViews(data);
+              },
+            ),
+            Sizer(
+              height: 10.h,
+            ),
+            //main cats
+            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+              builder: (context, state) {
+                final controller = context.read<MainCategoriesCubit>();
+                if (state.status == StateStatus.loading) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 40, top: 20),
+                      height: MediaQuery.of(context).size.height * 0.16,
                       width: double.infinity,
-                      child:AnimatedCardsListView(
-                        setupScrollController: (controller){
-                          controller.addListener(() {
-                            if (controller.position.userScrollDirection ==
-                                ScrollDirection.reverse) {
-                              if (!_isScrollingDown) {
-                                setState(() {
-                                  _isScrollingDown = true;
-                                });
-                              }
-                            } else if (controller.position.userScrollDirection ==
-                                ScrollDirection.forward) {
-                              if (_isScrollingDown) {
-                                setState(() {
-                                  _isScrollingDown = false;
-                                });
-                              }
-                            }
-                          });
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                    ),
+                  );
+                }
+                if (state.data != null) {
+                  List<Widget> items = List.generate(
+                    state.data?.length ?? 0,
+                        (index) => InkWell(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        HandleCashback.setCount('mainCategoriesCount', context);
+                        if (state.data![index].id == '62c8b5b09332225799fe335e') {
+                          context.push(Routes.MARRIAGESUBCATEGORIES,
+                              extra: state.data![index]);
+                        } else {
+                          context.push(Routes.SUBCATEGORIES,
+                              extra: state.data![index]);
+                        }
+                      },
+                      child: HomeMainCategoryBanner(
+                        category: state.data![index],
+                        imageHeight: MediaQuery.sizeOf(context).height * 0.10,
+                        onFavorite: () async {
+                          ManageVibration.vibrate();
+                          var result =
+                          await controller.toggleFavoriteMedicalService(
+                              state.data![index].id);
+                          print("result$result");
+                          return result;
                         },
-                        cardsList: List.generate(
-                          state.data?.length??0,
-                              (index) => InkWell(
-                            onTap: () {
+                      ),
+                    ),
+                  );
+                  return CarouselSlider(
+                    options: CarouselOptions(
+                      height:  MediaQuery.of(context).size.height * (0.4),
+                      // Adjust depending on card height
+                      autoPlay: true,
+                      enlargeCenterPage: false,
+                      enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                      viewportFraction: 0.31,
+                      enlargeFactor:0.5,
+                      enableInfiniteScroll: true,
+                      autoPlayInterval: const Duration(seconds: 3),
+                      scrollDirection: Axis.vertical,
+                    ),
+                    items: items.map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: item,
+                      );
+                    }).toList(),
+                  );
+                 /* return Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    height: MediaQuery.of(context).size.height * (0.6),
+                    width: double.infinity,
+                    child: AnimatedCardsListView(
+                      setupScrollController: (controller) {
+                        controller.addListener(() {
+                          if (controller.position.userScrollDirection ==
+                              ScrollDirection.reverse) {
+                            if (!_isScrollingDown) {
+                              setState(() {
+                                _isScrollingDown = true;
+                              });
+                            }
+                          } else if (controller.position.userScrollDirection ==
+                              ScrollDirection.forward) {
+                            if (_isScrollingDown) {
+                              setState(() {
+                                _isScrollingDown = false;
+                              });
+                            }
+                          }
+                        });
+                      },
+                      cardsList: List.generate(
+                        state.data?.length ?? 0,
+                        (index) => InkWell(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount(
+                                'mainCategoriesCount', context);
+                            if (state.data![index].id ==
+                                '62c8b5b09332225799fe335e') {
+                              context.push(Routes.MARRIAGESUBCATEGORIES,
+                                  extra: state.data![index]);
+                            } else {
+                              context.push(Routes.SUBCATEGORIES,
+                                  extra: state.data![index]);
+                            }
+                          },
+                          child: HomeMainCategoryBanner(
+                            category: state.data![index],
+                            imageHeight:
+                                MediaQuery.sizeOf(context).height * 0.10,
+                            onFavorite: () async {
                               ManageVibration.vibrate();
-                              AdInterstitialTop.loadIntersitialAd();
-                              AdInterstitialTop.showInterstitialAd();
-                              HandleCashback.setCount(
-                                  'mainCategoriesCount', context);
-                              if (state.data![index].id ==
-                                  '62c8b5b09332225799fe335e') {
-                                context.push(Routes.MARRIAGESUBCATEGORIES,
-                                    extra: state.data![index]);
-                              } else {
-                                context.push(Routes.SUBCATEGORIES,
-                                    extra: state.data![index]);
-                              }
+                              var result =
+                                  await controller.toggleFavoriteMedicalService(
+                                      state.data![index].id);
+                              print("result$result");
+                              return result;
                             },
-                            child: HomeMainCategoryBanner(
-                              category: state.data![index],
-                                imageHeight:MediaQuery.sizeOf(context).height * 0.10,
-                              onFavorite: () async {
-                                ManageVibration.vibrate();
-                                var result = await controller
-                                    .toggleFavoriteMedicalService(
-                                    state.data![index].id);
-                                print("result$result");
-                                return result;
-                              },
-                            ),
                           ),
                         ),
                       ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
-            ],
-          ),
+                    ),
+                  );*/
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+          ],
         ),
+      ),
       // ),
     );
   }
@@ -414,7 +466,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
       onTap: () {
         onTab();
         if (routeName == Routes.MAINCATEGORIESCARDS) {
-          context.push(routeName, extra: MainCategoriesCardsParams(data: extra,isCustomPage: false));
+          context.push(routeName,
+              extra:
+                  MainCategoriesCardsParams(data: extra, isCustomPage: false));
         } else {
           context.push(routeName, extra: extra);
         }

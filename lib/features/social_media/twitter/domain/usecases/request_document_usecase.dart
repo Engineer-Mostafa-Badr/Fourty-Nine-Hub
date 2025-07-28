@@ -6,7 +6,9 @@ import '../repositories/twitter_repo.dart';
 
 class RequestDocumentUseCase extends UseCase<bool, TwitterDocumentationParams> {
   final TwitterRepo _repo;
+
   RequestDocumentUseCase(this._repo);
+
   @override
   Future<Either<Failure, bool>> call(TwitterDocumentationParams params) async {
     return await _repo.requestDocument(params: params);
@@ -14,16 +16,20 @@ class RequestDocumentUseCase extends UseCase<bool, TwitterDocumentationParams> {
 }
 
 class TwitterDocumentationParams {
-  final List<String> mediaIds;
-  final String name;
+  final String idImageFront;
+  final String idImageBack;
+  final String personalImage;
 
   TwitterDocumentationParams({
-    required this.mediaIds,
-    required this.name,
+    required this.idImageFront,
+    required this.idImageBack,
+    required this.personalImage,
   });
+
   Map<String, dynamic> toJson() => {
-        'mediaIds': mediaIds,
-        'name': name,
-        'subCategory': '66a3583454e6e337915514db'
+        'idImageFront': idImageFront,
+        'idImageBack': idImageBack,
+        'personalImage': personalImage,
+        // 'subCategory': '66a3583454e6e337915514db'
       };
 }

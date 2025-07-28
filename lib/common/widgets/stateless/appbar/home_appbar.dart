@@ -167,8 +167,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
           ),
-          const Sizer(),
-          const Sizer(),
+          SizedBox(
+            width: 20.w,
+          ),
           if (showLanguage)
             Expanded(
               child: TextButton(
