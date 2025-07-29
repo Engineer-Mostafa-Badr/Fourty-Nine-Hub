@@ -378,6 +378,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           GoogleMapCarMarkerWidget(
             onCarMarkerUpdated: _updateCarMarker,
             mapController: _mapController!,
+            size: _currentZoom,
           ),
         if (widget.fromClient == false && _mapController != null)
           DriverCarMarkerWidget(
