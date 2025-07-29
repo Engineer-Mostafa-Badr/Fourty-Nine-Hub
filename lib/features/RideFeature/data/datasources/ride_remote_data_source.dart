@@ -435,6 +435,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         return Right(rideRequestTripModel);
       });
     } catch (e) {
+      log( "latest trip error $e");
       return Left(ServerFailure(message: e.toString()));
     }
   }

@@ -66,13 +66,11 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
   bool _isRecording = false;
   @override
   Widget build(BuildContext context) {
-    const Color navyColor = Color(0xFF0D1730);
-    // const Color redColor = Color(0xFFFF4C4C);
-    final Color greyTextColor = Colors.grey.shade600;
-
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color:  context.isDarkMode
+            ? AppColors.QUANTITY_COLOR
+            :  AppColors.whiteColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
@@ -209,6 +207,7 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
                 ],
               ),
             ),
+          const SizedBox(height: 16),
           InkWell(
             onTap: widget.onCallEmergency,
             child: Row(
@@ -263,7 +262,9 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
                  children: [
                    SvgPicture.asset(
                      Assets.rideRecord,
-                     color: _isRecording ? null : Colors.black,
+                     color: _isRecording ? null : context.isDarkMode
+                   ? AppColors.whiteColor
+                       :  Colors.black,
                    ),
                    SizedBox(width: 30.w),
                    if (!_isRecording) Text(context.isArabic?'تسجيل صوتي':'Record', style: TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else Expanded(child: _buildWaveform()),
@@ -271,7 +272,8 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
                ),
              ),
            ),
-          Text(context.isArabic?'اخر تسجيل صوتي فقط سيم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
+          if(widget.isStarted)
+          Text(context.isArabic?'اخر تسجيل صوتي فقط سيتم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
 
           // ClickableWidget(
           //   onTap: () {
@@ -311,16 +313,16 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
               onPressed: widget.onCancelRide,
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                backgroundColor: context.isDarkMode ? const Color(0xff2C2C2C) : const Color(0xFFF5F5F5), // Light gray background
+                backgroundColor: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : const Color(0xFFF5F5F5), // Light gray background
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30), // More rounded corners
                 ),
               ),
               child: Text(
                 LocaleKeys.cancelOrder.localize,
-                style: const TextStyle(
+                style:  TextStyle(
                   fontSize: 18,
-                  color: Colors.red, // Red text color
+                  color: context.isDarkMode ? AppColors.whiteColor : Colors.red, // Red text color
                   fontWeight: FontWeight.w500,
                 ),
               ),
