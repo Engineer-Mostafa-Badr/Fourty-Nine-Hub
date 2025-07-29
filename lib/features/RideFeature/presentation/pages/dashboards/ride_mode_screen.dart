@@ -795,6 +795,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
   final MapController _mapController = MapController();
 
   Widget _buildTopMap(BuildContext context, DashboardsState state) {
+    String tripStatus = context.read<DashboardsCubit>().state.tripStatus??'';
     List<gmap.LatLng> routePoints = [];
     List<gmap.LatLng> driverRoutePoints = [];
     routePoints = _convertPolylineToLatLng(context.read<DashboardsCubit>().activeTrip?.polyline ?? []);
@@ -826,6 +827,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
     }
 
     print("context.read<DashboardsCubit>().activeTrip?.driverPolyline ${context.read<DashboardsCubit>().activeTrip?.driverPolyline}");
+    print("tripStatus11 $tripStatus");
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
@@ -835,24 +837,24 @@ class _RideModeScreenState extends State<RideModeScreen> {
       child: ClipRect(
         child: CustomGoogleMap(
           // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
-          startLocation:context.read<DashboardsCubit>().state.tripStatus== TripState.goToClient.name?((context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == []))
+          startLocation:tripStatus== TripState.inLocation.name?null:(tripStatus== TripState.goToClient.name||tripStatus== TripState.accepted.name)?((context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == []))
               ? null
               : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.driverStartCoordinates![0], context.read<DashboardsCubit>().activeTrip!.driverStartCoordinates![1]):((context.read<DashboardsCubit>().activeTrip?.startCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.startCoordinates == []))
               ? null
               : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.startCoordinates![1], context.read<DashboardsCubit>().activeTrip!.startCoordinates![0]),
-          targetLocation: context.read<DashboardsCubit>().state.tripStatus== TripState.goToClient.name?((context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == []))
+          targetLocation:tripStatus== TripState.inLocation.name?null: (tripStatus== TripState.goToClient.name||tripStatus== TripState.accepted.name)?((context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == []))
               ? null
               : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.driverTargetCoordinates![0], context.read<DashboardsCubit>().activeTrip!.driverTargetCoordinates![1]):((context.read<DashboardsCubit>().activeTrip?.targetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.targetCoordinates == []))
               ? null
               : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.targetCoordinates![1], context.read<DashboardsCubit>().activeTrip!.targetCoordinates![0]),
-          polylinePoints: context.read<DashboardsCubit>().state.tripStatus== TripState.goToClient.name?driverRoutePoints:routePoints,
-          clientLocations: clients,
+          polylinePoints: tripStatus== TripState.inLocation.name?[]:(tripStatus== TripState.goToClient.name||tripStatus== TripState.accepted.name)?driverRoutePoints:routePoints,
+          clientLocations:tripStatus== TripState.inLocation.name?[]: (tripStatus== TripState.goToClient.name||tripStatus== TripState.accepted.name)?[]:clients,
           enableScrolling: true,
           fromClient: (context.read<DashboardsCubit>().activeTrip != null && (state.tripStatus == TripState.started.name|| state.tripStatus == TripState.goToClient.name|| state.tripStatus == TripState.inLocation.name)) == true ? false : null,
           startAddress: context.read<DashboardsCubit>().activeTrip?.from,
           targetAddress: context.read<DashboardsCubit>().activeTrip?.to,
-          clientAddresses: clientsAddress,
-          estimatedTime: (context.read<DashboardsCubit>().state.tripStatus==TripState.goToClient.name||context.read<DashboardsCubit>().state.tripStatus==TripState.inLocation.name) ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.driverIsArrivingIn??'').toLocal()) :context.read<DashboardsCubit>().state.tripStatus==TripState.started.name ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.tripStartTime??'').toLocal().add(Duration(minutes:context.read<DashboardsCubit>().activeTrip?.duration??0 ))): '',
+          clientAddresses:(tripStatus== TripState.goToClient.name||tripStatus== TripState.accepted.name)?[]: clientsAddress,
+          estimatedTime: (tripStatus==TripState.goToClient.name||tripStatus==TripState.inLocation.name) ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.driverIsArrivingIn??'').toLocal()) :tripStatus==TripState.started.name ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.tripStartTime??'').toLocal().add(Duration(minutes:context.read<DashboardsCubit>().activeTrip?.duration??0 ))): '',
         ),
       ),
     );
