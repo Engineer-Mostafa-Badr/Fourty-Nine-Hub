@@ -478,6 +478,7 @@ class CodegenLoader extends AssetLoader{
   "noReplied": "لا يوجد ردود",
   "sendMessage": "أرسل رسالة",
   "thisContentIsNotAvailableNow": "هذا المحتوي غير متوفر الان.",
+  "userNotAvailable": "المستخدم غير متوفر",
   "withUsers": "مع الأصدقاء",
   "noMedia": "لا يوجد وسائط",
   "discoverPeople": "اكتشف الاصدقاء",
@@ -755,7 +756,7 @@ class CodegenLoader extends AssetLoader{
   "errorLoadingSocialPage": "خطأ في تحميل الصفحة الاجتماعية",
   "updateSuccessfully": "تم التحديث بنجاح",
   "carpool": "مشاركة السيارة",
-  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستتلقى العروض قريبًا.",
+  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
   "thisFieldIsRequiredWithPeriod": "هذا الحقل مطلوب.",
   "pickupLocation": "موقع الاستلام",
   "destination": "الوجهة",
@@ -1350,7 +1351,7 @@ class CodegenLoader extends AssetLoader{
   "cancelOrder": "إلغاء الطلب",
   "acceptTheNearestDriverFor": "اقبل اقرب سائق لك",
   "automatic": "ألى",
-  "driversDisplayYourRequest": "سائقين عرض طلبك",
+  "driversDisplayYourRequest": "سائق عرض طلبك",
   "contactDriver": "اتصل بالسائق",
   "safety": "أمان",
   "good": "جيد",
@@ -1648,7 +1649,9 @@ class CodegenLoader extends AssetLoader{
   "ago": "منذ",
   "week": "أسبوع",
   "selectCarBrand": "اختر ماركة السيارة",
-  "selectCarModel": "اختر طراز السيارة"
+  "selectCarModel": "اختر طراز السيارة",
+  "checkInternetConnection": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى",
+  "retry": "إعادة المحاولة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2117,6 +2120,7 @@ static const Map<String,dynamic> _en = {
   "noReplied": "No Replies",
   "sendMessage": "Send Message",
   "thisContentIsNotAvailableNow": "This content is not available now.",
+  "userNotAvailable": "This user is not available now.",
   "withUsers": "With Users",
   "discoverPeople": "Discover People",
   "unBlock": "Un Block",
@@ -3012,7 +3016,7 @@ static const Map<String,dynamic> _en = {
   "cancelOrder": "Cancel Order",
   "acceptTheNearestDriverFor": "Accept The Nearest Driver For",
   "automatic": "Automatic",
-  "driversDisplayYourRequest": "Drivers Display Your Request",
+  "driversDisplayYourRequest": "Driver View Your Request",
   "contactDriver": "Contact Driver",
   "safety": "safety",
   "good": "Good",
@@ -3299,7 +3303,13 @@ static const Map<String,dynamic> _en = {
   "ago": "Ago",
   "week": "Week",
   "selectCarBrand": "Select Car Brand",
-  "selectCarModel": "Select Car Model"
+  "selectCarModel": "Select Car Model",
+  "checkInternetConnection": "Please check your internet connection and try again",
+  "retry": "Retry",
+  "reportClient": "Report Client",
+  "uploadingImage": "Uploading Image...",
+  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
+  "watch": "Watch"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

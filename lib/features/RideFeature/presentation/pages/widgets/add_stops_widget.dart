@@ -10,6 +10,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../service_locator/service_locator.dart';
 
@@ -38,6 +39,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   color: Colors.green,
                   text: state.currentLocation?.address,
                   onPressed: () async {
+                    ManageVibration.vibrate();
                     context.push(Routes.GoogleMapsSearchAndPick,
                         extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
@@ -52,6 +54,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   color: Colors.blue,
                   text: state.toLocation?.address,
                   onPressed: () async {
+                    ManageVibration.vibrate();
                     context.push(Routes.GoogleMapsSearchAndPick,
                         extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
@@ -84,6 +87,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                       ));
                     },
                     onAddPressed: () {
+                      ManageVibration.vibrate();
                       setState(() {
                         serviceLocator<RideCubit>().showWaypointTwo = true;
                       });
@@ -97,6 +101,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     color: Colors.blue,
                     text: state.wayPointTwo?.address,
                     onPressed: () async {
+                      ManageVibration.vibrate();
                       context.push(Routes.GoogleMapsSearchAndPick,
                           extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
@@ -116,6 +121,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                 AppButton(
                   label: context.isArabic ? 'تم' : 'Done',
                   onPressed: () {
+                    ManageVibration.vibrate();
                     context.pop();
                   },
                   width: MediaQuery.of(context).size.width / 2,

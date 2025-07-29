@@ -73,15 +73,15 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                     });
                   },
                 ),
-                switchWidget(
-                  text: LocaleKeys.record.tr(),
-                  value: _isRecord,
-                  onChanged: (value) {
-                    setState(() {
-                      _isRecord = value;
-                    });
-                  },
-                ),
+                // switchWidget(
+                //   text: LocaleKeys.record.tr(),
+                //   value: _isRecord,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _isRecord = value;
+                //     });
+                //   },
+                // ),
                 AppButton(
                   width: double.infinity,
                   label: context.isArabic ? "تفعيل" : "Apply",

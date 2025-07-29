@@ -38,9 +38,14 @@ class RideRequestTripEntity {
   final String? vehiclePicture;
   final String? vehiclePlateNumber;
   final List<List<double>> polyline;
+  final List<List<double>> driverPolyline;
+  final double? driverStartLat;
+  final double? driverStartLng;
+  final double? driverTargetLat;
+  final double? driverTargetLng;
   final String? otp;
 
-  RideRequestTripEntity({required this.vehicleModelEn, required this.vehicleBrandEn, required this.id, required this.userId, required this.subCategoryId, required this.from, required this.to, required this.wayPointOneTitle, required this.wayPointTwoTitle, required this.wayPointOne, required this.wayPointTwo, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.lowestFare, required this.highestFare, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium,  required this.createdAt, required this.rating, required this.driverIsArrivingIn, required this.driverFirstName, required this.driverId,  required this.driverPhoneNumber, required this.driverProfilePicture,  required this.driverRating, required this.driverRatingCount, required this.vehicleModelAr, required this.vehicleColor, required this.vehicleBrandAr, required this.vehiclePicture, required this.vehiclePlateNumber,  required this.driverUserId, required this.polyline, required this.otp});
+  RideRequestTripEntity({required this.vehicleModelEn, required this.vehicleBrandEn, required this.id, required this.userId, required this.subCategoryId, required this.from, required this.to, required this.wayPointOneTitle, required this.wayPointTwoTitle, required this.wayPointOne, required this.wayPointTwo, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.lowestFare, required this.highestFare, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium,  required this.createdAt, required this.rating, required this.driverIsArrivingIn, required this.driverFirstName, required this.driverId,  required this.driverPhoneNumber, required this.driverProfilePicture,  required this.driverRating, required this.driverRatingCount, required this.vehicleModelAr, required this.vehicleColor, required this.vehicleBrandAr, required this.vehiclePicture, required this.vehiclePlateNumber,  required this.driverUserId, required this.polyline, required this.driverPolyline, required this.driverStartLat, required this.driverStartLng, required this.driverTargetLat, required this.driverTargetLng, required this.otp});
 
   RideRequestTripEntity copyWith({
     String? id,
@@ -78,6 +83,11 @@ class RideRequestTripEntity {
     String? vehiclePicture,
     String? vehiclePlateNumber,
     List<List<double>>? polyline,
+    List<List<double>>? driverPolyline,
+    double? driverStartLat,
+    double? driverStartLng,
+    double? driverTargetLat,
+    double? driverTargetLng,
     String? otp,
   }) {
     return RideRequestTripEntity(
@@ -118,6 +128,11 @@ class RideRequestTripEntity {
       polyline: polyline ?? this.polyline,
       wayPointOne: wayPointOne ?? wayPointOne,
       wayPointTwo: wayPointTwo ?? wayPointTwo, wayPointOneTitle: wayPointOneTitle ?? wayPointOneTitle, wayPointTwoTitle: wayPointTwoTitle ?? wayPointTwoTitle,
+      driverPolyline: driverPolyline ?? this.driverPolyline,
+      driverStartLat: driverStartLat ?? this.driverStartLat,
+      driverStartLng: driverStartLng ?? this.driverStartLng,
+      driverTargetLat: driverTargetLat ?? this.driverTargetLat,
+      driverTargetLng: driverTargetLng ?? this.driverTargetLng,
       otp: otp ?? this.otp
     );
   }
