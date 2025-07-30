@@ -916,11 +916,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       print('Error processing client locations: $e');
     }
 
-    if(state.wayPointOne?.address!=null && state.wayPointOne?.address!.isNotEmpty??false){
+    if(state.wayPointOne?.address!=null && (state.wayPointOne?.address?.isNotEmpty??false)){
       clientsAddress.add(state.wayPointOne!.address!);
     }
 
-    if(state.wayPointTwo?.address!=null && state.wayPointTwo?.address!.isNotEmpty??false){
+    if(state.wayPointTwo?.address!=null && (state.wayPointTwo?.address?.isNotEmpty??false)){
       clientsAddress.add(state.wayPointTwo!.address!);
     }
 
