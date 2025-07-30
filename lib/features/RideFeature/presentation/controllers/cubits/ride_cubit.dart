@@ -576,7 +576,7 @@ class RideCubit extends Cubit<RideState> {
 
           final String? incomingTripId = updateLocation['tripId'] as String?;
           if (state.requestedTrip != null &&
-              state.requestedTrip!.status == TripState.started.name &&
+              (state.requestedTrip!.status == TripState.started.name || state.requestedTrip!.status == TripState.goToClient.name || state.requestedTrip!.status == TripState.inLocation.name) &&
               incomingTripId == state.requestedTrip!.id) {
 
             if (updateLocation.containsKey('location')) {
@@ -590,6 +590,9 @@ class RideCubit extends Cubit<RideState> {
                 // IMPORTANT: Store the current driverLocation as the previousDriverLocation
                 // before updating to the new location.
                 final gmap.LatLng? oldDriverLocation = state.driverLocation;
+
+
+                log("newDriverLocation $newDriverLocation");
 
                 emit(state.copyWith(
                   driverLocation: newDriverLocation,

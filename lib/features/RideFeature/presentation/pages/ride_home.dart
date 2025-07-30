@@ -985,6 +985,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           clientLocations: (state.requestedTrip != null && (state.requestedTrip!.status == TripState.inLocation.name)) ?[]:  (state.requestedTrip != null && (state.requestedTrip!.status == TripState.goToClient.name || state.requestedTrip!.status == TripState.accepted.name))? [] : clients,
           enableScrolling: true,
           fromClient:true,
+          estimatedTime: state.requestedTrip?.status==TripState.goToClient.name?DateFormat('h:mm a').format(DateTime.parse(state.requestedTrip?.driverIsArrivingIn.toString()??'')):null,
         ),
       ),
     );
@@ -2386,7 +2387,7 @@ class CountdownTimerWidget extends StatefulWidget {
 }
 
 class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with SingleTickerProviderStateMixin {
-  static const int totalSeconds = 300;
+  static const int totalSeconds = 600;
   late Duration _remaining = const Duration(seconds: totalSeconds);
   Timer? _timer;
   late AnimationController _animationController;
@@ -2462,7 +2463,7 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with Single
 
   @override
   Widget build(BuildContext context) {
-    final isLastMinute = _remaining.inSeconds <= 60 && widget.isActive;
+    final isLastMinute = _remaining.inSeconds <= 300 && widget.isActive;
 
     final message = widget.isArabic
         ? (isLastMinute ? "كن حذرًا، يمكن أن يلغي السائق الرحلة، ولديه مبررات قوية لذلك." : "لا تتأخر، قد يؤثر على تقييمك")
