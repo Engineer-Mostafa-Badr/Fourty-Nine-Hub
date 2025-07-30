@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import '../core/widget/custom_circular_progress_indicator.dart';
+
 class MarkdownViewer extends StatelessWidget {
   final String markdownFilePath;
   const MarkdownViewer({super.key, required this.markdownFilePath});
@@ -18,7 +20,7 @@ class MarkdownViewer extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return Markdown(data: snapshot.data ?? '');
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
       },
     );

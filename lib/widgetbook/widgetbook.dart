@@ -3,6 +3,7 @@ import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
 import 'custom_directories.dart';
+import 'widgetbook.directories.g.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -16,7 +17,7 @@ class WidgetbookApp extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Widgetbook.material(
-      directories: customDirectories,
+      directories: directories,
       addons: [
         MaterialThemeAddon(
           themes: [
@@ -48,3 +49,5 @@ class WidgetbookApp extends StatelessWidget {
     );
   }
 }
+///! if u made any changies to the widgetbook file run this command
+//*  flutter packages pub run build_runner build --delete-conflicting-outputs
