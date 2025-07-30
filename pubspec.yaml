@@ -219,7 +219,6 @@ flutter:
     - assets/keys/
     - assets/map_styles/
     - assets/markdown/docs/
-    - assets/markdown/components/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

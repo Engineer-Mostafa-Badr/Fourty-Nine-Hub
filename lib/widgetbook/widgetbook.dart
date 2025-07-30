@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
-
 import 'custom_directories.dart';
+import 'utils/provider_wrapper.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -11,7 +11,7 @@ void main() {
 @widgetbook.App()
 class WidgetbookApp extends StatelessWidget {
   const WidgetbookApp({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return Widgetbook.material(
@@ -44,6 +44,8 @@ class WidgetbookApp extends StatelessWidget {
           devices: [...Devices.ios.all, ...Devices.android.all],
         ),
       ],
+      // Wrap the entire app with providers to ensure they're available globally
+      appBuilder: (context, child) => WidgetbookProviderWrapper(child: child),
     );
   }
 }

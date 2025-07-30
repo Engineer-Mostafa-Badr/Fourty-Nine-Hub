@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../core/widget/custom_circular_progress_indicator.dart';
+import '../../core/widget/custom_circular_progress_indicator.dart';
 
 class MarkdownViewer extends StatelessWidget {
   final String markdownFilePath;

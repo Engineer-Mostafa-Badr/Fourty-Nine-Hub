@@ -7,9 +7,11 @@ import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 import '../../core/widget/text_input/input_formats.dart';
 import '../../core/widget/text_input/text_field_validation.dart';
 import '../../core/widget/text_input/text_input_widget.dart';
-import '../flutter_markdown.dart';
+import '../../res/assets/assets.dart';
+import '../utils/flutter_markdown.dart';
 
-// Basic Text Input مع Knobs
+// ================== TextInputWidget Basic ==================
+
 @widgetbook.UseCase(
   name: 'Basic Text Input with Knobs',
   type: TextInputWidget,
@@ -75,7 +77,7 @@ Widget basicTextInputWidget(BuildContext context) {
   );
 }
 
-// Card Number Input مع Knobs
+// ================== TextInputWidget Card Number ==================
 @widgetbook.UseCase(
   name: 'Card Number Input with Knobs',
   type: TextInputWidget,
@@ -445,12 +447,13 @@ Widget passwordInputWidget(BuildContext context) {
     label: 'Validation Type',
     options: [
       TextFieldValidatorType.password,
-      TextFieldValidatorType.password,
+      TextFieldValidatorType.confirmPassword,
       TextFieldValidatorType.optional,
     ],
     labelBuilder: (type) {
       if (type == TextFieldValidatorType.password) return 'Password';
-      if (type == TextFieldValidatorType.password) return 'Strong Password';
+      if (type == TextFieldValidatorType.confirmPassword)
+        return 'Confirm Password';
       if (type == TextFieldValidatorType.optional) return 'Optional';
       return 'Unknown';
     },
@@ -466,8 +469,8 @@ Widget passwordInputWidget(BuildContext context) {
           label: label,
           isPassword: true,
           borderRadius: borderRadius,
-          prefixIcon: showPrefixIcon ? 'assets/icons/lock_icon.svg' : null,
-          suffixSvg: showSuffixIcon ? 'assets/icons/eye_icon.svg' : null,
+          prefixIcon: showPrefixIcon ? Assets.eyeIcon : null,
+          suffixSvg: showSuffixIcon ? Assets.eyeIcon : null,
           validator: (value) => validation(
             context,
             type: validationType,
@@ -486,7 +489,7 @@ Widget passwordInputWidget(BuildContext context) {
 )
 MarkdownViewer textInputWidgetDocumentation(BuildContext context) {
   return const MarkdownViewer(
-    markdownFilePath: 'assets/markdown/docs/MigrationAndUpdates.md',
+    markdownFilePath: 'assets/markdown/docs/text_input_widget_doc.md',
   );
 }
 
