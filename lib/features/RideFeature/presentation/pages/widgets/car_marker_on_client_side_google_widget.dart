@@ -70,7 +70,8 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
       final trip = rideState.requestedTrip;
       final currentLocation = rideState.driverLocation;
       final previousLocation = rideState.previousDriverLocation;
-      if ((trip?.status == TripState.started.name||trip?.status == TripState.goToClient.name) && currentLocation != null) {
+
+      if ((trip?.status == TripState.started.name || trip?.status == TripState.goToClient.name || trip?.status == TripState.inLocation.name) && currentLocation != null) {
         double newAngle = _lastAngle;
 
         if (previousLocation != null) {

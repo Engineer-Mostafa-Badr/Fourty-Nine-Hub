@@ -138,6 +138,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 driversCount: serviceLocator<RideCubit>().tripViewers.length,
                 rideCubit: serviceLocator<RideCubit>(),
                 onCancel: () async {
+                  ManageVibration.vibrate();
                   await serviceLocator<RideCubit>().cancelPendingTripByClient(
                         tripId: serviceLocator<RideCubit>().state.requestedTrip?.id ?? '',
                       );
@@ -185,6 +186,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 rideOffer: offerEntity,
                 rideCubit: serviceLocator<RideCubit>(),
                 onAccept: () async {
+                  ManageVibration.vibrate();
                   await serviceLocator<RideCubit>().acceptOfferByClient(offerId: offerEntity.offerId);
                 },
               );
@@ -300,6 +302,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 if (state.isOtherReason == true) ...[
                   const SizedBox(height: 20),
                   DefaultTextFormField(
+
                     currentController: cubit.reasonController,
                     fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                     borderColor: Colors.transparent,
@@ -413,12 +416,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   tripDurationSeconds: state.requestedTrip?.duration?.toDouble(),
                                   isArabic: context.isArabic,
                                 )
-                              : DriverArrivalCountdown(
+                              : (state.requestedTrip?.status == TripState.inLocation.name || state.requestedTrip?.status == TripState.goToClient.name) ? DriverArrivalCountdown(
                                   key: ValueKey("${state.requestedTrip?.driverIsArrivingIn}_${state.requestedTrip?.status}"),
                                   arrivalDateTime: state.requestedTrip?.driverIsArrivingIn,
                                   isCountdown: state.requestedTrip?.status == TripState.goToClient.name,
                                   isInLocation: state.requestedTrip?.status == TripState.inLocation.name,
-                                ),
+                                ) : const SizedBox.shrink(),
                           carImageUrl: state.requestedTrip?.vehiclePicture ?? "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
                           carName: context.isArabic ? state.requestedTrip?.vehicleBrandAr : state.requestedTrip?.vehicleBrandEn,
                           carNumber: state.requestedTrip?.vehiclePlateNumber ?? "",
@@ -479,14 +482,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         driverRating: state.requestedTrip?.driverRating,
                         driverName: state.requestedTrip?.driverFirstName ?? "",
                         onContactDriver: () {
+                          ManageVibration.vibrate();
                           // context.push(Routes.ratingClientScreen);
                         },
                         onSafety: () {
+                          ManageVibration.vibrate();
                           // context.push(Routes.rideArrivedScreen);
                           serviceLocator<RideCubit>().changeTripStatus(tripState: TripState.support);
                         },
                         is_show_message: true,
-                        onMessage: () {},
+                        onMessage: () {
+                          ManageVibration.vibrate();
+                        },
                       ),
                       // const FeedbackWidget(),
                       // const Divider(height: 2),
@@ -517,8 +524,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         isStarted: state.requestedTrip?.status == TripState.started.name,
                         fromLocation: state.requestedTrip?.from ?? 'أول العاشر من رمضان',
                         toLocation: state.requestedTrip?.to ?? 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
-                        onGoogleMap: () {},
+                        onGoogleMap: () {
+                          ManageVibration.vibrate();
+                        },
                         onPartialPayment: () {
+                          ManageVibration.vibrate();
                           showModalBottomSheet<bool>(
                             context: context,
                             isScrollControlled: true,
@@ -546,7 +556,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           children: [
                                             const SizedBox(width: 24),
                                             Text(
-                                              context.isArabic ? "دفع جزءي" : "Partial Payment",
+                                              context.isArabic ? "دفع جزئي" : "Partial Payment",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -605,6 +615,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                   fontSize: 30,
                                                 ),
                                                 textAlign: TextAlign.center,
+
                                                 decoration: InputDecoration(
                                                   floatingLabelBehavior: FloatingLabelBehavior.never,
                                                   hintText: context.isArabic ? 'ج.م' : 'EGP',
@@ -615,12 +626,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                   ),
                                                   fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                                                   filled: true,
-                                                  border: const UnderlineInputBorder(),
-                                                  focusedBorder: const UnderlineInputBorder(),
-                                                  enabledBorder: const UnderlineInputBorder(),
-                                                  errorBorder: const UnderlineInputBorder(),
-                                                  disabledBorder: const UnderlineInputBorder(),
-                                                  focusedErrorBorder: const UnderlineInputBorder(),
+                                                  border: const UnderlineInputBorder(
+                                                    borderSide: BorderSide.none,
+                                                  ),
+                                                  focusedBorder: const UnderlineInputBorder(borderSide: BorderSide.none,),
+                                                  enabledBorder: const UnderlineInputBorder(borderSide: BorderSide.none,),
+                                                  errorBorder: const UnderlineInputBorder(borderSide: BorderSide.none,),
+                                                  disabledBorder: const UnderlineInputBorder(borderSide: BorderSide.none,),
+                                                  focusedErrorBorder: const UnderlineInputBorder(borderSide: BorderSide.none,),
                                                 ),
                                                 validator: (value) {
                                                   if (value == null || value.isEmpty) {
@@ -678,12 +691,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           );
                         },
                         onStartRecord: () {
+                          ManageVibration.vibrate();
                           serviceLocator<RideCubit>().startRecord();
                         },
                         onStopRecord: () {
+                          ManageVibration.vibrate();
                           serviceLocator<RideCubit>().stopRecord(context: context, subcategoryId: state.requestedTrip?.subCategoryId ?? '', tripId: state.requestedTrip?.id ?? '');
                         },
                         onCallEmergency: () async {
+                          ManageVibration.vibrate();
                           final Uri launchUri = Uri(scheme: 'tel', path: '122');
                           if (await canLaunchUrl(launchUri)) {
                             await launchUrl(launchUri);
@@ -698,13 +714,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           }
                         },
                         onCancelRide: () {
+                          ManageVibration.vibrate();
                           showCancelTripDialog(
                             context: context,
                           );
                         },
                         isRecording: state.requestedTrip?.status == TripState.started.name,
                         audioDuration: '',
-                        onMicTap: () {},
+                        onMicTap: () {
+                          ManageVibration.vibrate();
+                        },
                         paymentMethod: state.requestedTrip?.paymentMethod ?? "cash",
                         wayPointOne: state.requestedTrip?.wayPointOneTitle,
                         wayPointTwo: state.requestedTrip?.wayPointTwoTitle,
@@ -821,9 +840,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     driverId: state.requestedTrip?.driverId ?? '',
                                                                     clientId: UserCubit.to.state.data?.id ?? ''),
                                                                 onClose: () {
+                                                                  ManageVibration.vibrate();
                                                                   serviceLocator<RideCubit>().closeSafetySheet();
                                                                 },
                                                                 supportRideScreen: () {
+                                                                  ManageVibration.vibrate();
                                                                   context.push(Routes.supportRideScreen,
                                                                       extra: SupportRideParams(
                                                                           tripId: state.requestedTrip?.id ?? '',
@@ -833,9 +854,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                           clientId: UserCubit.to.state.data?.id ?? ''));
                                                                 },
                                                                 emergencyContactsScreen: () {
+                                                                  ManageVibration.vibrate();
                                                                   context.push(Routes.emergencyContactsScreen);
                                                                 },
                                                                 rideFindingScreen: () async {
+                                                                  ManageVibration.vibrate();
                                                                   final Uri launchUri = Uri(scheme: 'tel', path: '122');
                                                                   if (await canLaunchUrl(launchUri)) {
                                                                     await launchUrl(launchUri);
@@ -885,6 +908,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     List<gmap.LatLng> routePoints = [];
     List<String> clientsAddress = [];
 
+    List<gmap.LatLng> driverRoutePoints = [];
+
     try {
       if (state.requestedTrip == null ||
           state.requestedTrip!.status == TripState.canceled.name ||
@@ -892,6 +917,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
       } else {
         routePoints = _convertPolylineToLatLng(state.requestedTrip?.polyline ?? []);
+      }
+
+      if(state.requestedTrip != null && (state.requestedTrip!.status != TripState.goToClient.name || state.requestedTrip!.status != TripState.accepted.name)) {
+        driverRoutePoints = _convertPolylineToLatLng(state.requestedTrip?.driverPolyline ?? []);
       }
     } catch (e) {
       print('Error processing route points: $e');
@@ -932,11 +961,23 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     String startAddress = state.currentLocation?.address??'';
     String toAddress = state.toLocation?.address??'';
 
+    final driverStartLat = state.requestedTrip?.driverStartLat ?? 30.033333;
+    final driverStartLng = state.requestedTrip?.driverStartLng ?? 31.233334;
+    final driverTargetLat = state.requestedTrip?.driverTargetLat ?? 30.043333;
+    final driverTargetLng = state.requestedTrip?.driverTargetLng ?? 31.243334;
+
+
     bool isBeforeRequest = state.requestedTrip == null ||
         state.requestedTrip!.status == TripState.canceled.name ||
         state.requestedTrip!.status == TripState.completed.name;
     print("state.requestedTrip ${state.requestedTrip?.status}");
     print("state.driverLocation != null ${state.driverLocation != null}");
+
+    dev.log('driverRoutePoints: ${driverRoutePoints}');
+    dev.log('driverStartLat: $driverStartLat');
+    dev.log('driverStartLng: $driverStartLng');
+    dev.log('driverTargetLat: $driverTargetLat');
+    dev.log('driverTargetLng: $driverTargetLng');
     return Container(
       width: double.infinity,
       height: state.requestedTrip != null
@@ -948,10 +989,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       ),
       child: ClipRect(
         child: CustomGoogleMap(
-          startLocation: state.currentLocation==null?null:gmap.LatLng(isBeforeRequest? startLat : startLng,isBeforeRequest? startLng : startLat),
-          targetLocation: state.toLocation==null?null:gmap.LatLng(isBeforeRequest? targetLat : targetLng,isBeforeRequest? targetLng : targetLat),
-          polylinePoints: routePoints,
-          clientLocations: clients,
+          startLocation: (state.requestedTrip != null && (state.requestedTrip!.status == TripState.inLocation.name)) ?null: (state.requestedTrip != null && (state.requestedTrip!.status == TripState.goToClient.name || state.requestedTrip!.status == TripState.accepted.name) )? gmap.LatLng(driverStartLat, driverStartLng) : state.currentLocation==null?null:gmap.LatLng(isBeforeRequest? startLat : startLng,isBeforeRequest? startLng : startLat),
+          targetLocation: (state.requestedTrip != null && (state.requestedTrip!.status == TripState.inLocation.name)) ?null:  (state.requestedTrip != null && (state.requestedTrip!.status == TripState.goToClient.name || state.requestedTrip!.status == TripState.accepted.name))? gmap.LatLng(driverTargetLat, driverTargetLng) : state.toLocation==null?null:gmap.LatLng(isBeforeRequest? targetLat : targetLng,isBeforeRequest? targetLng : targetLat),
+          polylinePoints: (state.requestedTrip != null && (state.requestedTrip!.status == TripState.inLocation.name)) ?[]:  (state.requestedTrip != null && (state.requestedTrip!.status == TripState.goToClient.name || state.requestedTrip!.status == TripState.accepted.name))? driverRoutePoints.map((gmap.LatLng latLng) => gmap.LatLng(latLng.longitude, latLng.latitude)).toList() : routePoints,
+          clientLocations: (state.requestedTrip != null && (state.requestedTrip!.status == TripState.inLocation.name)) ?[]:  (state.requestedTrip != null && (state.requestedTrip!.status == TripState.goToClient.name || state.requestedTrip!.status == TripState.accepted.name))? [] : clients,
           enableScrolling: true,
           fromClient:true,
             startAddress:startAddress,
@@ -1403,6 +1444,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               driverInfo: state.driverInfo,
                               loadingInfo: state.loaderInfo,
                               openDrawer: () {
+                                ManageVibration.vibrate();
                                 showModalBottomSheet(
                                   backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                                   context: context,
@@ -1432,6 +1474,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     extra: RideGoogleMapSearchAndPickParams(
                                       minDistanceReferencePoint: state.toLocation == null ? null : LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                                       onPicked: (pickedData) async {
+                                        ManageVibration.vibrate();
                                         serviceLocator<RideCubit>().updateFromLocation(
                                           lat: pickedData.latitude,
                                           lng: pickedData.longitude,
@@ -1461,6 +1504,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     extra: RideGoogleMapSearchAndPickParams(
                                       minDistanceReferencePoint: state.currentLocation == null ? null : LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
                                       onPicked: (pickedData) async {
+                                        ManageVibration.vibrate();
                                         serviceLocator<RideCubit>().updateToLocation(
                                           lat: pickedData.latitude,
                                           lng: pickedData.longitude,
@@ -1591,7 +1635,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                         context.pop();
                                                       },
                                                       showRegular: false,
-                                                      title: LocaleKeys.premiumRequest.localize);
+                                                      title: context.isArabic ? state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryNameAr ?? '' : state.rideCategory?.subCategories[serviceLocator<RideCubit>().selectedCategoryIndex!].subCategoryNameEn ?? '');
                                                 } else {
                                                   // Reset the controller and form state before showing the sheet
                                                   serviceLocator<RideCubit>().phoneNumberController.clear(); // Clear any previous input
@@ -2358,7 +2402,7 @@ class CountdownTimerWidget extends StatefulWidget {
 }
 
 class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with SingleTickerProviderStateMixin {
-  static const int totalSeconds = 300;
+  static const int totalSeconds = 600;
   late Duration _remaining = const Duration(seconds: totalSeconds);
   Timer? _timer;
   late AnimationController _animationController;
@@ -2434,7 +2478,7 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with Single
 
   @override
   Widget build(BuildContext context) {
-    final isLastMinute = _remaining.inSeconds <= 60 && widget.isActive;
+    final isLastMinute = _remaining.inSeconds <= 300 && widget.isActive;
 
     final message = widget.isArabic
         ? (isLastMinute ? "كن حذرًا، يمكن أن يلغي السائق الرحلة، ولديه مبررات قوية لذلك." : "لا تتأخر، قد يؤثر على تقييمك")

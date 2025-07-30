@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import 'custom_wave_painter.dart';
 import 'font_manager.dart';
 
@@ -169,7 +170,7 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                context.isArabic? "كود التحقق" : "Your OTP Code",
+                context.isArabic? "رمز التحقق" : "Your OTP Code",
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -242,6 +243,7 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
          if(widget.isRecording)
            ClickableWidget(
              onTap: () {
+               ManageVibration.vibrate();
                if (_isRecording) {
                  setState(() {
                    _isRecording = false;
