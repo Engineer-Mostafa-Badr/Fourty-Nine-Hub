@@ -1,10 +1,16 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/usecases/edit_profile_usecase.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -15,8 +21,9 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   final postContentTextController = TextEditingController();
   final EditProfileUseCase _editProfileUseCase;
   final GetProfileGovernoratesUseCase getGovernoratesUseCase;
+  final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
 
-  EditProfileCubit(this._editProfileUseCase, this.getGovernoratesUseCase)
+  EditProfileCubit(this._editProfileUseCase,this.getSettingsDashboardUsecase, this.getGovernoratesUseCase)
       : super(EditProfileState());
 
   List<String>? selectedImages;
@@ -70,6 +77,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   }
 
   Future<void> editProfile(EditProfileEntity params) async {
+    if(state.isDriverLady==true && params.isMale==true){
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, currentContext.isArabic?'لا يمكن تغيير جنسية السائقين. يرجى الاتصال بالدعم':'Drivers are not allowed to change their gender. Please contact support');
+      return;
+    }
     emit(state.copyWith(status: EditProfileStates.loading));
     final response = await _editProfileUseCase(params);
     response.fold(
@@ -85,5 +97,27 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   initGender(String gender) {
     emit(state.copyWith(
         isMale: gender == 'male' || gender.isEmpty ? true : false));
+  }
+
+
+  Future<void> getSettings(BuildContext context) async {
+
+
+    final Either<Failure, SettingsDashboardEntityResponse> result =
+    await getSettingsDashboardUsecase(const NoParams());
+    result.fold(
+          (failure) {
+
+        emit(state.copyWith(status: EditProfileStates.error, failure: failure));
+      },
+          (settings) {
+
+        String lady = '62ea012a69ea29c91dfc3917';
+        bool isDriverLady = settings.data.categoryIds.any((element) => element.id == lady);
+        print("isDriverLady $isDriverLady");
+        emit(state.copyWith(
+            isDriverLady:isDriverLady));
+      },
+    );
   }
 }

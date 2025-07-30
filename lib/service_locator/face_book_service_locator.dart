@@ -275,6 +275,7 @@ class FaceBookServiceLocator {
     serviceLocator.registerFactory<EditProfileCubit>(() => EditProfileCubit(
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         ));
 
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(

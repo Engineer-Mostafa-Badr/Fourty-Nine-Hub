@@ -97,9 +97,9 @@ Future<dynamic> customBottomSheet2(
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const SizedBox(),
+                        const SizedBox(width: 48),
                         Expanded(
                           child: Text(
                             title,

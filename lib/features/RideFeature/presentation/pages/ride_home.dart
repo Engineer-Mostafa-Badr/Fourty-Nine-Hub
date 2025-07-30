@@ -943,6 +943,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           clientLocations: clients,
           enableScrolling: true,
           fromClient:true,
+          estimatedTime: state.requestedTrip?.status==TripState.inLocation.name?DateFormat('h:mm a').format(DateTime.parse(state.requestedTrip?.driverIsArrivingIn.toString()??'')):null,
         ),
       ),
     );
@@ -1216,6 +1217,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               decoration: BoxDecoration(
     color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :AppColors.whiteColor,
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
+                ],
               ),
               padding: const EdgeInsets.all(4),
               alignment: Alignment.center,

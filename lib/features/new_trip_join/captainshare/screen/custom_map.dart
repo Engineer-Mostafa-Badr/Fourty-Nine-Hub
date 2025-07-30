@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_google_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_car_marker_widget.dart';
@@ -17,6 +19,7 @@ class CustomGoogleMap extends StatefulWidget {
   final bool enableScrolling;
   final bool? fromClient;
   final String? startAddress;
+  final String? status;
   final String? targetAddress;
   final String? estimatedTime;
   final List<String> clientAddresses;
@@ -31,6 +34,7 @@ class CustomGoogleMap extends StatefulWidget {
     this.fromClient,
     this.startAddress,
     this.targetAddress,
+    this.status,
     this.estimatedTime,
     this.clientAddresses = const [],
   });
@@ -54,7 +58,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   BitmapDescriptor? _startMarkerIcon;
   BitmapDescriptor? _targetMarkerIcon;
   BitmapDescriptor? _clientMarkerIcon;
-  double _currentZoom = 12.0;
+  double _currentZoom = 16.0;
 
   @override
   void initState() {
@@ -68,6 +72,30 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     super.didUpdateWidget(oldWidget);
 
     bool shouldUpdate = false;
+
+    if (widget.status != oldWidget.status) {
+      print("widget.status != oldWidget.status ${widget.status} ${oldWidget.status}");
+      if (_mapController != null &&
+          widget.startLocation != null &&
+          widget.targetLocation != null&&widget.status!=TripState.started.name) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final bounds = LatLngBounds(
+            southwest: LatLng(
+              min(widget.startLocation!.latitude, widget.targetLocation!.latitude),
+              min(widget.startLocation!.longitude, widget.targetLocation!.longitude),
+            ),
+            northeast: LatLng(
+              max(widget.startLocation!.latitude, widget.targetLocation!.latitude),
+              max(widget.startLocation!.longitude, widget.targetLocation!.longitude),
+            ),
+          );
+
+          _mapController!.animateCamera(
+            CameraUpdate.newLatLngBounds(bounds, 80),
+          );
+        });
+      }
+    }
 
     if (widget.startLocation != oldWidget.startLocation) {
       _latestStartLocation = widget.startLocation;
@@ -204,7 +232,22 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _setMarkersAndPolyline();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.startLocation != null) {
+      if (widget.startLocation != null && widget.targetLocation != null&&widget.status!=TripState.started.name) {
+        final bounds = LatLngBounds(
+          southwest: LatLng(
+            min(widget.startLocation!.latitude, widget.targetLocation!.latitude),
+            min(widget.startLocation!.longitude, widget.targetLocation!.longitude),
+          ),
+          northeast: LatLng(
+            max(widget.startLocation!.latitude, widget.targetLocation!.latitude),
+            max(widget.startLocation!.longitude, widget.targetLocation!.longitude),
+          ),
+        );
+
+        _mapController!.moveCamera(
+          CameraUpdate.newLatLngBounds(bounds, 80), // padding between markers and screen edges
+        );
+      } else if (widget.startLocation != null) {
         _mapController!.moveCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(target: widget.startLocation!, zoom: _currentZoom),
@@ -213,6 +256,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       }
     });
   }
+
 
   void initMapStyle() async {
     var lightStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/light_map_style.json');

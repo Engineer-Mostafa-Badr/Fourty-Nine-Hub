@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class CountdownTimerCard extends StatefulWidget {
   final DateTime targetTime;
@@ -68,14 +69,15 @@ class _CountdownTimerCardState extends State<CountdownTimerCard> {
   @override
   Widget build(BuildContext context) {
     print("targetTime ${widget.targetTime}");
-    if(_isExpired) return SizedBox.shrink();
+    // if(_isExpired) return SizedBox.shrink();
     return Card(
+      color:  AppColors.PRIMARY_COLOR,
       child: Padding(
         padding: const EdgeInsets.all(6.0),
         child: Center(
           child: Text(
             _isExpired ? 'Expired' : _formatDuration(_remaining),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color:AppColors.whiteColor),
           ),
         ),
       ),

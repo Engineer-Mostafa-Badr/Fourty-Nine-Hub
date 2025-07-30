@@ -11,6 +11,7 @@ class MainCategoriesState {
   final WalletHomeEntity? wallet;
   final QuestionEntity? question;
   final SettingsDashboardEntityResponse? setting;
+  final bool? isDriverLady;
   MainCategoriesState({
     this.status = StateStatus.initial,
     this.failure,
@@ -22,6 +23,7 @@ class MainCategoriesState {
     this.question,
     this.wallet,
     this.setting,
+    this.isDriverLady,
   });
 
   MainCategoriesState copyWith({
@@ -34,10 +36,12 @@ class MainCategoriesState {
     MainCategoryEntity? marriageMainCategory,
     List<MainCategoryEntity>? data,
     List<MainCategoryEntity>? customPage,
+    bool? isDriverLady,
     SettingsDashboardEntityResponse? setting,
   }) {
     return MainCategoriesState(
       status: status ?? this.status,
+      isDriverLady: isDriverLady ?? this.isDriverLady,
       currency: currency ?? this.currency,
       failure: failure ?? this.failure,
       selectedIndex: selectedIndex ?? this.selectedIndex,

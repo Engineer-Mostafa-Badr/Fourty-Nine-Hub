@@ -2235,6 +2235,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     result.fold(
       (failure) {
         log("Failure ${getFailureMessage(failure, context)}");
+        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
+
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (settings) {
