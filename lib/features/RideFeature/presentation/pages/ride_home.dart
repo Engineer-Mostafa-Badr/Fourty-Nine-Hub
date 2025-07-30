@@ -29,7 +29,6 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/history_trips_screen.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
@@ -37,21 +36,15 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_button_ride_status_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_card_request.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_sheet/custom_reserve_ride_bottomsheet.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_header_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/feedback_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/payment_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/top_card_request.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
-import 'dart:math' as math;
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -81,7 +74,6 @@ import 'widgets/fare_bottom_sheet_widget.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RideHome extends StatefulWidget {
