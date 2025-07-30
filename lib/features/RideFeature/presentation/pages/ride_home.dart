@@ -883,6 +883,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildTopMap(RideState state, BuildContext context) {
     List<gmap.LatLng> routePoints = [];
+    List<String> clientsAddress = [];
 
     try {
       if (state.requestedTrip == null ||
@@ -915,11 +916,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       print('Error processing client locations: $e');
     }
 
+    if(state.wayPointOne?.address!=null && state.wayPointOne?.address!.isNotEmpty??false){
+      clientsAddress.add(state.wayPointOne!.address!);
+    }
+
+    if(state.wayPointTwo?.address!=null && state.wayPointTwo?.address!.isNotEmpty??false){
+      clientsAddress.add(state.wayPointTwo!.address!);
+    }
+
     // Provide default values to prevent null issues
     final startLat = state.currentLocation?.lat ?? 30.033333;
     final startLng = state.currentLocation?.lng ?? 31.233334;
     final targetLat = state.toLocation?.lat ?? 30.043333;
     final targetLng = state.toLocation?.lng ?? 31.243334;
+    String startAddress = state.currentLocation?.address??'';
+    String toAddress = state.toLocation?.address??'';
 
     bool isBeforeRequest = state.requestedTrip == null ||
         state.requestedTrip!.status == TripState.canceled.name ||
@@ -943,7 +954,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           clientLocations: clients,
           enableScrolling: true,
           fromClient:true,
-          estimatedTime: state.requestedTrip?.status==TripState.inLocation.name?DateFormat('h:mm a').format(DateTime.parse(state.requestedTrip?.driverIsArrivingIn.toString()??'')):null,
+            startAddress:startAddress,
+            targetAddress:toAddress,
+            clientAddresses:clientsAddress
         ),
       ),
     );

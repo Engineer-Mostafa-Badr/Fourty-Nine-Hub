@@ -69,7 +69,7 @@ class _CountdownTimerCardState extends State<CountdownTimerCard> {
   @override
   Widget build(BuildContext context) {
     print("targetTime ${widget.targetTime}");
-    // if(_isExpired) return SizedBox.shrink();
+    if(_isExpired) return SizedBox.shrink();
     return Card(
       color:  AppColors.PRIMARY_COLOR,
       child: Padding(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,13 +13,13 @@ import '../../controllers/cubits/ride_cubit.dart';
 class GoogleMapCarMarkerWidget extends StatefulWidget {
   final Function(Marker?) onCarMarkerUpdated;
   final GoogleMapController mapController;
-  final double size; // ← حجم السيارة
+  final double size;
 
   const GoogleMapCarMarkerWidget({
     super.key,
     required this.onCarMarkerUpdated,
     required this.mapController,
-    this.size = 8, // ← القيمة الافتراضية (8 × 8 = 64px)
+    this.size = 8,
   });
 
   @override
@@ -59,7 +60,7 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
 
     _carIcon = await getResizedCarIcon(
       'assets/images/car_for_tracking.png',
-      width: (widget.size * 8).toInt(), // ← التصغير حسب الحجم المحدد
+      width: (widget.size * 8).toInt(),
     );
   }
 
@@ -69,13 +70,14 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
       final trip = rideState.requestedTrip;
       final currentLocation = rideState.driverLocation;
       final previousLocation = rideState.previousDriverLocation;
-
-      if (trip?.status == TripState.started.name && currentLocation != null) {
+      if ((trip?.status == TripState.started.name||trip?.status == TripState.goToClient.name) && currentLocation != null) {
         double newAngle = _lastAngle;
 
         if (previousLocation != null) {
           newAngle = _calculateBearing(previousLocation, currentLocation);
         }
+
+        final String? eta = DateFormat('h:mm a').format(DateTime.parse(trip?.driverIsArrivingIn.toString()??''));
 
         final marker = Marker(
           markerId: const MarkerId('car'),
@@ -84,6 +86,14 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
           icon: _carIcon ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
           flat: true,
           anchor: const Offset(0.5, 0.5),
+          infoWindow: (eta != null && eta.isNotEmpty)
+              ? InfoWindow(title: "ETA: $eta")
+              : const InfoWindow(),
+          onTap: () {
+            if (eta != null && eta.isNotEmpty) {
+              widget.mapController.showMarkerInfoWindow(const MarkerId("car"));
+            }
+          },
         );
 
         _lastAngle = newAngle;
@@ -99,8 +109,14 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
         );
 
         widget.onCarMarkerUpdated(marker);
+
+        if (eta != null && eta.isNotEmpty) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            widget.mapController.showMarkerInfoWindow(const MarkerId("car"));
+          });
+        }
       } else {
-        widget.onCarMarkerUpdated(null); // ← إزالة الماركر
+        widget.onCarMarkerUpdated(null);
       }
     });
   }
