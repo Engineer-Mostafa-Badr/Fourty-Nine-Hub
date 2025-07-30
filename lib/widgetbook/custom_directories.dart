@@ -1,168 +1,185 @@
-// import 'package:fourtyninehub/widgetbook/flutter_markdown.dart';
-// import 'package:widgetbook/widgetbook.dart';
+import 'package:widgetbook/widgetbook.dart';
 
-// import 'component_usecases/temp_usecase.dart';
+import 'component_usecases/text_input_widget_usecases.dart';
+import 'docs_usecase.dart';
 
-// final customDirectories = <WidgetbookNode>[
-//   // Documentations Category
-//   WidgetbookCategory(
-//     name: 'Documentations',
-//     children: [
-//       WidgetbookUseCase(
-//         name: '01 Introduction.docs',
-//         builder: (context) => const MarkdownViewer(
-//           markdownFilePath: 'assets/markdown/docs/Introduction.md',
-//         ),
-//       ),
-//       WidgetbookUseCase(
-//         name: '02 Installation.docs',
-//         builder: (context) => const MarkdownViewer(
-//           markdownFilePath: 'assets/markdown/docs/Installation.md',
-//         ),
-//       ),
-//       WidgetbookUseCase(
-//         name: '03 Usage.docs',
-//         builder: (context) => const MarkdownViewer(
-//           markdownFilePath: 'assets/markdown/docs/Usage.md',
-//         ),
-//       ),
-//       WidgetbookUseCase(
-//         name: '04 Migration and Updates.docs',
-//         builder: (context) => const MarkdownViewer(
-//           markdownFilePath: 'assets/markdown/docs/MigrationAndUpdates.md',
-//         ),
-//       ),
-//     ],
-//   ), // Widgets Category
-//   WidgetbookCategory(
-//     name: 'Widgets',
-//     children: [
-//       // Forms Folder
-//       WidgetbookFolder(
-//         name: 'Forms',
-//         children: [
-//           //? Flexable Selector Widget
-//           WidgetbookComponent(
-//             name: 'Custom Widget',
-//             useCases: [
-//               WidgetbookUseCase(
-//                 name: 'Custom Description',
-//                 builder: tempDescriptionWidget,
-//               ),
-//               WidgetbookUseCase(
-//                 name: 'Custom UseCase',
-//                 builder: tempUseCaseWidget,
-//               ),
-//             ],
-//           ),
-//           //? Wide Rounded Button
+final customDirectories = <WidgetbookNode>[
+  // Documentations Category
+  WidgetbookCategory(
+    name: 'Documentations',
+    children: [
+      WidgetbookFolder(
+        name: 'Getting Started',
+        children: [
+          WidgetbookUseCase(
+            name: '01 Introduction.docs',
+            builder: introductionWidget,
+          ),
+          WidgetbookUseCase(
+            name: '02 Installation.docs',
+            builder: installationWidget,
+          ),
+          WidgetbookUseCase(
+            name: '03 Usage.docs',
+            builder: usageWidget,
+          ),
+          WidgetbookUseCase(
+            name: '04 Migration and Updates.docs',
+            builder: migrationAndUpdatesWidget,
+          ),
+        ],
+      ),
+    ],
+  ), // Widgets Category
+  WidgetbookCategory(
+    name: 'Widgets',
+    children: [
+      // Forms Folder
+      WidgetbookFolder(
+        name: 'Forms',
+        children: [
+          //? Text Input Widget Widget
+          WidgetbookComponent(
+            name: 'Text Input Widget',
+            useCases: [
+              WidgetbookUseCase(
+                name: 'Text Input Widget Description',
+                builder: textInputWidgetDocumentation,
+              ),
+              WidgetbookUseCase(
+                name: 'Basic Text Input UseCase',
+                builder: basicTextInputWidget,
+              ),
+              WidgetbookUseCase(
+                name: 'Card Number Input UseCase',
+                builder: cardNumberInputWidget,
+              ),
+              WidgetbookUseCase(
+                name: 'Custom Styled Text Input UseCase',
+                builder: customStyledTextInputWidget,
+              ),
+              WidgetbookUseCase(
+                name: 'Email Input UseCase',
+                builder: emailInputWidget,
+              ),
+              WidgetbookUseCase(
+                name: 'Multi-line Text Input UseCase',
+                builder: multilineTextInputWidget,
+              ),
+              WidgetbookUseCase(
+                name: 'Password Input UseCase',
+                builder: passwordInputWidget,
+              ),
+            ],
+          ),
+          //? Wide Rounded Button
 
-//           //? International Phone Input
+          //? International Phone Input
 
-//           //? OTP Input
+          //? OTP Input
 
-//           //? Text Input
+          //? Text Input
 
-//           //? Nationality Selector
-//         ],
-//       ),
-//       // General Folder for all widgets
-//       WidgetbookFolder(
-//         name: 'General',
-//         children: [
-//           //? App Bottom Navigation Bar Widget
+          //? Nationality Selector
+        ],
+      ),
+      // General Folder for all widgets
+      WidgetbookFolder(
+        name: 'General',
+        children: [
+          //? App Bottom Navigation Bar Widget
 
-//           //? AppTopBar Widget
+          //? AppTopBar Widget
 
-//           //? backgroundLogoPersonalImg Widget
+          //? backgroundLogoPersonalImg Widget
 
-//           //? clickable Container Widget
+          //? clickable Container Widget
 
-//           //? Color Container Widget
+          //? Color Container Widget
 
-//           //? Dual ActionButtons
+          //? Dual ActionButtons
 
-//           //? InfoDisplayWithTitleIcon
+          //? InfoDisplayWithTitleIcon
 
-//           //? Icon Background
+          //? Icon Background
 
-//           //? InfoDisplay
+          //? InfoDisplay
 
-//           //? PartnerItem
+          //? PartnerItem
 
-//           //? RichTextSections
+          //? RichTextSections
 
-//           //? RowTitlePrice
+          //? RowTitlePrice
 
-//           //? SelectManagerItem
+          //? SelectManagerItem
 
-//           //? StatusListWidget
+          //? StatusListWidget
 
-//           //? TappableIcon
-//         ],
-//       ),
-//       // Layout Folder
-//       WidgetbookFolder(
-//         name: 'Layout',
-//         children: [
-//           //? Info Layout Widget
-//           // WidgetbookComponent(
-//           //   name: 'InfoLayout Scaffold',
-//           //   useCases: [
-//           //     WidgetbookUseCase(
-//           //       name: 'Describtion.docs',
-//           //       builder: infoLayoutDescription,
-//           //     ),
-//           //     WidgetbookUseCase(
-//           //       name: 'InfoLayout UseCase',
-//           //       builder: infoLayoutScaffold,
-//           //     ),
-//           //   ],
-//           // ),
-//           //? Home Layout Widget
-//           // WidgetbookComponent(
-//           //   name: 'HomeLayoutScaffold',
-//           //   useCases: [
-//           //     WidgetbookUseCase(
-//           //       name: 'Describtion.docs',
-//           //       builder: homeLayoutDescribtion,
-//           //     ),
-//           //     WidgetbookUseCase(
-//           //       name: 'HomeLayout UseCase',
-//           //       builder: homeLayoutScaffold,
-//           //     ),
-//           //   ],
-//           // ),
-//           //? Detail Layout Widget
-//           // WidgetbookComponent(
-//           //   name: 'DetailLayoutScaffold',
-//           //   useCases: [
-//           //     WidgetbookUseCase(
-//           //       name: 'Describtion.docs',
-//           //       builder: detailLayoutDescription,
-//           //     ),
-//           //     WidgetbookUseCase(
-//           //       name: 'DetailLayout UseCase',
-//           //       builder: detailLayoutScaffold,
-//           //     ),
-//           //   ],
-//           // ),
-//           //? Auth Layout Widget
-//           // WidgetbookComponent(
-//           //   name: 'AuthLayoutScaffold',
-//           //   useCases: [
-//           //     WidgetbookUseCase(
-//           //       name: 'Describtion.docs',
-//           //       builder: authLayoutDescription,
-//           //     ),
-//           //     WidgetbookUseCase(
-//           //       name: 'AuthLayout UseCase',
-//           //       builder: authLayoutScaffold,
-//           //     ),
-//           //   ],
-//           // ),
-//         ],
-//       ),
-//     ],
-//   ),
-// ];
+          //? TappableIcon
+        ],
+      ),
+      // Layout Folder
+      WidgetbookFolder(
+        name: 'Layout',
+        children: [
+          //? Info Layout Widget
+          // WidgetbookComponent(
+          //   name: 'InfoLayout Scaffold',
+          //   useCases: [
+          //     WidgetbookUseCase(
+          //       name: 'Describtion.docs',
+          //       builder: infoLayoutDescription,
+          //     ),
+          //     WidgetbookUseCase(
+          //       name: 'InfoLayout UseCase',
+          //       builder: infoLayoutScaffold,
+          //     ),
+          //   ],
+          // ),
+          //? Home Layout Widget
+          // WidgetbookComponent(
+          //   name: 'HomeLayoutScaffold',
+          //   useCases: [
+          //     WidgetbookUseCase(
+          //       name: 'Describtion.docs',
+          //       builder: homeLayoutDescribtion,
+          //     ),
+          //     WidgetbookUseCase(
+          //       name: 'HomeLayout UseCase',
+          //       builder: homeLayoutScaffold,
+          //     ),
+          //   ],
+          // ),
+          //? Detail Layout Widget
+          // WidgetbookComponent(
+          //   name: 'DetailLayoutScaffold',
+          //   useCases: [
+          //     WidgetbookUseCase(
+          //       name: 'Describtion.docs',
+          //       builder: detailLayoutDescription,
+          //     ),
+          //     WidgetbookUseCase(
+          //       name: 'DetailLayout UseCase',
+          //       builder: detailLayoutScaffold,
+          //     ),
+          //   ],
+          // ),
+          //? Auth Layout Widget
+          // WidgetbookComponent(
+          //   name: 'AuthLayoutScaffold',
+          //   useCases: [
+          //     WidgetbookUseCase(
+          //       name: 'Describtion.docs',
+          //       builder: authLayoutDescription,
+          //     ),
+          //     WidgetbookUseCase(
+          //       name: 'AuthLayout UseCase',
+          //       builder: authLayoutScaffold,
+          //     ),
+          //   ],
+          // ),
+        ],
+      ),
+    ],
+  ),
+];
