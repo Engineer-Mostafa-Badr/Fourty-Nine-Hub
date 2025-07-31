@@ -261,5 +261,52 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure, UserTokensEntity>> loginWithPhone(LoginWithPhoneParams params) {
     return _remoteDataSource.loginWithPhone(params);
   }
+  
+  @override
+  Future<Either<Failure, void>> saveGuestState() async {
+    return await _localDataSource.saveGuestState();
+  }
+
+  @override
+  Future<Either<Failure, void>> clearGuestState() async {
+    return await _localDataSource.clearGuestState();
+  }
+
+  @override
+  Future<bool> getGuestState() async {
+    final result = await _localDataSource.getGuestState();
+    return result.fold((_) => false, (isGuest) => isGuest);
+  }
+
+  @override
+  Future<Either<Failure, void>> migrateGuestData() async {
+    final guestDataResult = await _localDataSource.getGuestData();
+    
+    return guestDataResult.fold(
+      (failure) => Left(failure),
+      (guestData) async {
+        if (guestData != null && guestData.isNotEmpty) {
+          await _uploadGuestDataToServer(guestData);
+          await _localDataSource.clearGuestData();
+        }
+        return const Right(null);
+      },
+    );
+  }
+
+  Future<void> _uploadGuestDataToServer(Map<String, dynamic> data) async {
+    // Implementation لنقل البيانات للسيرفر
+    // مثال: رفع السلة، المفضلة، إلخ
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>?>> getGuestData() async {
+    return await _localDataSource.getGuestData();
+  }
+
+  @override
+  Future<Either<Failure, void>> saveGuestData(Map<String, dynamic> data) async {
+    return await _localDataSource.saveGuestData(data);
+  }
 }
 //enum: ['google', 'facebook', 'local', 'apple']
