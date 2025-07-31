@@ -10,16 +10,9 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/pages/c
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../../service_locator/service_locator.dart';
-import '../../../reels/presentation/pages/main_reel_view.dart';
-import '../../../reels/presentation/pages/recording/my_voice.dart';
-import '../../../reels/presentation/pages/recording/next_media_preview.dart';
 import '../../../reels/presentation/pages/recording/recording_shared.dart';
-import '../../../social_posts/presentation/cubit/social_posts_cubit.dart';
 
 class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
   const FloatingActionButtonCreatePostInstagram({

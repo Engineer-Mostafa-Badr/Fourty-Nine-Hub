@@ -8,11 +8,11 @@ class LocationInfoWidget extends StatelessWidget {
   final bool? hasTitle;
 
   const LocationInfoWidget({
-    Key? key,
+    super.key,
     required this.from,
     required this.to,
     this.hasTitle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -140,7 +140,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                         child: PageView.builder(
                             controller: pageController,
                             scrollDirection: Axis.horizontal,
-                            itemCount: sortedPosts[index].images!.length,
+                            itemCount: sortedPosts[index].images.length,
                             // itemCount: controller.feedPagingController
                             //     .itemList![index].images!.length,
                             onPageChanged: (i) {
@@ -148,9 +148,9 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                             },
                             itemBuilder: (context, i) {
                               return SocialImageViewer(
-                                image: sortedPosts[index].images![i],
+                                image: sortedPosts[index].images[i],
                                 index: i + 1,
-                                length: sortedPosts[index].images!.length,
+                                length: sortedPosts[index].images.length,
                                 // onDoubleTap: () {
                                 //   sortedPosts[index].o =
                                 //       !sortedPosts[index].isLove;
@@ -162,14 +162,14 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      if (sortedPosts[index].images!.length > 1)
+                      if (sortedPosts[index].images.length > 1)
                         Center(
                           child: SizedBox(
                             height: 10.h,
                             child: ListView.separated(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: sortedPosts[index].images!.length,
+                                itemCount: sortedPosts[index].images.length,
                                 separatorBuilder: (context, index) =>
                                     const Sizer(
                                       width: 3,

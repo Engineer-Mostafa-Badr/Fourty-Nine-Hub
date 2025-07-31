@@ -1,6 +1,5 @@
 // import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelCard extends StatelessWidget {

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../routes/routes.dart';
@@ -12,7 +11,6 @@ import '../../../domain/use_cases/change_password_use_case.dart';
 import '../../../domain/use_cases/send_forget_password_otp_use_case.dart';
 import '../../../domain/use_cases/send_forget_password_question_use_case.dart';
 import '../../../domain/use_cases/verify_questions_use_case.dart';
-import '../user_cubit/user_cubit.dart';
 
 part 'forgot_password_state.dart';
 

@@ -53,13 +53,13 @@ class AudioWaveWidget extends StatefulWidget {
   final bool isRecording;
 
   const AudioWaveWidget({
-    Key? key,
+    super.key,
     this.barWidth = 3.0,
     this.spacing = 2.0,
     this.barColor = Colors.blue,
     this.barCount = 50,
     this.isRecording = false,
-  }) : super(key: key);
+  });
 
   @override
   _AudioWaveWidgetState createState() => _AudioWaveWidgetState();

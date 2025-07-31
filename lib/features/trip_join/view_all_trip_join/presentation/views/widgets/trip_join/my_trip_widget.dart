@@ -20,11 +20,9 @@ import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../../../../domain/entities/my_ads_trip_join_entity.dart';
-import '../../../../domain/entities/request_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../Modified_widgets/cards/available_trips_card.dart';
 import '../../Modified_widgets/trip_join_card.dart';
-import '../../Modified_widgets/trip_join_card_bottom_section.dart';
 import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
 import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 
@@ -61,13 +59,13 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       if (_isVisible) {
-        print("Visaible ${_isVisible}");
+        print("Visaible $_isVisible");
         setState(() => _isVisible = false);
       }
     } else if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
       if (!_isVisible) {
-        print("Visaible true ${_isVisible}");
+        print("Visaible true $_isVisible");
         setState(() => _isVisible = true);
       }
     }
@@ -172,8 +170,8 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                       : data.vehicleDetails?.modelEn ?? "",
                                   icon: Assets.tripJoinCarIcon,
                                   price:
-                                      "${formatPrice(data.pricePerSeat?.round() ?? 1, context)}",
-                                  seats: "${LocaleKeys.eachSeat.localize}"
+                                      formatPrice(data.pricePerSeat?.round() ?? 1, context),
+                                  seats: LocaleKeys.eachSeat.localize
                                   // icon: widget.iconCar
                                   //     ? Assets.tripJoinCarIcon
                                   //     : widget.isMale
@@ -184,11 +182,11 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                 height: 30,
                               ),
                               _locationWidget(
-                                  title: data?.location?.start?.address ?? "",
+                                  title: data.location?.start?.address ?? "",
                                   iconColor: AppColors.LIGHT_BLUE),
                               const Sizer(),
                               _locationWidget(
-                                  title: data?.location?.target?.address ?? "",
+                                  title: data.location?.target?.address ?? "",
                                   iconColor: AppColors.CHECK_MARK_COLOR),
                               const Sizer(),
                               Padding(
@@ -381,7 +379,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
               RichText(
                   text: TextSpan(children: [
                 TextSpan(
-                    text: "${price}  ",
+                    text: "$price  ",
                     style: Styles.headerText(
                         color: AppColors.getTextColor(context),
                         fontWeight: FontWeight.bold)),

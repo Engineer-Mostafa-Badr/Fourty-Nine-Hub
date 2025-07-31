@@ -55,7 +55,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_wallet_h
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/social_media/snap/data/data_source/snap_remote_data_source.dart';
 import 'package:fourtyninehub/features/social_media/snap/data/repository/snap_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/snap/domain/repository/snap_repository.dart';

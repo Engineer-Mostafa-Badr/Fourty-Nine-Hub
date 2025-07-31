@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -22,7 +21,7 @@ class CustomUserInfoSection extends StatelessWidget {
 
 
   CustomUserInfoSection(
-      {required this.context,
+      {super.key, required this.context,
       required this.Time,
       required this.location,
       required this.fees,

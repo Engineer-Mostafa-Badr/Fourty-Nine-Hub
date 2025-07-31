@@ -8,10 +8,10 @@ class HelpTooltip extends StatefulWidget {
   final double width;
 
   const HelpTooltip({
-    Key? key,
+    super.key,
     required this.message,
     this.width = 300,
-  }) : super(key: key);
+  });
 
   @override
   State<HelpTooltip> createState() => _HelpTooltipState();

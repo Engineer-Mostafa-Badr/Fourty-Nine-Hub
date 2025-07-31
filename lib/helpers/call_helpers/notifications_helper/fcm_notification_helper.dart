@@ -20,10 +20,7 @@ import '../../../firebase_options.dart';
 import 'package:fourtyninehub/main.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import '../../../features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:snacknload/snacknload.dart';
 
 abstract class FcmNotificationHelper {
   Future<void> setup(BuildContext context);

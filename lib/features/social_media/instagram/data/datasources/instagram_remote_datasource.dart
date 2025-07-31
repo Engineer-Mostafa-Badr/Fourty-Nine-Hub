@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/social_media/instagram/data/models/commen
 import 'package:fourtyninehub/features/social_media/instagram/data/models/create_post_request_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/data_suggest_follow_instagram_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/followers_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/following_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/profile_instagram_data_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/reel_instagram_data_model.dart';
@@ -17,7 +16,6 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/co
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reels_specific_user_entity.dart';

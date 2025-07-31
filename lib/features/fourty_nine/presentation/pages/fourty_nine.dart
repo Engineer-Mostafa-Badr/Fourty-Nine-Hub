@@ -21,14 +21,10 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_card.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
@@ -47,8 +43,6 @@ import '../widgets/exit_widget.dart';
 import '../widgets/favourite_screens_view.dart';
 import '../widgets/grid_blocks_widget.dart';
 import 'main_categories_cards_view.dart';
-import 'package:animated_cards_carousel/animated_cards_carousel.dart';
-import 'package:vertical_card_pager/vertical_card_pager.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});

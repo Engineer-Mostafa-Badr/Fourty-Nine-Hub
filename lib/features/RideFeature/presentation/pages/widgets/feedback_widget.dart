@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'font_manager.dart';
 class FeedbackWidget extends StatelessWidget {
-  const FeedbackWidget({Key? key}) : super(key: key);
+  const FeedbackWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

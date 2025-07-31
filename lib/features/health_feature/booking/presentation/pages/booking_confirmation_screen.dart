@@ -98,7 +98,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
                       Time:
                           "${widget.doctorDetailsCubit.selectedAppointment.startTime} : ${widget.doctorDetailsCubit.selectedAppointment.endTime}  ",
                       location:
-                          "${bookingController.doctor.address.address}".trim() ?? "no address",
+                          bookingController.doctor.address.address.trim() ?? "no address",
                       fees:
                           "${bookingController.doctor.priceToShow} ${LocaleKeys.egp.localize} " ??
                               " ",

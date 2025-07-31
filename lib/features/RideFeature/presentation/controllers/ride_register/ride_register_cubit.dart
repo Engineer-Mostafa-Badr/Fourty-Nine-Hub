@@ -49,7 +49,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 
@@ -154,7 +153,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         rideSubCategories.addAll(rideCategory.subCategories??[]);
         List<String> subcategoryIds = [];
         subcategoryIds.add(loadingCachedData?.categoryId??'');
-        log("subcategoryIds${subcategoryIds}");
+        log("subcategoryIds$subcategoryIds");
         log("subcategoryIds${rideCategory.subCategories}");
         if(subcategoryIds==[]){
           log("subcategoryIdsTrue${rideCategory.subCategories}");

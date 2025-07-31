@@ -1,6 +1,5 @@
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -234,7 +232,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                            text: "${formatPrice(offers?.tripDetails?.price ?? 0, context)}",
+                            text: formatPrice(offers?.tripDetails?.price ?? 0, context),
                             style:
                             Styles.mediumText(fontWeight: FontWeight.w700)),
                         const Sizer(width: 4),
@@ -249,13 +247,13 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: "${formatTimeOnly(offers?.tripDetails?.pickupTime, context)}",
+                          text: formatTimeOnly(offers?.tripDetails?.pickupTime, context),
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Label(
-                          text: "${formatPickupDate(offers?.tripDetails?.pickupTime, context)}",
+                          text: formatPickupDate(offers?.tripDetails?.pickupTime, context),
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
@@ -291,7 +289,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                             onPressed: () {
                               final price = offers?.tripDetails?.price ?? 0;
                               final tripId = offers?.tripDetails?.id  ?? '';
-                              print("XXQ ${tripId}");
+                              print("XXQ $tripId");
                               print("XXQ ${offers?.tripDetails?.id }");
                               context.read<DashboardsCubit>().createNonTrackOffer(
                                 CreateNonTrackOfferParams(

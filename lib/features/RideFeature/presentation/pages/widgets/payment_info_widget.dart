@@ -4,7 +4,7 @@ import 'font_manager.dart';
 class PaymentInfoWidget extends StatelessWidget {
   final int price;
 
-  const PaymentInfoWidget({Key? key, required this.price}) : super(key: key);
+  const PaymentInfoWidget({super.key, required this.price});
 
   @override
   Widget build(BuildContext context) {

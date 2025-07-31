@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
@@ -11,10 +10,10 @@ class MinimizedCallAppBarWrapper extends StatelessWidget {
   final bool showMinimizedCall;
 
   const MinimizedCallAppBarWrapper({
-    Key? key,
+    super.key,
     required this.receiver,
     required this.showMinimizedCall,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +37,11 @@ class MinimizedCallAppBar extends StatelessWidget
   final double height;
 
   const MinimizedCallAppBar({
-    Key? key,
+    super.key,
     required this.receiver,
     required this.showMinimizedCall,
     required this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +114,7 @@ class MinimizedCallAppBar extends StatelessWidget
                     : null,
                 child: receiver.profilePicture == null
                     ? Text(
-                        receiver.fullName?.substring(0, 1).toUpperCase() ?? 'U',
+                        receiver.fullName.substring(0, 1).toUpperCase() ?? 'U',
                         style: const TextStyle(color: Colors.white),
                       )
                     : null,

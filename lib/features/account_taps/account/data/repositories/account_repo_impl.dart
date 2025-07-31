@@ -5,8 +5,6 @@ import 'package:fourtyninehub/features/account_taps/account/domain/entities/favo
 
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_entity.dart';
 
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../domain/entities/favourite_subcategory_entity.dart';
 import '../../domain/repositories/account_repo.dart';

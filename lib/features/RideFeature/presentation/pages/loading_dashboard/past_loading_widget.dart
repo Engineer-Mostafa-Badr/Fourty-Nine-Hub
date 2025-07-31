@@ -63,7 +63,7 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
               child: PriceColumnNonSocket(
                 status: widget.tripEntity?.tripDetails?.status ?? "",
                 title: widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
-                date: "${formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context)}",
+                date: formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context),
                 price:formatPrice( widget.tripEntity?.tripDetails?.price?.toDouble() ?? 0,context),
               ),
             ),

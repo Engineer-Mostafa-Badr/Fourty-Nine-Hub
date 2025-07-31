@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -15,13 +14,10 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/stateless/dynamic/rating_stars.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -75,8 +71,8 @@ PremuimViewsCard(),
                       Row(
                         children: [
                           DoctorImage(
-                            rating: doctor?.rating ?? 0,
-                            imageUrl: doctor?.image ?? '',
+                            rating: doctor.rating ?? 0,
+                            imageUrl: doctor.image ?? '',
                           ),
                           Sizer(),
                           Column(
@@ -85,7 +81,7 @@ PremuimViewsCard(),
                               /// first name
                               Label(
                                 text:
-                                    '${toBeginningOfSentenceCase(doctor?.firstName ?? '')} ${toBeginningOfSentenceCase(doctor?.lastName ?? '')}',
+                                    '${toBeginningOfSentenceCase(doctor.firstName ?? '')} ${toBeginningOfSentenceCase(doctor.lastName ?? '')}',
                                 style: Styles.headerText(
                                     fontWeight: FontWeight.w600),
                               ),
@@ -93,8 +89,8 @@ PremuimViewsCard(),
                               /// last name
                               Label(
                                   text: context.isArabic
-                                      ? doctor?.subCategory.nameAr ?? ''
-                                      : doctor?.subCategory.nameEn ?? '',
+                                      ? doctor.subCategory.nameAr ?? ''
+                                      : doctor.subCategory.nameEn ?? '',
                                   maxLines: 1,
                                   style: Styles.mediumText(
                                       fontWeight: FontWeight.w400)),

@@ -589,7 +589,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
 class CallMessageReportButtons extends StatefulWidget {
   final GetAllRestaurantEntity item;
 
-  CallMessageReportButtons({super.key, required this.item});
+  const CallMessageReportButtons({super.key, required this.item});
 
   @override
   State<CallMessageReportButtons> createState() =>

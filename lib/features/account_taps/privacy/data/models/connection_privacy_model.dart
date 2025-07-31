@@ -2,22 +2,14 @@ import '../../domain/entities/connection_privacy_entity.dart';
 
 class ConnectionPrivacyModel extends ConnectionPrivacyEntity {
   ConnectionPrivacyModel({
-    String? userId,
-    String? friendRequests,
-    String? followerRequests,
-    String? friendsList,
-    String? followerList,
-    String? randomAppearance,
-    Map<String, dynamic>? allowedUsers,
-  }) : super(
-    userId: userId,
-    friendRequests: friendRequests,
-    followerRequests: followerRequests,
-    friendsList: friendsList,
-    followerList: followerList,
-    allowedUsers: allowedUsers,
-    randomAppearance: randomAppearance,
-  );
+    super.userId,
+    super.friendRequests,
+    super.followerRequests,
+    super.friendsList,
+    super.followerList,
+    super.randomAppearance,
+    super.allowedUsers,
+  });
 
   factory ConnectionPrivacyModel.fromJson(Map<String, dynamic> json) {
     return ConnectionPrivacyModel(

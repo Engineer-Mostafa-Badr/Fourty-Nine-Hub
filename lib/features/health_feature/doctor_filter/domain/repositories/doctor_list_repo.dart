@@ -5,7 +5,6 @@ import '../../../../../core/error/failure.dart';
 import '../../../doctor_details/domain/entities/doctor_entity.dart';
 import '../../../health/domain/entities/most_booking_entity.dart';
 import '../usecases/get_doctor_list_use_case.dart';
-import '../usecases/get_doctor_list_usecase.dart';
 
 abstract class DoctorListRepo {
   Future<Either<Failure, List<MostBookingEntity>>> getDoctorsList(

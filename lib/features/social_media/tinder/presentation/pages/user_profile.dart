@@ -1,12 +1,7 @@
-import 'dart:developer';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -15,19 +10,13 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/show_dialog.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/dialog/Show_dialog.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/dialog/dialog_content.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
-import '../../data/shared/shared.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -173,7 +162,7 @@ class UserProfilePageState extends State<UserProfilePage> {
       'Singing',
       'Painting',
     ];
-    List<String> interests_ar = [
+    List<String> interestsAr = [
       'كرة القدم',
       'الجيم',
       'قراءة',
@@ -188,7 +177,7 @@ class UserProfilePageState extends State<UserProfilePage> {
             prefixIcon: Assets.tinder_search,
             title: context.isArabic?'أبحث عن':'Looking For',
             child: Label(
-              text: '${context.isArabic?'اصدقاء جُدد 👋':'New Friends 👋'}',
+              text: context.isArabic?'اصدقاء جُدد 👋':'New Friends 👋',
               style: Styles.headerText(
                   color: AppColors.getTextColor(context),
                   fontWeight: FontWeight.bold,
@@ -335,7 +324,7 @@ class UserProfilePageState extends State<UserProfilePage> {
             child: Wrap(
                 spacing: 8.0,
                 runSpacing: 8.0,
-                children: (context.isArabic?interests_ar:interests)
+                children: (context.isArabic?interestsAr:interests)
                     .map(
                       (interest) => _buildInterestsBobble(title: interest),
                     )

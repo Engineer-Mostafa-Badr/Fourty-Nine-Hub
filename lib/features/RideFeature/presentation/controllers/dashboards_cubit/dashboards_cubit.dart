@@ -410,8 +410,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getHistoryNonSocketLoading() async {
-    if (!hasMoreHistoryNonSocketLoading || isLoadingMoreHistoryNonSocketLoading)
+    if (!hasMoreHistoryNonSocketLoading || isLoadingMoreHistoryNonSocketLoading) {
       return;
+    }
     isLoadingMoreHistoryNonSocketLoading = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getHistoryNonSocketLoadingUseCase(
@@ -538,8 +539,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAvailableNonSocketLoading() async {
-    if (!hasMoreAvailableNonSocketLoading || isLoadingMoreAvailableNonSocketLoading)
+    if (!hasMoreAvailableNonSocketLoading || isLoadingMoreAvailableNonSocketLoading) {
       return;
+    }
     isLoadingMoreAvailableNonSocketLoading = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getAvailableNonSocketLoadingUseCase(
@@ -627,8 +629,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAcceptedNonSocketLoading() async {
-    if (!hasMoreAcceptedNonSocketLoading || isLoadingMoreAcceptedNonSocketLoading)
+    if (!hasMoreAcceptedNonSocketLoading || isLoadingMoreAcceptedNonSocketLoading) {
       return;
+    }
     isLoadingMoreAcceptedNonSocketLoading = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getAcceptedNonSocketLoadingUseCase(
@@ -2552,7 +2555,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  bool _isRequestingPermission = false;
+  final bool _isRequestingPermission = false;
 
   Future<bool> _checkPermissions() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();

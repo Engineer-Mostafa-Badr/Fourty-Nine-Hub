@@ -6,7 +6,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../font_manager.dart';
 class ConfirmRecordDialog extends StatelessWidget {
-  const ConfirmRecordDialog({Key? key}) : super(key: key);
+  const ConfirmRecordDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

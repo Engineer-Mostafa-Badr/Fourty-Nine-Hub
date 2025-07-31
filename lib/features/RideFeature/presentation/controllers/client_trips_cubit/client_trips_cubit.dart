@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -31,7 +30,6 @@ import '../../../../health_feature/create_doctor/domain/entities/city.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_cities.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_governorates.dart';
-import '../../../data/models/client/driver_all_rating_model.dart';
 import '../../../domain/entities/client/client_all_rating_entity.dart';
 import '../../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../../domain/entities/create_no_track_trip_entity.dart';
@@ -298,7 +296,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       clientOfferTripsData = list;
 
       // Debug: Log state after emitting
-      CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData?.length}');
+      CliLogger.info('State emitted. Current state list length: ${state.clientOfferTripData.length}');
       log('Final list count: ${list.length}');
       log(updatedTrip.toString());
     });

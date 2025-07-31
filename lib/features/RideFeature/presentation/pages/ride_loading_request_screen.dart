@@ -1,26 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
-import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../core/error/failure.dart';
-import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/messages/messages.dart';
-import '../../../../res/assets/assets.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
-import '../../../../service_locator/service_locator.dart';
-import '../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../domain/entities/get_client_pending_trips_entity.dart';
-import '../controllers/client_trips_cubit/client_trips_cubit.dart';
-import 'dashboards/widgets/client_offers_widget.dart';
 
 // class RideLoadingRequestScreen extends StatefulWidget {
 //   // final bool isTruk;

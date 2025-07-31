@@ -1,4 +1,3 @@
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class RegisterRideSpecialEntity {
   final String driverFirstName;

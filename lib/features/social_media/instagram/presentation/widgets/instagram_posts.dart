@@ -218,7 +218,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   controller: pageController,
                                   scrollDirection: Axis.horizontal,
                                   itemCount: controller.feedPagingController
-                                      .itemList?[index].images?.length,
+                                      .itemList?[index].images.length,
                                   onPageChanged: (i) {
                                     controller.changeIndex(i);
                                     final audio = controller
@@ -253,10 +253,10 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                       },
                                       child: SocialImageViewer(
                                         image: controller.feedPagingController
-                                            .itemList![index].images![i],
+                                            .itemList![index].images[i],
                                         index: i + 1,
                                         length: controller.feedPagingController
-                                            .itemList![index].images!.length,
+                                            .itemList![index].images.length,
                                         // onDoubleTap: () {
                                         //   controller.feedPagingController
                                         //           .itemList?[index].isLove =
@@ -268,7 +268,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     );
                                   }),
                               if (controller.feedPagingController
-                                  .itemList![index].audio!.isNotEmpty)
+                                  .itemList![index].audio.isNotEmpty)
                                 Positioned(
                                   bottom: 20.h,
                                   left: 20.w,
@@ -303,7 +303,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                           height: 10.h,
                         ),
                         if (controller.feedPagingController.itemList![index]
-                                .images!.length >
+                                .images.length >
                             1)
                           Center(
                             child: SizedBox(
@@ -312,7 +312,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   shrinkWrap: true,
                                   scrollDirection: Axis.horizontal,
                                   itemCount: controller.feedPagingController
-                                      .itemList![index].images!.length,
+                                      .itemList![index].images.length,
                                   separatorBuilder: (context, index) =>
                                       const Sizer(
                                         width: 3,

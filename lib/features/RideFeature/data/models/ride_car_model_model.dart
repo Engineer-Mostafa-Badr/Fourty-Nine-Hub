@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
 
 class RideCarModelModel extends RideModelEntity {

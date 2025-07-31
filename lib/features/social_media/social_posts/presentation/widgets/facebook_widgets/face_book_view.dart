@@ -15,8 +15,6 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/pages/f
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
-import '../../../../../../core/widget/olx_pagination/banner.dart';
-import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class FaceBookView extends StatefulWidget {
   const FaceBookView({super.key, required this.scrollController});

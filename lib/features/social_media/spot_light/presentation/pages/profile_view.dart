@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/spot_light/presentation/widg
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:path/path.dart';
 
 class SpotLightProfileScreen extends StatelessWidget {
   const SpotLightProfileScreen({super.key});

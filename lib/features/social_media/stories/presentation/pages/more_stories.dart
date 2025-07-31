@@ -38,7 +38,7 @@ class EnhancedInputWidget extends StatefulWidget {
 }
 
 class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -373,7 +373,7 @@ class UserStoryViewState extends State<UserStoryView>
   late final StoryController _storyController;
   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
   late final ValueNotifier<String> _currentStoryIdNotifier;
-  late ValueNotifier<int> _currentStoryIndex = ValueNotifier<int>(0);
+  late final ValueNotifier<int> _currentStoryIndex = ValueNotifier<int>(0);
 
   @override
   void initState() {

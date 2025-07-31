@@ -43,7 +43,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
     with TickerProviderStateMixin {
   bool isLoading = false;
   bool isStorySelected = false;
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

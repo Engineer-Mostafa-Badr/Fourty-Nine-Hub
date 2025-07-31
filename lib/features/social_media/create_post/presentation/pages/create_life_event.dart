@@ -25,6 +25,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
   DateTime selectedDate = DateTime(2025, 2, 7);
 
   var formKey = GlobalKey<FormState>();
+  @override
   initState() {
     if(context.read<CreatePostCubit>().state.selectedLifeEvent==null||context.read<CreatePostCubit>().state.selectedLifeEvent?.id!=widget.lifeEventData.id){
       context.read<CreatePostCubit>().onChangePage(0);

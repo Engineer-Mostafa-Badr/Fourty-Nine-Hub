@@ -71,7 +71,7 @@ class FacebookTweetCard extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    if (post.content!.isNotEmpty || post.images!.isNotEmpty)
+                    if (post.content!.isNotEmpty || post.images.isNotEmpty)
                       _buildContent(context: context, post: post),
                     SizedBox(
                       height: 10.h,
@@ -166,22 +166,22 @@ class FacebookTweetCard extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          if ((post.images?.isNotEmpty ?? false))
+          if ((post.images.isNotEmpty ?? false))
             GridView.builder(
                 padding: const EdgeInsets.all(10),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: post.images!.length == 1 ? 1 : 2),
-                itemCount: post.images!.length < 4 ? post.images!.length : 4,
+                    crossAxisCount: post.images.length == 1 ? 1 : 2),
+                itemCount: post.images.length < 4 ? post.images.length : 4,
                 itemBuilder: (context, index) => InkWell(
                       onTap: () {
                         if (index != 3 ||
-                            (index == 3 && post.images!.length == 4)) {
+                            (index == 3 && post.images.length == 4)) {
                           showDialog(
                               context: context,
                               builder: (context) => ImageDetailsScreen(
-                                    image: post.images![index],
+                                    image: post.images[index],
                                     fromPost: true,
                                     onRemoveImage: () {
                                       // controller
@@ -207,10 +207,10 @@ class FacebookTweetCard extends StatelessWidget {
                           Stack(
                             children: [
                               ImageFromInternet(
-                                image: post.images?[index] ?? '',
+                                image: post.images[index] ?? '',
                                 defaultLogo: true,
                               ),
-                              if (index == 3 && post.images!.length > 4)
+                              if (index == 3 && post.images.length > 4)
                                 Container(
                                   margin: const EdgeInsetsDirectional.only(
                                       end: 10, bottom: 10),
@@ -222,7 +222,7 @@ class FacebookTweetCard extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Label(
-                                      text: "+${post.images!.length - 4}",
+                                      text: "+${post.images.length - 4}",
                                       style: Styles.headerText(
                                         color: Colors.white,
                                       ),

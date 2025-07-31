@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../screen/widget/all_location_body.dart';
-import '../widgets/video_card_widget.dart';
 
 class AllLocationScreen extends StatelessWidget {
   const AllLocationScreen({super.key});

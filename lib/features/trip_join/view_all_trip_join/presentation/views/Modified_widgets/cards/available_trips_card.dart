@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_bottom_section.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
@@ -180,8 +179,8 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                   title:context.isArabic ?data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
                                   model:context.isArabic ?data.vehicleDetails?.modelAr ?? "" :  data.vehicleDetails?.modelEn ?? "",
                                   icon: Assets.tripJoinCarIcon,
-                                  price: "${formatPrice(data.pricePerSeat?.round() ?? 0,context)}",
-                                  seats: "${LocaleKeys.eachSeat.localize}"
+                                  price: formatPrice(data.pricePerSeat?.round() ?? 0,context),
+                                  seats: LocaleKeys.eachSeat.localize
                               ),
 
                               const Sizer(
@@ -399,7 +398,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
               RichText(
                   text: TextSpan(children: [
                     TextSpan(
-                        text: "${price}  ",
+                        text: "$price  ",
                         style: Styles.headerText(
                             color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.bold)),

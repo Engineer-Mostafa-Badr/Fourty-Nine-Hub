@@ -163,14 +163,14 @@ class SmoothIndicator extends StatelessWidget {
 
   /// Default constructor
   const SmoothIndicator({
-    Key? key,
+    super.key,
     required this.offset,
     required this.count,
     required this.size,
     this.quarterTurns = 0,
     this.effect = const ScrollingDotsEffect(),
     this.onDotClicked,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -183,7 +183,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
         controller: _scrollController,
         child: const Column(
           children: [
-            const Sizer(),
+            Sizer(),
             TinderCardStack()
             // if (state.userData0 != null && state.userData0!.isNotEmpty)
             //   const TinderCardStack()

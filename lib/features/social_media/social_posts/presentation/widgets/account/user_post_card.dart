@@ -791,7 +791,7 @@ class _UserPostCardState extends State<UserPostCard> {
             ),
             const SizedBox(width: 10),
           ],
-          if (post.users != null && post.users!.isNotEmpty)
+          if (post.users.isNotEmpty)
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               spacing: 8.0, // Space between children
@@ -803,25 +803,25 @@ class _UserPostCardState extends State<UserPostCard> {
                 GestureDetector(
                   onTap: () {
                     context.push(Routes.OTHERSACCOUNT,
-                        extra: post.users![0].id);
+                        extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                        "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style:
                         Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
-                if (post.users!.length > 1)
+                if (post.users.length > 1)
                   GestureDetector(
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (_) => BuildWithUsers(users: post.users!),
+                        builder: (_) => BuildWithUsers(users: post.users),
                       );
                     },
                     child: Label(
-                      text: '+${post.users!.length - 1}',
+                      text: '+${post.users.length - 1}',
                       style: Styles.headerText(),
                     ),
                   ),

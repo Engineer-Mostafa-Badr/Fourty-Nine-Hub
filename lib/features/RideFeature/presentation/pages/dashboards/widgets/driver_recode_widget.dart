@@ -5,7 +5,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 class DriverTripRecordWidget extends StatefulWidget {
   final String mp3Path; // Path to the MP3 file (asset or local)
 
-  const DriverTripRecordWidget({Key? key, required this.mp3Path}) : super(key: key);
+  const DriverTripRecordWidget({super.key, required this.mp3Path});
 
   @override
   _DriverTripRecordWidgetState createState() => _DriverTripRecordWidgetState();

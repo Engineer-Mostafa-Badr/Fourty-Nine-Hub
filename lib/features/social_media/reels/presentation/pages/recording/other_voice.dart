@@ -268,6 +268,7 @@ class OtherVoiceVideoRecordingScreenState
     ];
 
     log("Executing FFmpeg command: ${commandArgs.join(' ')}");
+    return null;
 
     // final session = await FFmpegKit.executeWithArguments(commandArgs);
     // var returned = await session.getReturnCode();

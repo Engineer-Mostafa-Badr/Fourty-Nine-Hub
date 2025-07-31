@@ -8,11 +8,8 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_trip_join_offer_use_case.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/infoButton.dart';
@@ -739,15 +736,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
 
 
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/expected_price_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 // Import other necessary dependencies (e.g., bloc, map, etc.)
 
 class TripJoinCreateAdView extends StatefulWidget {
@@ -1423,9 +1412,9 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (bottomSheetContext) {
-        ScrollController _scrollController = ScrollController();
-        _scrollController.addListener(() {
-          if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
+        ScrollController scrollController = ScrollController();
+        scrollController.addListener(() {
+          if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
             cubit.getCarBrandLoading();
           }
         });
@@ -1452,7 +1441,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                       return Center(child: Text(LocaleKeys.noData.localize));
                     }
                     return ListView.builder(
-                      controller: _scrollController,
+                      controller: scrollController,
                       itemCount: brands.length + (cubit.isLoadingMoreCarBrandLoading ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index >= brands.length) {
@@ -1495,9 +1484,9 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (bottomSheetContext) {
-        ScrollController _scrollController = ScrollController();
-        _scrollController.addListener(() {
-          if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
+        ScrollController scrollController = ScrollController();
+        scrollController.addListener(() {
+          if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
             if (selectedBrandId != null) {
               cubit.getCarModelLoading(brandId: selectedBrandId!);
             }
@@ -1527,7 +1516,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
 
                     }
                     return ListView.builder(
-                      controller: _scrollController,
+                      controller: scrollController,
                       itemCount: models.length + (cubit.isLoadingMoreCarModelLoading ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index >= models.length) {

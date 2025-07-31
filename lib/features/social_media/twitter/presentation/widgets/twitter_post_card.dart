@@ -19,7 +19,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
@@ -538,7 +537,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     ),
                     Label(
                         text:
-                            '@${(post.postShare == null ? '' : post.postShare?.user?.email ?? '')?.split('@')[0]}',
+                            '@${(post.postShare == null ? '' : post.postShare?.user?.email ?? '').split('@')[0]}',
                         maxLines: 1,
                         style: Styles.mediumText(color: Colors.grey)),
                   ],

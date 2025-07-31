@@ -10,12 +10,9 @@ import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_circle_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/info_column_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/rate_car_widget.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../res/assets/assets.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../res/style/app_colors.dart';

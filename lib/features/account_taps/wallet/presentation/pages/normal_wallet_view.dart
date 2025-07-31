@@ -20,7 +20,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../payment/presentation/pages/payment_cash_out.dart';
-import '../../../../subscripe/presentation/widgets/amounts.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
 import '../widgets/wallet_card_widget.dart';

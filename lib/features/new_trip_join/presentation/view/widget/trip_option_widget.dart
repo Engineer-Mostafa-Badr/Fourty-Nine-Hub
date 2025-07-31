@@ -17,7 +17,7 @@ class TripOptionWidget extends StatelessWidget {
   final String? icon;
 
   const TripOptionWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     this.onTap,
@@ -26,7 +26,7 @@ class TripOptionWidget extends StatelessWidget {
     this.containerColor,
     this.borderColor,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

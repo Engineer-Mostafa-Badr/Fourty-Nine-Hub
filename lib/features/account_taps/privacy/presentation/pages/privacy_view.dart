@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
 
@@ -14,7 +12,6 @@ import '../../../../../core/widget/custom_text_no_login.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/privacy_status_enum.dart';
-import '../../domain/entities/search_users_entity.dart';
 import '../../domain/useCase/update_communication_privacy_use_case.dart';
 import '../../domain/useCase/update_connection_privacy_use_case.dart';
 import '../../domain/useCase/update_except_from_privacy_use_case.dart';
@@ -25,7 +22,7 @@ import '../widgets/privacy_muti_select_item.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class PrivacyView extends StatelessWidget {
-  PrivacyView({super.key});
+  const PrivacyView({super.key});
 
   @override
   Widget build(BuildContext context) {

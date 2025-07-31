@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azka
 import 'package:fourtyninehub/features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 
-import '../../domain/entity/azkar_search_entity.dart';
 
 class AzkarCubit extends Cubit<AzkarState> {
   final FetchAzkarUseCase _azkarUseCase;
