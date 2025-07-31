@@ -50,11 +50,6 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'routes/pages.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-bool isActivate = false;
-bool isShowOnboarding = false;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
@@ -132,6 +127,11 @@ void main() async {
   );
 }
 
+bool isActivate = false;
+bool isShowOnboarding = false;
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -141,49 +141,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
-  void initState() {
-    super.initState();
-
-    NetworkManager().initialize();
-
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  Future<dynamic> getCurrentCall() async {
-    var calls = await FlutterCallkitIncoming.activeCalls();
-    if (calls is List) {
-      if (calls.isNotEmpty) {
-        print('DATA: $calls');
-        return calls[0];
-      } else {
-        return null;
-      }
-    }
-  }
-
-  Future<void> getDevicePushTokenVoIP() async {
-    var devicePushTokenVoIP =
-        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
-    print(devicePushTokenVoIP);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  Future getToken() async {
-    var token = await CacheManager.getAccessToken();
-    log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
-  }
-
-  @override
   Widget build(BuildContext context) {
     getToken();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => NetworkConnectivityCubit(navigatorKey: navigatorKey)),
+        BlocProvider(
+            create: (context) =>
+                NetworkConnectivityCubit(navigatorKey: navigatorKey)),
         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
         BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
@@ -298,7 +262,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, themeState) {
-              return BlocBuilder<NetworkConnectivityCubit, NetworkConnectivityState>(
+              return BlocBuilder<NetworkConnectivityCubit,
+                  NetworkConnectivityState>(
                 builder: (context, networkState) {
                   // Show full-screen network error when disconnected
                   if (networkState == NetworkConnectivityState.disconnected) {
@@ -361,7 +326,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                   left: 0,
                                   right: 0,
                                   child: NetworkAlertBanner(
-                                      isConnected: networkState == NetworkConnectivityState.connected),
+                                      isConnected: networkState ==
+                                          NetworkConnectivityState.connected),
                                 ),
                               ],
                             ),
@@ -377,5 +343,43 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Future<dynamic> getCurrentCall() async {
+    var calls = await FlutterCallkitIncoming.activeCalls();
+    if (calls is List) {
+      if (calls.isNotEmpty) {
+        print('DATA: $calls');
+        return calls[0];
+      } else {
+        return null;
+      }
+    }
+  }
+
+  Future<void> getDevicePushTokenVoIP() async {
+    var devicePushTokenVoIP =
+        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    print(devicePushTokenVoIP);
+  }
+
+  Future getToken() async {
+    var token = await CacheManager.getAccessToken();
+    log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    NetworkManager().initialize();
+
+    WidgetsBinding.instance.addObserver(this);
   }
 }
