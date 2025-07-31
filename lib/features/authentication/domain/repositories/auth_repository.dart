@@ -98,4 +98,10 @@ abstract class AuthRepository {
   Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params);
 
   Future<Either<Failure, UserTokensEntity>> loginWithPhone(LoginWithPhoneParams params);
+  Future<Either<Failure, void>> saveGuestState();
+  Future<Either<Failure, void>> clearGuestState();
+  Future<bool> getGuestState();
+  Future<Either<Failure, void>> migrateGuestData();
+  Future<Either<Failure, Map<String, dynamic>?>> getGuestData();
+  Future<Either<Failure, void>> saveGuestData(Map<String, dynamic> data);
 }

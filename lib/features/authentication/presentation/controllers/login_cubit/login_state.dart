@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 
 // auth_status.dart
@@ -32,6 +33,16 @@ final class LoginSuccess extends LoginState {
 
   const LoginSuccess({required this.userTokensEntity});
 }
+
+class LoginGuestSuccess extends LoginState {
+  final UserEntity user;
+
+  const LoginGuestSuccess({required this.user});
+
+  @override
+  List<Object> get props => [user];
+}
+
 
 final class SocialAuthState extends LoginState {
   final AuthStatus status;
