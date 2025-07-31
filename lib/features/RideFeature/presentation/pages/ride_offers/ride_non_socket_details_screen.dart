@@ -14,7 +14,6 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -25,8 +24,6 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
-import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/get_client_past_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
@@ -60,6 +57,7 @@ class _RideNonSocketDetailsScreenState
   String? pdfPath;
   double? currentTripRating;
 
+  @override
   initState() {
     context.read<DashboardsCubit>().getEmergencyDetails(
         context,
@@ -170,7 +168,7 @@ class _RideNonSocketDetailsScreenState
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: Text(context.isArabic ? 'تفاصيل العميل' : 'Client Details'),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           height: 300,
           child: PDFView(
@@ -206,7 +204,7 @@ class _RideNonSocketDetailsScreenState
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.parse(
-        widget.tripEntity?.tripDetails?.createdAt ??
+        widget.tripEntity.tripDetails?.createdAt ??
             '2025-03-11T21:50:21.998Z');
     String formattedDate =
         "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
@@ -216,7 +214,7 @@ class _RideNonSocketDetailsScreenState
         "${(dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12)}:${dateTime.minute.toString().padLeft(2, '0')} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
 
     DateTime dateTimePickUp = DateTime.parse(
-        widget.tripEntity?.tripDetails?.pickupTime ??
+        widget.tripEntity.tripDetails?.pickupTime ??
             '2025-03-11T21:50:21.998Z');
     String formattedDatePickUp =
         "${dateTimePickUp.day.toString().padLeft(2, '0')}/${dateTimePickUp.month.toString().padLeft(2, '0')}/${dateTimePickUp.year}";

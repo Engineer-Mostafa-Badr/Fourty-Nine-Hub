@@ -90,8 +90,7 @@ class NormalPostScreen extends StatelessWidget {
                   height: 256,
                   fit: BoxFit.cover,
                 ),
-              if (postEntity.images != null &&
-                  postEntity.images!.isNotEmpty &&
+              if (postEntity.images.isNotEmpty &&
                   postEntity.type == "normal_post")
                 SizedBox(
                   height: 256,

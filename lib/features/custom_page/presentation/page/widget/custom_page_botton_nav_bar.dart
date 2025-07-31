@@ -12,7 +12,6 @@ import '../../../../../common/widgets/dynamic/bottom_painter.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
 
 class CustomPageBottonNavBar extends StatelessWidget
     implements PreferredSizeWidget {

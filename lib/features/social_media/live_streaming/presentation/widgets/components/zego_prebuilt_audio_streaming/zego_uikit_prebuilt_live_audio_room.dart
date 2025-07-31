@@ -1,4 +1,4 @@
-library zego_uikit_prebuilt_live_audio_room;
+library;
 
 export 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 

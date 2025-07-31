@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -20,7 +21,7 @@ class AppButton extends StatelessWidget {
   final BoxBorder? border;
   const AppButton({
     super.key,
-     this.label,
+    this.label,
     required this.onPressed,
     this.backColor,
     this.height,
@@ -42,7 +43,10 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onPressed(),
+      onTap: () {
+        ManageVibration.vibrate();
+        onPressed();
+      },
       child: Container(
         height: height ?? kToolbarHeight * 1.2.h,
         width: width,

@@ -4,7 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 class RecordPlayerWidget extends StatefulWidget {
   final String mp3Path; // Path to the MP3 file (asset or local)
 
-  const RecordPlayerWidget({Key? key, required this.mp3Path}) : super(key: key);
+  const RecordPlayerWidget({super.key, required this.mp3Path});
 
   @override
   _RecordPlayerWidgetState createState() => _RecordPlayerWidgetState();

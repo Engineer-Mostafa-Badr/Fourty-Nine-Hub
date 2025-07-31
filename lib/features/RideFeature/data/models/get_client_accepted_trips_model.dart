@@ -20,27 +20,17 @@ class ClientAcceptedTripModel extends ClientAcceptedTripEntity {
 
 class TripDetailsModel extends TripDetailsEntity {
   TripDetailsModel({
-    String? id,
-    String? status,
-    bool? isPremium,
-    num? price,
+    super.id,
+    super.status,
+    super.isPremium,
+    super.price,
     num? passengers,
-    String? date,
-    String? note,
-    LocationModel? location,
-    CategoryModel? category,
-    String? createdAt,
-  }) : super(
-    id: id,
-    status: status,
-    isPremium: isPremium,
-    price: price,
-    date: date,
-    note: note,
-    location: location,
-    category: category,
-    createdAt: createdAt,
-  );
+    super.date,
+    super.note,
+    LocationModel? super.location,
+    CategoryModel? super.category,
+    super.createdAt,
+  });
 
   factory TripDetailsModel.fromJson(Map<String, dynamic> json) {
     return TripDetailsModel(
@@ -64,8 +54,7 @@ class TripDetailsModel extends TripDetailsEntity {
 }
 
 class LocationModel extends LocationEntity {
-  LocationModel({String? fromTitle, String? toTitle})
-      : super(fromTitle: fromTitle, toTitle: toTitle);
+  LocationModel({super.fromTitle, super.toTitle});
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
@@ -76,8 +65,7 @@ class LocationModel extends LocationEntity {
 }
 
 class CategoryModel extends CategoryEntity {
-  CategoryModel({String? nameAr, String? nameEn, String? picture})
-      : super(nameAr: nameAr, nameEn: nameEn, picture: picture);
+  CategoryModel({super.nameAr, super.nameEn, super.picture});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
@@ -90,19 +78,12 @@ class CategoryModel extends CategoryEntity {
 
 class DriverDetailsModel extends DriverDetailsEntity {
   DriverDetailsModel({
-    String? id,
-    String? firstName,
-    String? picture,
-    RatingModel? rating,
-    VehicleDetailsModel? vehicleDetails,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    picture: picture,
-    rating: rating,
-    vehicleDetails: vehicleDetails,
-
-  );
+    super.id,
+    super.firstName,
+    super.picture,
+    RatingModel? super.rating,
+    VehicleDetailsModel? super.vehicleDetails,
+  });
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
@@ -139,8 +120,7 @@ class VehicleDetailsModel extends VehicleDetailsEntity {
   }
 }
 class RatingModel extends RatingEntity {
-  RatingModel({double? average, int? count})
-      : super(average: average, count: count);
+  RatingModel({super.average, super.count});
 
   factory RatingModel.fromJson(Map<String, dynamic> json) {
     return RatingModel(

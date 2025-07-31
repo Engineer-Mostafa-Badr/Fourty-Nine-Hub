@@ -244,7 +244,7 @@ class _FoodCartViewState extends State<FoodCartView> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              '${LocaleKeys.restaurant_total.tr()} ${context.isArabic?(cartItem.total).toLocalizedArabic(context):(cartItem.total).toStringAsFixed(0)} ${currency}',
+              '${LocaleKeys.restaurant_total.tr()} ${context.isArabic?(cartItem.total).toLocalizedArabic(context):(cartItem.total).toStringAsFixed(0)} $currency',
               style: Styles.headerText(),
             ),
           ),

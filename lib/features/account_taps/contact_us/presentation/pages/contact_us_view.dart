@@ -29,6 +29,24 @@ class ContactUsView extends StatefulWidget {
 }
 
 class _ContactUsViewState extends State<ContactUsView> {
+  final FocusNode phoneFocusNode = FocusNode();
+  final FocusNode messageFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      phoneFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    phoneFocusNode.dispose();
+    messageFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -37,7 +55,9 @@ class _ContactUsViewState extends State<ContactUsView> {
         preferredSize: const Size.fromHeight(46),
         child: BackAppBar(
           label: LocaleKeys.contactUs.localize,
-          subTitle:context.isArabic? 'فريق ٤٩ هاب جاهز للمساعدة':LocaleKeys.TeamHelp.localize,
+          subTitle: context.isArabic
+              ? 'فريق ٤٩ هاب جاهز للمساعدة'
+              : LocaleKeys.TeamHelp.localize,
           enableCustomAppBar: true,
           textColor: AppColors.getReversedTextColor(context),
         ),
@@ -64,7 +84,7 @@ class _ContactUsViewState extends State<ContactUsView> {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height-140.h,
+                minHeight: MediaQuery.of(context).size.height - 140.h,
               ),
               child: IntrinsicHeight(
                 child: Form(
@@ -89,7 +109,8 @@ class _ContactUsViewState extends State<ContactUsView> {
                         DefaultTextFormField(
                           contentPadding: EdgeInsets.symmetric(horizontal: 4),
                           inputFormatter: [
-                            FilteringTextInputFormatter.digitsOnly, // يسمح بالأرقام فقط
+                            FilteringTextInputFormatter
+                                .digitsOnly, // يسمح بالأرقام فقط
                           ],
                           fillColor: Colors.transparent,
                           borderColor: AppColors.getTextColor(context),
@@ -101,15 +122,20 @@ class _ContactUsViewState extends State<ContactUsView> {
                             child: Container(
                               padding: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
-                                  color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.PRIMARY_COLOR,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Icon(
                                 Icons.phone,
-                                color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
+                                color: context.isDarkMode
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white,
                                 // size: 27,
                               ),
                             ),
                           ),
+                          currentFocusNode: phoneFocusNode,
                         ),
                         const Sizer(),
                         DefaultTextFormField(
@@ -119,11 +145,17 @@ class _ContactUsViewState extends State<ContactUsView> {
                           borderColor: AppColors.getTextColor(context),
                           currentController: controller.messageController,
                           hint: '${LocaleKeys.message.localize}...',
-                          hintColor:
-                              context.isDarkMode ? Colors.white : Colors.black54,
+                          hintColor: context.isDarkMode
+                              ? Colors.white
+                              : Colors.black54,
                           maxLength: 150,
                           maxLines: 5,
-                          hintStyle: Styles.headerText(color: context.isDarkMode ? Colors.white : Colors.black54,),
+                          hintStyle: Styles.headerText(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black54,
+                          ),
+                          textInputAction: TextInputAction.done,
                         ),
                         const SizedBox(
                           height: 30,
@@ -135,7 +167,8 @@ class _ContactUsViewState extends State<ContactUsView> {
                             label: LocaleKeys.send.localize,
                             margin: 10,
                             backColor: AppColors.getRedColor(context),
-                            onPressed: () => controller.createContactUs(context)),
+                            onPressed: () =>
+                                controller.createContactUs(context)),
                       ],
                     ),
                   ),
@@ -160,7 +193,9 @@ class _ContactUsViewState extends State<ContactUsView> {
         height: 80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: context.isDarkMode?AppColors.getFindFillColor(context):AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
+          color: context.isDarkMode
+              ? AppColors.getFindFillColor(context)
+              : AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -170,16 +205,18 @@ class _ContactUsViewState extends State<ContactUsView> {
                 padding: const EdgeInsets.all(12.0),
                 child: SvgPicture.asset(
                   Assets.aMailIcon,
-                  color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
                 ),
               )
             else
-            Icon(
-              icon,
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-              size: 27,
-            ),
+              Icon(
+                icon,
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                size: 27,
+              ),
             const SizedBox(
               width: 16,
             ),

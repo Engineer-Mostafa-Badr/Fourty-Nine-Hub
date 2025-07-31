@@ -8,12 +8,12 @@ class OverlayCircularMenu extends StatefulWidget {
   final Color overlayColor;
 
   const OverlayCircularMenu({
-    Key? key,
+    super.key,
     required this.mainIcon,
     required this.menuItems,
     this.radius = 100.0,
     this.overlayColor = Colors.black54,
-  }) : super(key: key);
+  });
 
   @override
   _OverlayCircularMenuState createState() => _OverlayCircularMenuState();

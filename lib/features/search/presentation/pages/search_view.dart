@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/ads_search_view.dart';
-import 'package:fourtyninehub/features/search/presentation/pages/widget/come_with_me_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/main_category_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/posts_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/profile_search_view.dart';
@@ -32,21 +31,35 @@ class SearchView extends StatefulWidget {
   _SearchViewState createState() => _SearchViewState();
 }
 
-class _SearchViewState extends State<SearchView> with SingleTickerProviderStateMixin {
+class _SearchViewState extends State<SearchView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late TextEditingController _searchController;
+  final _focusNode = FocusNode();
   Timer? _searchDebounce;
   bool _isSearching = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     print('✅ INIT SEARCH VIEW');
     context.read<SearchCubit>().initPref();
     _tabController = TabController(length: 6, vsync: this);
     _searchController = context.read<SearchCubit>().searchController;
     _searchController.addListener(_onSearchChanged);
   }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchDebounce?.cancel();
+    _tabController.dispose();
+    super.dispose();
+  }
+
   String _lastSearchText = '';
   void _onSearchChanged() {
     final currentText = _searchController.text.trim();
@@ -158,16 +171,6 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
   }
 
   @override
-  void dispose() {
-    print('♻️ Disposing search view');
-    _searchController.removeListener(_onSearchChanged);
-    _searchDebounce?.cancel();
-    _tabController.dispose();
-    super.dispose();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     // Build method remains the same as your original,
     // just be sure to use `_searchController` in `FormTextField`
@@ -182,7 +185,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
         ),
         title: Card(
           elevation: 0,
-          color: Colors.white,
+          color: Colors.red,
           shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(40.r),
             borderSide: BorderSide.none,
@@ -197,13 +200,19 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
               height: 70.h,
               hint: LocaleKeys.search.localize,
               borderRadius: BorderRadius.circular(40.r),
-              style: Styles.mediumText(color: context.isDarkMode?Colors.black:AppColors.GREY_NORMAL_COLOR),
+              style: Styles.mediumText(
+                  color: context.isDarkMode
+                      ? Colors.black
+                      : AppColors.GREY_NORMAL_COLOR),
               prefix: Icon(
                 Icons.search,
                 size: 30.h,
-                color:context.isDarkMode?Colors.black:AppColors.GREY_NORMAL_COLOR,
+                color: context.isDarkMode
+                    ? Colors.black
+                    : AppColors.GREY_NORMAL_COLOR,
               ),
               noBorder: true,
+              currentFocusNode: _focusNode,
               action: (_) {}, // no-op now
             ),
           ),
@@ -304,8 +313,12 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 
                   final prefs = await SharedPreferences.getInstance();
                   final filters = [
-                    'users', 'reels', 'posts',
-                    'mainCategories', 'subCategories', 'ads'
+                    'users',
+                    'reels',
+                    'posts',
+                    'mainCategories',
+                    'subCategories',
+                    'ads'
                   ];
                   await prefs.setString('filter', filters[i]);
 
@@ -322,13 +335,27 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                   );
 
                   switch (filter) {
-                    case 'users': cubit.loadUsersSearchData(params: params); break;
-                    case 'reels': cubit.loadReelsSearchData(params: params); break;
-                    case 'posts': cubit.loadPostsSearchData(params: params); break;
-                    case 'mainCategories': cubit.loadPaginatedSearchData(params: params); break;
-                    case 'subCategories': cubit.loadSubCategoriesSearchData(params: params); break;
-                    case 'ads': cubit.loadAdsData(params: params); break;
-                    case 'comeWithYouTrips': cubit.loadTripComeSearchData(params: params); break;
+                    case 'users':
+                      cubit.loadUsersSearchData(params: params);
+                      break;
+                    case 'reels':
+                      cubit.loadReelsSearchData(params: params);
+                      break;
+                    case 'posts':
+                      cubit.loadPostsSearchData(params: params);
+                      break;
+                    case 'mainCategories':
+                      cubit.loadPaginatedSearchData(params: params);
+                      break;
+                    case 'subCategories':
+                      cubit.loadSubCategoriesSearchData(params: params);
+                      break;
+                    case 'ads':
+                      cubit.loadAdsData(params: params);
+                      break;
+                    case 'comeWithYouTrips':
+                      cubit.loadTripComeSearchData(params: params);
+                      break;
                   }
                 },
                 indicator: const BoxDecoration(
@@ -356,7 +383,6 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
             },
           ),
         ),
-
       ),
       body: TabBarView(
         controller: _tabController,
@@ -365,24 +391,22 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
           const ProfileSearchView(),
           const ReelSearchView(),
           BlocProvider(
-    create: (context) => serviceLocator<SocialPostsCubit>(),
-  child: const PostsSearchView(
-            // params: SearchParams(
-            //   search: _searchController.text,
-            //   params: PaginationParams(page: 1),
-            // ),
+            create: (context) => serviceLocator<SocialPostsCubit>(),
+            child: const PostsSearchView(
+                // params: SearchParams(
+                //   search: _searchController.text,
+                //   params: PaginationParams(page: 1),
+                // ),
+                ),
           ),
-),
           const MainCategorySearchView(
-            // params: SearchParams(
-            //   search: _searchController.text,
-            //   params: PaginationParams(page: 1),
-            // ),
-          ),
+              // params: SearchParams(
+              //   search: _searchController.text,
+              //   params: PaginationParams(page: 1),
+              // ),
+              ),
           const SubCategorySearchView(),
-          const AdsSearchView(
-
-          ),
+          const AdsSearchView(),
           // ComeWithMeSearchView(
           //   params: SearchParams(
           //     search: _searchController.text,
@@ -396,9 +420,6 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
     );
   }
 }
-
-
-
 
 class CustomTapWidget extends StatelessWidget {
   final String text;
@@ -418,7 +439,9 @@ class CustomTapWidget extends StatelessWidget {
         height: 35,
         // padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.getButtonPrimaryColor(context):AppColors.getFillColor(context),
+          color: isSelected
+              ? AppColors.getButtonPrimaryColor(context)
+              : AppColors.getFillColor(context),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
@@ -426,7 +449,9 @@ class CustomTapWidget extends StatelessWidget {
             text,
             style: Styles.mediumText(
               // fontSize: 15,
-              color: isSelected ? AppColors.getReversedTextColor(context) : AppColors.GREY_NORMAL_COLOR,
+              color: isSelected
+                  ? AppColors.getReversedTextColor(context)
+                  : AppColors.GREY_NORMAL_COLOR,
             ),
           ),
         ),
@@ -434,7 +459,6 @@ class CustomTapWidget extends StatelessWidget {
     );
   }
 }
-
 
 /*
 class _SearchViewState extends State<SearchView> with SingleTickerProviderStateMixin {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CountryDropdown extends StatefulWidget {
-  const CountryDropdown({Key? key}) : super(key: key);
+  const CountryDropdown({super.key});
 
   @override
   State<CountryDropdown> createState() => _CountryDropdownState();
@@ -76,7 +76,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
                     value: country,
                     child: Text(country),
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),

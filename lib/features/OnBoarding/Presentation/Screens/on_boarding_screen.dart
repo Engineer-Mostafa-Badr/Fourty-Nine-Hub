@@ -16,7 +16,6 @@ import '../../../../common/theme/cubit/states.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import '../../../authentication/presentation/pages/first_login_screen.dart';
 import '../Controllers/on_boarding_cubit.dart';
 
 class OnBoardingScreen extends StatefulWidget {

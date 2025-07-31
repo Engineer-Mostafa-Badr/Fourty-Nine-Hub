@@ -1,27 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../data/models/loading/get_loading_accepted_model.dart';
-import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
-import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'loading_dashboard_details_screen.dart';
 
@@ -187,7 +180,7 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                               ),
                               Label(
                                   text:
-                                      '${offers?.tripDetails?.cargoDescription ?? ""}',
+                                      offers?.tripDetails?.cargoDescription ?? "",
                                   style: Styles.mediumText())
                             ],
                           ),
@@ -230,7 +223,7 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                            text: "${formatPrice(offers?.tripDetails?.price ?? 100, context)}",
+                            text: formatPrice(offers?.tripDetails?.price ?? 100, context),
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.w700)),
                         const Sizer(width: 4),

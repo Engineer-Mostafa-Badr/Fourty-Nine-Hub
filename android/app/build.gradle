@@ -29,7 +29,7 @@ android {
     // useAndroidX = true
     
     namespace "com.app.fourtynine"
-    compileSdk 34
+    compileSdk 35
     ndkVersion flutter.ndkVersion
 
     packagingOptions {

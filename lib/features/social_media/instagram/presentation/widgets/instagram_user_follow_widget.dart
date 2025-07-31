@@ -8,8 +8,6 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../domain/entities/followers_entity.dart';
-import 'follow_button_instagram.dart';
 
 class InstagramUserFollowWidget extends StatelessWidget {
   const InstagramUserFollowWidget({

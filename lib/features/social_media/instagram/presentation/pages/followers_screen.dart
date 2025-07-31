@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../domain/entities/profile_instagram_data_entity.dart';
-import '../widgets/instagram_friends_categorise_widget.dart';
-import '../widgets/instagram_user_follow_widget.dart';
 import 'instagram_block_list_body.dart';
 import 'instagram_followers_body.dart';
 import 'instagram_friends_body.dart';

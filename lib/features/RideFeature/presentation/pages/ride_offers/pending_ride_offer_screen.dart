@@ -1,31 +1,26 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 
-import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../service_locator/service_locator.dart';
 import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
-import '../dashboards/widgets/client_offers_widget.dart';
 
 class PendingRideOfferScreen extends StatefulWidget {
   final String type;
@@ -111,11 +106,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
           builder: (context, state) {
             return state.isLoading
-                ? Center(
-                    child: CustomCircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
+                ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
                         child: Label(
@@ -131,8 +122,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: context.read<ClientTripsCubit>().clientPendingTripsData == null ||
-                                    context.read<ClientTripsCubit>().clientPendingTripsData!.isEmpty
+                            child: context.read<ClientTripsCubit>().clientPendingTripsData.isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
                                     itemBuilder: (context, index) =>
@@ -334,7 +324,7 @@ class ClientPendingWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                        text: "${formatPrice(offers?.tripDetails?.price?.toInt() ?? 300, context)}",
+                        text: formatPrice(offers?.tripDetails?.price?.toInt() ?? 300, context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(width: 4),
@@ -352,11 +342,11 @@ class ClientPendingWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: "${formatTimeOnly(offers?.tripDetails?.date, context)}",
+                        text: formatTimeOnly(offers?.tripDetails?.date, context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       Label(
-                        text: "${formatPickupDate(offers?.tripDetails?.date, context)}",
+                        text: formatPickupDate(offers?.tripDetails?.date, context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                     ],

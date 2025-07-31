@@ -37,7 +37,7 @@ class OpenStreetMapSearchAndPick extends StatefulWidget {
   final String? allowedCountryCode;
 
   const OpenStreetMapSearchAndPick({
-    Key? key,
+    super.key,
     required this.onPicked,
     this.zoomOutIcon = Icons.zoom_out_map,
     this.zoomInIcon = Icons.zoom_in_map,
@@ -59,7 +59,7 @@ class OpenStreetMapSearchAndPick extends StatefulWidget {
     this.minAllowedDistanceKm =
         0,
     this.allowedCountryCode = 'EG',
-  }) : super(key: key);
+  });
 
   @override
   State<OpenStreetMapSearchAndPick> createState() =>

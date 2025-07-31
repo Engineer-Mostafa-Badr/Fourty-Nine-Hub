@@ -1,32 +1,26 @@
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/delete_restaurant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_statistics_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/change_connectivity_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
-import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../health_feature/create_doctor/domain/entities/city.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import '../../../../health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_cities.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/get_governorates.dart';
 import '../../../../health_feature/health/domain/usecases/get_health_subcategories.dart';
@@ -34,7 +28,6 @@ import '../../../../health_feature/health/presentation/controllers/shared_data/h
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../../restaurants_list/domain/usecases/create_restaurant.dart';
-import '../../data/models/restaurant_orders_model.dart';
 import '../../domain/entity/complete_order_entity.dart';
 import '../../domain/entity/order_food_entity.dart';
 import '../../domain/usecases/complete_order_restaurant_usecase.dart';
@@ -242,7 +235,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   // }
 
   Future<void> loadData() async {
-    print("Current ${orders}");
+    print("Current $orders");
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
     orders.clear();
     currentPage = 1;
@@ -250,7 +243,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     await getOrders(false);
   }
   Future<void> loadDataPast() async {
-    print("past ${orders}");
+    print("past $orders");
 
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
     ordersPast.clear();

@@ -15,13 +15,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../ads/interstitial_ad_model.dart';
-import '../../../../common/functions/helper/auth_helper.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
-import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 

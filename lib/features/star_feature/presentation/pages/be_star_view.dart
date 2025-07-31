@@ -9,7 +9,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -28,6 +27,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controller/cubit/star_cubit.dart';
@@ -147,7 +147,7 @@ class _BeStarViewState extends State<BeStarView> {
           //   return const CustomNotLogged();
           // }
           if (state.status == StarStates.loading) {
-            return const CustomLoading();
+            return const CustomLoadingSearchWidget();
           }
 
           final sortedStars = List<StarEntity>.from(state.star ?? [])
@@ -234,8 +234,8 @@ class _BeStarViewState extends State<BeStarView> {
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   child: Image.asset(
                                     Assets.talentGIF,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.8,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
                                     fit: BoxFit.cover,
                                   ),
                                 ),

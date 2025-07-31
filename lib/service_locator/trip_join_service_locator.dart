@@ -39,9 +39,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_pick_me/data/data_sour
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/data/repo/view_all_pick_me_repo_imp.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/repo/view_all_pick_me_repo.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/usecases/view_all_pick_me_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/datasource/remote_datasource/view_all_trip_join_remote_datasource.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/repos/view_all_trip_join_repo_imp.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/repos/view_all_trip_join_repo.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/request_trip_join_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
 import 'package:get_it/get_it.dart';

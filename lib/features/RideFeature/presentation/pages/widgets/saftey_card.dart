@@ -96,7 +96,7 @@ class SafetyCard extends StatelessWidget {
             icon:  Image.asset(Assets.emergencyIcon,width: 30,),
             label:  Text(LocaleKeys.call_emergency.localize),
           ),
-          Container(
+          SizedBox(
             height: MediaQuery.sizeOf(context).height*.58,
             child: Padding(
               padding: const EdgeInsets.only(top: 16.0,bottom: 16,left: 6,right: 6),
@@ -135,7 +135,7 @@ class SafetyCard extends StatelessWidget {
               icon: Icon(icon, size: 28, ),
               onPressed: onTap,
             ),
-            Container(
+            SizedBox(
                 height: 40,
                 child: Center(child: Text(label,
                     textAlign: TextAlign.center,
@@ -173,7 +173,7 @@ List<ProtectionItem> items = [
 class ProtectionCard extends StatelessWidget {
   final ProtectionItem item;
 
-  const ProtectionCard({Key? key, required this.item}) : super(key: key);
+  const ProtectionCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

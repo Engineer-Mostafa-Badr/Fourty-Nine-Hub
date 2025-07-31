@@ -19,7 +19,6 @@ import '../../dynamic/sizer.dart';
 import '../buttons/default_button.dart';
 import '../labels/label.dart';
 import 'package:flutter/services.dart';
-import 'package:vibration/vibration.dart';
 
 class ChooseLangScreen extends StatefulWidget {
   const ChooseLangScreen({super.key});

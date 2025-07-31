@@ -17,7 +17,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/dashboards/support_details_entity.dart';
-import '../../../domain/entities/dashboards/trip_entity.dart';
 
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
@@ -160,7 +159,7 @@ class _LoadingDashboardDetailsScreenState
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: Text(context.isArabic ? 'تفاصيل العميل' : 'Client Details'),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           height: 300,
           child: PDFView(

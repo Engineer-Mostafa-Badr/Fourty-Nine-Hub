@@ -12,6 +12,7 @@ class CustomTextFieldHealth extends StatelessWidget {
     this.validator,
     required this.controller,
     this.inputFormatters,
+    this.focusNode,
   });
 
   final Function(String)? onChanged;
@@ -20,6 +21,7 @@ class CustomTextFieldHealth extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextEditingController controller;
   final List<TextInputFormatter>? inputFormatters;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class CustomTextFieldHealth extends StatelessWidget {
         minHeight: 44,
       ),
       child: TextFormField(
+        focusNode: focusNode,
         controller: controller,
         maxLines: 1,
         keyboardType: keyboardType,

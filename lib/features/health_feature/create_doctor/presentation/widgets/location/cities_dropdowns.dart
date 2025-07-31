@@ -28,10 +28,8 @@ class CreateDoctorCitiesDropdowns extends StatelessWidget {
           return CustomDropdownHealth<CityEntity>(
             items: state.cities,
             onItemSelected: (value) {
-              if (value != null) {
-                createDoctorCubit.selectCity(value);
-              }
-            },
+              createDoctorCubit.selectCity(value);
+                        },
             // (value) {
             //   if (value != null) {
             //     createDoctorCubit.selectSubcategory(value);

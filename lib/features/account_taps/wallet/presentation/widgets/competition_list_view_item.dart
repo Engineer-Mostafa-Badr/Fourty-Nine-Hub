@@ -171,7 +171,7 @@ class CompetitionListViewItem extends StatelessWidget {
                 PercentageCompetitionWidget(
                   currency: currency,
                   currentPoints: competition.countOfRequest ?? 0,
-                  totalPoints: competition.maxRequests ?? 0,
+                  totalPoints: num.tryParse(competition.maxRequests.toString()??'0') ?? 0,
                   price: num.tryParse(competition.amount ?? '0') ?? 0,
                   percentage: ((num.tryParse(competition.amount ?? '') ?? 0) /
                           (competition.withdrawLimit ?? 0)) *

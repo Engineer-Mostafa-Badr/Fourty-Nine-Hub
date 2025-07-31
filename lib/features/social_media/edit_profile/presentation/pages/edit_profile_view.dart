@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +46,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   final referrerTextController = TextEditingController();
   final bioTextController = TextEditingController();
   final statusController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
   String city = ''; // LocaleKeys.country.localize;
   String? gender;
 
@@ -60,6 +63,9 @@ class _EditProfileViewState extends State<EditProfileView> {
     //         '';
     firstNameTextController.text =
         context.read<UserCubit>().state.data?.firstName ?? '';
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
     lastNameTextController.text =
         context.read<UserCubit>().state.data?.lastName ?? '';
     phoneTextController.text =
@@ -77,16 +83,22 @@ class _EditProfileViewState extends State<EditProfileView> {
     //     .format(DateTime.parse(
     //     context.read<UserCubit>().state.data!.birthday.toString().substring(0, 19)))
     //     .toString();
-    birthDateTextController.text = DateFormat('dd/MM/yyyy')
-            .format(DateTime.parse(context
-                .read<UserCubit>()
-                .state
-                .data!
-                .birthday
-                .toString()
-                .substring(0, 19)))
-            .toString() ??
-        '';
+    log('birthDate: ${context.read<UserCubit>().state.data?.birthday}');
+    birthDateTextController.text =
+        context.read<UserCubit>().state.data?.birthday != null
+            ? DateFormat('dd/MM/yyyy').format(DateTime.parse(
+                context.read<UserCubit>().state.data!.birthday.toString()))
+            : '';
+    // birthDateTextController.text = DateFormat('dd/MM/yyyy')
+    //         .format(DateTime.parse(context
+    //             .read<UserCubit>()
+    //             .state
+    //             .data!
+    //             .birthday
+    //             .toString()
+    //             .substring(0, 19)))
+    //         .toString() ??
+    //     '';
     jobTextController.text = context.read<UserCubit>().state.data?.job ?? '';
     bioTextController.text = context.read<UserCubit>().state.data?.bio ?? '';
     context
@@ -145,6 +157,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderColor: context.isDarkMode
                         ? const Color(0xffCACFF4)
                         : AppColors.PRIMARY_COLOR,
+                    keyboardType: TextInputType.text,
+                    currentFocusNode: focusNode,
                   ),
                   const Sizer(),
                   Text(
@@ -282,6 +296,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           borderColor: context.isDarkMode
                               ? const Color(0xffCACFF4)
                               : AppColors.PRIMARY_COLOR,
+                          keyboardType: TextInputType.phone,
                         ),
                       ),
 

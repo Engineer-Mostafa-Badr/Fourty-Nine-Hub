@@ -1,24 +1,15 @@
 import '../../../domain/entities/client/client_all_rating_entity.dart';
-import '../../../domain/entities/client/driver_all_rating_entity.dart';
 
 class ClientAllRatingModel extends ClientAllRatingEntity {
   ClientAllRatingModel({
-    String? id,
-    String? firstName,
-    String? pictureUrl,
-    String? gender,
-    double? rating,
-    int? totalRatings,
-    List<ClientRating>? ratings,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    pictureUrl: pictureUrl,
-    gender: gender,
-    rating: rating,
-    totalRatings: totalRatings,
-    ratings: ratings,
-  );
+    super.id,
+    super.firstName,
+    super.pictureUrl,
+    super.gender,
+    super.rating,
+    super.totalRatings,
+    super.ratings,
+  });
 
   factory ClientAllRatingModel.fromJson(Map<String, dynamic> json) {
     final driverDetails = json['data']?['clientDetails'] ?? {};

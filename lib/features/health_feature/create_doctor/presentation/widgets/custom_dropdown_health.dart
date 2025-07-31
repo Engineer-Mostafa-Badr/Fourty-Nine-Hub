@@ -237,6 +237,6 @@ class _CustomDropdownHealthState<T> extends State<CustomDropdownHealth<T>>
       return widget.hint;
     }
 
-    return widget.displayStringForItem(_selectedItem!);
+    return widget.displayStringForItem(_selectedItem as T);
   }
 }

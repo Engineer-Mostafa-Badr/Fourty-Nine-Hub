@@ -14,19 +14,15 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_google_maps.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
@@ -476,7 +472,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextAppButton(
-                            label: post.user?.userName??'',
+                            label: post.user.userName??'',
                             onPressed: () {
                               if (widget.fromProfile == false &&
                                   context.read<UserCubit>().isLoggedIn) {
@@ -766,7 +762,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               width: 10,
             ),
           ],
-          if (post.users != null && post.users!.isNotEmpty)
+          if (post.users.isNotEmpty)
             Row(
               children: [
                 Label(
@@ -776,26 +772,26 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 GestureDetector(
                   onTap: () {
                     context.push(Routes.OTHERSACCOUNT,
-                        extra: post.users![0].id);
+                        extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                        "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style:
                         Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
-                if (post.users!.length > 1)
+                if (post.users.length > 1)
                   GestureDetector(
                       onTap: () {
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                                  users: post.users!,
+                                  users: post.users,
                                 ));
                       },
                       child: Label(
-                        text: '+${post.users!.length - 1}',
+                        text: '+${post.users.length - 1}',
                         style: Styles.headerText(),
                       ))
               ],

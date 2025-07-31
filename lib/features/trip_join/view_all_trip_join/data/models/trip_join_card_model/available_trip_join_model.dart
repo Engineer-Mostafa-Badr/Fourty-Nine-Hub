@@ -2,34 +2,20 @@ import '../../../domain/entities/available_trip_join_entity.dart';
 
 class AvailableTripJoinModel extends AvailableTripJoinEntity {
   AvailableTripJoinModel({
-    String? id,
-    double? pricePerSeat,
-    String? status,
-    num? viewerIds,
-    bool? isRepeat,
-    int? passengers,
-    String? startDate,
-    String? offerType,
-    bool? isPremium,
-    String? phoneNumber, // ✅ Added
-    IsButtonEnabledModel? isButtonEnabled,
-    VehicleDetailsModel? vehicleDetails,
-    LocationModel? location,
-  }) : super(
-    id: id,
-    pricePerSeat: pricePerSeat,
-    status: status,
-    viewerIds: viewerIds,
-    isRepeat: isRepeat,
-    passengers: passengers,
-    startDate: startDate,
-    offerType: offerType,
-    isPremium: isPremium,
-    phoneNumber: phoneNumber, // ✅ Added
-    isButtonEnabled: isButtonEnabled,
-    vehicleDetails: vehicleDetails,
-    location: location,
-  );
+    super.id,
+    super.pricePerSeat,
+    super.status,
+    super.viewerIds,
+    super.isRepeat,
+    super.passengers,
+    super.startDate,
+    super.offerType,
+    super.isPremium,
+    super.phoneNumber, // ✅ Added
+    IsButtonEnabledModel? super.isButtonEnabled,
+    VehicleDetailsModel? super.vehicleDetails,
+    LocationModel? super.location,
+  });
 
   factory AvailableTripJoinModel.fromJson(Map<String, dynamic> json) {
     return AvailableTripJoinModel(
@@ -57,7 +43,7 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
 }
 
 class IsButtonEnabledModel extends IsButtonEnabledEntity {
-  IsButtonEnabledModel({bool? state}) : super(state: state);
+  IsButtonEnabledModel({super.state});
 
   factory IsButtonEnabledModel.fromJson(Map<String, dynamic> json) {
     return IsButtonEnabledModel(
@@ -68,16 +54,11 @@ class IsButtonEnabledModel extends IsButtonEnabledEntity {
 
 class VehicleDetailsModel extends VehicleDetailsEntity {
   VehicleDetailsModel({
-    String? brandAr,
-    String? brandEn,
-    String? modelAr,
-    String? modelEn,
-  }) : super(
-    brandAr: brandAr,
-    brandEn: brandEn,
-    modelAr: modelAr,
-    modelEn: modelEn,
-  );
+    super.brandAr,
+    super.brandEn,
+    super.modelAr,
+    super.modelEn,
+  });
 
   factory VehicleDetailsModel.fromJson(Map<String, dynamic> json) {
     return VehicleDetailsModel(
@@ -112,12 +93,9 @@ class LocationModel extends LocationEntity {
 
 class CoordinatesModel extends CoordinatesEntity {
   CoordinatesModel({
-    String? address,
-    List<double>? coordinates,
-  }) : super(
-    address: address,
-    coordinates: coordinates,
-  );
+    super.address,
+    super.coordinates,
+  });
 
   factory CoordinatesModel.fromJson(Map<String, dynamic> json) {
     return CoordinatesModel(

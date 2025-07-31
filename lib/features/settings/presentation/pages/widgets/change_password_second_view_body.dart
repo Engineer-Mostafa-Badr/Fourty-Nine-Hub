@@ -17,7 +17,6 @@ import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import '../../../../notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 
 class ChangePasswordSecondViewBody extends StatefulWidget {
   const ChangePasswordSecondViewBody({super.key});
@@ -32,12 +31,18 @@ class _ChangePasswordSecondViewBodyState
   late TextEditingController oldPasswordController;
   late TextEditingController newPasswordController;
   late TextEditingController confirmPasswordController;
+  final FocusNode oldPasswordFocusNode = FocusNode();
+  final FocusNode newPasswordFocusNode = FocusNode();
+  final FocusNode confirmPasswordFocusNode = FocusNode();
 
   @override
   void initState() {
     oldPasswordController = TextEditingController();
     newPasswordController = TextEditingController();
     confirmPasswordController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      oldPasswordFocusNode.requestFocus();
+    });
     super.initState();
   }
 
@@ -85,7 +90,6 @@ class _ChangePasswordSecondViewBodyState
                 // Navigator.pop(context);
                 context.pushReplacement(Routes.HOME);
               });
-           
           }
           if (state is ConfirmPasswordNotMache) {
             showErrorMessage(
@@ -113,6 +117,8 @@ class _ChangePasswordSecondViewBodyState
                         context.isArabic ? 'كلمة مرور قديمة' : 'Old Password',
                     controller: forgotPasswordCubit.odlPasswordController,
                     hint: context.isArabic ? 'كلمة مرور قديمة' : 'Old Password',
+                    focusNodeCurrent: oldPasswordFocusNode,
+                    focusNodeNext: newPasswordFocusNode,
                   ),
                   const SizedBox(
                     height: 8,
@@ -121,6 +127,8 @@ class _ChangePasswordSecondViewBodyState
                     label: LocaleKeys.newPassword.localize,
                     controller: forgotPasswordCubit.newPasswordController,
                     hint: LocaleKeys.newPassword.localize,
+                    focusNodeCurrent: newPasswordFocusNode,
+                    focusNodeNext: confirmPasswordFocusNode,
                   ),
                   const SizedBox(
                     height: 8,
@@ -130,6 +138,9 @@ class _ChangePasswordSecondViewBodyState
                     controller:
                         forgotPasswordCubit.confirmNewPasswordController,
                     hint: LocaleKeys.confirmNewPassword.localize,
+                    focusNodeCurrent: confirmPasswordFocusNode,
+                    focusNodeNext: null,
+                    textInputAction: TextInputAction.done,
                   ),
                   const SizedBox(
                     height: 16,

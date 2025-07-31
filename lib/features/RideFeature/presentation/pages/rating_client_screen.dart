@@ -13,6 +13,8 @@ import 'widgets/map_section.dart';
 
 // هتتغير انا عملها علشان التغير بتاع ال rate بس
 class RatingClientScreen extends StatefulWidget {
+  const RatingClientScreen({super.key});
+
   @override
   State<RatingClientScreen> createState() => _RatingClientScreenState();
 }

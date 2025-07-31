@@ -6,14 +6,21 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class LabelAndTextFormField extends StatelessWidget {
-  const LabelAndTextFormField(
-      {super.key,
-      required this.label,
-      required this.controller,
-      required this.hint});
+  const LabelAndTextFormField({
+    super.key,
+    required this.label,
+    required this.controller,
+    required this.hint,
+    this.focusNodeCurrent,
+    this.focusNodeNext,
+    this.textInputAction,
+  });
 
   final String label, hint;
   final TextEditingController controller;
+  final FocusNode? focusNodeCurrent;
+  final FocusNode? focusNodeNext;
+  final TextInputAction? textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +45,9 @@ class LabelAndTextFormField extends StatelessWidget {
           hint: hint,
           borderColor:
               context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          currentFocusNode: focusNodeCurrent,
+          nextFocusNode: focusNodeNext,
+          textInputAction: textInputAction,
         ),
       ],
     );

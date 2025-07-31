@@ -32,16 +32,16 @@ class FacebookAdvertisementCard extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: post.images!.length == 1 ? 1 : 2),
-                itemCount: post.images!.length < 4 ? post.images!.length : 4,
+                    crossAxisCount: post.images.length == 1 ? 1 : 2),
+                itemCount: post.images.length < 4 ? post.images.length : 4,
                 itemBuilder: (context, index) => InkWell(
                       onTap: () {
                         if (index != 3 ||
-                            (index == 3 && post.images!.length == 4)) {
+                            (index == 3 && post.images.length == 4)) {
                           showDialog(
                               context: context,
                               builder: (context) => ImageDetailsScreen(
-                                    image: post.images![index],
+                                    image: post.images[index],
                                     fromPost: true,
                                     onRemoveImage: () {
                                       // controller
@@ -65,7 +65,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                       child: Stack(
                         children: [
                           ImageFromInternet(
-                            image: post.images?[index] ?? '',
+                            image: post.images[index] ?? '',
                             borderRadius: BorderRadius.circular(5),
                             defaultLogo: true,
                           ),
@@ -85,7 +85,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                           //     ),
                           //   ),
                           // ),
-                          if (index == 3 && post.images!.length > 4)
+                          if (index == 3 && post.images.length > 4)
                             Container(
                               margin: const EdgeInsetsDirectional.only(
                                   end: 10, bottom: 10),
@@ -97,7 +97,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Label(
-                                  text: "+${post.images!.length - 4}",
+                                  text: "+${post.images.length - 4}",
                                   style: Styles.headerText(
                                     color: Colors.white,
                                   ),

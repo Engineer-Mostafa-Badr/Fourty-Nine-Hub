@@ -480,10 +480,7 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/pages/m
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For localization keys
 

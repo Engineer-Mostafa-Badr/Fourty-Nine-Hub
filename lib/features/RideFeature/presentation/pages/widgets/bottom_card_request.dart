@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/utils/format_numbers.dart';
@@ -125,9 +124,9 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                               inactiveThumbColor: switchThumbColor,
                               activeTrackColor: switchActiveTrack,
                               inactiveTrackColor: switchInactiveTrack,
-                              trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
-                                    (Set<MaterialState> states) {
-                                  return states.contains(MaterialState.selected)
+                              trackOutlineColor: WidgetStateProperty.resolveWith<Color?>(
+                                    (Set<WidgetState> states) {
+                                  return states.contains(WidgetState.selected)
                                       ? Colors.transparent
                                       : Colors.black;
                                 },

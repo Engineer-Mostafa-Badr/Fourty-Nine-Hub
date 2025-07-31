@@ -258,7 +258,7 @@ class MyVoiceVideoRecordingScreenState
     //   return false;
     // }
 
-    void _navigateToPlaybackScreen() {
+    void navigateToPlaybackScreen() {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -268,14 +268,14 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    void _switchCamera() {
+    void switchCamera() {
       setState(() {
         isFrontCamera = !isFrontCamera;
       });
       _initializeCameraController(cameras[isFrontCamera ? 1 : 0]);
     }
 
-    void _showErrorDialog(String message) {
+    void showErrorDialog(String message) {
       showAnimatedDialog(
         context,
         AlertDialog(
@@ -366,7 +366,7 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildCameraPreview() {
+    Widget buildCameraPreview() {
       return SizedBox(
         height: double.infinity,
         child: Stack(
@@ -417,7 +417,7 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildTimerPopup() {
+    Widget buildTimerPopup() {
       return Positioned(
         top: 40,
         left: 0,
@@ -440,7 +440,7 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildControls() {
+    Widget buildControls() {
       return Align(
         alignment: Alignment.bottomCenter,
         child: Column(
@@ -518,9 +518,9 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildSwitchCameraButton(double width) {
+    Widget buildSwitchCameraButton(double width) {
       return IconButton(
-        onPressed: _switchCamera,
+        onPressed: switchCamera,
         icon: Icon(
           Icons.flip_camera_android,
           semanticLabel: LocaleKeys.controls_switch_camera.tr(),
@@ -538,6 +538,7 @@ class MyVoiceVideoRecordingScreenState
       _flashAnimationController.dispose();
       super.dispose();
     }
+    return null;
   }
 
   @override

@@ -36,10 +36,20 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   File? _selectedVideo;
   VideoPlayerController? _videoController;
   String? _mediaUrl;
+  final FocusNode _titleFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _titleFocusNode.requestFocus();
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
     _titleController.dispose();
+    _titleFocusNode.dispose();
     _descriptionController.dispose();
     _videoController?.dispose();
     super.dispose();
@@ -64,21 +74,19 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         onUploaded: (data) {
           XFile? file = data.file;
           _mediaUrl = data.mediaId;
-          if (file != null) {
-            setState(() {
-              if (isImage) {
-                _selectedImages = File(file.path);
-                _selectedVideo = null;
-                _videoController?.dispose();
-                _videoController = null;
-              } else {
-                _selectedVideo = File(file.path);
-                _selectedImages = null;
-                _initializeVideo(file.path);
-              }
-            });
-          }
-          print("data.mediaId ${data.mediaId}");
+          setState(() {
+            if (isImage) {
+              _selectedImages = File(file.path);
+              _selectedVideo = null;
+              _videoController?.dispose();
+              _videoController = null;
+            } else {
+              _selectedVideo = File(file.path);
+              _selectedImages = null;
+              _initializeVideo(file.path);
+            }
+          });
+                  print("data.mediaId ${data.mediaId}");
           print("data.file ${data.file.mimeType}");
           //Type here your code
         },
@@ -90,21 +98,19 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         onUploaded: (data) {
           XFile? file = data.file;
           _mediaUrl = data.mediaId;
-          if (file != null) {
-            setState(() {
-              if (isImage) {
-                _selectedImages = File(file.path);
-                _selectedVideo = null;
-                _videoController?.dispose();
-                _videoController = null;
-              } else {
-                _selectedVideo = File(file.path);
-                _selectedImages = null;
-                _initializeVideo(file.path);
-              }
-            });
-          }
-          print("data.mediaId ${data.mediaId}");
+          setState(() {
+            if (isImage) {
+              _selectedImages = File(file.path);
+              _selectedVideo = null;
+              _videoController?.dispose();
+              _videoController = null;
+            } else {
+              _selectedVideo = File(file.path);
+              _selectedImages = null;
+              _initializeVideo(file.path);
+            }
+          });
+                  print("data.mediaId ${data.mediaId}");
           print("data.file ${data.file.mimeType}");
           //Type here your code
         },
@@ -282,6 +288,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   borderSide: BorderSide.none,
                 ),
               ),
+              focusNode: _titleFocusNode,
             ),
             const SizedBox(height: 16),
 

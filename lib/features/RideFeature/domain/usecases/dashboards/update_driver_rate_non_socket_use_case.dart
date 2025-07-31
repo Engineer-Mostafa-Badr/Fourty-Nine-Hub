@@ -2,9 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
-import '../../entities/create_no_track_trip_entity.dart';
 import '../../entities/dashboards/create_non_track_offer_entity.dart';
-import '../../repositories/ride_repository.dart';
 import '../../repositories/trip_repository.dart';
 import '../client_trips/update_client_rate_non_socket_use_case.dart';
 

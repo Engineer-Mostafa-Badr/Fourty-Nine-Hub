@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/location.dart';
-import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/patient_info.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/price.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/time.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';

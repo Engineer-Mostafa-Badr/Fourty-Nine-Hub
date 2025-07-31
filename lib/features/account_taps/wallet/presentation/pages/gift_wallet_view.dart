@@ -62,7 +62,7 @@ class GiftWalletView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     WalletCardWidget(
-                      balance: '${state.gift?.giftWallet.amount ?? ''}',
+                      balance: state.gift?.giftWallet.amount ?? '',
                       type: WalletTypes.giftWallet,
                     ),
                     const Sizer(),

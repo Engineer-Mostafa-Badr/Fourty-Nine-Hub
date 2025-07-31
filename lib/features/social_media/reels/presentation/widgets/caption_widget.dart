@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 class CaptionWidget extends StatelessWidget {
   final String caption;

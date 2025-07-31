@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -14,7 +13,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
-import '../../../features/ads_feature/ads/presentation/pages/ads_view.dart';
 import '../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import '../../../features/notifications/presentation/widgets/icon_with_view_count.dart';

@@ -1,14 +1,10 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -27,12 +23,8 @@ import '../../../tinder/data/shared/shared.dart';
 import '../../data/models/new_reels_model.dart';
 import '../widgets/caption_widget.dart';
 import '../widgets/components/unified_widget_view.dart';
-import '../widgets/full_screen_widget.dart';
-import '../widgets/song_bottom_sheet.dart';
-import '../widgets/song_widget.dart';
 import '../widgets/tag_widget.dart';
 import '../widgets/user_section.dart';
-import 'audio_screen.dart';
 
 class ReelActions extends StatefulWidget {
   final Reel reel;

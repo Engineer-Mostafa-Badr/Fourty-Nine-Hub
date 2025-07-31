@@ -2,10 +2,6 @@ import 'package:fourtyninehub/features/social_media/instagram/data/models/commen
 import 'package:fourtyninehub/features/social_media/instagram/data/models/last_like_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 
-import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/user_tag_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 
 class InstagramPostModel extends InstagramPostEntity {
   InstagramPostModel({

@@ -14,6 +14,8 @@ import 'widgets/map_section.dart';
 
 // هتتغير انا عملها علشان التغير بتاع ال rate بس
 class RatingDriverScreen extends StatefulWidget {
+  const RatingDriverScreen({super.key});
+
   @override
   State<RatingDriverScreen> createState() => _RatingDriverScreenState();
 }

@@ -29,8 +29,28 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
-class CreateResturantView extends StatelessWidget {
+class CreateResturantView extends StatefulWidget {
   const CreateResturantView({super.key});
+
+  @override
+  State<CreateResturantView> createState() => _CreateResturantViewState();
+}
+
+class _CreateResturantViewState extends State<CreateResturantView> {
+  final FocusNode nameFocusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      nameFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    nameFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +92,9 @@ class CreateResturantView extends StatelessWidget {
                 Sizer(height: 20.h),
                 CreateDoctorOptionsCheckbox(),
                 Sizer(height: 20.h),
-                const CreateDoctorNameField(),
+                CreateDoctorNameField(
+                  focusNode: nameFocusNode,
+                ),
                 Sizer(height: 20.h),
                 const CreateDoctorProfilePhotoPicker(),
                 Sizer(height: 20.h),

@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_location_entity.dart';
 
 class RunningTripEntity {
   final String tripId;

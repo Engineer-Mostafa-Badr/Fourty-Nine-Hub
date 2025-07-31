@@ -20,7 +20,7 @@ class DeclinedAppBar extends StatelessWidget {
               ),
               const Text(
                 'Call declined',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
                 ),

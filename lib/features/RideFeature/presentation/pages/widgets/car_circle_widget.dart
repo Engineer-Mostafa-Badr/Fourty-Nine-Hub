@@ -4,11 +4,7 @@ import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/app_colors.dart';
 
 class CarContainer extends StatelessWidget {
   final String? image;

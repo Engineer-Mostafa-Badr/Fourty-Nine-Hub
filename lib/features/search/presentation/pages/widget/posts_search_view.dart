@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -10,12 +9,13 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
 class PostsSearchView extends StatefulWidget {
-  const PostsSearchView({Key? key}) : super(key: key);
+  const PostsSearchView({super.key});
 
   @override
   State<PostsSearchView> createState() => _PostsSearchViewState();
@@ -33,7 +33,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
     // _scrollController = ScrollController()..addListener(_onScroll);
   }
 
- /* void _onScroll() async {
+  /* void _onScroll() async {
     final max = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
     if (current >= max - _scrollThreshold &&
@@ -70,7 +70,10 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         }
         // Handle loading state
         if (state.status == SearchStates.loading) {
-          return const Center(child: CustomCircularProgressIndicator());
+          return const Center(
+            // child: CustomCircularProgressIndicator(),
+            child: CustomLoadingSearchWidget(),
+          );
         }
 
         // Handle success state
@@ -86,10 +89,10 @@ class _PostsSearchViewState extends State<PostsSearchView> {
           print("${posts.first.content}");
           print("${posts.first.name}");
           print(posts.first.user.firstName);
-          print("${posts.first.id}");
+          print(posts.first.id);
           return OlxPaginationWidget(
             itemsPerPage: 2,
-            loadPage: (page) async{
+            loadPage: (page) async {
               {
                 final prefs = await SharedPreferences.getInstance();
                 final filter = prefs.getString('filter') ?? '';
@@ -104,20 +107,20 @@ class _PostsSearchViewState extends State<PostsSearchView> {
             banners: bannersList,
             items: List.generate(
               posts.length,
-                  (index) {
-                    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
-                      listener: (context, state) {},
-                      builder: (context, state) {
-                        return NormalPostScreen(
-                          postEntity: posts[index],
-                        );
-                      },
-                    );
-
-                    return ListTile(
-                      title: Text(posts[index].user.firstName),
+              (index) {
+                return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return NormalPostScreen(
+                      postEntity: posts[index],
                     );
                   },
+                );
+
+                return ListTile(
+                  title: Text(posts[index].user.firstName),
+                );
+              },
             ),
           );
           /*return ListView.builder(

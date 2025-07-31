@@ -92,7 +92,7 @@ class _MediaViewState extends State<MediaView> {
                           child: ClipRRect(
                             child: CachedNetworkImage(
                               height: 300.h,
-                              imageUrl: sortedItem.images?[0] ?? '',
+                              imageUrl: sortedItem.images[0] ?? '',
                               fit: BoxFit.fill,
                               placeholder: (context, url) => const Center(
                                 child: CupertinoActivityIndicator(radius: 25),

@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
@@ -54,7 +54,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         builder: (context, state) {
       final controller = context.read<SubcategoriesCubit>();
       if (state.isLoadingAds) {
-        return const CustomLoading();
+        return const CustomLoadingSearchWidget();
       }
       if (controller.initalSearchAds) {
         return Column(
@@ -109,7 +109,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         items: List.generate(
           controller.searchAdsList.length,
           (i) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: MyAdCard(
               item: controller.searchAdsList[i],
               showSubCategory: true,
@@ -128,7 +128,6 @@ class _AdsSearchViewState extends State<AdsSearchView> {
             ),
           ),
         ),
-
       );
       /*return ListView.separated(
         padding: const EdgeInsets.all(16),

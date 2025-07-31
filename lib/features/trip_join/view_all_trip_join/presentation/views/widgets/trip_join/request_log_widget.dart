@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
@@ -21,7 +22,6 @@ import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../Modified_widgets/cards/available_trips_card.dart';
 import '../../Modified_widgets/cards/trip_contacts_buttons.dart';
 import '../../Modified_widgets/trip_join_card.dart';
-import '../../Modified_widgets/trip_join_card_bottom_section.dart';
 import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
 import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 
@@ -113,7 +113,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
         BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
         if(context.read<ViewAllTripJoinCubit>().isLoadingRequestTripJoin==true){
-          return const Center(child: CircularProgressIndicator(),);
+          return const Center(child: CustomLoadingSearchWidget(),);
         }
 
         if(context.read<ViewAllTripJoinCubit>().requestTripJoinData.isEmpty){
@@ -180,12 +180,12 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         ),
                         const Divider(),
                         TripCardInfoWidget(
-                            price: "${formatPrice(data.pricePerSeat?.round() ?? 10,context)}",
+                            price: formatPrice(data.pricePerSeat?.round() ?? 10,context),
                             title: data.firstName ?? "",
                             icon: data.gender == "male"
                         ? Assets.maleUser
                             : Assets.femaleUser,
-                            seats: "${LocaleKeys.eachSeat.localize}"
+                            seats: LocaleKeys.eachSeat.localize
                             // icon:   Assets.maleUser,
                             //
                             // // : Assets.femaleUser,
@@ -376,7 +376,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
               RichText(
                   text: TextSpan(children: [
                     TextSpan(
-                        text: "${price}  ",
+                        text: "$price  ",
                         style: Styles.headerText(
                             color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.bold)),
@@ -475,8 +475,6 @@ String formatTimestamp1(dynamic time, BuildContext context) {
     print("Unsupported time type");
     return "-";
   }
-
-  if (date == null) return "-";
 
   final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
   final ampm = date.hour >= 12 ? "PM" : "AM";

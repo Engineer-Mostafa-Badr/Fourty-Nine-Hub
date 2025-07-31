@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/co
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reels_specific_user_entity.dart';
@@ -24,10 +23,8 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/li
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/unfollow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../usecases/get_all_followers_use_case.dart';

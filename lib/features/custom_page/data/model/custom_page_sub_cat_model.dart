@@ -1,6 +1,4 @@
-import 'package:fourtyninehub/features/custom_page/domain/entity/favourite_categ_entity.dart';
 
-import '../../domain/entity/custom_page_categories_entity.dart';
 import '../../domain/entity/custom_page_sub_categories_entity.dart';
 
 class CustomPageSubCategoriesModel extends CustomPageSubCategoriesEntity {

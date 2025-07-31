@@ -14,19 +14,14 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
 import '../cubit/create_company_ad_cubit.dart';
 

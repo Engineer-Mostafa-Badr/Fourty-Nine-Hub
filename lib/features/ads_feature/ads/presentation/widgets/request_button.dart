@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -16,7 +15,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 
 class RequestButton extends StatelessWidget {
   const RequestButton({
@@ -291,8 +289,8 @@ class RequestButton extends StatelessWidget {
   }
 }
 
-class RequestNumberBottomSheet extends StatelessWidget {
-  RequestNumberBottomSheet({
+class RequestNumberBottomSheet extends StatefulWidget {
+  const RequestNumberBottomSheet({
     super.key,
     // required this.controller,
     // required this.adId,
@@ -310,11 +308,36 @@ class RequestNumberBottomSheet extends StatelessWidget {
   final void Function(String)? onChanged;
   final TextEditingController textController;
   final bool isLoading;
+
+  @override
+  State<RequestNumberBottomSheet> createState() =>
+      _RequestNumberBottomSheetState();
+}
+
+class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
   final RegExp _phonePattern =
       RegExp(r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'
           r'\d{10}|'
           r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'
           r'\+\d{10,}');
+
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.textController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +364,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
 
             InkWell(
               onTap: () {
+                focusNode.unfocus();
                 context.pop();
               },
               child: Container(
@@ -382,10 +406,11 @@ class RequestNumberBottomSheet extends StatelessWidget {
             Container(
               constraints: BoxConstraints(maxHeight: 180.h),
               child: Form(
-                key: formKey,
+                key: widget.formKey,
                 child: PickUpTextFormField(
-                  controller: textController,
-                  onChanged: onChanged,
+                  controller: widget.textController,
+                  focusNode: focusNode,
+                  onChanged: widget.onChanged,
                   fillColor: AppColors.getFillColor(context),
                   textColor: AppColors.getTextColor(context),
                   hintText: LocaleKeys.phoneNumber.localize,
@@ -408,10 +433,10 @@ class RequestNumberBottomSheet extends StatelessWidget {
             const SizedBox(
               height: 24,
             ),
-            isLoading
+            widget.isLoading
                 ? const CustomLoading()
                 : InkWell(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: Container(
                       // width: 100,
                       // height: 40,

@@ -4,16 +4,11 @@ import '../../domain/entities/remove_response_allowed_entity.dart';
 
 class RemoveDataModel extends RemoveDataEntity {
   RemoveDataModel({
-    String? feature,
-    String? privacyOption,
-    List<String>? allowedUsers,
-    List<String>? removedUsers,
-  }) : super(
-    feature: feature,
-    privacyOption: privacyOption,
-    allowedUsers: allowedUsers,
-    removedUsers: removedUsers,
-  );
+    super.feature,
+    super.privacyOption,
+    super.allowedUsers,
+    super.removedUsers,
+  });
 
   factory RemoveDataModel.fromJson(Map<String, dynamic> json) {
     return RemoveDataModel(

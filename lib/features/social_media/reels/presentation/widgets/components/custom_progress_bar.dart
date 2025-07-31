@@ -125,7 +125,7 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
                       (thumbSize / 2) +
                       2; // Adjust for margin
 
-                  return Container(
+                  return SizedBox(
                     height: 10,
                     // margin: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Stack(

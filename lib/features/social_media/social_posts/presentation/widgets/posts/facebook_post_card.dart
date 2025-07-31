@@ -8,22 +8,13 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_google_maps.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
@@ -34,7 +25,6 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
@@ -1369,7 +1359,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               width: 10,
             ),
           ],
-          if (post.users != null && post.users!.isNotEmpty)
+          if (post.users.isNotEmpty)
             Row(
               children: [
                 Label(
@@ -1379,27 +1369,27 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 GestureDetector(
                   onTap: () {
                     context.push(Routes.OTHERSACCOUNT,
-                        extra: post.users![0].id);
+                        extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                    "${post.users![0].firstName} ${post.users![0].lastName} ",
+                    "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style: Styles.smallText(
                         decoration: TextDecoration.underline,
                         color: AppColors.GREY_NORMAL_COLOR),
                   ),
                 ),
-                if (post.users!.length > 1)
+                if (post.users.length > 1)
                   GestureDetector(
                       onTap: () {
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                              users: post.users!,
+                              users: post.users,
                             ));
                       },
                       child: Label(
-                        text: '+${post.users!.length - 1}',
+                        text: '+${post.users.length - 1}',
                         style: Styles.mediumText(
                             color: AppColors.GREY_NORMAL_COLOR),
                       ))

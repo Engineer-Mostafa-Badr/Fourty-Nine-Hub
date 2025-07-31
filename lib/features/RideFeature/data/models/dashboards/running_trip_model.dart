@@ -1,5 +1,4 @@
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/trip_location_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 
 class RunningTripModel extends RunningTripEntity {

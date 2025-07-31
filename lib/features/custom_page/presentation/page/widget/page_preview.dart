@@ -45,7 +45,7 @@ class PagePreview extends StatefulWidget {
 class _PagePreviewState extends State<PagePreview>
     with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _showButtons = true;
 
   @override

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,10 +12,9 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widg
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../../res/style/app_colors.dart';
 
 class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
-  const CreateRestaurantLicensePhotoPicker({Key? key}) : super(key: key);
+  const CreateRestaurantLicensePhotoPicker({super.key});
 
   @override
   Widget build(BuildContext context) {

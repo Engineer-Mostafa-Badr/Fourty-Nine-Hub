@@ -4,10 +4,12 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class SearchBarWidget extends StatelessWidget {
-  const SearchBarWidget({super.key, required this.onChanged});
+  const SearchBarWidget(
+      {super.key, required this.onChanged, required this.focusNode});
 
   final void Function(String)? onChanged;
 
+  final FocusNode focusNode;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,6 +37,7 @@ class SearchBarWidget extends StatelessWidget {
           ),
         ),
         onChanged: onChanged,
+        focusNode: focusNode,
       ),
     );
   }

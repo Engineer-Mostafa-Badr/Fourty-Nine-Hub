@@ -9,7 +9,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/format_numbers.dart';
-import '../../../../res/assets/assets.dart';
 import 'widgets/bottom_button_ride_status_widget.dart';
 import 'widgets/driver_header_widget.dart';
 import 'widgets/feedback_widget.dart';
@@ -151,7 +150,7 @@ class ActionButtonsWidget extends StatelessWidget {
     required this.onContactDriver,
     this.is_show_message = false,
     required this.onSafety,
-    this.onMessage = null,
+    this.onMessage,
   });
 
   @override

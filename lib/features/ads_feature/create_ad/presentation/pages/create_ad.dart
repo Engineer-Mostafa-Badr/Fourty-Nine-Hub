@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -48,6 +46,7 @@ class CreateAdView extends StatefulWidget {
 }
 
 class _CreateAdViewState extends State<CreateAdView> {
+  final FocusNode _focusNode = FocusNode();
   @override
   void initState() {
     context.read<CreateAdCubit>().loadData(
@@ -55,7 +54,16 @@ class _CreateAdViewState extends State<CreateAdView> {
             ? widget.categorization.mainCategory.id
             : widget.categorization.subCategory.id,
         fromMarriage: widget.categorization.fromMarriage ?? false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   final RegExp _phonePattern = RegExp(
@@ -256,11 +264,14 @@ class _CreateAdViewState extends State<CreateAdView> {
                             return LocaleKeys.required.localize;
                           }
                           if (_phonePattern.hasMatch(value)) {
-                            return context.isArabic?'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود':'Phone numbers are not allowed. Please remove any phone number pattern.';
+                            return context.isArabic
+                                ? 'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود'
+                                : 'Phone numbers are not allowed. Please remove any phone number pattern.';
                           }
 
                           return null;
                         },
+                        focusNode: _focusNode,
                       ),
                       // TextFormField(
                       //   maxLines: null,
@@ -467,7 +478,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                         height: 10,
                       ),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CustomCircularProgressIndicator())
+                          ? const Center(
+                              child: CustomCircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -506,7 +518,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                                             style: Styles.mediumText(
                                               fontSize: 32,
                                               height: 1.60,
-                                              color: AppColors.getTextColor(context),
+                                              color: AppColors.getTextColor(
+                                                  context),
                                             ),
                                           ),
                                         );
@@ -625,7 +638,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                           // },
                           // controller: controller,
                         ),
-                       /* CreateAdTextFormField(
+                        /* CreateAdTextFormField(
                           onChanged: (v) => controller.price = v,
                           hintText: state.isPrice == true
                               ? LocaleKeys.price.localize
@@ -672,6 +685,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           final property = state.adProperties![index];
+
                           return AdDynamicInputWidget(
                             property: property,
                             onChanged: (SelectionEntity v) =>
@@ -679,6 +693,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                             onTextChanged: (String v) =>
                                 controller.onTextChanged(v: v, index: index),
                             selectedProp: '',
+                            textInputAction: property.nameEn == 'family name' ||
+                                    property.nameAr == 'اسم العائلة'
+                                ? TextInputAction.done
+                                : TextInputAction.next,
                           );
                         },
                         // separatorBuilder: (context, index) => const Sizer(),
@@ -689,7 +707,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                         height: 16,
                       ),
                       state.isLoadingCreateAd
-                          ? const Center(child: CustomCircularProgressIndicator())
+                          ? const Center(
+                              child: CustomCircularProgressIndicator())
                           : Row(
                               children: [
                                 Expanded(

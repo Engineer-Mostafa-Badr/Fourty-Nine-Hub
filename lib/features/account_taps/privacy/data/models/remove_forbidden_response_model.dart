@@ -5,16 +5,11 @@ import '../../domain/entities/remove_response_forbidden_entity.dart';
 
 class RemoveForbiddenDataModel extends RemoveForbiddenDataEntity {
   RemoveForbiddenDataModel({
-    String? feature,
-    String? privacyOption,
-    List<String>? forbiddenUsers,
-    List<String>? removedUsers,
-  }) : super(
-    feature: feature,
-    privacyOption: privacyOption,
-    forbiddenUsers: forbiddenUsers,
-    removedUsers: removedUsers,
-  );
+    super.feature,
+    super.privacyOption,
+    super.forbiddenUsers,
+    super.removedUsers,
+  });
 
   factory RemoveForbiddenDataModel.fromJson(Map<String, dynamic> json) {
     return RemoveForbiddenDataModel(

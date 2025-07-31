@@ -4,15 +4,9 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/display_trip_join_card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/show_bottom_sheet.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/submit_bottom_sheet.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
 import 'available_pickme_screen.dart';
 
 class AllPickMeView extends StatefulWidget {
@@ -69,7 +63,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
           Sizer(
             height: 10.h,
           ),
-          Expanded(child:_buildCardForCategory()),
+          Expanded(child: _buildCardForCategory()),
           // Expanded(
           //   child: ListView.builder(
           //       physics: const NeverScrollableScrollPhysics(),
@@ -158,9 +152,12 @@ class _AllPickMeViewState extends State<AllPickMeView>
       ],
     );
   }
-  Widget _buildCardForCategory( ) {
+
+  Widget _buildCardForCategory() {
     switch (_displayedCategory) {
       case LocaleKeys.availableTrips:
+        //TODO: Dont forget to add CustomLoadingSearchWidget for loading state in every DisplayTripJoinCard
+        // اياك تنسى 🙂🔪
         return AvailablePickMeCard();
       case LocaleKeys.requestLog:
         return SizedBox();
@@ -171,6 +168,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
         return const SizedBox.shrink();
     }
   }
+
   _buildStatusCategories() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,11 +215,11 @@ class _AllPickMeViewState extends State<AllPickMeView>
       // },
       onTap: () {
         tabController.animateTo(index);
-        if(index==0){
+        if (index == 0) {
           // context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
           print("Fiiiiiiiiiirst");
         }
-        if(index == 1){
+        if (index == 1) {
           print("Seeeeeecond");
 
           // context.read<ViewAllTripJoinCubit>().loadInitialRequestTripJoin();

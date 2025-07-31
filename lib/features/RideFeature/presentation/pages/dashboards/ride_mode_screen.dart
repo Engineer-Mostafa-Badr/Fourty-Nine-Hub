@@ -1,19 +1,14 @@
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_dashboard_non_socket_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/available_ride_trip_item.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_arrival_timer_card.dart';
@@ -23,7 +18,6 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_driver_rate_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_go_to_client_sheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/build_safety_sheet.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_home.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket_loading.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
@@ -37,30 +31,22 @@ import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:latlong2/latlong.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
-import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../loading_dashboard/accepted_non_socket_loading.dart';
 import '../loading_dashboard/available_loading_widget.dart';
 import '../loading_dashboard/past_loading_widget.dart';
-import '../ride_details_screen.dart';
 import '../widgets/accepted_non_socket_widget.dart';
-import '../widgets/map_section.dart';
 import '../widgets/past_trip_non_socket_widget.dart';
 import 'widgets/not_ready_available_trips_widget.dart';
 import 'widgets/past_trips_widget.dart';
 import 'widgets/settings_widget.dart';
-import 'widgets/truk_bus_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RideModeParams {

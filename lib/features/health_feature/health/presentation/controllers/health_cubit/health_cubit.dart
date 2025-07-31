@@ -60,7 +60,9 @@ class HealthCubit extends Cubit<HealthState> {
       this._isDoctorApprovalUsecase,
       this._toggleFavoriteCategoryUseCase,
       this._deleteFavoriteCategoryUseCase,
-      this._cancelAppointmentUseCase, this._getBookingUseCase, this._getMostBookingUseCase)
+      this._cancelAppointmentUseCase,
+      this._getBookingUseCase,
+      this._getMostBookingUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -278,7 +280,6 @@ class HealthCubit extends Cubit<HealthState> {
     return result;
   }
 
-
   int currentPage = 1;
   int historyPage = 1;
   bool hasMoreCurrent = true;
@@ -328,7 +329,7 @@ class HealthCubit extends Cubit<HealthState> {
     );
 
     response.fold(
-          (failure) {
+      (failure) {
         isLoading = false;
         emit(state.copyWith(
           failure: failure,
@@ -336,7 +337,7 @@ class HealthCubit extends Cubit<HealthState> {
           status: HealthStates.error,
         ));
       },
-          (data) {
+      (data) {
         if (isCurrent) {
           currentBookings.addAll(data);
           currentPage++;
@@ -368,11 +369,11 @@ class HealthCubit extends Cubit<HealthState> {
 
   int mostBookingPage = 1;
   bool hasMoreMost = true;
- bool isLoadingMoreMost = true;
-
+  bool isLoadingMoreMost = true;
 
   void loadInitialMostBooking() async {
     emit(state.copyWith(status: HealthStates.loading));
+
     currentBookings.clear();
     mostBookingPage = 1;
     hasMoreMost = true;
@@ -381,7 +382,7 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> getMostBookings() async {
-    if (isLoading) return;  // Prevent concurrent requests if needed
+    if (isLoading) return; // Prevent concurrent requests if needed
 
     isLoading = true;
     emit(state.copyWith(isLoadingMoreMostBooking: true));
@@ -391,7 +392,7 @@ class HealthCubit extends Cubit<HealthState> {
     );
 
     response.fold(
-          (failure) {
+      (failure) {
         isLoading = false;
         emit(state.copyWith(
           failure: failure,
@@ -399,8 +400,8 @@ class HealthCubit extends Cubit<HealthState> {
           status: HealthStates.error,
         ));
       },
-          (data) {
-            mostBooking.addAll(data);
+      (data) {
+        mostBooking.addAll(data);
 
         if ((data.length ?? 0) < 5) {
           hasMoreMost = false;
@@ -409,9 +410,9 @@ class HealthCubit extends Cubit<HealthState> {
           mostBookingPage++;
         }
 
-            isLoadingMoreMost = false;
-        emit(state.copyWith(
-            mostBooking: data, isLoadingMoreMostBooking: false));
+        isLoadingMoreMost = false;
+        emit(
+            state.copyWith(mostBooking: data, isLoadingMoreMostBooking: false));
       },
       //     (data) {
       //   mostBooking.addAll(data);  // Add new data to the list
@@ -427,7 +428,6 @@ class HealthCubit extends Cubit<HealthState> {
       // },
     );
   }
-
 
   // Future<void> getMostBookings() async {
   //   isLoading = true;

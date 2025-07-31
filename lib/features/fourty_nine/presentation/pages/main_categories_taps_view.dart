@@ -58,13 +58,16 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   String labelName = "";
   bool isFloatingButtonVisible = true;
   late Debouncer _debounce;
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     _debounce = Debouncer();
     // context.read<MainCategoriesTapsCubit>().selectMainCategory(0);
     super.initState();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
     _tabController = TabController(
         length: context.read<MainCategoriesTapsCubit>().mainCategories.length,
         vsync: this);
@@ -104,6 +107,14 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
             .mainCategories[0]
             .nameEn
             .toString();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   // Scroll to the selected tab and make it the first tab in view
@@ -508,6 +519,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               );
                         });
                       },
+                      focusNode: focusNode,
                     ),
                   if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
                     //kslkfjslkfjslkfsldfkjlsfld
@@ -786,6 +798,7 @@ class _MainCategoriesGridViewCustomPageState
   @override
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
+    final focusNode = FocusNode();
     return BlocProvider(
       create: (context) => serviceLocator<SubcategoriesCubit>(),
       child: BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
@@ -1017,6 +1030,7 @@ class _MainCategoriesGridViewCustomPageState
                               );
                         });
                       },
+                      focusNode: focusNode,
                     ),
                   if (subCategoriesCubit.isFavouriteAdsOpen)
                     Expanded(

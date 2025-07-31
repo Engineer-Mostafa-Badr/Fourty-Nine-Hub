@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/map_section.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 class CompleteRideScreen extends StatelessWidget {
   const CompleteRideScreen({super.key});
@@ -135,7 +132,7 @@ class CompleteRideScreen extends StatelessWidget {
 }
 class CustomRideButton extends StatelessWidget {
   final String text;
-  const CustomRideButton({required this.text});
+  const CustomRideButton({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

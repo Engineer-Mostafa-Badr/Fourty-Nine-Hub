@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/instagram_user_follow_widget.dart';
 
 class InstagramBlockListBody extends StatelessWidget {
   const InstagramBlockListBody({super.key});

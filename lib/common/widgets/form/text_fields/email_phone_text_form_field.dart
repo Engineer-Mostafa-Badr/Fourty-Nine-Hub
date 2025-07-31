@@ -11,7 +11,7 @@ class EmailOrPhoneTextFormField extends MainTextFormField {
     super.nextFocusNode,
     required super.currentController,
     required final String hint,
-    super.keyboardType,
+    super.keyboardType = TextInputType.emailAddress,
     super.contentPadding,
     super.style,
     super.onTap,

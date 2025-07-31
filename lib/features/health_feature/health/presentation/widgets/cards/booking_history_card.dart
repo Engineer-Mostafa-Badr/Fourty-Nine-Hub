@@ -7,7 +7,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
@@ -15,11 +14,15 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
+
 class BookingHistoryScreen extends StatefulWidget {
   const BookingHistoryScreen({super.key, this.onClose});
+
   final VoidCallback? onClose;
 
   @override
@@ -27,6 +30,7 @@ class BookingHistoryScreen extends StatefulWidget {
 }
 
 class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
+/*
   late ScrollController _scrollController;
 
   @override
@@ -48,6 +52,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
     _scrollController.dispose();
     super.dispose();
   }
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -55,44 +60,94 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
       builder: (context, state) {
         final cubit = context.read<HealthCubit>();
 
-        if (state.status == HealthStates.loading && cubit.historyBookings.isEmpty) {
+        if (state.status == HealthStates.loading &&
+            cubit.historyBookings.isEmpty) {
           return SizedBox(
-              height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
+              height: MediaQuery.of(context).size.height * .6,
+              child: Center(child: CustomLoadingSearchWidget()));
         }
-
+        if (cubit.historyBookings.isEmpty) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * .6,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomEmptyWidget(
+                  label: context.isArabic
+                      ? 'لا يوجد حجوزات سابقة'
+                      : 'No booking history',
+                ),
+              ],
+            ),
+          );
+        }
+        if (state.status == HealthStates.loading &&
+            cubit.historyBookings.isEmpty) {
+          // return SizedBox(
+          //     height:MediaQuery.of(context).size.height*.6,child: Center(child: CustomLoading()));
+          return const CustomLoadingSearchWidget();
+        }
         return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.67,
+          child: OlxPaginationWidget(
+            itemsPerPage: 2,
+            loadPage: (page) =>
+                context.read<HealthCubit>().getBookings('history'),
+            banners: bannersList,
+            items: List.generate(
+              cubit.historyBookings.length,
+              (index) {
+                final booking = cubit.historyBookings[index];
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: BookingHistoryCard(
+                    title:
+                        '${booking.doctor?.firstName ?? ''} ${booking.doctor?.lastName ?? ''}',
+                    isSubscribed: booking.doctor?.isPremium ?? false,
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+        /*return SizedBox(
           height: MediaQuery.of(context).size.height * 0.67,
           child: Column(
             children: [
               Expanded(
                 child: cubit.historyBookings.isEmpty
                     ? Center(
-                  child: CustomEmptyWidget(label: context.isArabic ? 'لا يوجد حجوزات سابقة' : 'No booking history',),
-                )
+                        child: CustomEmptyWidget(
+                          label: context.isArabic
+                              ? 'لا يوجد حجوزات سابقة'
+                              : 'No booking history',
+                        ),
+                      )
                     : ListView.separated(
-                  controller: _scrollController,
-                  itemCount: cubit.historyBookings.length,
-                  itemBuilder: (context, index) {
-                    final booking = cubit.historyBookings[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: BookingHistoryCard(
-                        title: '${booking.doctor?.firstName ?? ''} ${booking.doctor?.lastName ?? ''}',
-                        isSubscribed: booking.doctor?.isPremium ?? false,
+                        controller: _scrollController,
+                        itemCount: cubit.historyBookings.length,
+                        itemBuilder: (context, index) {
+                          final booking = cubit.historyBookings[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: BookingHistoryCard(
+                              title:
+                                  '${booking.doctor?.firstName ?? ''} ${booking.doctor?.lastName ?? ''}',
+                              isSubscribed: booking.doctor?.isPremium ?? false,
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Sizer(),
                       ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(),
-                ),
               ),
               if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CustomCircularProgressIndicator(),
+                  child: CustomLoadingSearchWidget(),
                 ),
             ],
           ),
-        );
+        );*/
       },
     );
   }
@@ -146,8 +201,11 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                       ),
                       const Sizer(),
                       Label(
-                        text: context.isArabic?'مدينة نصر ،القاهرة':'Nasr City, Cairo',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
+                        text: context.isArabic
+                            ? 'مدينة نصر ،القاهرة'
+                            : 'Nasr City, Cairo',
+                        style: Styles.mediumText(
+                            fontWeight: FontWeight.w500, fontSize: 32),
                       )
                     ],
                   ),
@@ -164,29 +222,36 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                       Expanded(
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
-                          style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.w500, fontSize: 32),
                         ),
                       ),
                       Label(
-                        text: '${100.toLocalizedArabic(context)} ${context.isArabic?'ج.م':LocaleKeys.egp.localize}',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
+                        text:
+                            '${100.toLocalizedArabic(context)} ${context.isArabic ? 'ج.م' : LocaleKeys.egp.localize}',
+                        style: Styles.mediumText(
+                            fontWeight: FontWeight.w500, fontSize: 32),
                       )
                     ],
                   ),
                   const Sizer(),
-                  if(widget.isSubscribed)
+                  if (widget.isSubscribed)
                     Row(
-                    children: [
-                      Icon(Icons.watch_later_outlined,
-                          color: AppColors.getButtonPrimaryWhiteColor(context), size: 48.h),
-                      const Sizer(),
-                      Label(
-                        text:
-                            '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: 10 ${context.isArabic ? 'دقيقة' : 'min'}'.toArabicNumbers(context),
-                        style: Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32),
-                      )
-                    ],
-                  ),
+                      children: [
+                        Icon(Icons.watch_later_outlined,
+                            color:
+                                AppColors.getButtonPrimaryWhiteColor(context),
+                            size: 48.h),
+                        const Sizer(),
+                        Label(
+                          text:
+                              '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: 10 ${context.isArabic ? 'دقيقة' : 'min'}'
+                                  .toArabicNumbers(context),
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.w500, fontSize: 32),
+                        )
+                      ],
+                    ),
                   const Sizer(),
                   HealthCardButtonsSection(
                     isButton: false,
@@ -243,7 +308,9 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                         child: Row(children: [
                           SvgPicture.asset(Assets.star2, width: 8, height: 8),
                           const Sizer(width: 4),
-                          Label(text: '4.4'.toArabicNumbers(context), style: Styles.smallText(color: Colors.black))
+                          Label(
+                              text: '4.4'.toArabicNumbers(context),
+                              style: Styles.smallText(color: Colors.black))
                         ]))))
           ],
         ),
@@ -259,14 +326,14 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
               ),
               if (widget.isSubscribed)
                 Label(
-                  text:context.isArabic?'انف/أذن': 'Ear/Nose',
+                  text: context.isArabic ? 'انف/أذن' : 'Ear/Nose',
                   style: Styles.mediumText(),
                 )
             ],
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.h,vertical: 10.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 10.h),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
@@ -276,9 +343,8 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
           child: Label(
             text: LocaleKeys.expired.localize,
             style: Styles.mediumText(
-              color: AppColors.getRedColor(context),
-              fontWeight: FontWeight.w600
-            ),
+                color: AppColors.getRedColor(context),
+                fontWeight: FontWeight.w600),
           ),
         )
       ],

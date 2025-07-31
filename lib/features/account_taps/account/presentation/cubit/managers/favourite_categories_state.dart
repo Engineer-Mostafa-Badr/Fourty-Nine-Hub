@@ -3,11 +3,11 @@ part of 'favourite_categories_cubit.dart';
 class FavouriteCategoryState {
   final StateStatus status;
   final Failure? failure;
-  final List<MainCategoryEntity>? data;
+  final List<FavouriteCategoryModel>? data;
   const FavouriteCategoryState(
       {this.status = StateStatus.loading, this.failure, this.data});
   FavouriteCategoryState copyWith(
-      {StateStatus? status, Failure? failure, List<MainCategoryEntity>? data}) {
+      {StateStatus? status, Failure? failure, List<FavouriteCategoryModel>? data}) {
     return FavouriteCategoryState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

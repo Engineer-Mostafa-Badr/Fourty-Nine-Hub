@@ -60,14 +60,10 @@ class MostBookingModel extends MostBookingEntity {
 
 class AddressModel extends AddressEntity {
   AddressModel({
-    MostGovernorateEntity? governorate,
-    MostCityEntity? city,
-    String? address,
-  }) : super(
-          governorate: governorate,
-          city: city,
-          address: address,
-        );
+    super.governorate,
+    super.city,
+    super.address,
+  });
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
@@ -82,16 +78,11 @@ class AddressModel extends AddressEntity {
 
 class MostGovernorateModel extends MostGovernorateEntity {
   MostGovernorateModel({
-    String? id,
-    int? provinceId,
-    String? governorateNameAr,
-    String? governorateNameEn,
-  }) : super(
-          id: id,
-          provinceId: provinceId,
-          governorateNameAr: governorateNameAr,
-          governorateNameEn: governorateNameEn,
-        );
+    super.id,
+    super.provinceId,
+    super.governorateNameAr,
+    super.governorateNameEn,
+  });
 
   factory MostGovernorateModel.fromJson(Map<String, dynamic> json) {
     return MostGovernorateModel(
@@ -105,16 +96,11 @@ class MostGovernorateModel extends MostGovernorateEntity {
 
 class MostCityModel extends MostCityEntity {
   MostCityModel({
-    String? id,
-    int? governorateId,
-    String? cityNameAr,
-    String? cityNameEn,
-  }) : super(
-          id: id,
-          governorateId: governorateId,
-          cityNameAr: cityNameAr,
-          cityNameEn: cityNameEn,
-        );
+    super.id,
+    super.governorateId,
+    super.cityNameAr,
+    super.cityNameEn,
+  });
 
   factory MostCityModel.fromJson(Map<String, dynamic> json) {
     return MostCityModel(
@@ -128,14 +114,10 @@ class MostCityModel extends MostCityEntity {
 
 class MostSubCategoryModel extends MostSubCategoryEntity {
   MostSubCategoryModel({
-    String? id,
-    String? nameAr,
-    String? nameEn,
-  }) : super(
-          id: id,
-          nameAr: nameAr,
-          nameEn: nameEn,
-        );
+    super.id,
+    super.nameAr,
+    super.nameEn,
+  });
 
   factory MostSubCategoryModel.fromJson(Map<String, dynamic> json) {
     return MostSubCategoryModel(

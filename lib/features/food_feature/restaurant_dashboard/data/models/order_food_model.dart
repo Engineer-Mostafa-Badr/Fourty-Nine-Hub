@@ -4,10 +4,10 @@ import '../../domain/entity/order_food_entity.dart';
 
 class GetFoodRequestModel extends GetFoodRequestEntity {
   GetFoodRequestModel({
-    bool? status,
-    String? message,
-    GetFoodRequestDataEntity? data,
-  }) : super(status: status, message: message, data: data);
+    super.status,
+    super.message,
+    super.data,
+  });
 
   factory GetFoodRequestModel.fromJson(Map<String, dynamic> json) {
     return GetFoodRequestModel(
@@ -22,14 +22,10 @@ class GetFoodRequestModel extends GetFoodRequestEntity {
 
 class GetFoodRequestDataModel extends GetFoodRequestDataEntity {
   GetFoodRequestDataModel({
-    List<OrderEntity>? orders,
-    RestaurantSubscriptionTypeEntity? restaurantSubscriptionType,
-    String? subcategoryId,
-  }) : super(
-    orders: orders,
-    restaurantSubscriptionType: restaurantSubscriptionType,
-    subcategoryId: subcategoryId,
-  );
+    super.orders,
+    super.restaurantSubscriptionType,
+    super.subcategoryId,
+  });
 
   factory GetFoodRequestDataModel.fromJson(Map<String, dynamic> json) {
     return GetFoodRequestDataModel(
@@ -49,8 +45,7 @@ class GetFoodRequestDataModel extends GetFoodRequestDataEntity {
 }
 
 class RestaurantSubscriptionTypeModel extends RestaurantSubscriptionTypeEntity {
-  RestaurantSubscriptionTypeModel({String? ar, String? en})
-      : super(ar: ar, en: en);
+  RestaurantSubscriptionTypeModel({super.ar, super.en});
 
   factory RestaurantSubscriptionTypeModel.fromJson(Map<String, dynamic> json) {
     return RestaurantSubscriptionTypeModel(
@@ -62,38 +57,22 @@ class RestaurantSubscriptionTypeModel extends RestaurantSubscriptionTypeEntity {
 
 class OrderModel extends OrderEntity {
   OrderModel({
-    String? id,
-    UserIdEntity? userId,
-    String? restaurantId,
-    List<OrderItemEntity>? orders,
-    int? total,
-    bool? isPremium,
-    String? address,
-    String? phone,
-    String? createdAt,
-    String? updatedAt,
-    bool? completed,
-    int? userRate,
-    String? currencyEn,
-    String? currencyAr,
-    String? openCallAndChat,
-  }) : super(
-    id: id,
-    userId: userId,
-    restaurantId: restaurantId,
-    orders: orders,
-    total: total,
-    isPremium: isPremium,
-    address: address,
-    phone: phone,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-    completed: completed,
-    userRate: userRate,
-    currencyEn: currencyEn,
-    currencyAr: currencyAr,
-    openCallAndChat: openCallAndChat,
-  );
+    super.id,
+    super.userId,
+    super.restaurantId,
+    super.orders,
+    super.total,
+    super.isPremium,
+    super.address,
+    super.phone,
+    super.createdAt,
+    super.updatedAt,
+    super.completed,
+    super.userRate,
+    super.currencyEn,
+    super.currencyAr,
+    super.openCallAndChat,
+  });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
@@ -124,16 +103,11 @@ class OrderModel extends OrderEntity {
 
 class UserIdModel extends UserIdEntity {
   UserIdModel({
-    String? id,
-    String? firstName,
-    String? gender,
-    UserProfileEntity? userProfile,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    gender: gender,
-    userProfile: userProfile,
-  );
+    super.id,
+    super.firstName,
+    super.gender,
+    super.userProfile,
+  });
 
   factory UserIdModel.fromJson(Map<String, dynamic> json) {
     return UserIdModel(
@@ -149,14 +123,10 @@ class UserIdModel extends UserIdEntity {
 
 class UserProfileModel extends UserProfileEntity {
   UserProfileModel({
-    String? id,
-    String? userId,
-    PictureEntity? profilePictureKey,
-  }) : super(
-    id: id,
-    userId: userId,
-    profilePictureKey: profilePictureKey,
-  );
+    super.id,
+    super.userId,
+    super.profilePictureKey,
+  });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
@@ -171,9 +141,9 @@ class UserProfileModel extends UserProfileEntity {
 
 class PictureModel extends PictureEntity {
   PictureModel({
-    String? id,
-    String? mediaKey,
-  }) : super(id: id, mediaKey: mediaKey);
+    super.id,
+    super.mediaKey,
+  });
 
   factory PictureModel.fromJson(Map<String, dynamic> json) {
     return PictureModel(
@@ -185,18 +155,12 @@ class PictureModel extends PictureEntity {
 
 class OrderItemModel extends OrderItemEntity {
   OrderItemModel({
-    FoodIdEntity? foodId,
-    int? quantity,
-    int? price,
-    int? totalPriceOfItem,
-    String? id,
-  }) : super(
-    foodId: foodId,
-    quantity: quantity,
-    price: price,
-    totalPriceOfItem: totalPriceOfItem,
-    id: id,
-  );
+    super.foodId,
+    super.quantity,
+    super.price,
+    super.totalPriceOfItem,
+    super.id,
+  });
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) {
     return OrderItemModel(
@@ -213,10 +177,10 @@ class OrderItemModel extends OrderItemEntity {
 
 class FoodIdModel extends FoodIdEntity {
   FoodIdModel({
-    String? id,
-    String? foodName,
-    PictureEntity? picture,
-  }) : super(id: id, foodName: foodName, picture: picture);
+    super.id,
+    super.foodName,
+    super.picture,
+  });
 
   factory FoodIdModel.fromJson(Map<String, dynamic> json) {
     return FoodIdModel(

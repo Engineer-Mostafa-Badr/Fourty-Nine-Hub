@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/new_phone_number_text_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
@@ -20,10 +15,23 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 
-class HealthEmergencyView extends StatelessWidget {
+class HealthEmergencyView extends StatefulWidget {
   const HealthEmergencyView({super.key});
+
+  @override
+  State<HealthEmergencyView> createState() => _HealthEmergencyViewState();
+}
+
+class _HealthEmergencyViewState extends State<HealthEmergencyView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final emergencyCubit = context.read<HealthEmergencyCubit>();
+      emergencyCubit.firstNameFocusNode.requestFocus();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

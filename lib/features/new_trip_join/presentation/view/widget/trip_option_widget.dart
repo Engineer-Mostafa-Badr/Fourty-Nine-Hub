@@ -17,7 +17,7 @@ class TripOptionWidget extends StatelessWidget {
   final String? icon;
 
   const TripOptionWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     this.onTap,
@@ -26,7 +26,7 @@ class TripOptionWidget extends StatelessWidget {
     this.containerColor,
     this.borderColor,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,10 @@ class TripOptionWidget extends StatelessWidget {
               ),
             ],
           ),
-          SvgPicture.asset(Assets.shadowTripIcon,color: context.isDarkMode?const Color(0xFF333333):null,),
+          SvgPicture.asset(
+            Assets.shadowTripIcon,
+            color: context.isDarkMode ? const Color(0xFF333333) : null,
+          ),
           Text(
             title,
             textAlign: TextAlign.center,

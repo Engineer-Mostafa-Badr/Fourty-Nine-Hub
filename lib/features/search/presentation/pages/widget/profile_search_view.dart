@@ -1,14 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,15 +11,15 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 class ProfileSearchView extends StatefulWidget {
-  const ProfileSearchView({Key? key}) : super(key: key);
+  const ProfileSearchView({super.key});
 
   @override
   State<ProfileSearchView> createState() => _ProfileSearchViewState();
@@ -84,7 +79,11 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
 
           // Loading during search
           if (state.status == SearchStates.loading) {
-            return const Center(child: CustomCircularProgressIndicator());
+            return Center(
+              // child: CustomCircularProgressIndicator(
+              // ),
+              child: CustomLoadingSearchWidget(),
+            );
           }
           return OlxPaginationWidget(
             itemsPerPage: 10,

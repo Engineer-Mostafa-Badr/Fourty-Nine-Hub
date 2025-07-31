@@ -1,24 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
-import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../cubit/restaurants_list_cubit.dart';
@@ -66,16 +59,17 @@ class _RestaurantRequestLogsScreenState
         builder: (context, state) {
           final controller = context.read<RestaurantsCubit>();
           if (state.isLoading) {
-            return SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height *
-                  .65, // Make sure it takes up full height
-              child: const Center(
-                child: CustomCircularProgressIndicator(),
-              ),
-            );
+            return  const CustomLoadingSearchWidget();
+            // SizedBox(
+            //   height: MediaQuery
+            //       .of(context)
+            //       .size
+            //       .height *
+            //       .65, // Make sure it takes up full height
+            //   child: const Center(
+            //     child: CustomCircularProgressIndicator(),
+            //   ),
+            // );
           }
           if (controller.reqLogs.isEmpty) {
             return Center(
@@ -96,7 +90,25 @@ class _RestaurantRequestLogsScreenState
           }
 
           if (!state.isLoading) {
-            return ListView.separated(
+            return OlxPaginationWidget(
+              itemsPerPage: 2,
+              loadPage: (page) async {},
+              banners: bannersList,
+              items: List.generate(
+                controller.reqLogs.length,
+                    (index) {
+                      final request = controller.reqLogs[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TripLogRequestCard(
+                          orderData: request,
+                          index: index,
+                        ),
+                      );
+                    },
+              ),
+            );
+           /* return ListView.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: controller.reqLogs.length,
@@ -113,18 +125,19 @@ class _RestaurantRequestLogsScreenState
               separatorBuilder: (BuildContext context, int index) {
                 return const Sizer();
               },
-            );
+            );*/
           } else {
-            return SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height *
-                  .65, // Make sure it takes up full height
-              child: const Center(
-                child: CustomCircularProgressIndicator(),
-              ),
-            );
+            return  const CustomLoadingSearchWidget();
+            // SizedBox(
+            //   height: MediaQuery
+            //       .of(context)
+            //       .size
+            //       .height *
+            //       .7, // Make sure it takes up full height
+            //   child: const Center(
+            //     child: CustomCircularProgressIndicator(),
+            //   ),
+            // );
           }
         });
   }

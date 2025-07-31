@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/update_pr
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_bio_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_name_usecase.dart';

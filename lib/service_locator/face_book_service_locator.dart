@@ -52,9 +52,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:get_it/get_it.dart';
 
-import '../features/health_feature/create_doctor/data/repositories/create_repo_doctor_imp.dart';
-import '../features/health_feature/create_doctor/domain/repositories/create_doctor_repo.dart';
-import '../features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
 import '../features/social_media/edit_profile/domain/usecases/get_governorates.dart';
 
 class FaceBookServiceLocator {

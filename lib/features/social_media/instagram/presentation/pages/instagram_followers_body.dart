@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/instagram_user_follow_widget.dart';
 
 class InstagramFollowersBody extends StatelessWidget {
   const InstagramFollowersBody({super.key});

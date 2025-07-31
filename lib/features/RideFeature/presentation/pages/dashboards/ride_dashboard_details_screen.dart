@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/driver_recode_widget.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:pdf/pdf.dart';
@@ -25,7 +23,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
-import 'widgets/problem_and_client_details.dart';
 import 'widgets/ride_details_rating_widget.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
@@ -155,7 +152,7 @@ class _RideDashboardDetailsScreenState
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: Text(context.isArabic?'تفاصيل العميل':'Client Details'),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           height: 300,
           child: PDFView(

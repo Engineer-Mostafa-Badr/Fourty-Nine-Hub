@@ -15,10 +15,31 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 import '../../../../../res/assets/assets.dart';
 import '../../../../account_taps/wallet/presentation/widgets/button_wallet_and_bill.dart';
 
-class TenPercentViewBody extends StatelessWidget {
+class TenPercentViewBody extends StatefulWidget {
   const TenPercentViewBody({
     super.key,
   });
+
+  @override
+  State<TenPercentViewBody> createState() => _TenPercentViewBodyState();
+}
+
+class _TenPercentViewBodyState extends State<TenPercentViewBody> {
+  final FocusNode trafficFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      trafficFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    trafficFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +142,7 @@ class TenPercentViewBody extends StatelessWidget {
                         }
                         return null;
                       },
+                      currentFocusNode: trafficFocusNode,
                     ),
                     const SizedBox(
                       height: 16,

@@ -4,8 +4,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_shipping_trip_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_shipping_trip_use_case.dart';
@@ -78,7 +76,6 @@ import '../features/RideFeature/domain/usecases/rating_driver_by_client.dart';
 import '../features/RideFeature/domain/usecases/refuse_non_track_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/send_ok_iam_coming_message_usecase.dart';
 import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
-import '../features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 
 class RideServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {

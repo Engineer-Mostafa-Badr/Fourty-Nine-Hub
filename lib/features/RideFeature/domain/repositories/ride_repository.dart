@@ -1,6 +1,5 @@
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
@@ -59,7 +58,6 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
 import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
-import '../../data/models/client/driver_all_rating_model.dart';
 import '../entities/client/client_all_rating_entity.dart';
 import '../entities/client/driver_all_rating_entity.dart';
 import '../entities/create_no_track_trip_entity.dart';
@@ -77,7 +75,6 @@ import '../usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../usecases/create_non_track_trip_use_case.dart';
 import '../usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../usecases/dashboards/create_non_track_offer_use_case.dart';
-import '../usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../usecases/dashboards/update_driver_settings_use_case.dart';
 import '../usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../usecases/make_loading_request_trip_usecase.dart';

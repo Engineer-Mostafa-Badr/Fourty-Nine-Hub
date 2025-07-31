@@ -2,27 +2,17 @@
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import '../../../domain/entities/expected_price_entity.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import '../../../domain/entities/expected_price_entity.dart';
 
 class ExpectedPriceTripModel extends ExpectedPriceTripEntity {
   ExpectedPriceTripModel({
-    required double pricePerSeat,
-    required double distance,
-    required double duration,
-    required String destinationAddress,
-    required String originAddress,
-    required List<List<double>> polyline,
-    required String type,
-  }) : super(
-    pricePerSeat: pricePerSeat,
-    distance: distance,
-    duration: duration,
-    destinationAddress: destinationAddress,
-    originAddress: originAddress,
-    polyline: polyline,
-    type: type,
-  );
+    required super.pricePerSeat,
+    required super.distance,
+    required super.duration,
+    required super.destinationAddress,
+    required super.originAddress,
+    required super.polyline,
+    required super.type,
+  });
 
   factory ExpectedPriceTripModel.fromJson(Map<String, dynamic> json) {
     List<List<double>> parsedPolyline = [];

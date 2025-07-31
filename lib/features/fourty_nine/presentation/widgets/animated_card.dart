@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AnimatedCards extends StatefulWidget {
@@ -56,13 +55,14 @@ class _AnimatedCardsState extends State<AnimatedCards> {
   }
 }
 
-
-
 class AnimatedCardsListView extends StatefulWidget {
   final List<Widget> cardsList;
   final Function(ScrollController) setupScrollController;
 
-  const AnimatedCardsListView({super.key, required this.cardsList,required this.setupScrollController});
+  const AnimatedCardsListView(
+      {super.key,
+      required this.cardsList,
+      required this.setupScrollController});
 
   @override
   State<AnimatedCardsListView> createState() => _AnimatedCardsListViewState();
@@ -105,8 +105,6 @@ class _AnimatedCardsListViewState extends State<AnimatedCardsListView> {
     });
   }
 
-
-
   @override
   void dispose() {
     _timer.cancel();
@@ -119,12 +117,17 @@ class _AnimatedCardsListViewState extends State<AnimatedCardsListView> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.3, // or any fixed height
       child: ListView.separated(
-        separatorBuilder: (context,i)=>SizedBox(height: 8.h,),
+        separatorBuilder: (context, i) => SizedBox(
+          height: 8.h,
+        ),
         controller: _scrollController,
         // physics:const NeverScrollableScrollPhysics(),
-        itemCount: widget.cardsList.length,
+        itemCount: widget.cardsList.length + 4,
         itemBuilder: (context, index) {
-          return widget.cardsList[index];
+          if (index < widget.cardsList.length) {
+            return widget.cardsList[index];
+          }
+          return SizedBox(height: 75);
         },
       ),
     );

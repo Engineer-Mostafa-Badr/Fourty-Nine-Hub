@@ -23,10 +23,8 @@ class CreateDoctorSubcategoryDropdown extends StatelessWidget {
           return CustomDropdownHealth<SubCategoryEntity>(
             items: state.subCategories,
             onItemSelected: (value) {
-              if (value != null) {
-                createDoctorCubit.selectSubcategory(value);
-              }
-            },
+              createDoctorCubit.selectSubcategory(value);
+                        },
             displayStringForItem: (value) =>
                 context.isArabic ? value.nameAr : value.nameEn,
             hint: LocaleKeys.speciality.tr(),
