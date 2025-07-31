@@ -330,8 +330,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ClickableWidget(
               onTap: () async {
                 ManageVibration.vibrate();
-                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                    value: serviceLocator<DashboardsCubit>(),
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider(
+                    create:(context)=> serviceLocator<DashboardsCubit>(),
                     child: const PersonalDocumentsNonSocketScreen())));
               },
 

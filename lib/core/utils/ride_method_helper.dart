@@ -10,6 +10,28 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:path/path.dart' as path;
 
 class RideMethodHelper {
+  Future<bool> updateExpiredImage(
+      {required String recordType,
+        required String expiryDate,
+        required List<String> mediaIds}) async {
+    bool successUpdate = false;
+    var response = await serviceLocator<ApiConsumer>().put(EndPoints.requestUpdate,
+        data: {
+          "recordType": recordType,
+          "expiryDate": expiryDate,
+          "mediaIds": mediaIds
+        });
+    response.fold(
+          (l) {
+            successUpdate= false;
+          },
+          (r) async {
+            successUpdate= true;
+          },
+    );
+    return successUpdate;
+  }
+
   getSignUrl(
       {required Map<String, dynamic>? data,
         required String url,

@@ -1185,6 +1185,7 @@ class EndPoints {
   static const helpMessages = '/help';
   static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
+  static String requestUpdate = '/ride/driver/info/records';
   static String bulkMediaUrl = '/media/bulk/signed-url';
 
   static String confirmUpload(String mediaId) {
