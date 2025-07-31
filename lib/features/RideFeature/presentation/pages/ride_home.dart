@@ -218,32 +218,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       color: context.isDarkMode ? Colors.white : Colors.black,
                     )),
                 const SizedBox(height: 20),
-                ClickableWidget(
-                  onTap: () {
-                    ManageVibration.vibrate();
-                    cubit.changeReasonSelection(isClientNotShown: true);
-                  },
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
-                      border: state.isClientNotShownReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
-                        SizedBox(width: 5),
-                        Text(
-                          context.isArabic ? "لم يظهر السائق" : "The Driver did not show up",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
+
                 ClickableWidget(
                   onTap: () {
                     ManageVibration.vibrate();
@@ -269,6 +244,35 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+                if(state.requestedTrip?.status == TripState.goToClient.name)
+                const SizedBox(height: 20),
+                if(state.requestedTrip?.status == TripState.goToClient.name)
+                ClickableWidget(
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    cubit.changeReasonSelection(isClientNotShown: true);
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                      border: state.isClientNotShownReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.black54),
+                        SizedBox(width: 5),
+                        Text(
+                          context.isArabic ? "لم يظهر السائق" : "The Driver did not show up",
+                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
@@ -344,7 +348,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               reasonId: state.isOtherReason == true
                                   ? '6693d4723aa4a25077cdbc7b'
                                   : state.isClientNotShownReason == true
-                                      ? '665eec12ce3725d6bc6f40ca'
+                                      ? '688a24b8c2885aca461790bc'
                                       : state.isChangedMindReason == true
                                           ? '665ef7118e67e46ce6498fef'
                                           : '',
@@ -786,7 +790,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 serviceLocator<RideCubit>().selectedCategoryIsSocket ? _buildTopImage() : const SizedBox.shrink(),
                                 state.requestedTrip == null
                                     ? _buildBottomSheet()
-                                    : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name
+                                    : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name
                                         ? _buildBottomSheet()
                                         : const SizedBox.shrink(),
                                 !serviceLocator<RideCubit>().selectedCategoryIsSocket
@@ -800,7 +804,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ? const SizedBox()
                                     : state.requestedTrip == null
                                         ? _buildBottomSheet()
-                                        : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name
+                                        : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name
                                             ? _buildBottomSheet()
                                             : state.requestedTrip!.status == TripState.pending.name
                                                 ? buildPendingSheet()
@@ -869,7 +873,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 serviceLocator<RideCubit>().selectedCategoryIsSocket &&
                                         (state.requestedTrip == null ||
                                             state.requestedTrip?.status == TripState.completed.name ||
-                                            state.requestedTrip?.status == TripState.canceled.name)
+                                            state.requestedTrip?.status == TripState.canceled.name ||
+                                            state.requestedTrip?.status == TripState.cancelledByClient.name || state.requestedTrip?.status == TripState.cancelledByDriver.name)
                                     ? _carTruckBtn(
                                         driverInfo: state.driverInfo,
                                         loadingInfo: state.loaderInfo,
@@ -904,7 +909,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
     try {
       if (state.requestedTrip == null ||
-          state.requestedTrip!.status == TripState.canceled.name ||
+          state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name ||
           state.requestedTrip!.status == TripState.completed.name) {
         routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
       } else {
@@ -960,7 +965,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
 
     bool isBeforeRequest = state.requestedTrip == null ||
-        state.requestedTrip!.status == TripState.canceled.name ||
+        state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name ||
         state.requestedTrip!.status == TripState.completed.name;
     print("state.requestedTrip ${state.requestedTrip?.status}");
     print("state.driverLocation != null ${state.driverLocation != null}");
@@ -1431,7 +1436,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     spacing: 8,
                     children: [
                       serviceLocator<RideCubit>().selectedCategoryIsSocket == false &&
-                              (state.requestedTrip == null || state.requestedTrip?.status == TripState.completed.name || state.requestedTrip?.status == TripState.canceled.name)
+                              (state.requestedTrip == null || state.requestedTrip?.status == TripState.completed.name || state.requestedTrip?.status == TripState.canceled.name || state.requestedTrip?.status == TripState.cancelledByClient.name || state.requestedTrip?.status == TripState.cancelledByDriver.name)
                           ? _carTruckBtn(
                               driverInfo: state.driverInfo,
                               loadingInfo: state.loaderInfo,

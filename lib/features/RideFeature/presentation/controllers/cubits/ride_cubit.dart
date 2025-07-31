@@ -248,7 +248,7 @@ class RideCubit extends Cubit<RideState> {
           try {
             RideRequestTripEntity rideRequestTrip =
             RideRequestTripModel.fromJson(parsedData);
-            if (rideRequestTrip.status == TripState.canceled.name ||
+            if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
                 rideRequestTrip.status == TripState.completed.name) {
               _fetchUserLocation();
             } else {
@@ -358,7 +358,7 @@ class RideCubit extends Cubit<RideState> {
           try {
             RideRequestTripEntity rideRequestTrip =
                 RideRequestTripModel.fromJson(parsedData);
-            if (rideRequestTrip.status == TripState.canceled.name ||
+            if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
                 rideRequestTrip.status == TripState.completed.name) {
               _fetchUserLocation();
             } else {
@@ -439,13 +439,13 @@ class RideCubit extends Cubit<RideState> {
           print(
               "RIDE:RIDE:DRIVER_COMPLETED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
         }
-        state.rideExpectedPrice = null;
-        state.requestedTrip = null;
-        state.currentLocation = null;
-        state.toLocation = null;
-        state.wayPointOne = null;
-        state.wayPointTwo = null;
-        await _fetchUserLocation();
+        // state.rideExpectedPrice = null;
+        // state.requestedTrip = null;
+        // state.currentLocation = null;
+        // state.toLocation = null;
+        // state.wayPointOne = null;
+        // state.wayPointTwo = null;
+        // await _fetchUserLocation();
 
         emit(state.copyWith(status: RideStates.success, driverLocation: null, previousDriverLocation: null));
         // RIDE:DRIVER_COMPLETED_TRIP:  {driverCompletedTrip: true}
@@ -743,7 +743,7 @@ class RideCubit extends Cubit<RideState> {
       _fetchUserLocation();
     } else {
       if (state.requestedTrip!.status == TripState.canceled.name ||
-          state.requestedTrip!.status == TripState.completed.name) {
+          state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name) {
         _fetchUserLocation();
       } else {
         if (state.requestedTrip!.targetCoordinates != null &&
@@ -909,7 +909,7 @@ class RideCubit extends Cubit<RideState> {
       );
 
       emit(state.copyWith(
-          status: RideStates.success, currentLocation: currentLocation));
+          status: RideStates.success, currentLocation: currentLocation, toLocation: null, wayPointOne: null, wayPointTwo: null));
     } catch (e) {
       log('_fetchUserLocation ${e.toString()}');
     }
@@ -1370,7 +1370,7 @@ class RideCubit extends Cubit<RideState> {
       },
       (rideRequestTrip) {
         log("tripId${rideRequestTrip.id}");
-        if (rideRequestTrip.status == TripState.canceled.name ||
+        if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
             rideRequestTrip.status == TripState.completed.name) {
           _fetchUserLocation();
         } else {
@@ -1479,7 +1479,7 @@ class RideCubit extends Cubit<RideState> {
       (failure) => emit(state.copyWith(
           status: RideStates.error, failure: failure, requestedTrip: null)),
       (rideRequestTrip) {
-        if (rideRequestTrip.status == TripState.canceled.name ||
+        if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
             rideRequestTrip.status == TripState.completed.name) {
           log("state.requestedTrip?.status from ride request ${rideRequestTrip.status}");
           _fetchUserLocation();
@@ -1537,7 +1537,7 @@ class RideCubit extends Cubit<RideState> {
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
       (rideRequestTrip) {
-        if (rideRequestTrip.status == TripState.canceled.name ||
+        if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
             rideRequestTrip.status == TripState.completed.name) {
           _fetchUserLocation();
         } else {

@@ -65,7 +65,8 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
   }
 
   void _subscribeToRideCubit() {
-    _rideSub = context.read<RideCubit>().stream.listen((rideState) async {
+    _rideSub = context.read<RideCubit>().stream.listen((
+        rideState) async {
       final double currentZoom = await widget.mapController.getZoomLevel();
       final trip = rideState.requestedTrip;
       final currentLocation = rideState.driverLocation;

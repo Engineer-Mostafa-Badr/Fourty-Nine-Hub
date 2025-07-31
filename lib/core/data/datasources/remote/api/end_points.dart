@@ -1601,7 +1601,7 @@ class EndPoints {
   }
 
   static String cancelTripByClient(String tripId) {
-    return '/ride/trips/cancel-by-client/$tripId';
+    return '/ride/client/tracking/trips/$tripId/cancel';
   }
 
   static String cancelPendingTripByClient(String tripId) {
