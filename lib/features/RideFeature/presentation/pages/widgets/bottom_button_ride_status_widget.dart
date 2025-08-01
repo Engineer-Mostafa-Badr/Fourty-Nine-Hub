@@ -28,6 +28,8 @@ class BottomRideStatusWidget extends StatefulWidget {
   final VoidCallback onCancelRide;
   final String? paymentMethod;
   final String? otp;
+  final bool showOTP;
+  final bool showCancelButton;
 
   final bool isRecording;
   final String audioDuration;
@@ -57,6 +59,8 @@ class BottomRideStatusWidget extends StatefulWidget {
     required this.isStarted,
     required this.onStartRecord,
     required this.onStopRecord,
+    required this.showOTP,
+    required this.showCancelButton
   });
 
   @override
@@ -178,7 +182,9 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
               ),
             ],
           ),
+          if(widget.showOTP)
           const SizedBox(height: 16),
+          if(widget.showOTP)
           if(widget.otp != null)
             Directionality(
               textDirection: TextDirection.ltr,
@@ -306,9 +312,10 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
           //     ),
           //   ),
           // ),
-
+          if(widget.showCancelButton)
           const SizedBox(height: 16),
           // Cancel Button
+          if(widget.showCancelButton)
           SizedBox(
             width: double.infinity,
             child: TextButton(
