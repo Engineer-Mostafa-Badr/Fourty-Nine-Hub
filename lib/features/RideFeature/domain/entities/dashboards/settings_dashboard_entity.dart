@@ -26,6 +26,8 @@ class SettingsDashboardEntity {
   final String criminalRecordExpiryDate;
   final String drugAnalysisExpiryDate;
   final String technicalExaminationExpiryDate;
+  final List<RequestEntity> requests;
+  final List<ExpiredRecordEntity> expiredRecords;
 
   SettingsDashboardEntity( {
     required this.isReady,
@@ -43,6 +45,8 @@ class SettingsDashboardEntity {
     required this.isActive,
     required this.isApproved,
     required this.isRejected,
+    required this.requests,
+    required this.expiredRecords,
     required this.isCriminalRecordEnabled, required this.isDrugAnalysisRecordEnabled, required this.isVehicleRecordEnabled, required this.idExpiryDate, required this.drivingLicenseExpiryDate, required this.carLicenseExpiryDate, required this.criminalRecordExpiryDate, required this.drugAnalysisExpiryDate, required this.technicalExaminationExpiryDate,
   });
 }
@@ -61,4 +65,22 @@ class SettingsDashboardEntityResponse {
   final SettingsDashboardEntity data;
 
   SettingsDashboardEntityResponse({required this.status, required this.data});
+}
+
+class RequestEntity{
+  final String requestId;
+  final String recordName;
+  final String expiryDate;
+  final String status;
+
+  RequestEntity({required this.requestId, required this.recordName, required this.expiryDate, required this.status});
+}
+
+
+class ExpiredRecordEntity{
+  final String recordId;
+  final String recordName;
+  final String expiryDate;
+
+  ExpiredRecordEntity({required this.recordId, required this.recordName, required this.expiryDate});
 }

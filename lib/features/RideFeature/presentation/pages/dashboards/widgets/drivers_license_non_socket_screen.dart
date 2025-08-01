@@ -27,7 +27,7 @@ class DriversLicenseNonSocketScreen extends StatelessWidget {
     List<String> uploadFilesTitles = [
       LocaleKeys.driversLicense.localize,
       LocaleKeys.backOfTheLicense.localize,
-      LocaleKeys.aSelfieWithTheLicense.localize,
+      // LocaleKeys.aSelfieWithTheLicense.localize,
     ];
     List<String> uploadLoadingFilesTitles = [
       LocaleKeys.driversLicense.localize,

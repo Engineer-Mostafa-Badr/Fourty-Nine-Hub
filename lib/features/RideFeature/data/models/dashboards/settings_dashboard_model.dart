@@ -20,6 +20,8 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
     required super.isActive,
     required super.isApproved,
     required super.isRejected,
+    required super.requests,
+    required super.expiredRecords,
     required super.isCriminalRecordEnabled, required super.isDrugAnalysisRecordEnabled, required super.isVehicleRecordEnabled, required super.idExpiryDate, required super.drivingLicenseExpiryDate, required super.carLicenseExpiryDate, required super.criminalRecordExpiryDate, required super.drugAnalysisExpiryDate, required super.technicalExaminationExpiryDate,
   });
 
@@ -30,6 +32,10 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
       isCaptainShareEnabled: json['isCaptainShareEnabled']??false,
       categoryIds: List<SubCategoryModel>.from((json['categoryIds'] as List)
           .map((x) => SubCategoryModel.fromJson(x))),
+      requests: List<RequestModel>.from((json['requests'] as List)
+          .map((x) => RequestModel.fromJson(x))),
+      expiredRecords: List<ExpiredRecordsModel>.from((json['expiredRecords'] as List)
+          .map((x) => ExpiredRecordsModel.fromJson(x))),
       subscriptionType: json['subscriptionType'],
       pricingPerKm: json['pricingPerKm']!=null?json['pricingPerKm'].toDouble():0.0,
       highCostPerKm: json['fairCostPerKm']!=null?json['fairCostPerKm']['highCostPerKm']??0.0:0.0,
@@ -74,6 +80,32 @@ class SettingsDashboardResponseModel extends SettingsDashboardEntityResponse {
     return SettingsDashboardResponseModel(
       status: json['status'],
       data: SettingsDashboardModel.fromJson(json['data']),
+    );
+  }
+}
+
+
+class RequestModel extends RequestEntity {
+  RequestModel({required super.requestId, required super.recordName, required super.expiryDate, required super.status});
+
+  factory RequestModel.fromJson(Map<String, dynamic> json) {
+    return RequestModel(
+      requestId: json['requestId'],
+      recordName: json['recordName'],
+      expiryDate: json['expiryDate'],
+      status: json['status'],
+    );
+  }
+}
+
+class ExpiredRecordsModel extends ExpiredRecordEntity {
+  ExpiredRecordsModel({required super.recordId, required super.recordName, required super.expiryDate});
+
+  factory ExpiredRecordsModel.fromJson(Map<String, dynamic> json) {
+    return ExpiredRecordsModel(
+      recordId: json['recordId'],
+      recordName: json['recordName'],
+      expiryDate: json['expiryDate'],
     );
   }
 }

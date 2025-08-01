@@ -25,7 +25,7 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> uploadFilesTitles = [
-      LocaleKeys.vehiclePicture.localize,
+      // LocaleKeys.vehiclePicture.localize,
       LocaleKeys.vehicleRegistrationCertificate.localize,
       LocaleKeys.backSideOfTheCertificate.localize,
     ];
@@ -90,16 +90,12 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
                                     title: uploadFilesTitles[index],
                                     onTap: () {
                                       if (index == 0) {
-                                        cubit.onUploadVehiclePicture(context);
-                                      } else if (index == 1) {
                                         cubit.onUploadVehicleFrontPicture(context);
                                       } else {
                                         cubit.onUploadVehicleBackPicture(context);
                                       }
                                     },
                                     imageUrl: index == 0
-                                        ? state.vehiclePicture
-                                        : index == 1
                                             ? state.vehicleFrontPicture
                                             : state.vehicleBackPicture,
                                   ),
@@ -142,10 +138,6 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
                         print("object");
                         if(context.read<DashboardsCubit>().driverLicenseFormKey.currentState!.validate()) {
                           print("object");
-                          if(context.read<DashboardsCubit>().state.vehiclePicture==null){
-                            showErrorMessage(context, "Please select vehicle picture");
-                            return;
-                          }
                           if(context.read<DashboardsCubit>().state.vehicleFrontPicture==null){
                             showErrorMessage(context, "Please select front of vehicle license picture");
                             return;

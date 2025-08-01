@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/enums/record_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/creminal_record_non_socket_screen.dart';
@@ -44,6 +45,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   late bool isIntercity;
   late bool isPremium;
   late num perKm;
+
   var planController = ExpansionTileController();
   var cityController = ExpansionTileController();
   List<String> subscriptionPlans = [
@@ -64,6 +66,18 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   ];
   late String planTrailing;
   late String cityTrailing;
+  bool hasIdRequest = false;
+  bool hasDriverLicenseRequest = false;
+  bool hasCarLicenseRequest = false;
+  bool hasCriminalRecordRequest = false;
+  bool hasDrugAnalysisRequest = false;
+  bool hasTechnicalExaminationRequest = false;
+  String idRequestStatus = '';
+  String driverLicenseRequestStatus = '';
+  String carLicenseRequestStatus = '';
+  String criminalRecordRequestStatus = '';
+  String drugAnalysisRequestStatus = '';
+  String technicalExaminationRequestStatus = '';
   @override
   void initState() {
     super.initState();
@@ -76,6 +90,30 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     if((widget.settings?.categoryIds.length ?? 0) > 0)isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 1)isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 2)isPremium = widget.settings?.categoryIds[2].isActive ?? false;
+    hasIdRequest = (widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.nationalId.status);
+    hasDriverLicenseRequest = (widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.drivingLicense.status);
+    hasCarLicenseRequest = (widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.carLicense.status);
+    hasCriminalRecordRequest = (widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.criminalRecord.status);
+    hasDrugAnalysisRequest = (widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.drugAnalysis.status);
+    hasTechnicalExaminationRequest = (widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.technicalExamination.status);
+    if((widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.drivingLicense.status)){
+      driverLicenseRequestStatus = widget.settings?.requests.firstWhere((e)=>e.recordName==RecordStatusEnum.drivingLicense.status).status??'';
+    }
+    if((widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.nationalId.status)){
+      idRequestStatus = widget.settings?.requests.firstWhere((e)=>e.recordName==RecordStatusEnum.nationalId.status).status??'';
+    }
+    if((widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.carLicense.status)){
+      carLicenseRequestStatus = widget.settings?.requests.firstWhere((e)=>e.recordName==RecordStatusEnum.carLicense.status).status??'';
+    }
+    if((widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.criminalRecord.status)){
+      criminalRecordRequestStatus = widget.settings?.requests.firstWhere((e)=>e.recordName==RecordStatusEnum.criminalRecord.status).status??'';
+    }
+    if((widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.drugAnalysis.status)){
+      drugAnalysisRequestStatus = widget.settings?.requests.firstWhere((e)=>e.recordName==RecordStatusEnum.drugAnalysis.status).status??'';
+    }
+    if((widget.settings?.requests??[]).any((e)=>e.recordName==RecordStatusEnum.technicalExamination.status)){
+      technicalExaminationRequestStatus = widget.settings?.requests.firstWhere((e)=>e.recordName==RecordStatusEnum.technicalExamination.status).status??'';
+    }
   }
 
   int calculateDaysUntilExpiry(String expiryDateString) {
@@ -326,68 +364,136 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),
           ClickableWidget(
               onTap: () async {
+                if(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
+                  return;
+                }
                 ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider(
                     create:(context)=> serviceLocator<DashboardsCubit>(),
                     child: const PersonalDocumentsNonSocketScreen())));
+                context.read<DashboardsCubit>().getSettings(context);
               },
 
-              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.idExpiryDate??''))),
+              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(),
+                  isEnabled: !(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
+                  exdIn: calculateDaysUntilExpiry(widget.settings?.idExpiryDate??''))),
+          if(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+          style: const TextStyle(
+              fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+          ),
+          ),
           ClickableWidget(
             onTap: () async {
+              if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
+                return;
+              }
               ManageVibration.vibrate();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                  value: serviceLocator<DashboardsCubit>(),
+              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider(
+                  create:(context)=> serviceLocator<DashboardsCubit>(),
                   child: const DriversLicenseNonSocketScreen())));
+              context.read<DashboardsCubit>().getSettings(context);
             },
             child: UpdatePersonalInfoWidget(
-                title: LocaleKeys.driversLicense.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.drivingLicenseExpiryDate??'')),
+                title: LocaleKeys.driversLicense.tr(),
+                isEnabled: !(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
+                exdIn: calculateDaysUntilExpiry(widget.settings?.drivingLicenseExpiryDate??'')),
           ),
-          if (widget.modeType == 'ride') ...[
+          if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+            style: const TextStyle(
+                fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+            ),
+          ),          if (widget.modeType == 'ride') ...[
             ClickableWidget(
               onTap: () async {
+                if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
+                  return;
+                }
                 ManageVibration.vibrate();
-                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                    value: serviceLocator<DashboardsCubit>(),
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider(
+                    create:(context)=> serviceLocator<DashboardsCubit>(),
                     child: const VehicleInformationNonSocketScreen())));
+                context.read<DashboardsCubit>().getSettings(context);
               },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.carLicense.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.carLicenseExpiryDate??'')),
+                  title: LocaleKeys.carLicense.tr(),
+                  isEnabled: !(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
+                  exdIn: calculateDaysUntilExpiry(widget.settings?.carLicenseExpiryDate??'')),
+            ),
+            if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+              style: const TextStyle(
+                  fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+              ),
             ),
             if(widget.settings?.isCriminalRecordEnabled == true)
-              ClickableWidget(
+              ...[ClickableWidget(
                 onTap: () async {
+                  if(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
+                    return;
+                  }
                   ManageVibration.vibrate();
                   await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                       value: serviceLocator<DashboardsCubit>(),
                       child: const CriminalRecordNonSocketScreen())));
+                  context.read<DashboardsCubit>().getSettings(context);
                 },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.criminalRecord.tr(), exdIn: 4),
+                  title: LocaleKeys.criminalRecord.tr(),
+                  isEnabled: !(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
+                  exdIn: 4),
             ),
+                if(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+                  ),
+                ),
+              ],
             if(widget.settings?.isDrugAnalysisRecordEnabled == true)
-            ClickableWidget(
+            ...[ClickableWidget(
               onTap: () async {
+                if(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
+                  return;
+                }
                 ManageVibration.vibrate();
                 await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                     value: serviceLocator<DashboardsCubit>(),
                     child: const DragAnalyticsNonSocketScreen())));
+                context.read<DashboardsCubit>().getSettings(context);
               },
               child: UpdatePersonalInfoWidget(
-                  title: LocaleKeys.drugAnalysis.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.drugAnalysisExpiryDate??'')),
+                  title: LocaleKeys.drugAnalysis.tr(),
+                  isEnabled: !(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
+                  exdIn: calculateDaysUntilExpiry(widget.settings?.drugAnalysisExpiryDate??'')),
             ),
+              if(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+                ),
+              ),
+            ],
           ],
           if(widget.settings?.isVehicleRecordEnabled == true)
-          ClickableWidget(
+          ...[ClickableWidget(
             onTap: () async {
+              if(hasTechnicalExaminationRequest&&(technicalExaminationRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
+                return;
+              }
               ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: const TechnicalExaminationNonSocketScreen())));
+              context.read<DashboardsCubit>().getSettings(context);
             },
             child: UpdatePersonalInfoWidget(
-                title: LocaleKeys.vehicleInspection.tr(), exdIn: calculateDaysUntilExpiry(widget.settings?.technicalExaminationExpiryDate??'')),
+                title: LocaleKeys.vehicleInspection.tr(),
+                isEnabled: !(hasTechnicalExaminationRequest&&(technicalExaminationRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
+                exdIn: calculateDaysUntilExpiry(widget.settings?.technicalExaminationExpiryDate??'')),
           ),
+            if(hasTechnicalExaminationRequest&&(technicalExaminationRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+              style: const TextStyle(
+                  fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           Row(
             spacing: 5,

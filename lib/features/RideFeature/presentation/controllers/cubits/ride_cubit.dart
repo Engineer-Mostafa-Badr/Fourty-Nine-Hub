@@ -742,12 +742,12 @@ class RideCubit extends Cubit<RideState> {
     if (state.requestedTrip == null && state.rideExpectedPrice == null) {
       _fetchUserLocation();
     } else {
-      if (state.requestedTrip!.status == TripState.canceled.name ||
-          state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name) {
+      if (state.requestedTrip?.status == TripState.canceled.name ||
+          state.requestedTrip?.status == TripState.completed.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name) {
         _fetchUserLocation();
       } else {
-        if (state.requestedTrip!.targetCoordinates != null &&
-            state.requestedTrip!.targetCoordinates!.length >= 2) {
+        if (state.requestedTrip?.targetCoordinates != null &&
+            (state.requestedTrip?.targetCoordinates?.length??0) >= 2) {
           updateToLocation(
             lat: state.requestedTrip!.targetCoordinates!.first,
             lng: state.requestedTrip!.targetCoordinates!.last,
