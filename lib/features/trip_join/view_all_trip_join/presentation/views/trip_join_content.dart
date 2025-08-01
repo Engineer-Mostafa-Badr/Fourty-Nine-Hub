@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
 import '../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'widgets/trip_join/my_trip_widget.dart';
 
@@ -206,6 +207,7 @@ class _TripJoinContentState extends State<TripJoinContent>
     bool selected = tabController.index == index;
     return GestureDetector(
       onTap: () {
+        ManageVibration.vibrate();
         tabController.animateTo(index);
         if(index==0){
           context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();

@@ -4,14 +4,17 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class PremiumAndRequestWidget extends StatelessWidget {
-  const PremiumAndRequestWidget({
-    super.key, required this.onPremiumRequest, required this.onRequest,
-  });
   final Function() onPremiumRequest;
   final Function() onRequest;
+  const PremiumAndRequestWidget({
+    super.key,
+    required this.onPremiumRequest,
+    required this.onRequest,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,12 +29,15 @@ class PremiumAndRequestWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              onPressed: () =>onPremiumRequest(),
+              onPressed: () {
+                ManageVibration.vibrate();
+                onPremiumRequest();
+              },
               child: Text(
                 LocaleKeys.premiumRequest.localize,
                 style: TextStyle(
                   fontSize: 25.sp,
-                  color: context.isDarkMode?Colors.black:Colors.white,
+                  color: context.isDarkMode ? Colors.black : Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -46,12 +52,15 @@ class PremiumAndRequestWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              onPressed: () =>onRequest(),
+              onPressed: () {
+                ManageVibration.vibrate();
+                onRequest();
+              },
               child: Text(
                 LocaleKeys.request.localize,
                 style: TextStyle(
                   fontSize: 25.sp,
-                  color: context.isDarkMode?Colors.black:Colors.white,
+                  color: context.isDarkMode ? Colors.black : Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),

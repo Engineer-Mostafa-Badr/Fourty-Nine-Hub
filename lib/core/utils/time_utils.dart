@@ -1,6 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class TimeUtils {
   /// Calculates the duration since the provided [createdAt] time.
@@ -90,6 +93,7 @@ class TimeUtils {
 
 
   static String getRelativeTime(String utcDateTimeString) {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     // Parse the UTC datetime string
     DateTime utcDateTime = DateTime.parse(utcDateTimeString);
 
@@ -102,12 +106,12 @@ class TimeUtils {
     // If less than 1 minute
     if (difference.inMinutes < 1) {
       int seconds = difference.inSeconds;
-      return '$seconds Sec';
+      return '${FormatNumbers().convertNumberToLocalizedString(seconds.toString(), isArabic: currentContext.isArabic)} ${currentContext.isArabic?"ثانية":"Sec"}';
     }
     // If 1 minute or more
     else {
       int minutes = difference.inMinutes;
-      return '$minutes Min';
+      return '${FormatNumbers().convertNumberToLocalizedString(minutes.toString(), isArabic: currentContext.isArabic)} ${currentContext.isArabic?"دقيقة":"Min"}';
     }
   }
 }

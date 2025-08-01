@@ -60,12 +60,12 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params);
    Future<Either<Failure, bool>> acceptTrip(String params);
    Future<Either<Failure, RunningTripEntity>> getRunningTrip();
-   Future<Either<Failure, bool>> goingToClient(String id);
+   Future<Either<Failure, RunningTripEntity>> goingToClient(String id);
    Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams id);
    Future<Either<Failure, bool>> updateDriverRateClient(DriverRateClientParams id);
    Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
    Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
-   Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
+   Future<Either<Failure, String>> startDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);

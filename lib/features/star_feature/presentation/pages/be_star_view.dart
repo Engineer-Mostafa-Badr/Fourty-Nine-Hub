@@ -28,6 +28,7 @@ import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controller/cubit/star_cubit.dart';
@@ -703,6 +704,7 @@ class _BeStarViewState extends State<BeStarView> {
           ),
           GestureDetector(
             onTap: () {
+              ManageVibration.vibrate();
               if (!context.read<UserCubit>().isLoggedIn) {
                 pleaseLoginDialog(context);
               } else {

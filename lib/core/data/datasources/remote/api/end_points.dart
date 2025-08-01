@@ -861,7 +861,7 @@ class EndPoints {
   }
 
   static String cancelTripRider(String id) {
-    return '/ride/trips/cancel-by-rider/$id';
+    return '/trips/cancel-by-rider/';
   }
 
   static String cancelTripClient(String id) {
@@ -1221,6 +1221,7 @@ class EndPoints {
   static const helpMessages = '/help';
   static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
+  static String requestUpdate = '/ride/driver/info/records';
   static String bulkMediaUrl = '/media/bulk/signed-url';
 
   static String confirmUpload(String mediaId) {
@@ -1592,7 +1593,7 @@ class EndPoints {
   }
 
   static String cancelTripByRider(String tripId) {
-    return '/ride/trips/cancel-by-rider/$tripId';
+    return '/ride/driver/tracking/trips/$tripId/cancel';
   }
 
   static String finalizeTripByRider(String tripId) {
@@ -1600,7 +1601,7 @@ class EndPoints {
   }
 
   static String cancelTripByClient(String tripId) {
-    return '/ride/trips/cancel-by-client/$tripId';
+    return '/ride/client/tracking/trips/$tripId/cancel';
   }
 
   static String cancelPendingTripByClient(String tripId) {

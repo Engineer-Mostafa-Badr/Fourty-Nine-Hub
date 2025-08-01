@@ -33,8 +33,8 @@ class FareBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context)=>serviceLocator<RideCubit>(),
+    return BlocProvider.value(
+      value: serviceLocator<RideCubit>(),
       child: BlocBuilder<RideCubit, RideState>(
         builder: (context, state) {
           var cubit = context.read<RideCubit>();

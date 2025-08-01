@@ -19,6 +19,7 @@ import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../core/loading/custom_loading.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
@@ -1054,7 +1055,7 @@ class _RidePersonalMoreInfoScreenState
                   text: LocaleKeys.freeCancellation.localize),
               const SizedBox(height: 15),
               state.isLoadingSubmit
-                  ? const Center(child: CustomCircularProgressIndicator())
+                  ? const Center(child: CustomLoading())
                   : SizedBox(
                       height: 40,
                       child: Row(

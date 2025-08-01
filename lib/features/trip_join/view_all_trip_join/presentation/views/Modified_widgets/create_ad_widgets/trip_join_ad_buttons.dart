@@ -6,6 +6,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../../../helpers/manage_vibration.dart';
+
 
 class PremiumAndRequestWidget extends StatelessWidget {
   const PremiumAndRequestWidget({
@@ -24,7 +26,9 @@ class PremiumAndRequestWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              ManageVibration.vibrate();
+            },
             child: Center(
               child: Text(
                 context.isArabic?'نشر مميز':'Premium Publish',
@@ -43,7 +47,9 @@ class PremiumAndRequestWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              ManageVibration.vibrate();
+            },
             child: Center(
               child: Text(
                 LocaleKeys.publish.localize,

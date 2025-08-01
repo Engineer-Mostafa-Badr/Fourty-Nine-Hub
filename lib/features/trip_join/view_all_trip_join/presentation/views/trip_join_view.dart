@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../routes/routes.dart';
 
 class TripJoinView extends StatefulWidget {
@@ -119,6 +120,7 @@ class _TripJoinViewState extends State<TripJoinView>
                       imagePath: Assets.locationTripIcon,
                       title: getTitleForIndex(index),
                       onTap: () {
+                        ManageVibration.vibrate();
                         setState(() {
                           selectedIndex = index;
                           _controller.forward(from: 0);
@@ -209,6 +211,7 @@ class _TripJoinViewState extends State<TripJoinView>
                   children: [
                     GestureDetector(
                       onTap: () {
+                        ManageVibration.vibrate();
                         switch (selectedIndex) {
                           case 0:
                             context.push(Routes.captainShareInfoScreen);
@@ -274,6 +277,7 @@ class _TripJoinViewState extends State<TripJoinView>
         return TripJoinFloatingActionButton(
           title: LocaleKeys.createRoute.localize,
           onTap: () {
+            ManageVibration.vibrate();
             context.push(Routes.newRouteScreen);
           },
         );
@@ -283,6 +287,7 @@ class _TripJoinViewState extends State<TripJoinView>
           child: TripJoinFloatingActionButton(
             title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
             onTap: () {
+              ManageVibration.vibrate();
               context.push(Routes.TRIP_JOIN);
             },
           ),
@@ -293,6 +298,7 @@ class _TripJoinViewState extends State<TripJoinView>
           child: TripJoinFloatingActionButton(
             title: context.isArabic ? "انشر رحلتك" : "Post your ride",
             onTap: () {
+              ManageVibration.vibrate();
               context.push(Routes.AddNewPickMe);
             },
           ),
