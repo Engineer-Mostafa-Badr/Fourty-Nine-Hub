@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/build_r
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/header_text_widget.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -234,6 +235,7 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          ManageVibration.vibrate();
                           context.push(Routes.captainShareInfoScreen);
                         },
                         child: Container(

@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../../helpers/manage_vibration.dart';
+
 class AvaialbleTripsButton extends StatelessWidget {
   const AvaialbleTripsButton({
     super.key,
@@ -25,7 +27,10 @@ class AvaialbleTripsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        ManageVibration.vibrate();
+        onTap?.call();
+      },
       child: Container(
         padding: padding ?? EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(

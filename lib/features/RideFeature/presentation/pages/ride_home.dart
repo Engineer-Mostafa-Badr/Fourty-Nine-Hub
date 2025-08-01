@@ -55,6 +55,7 @@ import '../../../../common/widgets/form/text_fields/default_text_form_field.dart
 import '../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../core/loading/custom_loading.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../core/utils/format_numbers.dart';
 import '../../../../core/utils/validator.dart';
@@ -740,9 +741,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final ScrollController _shippingScrollController = ScrollController();
 
   void _scrollRight(String type) {
-    final ScrollController? activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
 
-    if (activeController != null && activeController.hasClients) {
+    if (activeController.hasClients) {
       activeController.animateTo(
         activeController.offset + 200,
         duration: const Duration(milliseconds: 300),
@@ -752,9 +753,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   void _scrollToStart(String type) {
-    final ScrollController? activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
+    final ScrollController activeController = type == "ride" ? _rideScrollController : _shippingScrollController;
 
-    if (activeController != null && activeController.hasClients) {
+    if (activeController.hasClients) {
       activeController.animateTo(
         0,
         duration: const Duration(milliseconds: 300),
@@ -776,7 +777,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: cubit.loadingHomeData == true
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(child: CustomLoading())
                   : Form(
                       key: _formKey,
                       child: SafeArea(
@@ -970,7 +971,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     print("state.requestedTrip ${state.requestedTrip?.status}");
     print("state.driverLocation != null ${state.driverLocation != null}");
 
-    dev.log('driverRoutePoints: ${driverRoutePoints}');
+    dev.log('driverRoutePoints: $driverRoutePoints');
     dev.log('driverStartLat: $driverStartLat');
     dev.log('driverStartLng: $driverStartLng');
     dev.log('driverTargetLat: $driverTargetLat');
@@ -1773,7 +1774,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   Expanded(
                                       flex: 2,
                                       child: state.isLoadingSubmit
-                                          ? const Center(child: CircularProgressIndicator())
+                                          ? const Center(child: CustomLoading())
                                           : AppButton(
                                               radius: 15,
                                               label: LocaleKeys.request.tr(),

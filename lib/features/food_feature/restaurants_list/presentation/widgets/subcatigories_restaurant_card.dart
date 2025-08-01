@@ -23,6 +23,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
@@ -631,6 +632,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
             onPressed: context.read<UserCubit>().isLoggedIn
                 ? (isChatEnabled
                     ? () {
+                      ManageVibration.vibrate();
                         showModalBottomSheet(
                           context: context,
                           backgroundColor:
@@ -691,12 +693,14 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                         );
                       }
                     : () {
+                      ManageVibration.vibrate();
                         SubscriptionMethod().subscribe(
                           subscribeId: widget.item.subcategoryId?.id ?? '',
                           title: widget.item.name ?? '',
                         );
                       })
                 : () {
+                  ManageVibration.vibrate();
                     // ScaffoldMessenger.of(context).showSnackBar(
                     //   SnackBar(
                     //     content: Text(
@@ -785,17 +789,20 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
             onPressed: context.read<UserCubit>().isLoggedIn
                 ? (isChatEnabled
                     ? () {
+                       ManageVibration.vibrate();
                         BlocProvider.of<RestaurantsCubit>(context)
                             .getExpiredOrders();
                         // Implement message functionality here
                       }
                     : () {
+                      ManageVibration.vibrate();
                         SubscriptionMethod().subscribe(
                           subscribeId: widget.item.subcategoryId?.id ?? '',
                           title: widget.item.name ?? '',
                         );
                       })
                 : () {
+                  ManageVibration.vibrate();
                     return pleaseLoginDialog(context);
 
                     // ScaffoldMessenger.of(context).showSnackBar(
@@ -834,6 +841,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
             ),
             color: AppColors.getRedColor(context),
             onPressed: () async {
+              ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,

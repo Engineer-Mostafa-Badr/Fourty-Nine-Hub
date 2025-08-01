@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/custom_show_dialog.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
@@ -109,6 +110,7 @@ class ExitWidget extends StatelessWidget {
                           label: LocaleKeys.yes.localize,
                           color: AppColors.SECONDARY_COLOR,
                           onTap: () {
+                            ManageVibration.vibrate();
                             Navigator.of(context).pop();
                             SystemNavigator.pop();
                           },
@@ -119,6 +121,7 @@ class ExitWidget extends StatelessWidget {
                           context,
                           label: LocaleKeys.no.localize,
                           onTap: () {
+                            ManageVibration.vibrate();
                             Navigator.of(context).pop(false);
                           },
                         ),

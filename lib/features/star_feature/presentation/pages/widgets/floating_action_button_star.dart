@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/c
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FloatingActionButtonStar extends StatelessWidget {
   const FloatingActionButtonStar({super.key});
@@ -13,6 +14,7 @@ class FloatingActionButtonStar extends StatelessWidget {
     return FloatingActionButton.extended(
 
       onPressed: () {
+        ManageVibration.vibrate();
         Navigator.push(
           context,
           MaterialPageRoute(

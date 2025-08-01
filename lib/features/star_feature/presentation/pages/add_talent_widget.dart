@@ -16,6 +16,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../service_locator/service_locator.dart';
@@ -37,140 +38,6 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   VideoPlayerController? _videoController;
   String? _mediaUrl;
   final FocusNode _titleFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _titleFocusNode.requestFocus();
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _titleFocusNode.dispose();
-    _descriptionController.dispose();
-    _videoController?.dispose();
-    super.dispose();
-  }
-
-  void _initializeVideo(String path) {
-    if (_videoController != null) {
-      _videoController!.dispose();
-    }
-    _videoController = VideoPlayerController.file(File(path))
-      ..initialize().then((_) {
-        setState(() {});
-        _videoController!.play();
-        _videoController!.setLooping(true);
-      });
-  }
-
-  void _showMediaPicker(bool isImage) async {
-    if (isImage) {
-      UploadFile().uploadImage(
-        subCategoryId: Constants.tubeSubCategory,
-        onUploaded: (data) {
-          XFile? file = data.file;
-          _mediaUrl = data.mediaId;
-          setState(() {
-            if (isImage) {
-              _selectedImages = File(file.path);
-              _selectedVideo = null;
-              _videoController?.dispose();
-              _videoController = null;
-            } else {
-              _selectedVideo = File(file.path);
-              _selectedImages = null;
-              _initializeVideo(file.path);
-            }
-          });
-                  print("data.mediaId ${data.mediaId}");
-          print("data.file ${data.file.mimeType}");
-          //Type here your code
-        },
-        context: context,
-      );
-    } else {
-      UploadFile().uploadVideo(
-        subCategoryId: Constants.tubeSubCategory,
-        onUploaded: (data) {
-          XFile? file = data.file;
-          _mediaUrl = data.mediaId;
-          setState(() {
-            if (isImage) {
-              _selectedImages = File(file.path);
-              _selectedVideo = null;
-              _videoController?.dispose();
-              _videoController = null;
-            } else {
-              _selectedVideo = File(file.path);
-              _selectedImages = null;
-              _initializeVideo(file.path);
-            }
-          });
-                  print("data.mediaId ${data.mediaId}");
-          print("data.file ${data.file.mimeType}");
-          //Type here your code
-        },
-        context: context,
-      );
-    }
-    setState(() {});
-  }
-
-  Future<void> _handleSubmit() async {
-    if (_formKey.currentState!.validate()) {
-      if (_selectedImages == null && _selectedVideo == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(LocaleKeys.enterImageOrVideo.localize),
-          ),
-        );
-        return;
-      }
-      serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-        onSubscribed: () {
-          context.read<StarCubit>().uploadStar(
-                params: StarParams(
-                  title: _titleController.text,
-                  mediaUrl: _mediaUrl ?? '',
-                  description: _descriptionController.text,
-                  type: _selectedImages == null ? 'video' : 'image',
-                ),
-              );
-          context.pop();
-          // context.pop();
-        },
-        subCategoryId: Constants.tubeSubCategory,
-      );
-    }
-
-    // SubscriptionMethod().subscribe(
-    //     subscribeId: Constants.tubeSubCategory,
-    //     showRegular: true,
-    //     title: LocaleKeys.tube.localize);
-    // if (_formKey.currentState!.validate()) {
-    //   if (_selectedImages == null && _selectedVideo == null) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text(LocaleKeys.enterImageOrVideo.localize),
-    //       ),
-    //     );
-    //     return;
-    //   }
-    //
-    //   context.read<StarCubit>().uploadStar(
-    //         params: StarParams(
-    //           title: _titleController.text,
-    //           mediaUrl: _mediaUrl ?? '',
-    //           description: _descriptionController.text,
-    //           type: _selectedImages == null ? 'video' : 'image',
-    //         ),
-    //       );
-    // }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +90,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () => _showMediaPicker(true),
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                      _showMediaPicker(true);
+                    },
                     icon: Image.asset(Assets.uploadIcon,
                         color: AppColors.getReversedTextColor(context)),
                     label: FittedBox(
@@ -244,7 +114,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () => _showMediaPicker(false),
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                      _showMediaPicker(false);
+                    },
                     icon: Image.asset(Assets.uploadIcon,
                         color: AppColors.getReversedTextColor(context)),
                     label: FittedBox(
@@ -318,7 +191,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: _handleSubmit,
+              onPressed: () async {
+                ManageVibration.vibrate();
+                await _handleSubmit();
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.getRedColor(context),
                 minimumSize: const Size(double.infinity, 50),
@@ -337,5 +213,139 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _titleFocusNode.dispose();
+    _descriptionController.dispose();
+    _videoController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _titleFocusNode.requestFocus();
+    });
+    super.initState();
+  }
+
+  Future<void> _handleSubmit() async {
+    if (_formKey.currentState!.validate()) {
+      if (_selectedImages == null && _selectedVideo == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(LocaleKeys.enterImageOrVideo.localize),
+          ),
+        );
+        return;
+      }
+      serviceLocator<SubscriptionController>().checkIfUserSubscribed(
+        onSubscribed: () {
+          context.read<StarCubit>().uploadStar(
+                params: StarParams(
+                  title: _titleController.text,
+                  mediaUrl: _mediaUrl ?? '',
+                  description: _descriptionController.text,
+                  type: _selectedImages == null ? 'video' : 'image',
+                ),
+              );
+          context.pop();
+          // context.pop();
+        },
+        subCategoryId: Constants.tubeSubCategory,
+      );
+    }
+
+    // SubscriptionMethod().subscribe(
+    //     subscribeId: Constants.tubeSubCategory,
+    //     showRegular: true,
+    //     title: LocaleKeys.tube.localize);
+    // if (_formKey.currentState!.validate()) {
+    //   if (_selectedImages == null && _selectedVideo == null) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text(LocaleKeys.enterImageOrVideo.localize),
+    //       ),
+    //     );
+    //     return;
+    //   }
+    //
+    //   context.read<StarCubit>().uploadStar(
+    //         params: StarParams(
+    //           title: _titleController.text,
+    //           mediaUrl: _mediaUrl ?? '',
+    //           description: _descriptionController.text,
+    //           type: _selectedImages == null ? 'video' : 'image',
+    //         ),
+    //       );
+    // }
+  }
+
+  void _initializeVideo(String path) {
+    if (_videoController != null) {
+      _videoController!.dispose();
+    }
+    _videoController = VideoPlayerController.file(File(path))
+      ..initialize().then((_) {
+        setState(() {});
+        _videoController!.play();
+        _videoController!.setLooping(true);
+      });
+  }
+
+  void _showMediaPicker(bool isImage) async {
+    if (isImage) {
+      UploadFile().uploadImage(
+        subCategoryId: Constants.tubeSubCategory,
+        onUploaded: (data) {
+          XFile? file = data.file;
+          _mediaUrl = data.mediaId;
+          setState(() {
+            if (isImage) {
+              _selectedImages = File(file.path);
+              _selectedVideo = null;
+              _videoController?.dispose();
+              _videoController = null;
+            } else {
+              _selectedVideo = File(file.path);
+              _selectedImages = null;
+              _initializeVideo(file.path);
+            }
+          });
+          print("data.mediaId ${data.mediaId}");
+          print("data.file ${data.file.mimeType}");
+          //Type here your code
+        },
+        context: context,
+      );
+    } else {
+      UploadFile().uploadVideo(
+        subCategoryId: Constants.tubeSubCategory,
+        onUploaded: (data) {
+          XFile? file = data.file;
+          _mediaUrl = data.mediaId;
+          setState(() {
+            if (isImage) {
+              _selectedImages = File(file.path);
+              _selectedVideo = null;
+              _videoController?.dispose();
+              _videoController = null;
+            } else {
+              _selectedVideo = File(file.path);
+              _selectedImages = null;
+              _initializeVideo(file.path);
+            }
+          });
+          print("data.mediaId ${data.mediaId}");
+          print("data.file ${data.file.mimeType}");
+          //Type here your code
+        },
+        context: context,
+      );
+    }
+    setState(() {});
   }
 }

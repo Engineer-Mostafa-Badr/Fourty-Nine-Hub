@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/soci
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import 'custom_Page_categories.dart';
 
 class EditPage extends StatefulWidget {
@@ -104,7 +105,10 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: () {
+        ManageVibration.vibrate();
+        onPressed?.call();
+      },
       style: ElevatedButton.styleFrom(
           backgroundColor: backgoundColor ?? AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(

@@ -21,7 +21,9 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
+import '../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../domain/entities/available_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../widgets/trip_join/request_log_widget.dart';
@@ -248,9 +250,9 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                         // isPremium: false,
                                         isPremium:data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
                                         otherUserId: '2',
-                                        subcategoryId: '2',
+                                        subcategoryId: '62ea00e269ea29c91dfc390c',
                                         phone: data.phoneNumber ?? "1234",
-                                        id: '2',
+                                        id:context.read<UserCubit>().state.data!.id,
                                         hasReport: true,
                                       ),
                                     ),
@@ -318,6 +320,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                 child: TripJoinFloatingActionButton(
                   title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
                   onTap: () {
+                    ManageVibration.vibrate();
                     context.push(Routes.TRIP_JOIN);
                   },
                 ),

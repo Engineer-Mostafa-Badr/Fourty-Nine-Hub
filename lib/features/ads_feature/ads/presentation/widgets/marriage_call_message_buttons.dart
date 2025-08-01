@@ -30,7 +30,19 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
+
 class MarriageCallMessageButtons extends StatefulWidget {
+  final String otherUserId;
+
+  final String? clientId;
+  final String subcategoryId;
+  final String phone;
+  final String id;
+  final String? senderName;
+  final String? senderImage;
+  final bool? hasReport;
+  final double startPadding;
   const MarriageCallMessageButtons({
     super.key,
     required this.otherUserId,
@@ -43,16 +55,6 @@ class MarriageCallMessageButtons extends StatefulWidget {
     this.clientId,
     this.startPadding = 0,
   });
-
-  final String otherUserId;
-  final String? clientId;
-  final String subcategoryId;
-  final String phone;
-  final String id;
-  final String? senderName;
-  final String? senderImage;
-  final bool? hasReport;
-  final double startPadding;
 
   @override
   State<MarriageCallMessageButtons> createState() =>
@@ -82,11 +84,13 @@ class _MarriageCallMessageButtonsState
                   child: InkWell(
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
+                            ManageVibration.vibrate();
                             return pleaseLoginDialog(context);
                             // context.push(Routes.LOGIN);
                           }
                         : snap.data == true
                             ? () {
+                                ManageVibration.vibrate();
                                 showModalBottomSheet(
                                   backgroundColor: context.isDarkMode
                                       ? AppColors.DARK_BLUE_COLOR
@@ -114,7 +118,8 @@ class _MarriageCallMessageButtonsState
                                           padding: EdgeInsets.all(16),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
                                             children: [
                                               SizedBox(
                                                 height: 24,
@@ -123,13 +128,15 @@ class _MarriageCallMessageButtonsState
                                                   iconSize: 20,
                                                   padding: EdgeInsets.zero,
                                                   style: IconButton.styleFrom(
-                                                    backgroundColor: const Color(0xffD9D9D9),
+                                                    backgroundColor:
+                                                        const Color(0xffD9D9D9),
                                                   ),
                                                   icon: const Icon(
                                                     Icons.close,
                                                     color: Colors.black,
                                                   ),
-                                                  onPressed: () => Navigator.pop(context),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
                                                 ),
                                               ),
                                               const SizedBox(
@@ -140,9 +147,9 @@ class _MarriageCallMessageButtonsState
                                                     ? "اتصال عادى"
                                                     : "Regular Call",
                                                 radius: 12,
-                                                color:
-                                                    AppColors.getButtonPrimaryColor(context),
-
+                                                color: AppColors
+                                                    .getButtonPrimaryColor(
+                                                        context),
                                                 onTap: () {
                                                   context.pop();
                                                   LaunchURLHelper().call(
@@ -155,9 +162,7 @@ class _MarriageCallMessageButtonsState
                                                     ? "اتصال مجاني"
                                                     : "Free Call",
                                                 radius: 12,
-                                                color:
-                                                    AppColors.grey300,
-
+                                                color: AppColors.grey300,
                                                 onTap: () async {
                                                   context.pop();
                                                   if (await Permission
@@ -169,8 +174,7 @@ class _MarriageCallMessageButtonsState
                                                               .request() !=
                                                           PermissionStatus
                                                               .granted) {
-                                                    await Permission
-                                                        .microphone
+                                                    await Permission.microphone
                                                         .request();
                                                     await Permission.camera
                                                         .request();
@@ -259,11 +263,13 @@ class _MarriageCallMessageButtonsState
                   //         : AppColors.DARK_GRAY_COLOR,
                   onTap: !context.read<UserCubit>().isLoggedIn
                       ? () {
+                          ManageVibration.vibrate();
                           return pleaseLoginDialog(context);
                           // context.push(Routes.LOGIN);
                         }
                       : snap.data == true
                           ? () async {
+                              ManageVibration.vibrate();
                               ChatEntity? chat = await context
                                   .read<UserCubit>()
                                   .createNormalChat(
@@ -306,10 +312,12 @@ class _MarriageCallMessageButtonsState
                     // color: AppColors.SECONDARY_COLOR,
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
+                            ManageVibration.vibrate();
                             return pleaseLoginDialog(context);
                             // context.push(Routes.LOGIN);
                           }
                         : () {
+                            ManageVibration.vibrate();
                             bottomSheet(
                                 context: context,
                                 widget: ReportView(

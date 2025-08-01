@@ -162,26 +162,32 @@ class RideModeButton extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: isRegistered == false
-              ? () async {
-                  await context.push(Routes.welcomeRideRegister, extra: false);
-                  if (onRefreshSettings != null) onRefreshSettings!();
-                }
-              : (isApproved == false)
-                  ? () async {
-                      await context.push(Routes.RIDE_HOME);
-                      if (onRefreshSettings != null) onRefreshSettings!();
-                    }
-                  : (isReady == false || isCaptain == false)
-                      ? () async {
-                          await context.push(Routes.rideModeScreen,
-                              extra: const RideModeParams(
-                                  modeType: 'ride',
-                                  isSocket: true,
-                                  currentIndex: 3));
+    ? () async {
+        ManageVibration.vibrate();
+        await context.push(Routes.welcomeRideRegister, extra: false);
+        if (onRefreshSettings != null) onRefreshSettings!();
+      }
+    : (isApproved == false)
+        ? () async {
+            ManageVibration.vibrate();
+            await context.push(Routes.RIDE_HOME);
+            if (onRefreshSettings != null) onRefreshSettings!();
+          }
+        : (isReady == false || isCaptain == false)
+            ? () async {
+                ManageVibration.vibrate();
+                await context.push(Routes.rideModeScreen,
+                    extra: const RideModeParams(
+                        modeType: 'ride',
+                        isSocket: true,
+                        currentIndex: 3));
 
-                          if (onRefreshSettings != null) onRefreshSettings!();
-                        }
-                      : onTap,
+                if (onRefreshSettings != null) onRefreshSettings!();
+              }
+            : () {
+                ManageVibration.vibrate();
+                onTap?.call();
+              },
           child: Container(
             margin: EdgeInsets.all(5.w),
             width: double.infinity,

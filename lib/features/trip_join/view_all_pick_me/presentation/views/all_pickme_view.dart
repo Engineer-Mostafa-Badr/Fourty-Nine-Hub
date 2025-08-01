@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
 import 'available_pickme_screen.dart';
 
 class AllPickMeView extends StatefulWidget {
@@ -214,6 +215,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
       //   });
       // },
       onTap: () {
+        ManageVibration.vibrate();
         tabController.animateTo(index);
         if (index == 0) {
           // context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();

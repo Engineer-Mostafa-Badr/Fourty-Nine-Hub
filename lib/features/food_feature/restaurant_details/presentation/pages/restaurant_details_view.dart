@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/presentat
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -137,6 +138,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ElevatedButton(
               onPressed: () {
+                ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
                   context.push(Routes.FOODCART);
                 }else{
