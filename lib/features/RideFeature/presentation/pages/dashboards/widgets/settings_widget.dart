@@ -264,6 +264,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   GestureDetector(
                       onTap: () {
                         ManageVibration.vibrate();
+                        List<SubCategoriesActive> activeCategories=List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
+                            subcategoryId:
+                            widget.settings!.categoryIds[index].id,
+                            isActive:index==0? isCaptain:index==1?isIntercity:isPremium));
+                        print("activeCategories $activeCategories");
                         customBottomSheet2(context,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -286,7 +291,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                           subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
                                               subcategoryId:
                                               widget.settings!.categoryIds[index].id,
-                                              isActive: isCaptain))
+                                              isActive:index==0? isCaptain:index==1?isIntercity:isPremium))
                                       ));
                                 },
                               ),
@@ -527,7 +532,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
-                                  isActive: isCaptain))
+                                  isActive:index==0? isCaptain:index==1?isIntercity:isPremium))
+
                           ));
                     }),
               ),
