@@ -12,10 +12,13 @@ import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../common/widgets/stateful/picker/date_picker.dart';
@@ -49,6 +52,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
+    context.read<EditProfileCubit>().getSettings(context);
     // context.read<EditProfileCubit>().state.copyWith(status: EditProfileStates.initial);
     print(context.read<UserCubit>().state.data);
     // context.read<EditProfileCubit>().fetchRideGovernorates();
@@ -149,7 +153,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   DefaultTextFormField(
                     fillColor: Colors.transparent,
                     currentController: userNameTextController,
-                    hint: LocaleKeys.userName.localize,
+                    hint: '',
                     borderColor: context.isDarkMode
                         ? const Color(0xffCACFF4)
                         : AppColors.PRIMARY_COLOR,
@@ -165,7 +169,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   DefaultTextFormField(
                     fillColor: Colors.transparent,
                     currentController: firstNameTextController,
-                    hint: LocaleKeys.name.localize,
+                    hint: '',
                     borderColor: context.isDarkMode
                         ? const Color(0xffCACFF4)
                         : AppColors.PRIMARY_COLOR,
@@ -180,7 +184,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   DefaultTextFormField(
                     fillColor: Colors.transparent,
                     currentController: lastNameTextController,
-                    hint: LocaleKeys.name.localize,
+                    hint: '',
                     borderColor: context.isDarkMode
                         ? const Color(0xffCACFF4)
                         : AppColors.PRIMARY_COLOR,
@@ -201,6 +205,12 @@ class _EditProfileViewState extends State<EditProfileView> {
                           value: 'male',
                           groupValue: gender,
                           onChanged: (String? value) {
+                            print("controller.state.isDriverLady ${controller.state.isDriverLady}");
+                            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                            if(controller.state.isDriverLady!=null&&controller.state.isDriverLady==true){
+                              showErrorMessage(currentContext, currentContext.isArabic?'لا يمكن تغيير جنسية السائقين. يرجى الاتصال بالدعم':'Drivers are not allowed to change their gender. Please contact support');
+                              return;
+                            }
                             setState(() {
                               gender = value!;
                             });
@@ -216,6 +226,14 @@ class _EditProfileViewState extends State<EditProfileView> {
                           value: 'female',
                           groupValue: gender,
                           onChanged: (String? value) {
+                            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                            if(controller.state.isDriverLady!=null&&controller.state.isDriverLady==true){
+                               if(gender=='female'){
+                                 return;
+                               }else{
+                                 showErrorMessage(currentContext, currentContext.isArabic?'أنت بالفعل أنثي':'You are already female');
+                               }
+                            }
                             setState(() {
                               gender = value!;
                             });
@@ -233,7 +251,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   DefaultTextFormField(
                     fillColor: Colors.transparent,
                     currentController: bioTextController,
-                    hint: LocaleKeys.bio.localize,
+                    hint: '',
                     borderColor: context.isDarkMode
                         ? const Color(0xffCACFF4)
                         : AppColors.PRIMARY_COLOR,
@@ -247,7 +265,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   DefaultTextFormField(
                     fillColor: Colors.transparent,
                     currentController: jobTextController,
-                    hint: LocaleKeys.job.localize,
+                    hint: '',
                     borderColor: context.isDarkMode
                         ? const Color(0xffCACFF4)
                         : AppColors.PRIMARY_COLOR,
@@ -274,7 +292,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         child: DefaultTextFormField(
                           fillColor: Colors.transparent,
                           currentController: phoneTextController,
-                          hint: LocaleKeys.phone.localize,
+                          hint: '',
                           borderColor: context.isDarkMode
                               ? const Color(0xffCACFF4)
                               : AppColors.PRIMARY_COLOR,

@@ -64,6 +64,8 @@ class DashboardsState
       final String? supportStatus;
   final CreateNonTrackOfferEntity? createNonTrackOfferEntity;
   final bool? offerCreatedShown;
+  final String? personalFrontMediaId;
+   final   String? personalBackMediaId;
   final UpdateDriverSettingsEntity? updateDriverSettingsEntity;
   final DriverSettingsEntity? driverSettingsEntity;
   final XFile? personalFrontIdPicture;
@@ -98,6 +100,8 @@ class DashboardsState
       this.availableRideTrips,
       this.availableRideNonSocketTrips,
       this.acceptedRideNonSocketTrips,
+      this.personalFrontMediaId,
+      this.personalBackMediaId,
       this.pastRideNonSocketTrips,
       this.tripStatus,
       this.remainingTime,
@@ -144,6 +148,8 @@ class DashboardsState
         String? tripStatus,
         DateTime? remainingTime,
         String? lastStatus,
+        String? personalFrontMediaId,
+        String? personalBackMediaId,
         bool? isChangedMindReason,
         bool? isOtherReason,
         bool? isClientNotShownReason,
@@ -227,6 +233,8 @@ class DashboardsState
       loadingAvailableNonSocket: loadingAvailableNonSocket ?? this.loadingAvailableNonSocket,
       loadingHistoryNonSocket: loadingHistoryNonSocket ?? this.loadingHistoryNonSocket,
       driverSettingLoadingEntity: driverSettingLoadingEntity ?? this.driverSettingLoadingEntity,
+      personalFrontMediaId: personalFrontMediaId ?? this.personalFrontMediaId,
+      personalBackMediaId: personalBackMediaId ?? this.personalBackMediaId,
     );
   }
 

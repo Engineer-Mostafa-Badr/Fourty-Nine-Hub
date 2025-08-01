@@ -6,18 +6,20 @@ class LocationInfoWidget extends StatelessWidget {
   final String from;
   final String to;
   final bool? hasTitle;
+  final EdgeInsetsGeometry? padding;
 
   const LocationInfoWidget({
-    super.key,
+    Key? key,
     required this.from,
     required this.to,
     this.hasTitle,
-  });
+    this.padding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: padding??const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

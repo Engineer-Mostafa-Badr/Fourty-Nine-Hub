@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/format_numbers.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'font_manager.dart';
 
@@ -136,6 +137,7 @@ class TopCardRequest extends StatelessWidget {
                       duration: const Duration(seconds: 10),
                       tween: Tween(begin: 0.0, end: 1.0),
                       onEnd: (){
+                        ManageVibration.vibrate();
                         rideCubit.removeRideOfferFromRideOffers(rideOffer);
                       },
                       builder: (context, value, child) {

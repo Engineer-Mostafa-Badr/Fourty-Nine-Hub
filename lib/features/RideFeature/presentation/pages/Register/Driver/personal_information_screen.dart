@@ -77,7 +77,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       final DateTime latestDate = DateTime(now.year - 21, now.month, now.day);
       return PopScope(
         canPop: false,
-        child: CustomScaffold(  
+        child: CustomScaffold(
           appBar: const PreferredSize(
             preferredSize: Size.fromHeight(30),
             child: HomeAppbar(),
@@ -768,12 +768,21 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       ? AppColors.GREY_DARK_COLOR
                                       : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  onChanged: (v) =>
-                                      cubit.formKey.currentState?.validate(),
+                                  onChanged: (v)=>cubit.formKey.currentState?.validate(),
+                                  inputFormatter: [
+
+                                  ],
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
                                       return LocaleKeys.required.localize;
                                     }
+                                    final normalized = v.replaceAll(RegExp(r'\s+'), ' ').trim();
+
+                                    final plateRegExp = RegExp(r'^([\u0621-\u064A]\s?){1,3}[٠-٩0-9]{1,4}$');
+                                    if (!plateRegExp.hasMatch(normalized)) {
+                                      return context.isArabic?'رقم اللوحة غير صحيح (مثال: س ب ١٢٣)':'Invalid plate number (e.g. س ب 123)';
+                                    }
+
                                     return null;
                                   },
                                 ),

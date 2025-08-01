@@ -314,14 +314,17 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       },
           (settings) {
 
+            String lady = '62ea012a69ea29c91dfc3917';
         bool isReady = isServiceAvailable(settings);
+        bool isDriverLady = settings.data.categoryIds.any((element) => element.id == lady);
+        print("isDriverLady $isDriverLady");
         if(isReady){
           updateDriverLocation();
           listenToNewTrip(context,settings.data.enableNotificationSound);
           listenToAcceptOffer(context);
         }
         emit(state.copyWith(
-            status: StateStatus.success,setting: settings));
+            status: StateStatus.success,setting: settings,isDriverLady:isDriverLady));
       },
     );
   }

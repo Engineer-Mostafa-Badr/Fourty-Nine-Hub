@@ -193,10 +193,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(LocaleKeys.name.localize, style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 6),
+                    // Text(LocaleKeys.name.localize, style: TextStyle(fontWeight: FontWeight.bold)),
+                    // SizedBox(height: 6),
                     CustomSupportTextField(
-                        hintText: LocaleKeys.name.localize,
+                        hintText:'',
+                        labelText: LocaleKeys.name.localize,
                         controller: nameController,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -211,10 +212,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(LocaleKeys.phone.localize, style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 6),
+                    // Text(LocaleKeys.phone.localize, style: TextStyle(fontWeight: FontWeight.bold)),
+                    // SizedBox(height: 6),
                     CustomSupportTextField(
-                        hintText: LocaleKeys.phone.localize,
+                        hintText:'',
+                        labelText: LocaleKeys.phone.localize,
                         keyboardType: TextInputType.phone,
                         controller: phoneController,
                         inputFormatters: [
