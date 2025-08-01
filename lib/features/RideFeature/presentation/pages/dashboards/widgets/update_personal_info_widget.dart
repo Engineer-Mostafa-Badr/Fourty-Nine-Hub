@@ -9,8 +9,9 @@ import '../../../../../../res/assets/assets.dart';
 class UpdatePersonalInfoWidget extends StatefulWidget {
   final String title;
   final int exdIn;
+  final bool? isEnabled;
   const UpdatePersonalInfoWidget(
-      {super.key, required this.title, required this.exdIn});
+      {super.key, required this.title, required this.exdIn, this.isEnabled=true});
 
   @override
   State<UpdatePersonalInfoWidget> createState() =>
@@ -39,9 +40,11 @@ class _UpdatePersonalInfoWidgetState extends State<UpdatePersonalInfoWidget> {
         ),),
           const Spacer(),
            Text(LocaleKeys.update.tr(),//'Update',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,
+              color: widget.isEnabled==true?null:AppColors.GREY_DARK_COLOR
+              )),
           const SizedBox(width: 8),
-          Image.asset(Assets.update,color: context.isDarkMode?AppColors.PRIMARY_COLOR_DARK:null,),
+          Image.asset(Assets.update,color: context.isDarkMode?(widget.isEnabled==true?AppColors.PRIMARY_COLOR_DARK:AppColors.GREY_DARK_COLOR):widget.isEnabled==true?null:AppColors.GREY_DARK_COLOR,),
         ],
       ),
     );
