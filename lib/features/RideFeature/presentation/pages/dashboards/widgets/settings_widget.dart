@@ -385,7 +385,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               children: [
                 Text(LocaleKeys.totalTrips.tr(), //'Total Trips',
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500)),
+                        fontSize: 14, fontWeight: FontWeight.w500)),
                 Text(widget.settings?.countTrips.toString() ?? '', //'38',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500))
@@ -449,9 +449,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   isEnabled: !(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: calculateDaysUntilExpiry(widget.settings?.carLicenseExpiryDate??'')),
             ),
-            if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+            if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+              alignment: AlignmentDirectional.bottomEnd,
+              child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+                ),
               ),
             ),
             if(widget.settings?.isCriminalRecordEnabled == true)
