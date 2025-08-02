@@ -39,6 +39,8 @@ class SettingsWidget extends StatefulWidget {
 
 class _SettingsWidgetState extends State<SettingsWidget> {
   late bool isReady;
+  bool isComfort=false;
+  bool isNonSmoking=false;
   late bool enableSound;
   late bool isCaptainShare;
   late bool isCaptain;
@@ -85,6 +87,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     cityTrailing = widget.settings?.city ?? '';
     perKm = widget.settings?.pricingPerKm ?? 0;
     isReady = widget.settings?.isReady ?? false;
+    isComfort = widget.settings?.isComfort ?? false;
+    isNonSmoking = widget.settings?.isNonSmoking ?? false;
     enableSound =  widget.settings?.enableNotificationSound ?? false;
     isCaptainShare =  widget.settings?.isCaptainShareEnabled ?? false;
     if((widget.settings?.categoryIds.length ?? 0) > 0)isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
@@ -138,6 +142,27 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 ManageVibration.vibrate();
                 setState(() {
                   isReady = value;
+                });
+              }),
+          switchWidget(
+              title: LocaleKeys.comfort.tr(),
+              subText: isComfort ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+              valuee: isComfort,
+              onChanged: (value) {
+                ManageVibration.vibrate();
+                setState(() {
+                  isComfort = value;
+                });
+              }),
+
+          switchWidget(
+              title: LocaleKeys.nonSmokerDriver.tr(),
+              subText: isNonSmoking ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+              valuee: isNonSmoking,
+              onChanged: (value) {
+                ManageVibration.vibrate();
+                setState(() {
+                  isNonSmoking = value;
                 });
               }),
           if (widget.modeType == 'ride') ...[
@@ -278,6 +303,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       context,
                                       UpdateSettingsDashboardUsecaseParam(
                                           isReady: isReady,
+                                          isComfort: isComfort,
+                                          isNonSmoking:isNonSmoking,
                                           enableSound: enableSound,
                                           isCaptainShare: isCaptainShare,
                                           subscriptionPlan: planTrailing,
@@ -286,8 +313,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                           subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
                                               subcategoryId:
                                               widget.settings!.categoryIds[index].id,
-                                              isActive: isCaptain))
-                                      ));
+                                              isActive: index==0?isCaptain:index==1?isIntercity:isPremium)))
+                                      );
                                 },
                               ),
                             ),
@@ -344,7 +371,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         fontSize: 14, fontWeight: FontWeight.w500)),
                 Text('${widget.settings?.profit ?? '0'} ${LocaleKeys.egp.tr()}',
                     style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w500))
+                        fontSize: 14, fontWeight: FontWeight.w500
+                    ))
               ],
             ),
           ),
@@ -519,6 +547,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           context,
                           UpdateSettingsDashboardUsecaseParam(
                               isReady: isReady,
+                              isComfort: isComfort,
+                              isNonSmoking:isNonSmoking,
                               enableSound: enableSound,
                               isCaptainShare: isCaptainShare,
                               subscriptionPlan: planTrailing,
@@ -527,7 +557,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               subCategoriesActive: List.generate(widget.settings?.categoryIds.length??0, (index)=>SubCategoriesActive(
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
-                                  isActive: isCaptain))
+                                  isActive: index==0?isCaptain:index==1?isIntercity:isPremium))
                           ));
                     }),
               ),
