@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/record_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/creminal_record_non_socket_screen.dart';
@@ -295,6 +296,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: UpdateFareBottomSheetWidget(
+                                isArabic:context.isArabic,
                                 selectedCategoryPrice: widget.settings?.pricingPerKm ?? 0,
                                 highCostPerKm: widget.settings?.highCostPerKm ?? 0,
                                 lowCostPerKm: widget.settings?.lowCostPerKm ?? 0,
@@ -325,7 +327,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Row(
                         children: [
                           Text(
-                              '${widget.settings?.pricingPerKm ?? 0} ',
+                              '${FormatNumbers().convertNumberToLocalizedString(widget.settings?.pricingPerKm.toString() ?? '0', isArabic: context.isArabic)} ',
                               style: const TextStyle(fontSize: 12,)),
                           Text(
                               'change'.tr(),
@@ -357,7 +359,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                Text(widget.settings?.rating.totalRatings.toString() ?? '2.5',
+                Text(FormatNumbers().convertNumberToLocalizedString(widget.settings?.rating.totalRatings.toString() ?? '0.0', isArabic: context.isArabic),
                     style: const TextStyle(
                         fontSize: 12, fontWeight: FontWeight.w700))
               ],
@@ -371,7 +373,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 Text(LocaleKeys.totalProfit.tr(), //'Total Profit',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500)),
-                Text('${widget.settings?.profit ?? '0'} ${LocaleKeys.egp.tr()}',
+                Text('${FormatNumbers().convertNumberToLocalizedString(widget.settings?.profit.toString() ?? '0', isArabic: context.isArabic)} ${LocaleKeys.egp.tr()}',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500
                     ))
@@ -386,7 +388,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 Text(LocaleKeys.totalTrips.tr(), //'Total Trips',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500)),
-                Text(widget.settings?.countTrips.toString() ?? '', //'38',
+                Text(FormatNumbers().convertNumberToLocalizedString(widget.settings?.countTrips.toString() ?? '', isArabic: context.isArabic), //'38',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500))
               ],
@@ -407,11 +409,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(),
                   isEnabled: !(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: calculateDaysUntilExpiry(widget.settings?.idExpiryDate??''))),
-          if(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-          style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
-          ),
-          ),
+          if(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+    alignment: AlignmentDirectional.bottomEnd,
+    child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+    style: const TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+    ),
+    ),
+    ),
           ClickableWidget(
             onTap: () async {
               if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
@@ -428,11 +433,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 isEnabled: !(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                 exdIn: calculateDaysUntilExpiry(widget.settings?.drivingLicenseExpiryDate??'')),
           ),
-          if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-            style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
-            ),
-          ),          if (widget.modeType == 'ride') ...[
+          if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+    alignment: AlignmentDirectional.bottomEnd,
+    child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+    style: const TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+    ),
+    ),
+    ),
+          if (widget.modeType == 'ride') ...[
             ClickableWidget(
               onTap: () async {
                 if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
@@ -474,11 +483,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   isEnabled: !(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: 4),
             ),
-                if(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-                  style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
-                  ),
-                ),
+                if(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+    alignment: AlignmentDirectional.bottomEnd,
+    child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+    style: const TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+    ),
+    ),
+    ),
               ],
             if(widget.settings?.isDrugAnalysisRecordEnabled == true)
             ...[ClickableWidget(
@@ -497,9 +509,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   isEnabled: !(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: calculateDaysUntilExpiry(widget.settings?.drugAnalysisExpiryDate??'')),
             ),
-              if(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-                style: const TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+              if(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+                alignment: AlignmentDirectional.bottomEnd,
+                child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+                  ),
                 ),
               ),
             ],

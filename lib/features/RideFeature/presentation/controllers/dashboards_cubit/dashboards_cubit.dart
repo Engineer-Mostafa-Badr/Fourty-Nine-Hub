@@ -2545,7 +2545,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           ? showDebtDialog(currentContext, subCategoryId)
           : errorName == 'SubscribeError'
               ? showSubscribeDialog(currentContext, subCategoryId)
-              : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+              :errorName == 'RideActiveTripError'?showHaveTripDialog(context:currentContext,title:currentContext.isArabic?"لا يمكنك قبول هذه الرحلة أثناء قيامك برحلة أخرى الآن، يرجى إكمال الرحلة حتى تتمكن من قبول رحلة أخرى":"You can't accept this trip while you're taking another trip now, Please complete the trip so you can accept another trip",
+
+      ): showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: DashboardsStates.error));
     }, (data) {
       onSuccess();

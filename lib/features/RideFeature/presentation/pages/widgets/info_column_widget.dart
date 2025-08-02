@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -47,10 +48,10 @@ class PriceColumn extends StatelessWidget {
           children: [
             Label(
               text: price,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
-                color: AppColors.PRIMARY_COLOR,
+                color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,
               ),
             ),
             Label(
