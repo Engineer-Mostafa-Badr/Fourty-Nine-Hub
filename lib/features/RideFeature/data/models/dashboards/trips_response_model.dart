@@ -1,7 +1,6 @@
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 
-import 'pagination_model.dart';
 
 class TripsResponseModel extends TripsResponseEntity {
   TripsResponseModel({required super.status, required TripDataModel super.data});

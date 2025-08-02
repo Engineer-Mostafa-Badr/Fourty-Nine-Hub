@@ -7,7 +7,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class SupportClientDetailsScreen extends StatelessWidget {
-  SupportClientDetailsScreen({Key? key}) : super(key: key);
+  SupportClientDetailsScreen({super.key});
 
   final TextEditingController nameController = TextEditingController(text: "Ahmed mohammed");
   final TextEditingController phoneController = TextEditingController(text: "01578731541");

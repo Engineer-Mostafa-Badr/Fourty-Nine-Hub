@@ -135,7 +135,7 @@ class BuildLifeEventView extends StatelessWidget {
                       child:SvgPicture.network(context.read<CreatePostCubit>().state.selectedLifeEvent?.mainCat?.image??'',height: 32,width: 32,color: Colors.white,)
                   )
               ),
-              if(context.read<CreatePostCubit>().state.selectedLifeEvent?.media==null&&(context.read<CreatePostCubit>().state.selectedLifeEvent?.media?.isEmpty??false))PositionedDirectional(top: 110,start: 123,
+              if(context.read<CreatePostCubit>().state.selectedLifeEvent?.media==null&&(context.read<CreatePostCubit>().state.selectedLifeEvent?.media.isEmpty??false))PositionedDirectional(top: 110,start: 123,
                 child:
                 GestureDetector(
                     onTap: (){

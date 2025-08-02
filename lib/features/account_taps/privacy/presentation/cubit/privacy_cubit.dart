@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
 
-import '../../domain/entities/search_users_entity.dart';
 import '../../domain/useCase/fetch_communication_privacy_use_case.dart';
 import '../../domain/useCase/fetch_connection_privacy_use_case.dart';
 import '../../domain/useCase/fetch_exclusion_privacy_use_case.dart';

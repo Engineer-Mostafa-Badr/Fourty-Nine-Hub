@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
-import '../../../../../core/utils/hex_color_helper.dart';
-import '../../../../../res/assets/assets.dart';
-import 'hashtags_widget.dart';
 import 'sound_widget.dart';
 
 class SoundsContentWidget extends StatelessWidget {

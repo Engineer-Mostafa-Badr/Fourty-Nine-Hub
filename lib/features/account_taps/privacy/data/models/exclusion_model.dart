@@ -1,12 +1,11 @@
 import '../../domain/entities/exclusion_entity.dart';
 
-import '../../domain/entities/exclusion_entity.dart';
 
 class ExclusionModel extends ExclusionEntity {
   ExclusionModel({
-    bool? status,
-    ExclusionDataEntity? data,
-  }) : super(status: status, data: data);
+    super.status,
+    super.data,
+  });
 
   factory ExclusionModel.fromJson(Map<String, dynamic> json) {
     return ExclusionModel(
@@ -20,9 +19,9 @@ class ExclusionModel extends ExclusionEntity {
 
 class ExclusionDataModel extends ExclusionDataEntity {
   ExclusionDataModel({
-    List<UserEntity>? allowedUsers,
-    List<UserEntity>? forbiddenUsers,
-  }) : super(allowedUsers: allowedUsers, forbiddenUsers: forbiddenUsers);
+    super.allowedUsers,
+    super.forbiddenUsers,
+  });
 
   factory ExclusionDataModel.fromJson(Map<String, dynamic> json) {
     print("JSON data: $json");  // Log the raw JSON to debug
@@ -39,18 +38,12 @@ class ExclusionDataModel extends ExclusionDataEntity {
 
 class UserModel extends UserEntity {
   UserModel({
-    required String id,
-    required String username,
-    required String firstName,
-    required String lastName,
-    required ProfilePictureEntity profilePictureKey,
-  }) : super(
-    id: id,
-    username: username,
-    firstName: firstName,
-    lastName: lastName,
-    profilePictureKey: profilePictureKey,
-  );
+    required super.id,
+    required super.username,
+    required super.firstName,
+    required super.lastName,
+    required super.profilePictureKey,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -68,12 +61,9 @@ class UserModel extends UserEntity {
 
 class ProfilePictureModel extends ProfilePictureEntity {
   ProfilePictureModel({
-    required String id,
-    required String mediaKey,
-  }) : super(
-    id: id,
-    mediaKey: mediaKey,
-  );
+    required super.id,
+    required super.mediaKey,
+  });
 
   factory ProfilePictureModel.fromJson(Map<String, dynamic> json) {
     return ProfilePictureModel(

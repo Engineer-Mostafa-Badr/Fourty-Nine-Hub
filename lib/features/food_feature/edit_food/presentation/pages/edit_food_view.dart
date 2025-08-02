@@ -54,6 +54,7 @@ class _EditFoodViewState extends State<EditFoodView>
   String imagePath = "";
   final Duration _scrollDuration = const Duration(seconds: 1);
   final Curve _scrollCurve = Curves.easeInOut;
+  final FocusNode foodNameFocusNode = FocusNode();
 
   @override
   bool get wantKeepAlive => true;
@@ -70,6 +71,9 @@ class _EditFoodViewState extends State<EditFoodView>
             ? widget.restaurantData
             : widget.restaurantData.restaurantId,
         first: true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      foodNameFocusNode.requestFocus();
+    });
   }
 
   void _onScroll() {
@@ -89,6 +93,7 @@ class _EditFoodViewState extends State<EditFoodView>
     _scrollController.dispose();
     foodNameController.dispose();
     priceController.dispose();
+    foodNameFocusNode.dispose();
     super.dispose();
   }
 
@@ -127,7 +132,8 @@ class _EditFoodViewState extends State<EditFoodView>
     return result;
   }
 
-  Widget _buildMealsList(List<RestaurantMenu> meals, Function(String id) onDelete) {
+  Widget _buildMealsList(
+      List<RestaurantMenu> meals, Function(String id) onDelete) {
     return BlocBuilder<EditFoodCubit, EditFoodState>(
       builder: (context, state) {
         return ListView.separated(
@@ -144,7 +150,7 @@ class _EditFoodViewState extends State<EditFoodView>
             return Container(
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                color:AppColors.getFindFillColor(context),
+                color: AppColors.getFindFillColor(context),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -180,14 +186,18 @@ class _EditFoodViewState extends State<EditFoodView>
                         Text(
                           meal.foodName ?? '',
                           style: Styles.headerText(
-                            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          '${meal.price?.toInt().toLocalizedArabic(context) ?? ''} ${context.isArabic?'ج.م':'EGP'}',
-                          style: Styles.mediumText(color: AppColors.getTextColor(context),fontSize: 32),
+                          '${meal.price?.toInt().toLocalizedArabic(context) ?? ''} ${context.isArabic ? 'ج.م' : 'EGP'}',
+                          style: Styles.mediumText(
+                              color: AppColors.getTextColor(context),
+                              fontSize: 32),
                         ),
                       ],
                     ),
@@ -208,7 +218,9 @@ class _EditFoodViewState extends State<EditFoodView>
                               child: Text(
                                 context.isArabic ? 'حذف الوجبة' : 'Delete Item',
                                 style: Styles.headerText(
-                                  color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                                  color: context.isDarkMode
+                                      ? AppColors.whiteColor
+                                      : AppColors.PRIMARY_COLOR,
                                 ),
                               ),
                             ),
@@ -218,8 +230,9 @@ class _EditFoodViewState extends State<EditFoodView>
                                   : 'Are you sure you want to remove this item?',
                               style: Styles.mediumText(
                                 fontSize: 32,
-                                color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.PRIMARY_COLOR,
                               ),
                             ),
                             actions: [
@@ -228,14 +241,16 @@ class _EditFoodViewState extends State<EditFoodView>
                                 child: Text(
                                   LocaleKeys.no.localize,
                                   style: Styles.mediumText(
-                                    color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-
+                                    color: context.isDarkMode
+                                        ? AppColors.whiteColor
+                                        : AppColors.PRIMARY_COLOR,
                                   ),
                                 ),
                               ),
                               ElevatedButton(
-                                style :ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.getButtonPrimaryColor(context),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      AppColors.getButtonPrimaryColor(context),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -246,16 +261,18 @@ class _EditFoodViewState extends State<EditFoodView>
                                 },
                                 child: Text(
                                   LocaleKeys.yes.localize,
-                                  style: Styles.mediumText(color: AppColors.getReversedTextColor(context)),
+                                  style: Styles.mediumText(
+                                      color: AppColors.getReversedTextColor(
+                                          context)),
                                 ),
-
                               ),
                             ],
                           );
                         },
                       );
                     },
-                    child: Icon(Icons.delete, color: AppColors.getReversedTextColor(context)),
+                    child: Icon(Icons.delete,
+                        color: AppColors.getReversedTextColor(context)),
                   ),
                 ],
               ),
@@ -270,8 +287,8 @@ class _EditFoodViewState extends State<EditFoodView>
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-          color: AppColors.getFindFillColor(context),
-          borderRadius: BorderRadius.circular(15),
+        color: AppColors.getFindFillColor(context),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
@@ -293,9 +310,9 @@ class _EditFoodViewState extends State<EditFoodView>
                 child: GestureDetector(
                   onTap: () async {
                     await context.read<EditFoodCubit>().uploadProfileImage(
-                      context: context,
-                      subcategoryId: '62c8babb8e28a58a3edf581d',
-                    );
+                          context: context,
+                          subcategoryId: '62c8babb8e28a58a3edf581d',
+                        );
                   },
                   child: BlocBuilder<EditFoodCubit, EditFoodState>(
                     builder: (context, state) {
@@ -314,7 +331,10 @@ class _EditFoodViewState extends State<EditFoodView>
                       return Container(
                         height: 120,
                         decoration: BoxDecoration(
-                          border: Border.all(color:context.isDarkMode?Colors.grey.shade300:Colors.grey.shade600),
+                          border: Border.all(
+                              color: context.isDarkMode
+                                  ? Colors.grey.shade300
+                                  : Colors.grey.shade600),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
@@ -339,13 +359,15 @@ class _EditFoodViewState extends State<EditFoodView>
                       hintText: LocaleKeys.itemName.localize,
                       validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
                       keyboardType: TextInputType.text,
+                      focusNode: foodNameFocusNode,
                     ),
                     const SizedBox(height: 10),
                     _buildTextFormField(
                       controller: priceController,
                       hintText: LocaleKeys.price.localize,
                       validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
                       ],
@@ -363,13 +385,16 @@ class _EditFoodViewState extends State<EditFoodView>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
               onPressed: _onAddOrUpdatePressed,
-              icon: Icon(Icons.add, color: AppColors.getReversedTextColor(context)),
+              icon: Icon(Icons.add,
+                  color: AppColors.getReversedTextColor(context)),
               label: Text(
                 LocaleKeys.add.localize,
-                style: Styles.mediumText(color: AppColors.getReversedTextColor(context)),
+                style: Styles.mediumText(
+                    color: AppColors.getReversedTextColor(context)),
               ),
             ),
           ),
@@ -378,17 +403,19 @@ class _EditFoodViewState extends State<EditFoodView>
     );
   }
 
-
   Widget _buildTextFormField({
     required TextEditingController controller,
     required String hintText,
     required String validatorMessage,
     TextInputType keyboardType = TextInputType.text,
     List<TextInputFormatter>? inputFormatters,
+    FocusNode? focusNode,
   }) {
     return TextFormField(
+      focusNode: focusNode,
       style: TextStyle(
-          color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+        color:
+            context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -484,7 +511,8 @@ class _EditFoodViewState extends State<EditFoodView>
     return CustomScaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.editFood.localize),
-        leading: IconButton(onPressed: ()=>context.pop(), icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+            onPressed: () => context.pop(), icon: Icon(Icons.arrow_back)),
       ),
       body:
           BlocBuilder<EditFoodCubit, EditFoodState>(builder: (context, state) {

@@ -7,12 +7,10 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../../../RideFeature/domain/entities/ride_brand_entity.dart';
 import '../../../../../RideFeature/domain/entities/ride_model_entity.dart';
-import '../../../../../ride/RideRequest/domain/entity/expected_price_entity.dart';
 import '../../../domain/entities/available_trip_join_entity.dart';
 import '../../../domain/entities/delete_my_trip_join_entity.dart';
 import '../../../domain/entities/expected_price_entity.dart';
@@ -493,8 +491,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   }
 
   Future<void> getCarModelLoading({required String brandId}) async {
-    if (!hasMoreCarModelLoading || isLoadingMoreCarModelLoading)
+    if (!hasMoreCarModelLoading || isLoadingMoreCarModelLoading) {
       return;
+    }
     isLoadingMoreCarModelLoading = true;
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
     final response = await getCarModelUseCase(
@@ -550,8 +549,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   }
 
   Future<void> getCarBrandLoading() async {
-    if (!hasMoreCarBrandLoading || isLoadingMoreCarBrandLoading)
+    if (!hasMoreCarBrandLoading || isLoadingMoreCarBrandLoading) {
       return;
+    }
     isLoadingMoreCarBrandLoading = true;
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
     final response = await getCarBrandUseCase(

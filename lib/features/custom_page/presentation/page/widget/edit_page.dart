@@ -8,7 +8,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/choose_catgories_view_body.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/navigate_bar.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/social_page.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';

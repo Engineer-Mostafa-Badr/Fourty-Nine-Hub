@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -16,12 +14,9 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pe
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
 
 class RunningTripParams {
   final RideCubit rideCubit;

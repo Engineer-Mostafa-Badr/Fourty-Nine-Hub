@@ -15,8 +15,6 @@ import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import '../controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class PickedData {
   final String address;

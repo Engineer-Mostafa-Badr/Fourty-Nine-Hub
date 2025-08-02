@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
-import '../../../wallet/domain/entities/wallet/wallet_entity.dart';
 import '../../../wallet/domain/usecases/get_wallet_usecase.dart';
 import '../../domain/use_case/fetch_user_use_case.dart';
 

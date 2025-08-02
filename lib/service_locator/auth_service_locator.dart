@@ -6,22 +6,21 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_ne
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_by_user_id_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
-
 // import 'package:fourtyninehub/features/authentication/domain/use_cases/get_unreaded_chats_counter_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_profile_view_usecase.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_bio_usecase.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_name_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_bio_usecase.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_name_usecase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import '../features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import '../features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
 import '../features/authentication/data/data_sources/remote_data_source/user_remote_data_source.dart';
@@ -32,6 +31,8 @@ import '../features/authentication/domain/repositories/user_repository.dart';
 import '../features/authentication/domain/use_cases/apple_sign_in_usecase.dart';
 import '../features/authentication/domain/use_cases/attach_token_use_case.dart';
 import '../features/authentication/domain/use_cases/change_password_use_case.dart';
+import '../features/authentication/domain/use_cases/check_guest_state_use_case.dart';
+import '../features/authentication/domain/use_cases/convert_guest_to_user_use_case.dart';
 import '../features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/get_user_use_case.dart';
 import '../features/authentication/domain/use_cases/login_use_case.dart';
@@ -40,6 +41,7 @@ import '../features/authentication/domain/use_cases/register_by_phone_use_case.d
 import '../features/authentication/domain/use_cases/register_use_case.dart';
 import '../features/authentication/domain/use_cases/save_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/send_forget_password_question_use_case.dart';
+import '../features/authentication/domain/use_cases/signIn_as_guest_use_case.dart';
 import '../features/authentication/domain/use_cases/sign_out_usecase.dart';
 import '../features/authentication/domain/use_cases/verify_otp_use_case.dart';
 import '../features/authentication/domain/use_cases/verify_phone_otp_use_case.dart';
@@ -116,7 +118,8 @@ class AuthServiceLocator {
     );
     // auth use cases
     serviceLocator.registerFactory(() => LoginUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => LoginWithPhoneUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => LoginWithPhoneUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
     // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
@@ -124,9 +127,11 @@ class AuthServiceLocator {
     // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => RegisterByPhoneUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => RegisterByPhoneUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => VerifyPhoneOtpUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => VerifyPhoneOtpUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => ResendOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SignOutUseCase(serviceLocator()));
     serviceLocator
@@ -149,13 +154,26 @@ class AuthServiceLocator {
         () => SendForgetPasswordQuestionUseCase(serviceLocator()));
     serviceLocator.registerFactory(
         () => VerifyForgetPasswordOTPUseCase(serviceLocator()));
-    serviceLocator.registerFactory(
-        () => VerifyQuestionsUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => VerifyQuestionsUseCase(serviceLocator()));
     serviceLocator.registerFactory(
         () => CreateNewForgetPasswordUseCase(serviceLocator()));
 
     serviceLocator
         .registerFactory(() => ChangePasswordUseCase(serviceLocator()));
+
+    // Guest Use Cases
+    serviceLocator.registerLazySingleton(
+      () => SignInAsGuestUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton(
+      () => CheckGuestStateUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton(
+      () => ConvertGuestToUserUseCase(serviceLocator()),
+    );
 
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
@@ -168,6 +186,7 @@ class AuthServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator<SignInAsGuestUseCase>(),
           googleSignIn: googleSignIn,
           firebaseAuth: firebaseAuth,
         );
@@ -188,6 +207,9 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator<SignInAsGuestUseCase>(),
+        serviceLocator<CheckGuestStateUseCase>(),
+        serviceLocator<ConvertGuestToUserUseCase>(),
         // serviceLocator()
       )..attachToken(),
     );

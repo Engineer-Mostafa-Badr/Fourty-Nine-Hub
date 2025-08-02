@@ -18,7 +18,7 @@ class PriceTextFormField extends MainTextFormField {
     super.fillColor,
     super.style,
     String? hint,
-    TextStyle? hintStyle,
+    super.hintStyle,
     Color? borderColor,
   }) : super(
           validator: Validator().validateEmptyValue,
@@ -26,6 +26,5 @@ class PriceTextFormField extends MainTextFormField {
           keyboardType: TextInputType.number,
           textCapitalization: TextCapitalization.words,
           borderColor: borderColor ?? AppColors.GREY_DARK_COLOR,
-          hintStyle: hintStyle,
         );
 }

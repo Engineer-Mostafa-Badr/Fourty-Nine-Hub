@@ -10,8 +10,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -27,7 +25,7 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> uploadFilesTitles = [
-      LocaleKeys.vehiclePicture.localize,
+      // LocaleKeys.vehiclePicture.localize,
       LocaleKeys.vehicleRegistrationCertificate.localize,
       LocaleKeys.backSideOfTheCertificate.localize,
     ];
@@ -92,16 +90,12 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
                                     title: uploadFilesTitles[index],
                                     onTap: () {
                                       if (index == 0) {
-                                        cubit.onUploadVehiclePicture(context);
-                                      } else if (index == 1) {
                                         cubit.onUploadVehicleFrontPicture(context);
                                       } else {
                                         cubit.onUploadVehicleBackPicture(context);
                                       }
                                     },
                                     imageUrl: index == 0
-                                        ? state.vehiclePicture
-                                        : index == 1
                                             ? state.vehicleFrontPicture
                                             : state.vehicleBackPicture,
                                   ),
@@ -144,10 +138,6 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
                         print("object");
                         if(context.read<DashboardsCubit>().driverLicenseFormKey.currentState!.validate()) {
                           print("object");
-                          if(context.read<DashboardsCubit>().state.vehiclePicture==null){
-                            showErrorMessage(context, "Please select vehicle picture");
-                            return;
-                          }
                           if(context.read<DashboardsCubit>().state.vehicleFrontPicture==null){
                             showErrorMessage(context, "Please select front of vehicle license picture");
                             return;

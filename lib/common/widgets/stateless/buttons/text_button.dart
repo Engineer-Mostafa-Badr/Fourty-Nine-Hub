@@ -36,12 +36,14 @@ class TextAppButton extends StatelessWidget {
                     style: Styles.mediumText(color: AppColors.PRIMARY_COLOR))
               ]),
             )
-          : Label(
-              text: label,
-              style: style ??
-                  Styles.mediumText(
-                      color: AppColors.PRIMARY_COLOR,
-                      fontWeight: FontWeight.w700)),
+          : Center(
+            child: Label(
+                text: label,
+                style: style ??
+                    Styles.mediumText(
+                        color: AppColors.PRIMARY_COLOR,
+                        fontWeight: FontWeight.w700)),
+          ),
     );
   }
 }

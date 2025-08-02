@@ -100,14 +100,16 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       color: AppColors.getTextColor(context),
                     ),
                     Label(
-                        text: '${FormatNumbers().formatNumberByComma(state.ad!.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? state.ad!.currencyAr : state.ad!.currencyEn}',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      color: AppColors.getTextColor(context),),
+                      text:
+                          '${FormatNumbers().formatNumberByComma(state.ad!.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? state.ad!.currencyAr : state.ad!.currencyEn}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      color: AppColors.getTextColor(context),
+                    ),
                     Label(
-                        text: state.ad!.description,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      text: state.ad!.description,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       color: AppColors.getTextColor(context),
                     ),
                     Row(
@@ -115,13 +117,17 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       children: [
                         Row(
                           children: [
-                            SvgPicture.asset(Assets.adsLocationIcon,color: AppColors.getTextColor(context),),
+                            SvgPicture.asset(
+                              Assets.adsLocationIcon,
+                              color: AppColors.getTextColor(context),
+                            ),
                             const SizedBox(
                               width: 4,
                             ),
                             Label(
-                              text:
-                              context.isArabic ? '${state.ad!.cityAr}, ${state.ad!.governorateAr}' : '${state.ad!.cityEn}, ${state.ad!.governorateEn}',
+                              text: context.isArabic
+                                  ? '${state.ad!.cityAr}, ${state.ad!.governorateAr}'
+                                  : '${state.ad!.cityEn}, ${state.ad!.governorateEn}',
                               style: Styles.headerText(
                                 fontSize: 24,
                                 height: 1.60,
@@ -131,7 +137,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                           ],
                         ),
 
-                      /*    Label(
+                        /*    Label(
                             text: (context.isArabic
                                 ? state.ad!.subCategoryNameAr
                                 : widget.item.subCategoryNameEn) ??
@@ -194,11 +200,12 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       height: 8,
                     ),
                     itemCount: state.ad!.images.length ?? 0,
-                    padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top*2),
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).padding.top * 2),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top+8,
+                      top: MediaQuery.of(context).padding.top + 8,
                       left: 16,
                       right: 16,
                     ),
@@ -224,9 +231,13 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         InkWell(
                           onTap: () {
                             if (state.ad!.isFavourite == true) {
-                              context.read<AdvertisementCubit>().unFavouriteAd(state.ad!.id);
+                              context
+                                  .read<AdvertisementCubit>()
+                                  .unFavouriteAd(state.ad!.id);
                             } else {
-                              context.read<AdvertisementCubit>().favouriteAd(state.ad!.id);
+                              context
+                                  .read<AdvertisementCubit>()
+                                  .favouriteAd(state.ad!.id);
                             }
                           },
                           child: Container(
@@ -236,10 +247,12 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                             ),
                             padding: const EdgeInsets.all(8),
                             child: Icon(
-                              state.ad!.isFavourite == true?
-                              Icons.favorite:Icons.favorite_border,
-                              color: state.ad!.isFavourite == true?
-                                  Colors.red:AppColors.getTextColor(context),
+                              state.ad!.isFavourite == true
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: state.ad!.isFavourite == true
+                                  ? Colors.red
+                                  : AppColors.getTextColor(context),
                               size: 24,
                             ),
                           ),
@@ -354,8 +367,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   asAlertDialog: true,
                   widget: AreYouSureDeleteAdWidget(
                     title: LocaleKeys.alert.localize,
-                    subTitle:
-                    LocaleKeys.areYouSureAboutDeletingTheAD.localize,
+                    subTitle: LocaleKeys.areYouSureAboutDeletingTheAD.localize,
                     action: () async {
                       showLoadingDialog(context);
                       await context.read<SubcategoriesCubit>().deleteAd(adId);
@@ -363,9 +375,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       context.pop();
                       context.pop();
                       if (context
-                          .read<SubcategoriesCubit>()
-                          .state
-                          .deleteAdStatus ==
+                              .read<SubcategoriesCubit>()
+                              .state
+                              .deleteAdStatus ==
                           SubcategoriesStates.adsSuccess) {
                         context
                             .read<SubcategoriesCubit>()
@@ -378,17 +390,17 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         context.pop();
                       }
                       if (context
-                          .read<SubcategoriesCubit>()
-                          .state
-                          .deleteAdStatus ==
+                              .read<SubcategoriesCubit>()
+                              .state
+                              .deleteAdStatus ==
                           SubcategoriesStates.error) {
                         showErrorMessage(
                             context,
                             getFailureMessage(
                                 context
-                                    .read<SubcategoriesCubit>()
-                                    .state
-                                    .failure ??
+                                        .read<SubcategoriesCubit>()
+                                        .state
+                                        .failure ??
                                     UnknownFailure(''),
                                 context));
                       }
@@ -627,7 +639,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     // Regular
   }*/
 
- /* Widget _buildAdInfoWidget({required AddDetailsModel ad}) {
+  /* Widget _buildAdInfoWidget({required AddDetailsModel ad}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

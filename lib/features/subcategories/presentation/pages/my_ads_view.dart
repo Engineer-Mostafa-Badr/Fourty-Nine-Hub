@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -14,6 +13,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
@@ -72,7 +72,7 @@ class _MyAdsViewState extends State<MyAdsView> {
         builder: (context, state) {
       final controller = context.read<SubcategoriesCubit>();
       if (controller.isLoadingMyAds == true) {
-        return const CustomLoading();
+        return const CustomLoadingSearchWidget();
       }
       if (controller.myAds.isEmpty) {
         return Center(
@@ -97,7 +97,7 @@ class _MyAdsViewState extends State<MyAdsView> {
         items: List.generate(
           controller.myAds.length,
           (i) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: MyAdCard(
               showSubCategory: true,
               item: controller.myAds[i],
@@ -140,7 +140,6 @@ class _MyAdsViewState extends State<MyAdsView> {
             ),
           ),
         ),
-
       );
       /*return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),

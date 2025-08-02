@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/authentication/data/models/base_user_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 
 class ReelModel extends ReelEntity {

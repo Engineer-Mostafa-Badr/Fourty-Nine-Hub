@@ -16,13 +16,12 @@ import 'package:fourtyninehub/features/call/widgets/build_app_bar.dart';
 import 'package:fourtyninehub/features/call/widgets/build_bottom_btns.dart';
 import 'package:fourtyninehub/features/call/widgets/screen_lock_manager.dart';
 import 'package:fourtyninehub/features/call/widgets/ui_fake_call.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
 class WhatsAppCallScreen extends StatefulWidget {
   const WhatsAppCallScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<WhatsAppCallScreen> createState() => _WhatsAppCallScreenState();

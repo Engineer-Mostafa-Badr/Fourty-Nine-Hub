@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:go_router/go_router.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
-import '../../routes/routes.dart';
 import '../localization/locale_keys.g.dart';
 
 class CustomTextNoLogin extends StatelessWidget {

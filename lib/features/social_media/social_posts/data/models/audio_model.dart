@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
 
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
 
 class AudioModel extends AudioEntity {
   AudioModel({required super.id, required super.mediaKey, required super.sound});

@@ -420,7 +420,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                   children: [
                     if (superLikes != null)
                       TextSpan(
-                        text: '${superLikes}',
+                        text: '$superLikes',
                         style: Styles.mediumText(fontSize: 24, color: color),
                       ),
                     TextSpan(
@@ -437,11 +437,9 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                 ),
                 if (getMore)
                   Label(
-                    text: bottomText != null
-                        ? bottomText
-                        : context.isArabic
+                    text: bottomText ?? (context.isArabic
                             ? 'جمع المزيد'
-                            : 'Get More',
+                            : 'Get More'),
                     style: Styles.mediumText(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

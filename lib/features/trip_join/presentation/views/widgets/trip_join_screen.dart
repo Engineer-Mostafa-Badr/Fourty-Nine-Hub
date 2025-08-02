@@ -53,7 +53,7 @@ class TripJoinScreen extends StatelessWidget {
 }
 class BulletPoint extends StatelessWidget {
   final String text;
-  BulletPoint({required this.text});
+  const BulletPoint({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

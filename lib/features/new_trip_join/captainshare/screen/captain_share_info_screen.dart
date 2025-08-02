@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../../routes/routes.dart';
 
 class CaptainShareInfoScreen extends StatefulWidget {
   const CaptainShareInfoScreen({super.key});

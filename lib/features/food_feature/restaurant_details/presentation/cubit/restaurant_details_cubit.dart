@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/add_food_usecase.dart';
@@ -19,7 +18,6 @@ import '../../../../../core/error/failure.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/selected_meal_model.dart';
 import '../../domain/usecases/add_to_cart_usecase.dart';

@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -52,7 +51,7 @@ class _RegisterVerifyPhoneOTPState extends State<RegisterVerifyPhoneOTP> {
               state.userTokensEntity.accessToken);
           await CacheManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
-       
+
           serviceLocator<UserCubit>()
             ..setLogin(true)
             ..attachToken()
@@ -238,7 +237,8 @@ class _RegisterVerifyPhoneOTPState extends State<RegisterVerifyPhoneOTP> {
                       blurRadius: 10,
                     )
                   ],
-                  onCompleted: (v) => verifyOtpCubit.verifyPhoneOTP(widget.phoneNumber),
+                  onCompleted: (v) =>
+                      verifyOtpCubit.verifyPhoneOTP(widget.phoneNumber),
                   beforeTextPaste: (text) {
                     return true;
                   },

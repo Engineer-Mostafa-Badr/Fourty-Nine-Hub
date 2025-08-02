@@ -2,18 +2,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading/get_l
 
 class GetLoadingAvailableModel extends GetLoadingAvailableEntity {
   const GetLoadingAvailableModel({
-    TripDetailsHistoryEntity? tripDetails,
-    SubCategoryEntity? subCategory,
-    ClientDetailsEntity? clientDetails,
-    String? createdAt,
-    TripStateEntity? state,
-  }) : super(
-    tripDetails: tripDetails,
-    subCategory: subCategory,
-    clientDetails: clientDetails,
-    createdAt: createdAt,
-    state: state,
-  );
+    super.tripDetails,
+    super.subCategory,
+    super.clientDetails,
+    super.createdAt,
+    super.state,
+  });
 
   factory GetLoadingAvailableModel.fromJson(Map<String, dynamic> json) {
     return GetLoadingAvailableModel(
@@ -36,24 +30,15 @@ class GetLoadingAvailableModel extends GetLoadingAvailableEntity {
 
 class TripDetailsHistoryModel extends TripDetailsHistoryEntity {
   const TripDetailsHistoryModel({
-    String? id,
-    bool? isPremium,
-    num? price,
-    String? cargoDescription,
-    String? pickupTime,
-    String? status,
-    LocationTitleEntity? startLocation,
-    LocationTitleEntity? targetLocation,
-  }) : super(
-    id: id,
-    isPremium: isPremium,
-    price: price,
-    cargoDescription: cargoDescription,
-    pickupTime: pickupTime,
-    status: status,
-    startLocation: startLocation,
-    targetLocation: targetLocation,
-  );
+    super.id,
+    super.isPremium,
+    super.price,
+    super.cargoDescription,
+    super.pickupTime,
+    super.status,
+    super.startLocation,
+    super.targetLocation,
+  });
 
   factory TripDetailsHistoryModel.fromJson(Map<String, dynamic> json) {
     return TripDetailsHistoryModel(
@@ -74,7 +59,7 @@ class TripDetailsHistoryModel extends TripDetailsHistoryEntity {
 }
 
 class LocationTitleModel extends LocationTitleEntity {
-  const LocationTitleModel({String? title}) : super(title: title);
+  const LocationTitleModel({super.title});
 
   factory LocationTitleModel.fromJson(Map<String, dynamic> json) {
     return LocationTitleModel(
@@ -85,16 +70,11 @@ class LocationTitleModel extends LocationTitleEntity {
 
 class SubCategoryModel extends SubCategoryEntity {
   const SubCategoryModel({
-    String? id,
-    String? nameEn,
-    String? nameAr,
-    String? pictureUrl,
-  }) : super(
-    id: id,
-    nameEn: nameEn,
-    nameAr: nameAr,
-    pictureUrl: pictureUrl,
-  );
+    super.id,
+    super.nameEn,
+    super.nameAr,
+    super.pictureUrl,
+  });
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
@@ -108,18 +88,12 @@ class SubCategoryModel extends SubCategoryEntity {
 
 class ClientDetailsModel extends ClientDetailsEntity {
   const ClientDetailsModel({
-    String? id,
-    String? firstName,
-    String? gender,
-    String? profilePictureUrl,
-    RatingEntity? rating,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    gender: gender,
-    profilePictureUrl: profilePictureUrl,
-    rating: rating,
-  );
+    super.id,
+    super.firstName,
+    super.gender,
+    super.profilePictureUrl,
+    super.rating,
+  });
 
   factory ClientDetailsModel.fromJson(Map<String, dynamic> json) {
     return ClientDetailsModel(
@@ -135,8 +109,7 @@ class ClientDetailsModel extends ClientDetailsEntity {
 }
 
 class RatingModel extends RatingEntity {
-  const RatingModel({num? average, int? count})
-      : super(average: average, count: count);
+  const RatingModel({super.average, super.count});
 
   factory RatingModel.fromJson(Map<String, dynamic> json) {
     return RatingModel(
@@ -147,8 +120,7 @@ class RatingModel extends RatingEntity {
 }
 
 class TripStateModel extends TripStateEntity {
-  const TripStateModel({bool? isButtonEnabled})
-      : super(isButtonEnabled: isButtonEnabled);
+  const TripStateModel({super.isButtonEnabled});
 
   factory TripStateModel.fromJson(Map<String, dynamic> json) {
     return TripStateModel(

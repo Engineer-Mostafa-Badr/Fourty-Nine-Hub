@@ -2,24 +2,25 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/signIn_as_guest_use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
+import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/login_with_phone_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
-import '../../../domain/use_cases/attach_token_use_case.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase _loginUseCase;
@@ -27,22 +28,37 @@ class LoginCubit extends Cubit<LoginState> {
   final AppleSignInUseCase _appleSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
+  final SignInAsGuestUseCase _signInAsGuestUseCase;
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final emailFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
+
+  String? token;
+
+  User? user = FirebaseAuth.instance.currentUser;
+
+  final GoogleSignIn googleSignIn;
+
+  final FirebaseAuth firebaseAuth;
 
   LoginCubit(
     this._loginUseCase,
     this._loginWithPhoneUseCase,
     this._saveTokens,
     this._attachToken,
-    this._appleSignInUseCase, {
+    this._appleSignInUseCase,
+    this._signInAsGuestUseCase, {
     required this.googleSignIn,
     required this.firebaseAuth,
   }) : super(LoginInitial());
 
-  String? token;
+  @override
+  Future<void> close() {
+    emailTextController.dispose();
+    passwordFocusNode.dispose();
+    return super.close();
+  }
 
   Future<void> login(GlobalKey<FormState> formKey) async {
     String? token = await FirebaseMessaging.instance.getToken();
@@ -92,8 +108,6 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  User? user = FirebaseAuth.instance.currentUser;
-
   Future<User?> loginWithGoogle() async {
     final googleAccount = await GoogleSignIn().signIn();
 
@@ -110,13 +124,17 @@ class LoginCubit extends Cubit<LoginState> {
     return userCredential.user;
   }
 
-  static Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
-  }
+  // تسجيل دخول كـ Guest
+  Future<void> signInAsGuest() async {
+    emit(LoginLoading());
 
-  final GoogleSignIn googleSignIn;
-  final FirebaseAuth firebaseAuth;
+    final result = await _signInAsGuestUseCase(const NoParams());
+
+    result.fold(
+      (failure) => emit(LoginError(failure)),
+      (guestUser) => emit(LoginGuestSuccess(user: guestUser)),
+    );
+  }
 
   Future<void> signInWithApple() async {
     if (state is LoginLoading) return;
@@ -170,13 +188,6 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  @override
-  Future<void> close() {
-    emailTextController.dispose();
-    passwordFocusNode.dispose();
-    return super.close();
-  }
-
   bool _isEmail(String input) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return emailRegex.hasMatch(input);
@@ -185,5 +196,10 @@ class LoginCubit extends Cubit<LoginState> {
   bool _isPhoneNumber(String input) {
     final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
     return phoneRegex.hasMatch(input);
+  }
+
+  static Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 }

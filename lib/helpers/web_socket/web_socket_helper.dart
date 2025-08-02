@@ -88,9 +88,7 @@ class WebSocketHelper {
   
   static void dispose() {
     disconnect();
-    if (WebSocketIsolateManager.instance != null) {
-      WebSocketIsolateManager.instance.dispose();
-    }
-    log("WebSocket resources disposed successfully.");
+    WebSocketIsolateManager.instance.dispose();
+      log("WebSocket resources disposed successfully.");
   }
 }

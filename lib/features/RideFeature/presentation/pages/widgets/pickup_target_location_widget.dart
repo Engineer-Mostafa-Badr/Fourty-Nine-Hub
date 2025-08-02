@@ -3,20 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/functions/helper/lang_helper.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../health_feature/create_doctor/domain/entities/city.dart';
-import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../pick_location.dart';
 import 'bottom_sheet/custom_bottom_sheet.dart';
 import 'dialog_widget/show_custom_dialog_trip.dart';
-import 'font_manager.dart';
 class PickUpLocationCard extends StatefulWidget {
   final Color? firstColor;
   final ClientTripsCubit cubit;
@@ -227,7 +223,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                             widget.cubit.makeNonTrackingTripParam.toTitle = fullAddress;
                             widget.cubit.makeLoadingTripParam.toTitle = fullAddress;
                           }
-                          print("Full Adress ===============================${fullAddress}");
+                          print("Full Adress ===============================$fullAddress");
                           Navigator.pop(context, fullAddress);
                         },
                         child: Padding(

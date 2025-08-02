@@ -5,11 +5,9 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/debouncer.dart';
-import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
@@ -18,12 +16,12 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/form/text_fields/search_text_form_field.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../food_feature/create_restaurant/views/widgets/mneu/name/price_text_form_field.dart';
 import '../../domain/entities/user_transfer_money_entity.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class TransferMoneyView extends StatefulWidget {
   const TransferMoneyView({super.key});
@@ -63,6 +61,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
   late final TextEditingController amountController;
   late final TextEditingController searchController;
   late final GlobalKey<FormState> formKey;
+  final FocusNode _focusNode = FocusNode();
   // String? selectedUsername;
   // bool showUserList = false;
 
@@ -83,6 +82,8 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
     amountController = TextEditingController();
     searchController = TextEditingController();
     formKey = GlobalKey<FormState>();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _focusNode.requestFocus());
     super.initState();
   }
 
@@ -90,6 +91,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
   void dispose() {
     amountController.dispose();
     searchController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -132,7 +134,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
         }).toList();
 
         if (state.isLoading) {
-          return const CustomLoading();
+          return const CustomLoadingSearchWidget();
         }
 
         return Padding(
@@ -153,11 +155,11 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                         ),
                         fillColor: Colors.transparent,
                         currentController: searchController,
+                        currentFocusNode: _focusNode,
                         style: Styles.headerText(
                           fontSize: 32,
                           // color: Colors.black,
                         ),
-                        currentFocusNode: null,
                         margin: EdgeInsets.zero,
                         borderColor: context.isDarkMode
                             ? const Color(0xffCACFF4)
@@ -167,8 +169,8 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                             ? const Color(0xffCACFF4)
                             : AppColors.QUANTITY_COLOR,
                         onChanged: (value) {
-                          if(value.isEmpty){
-                            return ;
+                          if (value.isEmpty) {
+                            return;
                           }
                           setState(() {
                             // Show the list when the search text is not empty
@@ -253,7 +255,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                     ),
                     if (state.isTransferLoading)
                       const Center(
-                        child: CustomCircularProgressIndicator(),
+                        child: CustomLoadingSearchWidget(),
                       ),
                     if (!state.isTransferLoading)
                       AppButton(
@@ -339,7 +341,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
               // if (showUserList &&
               //     filteredUsers != null &&
               //     filteredUsers.isNotEmpty)
-              if (state.isSearchUserLoading) const CustomLoading(),
+              if (state.isSearchUserLoading) const CustomLoadingSearchWidget(),
               if (state.isSearchUserSuccess)
                 Positioned(
                   top: 47,

@@ -40,7 +40,7 @@ class _StartTextFieldAndFindButtonState
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
-      child: Container(
+      child: SizedBox(
         height: 76.h,
         child: Stack(
           children: [

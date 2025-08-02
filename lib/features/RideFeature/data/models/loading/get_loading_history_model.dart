@@ -2,16 +2,11 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading/get_l
 
 class GetLoadingHistoryModel extends GetLoadingHistoryEntity {
   GetLoadingHistoryModel({
-    TripDetailsHistoryEntity? tripDetails,
-    SubCategoryEntity? subCategory,
-    ClientDetailsEntity? clientDetails,
-    DriverDetailsEntity? driverDetails,
-  }) : super(
-    tripDetails: tripDetails,
-    subCategory: subCategory,
-    clientDetails: clientDetails,
-    driverDetails: driverDetails,
-  );
+    super.tripDetails,
+    super.subCategory,
+    super.clientDetails,
+    super.driverDetails,
+  });
 
   factory GetLoadingHistoryModel.fromJson(Map<String, dynamic> json) {
     return GetLoadingHistoryModel(
@@ -33,30 +28,18 @@ class GetLoadingHistoryModel extends GetLoadingHistoryEntity {
 
 class TripDetailsHistoryModel extends TripDetailsHistoryEntity {
   TripDetailsHistoryModel({
-    String? id,
-    String? status,
-    bool? isPremium,
-    num? price,
-    String? cargoDescription,
-    String? pickupTime,
-    String? createdAt,
-    LocationTitleEntity? startLocation,
-    LocationTitleEntity? targetLocation,
-    RateEntity? yourRateClient,
-    RateEntity? clientRateYou,
-  }) : super(
-    id: id,
-    status: status,
-    isPremium: isPremium,
-    price: price,
-    cargoDescription: cargoDescription,
-    pickupTime: pickupTime,
-    createdAt: createdAt,
-    startLocation: startLocation,
-    targetLocation: targetLocation,
-    yourRateClient: yourRateClient,
-    clientRateYou: clientRateYou,
-  );
+    super.id,
+    super.status,
+    super.isPremium,
+    super.price,
+    super.cargoDescription,
+    super.pickupTime,
+    super.createdAt,
+    super.startLocation,
+    super.targetLocation,
+    super.yourRateClient,
+    super.clientRateYou,
+  });
 
   factory TripDetailsHistoryModel.fromJson(Map<String, dynamic> json) {
     return TripDetailsHistoryModel(
@@ -84,7 +67,7 @@ class TripDetailsHistoryModel extends TripDetailsHistoryEntity {
 }
 
 class LocationTitleModel extends LocationTitleEntity {
-  LocationTitleModel({String? title}) : super(title: title);
+  LocationTitleModel({super.title});
 
   factory LocationTitleModel.fromJson(Map<String, dynamic> json) {
     return LocationTitleModel(title: json['title']);
@@ -92,7 +75,7 @@ class LocationTitleModel extends LocationTitleEntity {
 }
 
 class RateModel extends RateEntity {
-  RateModel({num? rate}) : super(rate: rate);
+  RateModel({super.rate});
 
   factory RateModel.fromJson(Map<String, dynamic> json) {
     return RateModel(rate: json['rate']);
@@ -101,16 +84,11 @@ class RateModel extends RateEntity {
 
 class SubCategoryModel extends SubCategoryEntity {
   SubCategoryModel({
-    String? id,
-    String? nameAr,
-    String? nameEn,
-    String? pictureUrl,
-  }) : super(
-    id: id,
-    nameAr: nameAr,
-    nameEn: nameEn,
-    pictureUrl: pictureUrl,
-  );
+    super.id,
+    super.nameAr,
+    super.nameEn,
+    super.pictureUrl,
+  });
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
@@ -124,20 +102,13 @@ class SubCategoryModel extends SubCategoryEntity {
 
 class ClientDetailsModel extends ClientDetailsEntity {
   ClientDetailsModel({
-    String? id,
-    String? firstName,
-    String? gender,
-    String? profilePictureUrl,
-    bool? verifiedBadge,
-    RatingEntity? rating,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    gender: gender,
-    profilePictureUrl: profilePictureUrl,
-    verifiedBadge: verifiedBadge,
-    rating: rating,
-  );
+    super.id,
+    super.firstName,
+    super.gender,
+    super.profilePictureUrl,
+    super.verifiedBadge,
+    super.rating,
+  });
 
   factory ClientDetailsModel.fromJson(Map<String, dynamic> json) {
     return ClientDetailsModel(
@@ -155,18 +126,12 @@ class ClientDetailsModel extends ClientDetailsEntity {
 
 class DriverDetailsModel extends DriverDetailsEntity {
   DriverDetailsModel({
-    String? id,
-    String? driverUserId,
-    String? firsName,
-    String? profilePictureUrl,
-    RatingEntity? rating,
-  }) : super(
-    id: id,
-    driverUserId: driverUserId,
-    firsName: firsName,
-    profilePictureUrl: profilePictureUrl,
-    rating: rating,
-  );
+    super.id,
+    super.driverUserId,
+    super.firsName,
+    super.profilePictureUrl,
+    super.rating,
+  });
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
@@ -182,7 +147,7 @@ class DriverDetailsModel extends DriverDetailsEntity {
 }
 
 class RatingModel extends RatingEntity {
-  RatingModel({num? average, int? count}) : super(average: average, count: count);
+  RatingModel({super.average, super.count});
 
   factory RatingModel.fromJson(Map<String, dynamic> json) {
     return RatingModel(

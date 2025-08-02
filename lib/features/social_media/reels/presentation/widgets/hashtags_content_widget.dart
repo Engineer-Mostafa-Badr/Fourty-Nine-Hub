@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'hashtags_widget.dart';
 
 class HashtagsContentWidget extends StatelessWidget {

@@ -9,7 +9,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
-import '../../../../../core/widget/custom_scaffold.dart';
 
 class PolicyView extends StatefulWidget {
   const PolicyView({super.key, this.fromTerms});

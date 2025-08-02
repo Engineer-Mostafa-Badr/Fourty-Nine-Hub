@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_bottom_section.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
@@ -21,6 +20,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import '../../../../domain/entities/available_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
@@ -108,7 +108,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
         BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
         if(context.read<ViewAllTripJoinCubit>().isLoadingTripJoin==true){
-          return const Center(child: CircularProgressIndicator(),);
+          return const Center(child: CustomLoadingSearchWidget(),);
         }
         if(context.read<ViewAllTripJoinCubit>().tripJoinData.isEmpty){
           return  Center(child: Text(LocaleKeys.noData.localize));
@@ -179,8 +179,8 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                   title:context.isArabic ?data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
                                   model:context.isArabic ?data.vehicleDetails?.modelAr ?? "" :  data.vehicleDetails?.modelEn ?? "",
                                   icon: Assets.tripJoinCarIcon,
-                                  price: "${formatPrice(data.pricePerSeat?.round() ?? 0,context)}",
-                                  seats: "${LocaleKeys.eachSeat.localize}"
+                                  price: formatPrice(data.pricePerSeat?.round() ?? 0,context),
+                                  seats: LocaleKeys.eachSeat.localize
                               ),
 
                               const Sizer(
@@ -398,7 +398,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
               RichText(
                   text: TextSpan(children: [
                     TextSpan(
-                        text: "${price}  ",
+                        text: "$price  ",
                         style: Styles.headerText(
                             color: AppColors.getTextColor(context),
                             fontWeight: FontWeight.bold)),

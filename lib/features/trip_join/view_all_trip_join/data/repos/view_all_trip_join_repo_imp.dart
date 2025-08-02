@@ -3,7 +3,6 @@ import "package:fourtyninehub/common/models/public/pagination_params.dart";
 import "package:fourtyninehub/core/error/failure.dart";
 import "package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart";
 import "package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart";
-import "package:fourtyninehub/features/ride/RideRequest/domain/entity/expected_price_entity.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/data/datasource/remote_datasource/view_all_trip_join_remote_datasource.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart";
 import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/delete_my_trip_join_entity.dart";

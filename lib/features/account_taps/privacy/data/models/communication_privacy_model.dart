@@ -3,20 +3,13 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/comm
 
 class CommunicationPrivacyModel extends CommunicationPrivacyEntity {
   CommunicationPrivacyModel({
-    String? userId,
-    String? receiveCalls,
-    String? receiveSocialMessages,
-    String? receiveGreetMessages,
-    String? receiveAnonymousMessages,
-    String? lastSeen,
-  }) : super(
-    userId: userId,
-    receiveCalls: receiveCalls,
-    receiveSocialMessages: receiveSocialMessages,
-    receiveGreetMessages: receiveGreetMessages,
-    receiveAnonymousMessages: receiveAnonymousMessages,
-    lastSeen: lastSeen,
-  );
+    super.userId,
+    super.receiveCalls,
+    super.receiveSocialMessages,
+    super.receiveGreetMessages,
+    super.receiveAnonymousMessages,
+    super.lastSeen,
+  });
 
   factory CommunicationPrivacyModel.fromJson(Map<String, dynamic> json) {
     return CommunicationPrivacyModel(

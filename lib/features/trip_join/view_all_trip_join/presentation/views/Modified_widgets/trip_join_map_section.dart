@@ -6,7 +6,7 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widget
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
 
 class MapSection extends StatelessWidget {
-  const MapSection();
+  const MapSection({super.key});
 
   @override
   Widget build(BuildContext context) {

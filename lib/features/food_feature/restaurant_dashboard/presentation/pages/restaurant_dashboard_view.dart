@@ -264,7 +264,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                                   const SizedBox(height: 16),
                                   // Confirmation message
                                   Text(
-                                    '${LocaleKeys.areYouSureUpdate.localize}',
+                                    LocaleKeys.areYouSureUpdate.localize,
                                     // 'Are you sure you want to ${v ? 'activate' : 'deactivate'} your restaurant?',
                                     textAlign: TextAlign.center,
                                     style: Styles.mediumText(
@@ -668,7 +668,7 @@ class CustomBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,

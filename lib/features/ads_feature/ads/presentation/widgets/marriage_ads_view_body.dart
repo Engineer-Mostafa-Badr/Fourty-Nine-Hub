@@ -6,9 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_bann
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/custom_notification_badge.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/header_button_widget.dart';
@@ -23,6 +21,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../filter_ads/presentation/pages/filter_ads.dart';
@@ -449,10 +448,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
 
   Widget _selectWidget(BuildContext context) {
     if (widget.state.status == SubcategoriesStates.loadingAds) {
-      return const CustomLoading();
+      return const CustomLoadingSearchWidget();
     }
     if (widget.state.status == SubcategoriesStates.loadingAds) {
-      return const CustomCircularProgressIndicator();
+      return const CustomLoadingSearchWidget();
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {

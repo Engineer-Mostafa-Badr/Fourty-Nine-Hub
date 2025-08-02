@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_w
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 
 import '../../../domain/usecases/request_withdraw_wallet_use_case.dart';
-import '../wallet_cubit.dart';
 
 part 'wallet_two_state.dart';
 

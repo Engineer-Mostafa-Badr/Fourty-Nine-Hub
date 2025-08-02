@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
@@ -15,22 +14,25 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class SearchRestaurantView extends StatelessWidget {
-  const SearchRestaurantView({super.key, this.onClose});
+  const SearchRestaurantView({super.key, this.onClose, this.focusNode});
+
   final VoidCallback? onClose; // Callback to hide search UI
+  final FocusNode? focusNode;
+
   @override
   Widget build(BuildContext context) {
     final searchCubit = context.read<SearchRestaurantsCubit>();
     return BlocBuilder<SearchRestaurantsCubit, SearchRestaurantState>(
         builder: (context, state) {
-      return  Padding(
+      return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
@@ -38,7 +40,7 @@ class SearchRestaurantView extends StatelessWidget {
             TextFormField(
               onChanged: (value) {
                 if (state.status ==
-                    SearchRestaurantStates.loadingSubCategories ||
+                        SearchRestaurantStates.loadingSubCategories ||
                     state.status ==
                         SearchRestaurantStates.loadingSearchSubCategory) {
                   context
@@ -46,7 +48,7 @@ class SearchRestaurantView extends StatelessWidget {
                       .searchSubCategories(value);
                 }
                 if (state.status ==
-                    SearchRestaurantStates.loadingGovernorates ||
+                        SearchRestaurantStates.loadingGovernorates ||
                     state.status ==
                         SearchRestaurantStates.loadingSearchGevnorates) {
                   context
@@ -67,37 +69,46 @@ class SearchRestaurantView extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: LocaleKeys.search.tr(),
                 hintStyle: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR
-                ),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: context.isDarkMode
+                        ? AppColors.whiteColor
+                        : AppColors.PRIMARY_COLOR),
                 prefixIcon: const Icon(Icons.search),
                 contentPadding:
-                EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.h),
+                    EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.h),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 filled: false,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.0),
-                  borderSide:  BorderSide(  color: context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR, width: 1),
+                  borderSide: BorderSide(
+                      color: context.isDarkMode
+                          ? AppColors.whiteColor
+                          : AppColors.PRIMARY_COLOR,
+                      width: 1),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.0),
-                  borderSide:  BorderSide(    color: context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR, width: 2),
+                  borderSide: BorderSide(
+                      color: context.isDarkMode
+                          ? AppColors.whiteColor
+                          : AppColors.PRIMARY_COLOR,
+                      width: 2),
                 ),
               ),
-
+              focusNode: focusNode,
             ),
 
             /// data
             SizedBox(
-              height:MediaQuery.sizeOf(context).height * .7,
+              height: MediaQuery.sizeOf(context).height * .7,
               child: Builder(
                 builder: (context) {
                   if (state.status == SearchRestaurantStates.loading) {
                     return const Center(
-                      child: CustomCircularProgressIndicator(),
+                      child: CustomLoadingSearchWidget(),
                     );
                   } else if (state.status == SearchRestaurantStates.error) {
                     return ListView(
@@ -116,7 +127,59 @@ class SearchRestaurantView extends StatelessWidget {
                   /// ------- search sub categories
                   else if (state.status ==
                       SearchRestaurantStates.loadingSubCategories) {
-                    return ListView.separated(
+                    return Expanded(
+                      child: OlxPaginationWidget(
+                        itemsPerPage: 3,
+                        loadPage: (page) async {},
+                        banners: bannersList,
+                        items: List.generate(
+                          state.mealCategories?.length ?? 0,
+                          (index) {
+                            FoodCategoryEntity? category =
+                                state.mealCategories?[index];
+                            return GestureDetector(
+                              onTap: () =>
+                                  searchCubit.selectSubcategory(category),
+                              child: Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl: category?.picture ?? "",
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      width: 150.w,
+                                      height: 150.h,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey.shade300,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: AppColors.PRIMARY_COLOR
+                                                  .withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 3,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          )),
+                                    ),
+                                    width: 150.w,
+                                  ),
+                                  const Sizer(),
+                                  Text(getLang() == "ar"
+                                      ? (category?.nameAr ?? "")
+                                      : (category?.nameEn ?? "")),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                    /* return ListView.separated(
                       itemCount: state.mealCategories?.length ?? 0,
                       padding: EdgeInsets.all(10.w),
                       separatorBuilder: (context, index) => Sizer(
@@ -124,16 +187,17 @@ class SearchRestaurantView extends StatelessWidget {
                       ),
                       itemBuilder: (context, index) {
                         FoodCategoryEntity? category =
-                        state.mealCategories?[index];
+                            state.mealCategories?[index];
                         return GestureDetector(
-                          onTap: () =>
-                              searchCubit.selectSubcategory(category),
+                          onTap: () => searchCubit.selectSubcategory(category),
                           child: Row(
                             children: [
                               CachedNetworkImage(
                                 imageUrl: category?.picture ?? "",
-                                imageBuilder: (context, imageProvider) => Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 8),
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
                                   width: 150.w,
                                   height: 150.h,
                                   alignment: Alignment.center,
@@ -159,38 +223,42 @@ class SearchRestaurantView extends StatelessWidget {
                               Sizer(
                                 width: 40.w,
                               ),
-                              Label(text: getLang() == "ar"
-                                  ? (category?.nameAr ?? "")
-                                  : (category?.nameEn ?? ""),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16
-                              ),
+                              Label(
+                                text: getLang() == "ar"
+                                    ? (category?.nameAr ?? "")
+                                    : (category?.nameEn ?? ""),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 16),
                               ),
                             ],
                           ),
                         );
                       },
-                    );
+                    );*/
                   } else if (state.status ==
                       SearchRestaurantStates.loadingSearchSubCategory) {
-                    return RefreshIndicator(
-                      onRefresh: () async => searchCubit.refreshState(),
-                      child: ListView.builder(
-                        itemCount: state.searchMealCategories?.length,
-                        padding: EdgeInsets.all(15.w),
-                        itemBuilder: (context, index) {
-                          FoodCategoryEntity? category =
-                          state.searchMealCategories?[index];
-                          return GestureDetector(
-                            onTap: () =>
-                                searchCubit.selectSubcategory(category),
-                            child: Row(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: category?.picture ?? "",
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * .7,
+                      child: RefreshIndicator(
+                        onRefresh: () async => searchCubit.refreshState(),
+                        child: OlxPaginationWidget(
+                          itemsPerPage: 3,
+                          loadPage: (page) async {},
+                          banners: bannersList,
+                          items: List.generate(
+                            state.searchMealCategories!.length,
+                            (index) {
+                              FoodCategoryEntity? category =
+                                  state.searchMealCategories?[index];
+                              return GestureDetector(
+                                onTap: () =>
+                                    searchCubit.selectSubcategory(category),
+                                child: Row(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: category?.picture ?? "",
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
                                         width: 150.w,
                                         height: 150.h,
                                         alignment: Alignment.center,
@@ -211,16 +279,64 @@ class SearchRestaurantView extends StatelessWidget {
                                               fit: BoxFit.cover,
                                             )),
                                       ),
-                                  width: 150.w,
+                                      width: 150.w,
+                                    ),
+                                    const Sizer(),
+                                    Text(getLang() == "ar"
+                                        ? (category?.nameAr ?? "")
+                                        : (category?.nameEn ?? "")),
+                                  ],
                                 ),
-                                const Sizer(),
-                                Text(getLang() == "ar"
-                                    ? (category?.nameAr ?? "")
-                                    : (category?.nameEn ?? "")),
-                              ],
-                            ),
-                          );
-                        },
+                              );
+                            },
+                          ),
+                        ),
+                        /* ListView.builder(
+                          itemCount: state.searchMealCategories?.length,
+                          padding: EdgeInsets.all(15.w),
+                          itemBuilder: (context, index) {
+                            FoodCategoryEntity? category =
+                            state.searchMealCategories?[index];
+                            return GestureDetector(
+                              onTap: () =>
+                                  searchCubit.selectSubcategory(category),
+                              child: Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl: category?.picture ?? "",
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          width: 150.w,
+                                          height: 150.h,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.grey.shade300,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: AppColors.PRIMARY_COLOR
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 2,
+                                                  blurRadius: 3,
+                                                  offset: const Offset(0, 3),
+                                                ),
+                                              ],
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              )),
+                                        ),
+                                    width: 150.w,
+                                  ),
+                                  const Sizer(),
+                                  Text(getLang() == "ar"
+                                      ? (category?.nameAr ?? "")
+                                      : (category?.nameEn ?? "")),
+                                ],
+                              ),
+                            );
+                          },
+                        ),*/
                       ),
                     );
                   }
@@ -230,10 +346,10 @@ class SearchRestaurantView extends StatelessWidget {
                       SearchRestaurantStates.loadingGovernorates) {
                     return ListView.separated(
                       shrinkWrap: true,
-                      itemCount: state.governorates?.length??0,
+                      itemCount: state.governorates?.length ?? 0,
                       itemBuilder: (context, index) {
                         GovernorateEntity? governorate =
-                        state.governorates?[index];
+                            state.governorates?[index];
                         return GestureDetector(
                           onTap: () =>
                               searchCubit.selectGovernorate(governorate),
@@ -241,14 +357,16 @@ class SearchRestaurantView extends StatelessWidget {
                             padding: const EdgeInsets.all(10.0),
                             child: Text(
                               (getLang() == "ar"
-                                  ? governorate?.nameAr
-                                  : governorate?.nameEn) ??
+                                      ? governorate?.nameAr
+                                      : governorate?.nameEn) ??
                                   '',
                               style: Styles.headerText(),
                             ),
                           ),
                         );
-                      }, separatorBuilder: (BuildContext context, int index)=>const Sizer(),
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Sizer(),
                     );
                   } else if (state.status ==
                       SearchRestaurantStates.loadingSearchGevnorates) {
@@ -259,7 +377,7 @@ class SearchRestaurantView extends StatelessWidget {
                         itemCount: state.searchGovernorates!.length,
                         itemBuilder: (context, index) {
                           GovernorateEntity? governorate =
-                          state.searchGovernorates?[index];
+                              state.searchGovernorates?[index];
                           return GestureDetector(
                             onTap: () =>
                                 searchCubit.selectGovernorate(governorate),
@@ -273,7 +391,9 @@ class SearchRestaurantView extends StatelessWidget {
                               ),
                             ),
                           );
-                        }, separatorBuilder: (BuildContext context, int index)=>const Sizer(),
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Sizer(),
                       ),
                     );
                   }
@@ -285,7 +405,6 @@ class SearchRestaurantView extends StatelessWidget {
                       onRefresh: () async => searchCubit.refreshState(),
                       child: ListView.builder(
                         shrinkWrap: true,
-
                         itemCount: state.cities?.length,
                         itemBuilder: (context, index) {
                           CityEntity? city = state.cities?[index];
@@ -295,8 +414,8 @@ class SearchRestaurantView extends StatelessWidget {
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
                                 (context.isArabic
-                                    ? city?.nameAr
-                                    : city?.nameEn) ??
+                                        ? city?.nameAr
+                                        : city?.nameEn) ??
                                     '',
                                 style: Styles.headerText(),
                               ),
@@ -311,7 +430,6 @@ class SearchRestaurantView extends StatelessWidget {
                       onRefresh: () async => searchCubit.refreshState(),
                       child: ListView.separated(
                         shrinkWrap: true,
-
                         itemCount: state.searchCities!.length,
                         itemBuilder: (context, index) {
                           CityEntity? city = state.searchCities?[index];
@@ -327,7 +445,9 @@ class SearchRestaurantView extends StatelessWidget {
                               ),
                             ),
                           );
-                        }, separatorBuilder: (BuildContext context, int index) =>const Sizer(),
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Sizer(),
                       ),
                     );
                   }
@@ -349,7 +469,7 @@ class SearchRestaurantView extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
                           mainAxisSpacing: 8,
                           crossAxisSpacing: 8,
@@ -358,7 +478,7 @@ class SearchRestaurantView extends StatelessWidget {
                         itemCount: state.allRestaurant?.length,
                         itemBuilder: (context, index) {
                           GetAllRestaurantEntity? restaurant =
-                          state.allRestaurant?[index];
+                              state.allRestaurant?[index];
                           return SearchRestaurantCard(restaurant: restaurant);
                         },
                       ),
@@ -371,7 +491,7 @@ class SearchRestaurantView extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
                           mainAxisSpacing: 8,
                           crossAxisSpacing: 8,
@@ -380,7 +500,7 @@ class SearchRestaurantView extends StatelessWidget {
                         itemCount: state.searchRestaurant?.length,
                         itemBuilder: (context, index) {
                           GetAllRestaurantEntity? restaurant =
-                          state.searchRestaurant?[index];
+                              state.searchRestaurant?[index];
                           return SearchRestaurantCard(restaurant: restaurant);
                         },
                       ),

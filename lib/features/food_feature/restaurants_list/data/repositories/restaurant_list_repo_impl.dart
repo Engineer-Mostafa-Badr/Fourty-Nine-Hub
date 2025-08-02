@@ -4,8 +4,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_ads_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/log_count_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/logs_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
@@ -21,7 +19,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import '../../domain/entities/restaurant.dart';
 import '../../domain/repositories/resturant_list_repo.dart';
 import '../datasources/restaurants_remote_data_source.dart';
-import '../models/restaurant_model.dart';
 
 class RestaurantListRepoImpl implements RestaurantListRepo {
   final RestaurantsRemoteDataSource _remoteDataSource;

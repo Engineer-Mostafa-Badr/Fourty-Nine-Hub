@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 class WhyDoHaveCancelDialog extends StatelessWidget {
-  const WhyDoHaveCancelDialog({Key? key}) : super(key: key);
+  const WhyDoHaveCancelDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class WinnersGridView extends StatefulWidget {

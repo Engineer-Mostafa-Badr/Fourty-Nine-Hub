@@ -2,9 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../ride/RideRequest/domain/entity/expected_price_entity.dart';
 import '../entities/delete_my_trip_join_entity.dart';
-import '../entities/expected_price_entity.dart';
 import '../repos/view_all_trip_join_repo.dart';
 
 class CreateTripJoinOfferUseCase

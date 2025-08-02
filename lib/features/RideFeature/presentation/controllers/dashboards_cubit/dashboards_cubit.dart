@@ -8,8 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/global/find_media_id.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/enums/support_status_enum.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
@@ -410,8 +413,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getHistoryNonSocketLoading() async {
-    if (!hasMoreHistoryNonSocketLoading || isLoadingMoreHistoryNonSocketLoading)
+    if (!hasMoreHistoryNonSocketLoading || isLoadingMoreHistoryNonSocketLoading) {
       return;
+    }
     isLoadingMoreHistoryNonSocketLoading = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getHistoryNonSocketLoadingUseCase(
@@ -538,8 +542,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAvailableNonSocketLoading() async {
-    if (!hasMoreAvailableNonSocketLoading || isLoadingMoreAvailableNonSocketLoading)
+    if (!hasMoreAvailableNonSocketLoading || isLoadingMoreAvailableNonSocketLoading) {
       return;
+    }
     isLoadingMoreAvailableNonSocketLoading = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getAvailableNonSocketLoadingUseCase(
@@ -627,8 +632,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAcceptedNonSocketLoading() async {
-    if (!hasMoreAcceptedNonSocketLoading || isLoadingMoreAcceptedNonSocketLoading)
+    if (!hasMoreAcceptedNonSocketLoading || isLoadingMoreAcceptedNonSocketLoading) {
       return;
+    }
     isLoadingMoreAcceptedNonSocketLoading = true;
     emit(state.copyWith(status: DashboardsStates.loading));
     final response = await getAcceptedNonSocketLoadingUseCase(
@@ -677,8 +683,33 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
       showLoadingDialog(context, canPop: false);
 
-      await RideMethodHelper().uploadTechnicalExamination(
-          technicalExaminationDate: rideTechnicalExaminationExpireDateController.text, technicalExaminationImage: state.personalTechnicalExaminationPicture!, onSuccessUploaded: (bool isSuccess) async{
+      // await RideMethodHelper().uploadTechnicalExamination(
+      //     technicalExaminationDate: rideTechnicalExaminationExpireDateController.text,
+      //     technicalExaminationImage: state.personalTechnicalExaminationPicture!,
+      //     onSuccessUploaded: (bool isSuccess) async{
+      final terminalExaminationImageMediaId = await FindMediaId.getMediaId(
+        subCategoryId: Constants.facebookSubCategory,
+        image: state.personalDrugAnalysisPicture!,
+      );
+      List<String> mediaIds = [terminalExaminationImageMediaId];
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      if(mediaIds.isEmpty){
+        context.pop();
+        showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصور':'Please upload photos');
+        return;
+      }else{
+        if(terminalExaminationImageMediaId.isEmpty){
+          context.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة':'Please upload picture');
+          return;
+        }
+      }
+
+      bool isSuccess = await RideMethodHelper().updateExpiredImage(
+        recordType: 'TECHNICAL_EXAMINATION',
+        expiryDate: rideTechnicalExaminationExpireDateController.text,
+        mediaIds: mediaIds,
+      );
         if (isSuccess) {
           showSuccessMessage(
               context,
@@ -696,7 +727,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                   ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
                   : 'An error occurred while uploading images. Please try again.');
         }
-      });
+      // });
       emit(state.copyWith(status: DashboardsStates.success, ));
     }
   }
@@ -704,8 +735,34 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (drugAnalysisFormKey.currentState!.validate()) {
       emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
       showLoadingDialog(context, canPop: false);
-      await RideMethodHelper().uploadDrugAnalysis(dragAnalysisDate: rideDragAnalysisExpireDateController.text, dragAnalysis: state.personalDrugAnalysisPicture!, onSuccessUploaded: (bool isSuccess) async{
-        if (isSuccess) {
+      // await RideMethodHelper().uploadDrugAnalysis(dragAnalysisDate:
+      // rideDragAnalysisExpireDateController.text,
+      //     dragAnalysis: state.personalDrugAnalysisPicture!,
+      //     onSuccessUploaded: (bool isSuccess) async{
+      final drugAnalysisImageMediaId = await FindMediaId.getMediaId(
+        subCategoryId: Constants.facebookSubCategory,
+        image: state.personalDrugAnalysisPicture!,
+      );
+      List<String> mediaIds = [drugAnalysisImageMediaId];
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      if(mediaIds.isEmpty){
+        context.pop();
+        showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصور':'Please upload photos');
+        return;
+      }else{
+        if(drugAnalysisImageMediaId.isEmpty){
+          context.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة':'Please upload picture');
+          return;
+        }
+      }
+
+      bool isSuccess = await RideMethodHelper().updateExpiredImage(
+        recordType: 'DRUG_ANALYSIS',
+        expiryDate: rideDragAnalysisExpireDateController.text,
+        mediaIds: mediaIds,
+      );
+      if (isSuccess) {
           showSuccessMessage(
               context,
               context.isArabic
@@ -722,7 +779,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                   ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
                   : 'An error occurred while uploading images. Please try again.');
         }
-      });
+      // });
       emit(state.copyWith(status: DashboardsStates.success));
     }
   }
@@ -744,7 +801,35 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (criminalRecordFormKey.currentState!.validate()) {
       emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
       showLoadingDialog(context, canPop: false);
-      await RideMethodHelper().uploadCriminalRecord(criminalRecordDate: rideCriminalRecordExpireDateController.text, criminalRecordImage: state.personalCriminalRecordPicture!, onSuccessUploaded: (bool isSuccess) async{
+      // await RideMethodHelper().uploadCriminalRecord(criminalRecordDate:
+      // rideCriminalRecordExpireDateController.text,
+      //     criminalRecordImage: state.personalCriminalRecordPicture!,
+      //     onSuccessUploaded: (bool isSuccess) async{
+
+
+      final criminalRecordImageMediaId = await FindMediaId.getMediaId(
+        subCategoryId: Constants.facebookSubCategory,
+        image: state.personalCriminalRecordPicture!,
+      );
+      List<String> mediaIds = [criminalRecordImageMediaId];
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      if(mediaIds.isEmpty){
+        context.pop();
+        showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصور':'Please upload photos');
+        return;
+      }else{
+        if(criminalRecordImageMediaId.isEmpty){
+          context.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة':'Please upload picture');
+          return;
+        }
+      }
+
+      bool isSuccess = await RideMethodHelper().updateExpiredImage(
+        recordType: 'CRIMINAL_RECORD',
+        expiryDate: rideCriminalRecordExpireDateController.text,
+        mediaIds: mediaIds,
+      );
         if (isSuccess) {
           showSuccessMessage(
               context,
@@ -762,7 +847,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                   ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
                   : 'An error occurred while uploading images. Please try again.');
         }
-      });
+      // });
       emit(state.copyWith(status: DashboardsStates.success));
     }
   }
@@ -855,52 +940,61 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       BuildContext context, ) async {
     emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
     showLoadingDialog(context, canPop: false);
-    await RideMethodHelper().uploadCarLicense(
-        licenseExpiryDate: rideVehicleExpireDateController.text,
-        carLicenseBehindImage: state.vehicleBackPicture!,
-        carLicenseFrontImage: state.vehicleFrontPicture!,
-        onSuccessUploaded: (bool isSuccess) async {
-          if (isSuccess) {
-            // showSuccessMessage(
-            //     context,
-            //     context.isArabic
-            //         ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
-            //         : "Successfully uploaded images, please wait for the approval of all data.");
-            // context.pop();
-            // context.pop();
-            emit(state.copyWith(status: DashboardsStates.success));
-          } else {
-            context.pop();
-            showErrorMessage(
-                context,
-                context.isArabic
-                    ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
-                    : 'An error occurred while uploading images. Please try again.');
-          }
-        });
-         await RideMethodHelper().uploadCarImage(
-            carImage: state.vehiclePicture!,
-            onSuccessUploaded: (bool isSuccess) async {
-              log('uploadCarImageSuccessCubit $isSuccess');
 
-              if (isSuccess) {
-                showSuccessMessage(
-                    context,
-                    context.isArabic
-                        ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
-                        : "Successfully uploaded images, please wait for the approval of all data.");
-                context.pop();
-                context.pop();
-                emit(state.copyWith(status: DashboardsStates.success));
-              } else {
-                context.pop();
-                showErrorMessage(
-                    context,
-                    context.isArabic
-                        ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
-                        : 'An error occurred while uploading images. Please try again.');
-              }
-            });
+
+    final vehicleFrontPictureMediaId = await FindMediaId.getMediaId(
+      subCategoryId: Constants.facebookSubCategory,
+      image: state.vehicleFrontPicture!,
+    );
+
+    final vehicleBackPictureMediaId = await FindMediaId.getMediaId(
+      subCategoryId: Constants.facebookSubCategory,
+      image: state.vehicleBackPicture!,
+    );
+    List<String> mediaIds = [vehicleFrontPictureMediaId, vehicleBackPictureMediaId];
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if(mediaIds.isEmpty){
+      context.pop();
+      showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصور':'Please upload photos');
+      return;
+    }else{
+      if(vehicleFrontPictureMediaId.isEmpty){
+        context.pop();
+        showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة الامامية للرخصة':'Please upload front license picture');
+        return;
+      }
+      if(vehicleBackPictureMediaId.isEmpty){
+        context.pop();
+        showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة الخلفية للرخصة':'Please upload back license picture');
+        return;
+      }
+    }
+
+    bool isSuccess = await RideMethodHelper().updateExpiredImage(
+      recordType: 'CAR_LICENSE',
+      expiryDate: rideVehicleExpireDateController.text,
+      mediaIds: mediaIds,
+    );
+    if (isSuccess) {
+      showSuccessMessage(
+          context,
+          context.isArabic
+              ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+              : "Successfully uploaded images, please wait for the approval of all data.");
+      context.pop();
+      context.pop();
+      emit(state.copyWith(status: DashboardsStates.success));
+    } else {
+      context.pop();
+      showErrorMessage(
+          context,
+          context.isArabic
+              ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+              : 'An error occurred while uploading images. Please try again.');
+    }
+
+
+            // });
     emit(state.copyWith(status: DashboardsStates.success));
   }
 
@@ -1019,32 +1113,42 @@ class DashboardsCubit extends Cubit<DashboardsState> {
             context, "Please select back of driver license picture");
         return;
       }
-      if (state.selfieDriverLicensePicture == null) {
-        showErrorMessage(
-            context, "Please select selfie driver license picture");
-        return;
-      }
-      showLoadingDialog(context, canPop: false);
-      await RideMethodHelper().uploadDriverLicense(
-          drivingImageInFront: state.driverLicensePicture!,
-          drivingImageBehind: state.backOfDriverLicensePicture!,
-          drivingExpiryDate: rideDriverExpireDateController.text,
-          onSuccessUploaded: (bool isSuccess) async {
-            if (isSuccess) {
-              emit(state.copyWith(status: DashboardsStates.success));
-            } else {
-              showErrorMessage(
-                  context,
-                  context.isArabic
-                      ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
-                      : 'An error occurred while uploading images. Please try again.');
-            }
-          });
-      emit(state.copyWith(status: DashboardsStates.success));
 
-      await RideMethodHelper().confirmIdentity(
-          verifyUserImage: state.selfieDriverLicensePicture!,
-          onSuccessUploaded: (bool isSuccess) async {
+      showLoadingDialog(context, canPop: false);
+
+      final drivingImageInFrontMediaId = await FindMediaId.getMediaId(
+        subCategoryId: Constants.facebookSubCategory,
+        image: state.driverLicensePicture!,
+      );
+
+      final drivingImageInBackMediaId = await FindMediaId.getMediaId(
+        subCategoryId: Constants.facebookSubCategory,
+        image: state.backOfDriverLicensePicture!,
+      );
+      List<String> mediaIds = [drivingImageInFrontMediaId, drivingImageInBackMediaId];
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      if(mediaIds.isEmpty){
+        context.pop();
+        showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصور':'Please upload photos');
+        return;
+      }else{
+        if(drivingImageInFrontMediaId.isEmpty){
+          context.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة الامامية للبطاقة':'Please upload front id picture');
+          return;
+        }
+        if(drivingImageInBackMediaId.isEmpty){
+          context.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة الخلفية للبطاقة':'Please upload back id picture');
+          return;
+        }
+      }
+
+      bool isSuccess = await RideMethodHelper().updateExpiredImage(
+        recordType: 'DRIVING_LICENSE',
+        expiryDate: rideDriverExpireDateController.text,
+        mediaIds: mediaIds,
+      );
             if (isSuccess) {
               showSuccessMessage(
                   context,
@@ -1062,8 +1166,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                       ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
                       : 'An error occurred while uploading images. Please try again.');
             }
-          });
-
       emit(state.copyWith(status: DashboardsStates.success));
     }
   }
@@ -1145,10 +1247,14 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
 
+  String personalFrontMediaId ='';
+  String personalBackMediaId = '';
 
   onSubmitUploadingId(
     BuildContext context,
   ) async {
+    personalFrontMediaId = '';
+    personalBackMediaId = '';
     emit(state.copyWith(status: DashboardsStates.loading));
     // DriverInfoEntity? driverInfo = state.driverInfo;
     // LoadingInfoEntity? loaderInfo = state.loaderInfo;
@@ -1163,11 +1269,55 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       }
       showLoadingDialog(context, canPop: false);
       emit(state.copyWith(status: DashboardsStates.loading));
-      await RideMethodHelper().uploadDriverId(
-          idImageInBehind: state.personalBackIdPicture!,
-          idImageInFront: state.personalFrontIdPicture!,
-          idExpiryDate: ridePersonalDocExpireDateController.text,
-          onSuccessUploaded: (bool isSuccess) async {
+      // await FindMediaId.getMediaId(
+      //   subCategoryId: Constants.facebookSubCategory,
+      //   image: state.personalBackIdPicture!,
+      //     onUploaded:(String mediaId){
+      //       personalFrontMediaId = mediaId;
+      //       emit(state.copyWith(status: DashboardsStates.success,personalFrontMediaId:mediaId));
+      //     print("String mediaId $mediaId");
+      //     }
+      // );
+      final personalFrontMediaId = await FindMediaId.getMediaId(
+        subCategoryId: Constants.facebookSubCategory,
+        image: state.personalFrontIdPicture!,
+      );
+
+      final personalBackMediaId = await FindMediaId.getMediaId(
+        subCategoryId: Constants.facebookSubCategory,
+        image: state.personalBackIdPicture!,
+      );
+      List<String> mediaIds = [personalFrontMediaId, personalBackMediaId];
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      if(mediaIds.isEmpty){
+        context.pop();
+        showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصور':'Please upload photos');
+        return;
+      }else{
+        if(personalFrontMediaId.isEmpty){
+          context.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة الامامية للبطاقة':'Please upload front id picture');
+          return;
+        }else{
+          print("state.personalFrontMediaId ${state.personalFrontMediaId}");
+        }
+        if(personalBackMediaId.isEmpty){
+          context.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'يرجى رفع الصورة الخلفية للبطاقة':'Please upload back id picture');
+          return;
+        }
+      }
+
+      bool isSuccess = await RideMethodHelper().updateExpiredImage(
+        recordType: 'National_ID',
+        expiryDate: ridePersonalDocExpireDateController.text,
+        mediaIds: mediaIds,
+      );
+      // await RideMethodHelper().uploadDriverId(
+      //     idImageInBehind: state.personalBackIdPicture!,
+      //     idImageInFront: state.personalFrontIdPicture!,
+      //     idExpiryDate: ridePersonalDocExpireDateController.text,
+      //     onSuccessUploaded: (bool isSuccess) async {
             if (isSuccess) {
               showSuccessMessage(
                   context,
@@ -1185,7 +1335,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                       ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
                       : 'An error occurred while uploading images. Please try again.');
             }
-          });
+      //     });
       Future.delayed(const Duration(seconds: 3));
       // driverInfo?.isUploadDriverId = true;
     }
@@ -2559,7 +2709,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  bool _isRequestingPermission = false;
+  final bool _isRequestingPermission = false;
 
   Future<bool> _checkPermissions() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();

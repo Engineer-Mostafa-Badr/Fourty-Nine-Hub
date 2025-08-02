@@ -4,12 +4,9 @@ import '../../../domain/entities/dashboards/create_non_track_offer_entity.dart';
 
 class CreateNonTrackOfferModel extends CreateNonTrackOfferEntity {
   CreateNonTrackOfferModel({
-    required bool status,
-    required String message,
-  }) : super(
-    status: status,
-    message: message,
-  );
+    required super.status,
+    required super.message,
+  });
 
   factory CreateNonTrackOfferModel.fromJson(Map<String, dynamic> json) {
     return CreateNonTrackOfferModel(

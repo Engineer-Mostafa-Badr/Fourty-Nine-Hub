@@ -51,7 +51,7 @@ class BookingSummaryInfo extends StatelessWidget {
               "${bookingController.doctor.priceToShow} ${LocaleKeys.egp.localize}   ${bookingController.appointment.appointmentType}",
           bgColor: AppColors.whiteColor,
           isBordered: true,
-          fees: "${doctor.clinicPrice}",
+          fees: doctor.clinicPrice,
         ),
       ],
     );

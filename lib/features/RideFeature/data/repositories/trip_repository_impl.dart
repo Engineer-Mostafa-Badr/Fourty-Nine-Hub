@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/loading/get_loading_accepted_model.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
@@ -13,7 +12,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/dr
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
@@ -22,7 +20,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading/setti
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_rate_with_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_non_track_offer_use_case.dart';

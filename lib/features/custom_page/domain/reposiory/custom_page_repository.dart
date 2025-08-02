@@ -6,10 +6,8 @@ import 'package:fourtyninehub/features/custom_page/domain/entity/social_page_ent
 import '../../data/model/update_custom_page_categorise_model.dart';
 import '../entity/custom_page_categories_entity.dart';
 import '../entity/custom_page_sub_categories_entity.dart';
-import '../entity/favourite_categ_entity.dart';
 import '../entity/navigate_bar_entity.dart';
 import '../entity/sub_tab_entity.dart';
-import '../use_case/update_favourite_cat_use_case.dart';
 import '../use_case/update_navigate_bar_use_case.dart';
 import '../use_case/update_social_page_use_case.dart';
 import '../use_case/update_sub_tab_use_case.dart';

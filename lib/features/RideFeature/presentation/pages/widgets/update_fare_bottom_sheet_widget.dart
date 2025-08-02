@@ -40,16 +40,6 @@ class UpdateFareBottomSheetWidget extends StatefulWidget {
 
 class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidget> {
   final _formKey = GlobalKey<FormState>();
-  String convertToArabicNumber(String input) {
-    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-    for (int i = 0; i < english.length; i++) {
-      input = input.replaceAll(english[i], arabic[i]);
-    }
-    return input;
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +72,6 @@ class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidge
                       }
                       return newValue;
                     }),
-                    // ArabicNumberFormatter(isArabic: context.isArabic), // ✅ أضف دي
                   ],
                   style: TextStyle(
                     color: context.isDarkMode
@@ -197,49 +186,6 @@ class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidge
     );
   }
 }
-
-class ArabicNumberFormatter extends TextInputFormatter {
-  final bool isArabic;
-
-  ArabicNumberFormatter({required this.isArabic});
-
-  static const _englishToArabic = {
-    '0': '٠',
-    '1': '١',
-    '2': '٢',
-    '3': '٣',
-    '4': '٤',
-    '5': '٥',
-    '6': '٦',
-    '7': '٧',
-    '8': '٨',
-    '9': '٩',
-  };
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
-    if (!isArabic) return newValue;
-
-    final buffer = StringBuffer();
-    int selectionIndex = newValue.selection.baseOffset;
-
-    for (int i = 0; i < newValue.text.length; i++) {
-      final oldChar = newValue.text[i];
-      final isBeforeCursor = i < selectionIndex;
-      final newChar = _englishToArabic[oldChar] ?? oldChar;
-      buffer.write(newChar);
-    }
-
-    return TextEditingValue(
-      text: buffer.toString(),
-      selection: TextSelection.collapsed(offset: selectionIndex),
-    );
-  }
-}
-
 
 class FareBottomSheetWidget2 extends StatelessWidget {
   FareBottomSheetWidget2({

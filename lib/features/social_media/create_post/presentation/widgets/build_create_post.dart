@@ -8,10 +8,34 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/cub
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 
-class BuildCreatePost extends StatelessWidget {
-  const BuildCreatePost({super.key, required this.onChange, required this.sheetController});
+class BuildCreatePost extends StatefulWidget {
+  const BuildCreatePost(
+      {super.key, required this.onChange, required this.sheetController});
+
   final Function(String) onChange;
   final SheetController sheetController;
+
+  @override
+  State<BuildCreatePost> createState() => _BuildCreatePostState();
+}
+
+class _BuildCreatePostState extends State<BuildCreatePost> {
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // فتح الكيبورد تلقائياً بعد بناء الواجهة
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,38 +45,66 @@ class BuildCreatePost extends StatelessWidget {
         var controller = context.read<CreatePostCubit>();
 
         return Container(
-          height: ((state.backColor == '#FFFFFFFF' && state.isBiggerThen150 == false)||state.selectedLifeEvent!=null)
+          height: ((state.backColor == '#FFFFFFFF' &&
+                      state.isBiggerThen150 == false) ||
+                  state.selectedLifeEvent != null)
               ? 250
-              :((state.backColor == '#FFFFFFFF' && state.isBiggerThen120 == true)||state.selectedLifeEvent!=null)?250: (state.isBiggerThen150 == true)
-              ? 300
-              : 250,
-          alignment: state.isBiggerThen150 == false ? AlignmentDirectional.topStart : Alignment.center,
-          color: Color(int.parse((state.selectedLifeEvent!=null?(context.isDarkMode?'#00000000':'#FFFFFFFF'):state.backColor ?? (context.isDarkMode?'#00000000':'#FFFFFFFF')).replaceAll("#", ""), radix: 16),),
+              : ((state.backColor == '#FFFFFFFF' &&
+                          state.isBiggerThen120 == true) ||
+                      state.selectedLifeEvent != null)
+                  ? 250
+                  : (state.isBiggerThen150 == true)
+                      ? 300
+                      : 250,
+          alignment: state.isBiggerThen150 == false
+              ? AlignmentDirectional.topStart
+              : Alignment.center,
+          color: Color(
+            int.parse(
+                (state.selectedLifeEvent != null
+                        ? (context.isDarkMode ? '#00000000' : '#FFFFFFFF')
+                        : state.backColor ??
+                            (context.isDarkMode ? '#00000000' : '#FFFFFFFF'))
+                    .replaceAll("#", ""),
+                radix: 16),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: TextField(
+                  focusNode: _focusNode, // إضافة FocusNode
                   maxLines: null,
                   expands: true,
-                  textAlign:TextAlign.start,
+                  textAlign: TextAlign.start,
+                  autofocus: true, // فتح الكيبورد تلقائياً
                   style: TextStyle(
-                    color: (state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.selectedLifeEvent==null&&state.backColor!='#FFFFFF00')
+                    color: (state.backColor != '#FFFFFFFF' &&
+                            state.isBiggerThen150 == false &&
+                            state.selectedLifeEvent == null &&
+                            state.backColor != '#FFFFFF00')
                         ? Colors.white
                         : AppColors.QUANTITY_COLOR,
-                    fontSize: (state.isBiggerThen120 == true && state.isBiggerThan80 == false)
+                    fontSize: (state.isBiggerThen120 == true &&
+                            state.isBiggerThan80 == false)
                         ? 45.sp
-                        : (state.isBiggerThen120 == false && state.isBiggerThan80 == true)
-                        ? 45.sp
-                        : 55.sp,
-                    fontWeight: (state.backColor == '#FFFFFFFF' || state.isBiggerThen150 == true||state.selectedLifeEvent!=null)
+                        : (state.isBiggerThen120 == false &&
+                                state.isBiggerThan80 == true)
+                            ? 45.sp
+                            : 55.sp,
+                    fontWeight: (state.backColor == '#FFFFFFFF' ||
+                            state.isBiggerThen150 == true ||
+                            state.selectedLifeEvent != null)
                         ? FontWeight.w400
                         : FontWeight.bold,
                   ),
                   onChanged: (c) {
+                    // استدعاء callback function
+                    widget.onChange(c);
+
                     if (c.isNotEmpty) {
-                      sheetController.collapse();
+                      widget.sheetController.collapse();
                     }
                     if (c.length > 80 &&
                         c.length < 120 &&
@@ -68,23 +120,33 @@ class BuildCreatePost extends StatelessWidget {
                     } else {
                       controller.onSmallerText();
                     }
-                    },
-                  controller: context.read<CreatePostCubit>().postContentTextController,
+                  },
+                  controller:
+                      context.read<CreatePostCubit>().postContentTextController,
                   decoration: InputDecoration(
                     hintText: LocaleKeys.whatDoYouThink.localize,
                     hintStyle: TextStyle(
-                      fontSize: 45.sp,
-                      fontWeight: FontWeight.w400,
-                      color:(state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.backColor!='#FFFFFF00')
-                          ? Colors.white
-                          : AppColors.GREYTEXT
-                    ),
-                    focusColor:(state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.backColor!='#FFFFFF00')
+                        fontSize: 45.sp,
+                        fontWeight: FontWeight.w400,
+                        color: (state.backColor != '#FFFFFFFF' &&
+                                state.isBiggerThen150 == false &&
+                                state.backColor != '#FFFFFF00')
+                            ? Colors.white
+                            : AppColors.GREYTEXT),
+                    focusColor: (state.backColor != '#FFFFFFFF' &&
+                            state.isBiggerThen150 == false &&
+                            state.backColor != '#FFFFFF00')
                         ? Colors.white
                         : AppColors.GREYTEXT,
-
                     floatingLabelAlignment: FloatingLabelAlignment.center,
-                    fillColor: state.isBiggerThen150?Colors.white:Color(int.parse((state.backColor??'#FFFFFFFF').replaceAll("#", ""), radix: 16),),
+                    fillColor: state.isBiggerThen150
+                        ? Colors.white
+                        : Color(
+                            int.parse(
+                                (state.backColor ?? '#FFFFFFFF')
+                                    .replaceAll("#", ""),
+                                radix: 16),
+                          ),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,

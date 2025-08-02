@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_review_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instgram_images_post_widget.dart';
-import 'package:fourtyninehub/helpers/media_helper.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 

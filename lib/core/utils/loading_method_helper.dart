@@ -126,7 +126,7 @@ class LoadingMethodHelper {
             signedUrl: data['data']['idBehindData']['signedUrl'])
             .then(
               (value) async {
-                print("valllllue${value}");
+                print("valllllue$value");
             print("data['data']['idFrontData']['signedUrl']${data['data']['idFrontData']['signedUrl']}");
             await sendBinaryFileData(
                 file: XFile(idImageInFront.path),

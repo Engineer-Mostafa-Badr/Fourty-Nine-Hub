@@ -137,7 +137,7 @@ class UploadFile {
               );
             },
           );
-          };
+          }
 
           log("responseData: ${jsonEncode(data)}");
           final tempDir = await getTemporaryDirectory();

@@ -18,7 +18,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 class RestaurantHeader extends StatefulWidget {
   final GetAllRestaurantEntity restaurant;
 
-  const RestaurantHeader({Key? key, required this.restaurant}) : super(key: key);
+  const RestaurantHeader({super.key, required this.restaurant});
 
   @override
   State<RestaurantHeader> createState() => _RestaurantHeaderState();

@@ -12,13 +12,13 @@ class BookingCheckBoxWidget extends StatelessWidget {
   final Color? borderColor; // for inactive checkbox
 
   const BookingCheckBoxWidget({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
     this.activeColor,
     this.checkColor,
     this.borderColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,13 @@ class BookingCheckBoxWidget extends StatelessWidget {
       data: Theme.of(context).copyWith(
         unselectedWidgetColor: borderColor ?? Colors.grey, // border color when unchecked
         checkboxTheme: CheckboxThemeData(
-          fillColor: MaterialStateProperty.resolveWith<Color>((states) {
-            if (states.contains(MaterialState.selected)) {
+          fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+            if (states.contains(WidgetState.selected)) {
               return activeColor ?? Theme.of(context).primaryColor;
             }
             return borderColor ?? Colors.grey;
           }),
-          checkColor: MaterialStateProperty.all(
+          checkColor: WidgetStateProperty.all(
               checkColor ?? Colors.white), // checkmark color
         ),
       ),

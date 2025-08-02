@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -15,8 +14,8 @@ import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/filter_ad_dynamic_inputs.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class FilterAdsParams {
@@ -38,12 +37,15 @@ class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
     context.read<CreateAdCubit>().loadData(
-        subCategoryId: widget.filterAdsParams.categorization.fromMarriage == false
-            ? widget.filterAdsParams.categorization.mainCategory.id
-            : widget.filterAdsParams.categorization.subCategory.id,
-        fromMarriage: widget.filterAdsParams.categorization.fromMarriage ?? false);
+        subCategoryId:
+            widget.filterAdsParams.categorization.fromMarriage == false
+                ? widget.filterAdsParams.categorization.mainCategory.id
+                : widget.filterAdsParams.categorization.subCategory.id,
+        fromMarriage:
+            widget.filterAdsParams.categorization.fromMarriage ?? false);
     super.initState();
   }
+
   String _convertToArabicDigits(String input) {
     const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -65,6 +67,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
     }
     return output;
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateAdCubit, CreateAdState>(
@@ -91,7 +94,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
               builder: (context, state) {
             if (state.isLoading) {
               return const Center(
-                child: CustomCircularProgressIndicator(),
+                child: CustomLoadingSearchWidget(),
               );
             }
             return Padding(
@@ -127,26 +130,24 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                       itemBuilder: (context, index) {
                         final property = state.filterAdProperties![index];
                         return FilterAdDynamicInputWidget(
-                          property: property,
-                          onChanged: (SelectionEntity v) =>
-                              controller.onChanged(v: v, index: index),
-                          onTextChanged: (String v, bool from, String type) {
-                            // if (context.isArabic) {
-                            //   final englishValue = _convertToEnglishDigits(v);
-                            //   final arabicValue = _convertToArabicDigits(englishValue);
-                            //   v = arabicValue;
-                            // }
-                            print('arabicValue $v');
+                            property: property,
+                            onChanged: (SelectionEntity v) =>
+                                controller.onChanged(v: v, index: index),
+                            onTextChanged: (String v, bool from, String type) {
+                              // if (context.isArabic) {
+                              //   final englishValue = _convertToEnglishDigits(v);
+                              //   final arabicValue = _convertToArabicDigits(englishValue);
+                              //   v = arabicValue;
+                              // }
+                              print('arabicValue $v');
 
-                            controller.onTextChanged(
-                                v: v,
-                                index: index,
-                                isNumber: property.type == 'number',
-                                from: from,
-                                type: type);
-                          }
-
-                        );
+                              controller.onTextChanged(
+                                  v: v,
+                                  index: index,
+                                  isNumber: property.type == 'number',
+                                  from: from,
+                                  type: type);
+                            });
                       },
                       // separatorBuilder: (context, index) => const Sizer(),
                     ),
@@ -183,7 +184,8 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                           // ),
                           child: Label(
                             text: LocaleKeys.filter.localize,
-                            style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
+                            style: Styles.headerText(
+                                color: AppColors.getReversedTextColor(context)),
                           ),
                         )),
                   ],

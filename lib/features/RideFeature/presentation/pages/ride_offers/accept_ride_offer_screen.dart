@@ -6,28 +6,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
-import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
-import '../../../../../helpers/subscription_method.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import '../../../../../service_locator/service_locator.dart';
 import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
-import '../dashboards/widgets/client_offers_widget.dart';
 
 class AcceptRideOfferScreen extends StatefulWidget {
   final String type;
@@ -51,9 +43,14 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      if (widget.type == 'ride') context.read<ClientTripsCubit>().getClientAcceptedTrips();
-      if (widget.type == 'shipping') context.read<ClientTripsCubit>().getClientAcceptedShippingTrips();
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      if (widget.type == 'ride') {
+        context.read<ClientTripsCubit>().getClientAcceptedTrips();
+      }
+      if (widget.type == 'shipping') {
+        context.read<ClientTripsCubit>().getClientAcceptedShippingTrips();
+      }
     }
   }
 
@@ -79,10 +76,13 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
     return Scaffold(
       body: BlocListener<ClientTripsCubit, ClientTripsState>(
         listener: (context, state) {
-          if (state.status == ClientTripsStates.success && state.showSnackbar && state.createNonTrackTripEntity?.message.isNotEmpty == true) {
+          if (state.status == ClientTripsStates.success &&
+              state.showSnackbar &&
+              state.createNonTrackTripEntity?.message.isNotEmpty == true) {
             showCustomSnackBar(
               context,
-              state.createNonTrackTripEntity?.message ?? LocaleKeys.requestSentSuccess.localize,
+              state.createNonTrackTripEntity?.message ??
+                  LocaleKeys.requestSentSuccess.localize,
               Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
             );
 
@@ -94,41 +94,57 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
 
           if (state.status == ClientTripsStates.error) {
             final failure = state.failure;
-            if (failure is ServerFailure && failure.errors != null && failure.errors!.isNotEmpty) {
+            if (failure is ServerFailure &&
+                failure.errors != null &&
+                failure.errors!.isNotEmpty) {
               showErrorMessage(context, failure.errors!.first);
               return;
             }
-            showErrorMessage(context, getFailureMessage(state.failure!, context));
+            showErrorMessage(
+                context, getFailureMessage(state.failure!, context));
           }
         },
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
           builder: (context, state) {
             return state.isLoading
-                ? Center(
-                    child: CustomCircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
+                ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
-                        child: Label(text: LocaleKeys.errorHappen.localize, style: const TextStyle(color: Colors.red)),
+                        child: Label(
+                            text: LocaleKeys.errorHappen.localize,
+                            style: const TextStyle(color: Colors.red)),
                       )
-                    : context.read<ClientTripsCubit>().clientAcceptedTripsData == null || context.read<ClientTripsCubit>().clientAcceptedTripsData.isEmpty
+                    : context
+                                .read<ClientTripsCubit>()
+                                .clientAcceptedTripsData
+                                .isEmpty
                         ? Center(
-                            child: Label(text: LocaleKeys.youDontHaveAcceptedOffer.localize
+                            child: Label(
+                                text:
+                                    LocaleKeys.youDontHaveAcceptedOffer.localize
                                 // , style: TextStyle(color: Colors.red, fontSize: 18)
-                            ),
+                                ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: context.read<ClientTripsCubit>().clientAcceptedTripsData == null || context.read<ClientTripsCubit>().clientAcceptedTripsData.isEmpty
+                            child: context
+                                        .read<ClientTripsCubit>()
+                                        .clientAcceptedTripsData
+                                        .isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
-                                    itemBuilder: (context, index) => ClientAcceptWidget(
-                                          offers: state.clientAcceptedTripData?[index],
+                                    itemBuilder: (context, index) =>
+                                        ClientAcceptWidget(
+                                          offers: state
+                                              .clientAcceptedTripData?[index],
                                         ),
-                                    separatorBuilder: (context, index) => const SizedBox(height: 5),
-                                    itemCount: context.read<ClientTripsCubit>().clientAcceptedTripsData.length ?? 0),
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(height: 5),
+                                    itemCount: context
+                                            .read<ClientTripsCubit>()
+                                            .clientAcceptedTripsData
+                                            .length ??
+                                        0),
                           );
           },
         ),
@@ -170,8 +186,8 @@ class ClientAcceptWidget extends StatelessWidget {
     // Format date with Arabic digits if needed
     final formattedDate = isArabic
         ? _formatNumber(
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
-        context)
+            "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
+            context)
         : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
 
     // Format time with Arabic digits if needed
@@ -184,18 +200,22 @@ class ClientAcceptWidget extends StatelessWidget {
     final ratingCount = _formatNumber(
         offers?.driverDetails?.rating?.count?.toString() ?? '0', context);
     final ratingAverage = _formatNumber(
-        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1), context);
+        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1),
+        context);
 
     // Format passengers count
     final passengersCount = _formatNumber(
         (offers?.tripDetails?.passengers ?? 0).toString(), context);
 
     // Format price
-    final price = _formatNumber(
-        "${offers?.tripDetails?.price ?? 300}", context);
+    final price =
+        _formatNumber("${offers?.tripDetails?.price ?? 300}", context);
     return Container(
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5, borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+          color:
+              context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
+          borderRadius: BorderRadius.circular(20)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -213,7 +233,8 @@ class ClientAcceptWidget extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: offers?.driverDetails?.picture == null || offers!.driverDetails!.picture!.isEmpty
+                        child: offers?.driverDetails?.picture == null ||
+                                offers!.driverDetails!.picture!.isEmpty
                             ? Image.asset(
                                 Assets.maleImagePlaceholder,
                                 fit: BoxFit.cover,
@@ -233,11 +254,17 @@ class ClientAcceptWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Row(children: [
-                                  SvgPicture.asset(Assets.star2, width: 8, height: 8),
+                                  SvgPicture.asset(Assets.star2,
+                                      width: 8, height: 8),
                                   const Sizer(width: 4),
-                                  Label(text: "${offers?.driverDetails?.rating?.count ?? 0}", style: Styles.smallText(color: AppColors.PRIMARY_COLOR))
+                                  Label(
+                                      text:
+                                          "${offers?.driverDetails?.rating?.count ?? 0}",
+                                      style: Styles.smallText(
+                                          color: AppColors.PRIMARY_COLOR))
                                 ]))))
                   ],
                 ),
@@ -272,22 +299,39 @@ class ClientAcceptWidget extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 1,
-                                  child: Image.asset(Assets.rideFrom, width: 24, height: 24),
+                                  child: Image.asset(Assets.rideFrom,
+                                      width: 24, height: 24),
                                 ),
-                                Expanded(flex: 8, child: Label(text: offers?.tripDetails?.location?.fromTitle ?? 'Cairo International Airport', style: Styles.headerText()))
+                                Expanded(
+                                    flex: 8,
+                                    child: Label(
+                                        text: offers?.tripDetails?.location
+                                                ?.fromTitle ??
+                                            'Cairo International Airport',
+                                        style: Styles.headerText()))
                               ],
                             ),
                             Row(
                               spacing: 5,
                               children: [
-                                Expanded(flex: 1, child: Image.asset(Assets.rideTo, width: 24, height: 24)),
+                                Expanded(
+                                    flex: 1,
+                                    child: Image.asset(Assets.rideTo,
+                                        width: 24, height: 24)),
                                 Expanded(
                                     flex: 8,
-                                    child:
-                                        Label(text: offers?.tripDetails?.location?.toTitle ?? 'Cairo International Airport', style: Styles.mediumText(fontWeight: FontWeight.w300)))
+                                    child: Label(
+                                        text: offers?.tripDetails?.location
+                                                ?.toTitle ??
+                                            'Cairo International Airport',
+                                        style: Styles.mediumText(
+                                            fontWeight: FontWeight.w300)))
                               ],
                             ),
-                            Label(text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}', style: Styles.mediumText())
+                            Label(
+                                text:
+                                    '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
+                                style: Styles.mediumText())
                           ],
                         ),
                       ),
@@ -299,9 +343,20 @@ class ClientAcceptWidget extends StatelessWidget {
                               //     ? Image.asset(Assets.rideIcon,
                               //     width: 40, height: 40, fit: BoxFit.cover)
                               //     :
-                              ImageFromInternet(image: offers!.tripDetails!.category!.picture!, width: 40, height: 40, fit: BoxFit.contain),
+                              ImageFromInternet(
+                                  image:
+                                      offers!.tripDetails!.category!.picture!,
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.contain),
                               Label(
-                                  text: context.isArabic ? (offers?.tripDetails?.category?.nameAr ?? '') : (offers?.tripDetails?.category?.nameEn ?? ''),
+                                  text: context.isArabic
+                                      ? (offers
+                                              ?.tripDetails?.category?.nameAr ??
+                                          '')
+                                      : (offers
+                                              ?.tripDetails?.category?.nameEn ??
+                                          ''),
                                   style: Styles.mediumText(fontSize: 25))
                             ],
                           )),
@@ -316,9 +371,16 @@ class ClientAcceptWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Label(text: "${offers?.tripDetails?.price ?? 300}", style: Styles.mediumText(fontWeight: FontWeight.w700)),
+                      Label(
+                          text: "${offers?.tripDetails?.price ?? 300}",
+                          style:
+                              Styles.mediumText(fontWeight: FontWeight.w700)),
                       const Sizer(width: 4),
-                      Label(text: LocaleKeys.egp.tr(), style: Styles.mediumText(color: AppColors.SECONDARY_COLOR, fontWeight: FontWeight.w700))
+                      Label(
+                          text: LocaleKeys.egp.tr(),
+                          style: Styles.mediumText(
+                              color: AppColors.SECONDARY_COLOR,
+                              fontWeight: FontWeight.w700))
                     ],
                   ),
                   Row(
@@ -348,7 +410,9 @@ class ClientAcceptWidget extends StatelessWidget {
                             Assets.phoneIconRed,
                             width: 30.w,
                             height: 30.h,
-                            color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? AppColors.PRIMARY_COLOR_DARK
+                                : AppColors.PRIMARY_COLOR,
                           ),
                           onPressed: () {},
                         ),
@@ -359,7 +423,9 @@ class ClientAcceptWidget extends StatelessWidget {
                               Assets.mailIconRed,
                               width: 25.w,
                               height: 25.h,
-                              color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
+                              color: context.isDarkMode
+                                  ? AppColors.PRIMARY_COLOR_DARK
+                                  : AppColors.PRIMARY_COLOR,
                             ),
                             onPressed: () {}),
                       ),

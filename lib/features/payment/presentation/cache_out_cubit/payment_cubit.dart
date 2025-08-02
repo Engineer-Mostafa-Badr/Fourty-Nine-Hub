@@ -1,13 +1,9 @@
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/payment_provider_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/get_payment_provider_use_case.dart';
-import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
-import 'package:fourtyninehub/routes/pages.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
 import '../../../../core/abstract/use_case.dart';

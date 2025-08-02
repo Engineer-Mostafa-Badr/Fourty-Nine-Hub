@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 void showDialogTripJoin(BuildContext context, Widget screen) {
   showDialog(

@@ -27,7 +27,7 @@ class MarriageRequest extends StatelessWidget {
     return OlxPaginationWidget(
       itemsPerPage: 2,
       loadPage: (page) {
-        print('==> page ${page}');
+        print('==> page $page');
         print('==> filterModel ${state.filterModel}');
         return controller.filterAds(
             model: state.filterModel ?? FilterModel(), filter: '');

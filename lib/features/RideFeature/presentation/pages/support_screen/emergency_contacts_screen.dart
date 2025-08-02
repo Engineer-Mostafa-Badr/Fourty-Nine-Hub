@@ -328,7 +328,7 @@ class EmergencyContactItem extends StatelessWidget {
   final TextEditingController nameController = TextEditingController(text: "Ahmed mohammed");
   final TextEditingController phoneController = TextEditingController(text: "01578731541");
 
-  EmergencyContactItem({Key? key}) : super(key: key);
+  EmergencyContactItem({super.key});
 
   @override
   Widget build(BuildContext context) {

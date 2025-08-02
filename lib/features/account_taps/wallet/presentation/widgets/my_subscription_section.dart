@@ -52,22 +52,22 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
             ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            height: _isExpanded ? MediaQuery.sizeOf(context).height * 0.3 : 0,
+            height: _isExpanded ? MediaQuery.sizeOf(context).height * 0.2 : 0,
             child: _isExpanded
                 ? MySubscriptionListView(subscriptions: widget.subscriptions)
                 : null,
           ),
           Row(
             children: [
-              if (!_isExpanded)
-                Label(
-                  text: LocaleKeys.active.localize,
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.w600,
-                    color: context.isDarkMode ? Colors.white : Colors.black,
-                    height: 1.60,
-                  ),
-                ),
+              // if (!_isExpanded)
+              //   Label(
+              //     text: LocaleKeys.active.localize,
+              //     style: Styles.mediumText(
+              //       fontWeight: FontWeight.w600,
+              //       color: context.isDarkMode ? Colors.white : Colors.black,
+              //       height: 1.60,
+              //     ),
+              //   ),
               const Spacer(),
               GestureDetector(
                 onTap: () {

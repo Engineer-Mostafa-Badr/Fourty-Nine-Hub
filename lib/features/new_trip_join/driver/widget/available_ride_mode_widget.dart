@@ -31,7 +31,7 @@ class AvailableRideModeWidget extends StatefulWidget {
 }
 
 class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
-  bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+  final bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
   late ExpandableController _expandableController;
 
   @override

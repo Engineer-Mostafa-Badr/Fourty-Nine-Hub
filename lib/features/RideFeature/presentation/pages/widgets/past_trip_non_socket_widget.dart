@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
-import '../../../../../../routes/routes.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../res/style/styles.dart';
@@ -63,8 +60,8 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
               child: PriceColumnNonSocket(
                 status: widget.tripEntity?.tripDetails?.status ?? "",
                 title: widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
-                date: "${formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context)}",
-                price: "${formatPrice(widget.tripEntity?.tripDetails?.price?.toInt() ?? 0.0, context)}",
+                date: formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context),
+                price: formatPrice(widget.tripEntity?.tripDetails?.price?.toInt() ?? 0.0, context),
               ),
             ),
 

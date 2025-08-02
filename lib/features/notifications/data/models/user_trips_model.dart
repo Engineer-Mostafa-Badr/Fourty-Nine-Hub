@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/user_trip_entity.dart';
 
 class UserTripsModel extends UserTripEntity {

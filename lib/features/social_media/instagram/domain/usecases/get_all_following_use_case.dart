@@ -1,6 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';

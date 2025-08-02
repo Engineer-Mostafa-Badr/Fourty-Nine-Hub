@@ -8,10 +8,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/past_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../res/style/styles.dart';
@@ -26,23 +24,33 @@ class MainTabsRideOffer extends StatefulWidget {
   State<MainTabsRideOffer> createState() => _MainTabsRideOfferState();
 }
 
-class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTickerProviderStateMixin {
+class _MainTabsRideOfferState extends State<MainTabsRideOffer>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<String> _tabTitles = [LocaleKeys.offers.localize, LocaleKeys.accepted.localize, LocaleKeys.pending.localize, LocaleKeys.past.localize];
+  final List<String> _tabTitles = [
+    LocaleKeys.offers.localize,
+    LocaleKeys.accepted.localize,
+    LocaleKeys.pending.localize,
+    LocaleKeys.past.localize
+  ];
 
   String selectedTap = 'ride';
 
   @override
   void initState() {
     super.initState();
-    selectedTap = widget.type??'ride';
-    if(widget.type=='ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-    if(widget.type=='ride')context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
-    if(widget.type=='shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+    selectedTap = widget.type ?? 'ride';
+    if (widget.type == 'ride') {
+      context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+    }
+    if (widget.type == 'ride') {
+      context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
+    }
+    if (widget.type == 'shipping') {
+      context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+    }
     _tabController = TabController(length: _tabTitles.length, vsync: this);
   }
-
-
 
   @override
   void dispose() {
@@ -87,34 +95,44 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
 
                         if (_tabController.index == 2) {
                           // if (widget.type == 'ride')
-                            context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPendingTrips();
                           // if (widget.type == 'shipping') context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
                         }
-                        if(_tabController.index ==1){
+                        if (_tabController.index == 1) {
                           // if (selectedTap == 'ride')
-                            context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientAcceptedTrips();
                           // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
                         }
-                        if(_tabController.index ==0){
+                        if (_tabController.index == 0) {
                           // if (selectedTap == 'ride')
-                            context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientOfferTrips();
                           // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
                         }
-                        if(_tabController.index ==3){
+                        if (_tabController.index == 3) {
                           print("object");
                           // if (selectedTap == 'ride')
-                            context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPastTrips();
                           // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
                         }
                       }
                     },
-                    backColor: selectedTap == 'ride' ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+                    backColor: selectedTap == 'ride'
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.PRIMARY_COLOR,
                   ),
                 ),
                 Sizer(),
                 Expanded(
                   child: AppButton(
-                    color:AppColors.whiteColor,
+                    color: AppColors.whiteColor,
                     // color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.whiteColor,
                     radius: 15,
                     label: context.isArabic ? 'تحميله' : 'Shipping',
@@ -126,27 +144,37 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                         if (_tabController.index == 2) {
                           // if (selectedTap == 'ride') context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
                           // if (selectedTap == 'shipping')
-                            context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPendingShippingTrips();
                         }
-                        if(_tabController.index ==1){
+                        if (_tabController.index == 1) {
                           // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
                           // if (selectedTap == 'shipping')
-                            context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientAcceptedShippingTrips();
                         }
-                        if(_tabController.index ==0){
+                        if (_tabController.index == 0) {
                           // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
                           // if (selectedTap == 'shipping')
-                            context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientOfferShippingTrips();
                         }
-                        if(_tabController.index ==3){
+                        if (_tabController.index == 3) {
                           print("object");
                           // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
                           // if (selectedTap == 'shipping')
-                            context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPastShippingTrips();
                         }
                       }
                     },
-                    backColor: selectedTap == 'shipping' ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+                    backColor: selectedTap == 'shipping'
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.PRIMARY_COLOR,
                   ),
                 ),
               ],
@@ -192,24 +220,48 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
         // No underline
         labelPadding: EdgeInsets.zero,
         onTap: (index) {
-          if(index==2){
+          if (index == 2) {
             // loadInitialClientAcceptedShippingTrips
-            if (selectedTap == 'ride') context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
-            if (selectedTap == 'shipping') context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
+            if (selectedTap == 'ride') {
+              context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
+            }
+            if (selectedTap == 'shipping') {
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientPendingShippingTrips();
+            }
           }
           if (index == 1) {
             print("object1");
-            if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
-            if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
+            if (selectedTap == 'ride') {
+              context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
+            }
+            if (selectedTap == 'shipping') {
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientAcceptedShippingTrips();
+            }
           }
-          if(index ==0){
-            if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-            if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+          if (index == 0) {
+            if (selectedTap == 'ride') {
+              context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+            }
+            if (selectedTap == 'shipping') {
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientOfferShippingTrips();
+            }
           }
-          if(index ==3){
+          if (index == 3) {
             print("object");
-            if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
-            if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
+            if (selectedTap == 'ride') {
+              context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+            }
+            if (selectedTap == 'shipping') {
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientPastShippingTrips();
+            }
           }
 
           // if (index == 0) {
@@ -230,9 +282,12 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
             child: Tab(
               child: Container(
                 width: 200.w,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.PRIMARY_COLOR : const Color(0xFFE0E0E0),
+                  color: isSelected
+                      ? AppColors.PRIMARY_COLOR
+                      : const Color(0xFFE0E0E0),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
@@ -250,6 +305,4 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
       ),
     );
   }
-
-
 }

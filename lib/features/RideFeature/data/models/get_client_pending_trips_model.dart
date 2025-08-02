@@ -23,28 +23,17 @@ class ClientPendingTripModel extends ClientPendingTripEntity {
 
 class TripDetailsModel extends TripDetailsEntity {
   TripDetailsModel({
-    String? id,
-    String? status,
-    bool? isPremium,
-    num? price,
-    num? passengers,
-    String? date,
-    String? note,
-    LocationModel? location,
-    CategoryModel? category,
-    String? createdAt,
-  }) : super(
-    id: id,
-    status: status,
-    isPremium: isPremium,
-    price: price,
-    passengers: passengers,
-    date: date,
-    note: note,
-    location: location,
-    category: category,
-    createdAt: createdAt,
-  );
+    super.id,
+    super.status,
+    super.isPremium,
+    super.price,
+    super.passengers,
+    super.date,
+    super.note,
+    LocationModel? super.location,
+    CategoryModel? super.category,
+    super.createdAt,
+  });
 
   factory TripDetailsModel.fromJson(Map<String, dynamic> json) {
     return TripDetailsModel(
@@ -69,20 +58,13 @@ class TripDetailsModel extends TripDetailsEntity {
 
 class YourDetailsModel extends YourDetailsEntity {
   YourDetailsModel({
-    String? id,
-    String? firstName,
-    String? lastName,
-    String? pictureUrl,
-    bool? verifiedBadge, // ✅ NEW FIELD
-    RatingModel? rating,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    lastName: lastName,
-    pictureUrl: pictureUrl,
-    verifiedBadge: verifiedBadge, // ✅ INCLUDE HERE
-    rating: rating,
-  );
+    super.id,
+    super.firstName,
+    super.lastName,
+    super.pictureUrl,
+    super.verifiedBadge, // ✅ NEW FIELD
+    RatingModel? super.rating,
+  });
 
   factory YourDetailsModel.fromJson(Map<String, dynamic> json) {
     return YourDetailsModel(
@@ -100,8 +82,7 @@ class YourDetailsModel extends YourDetailsEntity {
 
 
 class RatingModel extends RatingEntity {
-  RatingModel({num? average, int? count})
-      : super(average: average, count: count);
+  RatingModel({super.average, super.count});
 
   factory RatingModel.fromJson(Map<String, dynamic> json) {
     return RatingModel(
@@ -112,8 +93,7 @@ class RatingModel extends RatingEntity {
 }
 
 class LocationModel extends LocationEntity {
-  LocationModel({String? fromTitle, String? toTitle})
-      : super(fromTitle: fromTitle, toTitle: toTitle);
+  LocationModel({super.fromTitle, super.toTitle});
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
@@ -124,8 +104,7 @@ class LocationModel extends LocationEntity {
 }
 
 class CategoryModel extends CategoryEntity {
-  CategoryModel({String? nameAr, String? nameEn, String? picture})
-      : super(nameAr: nameAr, nameEn: nameEn, picture: picture);
+  CategoryModel({super.nameAr, super.nameEn, super.picture});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(

@@ -10,7 +10,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -168,8 +167,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
           ),
-          const Sizer(),
-          const Sizer(),
+          SizedBox(
+            width: 20.w,
+          ),
           if (showLanguage)
             Expanded(
               child: TextButton(

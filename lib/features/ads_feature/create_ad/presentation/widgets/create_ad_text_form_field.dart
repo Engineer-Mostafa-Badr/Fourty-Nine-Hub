@@ -12,6 +12,8 @@ class CreateAdTextFormField extends StatelessWidget {
     required this.keyboardType,
     this.validator,
     this.inputFormatters,
+    this.focusNode,
+    this.textInputAction,
   });
 
   final Function(String)? onChanged;
@@ -19,6 +21,8 @@ class CreateAdTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +36,11 @@ class CreateAdTextFormField extends StatelessWidget {
         keyboardType: keyboardType,
         onChanged: onChanged,
         inputFormatters: inputFormatters,
-        style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
+        style: Styles.mediumText(
+            fontSize: 32,
+            color: context.isDarkMode ? AppColors.whiteColor : Colors.black),
         decoration: InputDecoration(
-          fillColor:AppColors.getFillColor(context),
+          fillColor: AppColors.getFillColor(context),
           //context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
           filled: true,
           contentPadding: const EdgeInsetsDirectional.only(start: 16),
@@ -58,7 +64,9 @@ class CreateAdTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
           ),
-          hintStyle: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:Colors.black),
+          hintStyle: Styles.mediumText(
+              fontSize: 32,
+              color: context.isDarkMode ? AppColors.whiteColor : Colors.black),
           hintText: hintText,
           // prefix: Sizer(
           //   width: 20.w,
@@ -66,6 +74,8 @@ class CreateAdTextFormField extends StatelessWidget {
         ),
         // keyboardType: TextInputType.number,
         validator: validator,
+        focusNode: focusNode,
+        textInputAction: textInputAction ?? TextInputAction.next,
       ),
     );
   }

@@ -17,10 +17,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_save_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_saved_cards_entity.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
@@ -48,6 +46,7 @@ class _FawryPaymentState extends State<FawryPayment> {
   bool _showNumber = false;
   bool _isAddingNewCard = false;
   final TextEditingController _cardNumberController = TextEditingController();
+  final FocusNode _cardNumberFocusNode = FocusNode();
   final TextEditingController _cvvController = TextEditingController();
   final FocusNode _cvvFocusNode = FocusNode();
   final TextEditingController _expiryMonthController = TextEditingController();
@@ -61,6 +60,22 @@ class _FawryPaymentState extends State<FawryPayment> {
     _cvvFocusNode.addListener(() {
       setState(() {});
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _cardNumberFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _cardNumberController.dispose();
+    _cvvController.dispose();
+    _cvvFocusNode.dispose();
+    _cardNumberFocusNode.dispose();
+    _expiryMonthController.dispose();
+    _expiryYearController.dispose();
+    _cardAlias.dispose();
+    super.dispose();
   }
 
   @override
@@ -438,6 +453,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                     color: context.isDarkMode ? Colors.white : Colors.black),
               ),
             ),
+            focusNode: _cardNumberFocusNode,
             maxLength: 16,
             keyboardType: TextInputType.number,
             inputFormatters: [

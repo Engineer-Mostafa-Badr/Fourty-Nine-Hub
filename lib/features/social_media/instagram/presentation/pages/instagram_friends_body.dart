@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../widgets/instagram_friends_categorise_widget.dart';
-import '../widgets/instagram_user_follow_widget.dart';
 
 class InstagramFriendsBody extends StatelessWidget {
   const InstagramFriendsBody({super.key});
