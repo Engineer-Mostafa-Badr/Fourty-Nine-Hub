@@ -198,7 +198,7 @@ void _webSocketIsolateEntry(SendPort mainSendPort) {
 
   IO.Socket? socket;
   final subscribedEvents = <String>{};
-  const String url = 'https://49backend.com';
+  const String url = 'https://6db25d211280.ngrok-free.app';
 
   receivePort.listen((message) {
     final isolateMessage =

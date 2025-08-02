@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/record_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/creminal_record_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drivers_license_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drug_analysis_non_socket.dart';
@@ -30,8 +31,9 @@ import 'update_personal_info_widget.dart';
 
 class SettingsWidget extends StatefulWidget {
   final String modeType;
+  final RideModeParams params;
   final SettingsDashboardEntity? settings;
-  const SettingsWidget({super.key, required this.modeType, this.settings});
+  const SettingsWidget({super.key, required this.modeType,required this.params, this.settings});
 
   @override
   State<SettingsWidget> createState() => _SettingsWidgetState();
@@ -314,7 +316,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                               subcategoryId:
                                               widget.settings!.categoryIds[index].id,
                                               isActive: index==0?isCaptain:index==1?isIntercity:isPremium)))
-                                      );
+                                      ,widget.params);
                                 },
                               ),
                             ),
@@ -558,7 +560,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
                                   isActive: index==0?isCaptain:index==1?isIntercity:isPremium))
-                          ));
+                          ),widget.params);
                     }),
               ),
             ],

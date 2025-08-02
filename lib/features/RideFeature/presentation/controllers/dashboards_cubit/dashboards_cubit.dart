@@ -2372,7 +2372,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> updateSettings(
-      BuildContext context, UpdateSettingsDashboardUsecaseParam param) async {
+      BuildContext context, UpdateSettingsDashboardUsecaseParam param,RideModeParams rideModeParams) async {
     if (isClosed) {
       return;
     }
@@ -2384,8 +2384,16 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     if (isClosed) return;
     result.fold(
       (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
         var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+        log("Failure ${getFailureName(failure, currentContext)}");
+        String errorName = getFailureName(failure, currentContext);
+        if(errorName == 'RideActiveTripError'){
+          showHaveTripDialog(context:currentContext,title:currentContext.isArabic?"لا يمكنك تحديث الإعدادات أثناء قيامك برحلة أخرى الآن، يرجى إكمال الرحلة حتى تتمكن من تحديث الاعدادات":"You can't update settings while you're taking another trip now, Please complete the trip so you can update settings",
+              onClose:(){
+            changeIndex(1, context, rideModeParams);
+              }
+          );
+        }
         showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
 
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
@@ -2464,7 +2472,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     result.fold(
       (failure) {
         currentContext.pop();
-        log("Failure ${getFailureMessage(failure, currentContext)}");
+        log("Failure ${getFailureName(failure, currentContext)}");
+        String errorName = getFailureName(failure, currentContext);
+        if(errorName == 'RideActiveTripError'){
+          showHaveTripDialog(context:currentContext,title:currentContext.isArabic?"لا يمكنك قبول هذه الرحلة أثناء قيامك برحلة أخرى الآن، يرجى إكمال الرحلة حتى تتمكن من قبول رحلة أخرى":"You can't accept this trip while you're taking another trip now, Please complete the trip so you can accept another trip",
+              onClose:(){
+                changeIndex(1, context, params);
+              }
+          );
+        }
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (data) {

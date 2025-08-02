@@ -652,6 +652,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                       : SettingsWidget(
                                           modeType: widget.params.isSocket == true ? 'ride' : 'truck',
                                           settings: state.settings,
+                            params:widget.params
                                         ),
                         )
                       /*

@@ -140,7 +140,7 @@ class AvailableRideTripItem extends StatelessWidget {
                 Expanded(
                   flex: 6,
                   child: Column(
-                    spacing: 4,
+                    // mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(spacing: 0, children: [
@@ -230,7 +230,8 @@ class AvailableRideTripItem extends StatelessWidget {
 
                               );
                             });
-                          } else {
+                          }
+                          else {
                             cubit.autoAcceptTrip(context, tripEntity.id,params);
                           }
                         }else{
