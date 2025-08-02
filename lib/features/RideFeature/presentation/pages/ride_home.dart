@@ -245,8 +245,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   ),
                 ),
                 if(state.requestedTrip?.status == TripState.goToClient.name)
+                  if (state.requestedTrip?.driverIsArrivingIn != null)
+                      if(DateTime.now().isAfter(state.requestedTrip!.driverIsArrivingIn!.add(Duration(minutes: 10))))
                 const SizedBox(height: 20),
                 if(state.requestedTrip?.status == TripState.goToClient.name)
+                  if (state.requestedTrip?.driverIsArrivingIn != null)
+                    if(DateTime.now().isAfter(state.requestedTrip!.driverIsArrivingIn!.add(Duration(minutes: 10))))
                 ClickableWidget(
                   onTap: () {
                     ManageVibration.vibrate();
@@ -523,6 +527,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         onGoogleMap: () {
                           ManageVibration.vibrate();
                         },
+                        showCancelButton: (state.requestedTrip?.status == TripState.accepted.name || state.requestedTrip?.status == TripState.inLocation.name || state.requestedTrip?.status == TripState.goToClient.name),
+                        showOTP: state.requestedTrip?.status == TripState.inLocation.name,
                         onPartialPayment: () {
                           ManageVibration.vibrate();
                           showModalBottomSheet<bool>(
@@ -2183,6 +2189,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(12.0),
                   child: FareBottomSheetWidget(
                     rideCubit: serviceLocator<RideCubit>(),
+                    isArabic: context.isArabic,
                     selectedCategoryPrice: serviceLocator<RideCubit>().getTotalPrice(selectedCategoryPrice),
                     selectedCategoryName: selectedCategoryName,
                   ),

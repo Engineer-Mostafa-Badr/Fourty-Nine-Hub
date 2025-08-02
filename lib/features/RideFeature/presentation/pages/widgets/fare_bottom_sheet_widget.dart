@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -20,15 +21,19 @@ class FareBottomSheetWidget extends StatelessWidget {
     required this.rideCubit,
     required this.selectedCategoryPrice,
     required this.selectedCategoryName,
-  }) : _controller = TextEditingController(
-          text:
-              selectedCategoryPrice > 0 ? selectedCategoryPrice.toInt().toString() : '',
-        );
+    required this.isArabic,
+  }) : _controller = ArabicNumberTextController(
+    isArabic: isArabic,
+    initialText: selectedCategoryPrice > 0
+        ? selectedCategoryPrice.toInt().toString()
+        : '',
+  );
 
   final RideCubit rideCubit;
   final double selectedCategoryPrice;
   final String selectedCategoryName;
-  final TextEditingController _controller;
+  final bool isArabic;
+  final ArabicNumberTextController _controller;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -47,22 +52,14 @@ class FareBottomSheetWidget extends StatelessWidget {
                 TextFormField(
                   controller: _controller,
                   autofocus: true,
-                  cursorColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  cursorColor:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                   cursorHeight: 50,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      if (newValue.text.isEmpty) return newValue;
-                      if (newValue.text == '0') return newValue;
-                      if (newValue.text.startsWith('0')) {
-                        return oldValue;
-                      }
-                      return newValue;
-                    }),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
                   ],
-
-                  style:  TextStyle(
+                  style: TextStyle(
                     color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w500,
                     fontSize: 40,
@@ -71,8 +68,8 @@ class FareBottomSheetWidget extends StatelessWidget {
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     hintText: context.isArabic ? 'ج.م' : 'EGP',
-                    hintStyle:  const TextStyle(
-                      color:  Color(0xff96979B),
+                    hintStyle: const TextStyle(
+                      color: Color(0xff96979B),
                       fontWeight: FontWeight.w500,
                       fontSize: 40,
                     ),
@@ -86,24 +83,24 @@ class FareBottomSheetWidget extends StatelessWidget {
                     focusedErrorBorder: const UnderlineInputBorder(),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    final input = _controller.englishText;
+
+                    if (input.isEmpty) {
                       return context.isArabic
                           ? 'يرجى إدخال مبلغ'
                           : 'Please enter an amount';
                     }
 
-                    final double? amount = double.tryParse(value);
+                    final double? amount = double.tryParse(input);
                     final double minFare =
                         state.rideExpectedPrice?.lowestFare ?? 0;
                     final double maxFare =
                         state.rideExpectedPrice?.highestFare ?? double.infinity;
 
-                    if (amount == null ||
-                        amount < minFare ||
-                        amount > maxFare) {
+                    if (amount == null || amount < minFare || amount > maxFare) {
                       return context.isArabic
-                          ? 'يجب أن يكون المبلغ بين ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} و ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}'
-                          : 'Amount must be between ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} and ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}';
+                          ? 'يجب أن يكون المبلغ بين ${FormatNumbers().convertNumberToLocalizedString(serviceLocator<RideCubit>().getTotalPrice(minFare).toInt().toString(), isArabic: true)} و ${FormatNumbers().convertNumberToLocalizedString(serviceLocator<RideCubit>().getTotalPrice(maxFare).toInt().toString(), isArabic: true)}'
+                          : 'Amount must be between ${serviceLocator<RideCubit>().getTotalPrice(minFare).toInt().toString()} and ${serviceLocator<RideCubit>().getTotalPrice(maxFare).toInt().toString()}';
                     }
 
                     return null;
@@ -158,19 +155,22 @@ class FareBottomSheetWidget2 extends StatelessWidget {
     required this.selectedCategoryPrice,
     // required this.dashboardsCubit,
     required this.id,
+    required this.isArabic,
     required this.contextScreen,
     required this.subCategoryId,
-  }) : _controller = TextEditingController(
-          text:
-              selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
-        );
+  })  : _controller = ArabicNumberTextController(
+    isArabic: isArabic,
+    initialText: selectedCategoryPrice > 0
+        ? selectedCategoryPrice.toString()
+        : '',
+  );
 
   final num selectedCategoryPrice;
   final String id;
   final String subCategoryId;
   final BuildContext contextScreen;
-  // final DashboardsCubit dashboardsCubit;
-  final TextEditingController _controller;
+  final bool isArabic;
+  final ArabicNumberTextController _controller;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -188,6 +188,9 @@ class FareBottomSheetWidget2 extends StatelessWidget {
                 cursorColor: AppColors.PRIMARY_COLOR,
                 cursorHeight: 50,
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
+                ],
                 style: const TextStyle(
                   color: AppColors.PRIMARY_COLOR,
                   fontWeight: FontWeight.w500,
@@ -212,21 +215,12 @@ class FareBottomSheetWidget2 extends StatelessWidget {
                   focusedErrorBorder: const UnderlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  final input = _controller.englishText;
+                  if (input.isEmpty) {
                     return context.isArabic
                         ? 'يرجى إدخال مبلغ'
                         : 'Please enter an amount';
                   }
-                  // final double? amount = double.tryParse(value);
-                  // final double minFare =
-                  //     state.rideExpectedPrice?.lowestFare ?? 0;
-                  // final double maxFare =
-                  //     state.rideExpectedPrice?.highestFare ?? double.infinity;
-                  // if (amount == null || amount < minFare || amount > maxFare) {
-                  //   return context.isArabic
-                  //       ? 'يجب أن يكون المبلغ بين $minFare و $maxFare'
-                  //       : 'Amount must be between $minFare and $maxFare';
-                  // }
                   return null;
                 },
               ),
@@ -255,5 +249,78 @@ class FareBottomSheetWidget2 extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class ArabicNumberTextController extends TextEditingController {
+  final bool isArabic;
+
+  ArabicNumberTextController({
+    required this.isArabic,
+    String? initialText,
+  }) : super(text: isArabic
+      ? _convertToArabic(initialText ?? '')
+      : initialText ?? '') {
+    addListener(_onTextChanged);
+  }
+
+  static final Map<String, String> _enToAr = {
+    '0': '٠',
+    '1': '١',
+    '2': '٢',
+    '3': '٣',
+    '4': '٤',
+    '5': '٥',
+    '6': '٦',
+    '7': '٧',
+    '8': '٨',
+    '9': '٩',
+  };
+
+  static final Map<String, String> _arToEn = {
+    '٠': '0',
+    '١': '1',
+    '٢': '2',
+    '٣': '3',
+    '٤': '4',
+    '٥': '5',
+    '٦': '6',
+    '٧': '7',
+    '٨': '8',
+    '٩': '9',
+  };
+
+  static String _convertToArabic(String input) {
+    return input.split('').map((c) => _enToAr[c] ?? c).join();
+  }
+
+  static String _convertToEnglish(String input) {
+    return input.split('').map((c) => _arToEn[c] ?? c).join();
+  }
+
+  void _onTextChanged() {
+    if (!isArabic) return;
+
+    final english = _convertToEnglish(text);
+    final converted = _convertToArabic(english);
+
+    if (text != converted) {
+      final oldSelection = selection;
+      value = value.copyWith(
+        text: converted,
+        selection: oldSelection.copyWith(
+          baseOffset: converted.length,
+          extentOffset: converted.length,
+        ),
+      );
+    }
+  }
+
+  String get englishText => _convertToEnglish(text);
+
+  @override
+  void dispose() {
+    removeListener(_onTextChanged);
+    super.dispose();
   }
 }

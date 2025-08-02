@@ -287,6 +287,7 @@ class TrukBusWidget extends StatelessWidget {
                                                   contextScreen: contextScreen!,
                                                   id: tripEntity!
                                                       .tripDetails!.id,
+                                                  isArabic: context.isArabic,
                                                   selectedCategoryPrice:
                                                       tripEntity?.tripDetails?.price??0,
                                                   subCategoryId: tripEntity!
