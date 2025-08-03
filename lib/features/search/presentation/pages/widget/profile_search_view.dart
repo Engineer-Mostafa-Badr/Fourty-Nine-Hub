@@ -93,6 +93,7 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
             );
           }
           return OlxPaginationWidget(
+            scrollController: ScrollController(),
             itemsPerPage: 10,
             loadPage: (page) async {
               {

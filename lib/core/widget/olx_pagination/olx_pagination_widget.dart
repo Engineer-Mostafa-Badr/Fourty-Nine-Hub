@@ -6,6 +6,7 @@ class OlxPaginationWidget extends StatefulWidget {
   final List<Widget> items;
   final List<BannerAdsModel> banners;
   final int itemsPerPage;
+  final ScrollController scrollController;
   final Future<void> Function(int) loadPage; // Callback for loading pages
 
   const OlxPaginationWidget({
@@ -13,6 +14,7 @@ class OlxPaginationWidget extends StatefulWidget {
     required this.items,
     required this.banners,
     required this.loadPage,
+    required this.scrollController,
     this.itemsPerPage = 10,
   });
 
@@ -21,21 +23,21 @@ class OlxPaginationWidget extends StatefulWidget {
 }
 
 class _OlxPaginationWidget extends State<OlxPaginationWidget> {
-  final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   int _currentPage = 1; // Start at page 1
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener);
+    widget.scrollController.addListener(_scrollListener);
     // Load initial page if items are empty
     if (widget.items.isEmpty) _loadPage(_currentPage);
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 100 &&
+    if (widget.scrollController.position.pixels >=
+        widget.scrollController.position.maxScrollExtent - 100 &&
         !_isLoading) {
       _loadNextPage();
     }
@@ -57,7 +59,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   @override
   void dispose() {
-    _scrollController
+    widget.scrollController
       ..removeListener(_scrollListener)
       ..dispose();
     super.dispose();
@@ -70,7 +72,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 
     return CustomScrollView(
-      controller: _scrollController,
+      controller: widget.scrollController,
       slivers: [
         // First page items
         if (widget.items.isNotEmpty)

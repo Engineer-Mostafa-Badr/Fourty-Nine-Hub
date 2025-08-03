@@ -43,10 +43,10 @@ class _MyAdsViewState extends State<MyAdsView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SubcategoriesCubit>().getMyAds(widget.id);
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<SubcategoriesCubit>().getMyAds(widget.id);
+    // }
 
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
@@ -91,6 +91,7 @@ class _MyAdsViewState extends State<MyAdsView> {
       }
 
       return OlxPaginationWidget(
+        scrollController: _scrollController,
         itemsPerPage: 2,
         loadPage: (page) =>
             context.read<SubcategoriesCubit>().getMyAds(widget.id),

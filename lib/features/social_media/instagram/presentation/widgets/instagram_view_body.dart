@@ -167,6 +167,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
             ),
             Expanded(
               child: OlxPaginationWidget(
+                scrollController: ScrollController(),
                 itemsPerPage: 10,
                 items: List.generate(
                     state.posts.length + (state.hasMorePosts ? 1 : 0), (index) {

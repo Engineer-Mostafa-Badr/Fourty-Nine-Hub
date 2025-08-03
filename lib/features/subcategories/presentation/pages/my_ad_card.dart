@@ -84,10 +84,11 @@ class _MyAdCardState extends State<MyAdCard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
-                  color: context.isDarkMode
-                      ? AppColors.LIGHT_COLOR
-                      : AppColors.GREY_DARK_COLOR,
-                  width: 1),
+                color: context.isDarkMode
+                    ? AppColors.LIGHT_COLOR
+                    : AppColors.GREY_DARK_COLOR,
+                width: 1,
+              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -159,7 +160,8 @@ class _MyAdCardState extends State<MyAdCard> {
                                     text:
                                         '${context.isArabic ? 'مقدم' : 'Deposit'} ${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
                                     style: Styles.mediumText(
-                                        color: AppColors.getReversedTextColor(context))),
+                                        color: AppColors.getReversedTextColor(
+                                            context))),
                               ),
                             )
                         ],

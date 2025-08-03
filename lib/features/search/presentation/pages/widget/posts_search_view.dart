@@ -92,6 +92,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
           print(posts.first.user.firstName);
           print("${posts.first.id}");
           return OlxPaginationWidget(
+            scrollController: ScrollController(),
             itemsPerPage: 2,
             loadPage: (page) async {
               {

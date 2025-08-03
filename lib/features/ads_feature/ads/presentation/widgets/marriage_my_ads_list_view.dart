@@ -27,6 +27,7 @@ class MarriageMyAds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OlxPaginationWidget(
+      scrollController: _scrollController,
       itemsPerPage: 2,
       loadPage: (page) => controller.filterAds(
           model: state.filterModel ?? FilterModel(), filter: ''),

@@ -92,6 +92,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.67,
           child: OlxPaginationWidget(
+            scrollController: ScrollController(),
             itemsPerPage: 2,
             loadPage: (page) =>
                 context.read<HealthCubit>().getBookings('history'),

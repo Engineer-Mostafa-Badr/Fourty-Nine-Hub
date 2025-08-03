@@ -50,10 +50,10 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<HealthCubit>().getMostBookings();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<HealthCubit>().getMostBookings();
+    // }
   }
 
   @override
@@ -103,6 +103,7 @@ class _MostBookingScreenState extends State<MostBookingScreen> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.67,
           child: OlxPaginationWidget(
+            scrollController: _scrollController,
             itemsPerPage: 2,
             loadPage: (page) =>
                 context.read<HealthCubit>().getMostBookings(),

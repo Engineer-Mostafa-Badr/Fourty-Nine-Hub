@@ -47,11 +47,11 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      widget.controller
-          .loadFilterAdsData(model: widget.model, filter: widget.userType);
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   widget.controller
+    //       .loadFilterAdsData(model: widget.model, filter: widget.userType);
+    // }
   }
 
   @override
@@ -70,6 +70,7 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
       );
     }
     return OlxPaginationWidget(
+      scrollController: _scrollController,
       itemsPerPage: 2,
       loadPage: (page) => widget.controller
           .loadFilterAdsData(model: widget.model, filter: widget.userType),

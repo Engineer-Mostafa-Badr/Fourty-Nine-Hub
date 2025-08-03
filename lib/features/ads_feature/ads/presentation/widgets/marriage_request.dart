@@ -25,6 +25,7 @@ class MarriageRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OlxPaginationWidget(
+      scrollController: _scrollController,
       itemsPerPage: 2,
       loadPage: (page) {
         print('==> page ${page}');

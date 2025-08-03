@@ -58,6 +58,7 @@ class GetMyTalents extends StatelessWidget {
           return SizedBox(
             height: MediaQuery.of(context).size.height * 0.67,
             child: OlxPaginationWidget(
+              scrollController: ScrollController(),
               itemsPerPage: 1,
               loadPage: (page) =>
                   cubit.getMyTalents(),

@@ -47,10 +47,10 @@ class _RestaurantExpiredRequestsScreenState
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().getExpiredOrders();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<RestaurantsCubit>().getExpiredOrders();
+    // }
   }
 
   @override
@@ -121,6 +121,7 @@ class _RestaurantExpiredRequestsScreenState
           return SizedBox(
             height: MediaQuery.of(context).size.height * .7,
             child: OlxPaginationWidget(
+              scrollController: _scrollController,
               itemsPerPage: 2,
               loadPage: (page) async {},
               banners: bannersList,
