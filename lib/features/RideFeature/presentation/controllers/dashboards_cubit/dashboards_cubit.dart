@@ -61,6 +61,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
@@ -2399,6 +2400,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (settings) {
+        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.read<MainCategoriesCubit>().getSettings(currentContext);
+
         log("Suzccess");
         // emit(state.copyWith(status: DashboardsStates.success));
         // if (settings) {

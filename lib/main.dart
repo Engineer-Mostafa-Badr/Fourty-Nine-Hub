@@ -114,6 +114,7 @@ void main() async {
           : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
+  await LocationServiceWatcher().start();
   runApp(
     LocalizationService.rootWidget(
       child: Phoenix(
