@@ -405,6 +405,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
     // Listen for new locations (only when moved at least 1m)
     locationService.locationUpdates.listen((position) {
+      log("position.latitude ${position.latitude}");
       emitDriverLocation(lat: position.latitude, long: position.longitude);
       // Fluttertoast.showToast(
       //     msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",

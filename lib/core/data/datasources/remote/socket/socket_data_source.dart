@@ -151,7 +151,7 @@ abstract class SocketIOEvents {
 //   initSocketConnection(userToken) async {
 //     try {
 //       socket = io(
-//           'https://49backend.com',
+//           'https://b3c2387e02e3.ngrok-free.app',
 //           OptionBuilder()
 //               .setTransports(['websocket'])
 //               .disableAutoConnect()

@@ -17,7 +17,7 @@ class LocationService {
   void startLocationTracking() {
     stopLocationTracking();
 
-    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
       log('Checking location...');
       _checkAndUpdateLocation();
     });

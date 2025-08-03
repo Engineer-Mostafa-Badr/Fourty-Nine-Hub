@@ -69,7 +69,7 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
               width: 70,
               child: Column(
                 children: [
-                  if(widget.tripEntity?.rating?.yourRating.rating != null&& widget.tripEntity?.rating?.yourRating.rating != 0)Container(
+                  if(widget.tripEntity?.tripDetails?.clientRateDriver != null&& widget.tripEntity?.tripDetails?.clientRateDriver != 0)Container(
                     alignment: AlignmentDirectional.topEnd,
                     height: 55,
                     width: 55,
@@ -94,7 +94,7 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
                           Icon(Icons.star,
                               size: 12.ws, color: AppColors.YELLOW_COLOR),
                           Text(
-                              FormatNumbers().convertNumberToLocalizedString(widget.tripEntity?.rating?.yourRating.rating.toString() ?? '0.0', isArabic: context.isArabic),
+                              FormatNumbers().convertNumberToLocalizedString(widget.tripEntity?.tripDetails?.clientRateDriver.toString() ?? '0.0', isArabic: context.isArabic),
                               style: TextStyle(
                                   fontSize: 10.ts, fontWeight: FontWeight.w500,
                                 color: Colors.black
