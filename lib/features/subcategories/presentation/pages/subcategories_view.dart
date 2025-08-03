@@ -3,38 +3,38 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/models/public/pagination_params.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateful/dynamic/pagination_view.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/debouncer.dart';
+import '../../../../core/widget/custom_notification_badge.dart';
+import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../helpers/manage_vibration.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
+import '../../../../service_locator/service_locator.dart';
 import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import '../../../ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import '../../../ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../../../fourty_nine/domain/entities/main_category_entity.dart';
 import '../../domain/entities/sub_category_entity.dart';
+import '../cubit/subcategories_cubit.dart';
+import '../widgets/floating_add_button.dart';
+import '../widgets/search_bar_widget.dart';
+import '../widgets/subcategory_card.dart';
 import 'ads_request_log_view.dart';
 import 'ads_search_view.dart';
 import 'favourite_ads_view.dart';
 import 'my_ads_view.dart';
-import '../widgets/search_bar_widget.dart';
-import '../widgets/subcategory_card.dart';
-import '../../../../res/assets/assets.dart';
-import '../../../../routes/routes.dart';
-import '../../../../service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../common/widgets/dialogs/please_login_dialog.dart';
-
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/widget/custom_notification_badge.dart';
-import '../../../../core/widget/custom_scaffold.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
-import '../../../ads_feature/ads/presentation/widgets/header_button_widget.dart';
-import '../cubit/subcategories_cubit.dart';
-import '../widgets/floating_add_button.dart';
-import '../../../../helpers/manage_vibration.dart';
 
 class SubCategoriesView extends StatefulWidget {
   final MainCategoryEntity mainCategory;
@@ -54,131 +54,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
 
   final FocusNode focusNode = FocusNode();
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      focusNode.requestFocus();
-    });
-    _debounce = Debouncer();
-    context
-        .read<SubcategoriesCubit>()
-        .init(mainCategoryId: widget.mainCategory.id);
-    _fetchSubcategories();
-    scrollController = ScrollController();
-    scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        isFloatingButtonVisible = false;
-      } else {
-        isFloatingButtonVisible = true;
-      }
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    focusNode.dispose();
-    super.dispose();
-  }
-
   List<SubCategoryEntity> subCategories = [];
+
   String? selectedValue;
-
-  void _fetchSubcategories() async {
-    final subCategoriesList =
-        await context.read<SubcategoriesCubit>().getSubcategories(
-              paginationParams: PaginationParams(page: 1, limit: 200),
-            );
-    setState(() {
-      subCategories = subCategoriesList;
-    });
-  }
-
-  void _showDropdownMenu(BuildContext context) async {
-    if (subCategories.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No subcategories available')),
-      );
-      return;
-    }
-    final RenderBox button = context.findRenderObject() as RenderBox;
-    final RenderBox overlay =
-        Overlay.of(context).context.findRenderObject() as RenderBox;
-    final double bottomPadding =
-        MediaQuery.of(context).viewInsets.bottom + 200.0;
-
-    final RelativeRect position = RelativeRect.fromLTRB(
-      overlay.size.width - 300,
-      overlay.size.height - 300,
-      50,
-      bottomPadding,
-    );
-
-    final String? selected = await showMenu<String>(
-        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-        menuPadding: EdgeInsets.zero,
-        shadowColor: Colors.grey.shade300,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        context: context,
-        position: position,
-        items: [
-          PopupMenuItem<String>(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 600,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: subCategories.map((SubCategoryEntity item) {
-                    return Column(
-                      children: [
-                        ListTile(
-                          contentPadding: const EdgeInsets.all(0),
-                          dense: true,
-                          title: Label(
-                              text:
-                                  context.isArabic ? item.nameAr : item.nameEn,
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.bold)),
-                          onTap: () {
-      ManageVibration.vibrate();
-                            if (context.isUserLoggedIn) {
-                              Navigator.pop(context);
-                              context.push(Routes.CREATEAD,
-                                  extra: CategorizationEntity(
-                                      mainCategory: widget.mainCategory,
-                                      subCategory: item));
-                            } else {
-                              return pleaseLoginDialog(context);
-
-                              // context.push(Routes.LOGIN);
-                            }
-                          },
-                        ),
-                        Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: Colors.grey.shade300,
-                        )
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ),
-        ]);
-
-    if (selected != null) {
-      setState(() {
-        selectedValue = selected;
-      });
-    }
-    print(selectedValue.toString());
-  }
 
   // void _showDropdownMenu(BuildContext context) async {
   //   if (subCategories.isEmpty) {
@@ -254,7 +132,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                     IconButton(
                       padding: const EdgeInsets.all(0),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         context
                             .read<SubcategoriesCubit>()
                             .toggleMyAds('isSearchAdsOpen');
@@ -285,7 +163,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,
                           onPressed: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (!context.isUserLoggedIn) {
                               return pleaseLoginDialog(context);
                             } else {
@@ -312,17 +190,29 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           isOpened: context
                               .read<SubcategoriesCubit>()
                               .isRequestLogOpen,
-                          onPressed: () {
-      ManageVibration.vibrate();
-                            context
-                                .read<SubcategoriesCubit>()
-                                .loadRequestsLogByMainCategory(
-                                    mainCategoryId: widget.mainCategory.id);
-                            context
-                                .read<SubcategoriesCubit>()
-                                .toggleMyAds('isRequestLogOpen');
+                          onPressed: () async {
+                            ManageVibration.vibrate();
 
-                            // context.read<SubcategoriesCubit>().toggleRequestLog();
+                            if (!context.isUserLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+
+                            try {
+                              await context
+                                  .read<SubcategoriesCubit>()
+                                  .loadRequestsLogByMainCategory(
+                                      mainCategoryId: widget.mainCategory.id);
+
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .toggleMyAds('isRequestLogOpen');
+                            } catch (error) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content:
+                                        Text('خطأ في تحميل البيانات: $error')),
+                              );
+                            }
                           },
                         ),
                       ),
@@ -336,7 +226,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                         isOpened:
                             context.read<SubcategoriesCubit>().isMyAdsOpen,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           // TODO: EDIT THIS
                           if (!context.isUserLoggedIn) {
                             return pleaseLoginDialog(context);
@@ -464,5 +354,128 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
             })
           : null,
     );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
+    _debounce = Debouncer();
+    context
+        .read<SubcategoriesCubit>()
+        .init(mainCategoryId: widget.mainCategory.id);
+    _fetchSubcategories();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        isFloatingButtonVisible = false;
+      } else {
+        isFloatingButtonVisible = true;
+      }
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  void _fetchSubcategories() async {
+    final subCategoriesList =
+        await context.read<SubcategoriesCubit>().getSubcategories(
+              paginationParams: PaginationParams(page: 1, limit: 200),
+            );
+    setState(() {
+      subCategories = subCategoriesList;
+    });
+  }
+
+  void _showDropdownMenu(BuildContext context) async {
+    if (subCategories.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No subcategories available')),
+      );
+      return;
+    }
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final double bottomPadding =
+        MediaQuery.of(context).viewInsets.bottom + 200.0;
+
+    final RelativeRect position = RelativeRect.fromLTRB(
+      overlay.size.width - 300,
+      overlay.size.height - 300,
+      50,
+      bottomPadding,
+    );
+
+    final String? selected = await showMenu<String>(
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+        menuPadding: EdgeInsets.zero,
+        shadowColor: Colors.grey.shade300,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        context: context,
+        position: position,
+        items: [
+          PopupMenuItem<String>(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 600,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: subCategories.map((SubCategoryEntity item) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          dense: true,
+                          title: Label(
+                              text:
+                                  context.isArabic ? item.nameAr : item.nameEn,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.bold)),
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (context.isUserLoggedIn) {
+                              Navigator.pop(context);
+                              context.push(Routes.CREATEAD,
+                                  extra: CategorizationEntity(
+                                      mainCategory: widget.mainCategory,
+                                      subCategory: item));
+                            } else {
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
+                            }
+                          },
+                        ),
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Colors.grey.shade300,
+                        )
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        ]);
+
+    if (selected != null) {
+      setState(() {
+        selectedValue = selected;
+      });
+    }
+    print(selectedValue.toString());
   }
 }

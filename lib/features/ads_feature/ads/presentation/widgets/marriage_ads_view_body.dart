@@ -16,10 +16,10 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marr
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/sub_category_list_view_item.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
@@ -28,16 +28,16 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../filter_ads/presentation/pages/filter_ads.dart';
 
 class MarriageAdsViewBody extends StatefulWidget {
+  final SubcategoriesCubit controller;
+
+  final SubcategoriesState state;
+  final ScrollController _scrollController;
   const MarriageAdsViewBody({
     super.key,
     required this.controller,
     required this.state,
     required ScrollController scrollController,
   }) : _scrollController = scrollController;
-
-  final SubcategoriesCubit controller;
-  final SubcategoriesState state;
-  final ScrollController _scrollController;
 
   @override
   State<MarriageAdsViewBody> createState() => _MarriageAdsViewBodyState();
@@ -47,21 +47,6 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
-
-  @override
-  void initState() {
-    print('state:: ${widget.state.subCategories?.length}');
-    _tabController = TabController(
-        length: widget.state.subCategories?.length ?? 0, vsync: this);
-    _scrollController = ScrollController();
-
-    _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        _scrollToSelectedTab(_tabController.index);
-      }
-    });
-    super.initState();
-  }
 
   void animateTaps() {
     _tabController = TabController(
@@ -73,17 +58,6 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         _scrollToSelectedTab(_tabController.index);
       }
     });
-  }
-
-  void _scrollToSelectedTab(int index) {
-    // Assuming each tab has a width of 140.w
-    double tabWidth = 235.w;
-    double targetScrollPosition = index * tabWidth;
-    _scrollController.animateTo(
-      targetScrollPosition,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
@@ -129,7 +103,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     isOpened:
                         context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (!context.isUserLoggedIn) {
                         return pleaseLoginDialog(context);
                       } else {
@@ -156,7 +130,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     isOpened:
                         context.read<SubcategoriesCubit>().isRequestLogOpen,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (!context.isUserLoggedIn) {
                         return pleaseLoginDialog(context);
                       } else {
@@ -181,7 +155,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                   title: LocaleKeys.myAds.localize,
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     // TODO: EDIT THIS
                     context
                         .read<SubcategoriesCubit>()
@@ -203,7 +177,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
             children: [
               InkWell(
                 onTap: () async {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   dynamic data = await context.push(
                     Routes.FILTERADS,
                     extra: FilterAdsParams(
@@ -262,7 +236,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               const Sizer(),
               InkWell(
                 onTap: () async {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
                       extra: CategorizationEntity(
                           mainCategory: widget.state.mainCategory!,
@@ -453,6 +427,32 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     );
   }
 
+  @override
+  void initState() {
+    print('state:: ${widget.state.subCategories?.length}');
+    _tabController = TabController(
+        length: widget.state.subCategories?.length ?? 0, vsync: this);
+    _scrollController = ScrollController();
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollToSelectedTab(_tabController.index);
+      }
+    });
+    super.initState();
+  }
+
+  void _scrollToSelectedTab(int index) {
+    // Assuming each tab has a width of 140.w
+    double tabWidth = 235.w;
+    double targetScrollPosition = index * tabWidth;
+    _scrollController.animateTo(
+      targetScrollPosition,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
   Widget _selectWidget(BuildContext context) {
     if (widget.state.status == SubcategoriesStates.loadingAds) {
       return const CustomLoadingSearchWidget();
@@ -462,7 +462,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
-      if (widget.state.myAds == null) {
+      if (widget.state.myAds != null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(

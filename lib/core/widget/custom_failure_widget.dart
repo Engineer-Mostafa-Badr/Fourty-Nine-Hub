@@ -9,14 +9,16 @@ import '../../res/style/styles.dart';
 import '../localization/locale_keys.g.dart';
 
 class CustomFailureWidget extends StatelessWidget {
+  final String title;
+
+  final void Function() onPressed;
+  final String? buttonTitle;
   const CustomFailureWidget({
     super.key,
     required this.title,
     required this.onPressed,
+    this.buttonTitle,
   });
-
-  final String title;
-  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +69,16 @@ class CustomFailureWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(context.isDarkMode
-                    ? Assets.refreshIconDark
-                    : Assets.refreshIcon),
-                const SizedBox(
-                  width: 0.5,
-                ),
+                if (buttonTitle == null) ...[
+                  SvgPicture.asset(context.isDarkMode
+                      ? Assets.refreshIconDark
+                      : Assets.refreshIcon),
+                  const SizedBox(
+                    width: 0.5,
+                  ),
+                ],
                 Label(
-                  text: LocaleKeys.refresh.localize,
+                  text: buttonTitle ?? LocaleKeys.refresh.localize,
                   style: Styles.headerText(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

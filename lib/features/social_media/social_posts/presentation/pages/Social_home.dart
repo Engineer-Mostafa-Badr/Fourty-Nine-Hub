@@ -213,6 +213,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
               : Assets.facebookAppBarIcon,
           label: context.isArabic ? 'فيس' : LocaleKeys.Face.localize,
         ),
+        if (widget.params?.hideAppBar == false)
         _buildTab(
           icon: context.isDarkMode
               ? Assets.instagramAppBarIconDark
@@ -321,6 +322,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
       ),
     );
   }
+
+
 
   Widget _buildInstagramTab() {
     return MultiBlocProvider(

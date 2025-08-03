@@ -238,10 +238,11 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_search_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_search_view.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -261,7 +262,6 @@ import '../widgets/search_bar_widget.dart';
 import 'ads_request_log_view.dart';
 import 'favourite_ads_view.dart';
 import 'my_ads_view.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomPageSubCategoriesParams {
   final MainCategoryEntity mainCategory;
@@ -274,12 +274,12 @@ class CustomPageSubCategoriesParams {
 }
 
 class CustomPageSubCategoriesView extends StatefulWidget {
+  final CustomPageSubCategoriesParams params;
+
   const CustomPageSubCategoriesView({
     super.key,
     required this.params,
   });
-
-  final CustomPageSubCategoriesParams params;
 
   @override
   State<CustomPageSubCategoriesView> createState() =>
@@ -293,149 +293,9 @@ class _CustomPageSubCategoriesViewState
   late Debouncer _debounce;
   FocusNode focusNode = FocusNode();
 
-  @override
-  void initState() {
-    _debounce = Debouncer();
-    print('widget.mainCategory.id ${widget.params.mainCategory.nameEn}');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      focusNode.requestFocus();
-    });
-    context
-        .read<SubcategoriesCubit>()
-        .init(mainCategoryId: widget.params.mainCategory.id);
-    _fetchSubcategories(widget.params.isCustomPage);
-    scrollController = ScrollController();
-    scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        isFloatingButtonVisible = false;
-      } else {
-        isFloatingButtonVisible = true;
-      }
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    focusNode.dispose();
-    super.dispose();
-  }
-
   List<SubCategoryEntity> subCategories = [];
+
   String? selectedValue;
-
-  Future<void> _fetchSubcategories(bool isCustomPage) async {
-    if (isCustomPage) {
-      final subCategoriesList =
-          await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
-      setState(() {
-        subCategories = subCategoriesList;
-      });
-      return;
-    } else {
-      final subCategoriesList = await context
-          .read<SubcategoriesCubit>()
-          .getSubcategories(
-              paginationParams: PaginationParams(page: 1, limit: 200),
-              mainCategoryId: widget.params.mainCategory.id);
-      setState(() {
-        subCategories = subCategoriesList;
-      });
-      print('subCategories.length ${subCategories.length}');
-      return;
-    }
-    // final subCategoriesList =
-    // await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
-    // setState(() {
-    //   subCategories = subCategoriesList;
-    // });
-  }
-
-  void _showDropdownMenu(BuildContext context) async {
-    if (subCategories.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No subcategories available')),
-      );
-      return;
-    }
-    final RenderBox button = context.findRenderObject() as RenderBox;
-    final RenderBox overlay =
-        Overlay.of(context).context.findRenderObject() as RenderBox;
-    final double bottomPadding =
-        MediaQuery.of(context).viewInsets.bottom + 200.0;
-
-    final RelativeRect position = RelativeRect.fromLTRB(
-      overlay.size.width - 300,
-      overlay.size.height - 300,
-      50,
-      bottomPadding,
-    );
-
-    final String? selected = await showMenu<String>(
-        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-        menuPadding: EdgeInsets.zero,
-        shadowColor: Colors.grey.shade300,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        context: context,
-        position: position,
-        items: [
-          PopupMenuItem<String>(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 600,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: subCategories.map((SubCategoryEntity item) {
-                    return Column(
-                      children: [
-                        ListTile(
-                          contentPadding: const EdgeInsets.all(0),
-                          dense: true,
-                          title: Label(
-                              text:
-                                  context.isArabic ? item.nameAr : item.nameEn,
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.bold)),
-                          onTap: () {
-      ManageVibration.vibrate();
-                            if (context.isUserLoggedIn) {
-                              Navigator.pop(context);
-                              context.push(Routes.CREATEAD,
-                                  extra: CategorizationEntity(
-                                      mainCategory: widget.params.mainCategory,
-                                      subCategory: item));
-                            } else {
-                              return pleaseLoginDialog(context);
-
-                              // context.push(Routes.LOGIN);
-                            }
-                          },
-                        ),
-                        Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: Colors.grey.shade300,
-                        )
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ),
-        ]);
-
-    if (selected != null) {
-      setState(() {
-        selectedValue = selected;
-      });
-    }
-    print(selectedValue.toString());
-  }
 
   // void _showDropdownMenu(BuildContext context) async {
   //   if (subCategories.isEmpty) {
@@ -508,7 +368,7 @@ class _CustomPageSubCategoriesViewState
                   IconButton(
                     padding: const EdgeInsets.all(0),
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context
                           .read<SubcategoriesCubit>()
                           .toggleMyAds('isSearchAdsOpen');
@@ -539,7 +399,7 @@ class _CustomPageSubCategoriesViewState
                             .read<SubcategoriesCubit>()
                             .isFavouriteAdsOpen,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (!context.isUserLoggedIn) {
                             return pleaseLoginDialog(context);
                           } else {
@@ -583,16 +443,19 @@ class _CustomPageSubCategoriesViewState
                         isOpened:
                             context.read<SubcategoriesCubit>().isRequestLogOpen,
                         onPressed: () {
-      ManageVibration.vibrate();
-                          context
-                              .read<SubcategoriesCubit>()
-                              .loadRequestsLogByMainCategory(
-                                  mainCategoryId:
-                                      widget.params.mainCategory.id);
-                          context
-                              .read<SubcategoriesCubit>()
-                              .toggleMyAds('isRequestLogOpen');
-
+                          ManageVibration.vibrate();
+                          if (!context.isUserLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            context
+                                .read<SubcategoriesCubit>()
+                                .loadRequestsLogByMainCategory(
+                                    mainCategoryId:
+                                        widget.params.mainCategory.id);
+                            context
+                                .read<SubcategoriesCubit>()
+                                .toggleMyAds('isRequestLogOpen');
+                          }
                           // context.read<SubcategoriesCubit>().toggleRequestLog();
                         },
                       ),
@@ -606,7 +469,7 @@ class _CustomPageSubCategoriesViewState
                       title: LocaleKeys.myAds.localize,
                       isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // TODO: EDIT THIS
                         if (!context.isUserLoggedIn) {
                           return pleaseLoginDialog(context);
@@ -745,5 +608,146 @@ class _CustomPageSubCategoriesViewState
             })
           : null,
     );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    _debounce = Debouncer();
+    print('widget.mainCategory.id ${widget.params.mainCategory.nameEn}');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
+    context
+        .read<SubcategoriesCubit>()
+        .init(mainCategoryId: widget.params.mainCategory.id);
+    _fetchSubcategories(widget.params.isCustomPage);
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        isFloatingButtonVisible = false;
+      } else {
+        isFloatingButtonVisible = true;
+      }
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  Future<void> _fetchSubcategories(bool isCustomPage) async {
+    if (isCustomPage) {
+      final subCategoriesList =
+          await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
+      setState(() {
+        subCategories = subCategoriesList;
+      });
+      return;
+    } else {
+      final subCategoriesList = await context
+          .read<SubcategoriesCubit>()
+          .getSubcategories(
+              paginationParams: PaginationParams(page: 1, limit: 200),
+              mainCategoryId: widget.params.mainCategory.id);
+      setState(() {
+        subCategories = subCategoriesList;
+      });
+      print('subCategories.length ${subCategories.length}');
+      return;
+    }
+    // final subCategoriesList =
+    // await context.read<SubcategoriesCubit>().getCustomPageSubcategories();
+    // setState(() {
+    //   subCategories = subCategoriesList;
+    // });
+  }
+
+  void _showDropdownMenu(BuildContext context) async {
+    if (subCategories.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No subcategories available')),
+      );
+      return;
+    }
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final double bottomPadding =
+        MediaQuery.of(context).viewInsets.bottom + 200.0;
+
+    final RelativeRect position = RelativeRect.fromLTRB(
+      overlay.size.width - 300,
+      overlay.size.height - 300,
+      50,
+      bottomPadding,
+    );
+
+    final String? selected = await showMenu<String>(
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+        menuPadding: EdgeInsets.zero,
+        shadowColor: Colors.grey.shade300,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        context: context,
+        position: position,
+        items: [
+          PopupMenuItem<String>(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 600,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: subCategories.map((SubCategoryEntity item) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          dense: true,
+                          title: Label(
+                              text:
+                                  context.isArabic ? item.nameAr : item.nameEn,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.bold)),
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (context.isUserLoggedIn) {
+                              Navigator.pop(context);
+                              context.push(Routes.CREATEAD,
+                                  extra: CategorizationEntity(
+                                      mainCategory: widget.params.mainCategory,
+                                      subCategory: item));
+                            } else {
+                              return pleaseLoginDialog(context);
+
+                              // context.push(Routes.LOGIN);
+                            }
+                          },
+                        ),
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Colors.grey.shade300,
+                        )
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        ]);
+
+    if (selected != null) {
+      setState(() {
+        selectedValue = selected;
+      });
+    }
+    print(selectedValue.toString());
   }
 }

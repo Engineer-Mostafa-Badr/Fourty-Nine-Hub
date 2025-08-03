@@ -891,17 +891,20 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                   .isRequestLogOpen,
                               onPressed: () {
                                 vibrate.ManageVibration.vibrate();
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .loadRequestsLogByMainCategory(
-                                        mainCategoryId: controller
-                                            .mainCategories[
-                                                _tabController.index]
-                                            .id);
-                                context
-                                    .read<SubcategoriesCubit>()
-                                    .toggleMyAds('isRequestLogOpen');
-
+                                if (!context.isUserLoggedIn) {
+                                  return pleaseLoginDialog(context);
+                                } else {
+                                  context
+                                      .read<SubcategoriesCubit>()
+                                      .loadRequestsLogByMainCategory(
+                                          mainCategoryId: controller
+                                              .mainCategories[
+                                                  _tabController.index]
+                                              .id);
+                                  context
+                                      .read<SubcategoriesCubit>()
+                                      .toggleMyAds('isRequestLogOpen');
+                                }
                                 // context.read<SubcategoriesCubit>().toggleRequestLog();
                               },
                             ),

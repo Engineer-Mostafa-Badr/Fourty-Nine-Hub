@@ -1,14 +1,25 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:video_player/video_player.dart';
+
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/loading/custom_loading.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_failure_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
@@ -17,21 +28,155 @@ import '../cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
 import 'post_instagram_widget.dart';
 import 'suggest_followers_section.dart';
 import 'suggest_reels_instagram_section.dart';
-import '../../../../../res/assets/assets.dart';
-import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:video_player/video_player.dart';
-
-import '../../../../../core/widget/olx_pagination/banner.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramViewBody extends StatefulWidget {
   const InstagramViewBody({super.key});
 
   @override
   State<InstagramViewBody> createState() => _InstagramViewBodyState();
+}
+
+// مدير لكل مشغلات الفيديو في التطبيق
+class VideoControllerManager {
+  static final VideoControllerManager _instance =
+      VideoControllerManager._internal();
+
+  // تخزين مشغل الفيديو النشط حالياً
+  VideoPlayerController? _activeController;
+
+  // معرّف آخر مشغل فيديو ظاهر
+  String? _lastVisibleVideoId;
+
+  // نسبة الظهور المطلوبة لتشغيل الفيديو (50%)
+  final double _visibilityThreshold = 0.5;
+
+  // تخزين حالة مشغلات الفيديو وتفاصيل الرؤية
+  final Map<String, _VideoState> _videoStates = {};
+
+  factory VideoControllerManager() => _instance;
+
+  VideoControllerManager._internal();
+
+  // استخدامها عند التخلص من الصفحة
+  void disposeAll() {
+    _videoStates.forEach((_, state) {
+      state.controller.dispose();
+    });
+    _videoStates.clear();
+    _activeController = null;
+    _lastVisibleVideoId = null;
+  }
+
+  // استخدامها عند الخروج من القائمة أو الصفحة
+  void pauseAllVideos() {
+    _videoStates.forEach((_, state) {
+      if (state.controller.value.isPlaying) {
+        state.controller.pause();
+      }
+    });
+    _activeController = null;
+    _lastVisibleVideoId = null;
+  }
+
+  // إضافة أو تحديث مشغل فيديو
+  void registerController(String videoId, VideoPlayerController controller) {
+    _videoStates[videoId] = _VideoState(controller: controller);
+  }
+
+  // وضع علامة على الفيديو بأنه تم إيقافه يدويًا
+  void setPausedManually(String videoId, bool paused) {
+    if (!_videoStates.containsKey(videoId)) return;
+    _videoStates[videoId]!.pausedManually = paused;
+
+    // إذا تم إلغاء الإيقاف اليدوي وكان الفيديو ظاهرًا بشكل كافٍ، قم بتشغيله
+    if (!paused &&
+        _videoStates[videoId]!.visibilityFraction >= _visibilityThreshold) {
+      _lastVisibleVideoId = videoId;
+      _playMostVisibleVideo();
+    }
+  }
+
+  // إزالة مشغل فيديو
+  void unregisterController(String videoId) {
+    _videoStates.remove(videoId);
+  }
+
+  // تحديث نسبة ظهور الفيديو
+  void updateVisibility(String videoId, double visibilityFraction) {
+    if (!_videoStates.containsKey(videoId)) return;
+
+    _videoStates[videoId]!.visibilityFraction = visibilityFraction;
+
+    // لا نقوم بتشغيل الفيديو تلقائيًا إذا تم إيقافه يدويًا
+    if (_videoStates[videoId]!.pausedManually) return;
+
+    // إذا كان الفيديو ظاهر بدرجة كافية وليس هناك فيديو نشط آخر
+    if (visibilityFraction >= _visibilityThreshold) {
+      _lastVisibleVideoId = videoId;
+      _playMostVisibleVideo();
+    } else if (_lastVisibleVideoId == videoId &&
+        visibilityFraction < _visibilityThreshold) {
+      // إذا كان هذا الفيديو هو النشط وخرج من مجال الرؤية
+      _pauseCurrentVideo();
+      _lastVisibleVideoId = _findMostVisibleVideo();
+      _playMostVisibleVideo();
+    }
+  }
+
+  // العثور على الفيديو الأكثر ظهوراً
+  String? _findMostVisibleVideo() {
+    String? mostVisibleId;
+    double maxVisibility = 0;
+
+    _videoStates.forEach((id, state) {
+      if (state.visibilityFraction > maxVisibility &&
+          state.visibilityFraction >= _visibilityThreshold &&
+          !state.pausedManually) {
+        maxVisibility = state.visibilityFraction;
+        mostVisibleId = id;
+      }
+    });
+
+    return mostVisibleId;
+  }
+
+  // إيقاف الفيديو النشط حالياً
+  void _pauseCurrentVideo() {
+    if (_activeController != null && _activeController!.value.isPlaying) {
+      _activeController!.pause();
+    }
+    _activeController = null;
+  }
+
+  // تشغيل الفيديو الأكثر ظهوراً
+  void _playMostVisibleVideo() {
+    if (_lastVisibleVideoId == null) return;
+
+    final videoState = _videoStates[_lastVisibleVideoId!];
+    if (videoState == null || videoState.pausedManually) return;
+
+    // إذا كان نفس المشغل الحالي، لا داعي للتغيير
+    if (_activeController == videoState.controller) return;
+
+    // إيقاف الفيديو السابق
+    _pauseCurrentVideo();
+
+    // تشغيل الفيديو الجديد
+    _activeController = videoState.controller;
+    if (_activeController!.value.isInitialized) {
+      _activeController!.play();
+    } else {
+      // إذا لم يكن المشغل جاهزاً بعد، انتظر تهيئته ثم شغله
+      _activeController!.initialize().then((_) {
+        // تحقق إذا كان لا يزال هو النشط بعد التهيئة
+        if (_activeController == videoState.controller &&
+            !videoState.pausedManually) {
+          _activeController!.play();
+          _activeController!.setLooping(true);
+        }
+      });
+    }
+  }
 }
 
 class _InstagramViewBodyState extends State<InstagramViewBody> {
@@ -41,95 +186,6 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
   // final ScrollController _scrollController = ScrollController();
   final VideoControllerManager _videoManager = VideoControllerManager();
 
-  // للتتبع آخر موضع تمرير
-  // double _lastScrollPosition = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    // _loadMoreItems();
-
-    // إضافة مراقب للتمرير لتحميل المزيد من العناصر عند الوصول للأسفل
-    // _scrollController.addListener(() {
-    //   // تحميل المزيد من المنشورات عند الوصول للأسفل
-    //   if (_scrollController.position.pixels >=
-    //           _scrollController.position.maxScrollExtent - 200 &&
-    //       !_isLoading &&
-    //       context.read<PostsInstagramCubit>().state.hasMorePosts) {
-    //     context.read<PostsInstagramCubit>().loadPosts(context);
-    //   }
-
-    //   // للتحكم في تشغيل الفيديوهات عند التمرير السريع
-    //   if ((_scrollController.position.pixels - _lastScrollPosition).abs() >
-    //       50) {
-    //     // إذا كان التمرير سريعًا، قم بإيقاف جميع الفيديوهات
-    //     // if (_videoManager.currentlyPlayingVideoId != null) {
-    //     //   _videoManager.setCurrentlyPlayingVideo(null);
-    //     // }
-    //   }
-
-    //   _lastScrollPosition = _scrollController.position.pixels;
-    // });
-    /* _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 200 &&
-          !_isLoading &&
-          context.read<PostsInstagramCubit>().state.hasMorePosts) {
-        context.read<PostsInstagramCubit>().loadPosts(context);
-      }
-    });*/
-    // _scrollController.addListener(
-    //   () {
-    //     if (_scrollController.position.pixels >=
-    //             _scrollController.position.maxScrollExtent - 200 &&
-    //         !_isLoading &&
-    //         context.read<PostsInstagramCubit>().state.hasMorePosts) {
-    //       context.read<PostsInstagramCubit>().loadPosts(context);
-    //     }
-    //     // _visibilityListener();
-    //   },
-    // );
-  }
-
-  // List _posts = [];
-
-  // void _visibilityListener() {
-  //   _posts = context.read<PostsInstagramCubit>().state.posts;
-  //   // حساب المنشور المرئي حاليًا بناءً على موضع التمرير
-  //   double scrollPosition = _scrollController.position.pixels;
-  //   double viewportHeight = _scrollController.position.viewportDimension;
-
-  //   for (int i = 0; i < _posts.length; i++) {
-  //     // حساب موضع المنشور (تقريبي)
-  //     double postTopPosition = i * (viewportHeight * 1.2); // تقدير مبسط
-  //     double postBottomPosition = postTopPosition + viewportHeight;
-
-  //     bool isVisible = (postTopPosition <= scrollPosition + viewportHeight) &&
-  //         (postBottomPosition >= scrollPosition);
-
-  //     // تحديث حالة رؤية الفيديو
-  //     if (_posts[i].isVideo) {
-  //       setState(() {
-  //         _visibleVideos[_posts[i].id] = isVisible;
-  //       });
-  //     }
-  //   }
-  // }
-
-  // void _scrollListener() {
-  //   if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
-  //       !_isLoading) {
-  //     context.read<PostsInstagramCubit>().loadPosts(context);
-  //   }
-  // }
-
-  @override
-  void dispose() {
-    _videoManager.disposeAll();
-    // _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostsInstagramCubit, PostsInstagramState>(
@@ -137,11 +193,23 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
         if (state.status.isLoading || state.status.isInitial) {
           return const CustomLoading();
         }
+        if (state.errMessage == "Unauthorized" ) {
+          return CustomFailureWidget(
+            title: 'Please login',
+            buttonTitle: "Login",
+            onPressed: () {
+              ManageVibration.vibrate();
+              pleaseLoginDialog(context);
+            },
+
+          );
+        }
         if (state.status.isFailure) {
+          log(state.errMessage.toString());
           return CustomFailureWidget(
             title: state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.read<PostsInstagramCubit>().loadPosts(
                     context,
                     refresh: true,
@@ -310,17 +378,115 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
     );
   }
 
-  // دالة مساعدة لبناء قسم المقاطع المقترحة
-  Widget _buildSuggestedReels(BuildContext context) {
-    return BlocBuilder<ReelInstagramCubit, ReelInstagramState>(
-      builder: (context, state) {
-        if (state.status.isLoading) {
-          return _buildShimmerLoader();
-        } else if (state.status.isSuccess) {
-          return SuggestReelsInstagramSection(reels: state.reels!);
-        }
-        return _buildErrorWidget();
-      },
+  // List _posts = [];
+
+  // void _visibilityListener() {
+  //   _posts = context.read<PostsInstagramCubit>().state.posts;
+  //   // حساب المنشور المرئي حاليًا بناءً على موضع التمرير
+  //   double scrollPosition = _scrollController.position.pixels;
+  //   double viewportHeight = _scrollController.position.viewportDimension;
+
+  //   for (int i = 0; i < _posts.length; i++) {
+  //     // حساب موضع المنشور (تقريبي)
+  //     double postTopPosition = i * (viewportHeight * 1.2); // تقدير مبسط
+  //     double postBottomPosition = postTopPosition + viewportHeight;
+
+  //     bool isVisible = (postTopPosition <= scrollPosition + viewportHeight) &&
+  //         (postBottomPosition >= scrollPosition);
+
+  //     // تحديث حالة رؤية الفيديو
+  //     if (_posts[i].isVideo) {
+  //       setState(() {
+  //         _visibleVideos[_posts[i].id] = isVisible;
+  //       });
+  //     }
+  //   }
+  // }
+
+  // void _scrollListener() {
+  //   if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
+  //       !_isLoading) {
+  //     context.read<PostsInstagramCubit>().loadPosts(context);
+  //   }
+  // }
+
+  @override
+  void dispose() {
+    _videoManager.disposeAll();
+    // _scrollController.dispose();
+    super.dispose();
+  }
+
+  // للتتبع آخر موضع تمرير
+  // double _lastScrollPosition = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // _loadMoreItems();
+
+    // إضافة مراقب للتمرير لتحميل المزيد من العناصر عند الوصول للأسفل
+    // _scrollController.addListener(() {
+    //   // تحميل المزيد من المنشورات عند الوصول للأسفل
+    //   if (_scrollController.position.pixels >=
+    //           _scrollController.position.maxScrollExtent - 200 &&
+    //       !_isLoading &&
+    //       context.read<PostsInstagramCubit>().state.hasMorePosts) {
+    //     context.read<PostsInstagramCubit>().loadPosts(context);
+    //   }
+
+    //   // للتحكم في تشغيل الفيديوهات عند التمرير السريع
+    //   if ((_scrollController.position.pixels - _lastScrollPosition).abs() >
+    //       50) {
+    //     // إذا كان التمرير سريعًا، قم بإيقاف جميع الفيديوهات
+    //     // if (_videoManager.currentlyPlayingVideoId != null) {
+    //     //   _videoManager.setCurrentlyPlayingVideo(null);
+    //     // }
+    //   }
+
+    //   _lastScrollPosition = _scrollController.position.pixels;
+    // });
+    /* _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 200 &&
+          !_isLoading &&
+          context.read<PostsInstagramCubit>().state.hasMorePosts) {
+        context.read<PostsInstagramCubit>().loadPosts(context);
+      }
+    });*/
+    // _scrollController.addListener(
+    //   () {
+    //     if (_scrollController.position.pixels >=
+    //             _scrollController.position.maxScrollExtent - 200 &&
+    //         !_isLoading &&
+    //         context.read<PostsInstagramCubit>().state.hasMorePosts) {
+    //       context.read<PostsInstagramCubit>().loadPosts(context);
+    //     }
+    //     // _visibilityListener();
+    //   },
+    // );
+  }
+
+  // دالة لعرض خطأ (لتسهيل التصحيح)
+  Widget _buildErrorWidget() {
+    return Container(
+      height: 100,
+      color: Colors.red,
+      alignment: Alignment.center,
+      child: const Text('حدث خطأ', style: TextStyle(color: Colors.white)),
+    );
+  }
+
+// دالة لتحميل Shimmer (تأثير التحميل)
+  Widget _buildShimmerLoader() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 200,
+        width: double.infinity,
+        color: Colors.grey,
+      ),
     );
   }
 
@@ -342,26 +508,17 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
     );
   }
 
-// دالة لتحميل Shimmer (تأثير التحميل)
-  Widget _buildShimmerLoader() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Container(
-        height: 200,
-        width: double.infinity,
-        color: Colors.grey,
-      ),
-    );
-  }
-
-// دالة لعرض خطأ (لتسهيل التصحيح)
-  Widget _buildErrorWidget() {
-    return Container(
-      height: 100,
-      color: Colors.red,
-      alignment: Alignment.center,
-      child: const Text('حدث خطأ', style: TextStyle(color: Colors.white)),
+// دالة مساعدة لبناء قسم المقاطع المقترحة
+  Widget _buildSuggestedReels(BuildContext context) {
+    return BlocBuilder<ReelInstagramCubit, ReelInstagramState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return _buildShimmerLoader();
+        } else if (state.status.isSuccess) {
+          return SuggestReelsInstagramSection(reels: state.reels!);
+        }
+        return _buildErrorWidget();
+      },
     );
   }
 
@@ -387,7 +544,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                   // width: double.infinity,
                   child: GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       // يقوم بنقلك لصفحة انشاء منشور او ريلز للانستقرام
                       if (index == 1) {
                         context.goNamed(
@@ -527,149 +684,6 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
       //   ),
       // ),
     );
-  }
-}
-
-// مدير لكل مشغلات الفيديو في التطبيق
-class VideoControllerManager {
-  static final VideoControllerManager _instance =
-      VideoControllerManager._internal();
-
-  factory VideoControllerManager() => _instance;
-
-  VideoControllerManager._internal();
-
-  // تخزين مشغل الفيديو النشط حالياً
-  VideoPlayerController? _activeController;
-
-  // معرّف آخر مشغل فيديو ظاهر
-  String? _lastVisibleVideoId;
-
-  // نسبة الظهور المطلوبة لتشغيل الفيديو (50%)
-  final double _visibilityThreshold = 0.5;
-
-  // تخزين حالة مشغلات الفيديو وتفاصيل الرؤية
-  final Map<String, _VideoState> _videoStates = {};
-
-  // إضافة أو تحديث مشغل فيديو
-  void registerController(String videoId, VideoPlayerController controller) {
-    _videoStates[videoId] = _VideoState(controller: controller);
-  }
-
-  // إزالة مشغل فيديو
-  void unregisterController(String videoId) {
-    _videoStates.remove(videoId);
-  }
-
-  // تحديث نسبة ظهور الفيديو
-  void updateVisibility(String videoId, double visibilityFraction) {
-    if (!_videoStates.containsKey(videoId)) return;
-
-    _videoStates[videoId]!.visibilityFraction = visibilityFraction;
-
-    // لا نقوم بتشغيل الفيديو تلقائيًا إذا تم إيقافه يدويًا
-    if (_videoStates[videoId]!.pausedManually) return;
-
-    // إذا كان الفيديو ظاهر بدرجة كافية وليس هناك فيديو نشط آخر
-    if (visibilityFraction >= _visibilityThreshold) {
-      _lastVisibleVideoId = videoId;
-      _playMostVisibleVideo();
-    } else if (_lastVisibleVideoId == videoId &&
-        visibilityFraction < _visibilityThreshold) {
-      // إذا كان هذا الفيديو هو النشط وخرج من مجال الرؤية
-      _pauseCurrentVideo();
-      _lastVisibleVideoId = _findMostVisibleVideo();
-      _playMostVisibleVideo();
-    }
-  }
-
-  // إيقاف الفيديو النشط حالياً
-  void _pauseCurrentVideo() {
-    if (_activeController != null && _activeController!.value.isPlaying) {
-      _activeController!.pause();
-    }
-    _activeController = null;
-  }
-
-  // تشغيل الفيديو الأكثر ظهوراً
-  void _playMostVisibleVideo() {
-    if (_lastVisibleVideoId == null) return;
-
-    final videoState = _videoStates[_lastVisibleVideoId!];
-    if (videoState == null || videoState.pausedManually) return;
-
-    // إذا كان نفس المشغل الحالي، لا داعي للتغيير
-    if (_activeController == videoState.controller) return;
-
-    // إيقاف الفيديو السابق
-    _pauseCurrentVideo();
-
-    // تشغيل الفيديو الجديد
-    _activeController = videoState.controller;
-    if (_activeController!.value.isInitialized) {
-      _activeController!.play();
-    } else {
-      // إذا لم يكن المشغل جاهزاً بعد، انتظر تهيئته ثم شغله
-      _activeController!.initialize().then((_) {
-        // تحقق إذا كان لا يزال هو النشط بعد التهيئة
-        if (_activeController == videoState.controller &&
-            !videoState.pausedManually) {
-          _activeController!.play();
-          _activeController!.setLooping(true);
-        }
-      });
-    }
-  }
-
-  // العثور على الفيديو الأكثر ظهوراً
-  String? _findMostVisibleVideo() {
-    String? mostVisibleId;
-    double maxVisibility = 0;
-
-    _videoStates.forEach((id, state) {
-      if (state.visibilityFraction > maxVisibility &&
-          state.visibilityFraction >= _visibilityThreshold &&
-          !state.pausedManually) {
-        maxVisibility = state.visibilityFraction;
-        mostVisibleId = id;
-      }
-    });
-
-    return mostVisibleId;
-  }
-
-  // وضع علامة على الفيديو بأنه تم إيقافه يدويًا
-  void setPausedManually(String videoId, bool paused) {
-    if (!_videoStates.containsKey(videoId)) return;
-    _videoStates[videoId]!.pausedManually = paused;
-
-    // إذا تم إلغاء الإيقاف اليدوي وكان الفيديو ظاهرًا بشكل كافٍ، قم بتشغيله
-    if (!paused &&
-        _videoStates[videoId]!.visibilityFraction >= _visibilityThreshold) {
-      _lastVisibleVideoId = videoId;
-      _playMostVisibleVideo();
-    }
-  }
-
-  // استخدامها عند الخروج من القائمة أو الصفحة
-  void pauseAllVideos() {
-    _videoStates.forEach((_, state) {
-      if (state.controller.value.isPlaying) {
-        state.controller.pause();
-      }
-    });
-    _activeController = null;
-    _lastVisibleVideoId = null;
-  }
-
-  // استخدامها عند التخلص من الصفحة
-  void disposeAll() {
-    _videoStates.forEach((_, state) {
-      state.controller.dispose();
-    });
-    _videoStates.clear();
-    _activeController = null;
-    _lastVisibleVideoId = null;
   }
 }
 

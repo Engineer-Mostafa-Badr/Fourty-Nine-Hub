@@ -40,15 +40,14 @@ void pleaseLoginDialog(BuildContext context) {
                 child: AppButton(
                     label: LocaleKeys.login.localize,
                     style: Styles.mediumText(
-                       color:  context.isDarkMode
+                        color: context.isDarkMode
                             ? AppColors.PRIMARY_COLOR
-                            : Colors.white
-                    ),
+                            : Colors.white),
                     backColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context.go(Routes.LOGIN);
                     }),
               ),
@@ -57,7 +56,7 @@ void pleaseLoginDialog(BuildContext context) {
                 child: AppButton(
                     label: LocaleKeys.close.localize,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       Navigator.pop(context);
                     }),
               ),

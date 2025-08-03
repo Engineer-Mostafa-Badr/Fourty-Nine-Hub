@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
@@ -10,341 +16,27 @@ import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/numbers_extensions.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../domain/entities/restaurant.dart';
-import '../cubit/restaurants_list_cubit.dart';
-import 'Images_profile_for_restaurant.dart';
-import '../../../../social_media/reels/presentation/widgets/comments.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../helpers/subscription_method.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../helpers/manage_vibration.dart';
-import '../../../../../res/assets/assets.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../social_media/reels/presentation/widgets/comments.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
-import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../../helpers/manage_vibration.dart';
+import '../../domain/entities/restaurant.dart';
+import '../cubit/restaurants_list_cubit.dart';
+import 'Images_profile_for_restaurant.dart';
 
-class SubCategoriesRestaurantCard extends StatelessWidget {
-  final GetAllRestaurantEntity? item;
-  final bool isVertical;
-  final String mealId;
-  final Function(String id) favouriteRestaurant;
-
-  const SubCategoriesRestaurantCard({
-    super.key,
-    this.isVertical = true,
-    this.item,
-    required this.mealId,
-    required this.favouriteRestaurant,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
-      child: isVertical
-          ? VerticalRestaurantCard(
-              item: item,
-              mealId: mealId,
-              favouriteRestaurant: (String id) => favouriteRestaurant(id),
-            )
-          : HorizontalRestaurantCard(item: item),
-    );
-  }
-}
-
-class PropertyCard extends StatelessWidget {
+class CallMessageReportButtons extends StatefulWidget {
   final GetAllRestaurantEntity item;
-  final String mealId;
-  final bool myRestaurant;
-  final Function(String id) favouriteRestaurant;
 
-  const PropertyCard(
-      {super.key,
-      required this.item,
-      required this.mealId,
-      required this.favouriteRestaurant,
-      required this.myRestaurant});
-
-  String formatViews(int views) {
-    if (views >= 1000000) {
-      return "${(views / 1000000).toStringAsFixed(1)}M";
-    } else if (views >= 1000) {
-      return "${(views / 1000).toStringAsFixed(1)}K";
-    } else {
-      return views.toString();
-    }
-  }
-
-  String getSubscriptionType(String? subscriptionType) {
-    final normalizedType = subscriptionType?.trim().toLowerCase();
-
-    // 'Premium subscription': 2
-    // 'Regular subscription': 1
-    // 'No subscription': 0
-    switch (normalizedType) {
-      case ('no subscription'):
-        return LocaleKeys.notSubscribed.localize;
-      case ('premium subscription'):
-        return LocaleKeys.premium2.localize;
-      case ('regular subscription'):
-        return LocaleKeys.regular.localize;
-      default:
-        return 'N/A';
-    }
-  }
+  const CallMessageReportButtons({super.key, required this.item});
 
   @override
-  Widget build(BuildContext context) {
-    final hasSubscription = item.isPremium;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          width: 1,
-          color: context.isDarkMode
-              ? AppColors.whiteColor.withOpacity(0.7)
-              : AppColors.black.withOpacity(0.7),
-        ),
-      ),
-      child: Column(
-        // spacing: 10,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.symmetric(
-                vertical: 8, horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  spacing: 4,
-                  children: [
-                    SvgPicture.asset(
-                      Assets.eyeIcon,
-                      color: context.isDarkMode
-                          ? AppColors.whiteColor
-                          : AppColors.PRIMARY_COLOR,
-                    ),
-                    Label(
-                      text: formatViews(item.totalViews!.toInt())
-                          .toArabicNumbers(context),
-                      style: Styles.mediumText(
-                        // fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        // color: AppColors.c6C6C6C,
-                        color: context.isDarkMode
-                            ? AppColors.whiteColor
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                    ),
-                    Label(
-                      text: (item.totalViews!.toInt() >= 3 &&
-                              item.totalViews!.toInt() <= 9 &&
-                              context.isArabic)
-                          ? 'مشاهدات'
-                          : LocaleKeys.view.localize,
-                      style: Styles.mediumText(
-                        // fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: context.isDarkMode
-                            ? AppColors.whiteColor
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                    ),
-                  ],
-                ),
-                Label(
-                  text: getSubscriptionType(item.subscriptionType?.en),
-                  textAlign: TextAlign.right,
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.w700,
-                    color: context.isDarkMode
-                        ? AppColors.whiteColor
-                        : AppColors.PRIMARY_COLOR_DARK,
-                    // fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // if (hasSubscription == true)
-          //   EliteBanner(subscriptionType: (context.isArabic ? item.subscriptionType?.ar : item.subscriptionType?.en) ?? ''),
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: ImagesProfileForRestaurant(
-                  heightCarousel: 150,
-                  autoPlay: true,
-                  restaurantMedia: item.restaurantMedia,
-                ),
-              ),
-              if (!myRestaurant && context.read<UserCubit>().isLoggedIn)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: FavoriteButton(
-                    item: item,
-                    mealId: mealId,
-                    favouriteRestaurant: (String id) => favouriteRestaurant(id),
-                  ),
-                ),
-            ],
-          ),
-          DetailsSection(
-            item: item,
-            myRestaurant: myRestaurant,
-          ),
-          // if (!myRestaurant) const SizedBox(height: 4),
-          if (!myRestaurant)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: PremiumAndRequestButtons(item: item),
-                ),
-                Flexible(
-                  child: CallMessageReportButtons(item: item),
-                ),
-              ],
-            )
-        ],
-      ),
-    );
-  }
-}
-
-class FavoriteButton extends StatelessWidget {
-  final GetAllRestaurantEntity item;
-  final String mealId;
-  final Function(String id) favouriteRestaurant;
-
-  const FavoriteButton(
-      {super.key,
-      required this.item,
-      required this.mealId,
-      required this.favouriteRestaurant});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      padding: EdgeInsets.zero,
-      icon: Icon(
-        (item.isFavorite ?? false) ? Icons.favorite : Icons.favorite_border,
-        color: AppColors.SECONDARY_COLOR,
-      ),
-      onPressed: () async {
-      ManageVibration.vibrate();
-        await favouriteRestaurant(item.id!);
-      },
-    );
-  }
-}
-
-class VerticalRestaurantCard extends StatelessWidget {
-  final GetAllRestaurantEntity? item;
-  final String mealId;
-  final Function(String id) favouriteRestaurant;
-
-  const VerticalRestaurantCard(
-      {super.key,
-      this.item,
-      required this.mealId,
-      required this.favouriteRestaurant});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.92,
-      // height: MediaQuery.of(context).size.height * 0.50,
-      child: PropertyCard(
-        item: item!,
-        mealId: mealId,
-        myRestaurant: false,
-        favouriteRestaurant: (String id) => favouriteRestaurant(id),
-      ),
-    );
-  }
-}
-
-class HorizontalRestaurantCard extends StatelessWidget {
-  final GetAllRestaurantEntity? item;
-
-  const HorizontalRestaurantCard({super.key, this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: kToolbarHeight,
-          width: kToolbarHeight,
-          child: SquareImage(
-            radius: 5,
-            url: item?.restaurantMedia?.first.mediaKey,
-          ),
-        ),
-        const Sizer(),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Label(
-                text: item?.name ?? "",
-                style: Styles.mediumText(fontWeight: FontWeight.w400),
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.star_rounded,
-                    color: AppColors.ACCENT_COLOR,
-                  ),
-                  const Sizer(),
-                  Label(
-                    text: '${item?.totalRating} ',
-                    style: Styles.mediumText(fontWeight: FontWeight.w500),
-                  ),
-                  Label(
-                    text: '(${item?.numberOfReviews}+)',
-                    style: Styles.mediumText(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class PropertyCardShimmer extends StatelessWidget {
-  const PropertyCardShimmer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.92,
-        height: MediaQuery.of(context).size.width * 1.1,
-        child: Card(
-          clipBehavior: Clip.hardEdge,
-          color: Colors.grey[300],
-          elevation: 5,
-        ),
-      ),
-    );
-  }
+  State<CallMessageReportButtons> createState() =>
+      _CallMessageReportButtonsState();
 }
 
 // class EliteBanner extends StatelessWidget {
@@ -549,6 +241,85 @@ class DetailsSection extends StatelessWidget {
   }
 }
 
+class FavoriteButton extends StatelessWidget {
+  final GetAllRestaurantEntity item;
+  final String mealId;
+  final Function(String id) favouriteRestaurant;
+
+  const FavoriteButton(
+      {super.key,
+      required this.item,
+      required this.mealId,
+      required this.favouriteRestaurant});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      icon: Icon(
+        (item.isFavorite ?? false) ? Icons.favorite : Icons.favorite_border,
+        color: AppColors.SECONDARY_COLOR,
+      ),
+      onPressed: () async {
+        ManageVibration.vibrate();
+        await favouriteRestaurant(item.id!);
+      },
+    );
+  }
+}
+
+class HorizontalRestaurantCard extends StatelessWidget {
+  final GetAllRestaurantEntity? item;
+
+  const HorizontalRestaurantCard({super.key, this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: kToolbarHeight,
+          width: kToolbarHeight,
+          child: SquareImage(
+            radius: 5,
+            url: item?.restaurantMedia?.first.mediaKey,
+          ),
+        ),
+        const Sizer(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: item?.name ?? "",
+                style: Styles.mediumText(fontWeight: FontWeight.w400),
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.star_rounded,
+                    color: AppColors.ACCENT_COLOR,
+                  ),
+                  const Sizer(),
+                  Label(
+                    text: '${item?.totalRating} ',
+                    style: Styles.mediumText(fontWeight: FontWeight.w500),
+                  ),
+                  Label(
+                    text: '(${item?.numberOfReviews}+)',
+                    style: Styles.mediumText(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class PremiumAndRequestButtons extends StatelessWidget {
   final GetAllRestaurantEntity item;
 
@@ -563,7 +334,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
         label: LocaleKeys.request.localize,
         color: AppColors.getRedColor(context),
         onPressed: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           context.push(Routes.RESTAURANTDETAILS, extra: item);
         },
       ),
@@ -590,26 +361,249 @@ class PremiumAndRequestButtons extends StatelessWidget {
   }
 }
 
-class CallMessageReportButtons extends StatefulWidget {
+class PropertyCard extends StatelessWidget {
   final GetAllRestaurantEntity item;
+  final String mealId;
+  final bool myRestaurant;
+  final Function(String id) favouriteRestaurant;
 
-  const CallMessageReportButtons({super.key, required this.item});
+  const PropertyCard(
+      {super.key,
+      required this.item,
+      required this.mealId,
+      required this.favouriteRestaurant,
+      required this.myRestaurant});
 
   @override
-  State<CallMessageReportButtons> createState() =>
-      _CallMessageReportButtonsState();
+  Widget build(BuildContext context) {
+    final hasSubscription = item.isPremium;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          width: 1,
+          color: context.isDarkMode
+              ? AppColors.whiteColor.withOpacity(0.7)
+              : AppColors.black.withOpacity(0.7),
+        ),
+      ),
+      child: Column(
+        // spacing: 10,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+                vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  spacing: 4,
+                  children: [
+                    SvgPicture.asset(
+                      Assets.eyeIcon,
+                      color: context.isDarkMode
+                          ? AppColors.whiteColor
+                          : AppColors.PRIMARY_COLOR,
+                    ),
+                    Label(
+                      text: formatViews(item.totalViews!.toInt())
+                          .toArabicNumbers(context),
+                      style: Styles.mediumText(
+                        // fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        // color: AppColors.c6C6C6C,
+                        color: context.isDarkMode
+                            ? AppColors.whiteColor
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                    Label(
+                      text: (item.totalViews!.toInt() >= 3 &&
+                              item.totalViews!.toInt() <= 9 &&
+                              context.isArabic)
+                          ? 'مشاهدات'
+                          : LocaleKeys.view.localize,
+                      style: Styles.mediumText(
+                        // fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: context.isDarkMode
+                            ? AppColors.whiteColor
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                  ],
+                ),
+                Label(
+                  text: getSubscriptionType(item.subscriptionType?.en),
+                  textAlign: TextAlign.right,
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w700,
+                    color: context.isDarkMode
+                        ? AppColors.whiteColor
+                        : AppColors.PRIMARY_COLOR_DARK,
+                    // fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // if (hasSubscription == true)
+          //   EliteBanner(subscriptionType: (context.isArabic ? item.subscriptionType?.ar : item.subscriptionType?.en) ?? ''),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: ImagesProfileForRestaurant(
+                  heightCarousel: 150,
+                  autoPlay: true,
+                  restaurantMedia: item.restaurantMedia,
+                ),
+              ),
+              if (!myRestaurant && context.read<UserCubit>().isLoggedIn)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: FavoriteButton(
+                    item: item,
+                    mealId: mealId,
+                    favouriteRestaurant: (String id) => favouriteRestaurant(id),
+                  ),
+                ),
+            ],
+          ),
+          DetailsSection(
+            item: item,
+            myRestaurant: myRestaurant,
+          ),
+          // if (!myRestaurant) const SizedBox(height: 4),
+          if (!myRestaurant)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: PremiumAndRequestButtons(item: item),
+                ),
+                Flexible(
+                  child: CallMessageReportButtons(item: item),
+                ),
+              ],
+            )
+        ],
+      ),
+    );
+  }
+
+  String formatViews(int views) {
+    if (views >= 1000000) {
+      return "${(views / 1000000).toStringAsFixed(1)}M";
+    } else if (views >= 1000) {
+      return "${(views / 1000).toStringAsFixed(1)}K";
+    } else {
+      return views.toString();
+    }
+  }
+
+  String getSubscriptionType(String? subscriptionType) {
+    final normalizedType = subscriptionType?.trim().toLowerCase();
+
+    // 'Premium subscription': 2
+    // 'Regular subscription': 1
+    // 'No subscription': 0
+    switch (normalizedType) {
+      case ('no subscription'):
+        return LocaleKeys.notSubscribed.localize;
+      case ('premium subscription'):
+        return LocaleKeys.premium2.localize;
+      case ('regular subscription'):
+        return LocaleKeys.regular.localize;
+      default:
+        return 'N/A';
+    }
+  }
+}
+
+class PropertyCardShimmer extends StatelessWidget {
+  const PropertyCardShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.92,
+        height: MediaQuery.of(context).size.width * 1.1,
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          color: Colors.grey[300],
+          elevation: 5,
+        ),
+      ),
+    );
+  }
+}
+
+class SubCategoriesRestaurantCard extends StatelessWidget {
+  final GetAllRestaurantEntity? item;
+  final bool isVertical;
+  final String mealId;
+  final Function(String id) favouriteRestaurant;
+
+  const SubCategoriesRestaurantCard({
+    super.key,
+    this.isVertical = true,
+    this.item,
+    required this.mealId,
+    required this.favouriteRestaurant,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
+      child: isVertical
+          ? VerticalRestaurantCard(
+              item: item,
+              mealId: mealId,
+              favouriteRestaurant: (String id) => favouriteRestaurant(id),
+            )
+          : HorizontalRestaurantCard(item: item),
+    );
+  }
+}
+
+class VerticalRestaurantCard extends StatelessWidget {
+  final GetAllRestaurantEntity? item;
+  final String mealId;
+  final Function(String id) favouriteRestaurant;
+
+  const VerticalRestaurantCard(
+      {super.key,
+      this.item,
+      required this.mealId,
+      required this.favouriteRestaurant});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.92,
+      // height: MediaQuery.of(context).size.height * 0.50,
+      child: PropertyCard(
+        item: item!,
+        mealId: mealId,
+        myRestaurant: false,
+        favouriteRestaurant: (String id) => favouriteRestaurant(id),
+      ),
+    );
+  }
 }
 
 class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
   final _formKey = GlobalKey<FormState>();
 
   final FocusNode myFocusNode = FocusNode();
-
-  @override
-  void dispose() {
-    myFocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -635,7 +629,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
             onPressed: context.read<UserCubit>().isLoggedIn
                 ? (isChatEnabled
                     ? () {
-                      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         showModalBottomSheet(
                           context: context,
                           backgroundColor:
@@ -674,7 +668,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                                     color:
                                         AppColors.getReversedTextColor(context),
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       Navigator.pop(context);
                                       // _showFreeCallBottomSheet(context, item);
                                     },
@@ -684,7 +678,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                                     backColor: AppColors.getFillColor(context),
                                     color: AppColors.getTextColor(context),
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       Navigator.pop(context);
                                       _showRegularCallBottomSheet(
                                           context, widget.item, myFocusNode);
@@ -698,14 +692,14 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                         );
                       }
                     : () {
-                      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         SubscriptionMethod().subscribe(
                           subscribeId: widget.item.subcategoryId?.id ?? '',
                           title: widget.item.name ?? '',
                         );
                       })
                 : () {
-                  ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     // ScaffoldMessenger.of(context).showSnackBar(
                     //   SnackBar(
                     //     content: Text(
@@ -794,20 +788,20 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
             onPressed: context.read<UserCubit>().isLoggedIn
                 ? (isChatEnabled
                     ? () {
-                       ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         BlocProvider.of<RestaurantsCubit>(context)
                             .getExpiredOrders();
                         // Implement message functionality here
                       }
                     : () {
-                      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         SubscriptionMethod().subscribe(
                           subscribeId: widget.item.subcategoryId?.id ?? '',
                           title: widget.item.name ?? '',
                         );
                       })
                 : () {
-                  ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     return pleaseLoginDialog(context);
 
                     // ScaffoldMessenger.of(context).showSnackBar(
@@ -847,20 +841,24 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
             color: AppColors.getRedColor(context),
             onPressed: () async {
               ManageVibration.vibrate();
-              await showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                builder: (context) {
-                  return SizedBox(
-                    height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-                    child: ReportView(
-                      id: widget.item.id!,
-                      categoryId: widget.item.subcategoryId!.id!,
-                    ),
-                  );
-                },
-              );
+              if (!context.read<UserCubit>().isLoggedIn) {
+                return pleaseLoginDialog(context);
+              } else {
+                await showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  builder: (context) {
+                    return SizedBox(
+                      height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                      child: ReportView(
+                        id: widget.item.id!,
+                        categoryId: widget.item.subcategoryId!.id!,
+                      ),
+                    );
+                  },
+                );
+              }
 
               // Implement report functionality here
             },
@@ -868,6 +866,12 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
         )
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    super.dispose();
   }
 
   // void _showRegularCallBottomSheet(BuildContext context,
@@ -1140,7 +1144,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                         color: AppColors.getReversedTextColor(context),
                         label: LocaleKeys.submit.localize,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (_formKey.currentState?.validate() ?? false) {
                             final enteredNumber = phoneController.text.trim();
                             final phoneToDial = isBookingForAnotherClient
