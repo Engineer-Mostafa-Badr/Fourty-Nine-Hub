@@ -50,6 +50,8 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'routes/pages.dart';
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
