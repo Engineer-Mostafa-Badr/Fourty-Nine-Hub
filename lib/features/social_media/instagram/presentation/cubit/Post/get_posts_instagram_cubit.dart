@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_posts_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/post_instagram_state.dart';
+import '../../../../../../common/models/public/pagination_params.dart';
+import '../../../domain/usecases/get_posts_use_case.dart';
+import 'post_instagram_state.dart';
 
 class GetPostsInstagramCubit extends Cubit<PostInstagramState> {
   final GetPostsUseCase getPostsUseCase;

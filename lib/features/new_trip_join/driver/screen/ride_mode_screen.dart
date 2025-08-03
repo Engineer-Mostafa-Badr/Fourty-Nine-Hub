@@ -35,6 +35,7 @@ class _NewRideModeScreenState extends State<NewRideModeScreen> {
           language: true,
           leading: IconButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
             },
             icon: const Icon(
@@ -84,6 +85,7 @@ class NewRideModeBody extends StatelessWidget {
                 // ),
                 RideModeButton(
                     onTap: () {
+      ManageVibration.vibrate();
                       context.push(Routes.runningAndPastTripsScreen);
                     },
                     onRefreshSettings: () {
@@ -104,6 +106,7 @@ class NewRideModeBody extends StatelessWidget {
                       title:
                           context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
                       onTap: () {
+      ManageVibration.vibrate();
                         context.push(Routes.captainShareScreen);
                       },
                       iconColor: AppColors.getButtonPrimaryColor(context),
@@ -113,6 +116,7 @@ class NewRideModeBody extends StatelessWidget {
                       imagePath: Assets.locationTripIcon,
                       title: context.isArabic ? "جاي معاك" : "Trip Join",
                       onTap: () {
+      ManageVibration.vibrate();
                         context.push(Routes.AVAILABLE_TRIPS);
                       },
                       iconColor: AppColors.getButtonPrimaryColor(context),
@@ -122,6 +126,7 @@ class NewRideModeBody extends StatelessWidget {
                       imagePath: Assets.locationTripIcon,
                       title: context.isArabic ? "وصلني معاك" : "Pick me",
                       onTap: () {
+      ManageVibration.vibrate();
                         context.push(Routes.All_PickMe_View);
                       },
                       iconColor: AppColors.getButtonPrimaryColor(context),

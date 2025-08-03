@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../common/widgets/stateful/banners/main_category_banner.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../cubit/restaurants_list_cubit.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

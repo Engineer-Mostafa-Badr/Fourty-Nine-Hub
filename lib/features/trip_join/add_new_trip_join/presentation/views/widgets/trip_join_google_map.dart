@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../cubits/destination_location/destination_location_cubit.dart';
+import '../../cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
+import '../../cubits/starting_location/starting_location_cubit.dart';
+import '../../../../../../res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TripJoinGoogleMap extends StatefulWidget {

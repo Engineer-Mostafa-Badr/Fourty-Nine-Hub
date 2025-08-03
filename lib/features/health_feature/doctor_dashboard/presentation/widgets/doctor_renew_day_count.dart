@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorRenewDayCountWidget extends StatelessWidget {
   const DoctorRenewDayCountWidget({super.key});
@@ -48,7 +49,10 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     return _Item(
                       numerOfDays: days,
                       label: LocaleKeys.subscription.localize,
-                      onTap: () {},
+                      onTap: () {
+
+      ManageVibration.vibrate();
+                      },
                     );
                   },
                 ),
@@ -61,7 +65,10 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     days = state.info?.remainingDaysToExpiryId.toString() ?? '';
                     return _Item(
                       numerOfDays: days,
-                      label: LocaleKeys.id.localize, onTap: () {},
+                      label: LocaleKeys.id.localize, onTap: () {
+
+      ManageVibration.vibrate();
+                      },
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -78,7 +85,10 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     return _Item(
                       numerOfDays: days,
                       label: LocaleKeys.practiceCertification.localize,
-                      onTap: () {},
+                      onTap: () {
+
+      ManageVibration.vibrate();
+                      },
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -106,6 +116,7 @@ class _Item extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
       },
       child: Column(

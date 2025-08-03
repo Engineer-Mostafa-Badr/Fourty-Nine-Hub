@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RunningTripClientWidget extends StatefulWidget {
   const RunningTripClientWidget({
@@ -192,6 +193,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (context.read<CaptainShareDashboardCubit>().isGoingToClient) {
                     setState(() {
                       context.read<CaptainShareDashboardCubit>().isGoingToClient = false;
@@ -355,6 +357,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
         if (context.read<CaptainShareDashboardCubit>().showClientNotShown)
           GestureDetector(
             onTap: (){
+      ManageVibration.vibrate();
               widget.onClientNotShown();
             },
             child: Container(

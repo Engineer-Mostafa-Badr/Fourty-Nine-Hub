@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
+import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../account_taps/privacy/domain/entities/privacy_status_enum.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class PrivacyIcon extends StatelessWidget {
   const PrivacyIcon({super.key, required this.selectPrivacy});
@@ -13,6 +14,7 @@ class PrivacyIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () async {
+      ManageVibration.vibrate();
           final res =
               await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
             CustomSheetModel(

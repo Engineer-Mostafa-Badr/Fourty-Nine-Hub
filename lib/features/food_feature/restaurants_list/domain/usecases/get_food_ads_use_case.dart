@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/repositories/resturant_list_repo.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/error/failure.dart';
+import '../repositories/resturant_list_repo.dart';
 
 import '../entities/restaurant.dart';
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -61,6 +62,7 @@ class _ProgressButtonState extends State<ProgressButton> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (value > 0) {
           widget.onPressed();
         }

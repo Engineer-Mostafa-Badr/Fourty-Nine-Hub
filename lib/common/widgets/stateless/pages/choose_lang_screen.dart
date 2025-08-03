@@ -113,6 +113,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                     fontSize: 32.sp,
                                     color: AppColors.AUTH_CONTAINER_COLOR),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   changeLang(
                                       locale: Locales.arabic, context: context);
                                   Future.delayed(const Duration(seconds: 1));
@@ -227,6 +228,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                           fontSize: 35.sp, color: AppColors.AUTH_CONTAINER_COLOR),
                       width: double.infinity,
                       onPressed: () {
+      ManageVibration.vibrate();
                         context.go(Routes.onBoardingScreen);
                       },
                     ),

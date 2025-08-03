@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/ten_percent/data/model/winners_ten_percent_model.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/entities/winners_ten_percent_entity.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/usecases/get_winners_ten_percent_use_case.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/usecases/send_bill_request_use_case.dart';
+import '../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../core/error/failure.dart';
+import '../model/winners_ten_percent_model.dart';
+import '../../domain/entities/winners_ten_percent_entity.dart';
+import '../../domain/usecases/get_winners_ten_percent_use_case.dart';
+import '../../domain/usecases/send_bill_request_use_case.dart';
 
 abstract class TenPercentRemoteDataSource {
   Future<Either<Failure, bool>> sendBillRequest(

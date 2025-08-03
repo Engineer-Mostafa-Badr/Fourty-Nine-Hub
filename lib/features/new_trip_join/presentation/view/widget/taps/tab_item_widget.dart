@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 
 import '../../../../../../helpers/manage_vibration.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TabItemWidget extends StatelessWidget {
   final String text;

@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/delete_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_comment_use_case.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/comment_instagram_entity.dart';
+import '../../../domain/usecases/add_comment_use_case.dart';
+import '../../../domain/usecases/delete_comment_use_case.dart';
+import '../../../domain/usecases/get_comment_use_case.dart';
 
 part 'comments_instagram_state.dart';
 

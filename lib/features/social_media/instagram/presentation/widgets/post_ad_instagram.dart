@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_post_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_review_widget.dart';
-import 'package:fourtyninehub/helpers/media_helper.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'header_post_instagram.dart';
+import 'instagram_post_review_widget.dart';
+import '../../../../../helpers/media_helper.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 class PostAdInstagram extends StatelessWidget {
   const PostAdInstagram({

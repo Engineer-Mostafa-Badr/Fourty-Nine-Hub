@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
+import 'chat_model.dart';
+import '../../domain/entities/chat_category_entity.dart';
 
 class ChatCategoryModel extends ChatCategoryEntity {
   ChatCategoryModel({required super.chats, required super.totalUnreadMessages});

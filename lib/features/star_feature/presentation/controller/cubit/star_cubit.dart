@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/delete_my_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_banner_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
+import '../../../../../common/functions/global/upload_file.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../domain/entity/star_entity.dart';
+import '../../../domain/entity/star_winner_entity.dart';
+import '../../../domain/use_case/delete_my_star_use_case.dart';
+import '../../../domain/use_case/fetch_all_star_use_case.dart';
+import '../../../domain/use_case/fetch_banner_use_case.dart';
+import '../../../domain/use_case/fetch_myl_star_use_case.dart';
+import '../../../domain/use_case/fetch_winner_star_use_case.dart';
+import '../../../domain/use_case/upload_my_star_use_case.dart';
+import 'star_state.dart';
 
 class StarCubit extends Cubit<StarState> {
   final FetchAllStarUseCase _allStarUseCase;

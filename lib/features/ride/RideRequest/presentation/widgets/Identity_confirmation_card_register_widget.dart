@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/val
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class IdentityConfirmationCardRegisterWidget extends StatefulWidget {
   const IdentityConfirmationCardRegisterWidget({super.key, this.onChange, this.initImage});
@@ -113,6 +114,7 @@ class _IdentityConfirmationCardRegisterWidgetState
                   Align(
                     child: GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         var pickedImage = await ImagePicker()
                             .pickImage(source: ImageSource.gallery);
                         if (pickedImage != null) {

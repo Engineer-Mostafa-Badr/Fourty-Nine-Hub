@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -32,8 +33,14 @@ class MeetingParticipants extends StatelessWidget {
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AppButton(padding: 10, label: 'Invite', onPressed: () {}),
-          AppButton(padding: 10, label: 'Show All', onPressed: () {}),
+          AppButton(padding: 10, label: 'Invite', onPressed: () {
+
+      ManageVibration.vibrate();
+          }),
+          AppButton(padding: 10, label: 'Show All', onPressed: () {
+
+      ManageVibration.vibrate();
+          }),
         ],
       ),
     );

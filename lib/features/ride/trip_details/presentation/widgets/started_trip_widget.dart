@@ -14,6 +14,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../requests_history/data/models/driver_model.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class StartedTripWidget extends StatelessWidget {
   final TripEntity trip;
@@ -65,7 +66,10 @@ class StartedTripWidget extends StatelessWidget {
             )
           ],
         )),
-        IconAppButton(icon: Icons.call, isCircle: true, onPressed: () {}),
+        IconAppButton(icon: Icons.call, isCircle: true, onPressed: () {
+
+      ManageVibration.vibrate();
+        }),
         IconAppButton(
             icon: Icons.directions,
             isCircle: true,

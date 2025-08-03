@@ -36,6 +36,7 @@ import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'favorite_ads.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -452,6 +453,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               children: [
                 GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     if (context.read<UserCubit>().isLoggedIn) {
                       setState(() {
                         _showSearch = !_showSearch;
@@ -476,6 +478,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 const Sizer(),
                 GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       context.push(Routes.FOODCART);
                     },
                     child: Icon(
@@ -488,6 +491,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             ),
             GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 if (context.read<UserCubit>().isLoggedIn) {
                   setState(() {
                     _showFavAds = !_showFavAds;
@@ -538,6 +542,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   children: [
                     GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         print(context
                             .read<RestaurantsCubit>()
                             .state
@@ -628,6 +633,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               padding: EdgeInsets.only(top: 20.0.h),
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (context.read<UserCubit>().isLoggedIn) {
                     setState(() {
                       _showExpire = !_showExpire;

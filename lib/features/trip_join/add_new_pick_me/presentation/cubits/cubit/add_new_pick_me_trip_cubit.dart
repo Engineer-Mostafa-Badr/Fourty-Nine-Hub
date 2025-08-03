@@ -1,17 +1,17 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_brand_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_pick_me/domain/entities/add_new_pick_me_param.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_pick_me/domain/use_cases/add_new_pick_me_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/delete_my_trip_join_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/expected_price_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/get_request_count_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/my_ads_trip_join_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/request_trip_join_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_car_brand_use_case.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_car_model_use_case.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../RideFeature/domain/entities/ride_brand_entity.dart';
+import '../../../../../RideFeature/domain/entities/ride_model_entity.dart';
+import '../../../domain/entities/add_new_pick_me_param.dart';
+import '../../../domain/use_cases/add_new_pick_me_usecase.dart';
+import '../../../../view_all_trip_join/domain/entities/available_trip_join_entity.dart';
+import '../../../../view_all_trip_join/domain/entities/delete_my_trip_join_entity.dart';
+import '../../../../view_all_trip_join/domain/entities/expected_price_entity.dart';
+import '../../../../view_all_trip_join/domain/entities/get_request_count_entity.dart';
+import '../../../../view_all_trip_join/domain/entities/my_ads_trip_join_entity.dart';
+import '../../../../view_all_trip_join/domain/entities/request_trip_join_entity.dart';
+import '../../../../view_all_trip_join/domain/usecases/get_car_brand_use_case.dart';
+import '../../../../view_all_trip_join/domain/usecases/get_car_model_use_case.dart';
 
 part 'add_new_pick_me_trip_state.dart';
 

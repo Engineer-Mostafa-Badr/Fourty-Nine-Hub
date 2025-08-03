@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/functions/global/upload_file.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../create_post/presentation/widgets/image_details.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../pages/show_post_images.dart';
+import '../facebook_widgets/image_from_internet.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookAdvertisementCard extends StatelessWidget {
   const FacebookAdvertisementCard({super.key, required this.post});
@@ -36,6 +37,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                 itemCount: post.images.length < 4 ? post.images.length : 4,
                 itemBuilder: (context, index) => InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         if (index != 3 ||
                             (index == 3 && post.images.length == 4)) {
                           showDialog(
@@ -118,7 +120,10 @@ class FacebookAdvertisementCard extends StatelessWidget {
             height: 10.h,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+
+      ManageVibration.vibrate();
+            },
             child: Container(
               width: double.infinity,
               alignment: Alignment.center,

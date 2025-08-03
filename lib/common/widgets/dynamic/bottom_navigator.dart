@@ -228,6 +228,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       if (index != 2) {
                         widget.onTap(index);
                       }

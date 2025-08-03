@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../cubit/create_post_cubit.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CachedSvgImage extends StatefulWidget {
   final String imageUrl;
@@ -165,6 +166,7 @@ class _LifeEventState extends State<LifeEvent> {
                           print(cubit.lifeEventCategories[index].image);
                           return ClickableWidget(
                             onTap: () {
+      ManageVibration.vibrate();
                               context.push(Routes.LIFEEVENTSub,
                                   extra: cubit.lifeEventCategories[index]);
                             },

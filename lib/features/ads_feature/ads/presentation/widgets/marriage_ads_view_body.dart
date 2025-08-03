@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
@@ -128,6 +129,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     isOpened:
                         context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (!context.isUserLoggedIn) {
                         return pleaseLoginDialog(context);
                       } else {
@@ -154,6 +156,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     isOpened:
                         context.read<SubcategoriesCubit>().isRequestLogOpen,
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (!context.isUserLoggedIn) {
                         return pleaseLoginDialog(context);
                       } else {
@@ -178,6 +181,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                   title: LocaleKeys.myAds.localize,
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
+      ManageVibration.vibrate();
                     // TODO: EDIT THIS
                     context
                         .read<SubcategoriesCubit>()
@@ -199,6 +203,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
             children: [
               InkWell(
                 onTap: () async {
+      ManageVibration.vibrate();
                   dynamic data = await context.push(
                     Routes.FILTERADS,
                     extra: FilterAdsParams(
@@ -257,6 +262,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               const Sizer(),
               InkWell(
                 onTap: () async {
+      ManageVibration.vibrate();
                   dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
                       extra: CategorizationEntity(
                           mainCategory: widget.state.mainCategory!,
@@ -341,6 +347,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                 child: FilterButtonItem(
                   title: LocaleKeys.city.localize,
                   onTap: () async {
+      ManageVibration.vibrate();
                     dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,
                         extra: CategorizationEntity(

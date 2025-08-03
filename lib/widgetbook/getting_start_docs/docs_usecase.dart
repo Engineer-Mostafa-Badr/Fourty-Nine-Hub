@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:fourtyninehub/widgetbook/utils/flutter_markdown.dart';
+import '../utils/flutter_markdown.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
 // Installation Documentation

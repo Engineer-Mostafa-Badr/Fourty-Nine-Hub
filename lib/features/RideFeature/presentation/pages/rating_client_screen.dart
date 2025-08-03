@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 
 import 'widgets/font_manager.dart';
 import 'widgets/map_section.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // هتتغير انا عملها علشان التغير بتاع ال rate بس
 class RatingClientScreen extends StatefulWidget {
@@ -164,6 +165,7 @@ class RatingCard extends StatelessWidget {
           const SizedBox(height: 12),
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
             },
             child: Container(
               width: double.infinity,
@@ -197,6 +199,7 @@ class RatingCard extends StatelessWidget {
                 ),
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 context.push(Routes.connectionCallScreen);
               },
               child: Text(LocaleKeys.send.localize),

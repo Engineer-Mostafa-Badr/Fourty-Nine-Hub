@@ -19,6 +19,7 @@ import '../../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BookingHistoryScreen extends StatefulWidget {
   const BookingHistoryScreen({super.key, this.onClose});
@@ -257,7 +258,10 @@ class _BookingHistoryCardState extends State<BookingHistoryCard> {
                     isButton: false,
                     isSubscribed: widget.isSubscribed,
                     buttonTitle: '',
-                    onTap: () {},
+                    onTap: () {
+
+      ManageVibration.vibrate();
+                    },
                   ),
                   const Sizer(),
                 ],

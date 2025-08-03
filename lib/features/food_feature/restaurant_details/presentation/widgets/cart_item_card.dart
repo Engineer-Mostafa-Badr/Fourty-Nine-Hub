@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/entities/selected_meal_entity.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/images/square_image.dart';
+import '../../../../../common/widgets/stateless/labels/badged_label.dart';
+import '../../domain/entities/selected_meal_entity.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';

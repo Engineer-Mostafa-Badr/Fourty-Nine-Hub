@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
+import '../../domain/entities/create_post_request_entity.dart';
 
 class CreatePostRequestModel extends CreatePostRequestEntity {
   CreatePostRequestModel(

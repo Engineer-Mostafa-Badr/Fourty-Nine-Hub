@@ -18,6 +18,7 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 
 import '../../../../res/style/app_colors.dart';
 import '../../domain/entities/completed_trips_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ExpiredTripsScreenParams {
   final RideCubit rideCubit;
@@ -76,6 +77,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),

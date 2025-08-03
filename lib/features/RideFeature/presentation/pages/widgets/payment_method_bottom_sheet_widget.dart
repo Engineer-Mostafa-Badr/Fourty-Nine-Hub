@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PaymentBottomSheetWidget extends StatefulWidget {
   const PaymentBottomSheetWidget({super.key});
@@ -24,6 +25,7 @@ class _PaymentBottomSheetWidgetState extends State<PaymentBottomSheetWidget> {
         children: [
           ListTile(
             onTap: () {
+      ManageVibration.vibrate();
               setState(() {
                 _selectedPayment = 'cash';
               });
@@ -48,6 +50,7 @@ class _PaymentBottomSheetWidgetState extends State<PaymentBottomSheetWidget> {
           ),
           ListTile(
             onTap: () {
+      ManageVibration.vibrate();
               setState(() {
                 _selectedPayment = 'visa';
               });
@@ -74,7 +77,10 @@ class _PaymentBottomSheetWidgetState extends State<PaymentBottomSheetWidget> {
           AppButton(
               width: double.infinity,
               label: LocaleKeys.done.tr(),
-              onPressed: () {},
+              onPressed: () {
+
+      ManageVibration.vibrate();
+              },
               backColor: AppColors.PRIMARY_COLOR),
         ],
       ),

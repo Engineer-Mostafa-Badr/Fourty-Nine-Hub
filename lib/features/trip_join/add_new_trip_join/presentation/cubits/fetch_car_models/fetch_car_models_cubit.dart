@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_model_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/car_model_entity.dart';
+import '../../../domain/usecases/fetch_car_model_usecase.dart';
+import '../../../../../../res/strings/labels.dart';
 
 part 'fetch_car_models_state.dart';
 

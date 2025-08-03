@@ -2,21 +2,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/dialog/Show_dialog.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/dialog/dialog_content.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../widgets/dialog/Show_dialog.dart';
+import '../widgets/dialog/dialog_content.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -378,7 +379,10 @@ class UserProfilePageState extends State<UserProfilePage> {
                     style: Styles.headerText(fontSize: 28, color: AppColors.getTextColor(context)),
                     fillColor: AppColors.getFillColor(context),
                     suffix: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+
+      ManageVibration.vibrate();
+                        },
                         child: Label(
                           text: LocaleKeys.send.localize,
                           style: Styles.headerText(

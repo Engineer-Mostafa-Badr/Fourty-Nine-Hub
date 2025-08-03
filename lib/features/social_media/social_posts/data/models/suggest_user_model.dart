@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
+import '../../domain/entities/suggest_user_entity.dart';
 
 class SuggestUserModel extends SuggestUserEntity {
   SuggestUserModel({

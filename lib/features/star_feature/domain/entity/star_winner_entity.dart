@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
+import 'user_star_entity.dart';
 
 
 class StarWinnerEntity {

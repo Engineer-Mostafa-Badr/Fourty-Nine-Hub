@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/create_star.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import 'create_star.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
 class FloatingActionButtonStar extends StatelessWidget {

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_body.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/all_pickme_view.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trips_floating_action_button.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/avilable_trips_body.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
+import '../../../../carpool/avaliable_routes/presentation/widgets/car_pool_body.dart';
+import '../../../view_all_pick_me/presentation/views/all_pickme_view.dart';
+import 'widgets/available_trips_floating_action_button.dart';
+import 'widgets/avilable_trips_body.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 
 class AvailableTripsView extends StatefulWidget {
@@ -58,6 +59,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ElevatedButton(onPressed: (){
+      ManageVibration.vibrate();
                 // Navigator.push(context, MaterialPageRoute(builder: (context)=> RunningTripScreen()));
               }, child: Text("Move")),
               Center(

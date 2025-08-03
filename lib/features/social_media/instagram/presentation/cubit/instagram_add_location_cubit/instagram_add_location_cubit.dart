@@ -1,7 +1,7 @@
 
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/location_instagram_entity.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/location_instagram_entity.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';

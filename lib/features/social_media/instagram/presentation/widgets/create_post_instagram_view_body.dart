@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/custom_error.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/app_bar_create_post_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/floating_action_button_create_post_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/error/custom_error.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'app_bar_create_post_instagram.dart';
+import 'floating_action_button_create_post_instagram.dart';
+import 'post_body_create_post_instagram.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreatePostInstagramViewBody extends StatelessWidget {
   const CreatePostInstagramViewBody({super.key});
@@ -114,6 +115,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           .postTypes[state.postTypeSelectedIndex]
                           .index,
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (state.postTypeSelectedIndex == 0) {
                           bool isGalleryPostEmpty = context
                               .read<CreatePostInstagramCubit>()
@@ -325,6 +327,7 @@ class _ReelBodyCreatePostInstagramState
                       return InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
+      ManageVibration.vibrate();
                           context
                               .read<CreatePostInstagramCubit>()
                               .changeMultiSelectGalleryReel();

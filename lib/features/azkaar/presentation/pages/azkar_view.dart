@@ -16,6 +16,7 @@ import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AzkarView extends StatefulWidget {
   const AzkarView({super.key});
@@ -155,6 +156,7 @@ class _AzkarViewState extends State<AzkarView> {
       BuildContext context, AzkarEntity item, bool isSearch) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(
           Routes.AZKAARDETAILS,
           extra: item.name,

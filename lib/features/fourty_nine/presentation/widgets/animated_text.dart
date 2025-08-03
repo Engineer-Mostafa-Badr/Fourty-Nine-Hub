@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/clickable_widget.dart';
+import '../controllers/main_categories_cubit/main_categories_cubit.dart';
+import '../../../../helpers/manage_vibration.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 import '../../../../core/utils/custom_show_dialog.dart';
@@ -94,6 +94,7 @@ class _ScrollableTextWithAnimationState
                             actions: [
                               TextButton(
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   Navigator.of(context)
                                       .pop(); // Close the dialog
                                 },
@@ -108,6 +109,7 @@ class _ScrollableTextWithAnimationState
                               ),
                               ElevatedButton(
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   if (_formKey.currentState!.validate()) {
                                     cubit.answerQuestion(
                                         id: cubit.state.question?.id ?? '',
@@ -174,6 +176,7 @@ class _ScrollableTextWithAnimationState
                       //       actions: [
                       //         TextButton(
                       //           onPressed: () {
+      ManageVibration.vibrate();
                       //             Navigator.of(context)
                       //                 .pop(); // Close the dialog
                       //           },
@@ -188,6 +191,7 @@ class _ScrollableTextWithAnimationState
                       //         ),
                       //         ElevatedButton(
                       //           onPressed: () {
+      ManageVibration.vibrate();
                       //             if (_formKey.currentState!.validate()) {
                       //               cubit.answerQuestion(
                       //                   id: cubit.state.question?.id ?? '',

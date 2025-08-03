@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PartialPaymentWidget extends StatefulWidget {
   const PartialPaymentWidget({super.key});
@@ -34,7 +35,11 @@ class _PartialPaymentWidgetState extends State<PartialPaymentWidget> {
           AppButton(
               width: double.infinity,
               label: LocaleKeys.done.tr(),
-              onPressed: () {},
+              onPressed: () 
+              {
+
+      ManageVibration.vibrate();
+              },
               backColor: AppColors.PRIMARY_COLOR),
         ],
       ),

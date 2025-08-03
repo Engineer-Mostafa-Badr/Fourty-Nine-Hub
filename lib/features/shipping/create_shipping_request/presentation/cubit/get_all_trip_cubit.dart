@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import '../../data/models/all_trip_model/all_trip_model.dart';
+import '../../data/repositories/shipping_repository.dart';
+import 'shipping_state.dart';
 
 class GetAllTripCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;

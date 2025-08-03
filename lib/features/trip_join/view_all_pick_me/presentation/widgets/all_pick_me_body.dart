@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/widgets/all_pick_me_builder.dart';
+import 'all_pick_me_builder.dart';
 
 class AllPickMeBody extends StatelessWidget {
   const AllPickMeBody({super.key});

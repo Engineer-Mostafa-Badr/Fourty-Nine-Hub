@@ -4,21 +4,21 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/ads/native_ad_card.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../ads/native_ad_card.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/numbers_extensions.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/utils/custom_show_dialog.dart';
+import '../../../ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../domain/entity/star_entity.dart';
+import '../controller/cubit/star_state.dart';
+import 'all_winner_view.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../routes/routes.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
@@ -34,6 +34,7 @@ import '../../../../res/style/styles.dart';
 import '../controller/cubit/star_cubit.dart';
 import 'get_all_talents.dart';
 import 'widgets/floating_action_button_star.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BeStarView extends StatefulWidget {
   const BeStarView({super.key});
@@ -207,6 +208,7 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         showAnimatedDialog(
                           context,
                           AlertDialog(
@@ -217,6 +219,7 @@ class _BeStarViewState extends State<BeStarView> {
                                   children: [
                                     InkWell(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         context.pop();
                                       },
                                       child: Image.asset(
@@ -596,6 +599,7 @@ class _BeStarViewState extends State<BeStarView> {
         children: [
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
             },
             child: ImageFromInternet(
@@ -612,6 +616,7 @@ class _BeStarViewState extends State<BeStarView> {
             children: [
               InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
                 },
                 child: Column(
@@ -622,6 +627,7 @@ class _BeStarViewState extends State<BeStarView> {
                       style: Styles.mediumText(
                           color: Theme.of(context).primaryColor),
                       onPressed: () {
+      ManageVibration.vibrate();
                         context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
                       },
                     ),
@@ -659,6 +665,7 @@ class _BeStarViewState extends State<BeStarView> {
             // Ensure the background remains unchanged
             child: InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 print("object");
                 showDialog(
                   context: context,
@@ -745,6 +752,7 @@ class _BeStarViewState extends State<BeStarView> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => BlocProvider(

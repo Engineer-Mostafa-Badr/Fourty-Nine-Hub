@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/subcategories/domain/repositories/subcategories_repo.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../repositories/subcategories_repo.dart';
 
 class DeleteFavoriteCategoryUseCase extends UseCase<bool, String> {
   final SubcategoriesRepo _repo;

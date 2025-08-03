@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/secrets/controller/secrets_state.dart';
-import 'package:fourtyninehub/secrets/domain/use_cases/get_all_secrets_use_case.dart';
+import 'secrets_state.dart';
+import '../domain/use_cases/get_all_secrets_use_case.dart';
 
 class SecretsCubit extends Cubit<SecretsState> {
   SecretsCubit(this._allSecretsUseCase) : super(const SecretsState());

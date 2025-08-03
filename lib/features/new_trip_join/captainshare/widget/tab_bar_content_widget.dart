@@ -256,6 +256,7 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                       TripJoinFloatingActionButton(
                         title: LocaleKeys.createRoute.localize,
                         onTap: () {
+      ManageVibration.vibrate();
                           cubit.onNavigateToCreateRoute(context);
                         },
                       ),
@@ -367,6 +368,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                     children: [
                       GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           context
                               .read<CaptainShareCubit>()
                               .onNavigateToCreateRoute(context);
@@ -389,6 +391,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                       TripJoinFloatingActionButton(
                         title: LocaleKeys.createRoute.localize,
                         onTap: () {
+      ManageVibration.vibrate();
                           context.push(Routes.newRouteScreen);
                         },
                       ),
@@ -500,6 +503,7 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
                         children: [
                           GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               context
                                   .read<CaptainShareCubit>()
                                   .onNavigateToCreateRoute(context);
@@ -523,6 +527,7 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
                           TripJoinFloatingActionButton(
                             title: LocaleKeys.createRoute.localize,
                             onTap: () {
+      ManageVibration.vibrate();
                               context.push(Routes.newRouteScreen);
                             },
                           ),
@@ -637,6 +642,7 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
                     children: [
                       GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           context
                               .read<CaptainShareCubit>()
                               .onNavigateToCreateRoute(context);
@@ -659,6 +665,7 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
                       TripJoinFloatingActionButton(
                         title: LocaleKeys.createRoute.localize,
                         onTap: () {
+      ManageVibration.vibrate();
                           context.push(Routes.newRouteScreen);
                         },
                       ),

@@ -22,6 +22,7 @@ import '../../../../../../service_locator/service_locator.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../image_text_row.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomReserveRideBottomSheet extends StatefulWidget {
   final RideCubit rideCubit;
@@ -110,6 +111,7 @@ class _CustomReserveRideBottomSheetState
                                               0)) {
                                         return GestureDetector(
                                           onTap: () {
+      ManageVibration.vibrate();
                                             setState(() {
 
                                               if(context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null){
@@ -183,6 +185,7 @@ class _CustomReserveRideBottomSheetState
                                           : AppColors.PRIMARY_COLOR,
                                       label: LocaleKeys.confirm.localize,
                                       onPressed: () async {
+      ManageVibration.vibrate();
                                         if (widget.isPremium) {
                                           bool isSubscribed = await context
                                               .read<RideCubit>()
@@ -490,6 +493,7 @@ class _CustomReserveRideBottomSheetState
 
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         setState(() {
           selectedContainerIndex = index;
         });

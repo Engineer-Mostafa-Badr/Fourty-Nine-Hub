@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
+import '../../../../../core/widget/custom_floating_action_button.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TestScreen1 extends StatelessWidget {
   const TestScreen1({super.key});
@@ -13,7 +14,10 @@ class TestScreen1 extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {},
+          onPressed: () {
+
+      ManageVibration.vibrate();
+          },
         ),
       ),
       body: Stack(
@@ -93,7 +97,10 @@ class TestScreen1 extends StatelessWidget {
         ],
       ),
       floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+
+      ManageVibration.vibrate();
+        },
         text: '+ Create new route!',
       ),
       // floatingActionButton: FloatingActionButton.extended(

@@ -364,6 +364,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),
           ClickableWidget(
               onTap: () async {
+      ManageVibration.vibrate();
                 if(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
                   return;
                 }
@@ -384,6 +385,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
                 return;
               }
@@ -405,6 +407,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),          if (widget.modeType == 'ride') ...[
             ClickableWidget(
               onTap: () async {
+      ManageVibration.vibrate();
                 if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
                   return;
                 }
@@ -427,6 +430,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             if(widget.settings?.isCriminalRecordEnabled == true)
               ...[ClickableWidget(
                 onTap: () async {
+      ManageVibration.vibrate();
                   if(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
                     return;
                   }
@@ -450,6 +454,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             if(widget.settings?.isDrugAnalysisRecordEnabled == true)
             ...[ClickableWidget(
               onTap: () async {
+      ManageVibration.vibrate();
                 if(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
                   return;
                 }
@@ -474,6 +479,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           if(widget.settings?.isVehicleRecordEnabled == true)
           ...[ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               if(hasTechnicalExaminationRequest&&(technicalExaminationRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
                 return;
               }

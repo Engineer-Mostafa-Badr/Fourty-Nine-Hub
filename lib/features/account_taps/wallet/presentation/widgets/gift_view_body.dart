@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/investment_section.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/widget/custom_failure_widget.dart';
 
@@ -53,6 +54,7 @@ class GiftViewBody extends StatelessWidget {
                   CustomButtonWalletAndGiftAndCashback(
                     title: LocaleKeys.billGift.localize,
                     onPressed: () {
+      ManageVibration.vibrate();
                       HandleCashback.setCount('tenPercentCount', context);
                       context.push(Routes.TenPercent);
                     },
@@ -88,6 +90,7 @@ class GiftViewBody extends StatelessWidget {
                 title:
                     state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
                 onPressed: () {
+      ManageVibration.vibrate();
                   context.read<GiftTwoCubit>().getAllData(context);
                 },
               ),

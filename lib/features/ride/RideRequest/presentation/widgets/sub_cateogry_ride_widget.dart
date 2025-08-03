@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SubCateogryRideWidget extends StatefulWidget {
   const SubCateogryRideWidget({super.key});
@@ -110,6 +111,7 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     setState(() {
                       List<SubCategoryEntity> workingList =
                           List.from(category.subcategories!);

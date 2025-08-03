@@ -6,20 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_state.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../models/gift_model.dart';
+import '../../presentation/cubit/gift_cubit.dart';
+import '../../presentation/cubit/gift_state.dart';
+import '../../presentation/cubit/tinder_cubit.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
@@ -374,6 +375,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       if (isError)
         TextButton(
           onPressed: () {
+      ManageVibration.vibrate();
             serviceLocator<SubscriptionController>()
                 .showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
           },
@@ -401,6 +403,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       {String? receiverId, required void Function(GiftData) selectGift}) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         // context.read<StreamCubit>().selectGift(gift);
         // print(
         //     'selected ${context.read<StreamCubit>().state.selectedGifts.toString()}');
@@ -525,6 +528,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                                       Colors.grey.withOpacity(0.9)),
                             ),
                             onPressed: () {
+      ManageVibration.vibrate();
                               serviceLocator<SubscriptionController>()
                                   .showActiveSubscriptionAmounts(
                                       walletType: WalletTypes.balance);
@@ -607,6 +611,7 @@ pleaseLoginWidget(context) {
       child: Center(
         child: OutlinedButton(
           onPressed: () {
+      ManageVibration.vibrate();
             return pleaseLoginDialog(context);
             // context.push(Routes.LOGIN);
           },

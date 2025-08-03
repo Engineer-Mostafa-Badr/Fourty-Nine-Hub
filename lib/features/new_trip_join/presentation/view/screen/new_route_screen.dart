@@ -28,6 +28,7 @@ import '../widget/price_and_seat_widget.dart';
 import '../widget/switch_widget.dart';
 import '../widget/welcome_text_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NewRouteScreen extends StatefulWidget {
   const NewRouteScreen({super.key});
@@ -115,6 +116,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     color: Colors.green,
                     text: state.currentLocation?.address,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       if (context.isUserLoggedIn) {
                         context.push(
                           Routes.GoogleMapsSearchAndPick,
@@ -156,6 +158,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     color: Colors.blue,
                     text: state.toLocation?.address,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       if (context.isUserLoggedIn) {
                         context.push(
                           Routes.GoogleMapsSearchAndPick,
@@ -471,6 +474,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                       child: CustomButton(
                     width: double.infinity,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.pop();
                     },
                     color: AppColors.getButtonPrimaryColor(context),

@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/search_restaurants_use_case.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import '../../../../../../core/abstract/use_case.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../authentication/domain/entities/user_entity.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../domain/entities/food_category_entity.dart';
+import '../../../domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
+import '../../../domain/usecases/search_restaurants_use_case.dart';
+import '../../../../../fourty_nine/domain/entities/main_category_entity.dart';
+import '../../../../../health_feature/create_doctor/domain/entities/city.dart';
 
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/routes/pages.dart';
+import '../../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import '../../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../../../routes/pages.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../core/error/failure.dart';
@@ -185,6 +186,7 @@ class _ContactUsViewState extends State<ContactUsView> {
       Size size, String title, String val, IconData icon, Function()? onTap) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         onTap!();
       },
       child: Container(

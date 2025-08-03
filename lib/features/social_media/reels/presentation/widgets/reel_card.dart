@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
+import '../../domain/entities/reel_entity.dart';
 import 'reel_account_info.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'reel_actions.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ReelCard extends StatefulWidget {
   final ReelEntity item;
@@ -138,6 +139,7 @@ class _ControlsOverlay extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             controller.value.isPlaying ? controller.pause() : controller.play();
           },
         ),

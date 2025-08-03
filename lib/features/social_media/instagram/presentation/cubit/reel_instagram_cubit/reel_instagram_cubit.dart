@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/usecases/get_instagram_reels_usecase.dart';
+import '../../../../reels/domain/entities/reel_entity.dart';
+import '../../../../twitter/domain/usecases/get_feed_usecase.dart';
 
 part 'reel_instagram_state.dart';
 

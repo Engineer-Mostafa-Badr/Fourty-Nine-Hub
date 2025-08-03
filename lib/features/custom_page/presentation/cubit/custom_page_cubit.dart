@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
-import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_activate_use_case.dart';
-import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_social_page_use_case.dart';
-import 'package:fourtyninehub/features/custom_page/domain/use_case/update_activate_use_case.dart';
-import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/utils/shared_pref.dart';
+import '../../domain/entity/activate_entity.dart';
+import '../../domain/use_case/fetch_activate_use_case.dart';
+import '../../domain/use_case/fetch_social_page_use_case.dart';
+import '../../domain/use_case/update_activate_use_case.dart';
+import '../../domain/use_case/update_social_page_use_case.dart';
 
 import '../../data/model/update_custom_page_categorise_model.dart';
 import '../../domain/entity/custom_page_categories_entity.dart';

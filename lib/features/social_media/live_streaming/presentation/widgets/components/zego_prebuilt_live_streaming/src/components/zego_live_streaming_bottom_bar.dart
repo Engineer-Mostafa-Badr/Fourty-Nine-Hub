@@ -22,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
@@ -31,6 +32,7 @@ import '../internal/pk_combine_notifier.dart';
 import 'live_page_surface.dart';
 import 'member/button.dart';
 import 'message/input_board_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart' as manage_vibration;
 
 /// @nodoc
 class ZegoLiveStreamingBottomBar extends StatefulWidget {
@@ -233,6 +235,7 @@ class FakeTextFieldBuilder extends StatelessWidget {
           ),
           IconButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 print("objectss");
                 var cubit = context.read<StreamCubit>();
                 cubit.toggleComments();
@@ -590,6 +593,7 @@ class ZoomWhiteBoardButton extends StatelessWidget {
               width: 50.zW,
             ),
             onTap: () async {
+      manage_vibration.ManageVibration.vibrate();
               await context.read<StreamCubit>().openWhiteBoard();
             }),
         // Text(

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/settings/domain/useCase/delete_account_use_case.dart';
-import 'package:fourtyninehub/features/settings/presentation/cubit/settings_state.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../domain/useCase/delete_account_use_case.dart';
+import 'settings_state.dart';
 
 import '../../domain/entities/disable_entity.dart';
 import '../../domain/useCase/disable_account_use_case.dart';

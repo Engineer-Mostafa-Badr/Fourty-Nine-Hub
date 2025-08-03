@@ -21,6 +21,7 @@ import '../../../../food_feature/restaurant_details/presentation/cubit/restauran
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PendingRideOfferScreen extends StatefulWidget {
   final String type;
@@ -359,6 +360,7 @@ class ClientPendingWidget extends StatelessWidget {
                       color: AppColors.PRIMARY_COLOR_DARK,
                       label: LocaleKeys.cancel.tr(),
                       onPressed: () {
+      ManageVibration.vibrate();
                         if(modeType=='shipping'){
                           context
                               .read<ClientTripsCubit>()

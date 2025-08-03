@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -10,6 +10,7 @@ import '../../domain/entities/profile_instagram_data_entity.dart';
 import 'instagram_block_list_body.dart';
 import 'instagram_followers_body.dart';
 import 'instagram_friends_body.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FollowersScreenArguments {
   final int index;
@@ -82,6 +83,7 @@ class _FollowersScreenState extends State<FollowersScreen>
         ),
         leading: IconButton(
             onPressed: () {
+      ManageVibration.vibrate();
               context.pop();
             },
             icon: Icon(Icons.arrow_back)),

@@ -4,30 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_header.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import '../../../../../ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import '../../../../create_post/presentation/widgets/show_all_images.dart';
+import '../../../domain/usecases/add_reply_usecase.dart';
+import '../../../domain/usecases/post_comment_usecase.dart';
+import '../../cubit/social_posts_cubit.dart';
+import 'build_facebook_header.dart';
+import 'build_reactions_buttons.dart';
+import 'image_from_internet.dart';
+import '../posts/facebook_post_comments.dart';
+import '../../../../../../service_locator/service_locator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/post_entity.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class NormalPostScreen extends StatelessWidget {
   const NormalPostScreen({
@@ -192,6 +193,7 @@ class NormalPostScreen extends StatelessWidget {
                 // Comment button
                 ClickableWidget(
                   onTap: () {
+      ManageVibration.vibrate();
                     bottomSheet(
                         context: context,
                         isScrollControlled: true,
@@ -318,6 +320,7 @@ class NormalPostScreen extends StatelessWidget {
     if (media.length == 1) {
       return GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -342,6 +345,7 @@ class NormalPostScreen extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -363,6 +367,7 @@ class NormalPostScreen extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -389,6 +394,7 @@ class NormalPostScreen extends StatelessWidget {
             flex: 2,
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -412,6 +418,7 @@ class NormalPostScreen extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -434,6 +441,7 @@ class NormalPostScreen extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -463,6 +471,7 @@ class NormalPostScreen extends StatelessWidget {
             flex: 2,
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -488,6 +497,7 @@ class NormalPostScreen extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -510,6 +520,7 @@ class NormalPostScreen extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       showDialog(
                         context: context,
                         builder: (context) {

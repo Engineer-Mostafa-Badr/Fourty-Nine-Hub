@@ -27,6 +27,7 @@ import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MeetingView extends StatelessWidget {
   const MeetingView({super.key});
@@ -57,6 +58,7 @@ class MeetingView extends StatelessWidget {
                       icon: Icons.video_call,
                       twoLines: true,
                       onTap: () async {
+      ManageVibration.vibrate();
                         await newMeeting(cubit);
                         if (context.mounted) {
                           CliLogger.info('meeting id is ${cubit.meetingId}');
@@ -83,6 +85,7 @@ class MeetingView extends StatelessWidget {
                         label: LocaleKeys.join.localize,
                         icon: Icons.add_box_rounded,
                         onTap: () {
+      ManageVibration.vibrate();
                           // join meeting
                           Navigator.of(context).push(
                               createCustomTransitionRoute(
@@ -94,6 +97,7 @@ class MeetingView extends StatelessWidget {
                       label: LocaleKeys.schedule.localize,
                       icon: Icons.calendar_today_outlined,
                       onTap: () async {
+      ManageVibration.vibrate();
                         _scheduleAMeeting(context);
                       },
                     ),
@@ -104,6 +108,7 @@ class MeetingView extends StatelessWidget {
                         icon: Icons.screen_share,
                         twoLines: true,
                         onTap: () {
+      ManageVibration.vibrate();
                           //share screen
                           Navigator.of(context).push(
                               createCustomTransitionRoute(
@@ -122,6 +127,7 @@ class MeetingView extends StatelessWidget {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   _scheduleAMeeting(context);
                 },
                 child: Text(
@@ -253,6 +259,7 @@ class MeetingView extends StatelessWidget {
                               SizedBox(width: 15.h),
                               InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   //to unschedule
                                   joinRoom(context.read<StreamCubit>(),
                                       scheduledMeeting.roomId);

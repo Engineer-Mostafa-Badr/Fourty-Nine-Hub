@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
-import 'package:fourtyninehub/helpers/subscription_method.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/images/square_image.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../domain/entities/restaurant.dart';
+import '../cubit/restaurants_list_cubit.dart';
+import 'Images_profile_for_restaurant.dart';
+import '../../../../social_media/reels/presentation/widgets/comments.dart';
+import '../../../../../helpers/subscription_method.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -26,7 +26,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SubCategoriesRestaurantCard extends StatelessWidget {
   final GetAllRestaurantEntity? item;
@@ -240,6 +241,7 @@ class FavoriteButton extends StatelessWidget {
         color: AppColors.SECONDARY_COLOR,
       ),
       onPressed: () async {
+      ManageVibration.vibrate();
         await favouriteRestaurant(item.id!);
       },
     );
@@ -561,6 +563,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
         label: LocaleKeys.request.localize,
         color: AppColors.getRedColor(context),
         onPressed: () {
+      ManageVibration.vibrate();
           context.push(Routes.RESTAURANTDETAILS, extra: item);
         },
       ),
@@ -671,6 +674,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                                     color:
                                         AppColors.getReversedTextColor(context),
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       Navigator.pop(context);
                                       // _showFreeCallBottomSheet(context, item);
                                     },
@@ -680,6 +684,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                                     backColor: AppColors.getFillColor(context),
                                     color: AppColors.getTextColor(context),
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       Navigator.pop(context);
                                       _showRegularCallBottomSheet(
                                           context, widget.item, myFocusNode);
@@ -1135,6 +1140,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                         color: AppColors.getReversedTextColor(context),
                         label: LocaleKeys.submit.localize,
                         onPressed: () {
+      ManageVibration.vibrate();
                           if (_formKey.currentState?.validate() ?? false) {
                             final enteredNumber = phoneController.text.trim();
                             final phoneToDial = isBookingForAnotherClient

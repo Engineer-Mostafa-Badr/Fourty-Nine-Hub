@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RouteButtonWidget extends StatelessWidget {
   const RouteButtonWidget({
@@ -21,6 +22,7 @@ class RouteButtonWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 1),
           child: GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.captainShareInfoScreen);
             },
             child: Container(
@@ -41,6 +43,7 @@ class RouteButtonWidget extends StatelessWidget {
         const Spacer(),
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             context.push(Routes.newRouteScreen);
           },
           child: Container(

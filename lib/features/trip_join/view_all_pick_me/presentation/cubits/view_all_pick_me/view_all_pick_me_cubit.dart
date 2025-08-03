@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entities/pickme_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/usecases/view_all_pick_me_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../helpers/print_helper.dart';
+import '../../../domain/entities/pickme_entity.dart';
+import '../../../domain/usecases/view_all_pick_me_usecase.dart';
+import '../../../../../../res/strings/labels.dart';
 
 part 'view_all_pick_me_state.dart';
 

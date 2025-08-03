@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../instagram/presentation/widgets/insta_reel_card.dart';
+import '../../../../reels/data/models/new_reels_model.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 
 class FacebookReels extends StatefulWidget {
   const FacebookReels({super.key, required this.reels});

@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CarPoolNewRouteInfo extends StatefulWidget {
   const CarPoolNewRouteInfo({super.key});
@@ -207,6 +208,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                   title: LocaleKeys.regularRequest.localize,
                   color: AppColors.PRIMARY_COLOR,
                   onTap: () async {
+      ManageVibration.vibrate();
                     await createCarPool();
                   },
                 ),

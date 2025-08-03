@@ -28,6 +28,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../../service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthView extends StatefulWidget {
   const HealthView({super.key});
@@ -158,6 +159,7 @@ class _HealthViewState extends State<HealthView> {
                           context.isArabic ? 'سجل حجوزات' : 'Booking History',
                       isSelected: _showHistory,
                       onTap: () {
+      ManageVibration.vibrate();
                         if (!context.read<UserCubit>().isLoggedIn) {
                           return pleaseLoginDialog(context);
                         } else {
@@ -173,6 +175,7 @@ class _HealthViewState extends State<HealthView> {
                           context.isArabic ? 'حجوزات حالية' : 'Current Booking',
                       isSelected: _showCurrent,
                       onTap: () {
+      ManageVibration.vibrate();
                         if (!context.read<UserCubit>().isLoggedIn) {
                           return pleaseLoginDialog(context);
                         } else {
@@ -223,6 +226,7 @@ class _HealthViewState extends State<HealthView> {
                             title: LocaleKeys.requestLog.localize,
                             isSelected: _showRequestLog,
                             onTap: () {
+      ManageVibration.vibrate();
                               if (!context.read<UserCubit>().isLoggedIn) {
                                 return pleaseLoginDialog(context);
                               } else {
@@ -237,6 +241,7 @@ class _HealthViewState extends State<HealthView> {
                             title: LocaleKeys.myAds.localize,
                             isSelected: _showMyAds,
                             onTap: () {
+      ManageVibration.vibrate();
                               if (!context.read<UserCubit>().isLoggedIn) {
                                 return pleaseLoginDialog(context);
                               } else {

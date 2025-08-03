@@ -228,6 +228,7 @@ class GridBlocksWidget extends StatelessWidget {
       _buildStarWidget(
         context,
         onTap: () {
+      ManageVibration.vibrate();
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);
           }

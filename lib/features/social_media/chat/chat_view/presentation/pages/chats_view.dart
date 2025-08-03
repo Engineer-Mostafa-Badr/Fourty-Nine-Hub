@@ -5,29 +5,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/chat_categories.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
-import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/my_broadcast_card.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/enums/chat_categories.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/states/basic_state.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../authentication/domain/entities/user_entity.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../broadcasts/presentation/widgets/follow_broadcast_card.dart';
+import '../../../broadcasts/presentation/widgets/my_broadcast_card.dart';
+import '../../domain/entities/chat_entity.dart';
+import '../../domain/usecases/get_chats_usecase.dart';
+import '../chat_cubit/chats_cubit.dart';
+import 'archived_chats_view.dart';
+import '../widgets/chat_stories.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../routes/routes.dart';
+import '../../../../../../helpers/manage_vibration.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../../service_locator/service_locator.dart';
@@ -216,6 +218,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                               children: [
                                 GestureDetector(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       return pleaseLoginDialog(context);
                                       // context.push(Routes.LOGIN);
                                     },
@@ -369,6 +372,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           children: [
             InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 setState(() {
                   expandedOptions = !expandedOptions;
                 });
@@ -388,6 +392,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               icon: Icons.archive_outlined,
               text: context.isArabic ? "المؤرشفة" : "Archived",
               onTap: () async {
+      ManageVibration.vibrate();
                 final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
@@ -437,6 +442,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       //   }
                       // },
                       onTap: () async {
+      ManageVibration.vibrate();
                         await lockedChatsOnTap();
                       },
                     )
@@ -456,6 +462,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       icon: Icons.person_off_outlined,
                       text: LocaleKeys.anonymous.localize,
                       onTap: () async {
+      ManageVibration.vibrate();
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: ChatCategoriesIds.anonymous,
@@ -488,6 +495,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       icon: Icons.emoji_people,
                       text: LocaleKeys.greet.localize,
                       onTap: () async {
+      ManageVibration.vibrate();
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: ChatCategoriesIds.greet,
@@ -517,6 +525,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           children: [
             InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 setState(() {
                   expandedOptions = !expandedOptions;
                 });
@@ -536,6 +545,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               icon: Icons.archive_outlined,
               text: context.isArabic ? "المؤرشفة" : "Archived",
               onTap: () async {
+      ManageVibration.vibrate();
                 final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
@@ -584,6 +594,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       //   }
                       // },
                       onTap: () async {
+      ManageVibration.vibrate();
                         await lockedChatsOnTap();
                       },
                     )
@@ -854,6 +865,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               const Spacer(),
               TextButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   context.push(Routes.SEEALLBROADCASTS);
                 },
                 child: Text(
@@ -944,6 +956,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                     context.read<ChatsCubit>().selectedChats.isNotEmpty
                         ? IconButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               context.read<ChatsCubit>().clearSelectedChats();
                             },
                             icon: const Icon(Icons.arrow_back))
@@ -963,6 +976,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                       children: [
                         IconButton(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             await context.read<ChatsCubit>().pinAndUnpinChat();
                           },
                           icon: const Icon(Icons.push_pin_outlined),
@@ -972,6 +986,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                         ),
                         IconButton(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             await context.read<ChatsCubit>().deleteChat();
                           },
                           icon: Icon(
@@ -983,6 +998,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                         ),
                         IconButton(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             await context.read<ChatsCubit>().changeMuteChat();
                           },
                           icon: Icon(
@@ -994,6 +1010,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                         ),
                         IconButton(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             await context
                                 .read<ChatsCubit>()
                                 .changeArchiveChat(isArchivedTab: false);
@@ -1050,6 +1067,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                                   textColor: AppColors.PRIMARY_COLOR_DARK,
                                   // Set "Undo" text color to gray
                                   onPressed: () async {
+      ManageVibration.vibrate();
                                     await context
                                         .read<ChatsCubit>()
                                         .changeArchiveChat(
@@ -1150,6 +1168,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                                 textColor: AppColors.PRIMARY_COLOR_DARK,
                                 // Set "Undo" text color to gray
                                 onPressed: () async {
+      ManageVibration.vibrate();
                                   await context
                                       .read<ChatsCubit>()
                                       .lockChats(isLockedTap: false);

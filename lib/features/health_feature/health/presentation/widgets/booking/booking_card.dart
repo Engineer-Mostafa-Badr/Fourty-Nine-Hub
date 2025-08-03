@@ -17,6 +17,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthBookingCard extends StatelessWidget {
   final BookedAppointmentEntity appointment;
@@ -29,6 +30,7 @@ class HealthBookingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.bookingType =
             appointment.bookingType;
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
@@ -91,6 +93,7 @@ class HealthBookingCard extends StatelessWidget {
                   label: LocaleKeys.cancel.localize,
                   padding: 15.w,
                   onPressed: () {
+      ManageVibration.vibrate();
                     context
                         .read<HealthCubit>()
                         .cancelAppointment(appointment.id);

@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
+import '../../../../../core/error/failure.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../entities/restaurant.dart';

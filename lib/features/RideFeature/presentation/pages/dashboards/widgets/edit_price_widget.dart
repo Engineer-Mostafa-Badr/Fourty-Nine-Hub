@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../widgets/font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EditPriceWidget extends StatefulWidget {
   final AvailableRideTripEntity? tripEntity;
@@ -141,6 +142,7 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
             backColor: AppColors.PRIMARY_COLOR,
             label: LocaleKeys.sendOffer.localize,
             onPressed: () {
+      ManageVibration.vibrate();
               widget.onSendOffer(price);
             },
           )

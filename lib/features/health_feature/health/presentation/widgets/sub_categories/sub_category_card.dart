@@ -13,6 +13,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthSubCategoryCard extends StatefulWidget {
   final HealthSubcategoryEntity subCategory;
@@ -31,6 +32,7 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
     print(widget.subCategory.id);
     return GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           print("The x ${widget.subCategory.id}");
@@ -77,6 +79,7 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
                               : Icons.favorite_border,
                           color: Colors.red),
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           isFavorite = !isFavorite;
                         });

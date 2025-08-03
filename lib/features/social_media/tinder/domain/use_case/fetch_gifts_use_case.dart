@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../../data/models/gift_model.dart';
+import '../repositories/tinder_repository.dart';
 
 class FetchGiftsUseCase extends UseCase<GiftApi, NoParams> {
   final TinderRepository _repository;

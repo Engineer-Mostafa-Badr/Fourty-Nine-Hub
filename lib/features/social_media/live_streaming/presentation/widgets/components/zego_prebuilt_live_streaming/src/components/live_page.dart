@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 import '../../../../../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 /// user and sdk should be login and init before page enter
@@ -280,6 +281,7 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
   Widget clickListener({required Widget child}) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         /// listen only click event in empty space
       },
       child: Listener(

@@ -21,6 +21,7 @@ import '../pk/core/core.dart';
 import 'data.dart';
 import 'defines.dart';
 import 'overlay_machine.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Project imports:
 
@@ -263,6 +264,7 @@ class _ZegoUIKitPrebuiltLiveStreamingMiniOverlayPageState
       case ZegoLiveStreamingMiniOverlayPageState.minimizing:
         return GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             ZegoUIKitPrebuiltLiveStreamingController().minimize.restore(
                   widget.contextQuery(),
                   rootNavigator: widget.rootNavigator,
@@ -418,6 +420,7 @@ class _ZegoUIKitPrebuiltLiveStreamingMiniOverlayPageState
           backgroundColor: ZegoUIKitDefaultTheme.buttonBackgroundColor,
         ),
         onPressed: () async {
+      ManageVibration.vibrate();
           await ZegoUIKitPrebuiltLiveStreamingController().leave(
             context,
             showConfirmation: false,

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/error/failure.dart';
+import '../entities/trip_join_card_entity.dart';
 import '../../../../RideFeature/domain/entities/ride_brand_entity.dart';
 import '../../../../RideFeature/domain/entities/ride_model_entity.dart';
 import '../entities/available_trip_join_entity.dart';

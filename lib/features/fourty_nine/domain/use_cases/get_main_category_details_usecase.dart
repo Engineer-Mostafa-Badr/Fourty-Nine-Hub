@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../entities/main_category_entity.dart';
+import '../repositories/fourty_nine_repository.dart';
 
 class GetMainCategoryDetailsUseCase
     extends UseCase<MainCategoryEntity?, String> {

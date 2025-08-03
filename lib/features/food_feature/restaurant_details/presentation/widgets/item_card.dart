@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/restaurant_details_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -177,6 +177,7 @@ class _ItemCardState extends State<ItemCard> {
                         padding: const EdgeInsets.only(top: 0),
                         child: GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               _addToCart();
                             } else {
@@ -196,6 +197,7 @@ class _ItemCardState extends State<ItemCard> {
                               //       label: LocaleKeys.login.localize,
                               //       textColor: Colors.white,
                               //       onPressed: () {
+      ManageVibration.vibrate();
                               //        // context.push(Routes.LOGIN);
                               //       },
                               //     ),

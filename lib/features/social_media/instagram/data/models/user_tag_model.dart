@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
+import '../../domain/entities/user_tag_entity.dart';
 
 class UserTagModel extends UserTagEntity {
   UserTagModel({

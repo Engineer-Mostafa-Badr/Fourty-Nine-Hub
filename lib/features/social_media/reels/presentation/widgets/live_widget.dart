@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
 import '../../data/models/new_reels_model.dart';
 import 'sound_option_bottom_sheet.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class LiveWidget extends StatefulWidget {
   const LiveWidget({super.key});
@@ -154,6 +155,7 @@ class RotatingCircularButton extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 showModalBottomSheet(
                   backgroundColor:
                       context.isDarkMode ? Colors.grey[900] : Colors.white,
@@ -232,6 +234,7 @@ class RotatingBottomSheet extends StatelessWidget {
         SizedBox(height: 50.h),
         SoundOptionBottomSheet(
           onTap: () {
+      ManageVibration.vibrate();
             Navigator.pop(context);
             context.pushNamed(Routes.UseSoundScreen);
           },
@@ -239,17 +242,26 @@ class RotatingBottomSheet extends StatelessWidget {
           title: context.isArabic ? 'استخدم هذا الصوت' : 'Use this sound',
         ),
         SoundOptionBottomSheet(
-          onTap: () {},
+          onTap: () {
+
+      ManageVibration.vibrate();
+          },
           icon: Assets.collabIcon,
           title: context.isArabic ? 'تعاون' : 'Collab',
         ),
         SoundOptionBottomSheet(
-          onTap: () {},
+          onTap: () {
+
+      ManageVibration.vibrate();
+          },
           icon: Assets.layoutIcon,
           title: context.isArabic ? 'تَخطِيط' : 'Layout',
         ),
         SoundOptionBottomSheet(
-          onTap: () {},
+          onTap: () {
+
+      ManageVibration.vibrate();
+          },
           icon: Assets.mix,
           title: context.isArabic ? 'تجميعة مقاطع' : 'Mix Reel',
         ),

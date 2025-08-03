@@ -10,6 +10,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../auction_list/domain/entities/auction_entity.dart';
 import 'Biddings.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DetailsCounterWidget extends StatelessWidget {
   final AuctionEntity auction;
@@ -49,6 +50,7 @@ class DetailsCounterWidget extends StatelessWidget {
                       ...auction.biddings?.map((e) {
                             return InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 bottomSheet(
                                     context: context,
                                     isScrollControlled: true,
@@ -72,6 +74,7 @@ class DetailsCounterWidget extends StatelessWidget {
                               TextStyle(color: Theme.of(context).primaryColor),
                           label: '${auction.biddings?.length} ${Labels.bid}',
                           onPressed: () {
+      ManageVibration.vibrate();
                             bottomSheet(
                                 context: context,
                                 isScrollControlled: true,

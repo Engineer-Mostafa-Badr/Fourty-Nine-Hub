@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/social_media/snap/domain/use_case/fetch_filter_snap_use_case.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../domain/use_case/fetch_filter_snap_use_case.dart';
 import 'snap_states.dart';
 
 class SnapCubit extends Cubit<SnapState> {

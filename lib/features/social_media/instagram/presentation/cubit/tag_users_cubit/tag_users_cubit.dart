@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/user_tag_entity.dart';
+import '../../../domain/usecases/get_user_tag_use_case.dart';
 
 part 'tag_users_state.dart';
 

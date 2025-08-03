@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideShippingButtonSheet extends StatelessWidget {
   const RideShippingButtonSheet({super.key, required this.model});
@@ -39,6 +40,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                 if (!(state.model.mainCategory?.isDriverApproved ?? false)) {
                   return GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       if (state.model.mainCategory?.isDriverApproved == false &&
                           state.model.mainCategory?.isDriver == true) {
                         context.pop();
@@ -114,6 +116,7 @@ class RideShippingButtonSheet extends StatelessWidget {
           if (!(model.mainCategory?.isDriverApproved ?? false))
             GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 if (model.mainCategory?.isDriverApproved == false &&
                     model.mainCategory?.isDriver == true) {
                   context.pop();

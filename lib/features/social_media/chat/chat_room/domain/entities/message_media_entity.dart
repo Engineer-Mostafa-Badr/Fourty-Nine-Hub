@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/core/extensions/file_extension.dart';
+import '../../../../../../core/extensions/file_extension.dart';
 
 class MessageMediaEntity {
   String id;

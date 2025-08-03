@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/view_followers_and_following.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import 'view_followers_and_following.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
 import '../../domain/entities/profile_instagram_data_entity.dart';
 import '../pages/followers_screen.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ValueAndTitleHeaderProfileInstagram extends StatelessWidget {
   const ValueAndTitleHeaderProfileInstagram({
@@ -24,6 +25,7 @@ class ValueAndTitleHeaderProfileInstagram extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         if (index == 0 || index == 1) {
           context.push(Routes.followersScreen, extra: FollowersScreenArguments(
             index: index,

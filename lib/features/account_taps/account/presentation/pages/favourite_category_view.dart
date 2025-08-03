@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../res/style/styles.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
@@ -51,6 +52,7 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                       padding: const EdgeInsets.only(bottom: 10.0),
                       child: InkWell(
                         onTap: () {
+      ManageVibration.vibrate();
                           if (state.data![i].categoryEntity.id ==
                               '62c8b5b09332225799fe335e') {
                             context.push(

@@ -124,6 +124,7 @@ import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.da
 import '../../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import '../../pages/dashboards/ride_mode_screen.dart';
 import 'package:record/record.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 part 'dashboards_state.dart';
 
@@ -1777,6 +1778,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                 label: context.isArabic?'حسنا':'Ok',
                 backColor: AppColors.PRIMARY_COLOR,
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 }),
             const SizedBox(height: 16),
@@ -2621,6 +2623,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                     label: 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -2629,6 +2632,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                     label: 'Subscribe',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       SubscriptionMethod().subscribe(
                           subscribeId: subCategoryId,
@@ -2673,6 +2677,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                     label: 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -2681,6 +2686,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                     label: 'Pay',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       serviceLocator<SubscriptionController>()
                           .showActiveSubscriptionAmounts(

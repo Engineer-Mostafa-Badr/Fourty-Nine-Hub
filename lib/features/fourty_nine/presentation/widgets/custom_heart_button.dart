@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/overlay_circular_menu.dart';
+import 'overlay_circular_menu.dart';
 
 import '../../../../res/assets/assets.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class CustomHeartButton extends StatelessWidget {
   const CustomHeartButton({super.key});
@@ -36,6 +37,7 @@ class CustomHeartButton extends StatelessWidget {
             Assets.heartIcon,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             log('----------------------- Heart -----------------------');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('تم النقر على الصفحة الرئيسية')),
@@ -47,6 +49,7 @@ class CustomHeartButton extends StatelessWidget {
             Assets.adIcon,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             log('----------------------- Ad -----------------------');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('تم النقر على الصفحة الرئيسية')),
@@ -58,6 +61,7 @@ class CustomHeartButton extends StatelessWidget {
             Assets.starRedIcon,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             log('----------------------- Star -----------------------');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('تم النقر على الصفحة الرئيسية')),
@@ -69,6 +73,7 @@ class CustomHeartButton extends StatelessWidget {
             Assets.speakerIcon,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             log('----------------------- Speaker -----------------------');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('تم النقر على الصفحة الرئيسية')),
@@ -80,6 +85,7 @@ class CustomHeartButton extends StatelessWidget {
             Assets.starYellowIcon,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             log('----------------------- Star -----------------------');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('تم النقر على الصفحة الرئيسية')),
@@ -91,6 +97,7 @@ class CustomHeartButton extends StatelessWidget {
             Assets.saveIcon,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             log('----------------------- Save -----------------------');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('تم النقر على الصفحة الرئيسية')),
@@ -103,26 +110,31 @@ class CustomHeartButton extends StatelessWidget {
     //   CircularMenuItem(
     //       icon: Icons.home,
     //       onTap: () {
+      ManageVibration.vibrate();
     //         // callback
     //       }),
     //   CircularMenuItem(
     //       icon: Icons.search,
     //       onTap: () {
+      ManageVibration.vibrate();
     //         //callback
     //       }),
     //   CircularMenuItem(
     //       icon: Icons.settings,
     //       onTap: () {
+      ManageVibration.vibrate();
     //         //callback
     //       }),
     //   CircularMenuItem(
     //       icon: Icons.star,
     //       onTap: () {
+      ManageVibration.vibrate();
     //         //callback
     //       }),
     //   CircularMenuItem(
     //       icon: Icons.pages,
     //       onTap: () {
+      ManageVibration.vibrate();
     //         //callback
     //       }),
     // ]);
@@ -144,31 +156,37 @@ class CustomHeartButton extends StatelessWidget {
     //       CircularMenuItem(
     //           icon: Icons.home,
     //           onTap: () {
+      ManageVibration.vibrate();
     //             // callback
     //           }),
     //       CircularMenuItem(
     //           icon: Icons.search,
     //           onTap: () {
+      ManageVibration.vibrate();
     //             //callback
     //           }),
     //       CircularMenuItem(
     //           icon: Icons.settings,
     //           onTap: () {
+      ManageVibration.vibrate();
     //             //callback
     //           }),
     //       CircularMenuItem(
     //           icon: Icons.star,
     //           onTap: () {
+      ManageVibration.vibrate();
     //             //callback
     //           }),
     //       CircularMenuItem(
     //           icon: Icons.pages,
     //           onTap: () {
+      ManageVibration.vibrate();
     //             //callback
     //           }),
     //     ]);
     // return InkWell(
     //   onTap: () {
+      ManageVibration.vibrate();
     //     circularMenu.
     //   },
     //   child: Container(

@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
-import 'package:fourtyninehub/features/social_media/edit_profile/domain/usecases/edit_profile_usecase.dart';
-import 'package:fourtyninehub/features/social_media/edit_profile/domain/usecases/get_governorates.dart';
-import 'package:fourtyninehub/routes/pages.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
+import '../../../../RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../domain/entities/edit_profile_entity.dart';
+import '../../domain/usecases/edit_profile_usecase.dart';
+import '../../domain/usecases/get_governorates.dart';
+import '../../../../../routes/pages.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';

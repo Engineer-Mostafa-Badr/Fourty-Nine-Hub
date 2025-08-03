@@ -4,28 +4,28 @@ import 'dart:math';
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/muted_stories_model.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/create_story_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/delete_story_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/fetch_stories_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_followers_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_muted_stories_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_story_viewrs_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/make_like_usecase.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/make_view_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/mute_stories_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/update_privacy_use_case.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../chat/chat_room/domain/usecases/send_message_usecase.dart';
+import '../../../chat/chat_view/domain/entities/chat_entity.dart';
+import '../../data/models/friends_stories_model.dart';
+import '../../data/models/muted_stories_model.dart';
+import '../../data/models/viewers_model.dart';
+import '../../domain/use_case/create_story_use_case.dart';
+import '../../domain/use_case/delete_story_use_case.dart';
+import '../../domain/use_case/fetch_stories_use_case.dart';
+import '../../domain/use_case/get_followers_use_case.dart';
+import '../../domain/use_case/get_muted_stories_use_case.dart';
+import '../../domain/use_case/get_story_viewrs_use_case.dart';
+import '../../domain/use_case/make_like_usecase.dart';
+import '../../domain/use_case/make_view_use_case.dart';
+import '../../domain/use_case/mute_stories_use_case.dart';
+import '../../domain/use_case/update_privacy_use_case.dart';
+import '../../../tinder/data/shared/shared.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import '../../../../../core/utils/shared_pref.dart';
 import '../../data/models/followers_model.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 part 'stories_state.dart';
 
@@ -727,6 +728,7 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                                     ),
                                   ),
                                   onTap: () {
+      ManageVibration.vibrate();
                                     // Optional: Add tap functionality here
                                   },
                                 ),

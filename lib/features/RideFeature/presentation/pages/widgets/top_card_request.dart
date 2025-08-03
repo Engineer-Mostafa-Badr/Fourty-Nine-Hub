@@ -10,6 +10,7 @@ import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TopCardRequest extends StatelessWidget {
   final RideOfferEntity rideOffer;
@@ -188,6 +189,7 @@ class TopCardRequest extends StatelessWidget {
                       ),
                       child: MaterialButton(
                         onPressed: (){
+      ManageVibration.vibrate();
                           rideCubit.removeRideOfferFromRideOffers(rideOffer);
                         },
                         child: Text(

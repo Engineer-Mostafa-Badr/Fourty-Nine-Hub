@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_model_entity.dart';
+import '../../../../RideFeature/domain/entities/ride_model_entity.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';

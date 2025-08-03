@@ -12,6 +12,7 @@ import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.da
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/enums/base_status_enum.dart';
@@ -389,6 +390,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   // _pauseVideo();
 
                   onDeleteItem(advertises.sId!);

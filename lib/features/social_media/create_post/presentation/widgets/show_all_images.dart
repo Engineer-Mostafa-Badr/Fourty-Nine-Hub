@@ -3,12 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/functions/global/upload_file.dart';
+import '../../../../ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ShowAllImages extends StatefulWidget {
   const ShowAllImages(
@@ -43,6 +44,7 @@ class _ShowAllImagesState extends State<ShowAllImages> {
           itemCount:widget.imagesUrls!=null? (widget.imagesUrls?.length??0): widget.images.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               print("object");
               List<XFile> images = widget.images.map((e) => e.file).toList();
 
@@ -88,6 +90,7 @@ class _ShowAllImagesState extends State<ShowAllImages> {
                   top: 5,
                   child: InkWell(
                     onTap: () async {
+      ManageVibration.vibrate();
                       await widget.onRemoveImage(widget.images[index]);
                       widget.images.remove(widget.images[index]);
                       setState(() {});

@@ -19,6 +19,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/loading/get_loading_avaliable_entity.dart';
 import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 // Solution 1: Check if widget is mounted before using context
 class AvailableNonSocketLoadingWidget extends StatefulWidget {
   final GetLoadingAvailableEntity? offers;
@@ -220,6 +221,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                             ),
                           ),
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (!mounted) return; // Check if widget is still mounted
 
                             final price = widget.offers?.tripDetails?.price ?? 0;
@@ -252,6 +254,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                             fontSize: 23,
                           ),
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (!mounted) return; // Check if widget is still mounted
                             _showOfferFareBottomSheet(context, widget.offers?.tripDetails?.id ?? '');
                           },
@@ -349,6 +352,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                   radius: 15,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
+      ManageVibration.vibrate();
                     final enteredPrice = num.tryParse(offerPriceController.text) ?? 0;
 
                     // Close the bottom sheet first
@@ -455,6 +459,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                   radius: 15,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
+      ManageVibration.vibrate();
                     final enteredPrice = num.tryParse(offerPriceController.text) ?? 0;
                     Navigator.pop(context);
 
@@ -485,5 +490,4 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
     );
   }
 }
-
 

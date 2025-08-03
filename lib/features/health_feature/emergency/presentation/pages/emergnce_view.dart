@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthEmergencyView extends StatefulWidget {
   const HealthEmergencyView({super.key});
@@ -125,6 +126,7 @@ class _HealthEmergencyViewState extends State<HealthEmergencyView> {
                     color: Colors.white,
                   ),
                   onPressed: () {
+      ManageVibration.vibrate();
                     emergencyCubit.bookEmergency();
                   },
                   backColor: AppColors.SECONDARY_COLOR,

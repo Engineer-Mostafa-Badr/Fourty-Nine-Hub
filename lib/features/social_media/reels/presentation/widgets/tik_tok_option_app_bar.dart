@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TikTokOptionAppBar extends StatelessWidget {
   const TikTokOptionAppBar({
@@ -19,6 +20,7 @@ class TikTokOptionAppBar extends StatelessWidget {
         SizedBox(width: 16.w),
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             context.pop();
           },
           child: Icon(
@@ -59,7 +61,10 @@ class TikTokOptionAppBar extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+
+      ManageVibration.vibrate();
+          },
           icon: const Icon(
             Icons.more_horiz,
           ),

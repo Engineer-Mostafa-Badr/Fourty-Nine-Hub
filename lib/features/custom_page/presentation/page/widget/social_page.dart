@@ -18,6 +18,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SocialPage extends StatefulWidget {
   const SocialPage({super.key});
@@ -132,6 +133,7 @@ class _SocialPageState extends State<SocialPage> {
           },
           builder: (BuildContext context, Object? state) {
             return CustomFloatingActionButton(onPressed: () {
+      ManageVibration.vibrate();
               bool face = _selectedItem == 0;
               bool insta = _selectedItem == 1;
               bool tweet = _selectedItem == 2;
@@ -152,6 +154,7 @@ class _SocialPageState extends State<SocialPage> {
             //     style: const TextStyle(color: AppColors.whiteColor),
             //   ),
             //   onPressed: () {
+      ManageVibration.vibrate();
             //     bool face = _selectedItem == 0;
             //     bool insta = _selectedItem == 1;
             //     bool tweet = _selectedItem == 2;

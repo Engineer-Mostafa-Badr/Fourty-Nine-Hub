@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/zego_audio_room_widget.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/services/uikit_service.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../controller/club_voice_bloc.dart';
+import '../widgets/zego_audio_room_widget.dart';
+import '../../../live_streaming/presentation/widgets/components/zego_uikit/src/services/uikit_service.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AudioStreamScreen extends StatelessWidget {
   final String liveId;
@@ -96,6 +97,7 @@ class AudioStreamScreen extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         isHost
                             ? _endRoom(context)
                             : context.read<ClubVoiceCubit>().leaveRoom(liveId);

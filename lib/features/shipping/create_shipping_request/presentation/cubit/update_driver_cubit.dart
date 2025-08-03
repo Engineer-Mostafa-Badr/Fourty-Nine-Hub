@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/register_request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import '../../data/models/driver_register_request_model.dart';
+import '../../data/models/register_request_model.dart';
+import '../../data/repositories/shipping_repository.dart';
+import 'shipping_cubit.dart';
+import 'shipping_state.dart';
 
 class UpdateDriverCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;

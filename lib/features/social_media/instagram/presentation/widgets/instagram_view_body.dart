@@ -2,29 +2,30 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
-import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/suggest_followers_section.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/suggest_reels_instagram_section.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_failure_widget.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../chat/chat_view/presentation/widgets/chat_stories.dart';
+import '../cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
+import '../cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
+import '../cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
+import 'post_instagram_widget.dart';
+import 'suggest_followers_section.dart';
+import 'suggest_reels_instagram_section.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramViewBody extends StatefulWidget {
   const InstagramViewBody({super.key});
@@ -140,6 +141,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
           return CustomFailureWidget(
             title: state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
             onPressed: () {
+      ManageVibration.vibrate();
               context.read<PostsInstagramCubit>().loadPosts(
                     context,
                     refresh: true,
@@ -385,6 +387,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                   // width: double.infinity,
                   child: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       // يقوم بنقلك لصفحة انشاء منشور او ريلز للانستقرام
                       if (index == 1) {
                         context.goNamed(

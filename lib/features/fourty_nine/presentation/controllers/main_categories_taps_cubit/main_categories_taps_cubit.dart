@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../domain/entities/main_category_entity.dart';
+import '../../../domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
+import '../shared/fourty_nine_shared_data.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
 part 'main_categories_taps_state.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_gifts_use_case.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_state.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../data/models/gift_model.dart';
+import '../../domain/use_case/get_gifts_use_case.dart';
+import 'gift_state.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
 

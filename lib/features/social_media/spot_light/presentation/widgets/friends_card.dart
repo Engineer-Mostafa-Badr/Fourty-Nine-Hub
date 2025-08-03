@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FriendsCard extends StatelessWidget {
   const FriendsCard({super.key,required this.icon,
@@ -138,7 +139,10 @@ class FriendsCard extends StatelessWidget {
         required Color color,
       }) {
     return ClickableWidget(
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
       child: Container(
         height: 56.h,
         // width: 84.h,

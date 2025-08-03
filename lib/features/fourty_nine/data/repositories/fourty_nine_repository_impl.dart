@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/question_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/wallet_home_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/answer_question_usecase.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
+import '../models/banner_model.dart';
+import '../../domain/entities/currency_entity.dart';
+import '../../domain/entities/main_category_entity.dart';
+import '../../domain/entities/question_entity.dart';
+import '../../domain/entities/slider_item_entity.dart';
+import '../../domain/entities/wallet_home_entity.dart';
+import '../../domain/use_cases/answer_question_usecase.dart';
+import '../../domain/use_cases/get_main_categories_use_case.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../domain/entities/parent_main_category_entity.dart';

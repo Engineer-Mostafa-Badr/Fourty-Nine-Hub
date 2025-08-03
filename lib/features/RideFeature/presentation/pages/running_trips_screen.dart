@@ -18,6 +18,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RunningTripParams {
   final RideCubit rideCubit;
@@ -78,6 +79,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),

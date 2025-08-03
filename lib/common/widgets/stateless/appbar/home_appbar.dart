@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../core/utils/shared_pref.dart';
 import '../../../../res/assets/assets.dart';
@@ -76,6 +77,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 height: 25,
               ),
               onTap: () {
+      ManageVibration.vibrate();
                 HandleCashback.setCount('drawerCount', context);
                 Scaffold.of(context).openDrawer();
               },
@@ -90,6 +92,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (isShowLogo)
             InkWell(
               onTap: () async {
+      ManageVibration.vibrate();
                 bool isCustomPage = await CacheManager.getActivation() ?? false;
                 if (isCustomPage) {
                   if (!isCurrentRoute(context, Routes.PAGEPREVIEW)) {
@@ -128,7 +131,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             if (showLanguage)
               Expanded(
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                    },
+      
                     child: Label(text: 'Register', style: Styles.mediumText())),
               ),
           //put lang
@@ -140,6 +146,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   label: LocaleKeys.lang.localize,
                   style: Styles.headerText(color: AppColors.getRedColor(context)),
                   onPressed: () {
+      ManageVibration.vibrate();
                     HandleCashback.setCount('langCount', context);
                     // if (context.locale == Locales.arabic) {
                     if (LocaleKeys.lang.localize == 'En') {
@@ -158,6 +165,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           InkWell(
             borderRadius: BorderRadius.circular(40.r),
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.SEARCH);
             },
             child: Icon(
@@ -173,7 +181,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (showLanguage)
             Expanded(
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                     ManageVibration.vibrate();
+                  },
+     
                   child: Label(
                       text: LocaleKeys.register.localize,
                       style: Styles.mediumText())),
@@ -183,6 +194,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           inChat ??
               InkWell(
                 onTap: () async {
+      ManageVibration.vibrate();
                   if (!context.read<UserCubit>().isLoggedIn) {
                     return pleaseLoginDialog(context);
                   }

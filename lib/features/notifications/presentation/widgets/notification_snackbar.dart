@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 notificationSnackBar({
   required BuildContext context,
@@ -23,6 +24,7 @@ notificationSnackBar({
     Overlay.of(context),
     GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(notificationEntity.path ?? '',
             extra: notificationEntity.payload);
       },

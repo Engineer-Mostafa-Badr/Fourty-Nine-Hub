@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class QuraanView extends StatefulWidget {
   const QuraanView({super.key});
@@ -64,6 +65,7 @@ class _QuraanViewState extends State<QuraanView> {
                 Icons.arrow_forward,
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.of(context).pop(); // Pop the current screen
               },
             ),
@@ -88,6 +90,7 @@ class _QuraanViewState extends State<QuraanView> {
                   }
                   return InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         Navigator.push(
                           context,
                           MaterialPageRoute(

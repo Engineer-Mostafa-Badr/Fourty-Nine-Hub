@@ -1,26 +1,27 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/other_profile_view.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/profile_view.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_stories.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import 'other_profile_view.dart';
+import 'profile_view.dart';
+import '../widgets/friends_stories.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart' as vibration;
 
 //Todo:Mohamed Magdy: جميع الاكواد اللي معمول لها كومينت هي اكواد فيها لوجيك انا شايلها عشان اشتغل علي ال يو اي او اكواد ملغيه انا عاملها كومنت عشان لو اللي هيربط يستفاد منها او ياخد اجزاء منها
 class SpotlightView extends StatefulWidget {
@@ -310,7 +311,10 @@ class _FollowingSectionState extends State<FollowingSection> {
       //Reel reel,
       int index) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+
+      vibration.ManageVibration.vibrate();
+      },
       // async {
       //   await Navigator.push(
       //     context,
@@ -533,7 +537,10 @@ class DiscoverSectionState extends State<DiscoverSection> {
       //Reel reel,
       int index) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+
+      vibration.ManageVibration.vibrate();
+      },
       //Todo:  خلي اللي معموله كومينت مكان (){}
       // async {
       //   await Navigator.push(

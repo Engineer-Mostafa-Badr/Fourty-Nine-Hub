@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/enums/reports_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/enums/reports_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../tinder/data/shared/shared.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ReportView extends StatefulWidget {
   const ReportView({
@@ -43,6 +44,7 @@ class _ReportViewState extends State<ReportView> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+      ManageVibration.vibrate();
         FocusScope.of(context).unfocus();
       },
       child: BlocProvider<TwitterCubit>(
@@ -135,6 +137,7 @@ class _ReportViewState extends State<ReportView> {
       BuildContext context, ReportsEnum report, double screenWidth) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         setState(() {
           selectedReport = report;
         });

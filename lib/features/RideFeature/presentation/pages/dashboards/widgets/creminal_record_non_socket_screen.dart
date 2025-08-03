@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../Register/widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CriminalRecordNonSocketScreen extends StatelessWidget {
   const CriminalRecordNonSocketScreen({super.key});
@@ -103,6 +104,7 @@ class CriminalRecordNonSocketScreen extends StatelessWidget {
                         UploadFileWidget(
                           title: LocaleKeys.criminalRecord.localize,
                           onTap: () {
+      ManageVibration.vibrate();
                             cubit.onUploadPersonalCriminalRecordPicture(context);
                           },
                           imageUrl: state.personalCriminalRecordPicture,
@@ -153,6 +155,7 @@ class CriminalRecordNonSocketScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     if (context.read<DashboardsCubit>().state.personalCriminalRecordPicture == null) {
                       showErrorMessage(context, "Please select criminal record");
                     } else {

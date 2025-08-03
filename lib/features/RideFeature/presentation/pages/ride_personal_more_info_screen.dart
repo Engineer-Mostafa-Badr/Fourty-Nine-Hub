@@ -28,6 +28,7 @@ import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'widgets/pickup_target_location_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
@@ -641,6 +642,7 @@ class _RidePersonalMoreInfoScreenState
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if (cubit.selectedDate.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -1067,6 +1069,7 @@ class _RidePersonalMoreInfoScreenState
                               radius: 15,
                               label: LocaleKeys.premiumRequest.tr(),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 if (!context.isUserLoggedIn) {
                                   context.push(Routes.LOGIN);
                                   return;
@@ -1183,6 +1186,7 @@ class _RidePersonalMoreInfoScreenState
                               radius: 15,
                               label: LocaleKeys.request.tr(),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 print("normal price ${cubit.offerPrice}");
                                 if (!context.isUserLoggedIn) {
                                   context.push(Routes.LOGIN);
@@ -1453,6 +1457,7 @@ class _RidePersonalMoreInfoScreenState
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               cubit.offerPriceController.clear();
                               Navigator.pop(context);
                             },
@@ -1559,6 +1564,7 @@ class _RidePersonalMoreInfoScreenState
                       radius: 15,
                       backColor: AppColors.PRIMARY_COLOR,
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
                           setState(() {

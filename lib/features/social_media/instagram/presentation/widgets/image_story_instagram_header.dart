@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'dart:math' as math;
 import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 

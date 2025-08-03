@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
-import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/enums/wallet_types_enums.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/format_numbers.dart';
+import '../../../payment/presentation/pages/payment_view.dart';
+import '../../domain/entities/subscription_amount_entity.dart';
+import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class SubscriptoinAmountsWidget extends StatefulWidget {
   final WalletTypes walletType;
@@ -156,6 +157,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                         : Colors.white,
                   ),
                   onPressed: () {
+      ManageVibration.vibrate();
                     if (groupValue != null) {
                       context.push(Routes.PAYMENT,
                           extra: PaymobLink(
@@ -181,6 +183,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                     fontSize: 36,
                   ),
                   onPressed: () {
+      ManageVibration.vibrate();
                     context.pop();
                   },
                 ),

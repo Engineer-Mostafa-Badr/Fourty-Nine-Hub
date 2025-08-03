@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/followers_model.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/muted_stories_model.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
-import 'package:fourtyninehub/features/social_media/stories/domain/use_case/update_privacy_use_case.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../data/models/followers_model.dart';
+import '../../data/models/friends_stories_model.dart';
+import '../../data/models/muted_stories_model.dart';
+import '../../data/models/viewers_model.dart';
+import '../use_case/update_privacy_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../use_case/create_story_use_case.dart';

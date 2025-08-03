@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -47,6 +48,7 @@ void pleaseLoginDialog(BuildContext context) {
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.go(Routes.LOGIN);
                     }),
               ),
@@ -55,6 +57,7 @@ void pleaseLoginDialog(BuildContext context) {
                 child: AppButton(
                     label: LocaleKeys.close.localize,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.pop(context);
                     }),
               ),

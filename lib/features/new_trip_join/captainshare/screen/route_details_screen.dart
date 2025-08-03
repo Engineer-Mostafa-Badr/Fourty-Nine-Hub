@@ -23,6 +23,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RouteDetailsScreen extends StatefulWidget {
   final MyBookingEntity tripEntity;
@@ -171,6 +172,7 @@ class _RouteDetailsScreenState
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -407,6 +409,7 @@ class _RouteDetailsScreenState
                           height: 50,
                           child: state.isLoadingSubmitRequest? const Center(child: CircularProgressIndicator()): ElevatedButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
                                   // cubit.requestEmergencySupport(context: context, clientId: state.routeDetails.clientDetails?.id??'', driverId: state.routeDetails.driverDetails?.id??'', tripId: state.routeDetails.tripDetails?.id??'', userType: 'driver', tripType: 'tracing');
@@ -470,6 +473,7 @@ class _RouteDetailsScreenState
                         const SizedBox(height: 30),
                         isLoading? const Center(child: CircularProgressIndicator()): ElevatedButton.icon(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             setState(() => isLoading = true);
                             // final path = await _generatePdf(details:state.supportDetails,lat:31.2802705,lng: 31.6775629);
                             setState(() {

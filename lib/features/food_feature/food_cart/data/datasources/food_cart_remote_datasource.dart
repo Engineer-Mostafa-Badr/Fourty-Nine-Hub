@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/domain/entities/cart_entity.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/domain/usecases/remove_from_cart_usecase.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../domain/entities/cart_entity.dart';
+import '../../domain/usecases/remove_from_cart_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../models/cart_model.dart';

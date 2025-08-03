@@ -1,14 +1,14 @@
-import 'package:fourtyninehub/features/search/data/data_source/search_remote_data_source.dart';
-import 'package:fourtyninehub/features/search/data/repository/search_repository_impl.dart';
-import 'package:fourtyninehub/features/search/domain/repository/search_repository.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_ads_search_use_case.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_posts_search_use_case.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_reel_search_use_case.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_sub_category_use_case.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_trip_come_search_use_case.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_user_search_use_case.dart';
-import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import '../features/search/data/data_source/search_remote_data_source.dart';
+import '../features/search/data/repository/search_repository_impl.dart';
+import '../features/search/domain/repository/search_repository.dart';
+import '../features/search/domain/use_case/fetch_ads_search_use_case.dart';
+import '../features/search/domain/use_case/fetch_posts_search_use_case.dart';
+import '../features/search/domain/use_case/fetch_reel_search_use_case.dart';
+import '../features/search/domain/use_case/fetch_search_sub_category_use_case.dart';
+import '../features/search/domain/use_case/fetch_search_use_case.dart';
+import '../features/search/domain/use_case/fetch_trip_come_search_use_case.dart';
+import '../features/search/domain/use_case/fetch_user_search_use_case.dart';
+import '../features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class SearchServiceLocator {

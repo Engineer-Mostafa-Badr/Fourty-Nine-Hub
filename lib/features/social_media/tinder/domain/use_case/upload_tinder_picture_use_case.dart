@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../repositories/tinder_repository.dart';
 
 class UploadTinderPictureUseCase extends UseCase<bool, AddImagesParams> {
   final TinderRepository _repository;

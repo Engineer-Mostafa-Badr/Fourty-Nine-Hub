@@ -261,6 +261,7 @@ import '../widgets/search_bar_widget.dart';
 import 'ads_request_log_view.dart';
 import 'favourite_ads_view.dart';
 import 'my_ads_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomPageSubCategoriesParams {
   final MainCategoryEntity mainCategory;
@@ -400,6 +401,7 @@ class _CustomPageSubCategoriesViewState
                               style: Styles.mediumText(
                                   fontWeight: FontWeight.bold)),
                           onTap: () {
+      ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               Navigator.pop(context);
                               context.push(Routes.CREATEAD,
@@ -506,6 +508,7 @@ class _CustomPageSubCategoriesViewState
                   IconButton(
                     padding: const EdgeInsets.all(0),
                     onPressed: () {
+      ManageVibration.vibrate();
                       context
                           .read<SubcategoriesCubit>()
                           .toggleMyAds('isSearchAdsOpen');
@@ -536,6 +539,7 @@ class _CustomPageSubCategoriesViewState
                             .read<SubcategoriesCubit>()
                             .isFavouriteAdsOpen,
                         onPressed: () {
+      ManageVibration.vibrate();
                           if (!context.isUserLoggedIn) {
                             return pleaseLoginDialog(context);
                           } else {
@@ -579,6 +583,7 @@ class _CustomPageSubCategoriesViewState
                         isOpened:
                             context.read<SubcategoriesCubit>().isRequestLogOpen,
                         onPressed: () {
+      ManageVibration.vibrate();
                           context
                               .read<SubcategoriesCubit>()
                               .loadRequestsLogByMainCategory(
@@ -601,6 +606,7 @@ class _CustomPageSubCategoriesViewState
                       title: LocaleKeys.myAds.localize,
                       isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                       onPressed: () {
+      ManageVibration.vibrate();
                         // TODO: EDIT THIS
                         if (!context.isUserLoggedIn) {
                           return pleaseLoginDialog(context);

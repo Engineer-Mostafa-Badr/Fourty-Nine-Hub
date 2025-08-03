@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
+import '../../Modified_widgets/trip_join_floating_action_button.dart';
+import 'request_log_widget.dart';
+import '../../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -25,6 +25,7 @@ import '../../Modified_widgets/cards/available_trips_card.dart';
 import '../../Modified_widgets/trip_join_card.dart';
 import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
 import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class MyAdsTripWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
@@ -232,6 +233,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                   backColor: AppColors.PRIMARY_COLOR_DARK,
                                   color: AppColors.whiteColor,
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     context
                                         .read<ViewAllTripJoinCubit>()
                                         .deleteMyAdsTrip(
@@ -273,6 +275,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                         children: [
                           GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               context.pop();
                             },
                             child: Container(
@@ -298,6 +301,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                   ? "أعلن عن سيارتك"
                                   : "Advertise your car",
                               onTap: () {
+      ManageVibration.vibrate();
                                 context.push(Routes.TRIP_JOIN);
                               },
                             ),

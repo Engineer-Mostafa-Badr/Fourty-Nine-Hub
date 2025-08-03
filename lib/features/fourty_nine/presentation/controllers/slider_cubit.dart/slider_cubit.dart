@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_slider_items_usecase.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../domain/entities/slider_item_entity.dart';
+import '../../../domain/use_cases/get_slider_items_usecase.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/states/basic_state.dart';

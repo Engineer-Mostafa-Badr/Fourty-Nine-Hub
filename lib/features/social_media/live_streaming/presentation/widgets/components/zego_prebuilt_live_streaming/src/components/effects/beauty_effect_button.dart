@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../config.dart';
 import '../../inner_text.dart';
@@ -44,6 +45,7 @@ class _ZegoLiveStreamingBeautyEffectButtonState
     final sizeBoxSize = widget.iconSize ?? Size(56.zR, 56.zR);
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         if (ZegoUIKit.instance.getPlugin(ZegoUIKitPluginType.beauty) != null) {
           ZegoUIKit.instance.getBeautyPlugin().showBeautyUI(context);
         } else {

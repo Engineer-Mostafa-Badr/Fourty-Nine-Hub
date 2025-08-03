@@ -34,6 +34,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../cubit/stories_cubit.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For localization keys
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -204,6 +205,7 @@ class CameraScreenState extends State<CameraScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         FocusScope.of(context).unfocus();
       },
       child: CustomScaffold(
@@ -309,6 +311,7 @@ class CameraScreenState extends State<CameraScreen> {
               padding: const EdgeInsets.all(0),
               icon: const Icon(Icons.more_horiz, color: Colors.white, size: 22),
               onPressed: () {
+      ManageVibration.vibrate();
                 FocusScope.of(context).requestFocus(FocusNode());
                 Navigator.push(
                     context,
@@ -341,6 +344,7 @@ class CameraScreenState extends State<CameraScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 context.pop();
               },
             ),
@@ -507,6 +511,7 @@ class CameraScreenState extends State<CameraScreen> {
                     IconButton(
                       padding: const EdgeInsets.all(0),
                       onPressed: () {
+      ManageVibration.vibrate();
                         mp3File = null;
                         setState(() {});
                       },
@@ -532,6 +537,7 @@ class CameraScreenState extends State<CameraScreen> {
     } else {
       return GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           focusNode.requestFocus();
         },
         child: Container(
@@ -693,6 +699,7 @@ class CameraScreenState extends State<CameraScreen> {
               child: IconButton(
                 icon: const Icon(Icons.flip_camera_ios, color: Colors.white),
                 onPressed: () async {
+      ManageVibration.vibrate();
                   if (cameras.length > 1) {
                     final newIndex =
                         cameras.indexOf(_cameraController!.description) == 0
@@ -794,6 +801,7 @@ class CameraScreenState extends State<CameraScreen> {
               child: IconButton(
                 icon: const Icon(Icons.flip_camera_ios, color: Colors.white),
                 onPressed: () async {
+      ManageVibration.vibrate();
                   if (cameras.length > 1) {
                     final newIndex =
                         cameras.indexOf(_cameraController!.description) == 0
@@ -881,6 +889,7 @@ class CameraScreenState extends State<CameraScreen> {
                       size: 54,
                     ),
               onPressed: () {
+      ManageVibration.vibrate();
                 setState(() {
                   if (_videoPlayerController!.value.isPlaying) {
                     _videoPlayerController!.pause();
@@ -1046,6 +1055,7 @@ class CameraScreenState extends State<CameraScreen> {
   Widget _buildCaptureButton() {
     return IconButton(
       onPressed: () async {
+      ManageVibration.vibrate();
         if (_selectedPageIndex == 1) {
           await _pickImageFromCamera();
         } else if (_selectedPageIndex == 2) {
@@ -1090,6 +1100,7 @@ class CameraScreenState extends State<CameraScreen> {
                     _selectedFile != null)
                 ? InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       // open story privacy screen
                     },
                     child: SizedBox(
@@ -1173,6 +1184,7 @@ class CameraScreenState extends State<CameraScreen> {
                           ),
                           padding: const EdgeInsets.all(0),
                           onPressed: () async {
+      ManageVibration.vibrate();
                             if (_selectedPageIndex == 0) {
                               if (_storyText != null &&
                                   _storyText!.isNotEmpty) {
@@ -1252,6 +1264,7 @@ class CameraScreenState extends State<CameraScreen> {
                       ),
                       padding: const EdgeInsets.all(0),
                       onPressed: () async {
+      ManageVibration.vibrate();
                         if (_selectedPageIndex == 1 ||
                             _selectedPageIndex == 2) {
                           if (_selectedFile != null) {
@@ -1356,6 +1369,7 @@ class CameraScreenState extends State<CameraScreen> {
     return Expanded(
       child: InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           _pageController.animateToPage(index,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut);

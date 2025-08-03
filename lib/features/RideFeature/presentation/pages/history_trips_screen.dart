@@ -19,6 +19,7 @@ import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
 import '../../../../service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HistoryTripsScreenParams {
   final RideCubit rideCubit;
@@ -77,6 +78,7 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),
@@ -260,6 +262,7 @@ class TripCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(Routes.RIDEDETAILSTRIPS,
             extra: RideHistoryDetailsScreenParams(
               rideCubit: serviceLocator<RideCubit>(),

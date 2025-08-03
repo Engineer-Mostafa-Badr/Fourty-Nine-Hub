@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_media.dart';
+import '../../domain/entities/restaurant_media.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'restaurant_media_model.g.dart';

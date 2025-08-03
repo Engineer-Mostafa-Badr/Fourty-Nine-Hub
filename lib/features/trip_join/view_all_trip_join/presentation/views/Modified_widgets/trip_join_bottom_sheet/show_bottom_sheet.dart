@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/styles.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 Future<dynamic> JoinTripBottomSheet(
     BuildContext context, {
@@ -67,6 +68,7 @@ Future<dynamic> JoinTripBottomSheet(
                     // Free Call Button
                     ElevatedButton(
                       onPressed: () async {
+      ManageVibration.vibrate();
                         Navigator.of(context).pop();
                         final Uri phoneUri = Uri(scheme: 'tel', path: phone);
                         if (await canLaunchUrl(phoneUri)) {

@@ -4,14 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
+import '../../cubit/custom_page_cubit.dart';
+import '../../cubit/custom_page_states.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/bottom_painter.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CustomPageBottonNavBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -276,6 +277,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 children: List.generate(widget.items.length, (index) {
                   return GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       widget.onTap(index);
                     },
                     child: Column(

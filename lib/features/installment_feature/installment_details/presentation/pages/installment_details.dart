@@ -25,6 +25,7 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class InstallmentsDetails extends StatefulWidget {
   final String installmentId;
@@ -81,6 +82,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                           label:
                               '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.month}',
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (AuthHelper().isLoggedIn()) {
                               controller.buyWithInstallment(
                                   installmentId: widget.installmentId);

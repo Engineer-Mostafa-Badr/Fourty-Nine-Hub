@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_info_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/repo/trip_join_repo.dart';
+import '../../../../../core/error/failure.dart';
+import '../entities/trip_info_entity.dart';
+import '../repo/trip_join_repo.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FetchPriceDistanceUsecase {

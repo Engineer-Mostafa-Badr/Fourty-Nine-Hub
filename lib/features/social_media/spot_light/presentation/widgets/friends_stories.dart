@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/more_stories.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../stories/presentation/pages/create_story_screen.dart';
+import '../../../stories/presentation/pages/more_stories.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:story_view/controller/story_controller.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FriendsStories extends StatelessWidget {
   const FriendsStories({super.key});
@@ -108,6 +109,7 @@ class FriendsStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           context.read<UserCubit>().isLoggedIn
               ? await Navigator.push(
             context,
@@ -279,6 +281,7 @@ class FriendsStories extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () async {
+      ManageVibration.vibrate();
           context.read<UserCubit>().isLoggedIn
               ? await Navigator.push(
             context,

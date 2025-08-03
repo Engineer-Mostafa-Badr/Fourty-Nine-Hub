@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/repositories/social_posts_repo.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../repositories/social_posts_repo.dart';
 
 class AcceptRejectFriendRequestUseCase
     extends UseCase<bool, AcceptRejectFriendRequestParams> {

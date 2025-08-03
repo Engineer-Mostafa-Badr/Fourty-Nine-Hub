@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/usecases/delet_trip_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/usecases/delet_trip_usecase.dart';
+import '../../../../../../res/strings/labels.dart';
 
 part 'delete_trips_state.dart';
 

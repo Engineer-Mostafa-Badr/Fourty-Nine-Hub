@@ -21,6 +21,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RegisterVerifyPhoneOTP extends StatefulWidget {
   final String phoneNumber;
@@ -108,6 +109,7 @@ class _RegisterVerifyPhoneOTPState extends State<RegisterVerifyPhoneOTP> {
                                         horizontal: 8),
                                     child: ElevatedButton(
                                       onPressed: () {
+      ManageVibration.vibrate();
                                         Navigator.of(context).pop();
                                       },
                                       style: ElevatedButton.styleFrom(

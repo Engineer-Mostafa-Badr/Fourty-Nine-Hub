@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/single_post_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_single_post_instagram_use_case.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/single_post_instagram_entity.dart';
+import '../../../domain/usecases/get_single_post_instagram_use_case.dart';
 
 part 'single_post_instagram_state.dart';
 

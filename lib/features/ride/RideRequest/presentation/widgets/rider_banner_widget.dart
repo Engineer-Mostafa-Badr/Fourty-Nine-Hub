@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rid
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RiderBannerWidget extends StatelessWidget {
   const RiderBannerWidget({super.key});
@@ -36,6 +37,7 @@ class RiderBannerWidget extends StatelessWidget {
                           horizontal: 0, vertical: 5),
                       child: DashboardBanner(
                         onTap: () {
+      ManageVibration.vibrate();
                           if (state.model.mainCategory?.isSocketCategory ??
                               false) {
                             log("Socket Screen");
@@ -63,6 +65,7 @@ class RiderBannerWidget extends StatelessWidget {
                           // onTap: () => context
                           //     .push(Routes.SHIPPING_REGISTER),
                           onTap: () {
+      ManageVibration.vibrate();
                             context.push(Routes.RIDERREGISTER);
                           },
                           child: Padding(

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
-import 'package:fourtyninehub/routes/pages.dart';
+import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/enums/wallet_types_enums.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/messages/messages.dart';
+import '../../domain/usecases/get_active_subscription_amounts.dart';
+import '../widgets/amounts.dart';
+import '../../../../res/strings/labels.dart';
+import '../../../../routes/pages.dart';
 
 import '../../domain/entities/subscription_amount_entity.dart';
 import '../../domain/usecases/check_if_user_subscribed_usecase.dart';

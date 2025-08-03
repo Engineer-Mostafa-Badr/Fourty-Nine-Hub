@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/data/models/fetch_my_pick_me_model.dart';
-import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/domain/use_cases/fetch_my_pick_me_use_case.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
+import '../../../../../../../core/error/failure.dart';
+import '../../../../data/models/fetch_my_pick_me_model.dart';
+import '../../../../domain/use_cases/fetch_my_pick_me_use_case.dart';
+import '../../../../../../../res/strings/labels.dart';
 
 part 'fetch_my_pick_me_trips_state.dart';
 

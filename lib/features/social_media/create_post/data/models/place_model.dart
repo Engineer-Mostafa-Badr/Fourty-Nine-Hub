@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
+import '../../domain/entities/place_entity.dart';
 
 class PlaceModel extends PlaceEntity {
   PlaceModel({

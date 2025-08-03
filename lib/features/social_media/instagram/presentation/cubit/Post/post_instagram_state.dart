@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/instagram_post_entity.dart';
 
 class PostInstagramState {}
 

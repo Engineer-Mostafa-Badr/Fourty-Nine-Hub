@@ -33,6 +33,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripInfoByDriverScreen extends StatefulWidget {
   const TripInfoByDriverScreen({super.key, required this.model});
@@ -374,6 +375,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     launchUrlString(
                                         "tel://${widget.model.userPhone}");
                                   },
@@ -437,6 +439,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                                     width: double.infinity,
                                     label: LocaleKeys.openGoogleMap.tr(),
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       log("sldkfjsldkjf");
                                       if (inLocation) {
                                         openGoogleMaps(
@@ -471,6 +474,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                                             ? LocaleKeys.start.tr()
                                             : LocaleKeys.complete.tr(),
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       if (inLocation) {
                                         context
                                             .read<RiderInStartLocationCubit>()
@@ -510,6 +514,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                                                       width: double.infinity,
                                                       padding: EdgeInsets.zero,
                                                       onPressed: () {
+      ManageVibration.vibrate();
                                                         if (formKey.currentState
                                                                 ?.validate() ==
                                                             true) {
@@ -557,6 +562,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                                     width: double.infinity,
                                     label: LocaleKeys.cancel.tr(),
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       context.read<GetReasonsCubit>().get();
                                     },
                                   ),
@@ -647,6 +653,7 @@ class ReasonsDilogWidget extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     onTap(e.id!);
                   },
                   child: Text(e.reason.toString()),

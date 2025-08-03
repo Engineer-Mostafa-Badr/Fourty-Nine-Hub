@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class UploadImagePopup extends StatelessWidget {
   const UploadImagePopup({
@@ -30,6 +31,7 @@ class UploadImagePopup extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
+      ManageVibration.vibrate();
                   context.pop();
                 },
               ),

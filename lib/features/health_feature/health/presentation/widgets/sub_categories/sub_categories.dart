@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthSubCategories extends StatefulWidget {
   const HealthSubCategories({
@@ -64,6 +65,7 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                               ),
                               ClickableWidget(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   _scrollController?.animateTo(
                                     (_scrollController?.position.pixels ?? 0) +
                                         0.8.sw,

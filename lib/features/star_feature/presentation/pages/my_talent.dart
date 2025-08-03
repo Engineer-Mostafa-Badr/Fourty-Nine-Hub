@@ -2,16 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/get_my_talents.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import 'all_winner_view.dart';
+import 'widgets/get_my_talents.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controller/cubit/star_cubit.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class MyTalentView extends StatefulWidget {
   const MyTalentView({super.key});
@@ -48,6 +49,7 @@ class _MyTalentViewState extends State<MyTalentView> {
         actions: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               if (!context.read<UserCubit>().isLoggedIn) {
                 pleaseLoginDialog(context);
               } else {

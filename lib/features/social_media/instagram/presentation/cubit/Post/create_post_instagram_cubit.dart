@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/media_post_request_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repository.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/post_instagram_state.dart';
+import '../../../data/models/media_post_request_model.dart';
+import '../../../data/repositories/instagram_repository.dart';
+import 'post_instagram_state.dart';
 import 'package:path/path.dart' as path;
 
 class CreatePostInstagramCubit extends Cubit<PostInstagramState> {

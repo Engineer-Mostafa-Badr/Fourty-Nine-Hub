@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_category_card.dart';
+import '../../../../../../../ads/interstitial_ad_model.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import 'meal_category_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../cubit/restaurants_list_cubit.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class MealCategories extends StatefulWidget {
   const MealCategories({super.key, required});
@@ -59,6 +60,7 @@ class _MealCategoriesState extends State<MealCategories> {
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   onTap: () {
+      ManageVibration.vibrate();
                     _scrollController.animateTo(
                       _scrollController.position.pixels + 0.8.sw,
                       duration: const Duration(seconds: 1),

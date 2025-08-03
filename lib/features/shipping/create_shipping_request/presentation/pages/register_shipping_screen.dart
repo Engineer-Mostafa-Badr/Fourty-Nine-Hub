@@ -4,35 +4,36 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/Identity_confirmation_card_register_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_image_register_card_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/driver_license_card_register_ride_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/expiration_date_driver_license_card_register_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/plate_number_register_card_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/validation_error_widget.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/user_info_shipping_register_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/functions/helper/routing_helper.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../../common/widgets/stateless/labels/info_text.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import '../../../../health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
+import '../../../../ride/RideRequest/presentation/widgets/Identity_confirmation_card_register_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/car_image_register_card_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/driver_license_card_register_ride_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/expiration_date_driver_license_card_register_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/plate_number_register_card_widget.dart';
+import '../../../../ride/RideRequest/presentation/widgets/validation_error_widget.dart';
+import '../../data/models/banner_model/sub_category.dart';
+import '../cubit/shipping_cubit.dart';
+import '../cubit/shipping_state.dart';
+import '../widgets/user_info_shipping_register_widget.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RegisterShippingScreen extends StatefulWidget {
   const RegisterShippingScreen({super.key});
@@ -480,6 +481,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                             ),
                             label: LocaleKeys.submit.tr(),
                             onPressed: () {
+      ManageVibration.vibrate();
                               if (formKey.currentState!.validate()) {
                                 context.read<ShippingCubit>().register();
                               }
@@ -526,6 +528,7 @@ class _PickImageShippingCardState extends State<PickImageShippingCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         var pickedImage =
             await ImagePicker().pickImage(source: ImageSource.gallery);
         if (pickedImage != null) {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/reply_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../data/models/get_comments_model.dart';
+import '../controllers/explore_reels_cubit/reel_cubit.dart';
+import 'comments/no_scale_text.dart';
+import 'reply_widget.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../tinder/data/shared/shared.dart';
@@ -15,6 +15,7 @@ import '../../../twitter/presentation/widgets/report_view.dart';
 import 'Icon_and_text_widget.dart';
 import 'components/social_widget.dart';
 import 'send_to_bottom_sheet.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CommentWidget extends StatefulWidget {
   final CommentData commentData;
@@ -97,6 +98,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                         );
                       },
                       onTap: () {
+      ManageVibration.vibrate();
                         showModalBottomSheet(
                           backgroundColor: context.isDarkMode
                               ? Colors.grey[900]
@@ -184,6 +186,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                     SizedBox(width: 30.w),
                     GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         showModalBottomSheet(
                           backgroundColor: context.isDarkMode
                               ? Colors.grey[900]
@@ -275,6 +278,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                   SizedBox(width: 14),
                   GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       showModalBottomSheet(
                         backgroundColor: context.isDarkMode
                             ? Colors.grey[900]
@@ -327,10 +331,12 @@ class _CommentWidgetState extends State<CommentWidget> {
   Widget _buildReplyButton() {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         _toggleReplyMode('${'Ahmed'} ${'yousef'}');
       },
       child: GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           showModalBottomSheet(
             backgroundColor:
                 context.isDarkMode ? Colors.grey[900] : Colors.white,
@@ -380,6 +386,7 @@ class _CommentWidgetState extends State<CommentWidget> {
               //  AppColors.GREY_NORMAL_COLOR,
               ),
           onPressed: () {
+      ManageVibration.vibrate();
             _handleLikeComment('5', reply, replyId: replyId);
           },
         ),
@@ -412,6 +419,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                 : AppColors.GREY_NORMAL_COLOR,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             _handleLikeComment('5', reply, replyId: replyId);
           },
         ),
@@ -455,6 +463,7 @@ class _CommentWidgetState extends State<CommentWidget> {
       padding: EdgeInsets.symmetric(horizontal: 140.0.w),
       child: InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           setState(() {
             if (_isRepliesVisible && remainingReplies > 0) {
               _displayedRepliesCount += 3;
@@ -652,6 +661,7 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                           backgroundColor: Color(0xffEDEDED),
                           child: GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               showModalBottomSheet(
                                 backgroundColor: context.isDarkMode
                                     ? Colors.grey[900]
@@ -699,6 +709,7 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                   children: [
                     GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         setState(() {
                           showExtraContainer = !showExtraContainer;
                         });
@@ -744,6 +755,7 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
                     const SizedBox(width: 12),
                     GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         setState(() {
                           showExtraContainer = !showExtraContainer;
                         });
@@ -866,6 +878,7 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
           const SizedBox(height: 20),
           IconAndTextWidget(
             onTap: () {
+      ManageVibration.vibrate();
               _showReportBottomSheet(context);
             },
             name: context.isArabic ? 'الإبلاغ' : 'Report',
@@ -873,7 +886,10 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
           ),
           const SizedBox(height: 20),
           IconAndTextWidget(
-            onTap: () {},
+            onTap: () {
+
+      ManageVibration.vibrate();
+            },
             name: context.isArabic ? 'نسخ' : 'Copy',
             icon: Assets.copyComIcon,
           ),

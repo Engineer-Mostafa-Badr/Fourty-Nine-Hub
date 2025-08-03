@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import 'trip_contacts_buttons.dart';
+import '../trip_join_card.dart';
+import '../trip_join_dialog/dialog_content.dart';
+import '../trip_join_dialog/show_dialog_trip_join.dart';
+import '../trip_join_floating_action_button.dart';
+import '../../../../../../../res/assets/assets.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/styles.dart';
+import '../../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../core/widget/custom_loading_search_widget.dart';
@@ -28,6 +28,7 @@ import '../../../../domain/entities/available_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../widgets/trip_join/request_log_widget.dart';
 import '../trip_join_card_button.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 
 class AvailableTripsCard extends StatefulWidget {
@@ -130,6 +131,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                   children: [
                     InkWell(
                       onTap: (){
+      ManageVibration.vibrate();
                         // context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
                         // print("Hi");
                         _handleTap(data.id!);
@@ -240,7 +242,10 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                           const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                                           title: LocaleKeys.request.localize,
                                           color: AppColors.getRedColor(context),
-                                          onTap: (){},
+                                          onTap: (){
+
+      ManageVibration.vibrate();
+                                          },
                                           radius: 15,
                                         ),
                                       ),
@@ -265,7 +270,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                 //   buttonTitle:LocaleKeys.requests.localize,
                                 //   // buttonTitle:" buttonTitle",
                                 //   onTap: (){},
-                                // ),
+                                      // ),
                               ),
                               const Sizer(),
                             ],
@@ -300,6 +305,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
             children: [
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   context.pop();
                 },
                 child: Container(

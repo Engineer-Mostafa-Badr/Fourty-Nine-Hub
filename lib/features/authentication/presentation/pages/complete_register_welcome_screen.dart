@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../core/localization/locale_keys.g.dart';
@@ -85,6 +86,7 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
                     : AppColors.AUTH_CONTAINER_COLOR,
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 context.go(Routes.HOME);
               },
             ),

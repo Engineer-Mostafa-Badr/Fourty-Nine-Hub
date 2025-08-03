@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
+import '../../domain/entities/club_voice_room_entity.dart';
+import '../../domain/usecases/add_club_voice_use_case.dart';
+import '../../domain/usecases/join_club_voice_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 

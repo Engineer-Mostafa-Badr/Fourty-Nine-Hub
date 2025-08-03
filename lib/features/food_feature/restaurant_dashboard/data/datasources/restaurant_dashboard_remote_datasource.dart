@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/update_restaurant_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import '../../../../../core/data/datasources/json_parser.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../../domain/usecases/update_restaurant_usecase.dart';
+import '../../presentation/cubit/restaurant_statistics_cubit.dart';
+import '../../../restaurants_list/data/models/restaurant_2_model.dart';
 
 import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../domain/entity/complete_order_entity.dart';

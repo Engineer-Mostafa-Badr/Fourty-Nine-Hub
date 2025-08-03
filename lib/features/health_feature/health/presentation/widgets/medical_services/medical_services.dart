@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthMedicalServices extends StatefulWidget {
   const HealthMedicalServices({
@@ -118,6 +119,7 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
                             ),
                             ClickableWidget(
                               onTap: () {
+                                ManageVibration.vibrate();
                                 _scrollController?.animateTo(
                                   (_scrollController?.position.pixels ?? 0) +
                                       0.8.sw,

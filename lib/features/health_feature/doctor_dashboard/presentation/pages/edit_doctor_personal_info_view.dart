@@ -15,6 +15,7 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EditDoctorPersonalInfoView extends StatefulWidget {
   const EditDoctorPersonalInfoView({super.key, required this.doctor});
@@ -76,6 +77,7 @@ class _EditDoctorPersonalInfoViewState
                     label: LocaleKeys.update.localize,
                     // height: 50.h,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context
                           .read<EditDoctorPersonalInfoCubit>()
                           .updateDoctorPersonalInfo(context);

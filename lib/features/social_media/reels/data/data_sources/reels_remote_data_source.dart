@@ -1,23 +1,23 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../models/add_comments_model.dart';
+import '../models/audio_reels_model.dart';
+import '../models/get_comments_model.dart';
+import '../models/like_model.dart';
+import '../models/new_reels_model.dart';
+import '../models/save_reel_model.dart';
+import '../models/share_reel_model.dart';
+import '../../domain/use_case/add_reel_comment_use_case.dart';
+import '../../domain/use_case/add_reel_reply_use_case.dart';
+import '../../domain/use_case/create_advertisement_use_case.dart';
+import '../../domain/use_case/create_reel_use_case.dart';
+import '../../domain/use_case/reels_with_same_audia_use_case.dart';
+import '../../domain/use_case/upload_reel_use_case.dart';
+import '../../domain/use_case/upload_video_reel_use_case.dart';
 
 abstract class ReelsRemoteDataSource {
   Future<Either<Failure, ReelsResponse>> getExploreReels(

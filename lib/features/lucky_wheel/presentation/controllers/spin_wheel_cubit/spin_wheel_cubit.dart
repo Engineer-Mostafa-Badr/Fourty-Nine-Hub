@@ -21,6 +21,7 @@ import '../../../../../common/widgets/stateless/buttons/elevated_button.dart';
 import '../../../../../core/enums/wheel.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../domain/use_cases/spin_wheel_use_case.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
   final SpinWheelUseCase _spinWheelUseCase;
@@ -88,6 +89,7 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
                     color: AppColors.getReversedTextColor(context)),
                 backColor: AppColors.getRedColor(context),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),
@@ -120,6 +122,7 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
     //                     color: AppColors.AUTH_CONTAINER_COLOR),
     //                 backColor: AppColors.SECONDARY_COLOR,
     //                 onPressed: () {
+      ManageVibration.vibrate();
     //                   Navigator.pop(context);
     //                 },
     //               ),

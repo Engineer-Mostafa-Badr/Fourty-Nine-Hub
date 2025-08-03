@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BottomCardRequest extends StatefulWidget {
   final int driversCount;
@@ -216,6 +217,7 @@ class OfferRow extends StatelessWidget {
                     // Decrease Button
                     GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) return;
                         await rideCubit.updateTripPriceStatus(newOfferPrice: -3);
                       },
@@ -241,6 +243,7 @@ class OfferRow extends StatelessWidget {
                     // Increase Button
                     GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if ((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) return;
                         await rideCubit.updateTripPriceStatus(newOfferPrice: 3);
                       },

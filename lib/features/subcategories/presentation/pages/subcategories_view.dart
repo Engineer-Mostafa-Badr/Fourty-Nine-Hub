@@ -3,26 +3,26 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/utils/debouncer.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_view.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_search_view.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/favourite_ads_view.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_view.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/search_bar_widget.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../common/models/public/pagination_params.dart';
+import '../../../../common/widgets/stateful/dynamic/pagination_view.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/utils/debouncer.dart';
+import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import '../../../ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import '../../../fourty_nine/domain/entities/main_category_entity.dart';
+import '../../domain/entities/sub_category_entity.dart';
+import 'ads_request_log_view.dart';
+import 'ads_search_view.dart';
+import 'favourite_ads_view.dart';
+import 'my_ads_view.dart';
+import '../widgets/search_bar_widget.dart';
+import '../widgets/subcategory_card.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../routes/routes.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -34,6 +34,7 @@ import '../../../../res/style/styles.dart';
 import '../../../ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import '../cubit/subcategories_cubit.dart';
 import '../widgets/floating_add_button.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class SubCategoriesView extends StatefulWidget {
   final MainCategoryEntity mainCategory;
@@ -143,6 +144,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                               style: Styles.mediumText(
                                   fontWeight: FontWeight.bold)),
                           onTap: () {
+      ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               Navigator.pop(context);
                               context.push(Routes.CREATEAD,
@@ -252,6 +254,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                     IconButton(
                       padding: const EdgeInsets.all(0),
                       onPressed: () {
+      ManageVibration.vibrate();
                         context
                             .read<SubcategoriesCubit>()
                             .toggleMyAds('isSearchAdsOpen');
@@ -282,6 +285,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,
                           onPressed: () async {
+      ManageVibration.vibrate();
                             if (!context.isUserLoggedIn) {
                               return pleaseLoginDialog(context);
                             } else {
@@ -309,6 +313,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                               .read<SubcategoriesCubit>()
                               .isRequestLogOpen,
                           onPressed: () {
+      ManageVibration.vibrate();
                             context
                                 .read<SubcategoriesCubit>()
                                 .loadRequestsLogByMainCategory(
@@ -331,6 +336,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                         isOpened:
                             context.read<SubcategoriesCubit>().isMyAdsOpen,
                         onPressed: () {
+      ManageVibration.vibrate();
                           // TODO: EDIT THIS
                           if (!context.isUserLoggedIn) {
                             return pleaseLoginDialog(context);

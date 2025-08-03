@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/follower_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/followers_state.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/followers_view.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/following_view.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/followers_cubit/follower_cubit.dart';
+import '../cubit/followers_cubit/followers_state.dart';
+import 'followers_view.dart';
+import 'following_view.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 

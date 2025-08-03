@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
+import '../../../../common/functions/helper/lang_helper.dart';
+import 'main_category_model.dart';
 
 import '../../../../res/style/const.dart';
 import '../../domain/entities/parent_main_category_entity.dart';

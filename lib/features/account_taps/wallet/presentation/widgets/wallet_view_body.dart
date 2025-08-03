@@ -23,6 +23,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/widget/custom_failure_widget.dart';
 import '../cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
@@ -213,6 +214,7 @@ class _WalletViewBodyState extends State<WalletViewBody> {
                       ),
                       label: LocaleKeys.transferMoney.localize,
                       onPressed: () {
+      ManageVibration.vibrate();
                         context.push(Routes.TRANSFERMONEY);
                       },
                     ),
@@ -225,6 +227,7 @@ class _WalletViewBodyState extends State<WalletViewBody> {
               title: state.failureMessage ??
                   LocaleKeys.somethingWentWrong.localize,
               onPressed: () {
+      ManageVibration.vibrate();
                 context.read<WalletTwoCubit>().getAllDataWalletScreen(context);
               },
             );

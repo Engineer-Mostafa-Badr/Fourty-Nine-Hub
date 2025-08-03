@@ -21,6 +21,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../helpers/manage_vibration.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ContactsTripButtons extends StatefulWidget {
   final String otherUserId;

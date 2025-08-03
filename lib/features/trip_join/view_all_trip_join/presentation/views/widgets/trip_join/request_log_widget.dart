@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../Modified_widgets/trip_join_floating_action_button.dart';
+import '../../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -24,6 +24,7 @@ import '../../Modified_widgets/cards/trip_contacts_buttons.dart';
 import '../../Modified_widgets/trip_join_card.dart';
 import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
 import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class RequestLogTripJoinWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
@@ -134,6 +135,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                 children: [
                   InkWell(
                     onTap: (){
+      ManageVibration.vibrate();
                       context.read<ViewAllTripJoinCubit>().applyReadRequestTrip(data.id!);
                     },
                     child: CustomCard(
@@ -291,6 +293,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                         children: [
                           GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               context.pop();
                             },
                             child: Container(
@@ -311,6 +314,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                             child: TripJoinFloatingActionButton(
                               title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
                               onTap: () {
+      ManageVibration.vibrate();
                                 context.push(Routes.TRIP_JOIN);
                               },
                             ),
@@ -623,4 +627,3 @@ String formatTimestamp(dynamic time, BuildContext context) {
 
   return result;
 }
-

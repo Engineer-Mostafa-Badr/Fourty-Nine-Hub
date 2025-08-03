@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/helpers/web_socket/websocket_isolate_manager.dart';
+import 'core/utils/shared_pref.dart';
+import 'helpers/web_socket/websocket_isolate_manager.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SharedWebSocket {

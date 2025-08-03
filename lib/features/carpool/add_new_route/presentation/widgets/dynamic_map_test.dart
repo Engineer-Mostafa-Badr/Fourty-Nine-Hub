@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DynamicMapWithPolyline extends StatefulWidget {
   final String apiKey;
@@ -281,6 +282,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                 children: [
                   GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       setState(() {
                         _currentZoom++;
                         _mapController.move(_center, _currentZoom);
@@ -302,6 +304,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       setState(() {
                         _currentZoom--;
                         _mapController.move(_center, _currentZoom);

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/domain/entities/cart_entity.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../domain/entities/cart_entity.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/abstract/use_case.dart';

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // ignore: must_be_immutable
 class EditDoctorDocsView extends StatefulWidget {
@@ -87,6 +88,7 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
             height: 50.h,
             label: LocaleKeys.update.localize,
             onPressed: () {
+      ManageVibration.vibrate();
               print(_frontId);
               print(_backId);
               print(_expireDate);

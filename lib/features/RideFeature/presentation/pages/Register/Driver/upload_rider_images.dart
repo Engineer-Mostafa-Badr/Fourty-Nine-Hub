@@ -19,6 +19,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UploadRiderImagesParams{
   final bool? isShipping;
@@ -100,6 +101,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
         UploadImageRow(title: LocaleKeys.personalPhoto.localize,onTap: () async {
+      ManageVibration.vibrate();
           await  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: PersonalPhotoScreen(params: params,))));
@@ -110,6 +112,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         ),
         UploadImageRow(title: LocaleKeys.personalDocuments.localize,onTap: () async {
+      ManageVibration.vibrate();
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: PersonalDocumentsScreen(params: params,))));
@@ -120,6 +123,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         ),
         UploadImageRow(title: LocaleKeys.driversLicense.localize,onTap: () async {
+      ManageVibration.vibrate();
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: DriversLicenseScreen(params: params,))));
@@ -130,6 +134,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         ),
         UploadImageRow(title: LocaleKeys.vehicleInformation.localize,onTap: () async {
+      ManageVibration.vibrate();
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: VehicleInformationScreen(params: params,))));
@@ -140,6 +145,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         ),
         if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: LocaleKeys.criminalRecord.localize,onTap: () async {
+      ManageVibration.vibrate();
           // context.push(Routes.criminalRecordScreen);
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
@@ -149,6 +155,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         )],
         if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: LocaleKeys.dragAnalysis.localize,onTap: () async {
+      ManageVibration.vibrate();
           // context.push(Routes.drugAnalysisScreen);
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
@@ -192,6 +199,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           )],
         if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')...[
           UploadImageRow(title: LocaleKeys.technicalExamination.localize,onTap: () async {
+      ManageVibration.vibrate();
             // context.push(Routes.technicalExaminationScreen);
             await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                 value: serviceLocator<RideRegisterCubit>(),
@@ -240,6 +248,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
     return Column(
       children:[
         UploadImageRow(title: LocaleKeys.personalPhoto.localize,onTap: () async {
+      ManageVibration.vibrate();
          await  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: PersonalPhotoScreen(params: params,))));
@@ -250,6 +259,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         ),
         UploadImageRow(title: LocaleKeys.personalDocuments.localize,onTap: () async {
+      ManageVibration.vibrate();
          await  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: PersonalDocumentsScreen(params: params,))));
@@ -260,6 +270,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         ),
         UploadImageRow(title: LocaleKeys.driversLicense.localize,onTap: () async {
+      ManageVibration.vibrate();
         await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),
               child: DriversLicenseScreen(params: params,))));
@@ -270,6 +281,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         ),
         UploadImageRow(title: LocaleKeys.vehicleInformation.localize,onTap: () async {
+      ManageVibration.vibrate();
           // context.push(Routes.vehicleInformationScreen);
           await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
               value: serviceLocator<RideRegisterCubit>(),

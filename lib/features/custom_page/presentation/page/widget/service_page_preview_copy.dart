@@ -43,6 +43,7 @@ import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../fourty_nine/presentation/widgets/grid_blocks_widget.dart';
 import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key, this.noNavBar = false});
@@ -353,6 +354,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                 child: CustomAnimatedText(
                   text: LocaleKeys.youCanDeActivatePage.localize,
                   onTap: () {
+      ManageVibration.vibrate();
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -636,6 +638,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {
+      ManageVibration.vibrate();
         onTab();
         route != null ? context.push(route) : null;
       },
@@ -705,6 +708,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                       icon: Icons.star,
                       iconSize: 50.h,
                       onPressed: () {
+      ManageVibration.vibrate();
                         HandleCashback.setCount('tenPercentCount', context);
                         context.push(Routes.TenPercent);
                       }),
@@ -826,6 +830,7 @@ class CustomDeActivateDialog extends StatelessWidget {
             Expanded(
               child: CustomElevatedButton(
                 onPressed: () async {
+      ManageVibration.vibrate();
                   // await context.read<CustomPageCubit>().updateActivate(false);
                   // // Restart.restartApp();
                   // Phoenix.rebirth(context);
@@ -846,6 +851,7 @@ class CustomDeActivateDialog extends StatelessWidget {
                               Expanded(
                                 child: AppButton(
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     Navigator.pop(context);
                                   },
                                   label: LocaleKeys.cancel.localize,
@@ -858,6 +864,7 @@ class CustomDeActivateDialog extends StatelessWidget {
                                 child: AppButton(
                                   backColor: AppColors.PRIMARY_COLOR,
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     context
                                         .read<CustomPageCubit>()
                                         .updateActivate(true);
@@ -1000,6 +1007,7 @@ class MainCategoriesListView extends StatelessWidget {
 
         return InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('mainCategoriesCount', context);

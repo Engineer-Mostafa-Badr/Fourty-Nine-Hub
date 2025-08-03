@@ -25,6 +25,7 @@ import '../../../../core/enums/wheel.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entities/wheel_item_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class LuckyWheelView extends StatelessWidget {
   const LuckyWheelView({super.key});
@@ -214,6 +215,7 @@ class LuckyWheelView extends StatelessWidget {
                       color: AppColors.getReversedTextColor(context),
                     ),
                     onPressed: () {
+      ManageVibration.vibrate();
                       return spinWheelCubit.spin(state.data!, context);
                     },
                   ),

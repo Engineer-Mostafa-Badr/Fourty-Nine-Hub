@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CorporateAds extends StatefulWidget {
   const CorporateAds({super.key});
@@ -75,6 +76,7 @@ class _CorporateAdsState extends State<CorporateAds> {
                     buttonText: context.isArabic
                         ? 'أنشئ اعلان صورة ونص'
                         : 'Create Photo and Text Ad', onPressed: () {
+      ManageVibration.vibrate();
                   if (!context.isUserLoggedIn) {
                     print('not logged in');
                     context.push(Routes.FirstLoginScreen);
@@ -113,6 +115,7 @@ class _CorporateAdsState extends State<CorporateAds> {
                     buttonText: context.isArabic
                         ? 'أنشئ اعلان فيديو'
                         : 'Create Reel Ad', onPressed: () {
+      ManageVibration.vibrate();
                   if (!context.isUserLoggedIn) {
                     print('not logged in');
                     context.push(Routes.FirstLoginScreen);

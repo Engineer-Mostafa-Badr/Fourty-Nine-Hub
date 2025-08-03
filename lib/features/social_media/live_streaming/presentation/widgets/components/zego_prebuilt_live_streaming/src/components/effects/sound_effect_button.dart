@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/effects/sound_effect_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Package imports:
 
@@ -53,6 +54,7 @@ class _ZegoLiveStreamingSoundEffectButtonState
     final sizeBoxSize = widget.iconSize ?? Size(56.zR, 56.zR);
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         showSoundEffectSheet(
           context,
           translationText: widget.translationText,

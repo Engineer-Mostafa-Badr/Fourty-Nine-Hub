@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
+import '../../domain/entities/disable_entity.dart';
 
 class DisableModel extends DisableEntity {
   DisableModel(

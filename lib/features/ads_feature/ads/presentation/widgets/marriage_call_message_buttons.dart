@@ -31,6 +31,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../../helpers/manage_vibration.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MarriageCallMessageButtons extends StatefulWidget {
   final String otherUserId;
@@ -151,6 +152,7 @@ class _MarriageCallMessageButtonsState
                                                     .getButtonPrimaryColor(
                                                         context),
                                                 onTap: () {
+      ManageVibration.vibrate();
                                                   context.pop();
                                                   LaunchURLHelper().call(
                                                       phone: widget.phone);
@@ -164,6 +166,7 @@ class _MarriageCallMessageButtonsState
                                                 radius: 12,
                                                 color: AppColors.grey300,
                                                 onTap: () async {
+      ManageVibration.vibrate();
                                                   context.pop();
                                                   if (await Permission
                                                               .microphone

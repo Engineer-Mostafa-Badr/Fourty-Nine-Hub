@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/domain/repository/live_repository.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../repository/live_repository.dart';
 
 class SendPointListenerUseCase extends NormalUseCase<void, NoParams> {
   final LiveRepository _liveRepository;

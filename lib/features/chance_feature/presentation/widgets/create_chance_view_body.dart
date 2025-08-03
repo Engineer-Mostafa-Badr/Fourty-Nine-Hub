@@ -19,6 +19,7 @@ import '../../../account_taps/wallet/domain/entities/wallet/main_category_entity
 import '../../../account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import '../../domain/entity/main_category_drop_entity.dart';
 import '../../domain/use_case/add_chance_data.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateChanceViewBody extends StatefulWidget {
   const CreateChanceViewBody({super.key});
@@ -359,6 +360,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+      ManageVibration.vibrate();
                           if (_formKey.currentState!.validate()) {
                             if (selectedCategory != null &&
                                 selectedSubCategory != null) {

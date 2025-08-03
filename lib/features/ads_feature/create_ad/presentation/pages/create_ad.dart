@@ -35,6 +35,7 @@ import '../../../../../res/style/styles.dart';
 import '../../domain/entities/categorization_entity.dart';
 import '../widgets/ad_dynamic_inputs.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateAdView extends StatefulWidget {
   final CategorizationEntity categorization;
@@ -128,6 +129,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             Expanded(
                                 child: InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 setState(() {
                                   if (widget
                                           .categorization.mainCategory.nameEn ==
@@ -182,6 +184,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   setState(() {
                                     if (widget.categorization.mainCategory
                                             .nameEn ==
@@ -722,6 +725,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                     ),
                                     height: 44,
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       controller.createAd(
                                         categorize: widget.categorization,
                                         context: context,
@@ -744,6 +748,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                     ),
                                     height: 44,
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       controller.createAd(
                                         categorize: widget.categorization,
                                         context: context,
@@ -784,6 +789,7 @@ class _CreateAdViewState extends State<CreateAdView> {
           children: [
             InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 controller.uploadImage(
                   subCategoryId: widget.categorization.subCategory.id,
                   context: context,

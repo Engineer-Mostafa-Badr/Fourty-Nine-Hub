@@ -10,7 +10,7 @@ import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../common/widgets/stateless/buttons/app_button.dart';
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
@@ -180,6 +180,7 @@ Future<void> showPermissionDialog({required String message}) async =>
           TextAppButton(
             label: LocaleKeys.openAppSettings.tr(),
             onPressed: () async {
+      ManageVibration.vibrate();
               await openAppSettings();
               AppPages.router.configuration.navigatorKey.currentContext!.pop();
             },
@@ -338,6 +339,7 @@ void showConfirmDialog(
                 child: DefaultButton(
                   label: cancelText ?? 'Cancel',
                   onPressed: () {
+      ManageVibration.vibrate();
                     Navigator.of(context, rootNavigator: true).pop();
                     onCancel?.call();
                   },
@@ -348,6 +350,7 @@ void showConfirmDialog(
                 child: ElevatedAppButton(
                   label: confirmText ?? 'Delete',
                   onPressed: () {
+      ManageVibration.vibrate();
                     Navigator.of(context, rootNavigator: true).pop();
                     onConfirm?.call();
                   },
@@ -436,6 +439,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: LocaleKeys.close.localize,
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -444,6 +448,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: LocaleKeys.subscribe.localize,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       SubscriptionMethod().subscribe(
                           subscribeId: subCategoryId,
@@ -488,6 +493,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: context.isArabic? 'اغلاق' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -496,6 +502,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: context.isArabic? 'دفع' : 'Pay',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       serviceLocator<SubscriptionController>()
                           .showActiveSubscriptionAmounts(

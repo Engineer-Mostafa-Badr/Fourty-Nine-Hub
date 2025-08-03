@@ -28,6 +28,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/email_phone_text_form_field.dart';
@@ -252,6 +254,7 @@ class _LoginViewState extends State<LoginView> {
                         children: [
                           chooseAuthWidget(
                             onTap: () {
+      ManageVibration.vibrate();
                               setState(() {
                                 widget.authType = AuthType.LOGIN;
                               });
@@ -270,6 +273,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           chooseAuthWidget(
                             onTap: () {
+      ManageVibration.vibrate();
                               setState(() {
                                 widget.authType = AuthType.REGISTER;
                               });
@@ -316,6 +320,7 @@ class _LoginViewState extends State<LoginView> {
                               label: LocaleKeys.confirm.localize,
                               width: double.infinity,
                               onPressed: () {
+      ManageVibration.vibrate();
                                 if (registerCubit.accept) {
                                   if (formKeyRegister.currentState!
                                       .validate()) {
@@ -339,6 +344,7 @@ class _LoginViewState extends State<LoginView> {
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 log("message");
                                 loginCubit.login(formKeyLogin);
                               },
@@ -424,6 +430,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           obscureText: obsecure,
           prefixIcon: GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               setState(() {
                 obsecure = !obsecure;
               });
@@ -467,6 +474,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 color: AppColors.PRIMARY_COLOR,
                 icon: FontAwesomeIcons.google,
                 onPressed: () async {
+      ManageVibration.vibrate();
                   // await  loginCubit.handleGoogleSignIn();
                   print('@@@@@@@@@@@@@@@@@@@@@@@@@');
                   print(loginCubit.user!.uid);
@@ -500,6 +508,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 icon: FontAwesomeIcons.facebook,
                 color: AppColors.PRIMARY_COLOR,
                 onPressed: () async {
+      ManageVibration.vibrate();
                   await loginCubit.signInWithFacebook();
                 },
               ),
@@ -513,6 +522,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   textColor: Colors.black,
                   icon: FontAwesomeIcons.apple,
                   onPressed: () {
+      ManageVibration.vibrate();
                     loginCubit.signInWithApple();
                   },
                 ),
@@ -657,6 +667,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           Expanded(
                               child: BadgedLabel(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     registerCubit.isMale = true;
 
                                     setState(() {});
@@ -678,6 +689,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           Expanded(
                             child: BadgedLabel(
                               onTap: () {
+      ManageVibration.vibrate();
                                 registerCubit.isMale = false;
 
                                 setState(() {});
@@ -711,6 +723,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   obscureText: obsecure,
                   prefixIcon: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       setState(() {
                         obsecure = !obsecure;
                       });
@@ -741,6 +754,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   obscureText: obsecure,
                   prefixIcon: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       setState(() {
                         obsecure = !obsecure;
                       });
@@ -799,6 +813,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     ClickableWidget(
                       onTap: () {
+      ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
                         context.push(Routes.POLICY, extra: true);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/custom_fading_widget.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../add_new_trip_join/presentation/views/widgets/card.dart';
+import '../../../view_all_trip_join/presentation/views/widgets/custom_fading_widget.dart';
 
 class TripJoinRequestHistoryLoadingList extends StatelessWidget {
   const TripJoinRequestHistoryLoadingList({super.key});
