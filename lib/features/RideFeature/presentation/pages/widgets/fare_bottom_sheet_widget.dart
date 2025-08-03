@@ -114,25 +114,25 @@ class FareBottomSheetWidget extends StatelessWidget {
                     if (_formKey.currentState!.validate()) {
                       if (selectedCategoryName.trim().toLowerCase() == "Captain".toLowerCase()) {
                         state.rideExpectedPrice?.priceForCaptain =
-                            double.parse(_controller.text);
+                            double.parse(_controller.englishText);
                       } else if (selectedCategoryName.trim().toLowerCase() == "Scooter".toLowerCase()) {
                         state.rideExpectedPrice?.priceForScooter =
-                            double.parse(_controller.text);
+                            double.parse(_controller.englishText);
                       } else if (selectedCategoryName.trim().toLowerCase() == "Taxi".toLowerCase()) {
                         state.rideExpectedPrice?.priceForTaxi =
-                            double.parse(_controller.text);
+                            double.parse(_controller.englishText);
                       } else if (selectedCategoryName.trim().toLowerCase() == "Suv".toLowerCase()) {
                         state.rideExpectedPrice?.priceForSUV =
-                            double.parse(_controller.text);
+                            double.parse(_controller.englishText);
                       } else if (selectedCategoryName.trim().toLowerCase() == "Lady".toLowerCase()) {
                         state.rideExpectedPrice?.priceForWomen =
-                            double.parse(_controller.text);
+                            double.parse(_controller.englishText);
                       } else if (selectedCategoryName.trim().toLowerCase() == "Premium".toLowerCase()) {
                         state.rideExpectedPrice?.priceForPremium =
-                            double.parse(_controller.text);
+                            double.parse(_controller.englishText);
                       } else if (selectedCategoryName.trim().toLowerCase() == "Intercity".toLowerCase()) {
                         state.rideExpectedPrice?.priceForIntercity =
-                            double.parse(_controller.text);
+                            double.parse(_controller.englishText);
                       }
                       cubit.emitRefreshState();
                       Navigator.pop(context);
@@ -238,7 +238,7 @@ class FareBottomSheetWidget2 extends StatelessWidget {
                               .createNewOfferNonSocket(
                                   contextScreen,
                                   CreateNewOfferDashboardUsecaseParam(
-                                      priceOffer: double.parse(_controller.text).toInt(),
+                                      priceOffer: double.parse(_controller.englishText).toInt(),
                                       tripId: id),subCategoryId);
                         }
                       },
