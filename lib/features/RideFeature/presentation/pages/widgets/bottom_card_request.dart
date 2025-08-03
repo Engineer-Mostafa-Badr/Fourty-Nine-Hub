@@ -117,8 +117,67 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                             const Spacer(),
                             Switch(
                               value: state.requestedTrip?.autoAccept ?? false,
+                              // onChanged: (isAutoAccept) async {
+                              //   await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: isAutoAccept);
+                              // },
                               onChanged: (isAutoAccept) async {
-                                await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: isAutoAccept);
+                                final currentAutoAccept = state.requestedTrip?.autoAccept ?? false;
+
+                                // محاولة التفعيل (من false إلى true)
+                                if (!currentAutoAccept && isAutoAccept) {
+                                  final shouldProceed = await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(context.isArabic ? "تحذير" : "Alert!", style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.PRIMARY_COLOR_DARK)),
+                                      content: Text(
+                                        context.isArabic
+                                            ? "كن حذرا ربما تحصل علي سائق ليس لديه الاحتياجات المختاره"
+                                            : "Be careful, you might get a driver who does not meet your selected needs.",
+                                      ),
+                                      actions: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            OutlinedButton(
+                                              onPressed: () => Navigator.of(context).pop(false),
+                                              style: OutlinedButton.styleFrom(
+                                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                                side: BorderSide(color: Colors.red),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                              ),
+                                              child: Text(
+                                                context.isArabic ? "إلغاء" : "Cancel",
+                                                style: const TextStyle(color: Colors.red),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 12),
+                                            FilledButton(
+                                              onPressed: () => Navigator.of(context).pop(true),
+                                              style: FilledButton.styleFrom(
+                                                backgroundColor: AppColors.PRIMARY_COLOR,
+                                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                              ),
+                                              child: Text(
+                                                context.isArabic ? "موافق" : "OK",
+                                                style: const TextStyle(color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+
+                                      ],
+                                    ),
+                                  );
+
+                                  if (shouldProceed == true) {
+                                    await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: true);
+                                  }
+                                }
+                                // محاولة إيقاف التفعيل (من true إلى false)
+                                else if (currentAutoAccept && !isAutoAccept) {
+                                  await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: false);
+                                }
                               },
                               activeColor: switchThumbColor,
                               inactiveThumbColor: switchThumbColor,

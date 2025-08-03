@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class OptionsBottomsheetWidget extends StatefulWidget {
@@ -49,6 +50,7 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                 switchWidget(
                   text: LocaleKeys.comfort.tr(),
                   value: _isComfort,
+                  index: 1,
                   onChanged: (value) {
                     setState(() {
                       _isComfort = value;
@@ -58,6 +60,7 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                 switchWidget(
                   text: LocaleKeys.noSmoker.tr(),
                   value: _isNonSmoker,
+                  index: 2,
                   onChanged: (value) {
                     setState(() {
                       _isNonSmoker = value;
@@ -67,6 +70,7 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                 switchWidget(
                   text: LocaleKeys.autoAccept.tr(),
                   value: _isAutoAccept,
+                  index: 3,
                   onChanged: (value) {
                     setState(() {
                       _isAutoAccept = value;
@@ -106,15 +110,29 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
   Widget switchWidget({
     required String? text,
     required bool value,
+    required int index,
     required Function(bool)? onChanged,
   }) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           text ?? '',
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         ),
+        if(index == 1)
+          Image.asset(Assets.airConditioner,
+            height: 20,
+            width: 40,),
+        if(index == 2)
+          Image.asset(Assets.noSmokingIcon,
+            height: 20,
+            width: 40,),
+        if(index == 3)
+          SizedBox(width: 6,),
+        if(index == 3)
+          Icon(Icons.autorenew, size: 20,),
+        Spacer(),
         Transform.scale(
           scale: 0.75,
           child: Switch(

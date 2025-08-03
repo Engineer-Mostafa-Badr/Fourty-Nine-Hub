@@ -62,7 +62,7 @@ class RequestTripUseCaseParams {
     "paymentMethod" : paymentMethod,
     "passengers" : passengers,
     "comfort" : comfort,
-    "nonSmoker" : nonSmoker,
+    "nonSmoking" : nonSmoker,
     "autoAccept" : autoAccept,
     "isPremium" : isPremium,
     "polyline" : polyline,
