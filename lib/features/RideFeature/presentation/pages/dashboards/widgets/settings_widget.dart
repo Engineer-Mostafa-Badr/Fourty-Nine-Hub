@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/record_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
@@ -20,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -141,7 +143,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               title: LocaleKeys.ready.tr(),
               subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
               valuee: isReady,
-              onChanged: (value) {
+              onChanged: (value) async {
+                bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                if(!serviceEnabled){
+                  showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
+                  return;
+                }
                 ManageVibration.vibrate();
                 setState(() {
                   isReady = value;
@@ -185,7 +192,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 subText:
                     isCaptainShare ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
                 valuee: isCaptainShare,
-                onChanged: (value) {
+                onChanged: (value) async {
+                  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                  if(!serviceEnabled){
+                    showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
+                    return;
+                  }
                   ManageVibration.vibrate();
                   setState(() {
                     isCaptainShare = value;

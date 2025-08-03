@@ -28,6 +28,7 @@ class PriceColumn extends StatelessWidget {
           constraints:  BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.4),
           child: Label(
             text: startAddressTitle,
+            maxLines: 2,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 18,

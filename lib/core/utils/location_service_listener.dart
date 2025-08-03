@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationServiceWatcher {
@@ -19,13 +22,16 @@ class LocationServiceWatcher {
     // Start listening to changes
     _subscription = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
       bool isEnabled = status == ServiceStatus.enabled;
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
 
       if (_lastStatus != isEnabled) {
         _lastStatus = isEnabled;
 
         if (isEnabled) {
+          currentContext.read<MainCategoriesCubit>().updateSettings(true);
           print("✅ Location Service ENABLED");
         } else {
+          currentContext.read<MainCategoriesCubit>().updateSettings(false);
           print("❌ Location Service DISABLED");
         }
       }
