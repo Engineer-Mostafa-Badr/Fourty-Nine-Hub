@@ -119,7 +119,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       return const SetEquality().equals(a.toSet(), b.toSet());
     }
 
-    print("areStringListsEqualUnordered(widget.clientAddresses , oldWidget.clientAddresses) ${areStringListsEqualUnordered(widget.clientAddresses, oldWidget.clientAddresses)}");
     if (widget.targetLocation != oldWidget.targetLocation ||
         widget.startLocation != oldWidget.startLocation ||
         !areLatLngListsEqual(widget.polylinePoints, oldWidget.polylinePoints) ||
@@ -292,7 +291,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _markers.clear();
     _polylines.clear();
 
-    print("startAddress marker ${widget.startAddress}");
     if (widget.startLocation != null && _startMarkerIcon != null) {
       _markers.add(Marker(
         markerId: const MarkerId('start'),
@@ -412,7 +410,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    print('widget.startAddress ${widget.startAddress}');
     Widget mapWidget = GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(target: _getInitialCenter(), zoom: _currentZoom),
@@ -435,7 +432,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       },
     );
 
-    print("widget.fromClient ${widget.fromClient}");
     return Stack(
       children: [
         SizedBox(

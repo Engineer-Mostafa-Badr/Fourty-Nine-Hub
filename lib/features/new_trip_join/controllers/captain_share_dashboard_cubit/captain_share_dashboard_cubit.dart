@@ -10,7 +10,9 @@ import 'package:fourtyninehub/core/enums/route_client_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/accept_route_use_case.dart';
@@ -31,6 +33,7 @@ part 'captain_share_dashboard_state.dart';
 
 class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
+  final GetRunningTripUseCase getRunningTripUseCase;
   final GetDriverAvailableBookingsUseCase getDriverAvailableBookingsUseCase;
   final GetDriverRunningRouteUseCase getDriverRunningRouteUseCase;
   final ListenToNewRouteDriverUseCase listenToNewRouteDriverUseCase;
@@ -41,7 +44,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   final ClientNotShownUseCase clientNotShownUseCase;
   final GetDriverPastBookingsUseCase getDriverPastBookingsUseCase;
 
-  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.arrivedToClientUseCase,this.clientNotShownUseCase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
+  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.getRunningTripUseCase,this.arrivedToClientUseCase,this.clientNotShownUseCase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
       : super(const CaptainShareDashboardState());
 
 
@@ -67,21 +70,59 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
     });
   }
 
+  initData() async {
+    emit(state.copyWith(status: CaptainShareDashboardStates.loading));
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    // showLoadingDialog(currentContext);
+    await Future.wait([
+      getActiveTrip(currentContext),
+      getSettings(currentContext),
+    ]);
+    emit(state.copyWith(status: CaptainShareDashboardStates.success));
+  }
+
+  RunningTripEntity? activeTrip;
+  Future<void> getActiveTrip(BuildContext context) async {
+    activeTrip = null;
+
+    final Either<Failure, RunningTripEntity> result =
+    await getRunningTripUseCase(const NoParams());
+
+    if (isClosed) return;
+    result.fold(
+          (failure) {
+            // context.pop();
+        emit(state.copyWith(
+            status: CaptainShareDashboardStates.error,
+            failure: failure));
+      },
+          (trip) {
+            // context.pop();
+        activeTrip =trip;
+        // emit(state.copyWith(
+        //     status: CaptainShareDashboardStates.success,));
+      },
+    );
+  }
+
 
   Future<void> getSettings(BuildContext context) async {
+    // showLoadingDialog(context);
     log("getSettingsgetSettings");
     final Either<Failure, SettingsDashboardEntityResponse> result =
     await getSettingsDashboardUsecase(const NoParams());
     result.fold(
           (failure) {
+            // context.pop();
         log("getSettingsError${getFailureMessage(failure, context)}");
 
         emit(state.copyWith(status: CaptainShareDashboardStates.error, failure: failure,isCaptain:false));
       },
           (settings) {
         bool isCaptain = settings.data.isCaptainShareEnabled==true;
+        getActiveTrip(context);
         emit(state.copyWith(
-            status: CaptainShareDashboardStates.success,setting: settings,isCaptain:isCaptain));
+            setting: settings,isCaptain:isCaptain));
       },
     );
   }

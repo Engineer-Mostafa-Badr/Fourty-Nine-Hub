@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
@@ -18,6 +20,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 // import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -266,6 +269,118 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             onTap: () {
                               if (widget.onJoin != null) {
                                 widget.onJoin!();
+                                return;
+                                showModalBottomSheet(
+                                  backgroundColor:
+                                  Colors
+                                      .white,
+                                  context:
+                                  context,
+                                  shape:
+                                  const RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.only(
+                                      topLeft:
+                                      Radius.circular(32.0),
+                                      topRight:
+                                      Radius.circular(32.0),
+                                    ),
+                                  ),
+                                  isDismissible:
+                                  true,
+                                  isScrollControlled:
+                                  true,
+                                  builder:
+                                      (BuildContext
+                                  context) {
+                                    return AnimatedPadding(
+                                      padding:
+                                      MediaQuery.of(context).viewInsets,
+                                      duration:
+                                      const Duration(milliseconds: 50),
+                                      child:
+                                      Container(
+                                        height:
+                                        400.h,
+                                        padding:
+                                        EdgeInsets.symmetric(
+                                          vertical: 10.h,
+                                          horizontal: 10,
+                                        ),
+                                        child:
+                                        Column(
+                                          children: [
+                                            Label(
+                                              text: LocaleKeys.enterGreetMessage.localize,
+                                              style: Styles.headerText(),
+                                            ),
+                                            Sizer(
+                                              height: 30.h,
+                                            ),
+                                            Container(
+                                              constraints: BoxConstraints(maxHeight: 180.h),
+                                              child: TextField(
+                                                // focusNode: focusNode,
+                                                maxLines: null,
+                                                maxLength: 150,
+                                                onChanged: (c) {},
+                                                // controller: messageController,
+                                                decoration: InputDecoration(hintText: LocaleKeys.greetMessage.localize, fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        // if (messageController.text.isNotEmpty) {
+                                                        //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
+                                                        //   if (result == true) {
+                                                        //     controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
+                                                        //     showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
+                                                        //     Navigator.of(context).pop();
+                                                        //     setState(() {});
+                                                        //   } else {
+                                                        //     print(state.failure);
+                                                        //     Navigator.of(context).pop();
+                                                        //   }
+                                                        // }
+                                                      },
+                                                      child: Container(
+                                                        width: 100,
+                                                        height: 80.h,
+                                                        padding: const EdgeInsets.all(5),
+                                                        decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
+                                                        alignment: Alignment.center,
+                                                        child: Label(
+                                                          text: LocaleKeys.send.localize,
+                                                          style: Styles.headerText(color: Colors.white),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop(); // Close the dialog
+                                                      },
+                                                      child: Label(
+                                                        text: LocaleKeys.cancel.localize,
+                                                        style: Styles.headerText(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+
                               }
                             },
                             child: SvgPicture.asset(
@@ -589,7 +704,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
       }).toList();
     }
 
-    log("clients ${clients.length}");
 
     return GestureDetector(
       onTap: (){
