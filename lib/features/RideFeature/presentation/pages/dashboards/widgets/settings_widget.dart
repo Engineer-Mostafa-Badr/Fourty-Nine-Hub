@@ -6,7 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/record_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/creminal_record_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drivers_license_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/drug_analysis_non_socket.dart';
@@ -18,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -30,23 +34,24 @@ import 'update_personal_info_widget.dart';
 
 class SettingsWidget extends StatefulWidget {
   final String modeType;
+  final RideModeParams params;
   final SettingsDashboardEntity? settings;
-  const SettingsWidget({super.key, required this.modeType, this.settings});
+  const SettingsWidget({super.key, required this.modeType,required this.params, this.settings});
 
   @override
   State<SettingsWidget> createState() => _SettingsWidgetState();
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-  late bool isReady;
+  bool isReady=false;
   bool isComfort=false;
   bool isNonSmoking=false;
-  late bool enableSound;
-  late bool isCaptainShare;
-  late bool isCaptain;
-  late bool isIntercity;
-  late bool isPremium;
-  late num perKm;
+  bool enableSound=false;
+  bool isCaptainShare=false;
+  bool isCaptain=false;
+  bool isIntercity=false;
+  bool isPremium=false;
+  num perKm=0;
 
   var planController = ExpansionTileController();
   var cityController = ExpansionTileController();
@@ -138,7 +143,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               title: LocaleKeys.ready.tr(),
               subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
               valuee: isReady,
-              onChanged: (value) {
+              onChanged: (value) async {
+                bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                if(!serviceEnabled){
+                  showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
+                  return;
+                }
                 ManageVibration.vibrate();
                 setState(() {
                   isReady = value;
@@ -182,7 +192,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 subText:
                     isCaptainShare ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
                 valuee: isCaptainShare,
-                onChanged: (value) {
+                onChanged: (value) async {
+                  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                  if(!serviceEnabled){
+                    showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
+                    return;
+                  }
                   ManageVibration.vibrate();
                   setState(() {
                     isCaptainShare = value;
@@ -293,6 +308,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: UpdateFareBottomSheetWidget(
+                                isArabic:context.isArabic,
                                 selectedCategoryPrice: widget.settings?.pricingPerKm ?? 0,
                                 highCostPerKm: widget.settings?.highCostPerKm ?? 0,
                                 lowCostPerKm: widget.settings?.lowCostPerKm ?? 0,
@@ -314,7 +330,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                               subcategoryId:
                                               widget.settings!.categoryIds[index].id,
                                               isActive: index==0?isCaptain:index==1?isIntercity:isPremium)))
-                                      );
+                                      ,widget.params);
                                 },
                               ),
                             ),
@@ -323,7 +339,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Row(
                         children: [
                           Text(
-                              '${widget.settings?.pricingPerKm ?? 0} ',
+                              '${FormatNumbers().convertNumberToLocalizedString(widget.settings?.pricingPerKm.toString() ?? '0', isArabic: context.isArabic)} ',
                               style: const TextStyle(fontSize: 12,)),
                           Text(
                               'change'.tr(),
@@ -355,7 +371,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                Text(widget.settings?.rating.totalRatings.toString() ?? '2.5',
+                Text(FormatNumbers().convertNumberToLocalizedString(widget.settings?.rating.totalRatings.toString() ?? '0.0', isArabic: context.isArabic),
                     style: const TextStyle(
                         fontSize: 12, fontWeight: FontWeight.w700))
               ],
@@ -369,7 +385,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 Text(LocaleKeys.totalProfit.tr(), //'Total Profit',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500)),
-                Text('${widget.settings?.profit ?? '0'} ${LocaleKeys.egp.tr()}',
+                Text('${FormatNumbers().convertNumberToLocalizedString(widget.settings?.profit.toString() ?? '0', isArabic: context.isArabic)} ${LocaleKeys.egp.tr()}',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500
                     ))
@@ -383,8 +399,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               children: [
                 Text(LocaleKeys.totalTrips.tr(), //'Total Trips',
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500)),
-                Text(widget.settings?.countTrips.toString() ?? '', //'38',
+                        fontSize: 14, fontWeight: FontWeight.w500)),
+                Text(FormatNumbers().convertNumberToLocalizedString(widget.settings?.countTrips.toString() ?? '', isArabic: context.isArabic), //'38',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500))
               ],
@@ -405,11 +421,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(),
                   isEnabled: !(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: calculateDaysUntilExpiry(widget.settings?.idExpiryDate??''))),
-          if(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-          style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
-          ),
-          ),
+          if(hasIdRequest&&(idRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+    alignment: AlignmentDirectional.bottomEnd,
+    child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+    style: const TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+    ),
+    ),
+    ),
           ClickableWidget(
             onTap: () async {
               if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
@@ -426,11 +445,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 isEnabled: !(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                 exdIn: calculateDaysUntilExpiry(widget.settings?.drivingLicenseExpiryDate??'')),
           ),
-          if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-            style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
-            ),
-          ),          if (widget.modeType == 'ride') ...[
+          if(hasDriverLicenseRequest&&(driverLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+    alignment: AlignmentDirectional.bottomEnd,
+    child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+    style: const TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+    ),
+    ),
+    ),
+          if (widget.modeType == 'ride') ...[
             ClickableWidget(
               onTap: () async {
                 if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)){
@@ -447,9 +470,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   isEnabled: !(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: calculateDaysUntilExpiry(widget.settings?.carLicenseExpiryDate??'')),
             ),
-            if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+            if(hasCarLicenseRequest&&(carLicenseRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+              alignment: AlignmentDirectional.bottomEnd,
+              child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+                ),
               ),
             ),
             if(widget.settings?.isCriminalRecordEnabled == true)
@@ -469,11 +495,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   isEnabled: !(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: 4),
             ),
-                if(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-                  style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
-                  ),
-                ),
+                if(hasCriminalRecordRequest&&(criminalRecordRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+    alignment: AlignmentDirectional.bottomEnd,
+    child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+    style: const TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+    ),
+    ),
+    ),
               ],
             if(widget.settings?.isDrugAnalysisRecordEnabled == true)
             ...[ClickableWidget(
@@ -492,9 +521,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   isEnabled: !(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name)),
                   exdIn: calculateDaysUntilExpiry(widget.settings?.drugAnalysisExpiryDate??'')),
             ),
-              if(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
-                style: const TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+              if(hasDrugAnalysisRequest&&(drugAnalysisRequestStatus==DriverUpdateRequestStatusEnum.PENDING.name))Align(
+                alignment: AlignmentDirectional.bottomEnd,
+                child: Text(context.isArabic?"طلبك تحت المراجعه":"Your request is under review",
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500,color: AppColors.SECONDARY_COLOR
+                  ),
                 ),
               ),
             ],
@@ -558,7 +590,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
                                   isActive: index==0?isCaptain:index==1?isIntercity:isPremium))
-                          ));
+                          ),widget.params);
                     }),
               ),
             ],

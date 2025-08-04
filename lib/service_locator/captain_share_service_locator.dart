@@ -183,6 +183,7 @@ class CaptainShareServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
             ));
   }
 }

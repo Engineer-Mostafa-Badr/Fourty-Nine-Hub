@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
@@ -73,10 +74,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     bool shouldUpdate = false;
 
     if (widget.status != oldWidget.status) {
-      print("widget.status != oldWidget.status ${widget.status} ${oldWidget.status}");
-      if (_mapController != null &&
-          widget.startLocation != null &&
-          widget.targetLocation != null&&widget.status!=TripState.started.name) {
+      if (_mapController != null && widget.startLocation != null && widget.targetLocation != null && widget.status != TripState.started.name) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final bounds = LatLngBounds(
             southwest: LatLng(
@@ -107,27 +105,72 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         );
       }
     }
+    bool areLatLngListsEqual(List<LatLng> a, List<LatLng> b) {
+      if (a.length != b.length) return false;
+      for (int i = 0; i < a.length; i++) {
+        if (a[i].latitude != b[i].latitude || a[i].longitude != b[i].longitude) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    bool areStringListsEqualUnordered(List<String> a, List<String> b) {
+      return const SetEquality().equals(a.toSet(), b.toSet());
+    }
 
     if (widget.targetLocation != oldWidget.targetLocation ||
-        widget.clientLocations != oldWidget.clientLocations ||
-        widget.polylinePoints != oldWidget.polylinePoints ||
+        widget.startLocation != oldWidget.startLocation ||
+        !areLatLngListsEqual(widget.polylinePoints, oldWidget.polylinePoints) ||
+        !areLatLngListsEqual(widget.clientLocations, oldWidget.clientLocations) ||
+        !areStringListsEqualUnordered(widget.clientAddresses, oldWidget.clientAddresses) ||
         widget.startAddress != oldWidget.startAddress ||
-        widget.targetAddress != oldWidget.targetAddress ||
-        widget.clientAddresses != oldWidget.clientAddresses) {
+        widget.targetAddress != oldWidget.targetAddress) {
       shouldUpdate = true;
     }
-    if (widget.fromClient != oldWidget.fromClient ) {
+    if (widget.fromClient != oldWidget.fromClient) {
       shouldUpdate = true;
     }
-    if (widget.estimatedTime != oldWidget.estimatedTime ) {
-          shouldUpdate = true;
-        }
+    if (widget.estimatedTime != oldWidget.estimatedTime) {
+      shouldUpdate = true;
+    }
 
     if (shouldUpdate) {
       _setMarkersAndPolyline();
+      _moveCameraToFitAllPoints(); // 👈 أضف هذا السطر لتحريك الكاميرا بعد أي تحديث
     }
   }
 
+  void _moveCameraToFitAllPoints() {
+    if (_mapController == null) return;
+
+    List<LatLng> allPoints = [];
+    if (widget.startLocation != null) allPoints.add(widget.startLocation!);
+    if (widget.targetLocation != null) allPoints.add(widget.targetLocation!);
+    allPoints.addAll(widget.clientLocations);
+    allPoints.addAll(widget.polylinePoints);
+
+    if (allPoints.length < 2) return;
+
+    double minLat = allPoints.first.latitude;
+    double maxLat = allPoints.first.latitude;
+    double minLng = allPoints.first.longitude;
+    double maxLng = allPoints.first.longitude;
+
+    for (var point in allPoints) {
+      if (point.latitude < minLat) minLat = point.latitude;
+      if (point.latitude > maxLat) maxLat = point.latitude;
+      if (point.longitude < minLng) minLng = point.longitude;
+      if (point.longitude > maxLng) maxLng = point.longitude;
+    }
+
+    LatLngBounds bounds = LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
+
+    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 80));
+  }
 
   Future<void> _createCustomMarkerIcons(double size) async {
     _startMarkerIcon = await _createLocationGlowMarker(Colors.green, size);
@@ -231,49 +274,29 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _setMarkersAndPolyline();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.startLocation != null && widget.targetLocation != null&&widget.status!=TripState.started.name) {
-        final bounds = LatLngBounds(
-          southwest: LatLng(
-            min(widget.startLocation!.latitude, widget.targetLocation!.latitude),
-            min(widget.startLocation!.longitude, widget.targetLocation!.longitude),
-          ),
-          northeast: LatLng(
-            max(widget.startLocation!.latitude, widget.targetLocation!.latitude),
-            max(widget.startLocation!.longitude, widget.targetLocation!.longitude),
-          ),
-        );
-
-        _mapController!.moveCamera(
-          CameraUpdate.newLatLngBounds(bounds, 80), // padding between markers and screen edges
-        );
-      } else if (widget.startLocation != null) {
-        _mapController!.moveCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(target: widget.startLocation!, zoom: _currentZoom),
-          ),
-        );
-      }
+      _moveCameraToFitAllPoints();
     });
   }
-
 
   void initMapStyle() async {
     var lightStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/light_map_style.json');
     var darkStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/dark_map_style.json');
     _mapController?.setMapStyle(context.isDarkMode ? darkStyle : lightStyle);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _moveCameraToFitAllPoints();
+    });
   }
 
   void _setMarkersAndPolyline() {
     _markers.clear();
     _polylines.clear();
 
-    print("startAddress marker ${widget.startAddress}");
     if (widget.startLocation != null && _startMarkerIcon != null) {
       _markers.add(Marker(
         markerId: const MarkerId('start'),
         position: widget.startLocation!,
         icon: _startMarkerIcon!,
-        infoWindow: (widget.startAddress!=null&&(widget.startAddress?.isNotEmpty??false))?InfoWindow(title: widget.startAddress ?? ''):InfoWindow(),
+        infoWindow: (widget.startAddress != null && (widget.startAddress?.isNotEmpty ?? false)) ? InfoWindow(title: widget.startAddress ?? '') : InfoWindow(),
       ));
     }
 
@@ -282,7 +305,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         markerId: const MarkerId('target'),
         position: widget.targetLocation!,
         icon: _targetMarkerIcon!,
-        infoWindow:  (widget.targetAddress!=null&&(widget.targetAddress?.isNotEmpty??false))?InfoWindow( title: widget.targetAddress ?? ''):InfoWindow(),
+        infoWindow: (widget.targetAddress != null && (widget.targetAddress?.isNotEmpty ?? false)) ? InfoWindow(title: widget.targetAddress ?? '') : InfoWindow(),
       ));
     }
 
@@ -292,10 +315,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           markerId: MarkerId('client_$i'),
           position: widget.clientLocations[i],
           icon: _clientMarkerIcon!,
-          infoWindow: i < widget.clientAddresses.length ?InfoWindow(
-            // title: 'العميل ${i + 1}',
-            title: i < widget.clientAddresses.length ? widget.clientAddresses[i] : '',
-          ):InfoWindow(),
+          infoWindow: i < widget.clientAddresses.length
+              ? InfoWindow(
+                  // title: 'العميل ${i + 1}',
+                  title: i < widget.clientAddresses.length ? widget.clientAddresses[i] : '',
+                )
+              : InfoWindow(),
         ));
       }
     }
@@ -347,7 +372,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return gradientPolylines;
   }
 
-
   void _updateCarMarker(Marker? marker) {
     setState(() {
       _carMarker = marker;
@@ -370,9 +394,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     if (widget.startLocation != null && widget.targetLocation != null) {
       final url = Uri.parse(
         'https://www.google.com/maps/dir/?api=1'
-            '&origin=${widget.startLocation!.latitude},${widget.startLocation!.longitude}'
-            '&destination=${widget.targetLocation!.latitude},${widget.targetLocation!.longitude}'
-            '&travelmode=driving',
+        '&origin=${widget.startLocation!.latitude},${widget.startLocation!.longitude}'
+        '&destination=${widget.targetLocation!.latitude},${widget.targetLocation!.longitude}'
+        '&travelmode=driving',
       );
       if (await canLaunchUrl(url)) {
         await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -386,7 +410,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    print('widget.startAddress ${widget.startAddress}');
     Widget mapWidget = GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(target: _getInitialCenter(), zoom: _currentZoom),
@@ -409,7 +432,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       },
     );
 
-    print("widget.fromClient ${widget.fromClient}");
     return Stack(
       children: [
         SizedBox(
@@ -426,7 +448,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         if (widget.fromClient == false && _mapController != null)
           DriverCarMarkerWidget(
             onCarMarkerUpdated: _updateCarMarker,
-            mapController: _mapController!, size: _currentZoom,
+            mapController: _mapController!,
+            size: _currentZoom,
             time: widget.estimatedTime,
           ),
       ],

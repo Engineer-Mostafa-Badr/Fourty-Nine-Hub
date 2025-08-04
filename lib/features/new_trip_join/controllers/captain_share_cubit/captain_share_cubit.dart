@@ -312,13 +312,19 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   }
 
   Future<void> joinToRoute(
-      {required String id, required BuildContext context}) async {
+      {required String id,required String phone, required BuildContext context}) async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnabled){
+      showErrorMessage(context, context.isArabic?'يرجى الموافقة على إذن الموقع':'Please Allow Location Permission');
+      return;
+    }
     final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     Position currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     final response = await joinToRouteUseCase(JoinToRouteParams(
+    phone: phone,
       routeId: id,
       lat: currentPosition.latitude,
       lng: currentPosition.longitude

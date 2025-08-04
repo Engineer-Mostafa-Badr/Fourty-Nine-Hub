@@ -285,7 +285,7 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
     child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.cF3F3F3,
+            color: context.isDarkMode?AppColors.c5A5A5A:AppColors.cF3F3F3,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Label(

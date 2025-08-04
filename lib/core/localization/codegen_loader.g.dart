@@ -1402,7 +1402,7 @@ class CodegenLoader extends AssetLoader{
   "waitingApproval": "انتظار الموافقة",
   "change": "تغيير",
   "percentage": "نسبة",
-  "subscribePackage": "رزم الاشتراك",
+  "subscribePackage": "نظام الاشتراك",
   "busMode": "الوضع الحافلة",
   "trukMode": "الوضع شاحنة",
   "busDetails": "تفاصيل الحافلة",

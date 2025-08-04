@@ -469,7 +469,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: () async {
                   // await  loginCubit.handleGoogleSignIn();
                   print('@@@@@@@@@@@@@@@@@@@@@@@@@');
-                  print(loginCubit.user!.uid);
+                  print(loginCubit.user?.uid??'');
                   try {
                     final user = await loginCubit.loginWithGoogle();
                     if (user != null && mounted) {

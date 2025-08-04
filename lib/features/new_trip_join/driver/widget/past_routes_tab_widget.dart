@@ -86,7 +86,7 @@ class _PastRoutesTabWidgetState extends State<PastRoutesTabWidget> {
                             // cubit.cancelMyBooking(id: cubit.pastBookings[index].id, context: context, from: 'available');
                           }
                         },
-                        onJoin: () {
+                        onJoin: (phone) {
                           if ((!(cubit.pastBookings[index].clients ?? [])
                                   .contains(
                                       (UserCubit.to.state.data?.id ?? ''))) &&

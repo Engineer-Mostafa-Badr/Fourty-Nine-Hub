@@ -11,6 +11,7 @@ import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/core/utils/location_service_listener.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
@@ -114,6 +115,7 @@ void main() async {
           : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
+  await LocationServiceWatcher().start();
   runApp(
     LocalizationService.rootWidget(
       child: Phoenix(

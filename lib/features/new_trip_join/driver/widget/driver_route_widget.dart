@@ -419,7 +419,6 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
       }).toList();
     }
 
-    log("clients ${clients.length}");
 
     return GestureDetector(
       onTap: (){

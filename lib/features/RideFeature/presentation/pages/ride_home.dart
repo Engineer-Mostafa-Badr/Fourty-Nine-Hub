@@ -994,8 +994,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return Container(
       width: double.infinity,
       height: state.requestedTrip != null
-          ? MediaQuery.of(context).size.height
-          : MediaQuery.of(context).size.height * 0.5,
+          ? MediaQuery.of(context).size.height* 0.55
+          : MediaQuery.of(context).size.height * 0.55,
       // Add this to fix rendering issues
       decoration: const BoxDecoration(
         color: Colors.grey,
@@ -1279,8 +1279,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               openDrawer();
             },
             child: Container(
-              width: 85.w,
-              height: 45,
+              width: 75.w,
+              height: 35,
               decoration: BoxDecoration(
     color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :AppColors.whiteColor,
                 borderRadius: BorderRadius.circular(10),
@@ -1299,7 +1299,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           Sizer(),
           Expanded(
             child: SizedBox(
-              height: 45,
+              height: 35,
               child: GestureDetector(
                 onTap: () {
                   ManageVibration.vibrate();
@@ -1346,7 +1346,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               ? 'وضع السائق'
                               : 'Driver Mode'
                           : LocaleKeys.carTruckRegister.tr(),
-                      style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

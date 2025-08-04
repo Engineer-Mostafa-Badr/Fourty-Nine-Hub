@@ -192,7 +192,7 @@ class _RideDashboardDetailsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           scrolledUnderElevation: 0,
           leadingWidth: 30,
           title: Label(
@@ -296,6 +296,7 @@ class _RideDashboardDetailsScreenState
                             // ),
                             Label(
                               text: widget.tripEntity.tripDetails!.startLocation.title,
+                              maxLines: 2,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
@@ -335,6 +336,7 @@ class _RideDashboardDetailsScreenState
                             // ),
                             Label(
                               text: widget.tripEntity.tripDetails!.targetLocation.title,
+                              maxLines: 2,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
@@ -361,7 +363,7 @@ class _RideDashboardDetailsScreenState
                       const SizedBox(height: 15),
                     ],
                   ),
-                  RideDetailsRatingWidget(
+                  if(widget.tripEntity.tripDetails?.status!='canceled')RideDetailsRatingWidget(
                       isRate: widget.tripEntity.tripDetails?.driverRateClient!=null,
                       rate: (widget.tripEntity.tripDetails?.driverRateClient??0.0).toDouble(),
                       title: LocaleKeys.youRateClient.tr(),
@@ -385,7 +387,7 @@ class _RideDashboardDetailsScreenState
 
                       }
                   ),
-                  RideDetailsRatingWidget(
+                  if(widget.tripEntity.tripDetails?.status!='canceled') RideDetailsRatingWidget(
                       isRate: widget.tripEntity.tripDetails?.clientRateDriver!=null,
                       rate: (widget.tripEntity.tripDetails?.clientRateDriver??0.0).toDouble(),
                       title: LocaleKeys.clientRateYou.tr()),
