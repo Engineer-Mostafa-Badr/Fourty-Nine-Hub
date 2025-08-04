@@ -20,16 +20,10 @@ class ResponseStatusBuilder extends StatefulWidget {
 
 class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
   @override
-  void initState() {
-    GetStatusAllServicesNotificationsCubit getUserTripsNotificationsCubit =
-        context.read<GetStatusAllServicesNotificationsCubit>();
-    getUserTripsNotificationsCubit.getStatusAllServices();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final _ = context.locale;/// بيجبر الwidgets تعمل rebuild لما اللغة تتغير (setState لما اللغه تتغير)
+    final _ = context.locale;
+
+    /// بيجبر الwidgets تعمل rebuild لما اللغة تتغير (setState لما اللغه تتغير)
     return BlocConsumer<GetStatusAllServicesNotificationsCubit,
         GetStatusAllServicesNotificationsState>(
       listener: (context, state) {
@@ -43,18 +37,23 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
           return Shimmer.fromColors(
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white24,
-            child: SingleChildScrollView(
-              child: Column(
-                children: List.generate(
-                  14,
-                  (index) => Container(
-                    height: 50,
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey),
+            child: GlowingOverscrollIndicator(
+              axisDirection: AxisDirection.down,
+              color: AppColors.SECONDARY_COLOR,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: List.generate(
+                    14,
+                    (index) => Container(
+                      height: 50,
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey),
+                      ),
                     ),
                   ),
                 ),
@@ -62,61 +61,77 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
             ),
           );
         } else if (state is GetUserTripsNotificationsSuccess) {
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            itemCount: cubit.status.length,
-            itemBuilder: (context, index) {
-              return Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      constraints:  BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.5,
-                      ),
-                      // color: Colors.red,
-                      child: Label(
-                        text: context.isArabic
-                            ? cubit.status[index]['nameAr']!
-                            : cubit.status[index]['nameEn']!,
-                        style: Styles.mediumText(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          color: context.isDarkMode?Colors.white:Colors.black,
+          return GlowingOverscrollIndicator(
+            axisDirection: AxisDirection.down,
+            color: AppColors.SECONDARY_COLOR,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              itemCount: cubit.status.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.5,
                         ),
-                      ),
-                    ),
-                    // Spacer(),
-                    Flexible(
-                      child: Label(
-                        text: context.isArabic
-                            ? cubit.status[index]['valueAr']!
-                            : cubit.status[index]['valueEn']!,
-                        maxLines: 2,
-                        textAlign: TextAlign.end,
-                        style: Styles.mediumText(
+                        // color: Colors.red,
+                        child: Label(
+                          text: context.isArabic
+                              ? cubit.status[index]['nameAr']!
+                              : cubit.status[index]['nameEn']!,
+                          style: Styles.mediumText(
                             fontSize: 32,
                             fontWeight: FontWeight.w600,
-                            color: context.isDarkMode?Colors.white70: AppColors.PRIMARY_COLOR),
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const Sizer(),
+                      // Spacer(),
+                      Flexible(
+                        child: Label(
+                          text: context.isArabic
+                              ? cubit.status[index]['valueAr']!
+                              : cubit.status[index]['valueEn']!,
+                          maxLines: 2,
+                          textAlign: TextAlign.end,
+                          style: Styles.mediumText(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                              color: context.isDarkMode
+                                  ? Colors.white70
+                                  : AppColors.PRIMARY_COLOR),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Sizer(),
+            ),
           );
         } else {
           return Container();
         }
       },
     );
+  }
+
+  @override
+  void initState() {
+    GetStatusAllServicesNotificationsCubit getUserTripsNotificationsCubit =
+        context.read<GetStatusAllServicesNotificationsCubit>();
+    getUserTripsNotificationsCubit.getStatusAllServices();
+    super.initState();
   }
 }

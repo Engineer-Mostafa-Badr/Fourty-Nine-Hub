@@ -14,8 +14,10 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:latlong2/latlong.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -27,32 +29,19 @@ import '../widget/premium_and_request_widget.dart';
 import '../widget/price_and_seat_widget.dart';
 import '../widget/switch_widget.dart';
 import '../widget/welcome_text_widget.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
-
-class NewRouteScreen extends StatefulWidget {
-  const NewRouteScreen({super.key});
-
-  @override
-  State<NewRouteScreen> createState() => _NewRouteScreenState();
-}
-
-class _NewRouteScreenState extends State<NewRouteScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return const SharedScaffold(
-      mainCategoryId: 1,
-      isWithBackArrow: true,
-      body: NewRouteBody(),
-    );
-  }
-}
 
 class NewRouteBody extends StatefulWidget {
   const NewRouteBody({super.key});
 
   @override
   _NewRouteBodyState createState() => _NewRouteBodyState();
+}
+
+class NewRouteScreen extends StatefulWidget {
+  const NewRouteScreen({super.key});
+
+  @override
+  State<NewRouteScreen> createState() => _NewRouteScreenState();
 }
 
 class _NewRouteBodyState extends State<NewRouteBody> {
@@ -63,32 +52,13 @@ class _NewRouteBodyState extends State<NewRouteBody> {
   final TextEditingController phoneController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
-  @override
-  initState() {
-    super.initState();
-    context.read<CaptainShareCubit>().fetchUserLocation();
-  }
-
-
-  String convertDigits(String input, {bool toArabic = false}) {
-    const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const eastern = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-    final from = toArabic ? western : eastern;
-    final to = toArabic ? eastern : western;
-
-    for (int i = 0; i < from.length; i++) {
-      input = input.replaceAll(from[i], to[i]);
-    }
-
-    return input;
-  }
   // List<double>? currentLocation;
   // List<double>? toLocation;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(builder: (context, state) {
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
+        builder: (context, state) {
       var cubit = context.read<CaptainShareCubit>();
       return Form(
         key: formKey,
@@ -105,335 +75,473 @@ class _NewRouteBodyState extends State<NewRouteBody> {
             const SizedBox(height: 10),
             _buildTopImage(state.pricePerSeat?.polyline ?? [], state),
             Expanded(
-                child: ListView(
-              children: [
-                SizedBox(height: 10.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: _customLocationField(
-                    isTo: false,
-                    context: context,
-                    color: Colors.green,
-                    text: state.currentLocation?.address,
-                    onPressed: () async {
-      ManageVibration.vibrate();
-                      if (context.isUserLoggedIn) {
-                        context.push(
-                          Routes.GoogleMapsSearchAndPick,
-                          extra: RideGoogleMapSearchAndPickParams(
-                            minDistanceReferencePoint: state.toLocation == null ? null : LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
-                            onPicked: (pickedData) async {
-                              cubit.updateFromLocation(
-                                lat: pickedData.latitude,
-                                lng: pickedData.longitude,
-                                address: pickedData.address,
-                              );
-                              if (state.toLocation == null) {
-                                context.pop();
-                                return;
-                              }
-                              await cubit.createOffer(
-                                  context: context,
-                                  params: CreatePricePerSeatParams(
-                                      fromLocation: [pickedData.latitude, pickedData.longitude],
-                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-                                      isComfort: isComfort,
-                                      isLadiesPassenger: isLady,
-                                      isLadiesDriver: isLadyDriver, phoneNumber:''));
-                              context.pop();
-                            },
-                          ),
-                        );
-                      } else {
-                        context.push(Routes.LOGIN);
-                      }
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: _customLocationField(
-                    isTo: true,
-                    context: context,
-                    color: Colors.blue,
-                    text: state.toLocation?.address,
-                    onPressed: () async {
-      ManageVibration.vibrate();
-                      if (context.isUserLoggedIn) {
-                        context.push(
-                          Routes.GoogleMapsSearchAndPick,
-                          extra: RideGoogleMapSearchAndPickParams(
-                            minDistanceReferencePoint: state.currentLocation == null ? null : LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
-                            onPicked: (pickedData) async {
-                              await cubit.updateToLocation(
-                                lat: pickedData.latitude,
-                                lng: pickedData.longitude,
-                                address: pickedData.address,
-                              );
-                              print("state.currentLocation ${state.currentLocation} state.toLocation ${state.toLocation}");
-                              if (state.currentLocation == null) {
-                                context.pop();
-                                return;
-                              }
-
-                              await cubit.createOffer(
-                                  context: context,
-                                  params: CreatePricePerSeatParams(
-                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
-                                      toLocation: [pickedData.latitude, pickedData.longitude],
-                                      isComfort: isComfort,
-                                      isLadiesPassenger: isLady,
-                                      isLadiesDriver: isLadyDriver, phoneNumber: ''));
-                              context.pop();
-                            },
-                          ),
-                        );
-                      } else {
-                        context.push(Routes.LOGIN);
-                      }
-                    },
-                  ),
-                ),
-                PriceAndSeatWidget(
-                  price: state.pricePerSeat?.finalPricePerSeat,
-                ),
-                SizedBox(height: 10.h),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: CustomPhoneTextFormField(
-                      currentFocusNode: FocusNode(),
-                      nextFocusNode: FocusNode(),
-                      currentController: phoneController,
-                      onInputChanged: (value) =>formKey.currentState!.validate(),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(11),
-                      ],
-                      validator: (value) {
-                        final input = value?.trim() ?? '';
-
-                        if (input.isEmpty) return LocaleKeys.required.localize;
-
-                        final numericValue = convertDigits(input, toArabic: false)
-                            .replaceAll(RegExp(r'[^0-9]'), '');
-
-                        if (numericValue.length != 11) {
-                          return context.isArabic
-                              ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                              : 'Phone number must be exactly 11 digits.';
-                        }
-
-                        if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
-                          return context.isArabic
-                              ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                              : 'Phone number must start with 010, 011, 012, or 015.';
-                        }
-
-                        return null;
-                      },
-                    )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Column(
-                    children: [
-                      SwitchWidget(
-                          title: LocaleKeys.comfort.localize,
-                          value: isComfort,
-                          onChanged: (val) {
-                            if(formKey.currentState!.validate()) {
-                              if (state.currentLocation == null) {
-                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
-                                return;
-                              }
-                              if (state.toLocation == null) {
-                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
-                                return;
-                              }
-                              setState(() => isComfort = val);
-
-                              cubit.createOffer(
-                                  context: context,
-                                  params: CreatePricePerSeatParams(
-                                      phoneNumber:phoneController.text,
-                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
-                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-                                      isComfort: isComfort,
-                                      isLadiesPassenger: isLady,
-                                      isLadiesDriver: isLadyDriver));
-                            }
-                          }),
-                      SwitchWidget(
-                          title: context.isArabic ? 'راكبات سيدات' : 'Lady Passengers',
-                          value: isLady,
-                          onChanged: (val) {
-                            if(formKey.currentState!.validate()) {
-                              if (state.currentLocation == null) {
-                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
-                                return;
-                              }
-                              if (state.toLocation == null) {
-                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
-                                return;
-                              }
-                              bool gender = UserCubit.to.state.data?.gender == 'male';
-                              if (gender) {
-                                showErrorMessage(context, context.isArabic ? 'أنت رجل و لا يمكنك تحديد هذا الخيار' : 'You are a man and you can not select this option');
-                                return;
-                              }
-                              if (state.currentLocation == null || state.toLocation == null) {
-                                return;
-                              }
-                              setState(() => isLady = val);
-
-                              cubit.createOffer(
-                                  context: context,
-                                  params: CreatePricePerSeatParams(
-                                      phoneNumber:phoneController.text,
-                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
-                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-                                      isComfort: isComfort,
-                                      isLadiesPassenger: isLady,
-                                      isLadiesDriver: isLadyDriver));
-                            }
-
-
-                          }),
-                      SwitchWidget(
-                          title: context.isArabic ? 'سائقة' : 'Lady Driver',
-                          value: isLadyDriver,
-                          onChanged: (val) {
-                            if(formKey.currentState!.validate()) {
-                              if (state.currentLocation == null) {
-                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
-                                return;
-                              }
-                              if (state.toLocation == null) {
-                                showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
-                                return;
-                              }
-                              bool gender = UserCubit.to.state.data?.gender == 'male';
-                              if (gender) {
-                                showErrorMessage(context, context.isArabic ? 'أنت رجل و لا يمكنك تحديد هذا الخيار' : 'You are a man and you can not select this option');
-                                return;
-                              }
-                              setState(() => isLadyDriver = val);
-
-                              cubit.createOffer(
-                                  context: context,
-                                  params: CreatePricePerSeatParams(
-                                      phoneNumber:phoneController.text,
-                                      fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
-                                      toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-                                      isComfort: isComfort,
-                                      isLadiesPassenger: isLady,
-                                      isLadiesDriver: isLadyDriver));
-                            }
-
-                          }),
-                    ],
-                  ),
-                ),
-                if (isLadyDriver)
+                child: GlowingOverscrollIndicator(
+              color: AppColors.SECONDARY_COLOR,
+              axisDirection: AxisDirection.down,
+              child: ListView(
+                children: [
+                  SizedBox(height: 10.h),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Text(
-                      context.isArabic ? "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار" : 'You will find fewer drivers if you select this option!',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: AppColors.getRedColor(context),
-                        fontWeight: FontWeight.w600,
-                      ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: _customLocationField(
+                      isTo: false,
+                      context: context,
+                      color: Colors.green,
+                      text: state.currentLocation?.address,
+                      onPressed: () async {
+                        ManageVibration.vibrate();
+                        if (context.isUserLoggedIn) {
+                          context.push(
+                            Routes.GoogleMapsSearchAndPick,
+                            extra: RideGoogleMapSearchAndPickParams(
+                              minDistanceReferencePoint:
+                                  state.toLocation == null
+                                      ? null
+                                      : LatLng(state.toLocation!.lat!,
+                                          state.toLocation!.lng!),
+                              onPicked: (pickedData) async {
+                                cubit.updateFromLocation(
+                                  lat: pickedData.latitude,
+                                  lng: pickedData.longitude,
+                                  address: pickedData.address,
+                                );
+                                if (state.toLocation == null) {
+                                  context.pop();
+                                  return;
+                                }
+                                await cubit.createOffer(
+                                    context: context,
+                                    params: CreatePricePerSeatParams(
+                                        fromLocation: [
+                                          pickedData.latitude,
+                                          pickedData.longitude
+                                        ],
+                                        toLocation: [
+                                          state.toLocation!.lat!,
+                                          state.toLocation!.lng!
+                                        ],
+                                        isComfort: isComfort,
+                                        isLadiesPassenger: isLady,
+                                        isLadiesDriver: isLadyDriver,
+                                        phoneNumber: ''));
+                                context.pop();
+                              },
+                            ),
+                          );
+                        } else {
+                          context.push(Routes.LOGIN);
+                        }
+                      },
                     ),
                   ),
-                SizedBox(height: 5.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => showPaymentAlert(context),
-                            child: Text(
-                              LocaleKeys.paymentOption.localize,
-                              style: TextStyle(
-                                fontSize: 32.sp,
-                                fontWeight: FontWeight.bold,
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: _customLocationField(
+                      isTo: true,
+                      context: context,
+                      color: Colors.blue,
+                      text: state.toLocation?.address,
+                      onPressed: () async {
+                        ManageVibration.vibrate();
+                        if (context.isUserLoggedIn) {
+                          context.push(
+                            Routes.GoogleMapsSearchAndPick,
+                            extra: RideGoogleMapSearchAndPickParams(
+                              minDistanceReferencePoint:
+                                  state.currentLocation == null
+                                      ? null
+                                      : LatLng(state.currentLocation!.lat!,
+                                          state.currentLocation!.lng!),
+                              onPicked: (pickedData) async {
+                                await cubit.updateToLocation(
+                                  lat: pickedData.latitude,
+                                  lng: pickedData.longitude,
+                                  address: pickedData.address,
+                                );
+                                print(
+                                    "state.currentLocation ${state.currentLocation} state.toLocation ${state.toLocation}");
+                                if (state.currentLocation == null) {
+                                  context.pop();
+                                  return;
+                                }
+
+                                await cubit.createOffer(
+                                    context: context,
+                                    params: CreatePricePerSeatParams(
+                                        fromLocation: [
+                                          state.currentLocation!.lat!,
+                                          state.currentLocation!.lng!
+                                        ],
+                                        toLocation: [
+                                          pickedData.latitude,
+                                          pickedData.longitude
+                                        ],
+                                        isComfort: isComfort,
+                                        isLadiesPassenger: isLady,
+                                        isLadiesDriver: isLadyDriver,
+                                        phoneNumber: ''));
+                                context.pop();
+                              },
+                            ),
+                          );
+                        } else {
+                          context.push(Routes.LOGIN);
+                        }
+                      },
+                    ),
+                  ),
+                  PriceAndSeatWidget(
+                    price: state.pricePerSeat?.finalPricePerSeat,
+                  ),
+                  SizedBox(height: 10.h),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: CustomPhoneTextFormField(
+                        currentFocusNode: FocusNode(),
+                        nextFocusNode: FocusNode(),
+                        currentController: phoneController,
+                        onInputChanged: (value) =>
+                            formKey.currentState!.validate(),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(11),
+                        ],
+                        validator: (value) {
+                          final input = value?.trim() ?? '';
+
+                          if (input.isEmpty)
+                            return LocaleKeys.required.localize;
+
+                          final numericValue =
+                              convertDigits(input, toArabic: false)
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
+
+                          if (numericValue.length != 11) {
+                            return context.isArabic
+                                ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
+                                : 'Phone number must be exactly 11 digits.';
+                          }
+
+                          if (!['010', '011', '012', '015']
+                              .any(numericValue.startsWith)) {
+                            return context.isArabic
+                                ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
+                                : 'Phone number must start with 010, 011, 012, or 015.';
+                          }
+
+                          return null;
+                        },
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      children: [
+                        SwitchWidget(
+                            title: LocaleKeys.comfort.localize,
+                            value: isComfort,
+                            onChanged: (val) {
+                              if (formKey.currentState!.validate()) {
+                                if (state.currentLocation == null) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'يرجى تحديد الموقع الحالي'
+                                          : 'Please select your current location');
+                                  return;
+                                }
+                                if (state.toLocation == null) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'يرجى تحديد الموقع الهدف'
+                                          : 'Please select your target location');
+                                  return;
+                                }
+                                setState(() => isComfort = val);
+
+                                cubit.createOffer(
+                                    context: context,
+                                    params: CreatePricePerSeatParams(
+                                        phoneNumber: phoneController.text,
+                                        fromLocation: [
+                                          state.currentLocation!.lat!,
+                                          state.currentLocation!.lng!
+                                        ],
+                                        toLocation: [
+                                          state.toLocation!.lat!,
+                                          state.toLocation!.lng!
+                                        ],
+                                        isComfort: isComfort,
+                                        isLadiesPassenger: isLady,
+                                        isLadiesDriver: isLadyDriver));
+                              }
+                            }),
+                        SwitchWidget(
+                            title: context.isArabic
+                                ? 'راكبات سيدات'
+                                : 'Lady Passengers',
+                            value: isLady,
+                            onChanged: (val) {
+                              if (formKey.currentState!.validate()) {
+                                if (state.currentLocation == null) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'يرجى تحديد الموقع الحالي'
+                                          : 'Please select your current location');
+                                  return;
+                                }
+                                if (state.toLocation == null) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'يرجى تحديد الموقع الهدف'
+                                          : 'Please select your target location');
+                                  return;
+                                }
+                                bool gender =
+                                    UserCubit.to.state.data?.gender == 'male';
+                                if (gender) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'أنت رجل و لا يمكنك تحديد هذا الخيار'
+                                          : 'You are a man and you can not select this option');
+                                  return;
+                                }
+                                if (state.currentLocation == null ||
+                                    state.toLocation == null) {
+                                  return;
+                                }
+                                setState(() => isLady = val);
+
+                                cubit.createOffer(
+                                    context: context,
+                                    params: CreatePricePerSeatParams(
+                                        phoneNumber: phoneController.text,
+                                        fromLocation: [
+                                          state.currentLocation!.lat!,
+                                          state.currentLocation!.lng!
+                                        ],
+                                        toLocation: [
+                                          state.toLocation!.lat!,
+                                          state.toLocation!.lng!
+                                        ],
+                                        isComfort: isComfort,
+                                        isLadiesPassenger: isLady,
+                                        isLadiesDriver: isLadyDriver));
+                              }
+                            }),
+                        SwitchWidget(
+                            title: context.isArabic ? 'سائقة' : 'Lady Driver',
+                            value: isLadyDriver,
+                            onChanged: (val) {
+                              if (formKey.currentState!.validate()) {
+                                if (state.currentLocation == null) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'يرجى تحديد الموقع الحالي'
+                                          : 'Please select your current location');
+                                  return;
+                                }
+                                if (state.toLocation == null) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'يرجى تحديد الموقع الهدف'
+                                          : 'Please select your target location');
+                                  return;
+                                }
+                                bool gender =
+                                    UserCubit.to.state.data?.gender == 'male';
+                                if (gender) {
+                                  showErrorMessage(
+                                      context,
+                                      context.isArabic
+                                          ? 'أنت رجل و لا يمكنك تحديد هذا الخيار'
+                                          : 'You are a man and you can not select this option');
+                                  return;
+                                }
+                                setState(() => isLadyDriver = val);
+
+                                cubit.createOffer(
+                                    context: context,
+                                    params: CreatePricePerSeatParams(
+                                        phoneNumber: phoneController.text,
+                                        fromLocation: [
+                                          state.currentLocation!.lat!,
+                                          state.currentLocation!.lng!
+                                        ],
+                                        toLocation: [
+                                          state.toLocation!.lat!,
+                                          state.toLocation!.lng!
+                                        ],
+                                        isComfort: isComfort,
+                                        isLadiesPassenger: isLady,
+                                        isLadiesDriver: isLadyDriver));
+                              }
+                            }),
+                      ],
+                    ),
+                  ),
+                  if (isLadyDriver)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Text(
+                        context.isArabic
+                            ? "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار"
+                            : 'You will find fewer drivers if you select this option!',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.getRedColor(context),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  SizedBox(height: 5.h),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () => showPaymentAlert(context),
+                              child: Text(
+                                LocaleKeys.paymentOption.localize,
+                                style: TextStyle(
+                                  fontSize: 32.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 5.w),
-                          GestureDetector(
-                            onTap: () => showPaymentAlert(context),
-                            child: SvgPicture.asset(Assets.ideaIcon),
-                          ),
-                        ],
-                      ),
-                      SvgPicture.asset(
-                        Assets.visaIcon,
-                        width: 40,
-                        color: context.isDarkMode ? AppColors.Floating_Button_COLOR_DARK : null,
-                      ),
-                    ],
+                            SizedBox(width: 5.w),
+                            GestureDetector(
+                              onTap: () => showPaymentAlert(context),
+                              child: SvgPicture.asset(Assets.ideaIcon),
+                            ),
+                          ],
+                        ),
+                        SvgPicture.asset(
+                          Assets.visaIcon,
+                          width: 40,
+                          color: context.isDarkMode
+                              ? AppColors.Floating_Button_COLOR_DARK
+                              : null,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 15.h),
-                PremiumAndRequestWidget(
-                  onPremiumRequest: () {
-                    if(formKey.currentState!.validate()) {
-                      if (state.currentLocation == null) {
-                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
-                        return;
-                      }
-                      if (state.toLocation == null) {
-                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
-                        return;
-                      }
+                  SizedBox(height: 15.h),
+                  PremiumAndRequestWidget(
+                    onPremiumRequest: () {
+                      if (formKey.currentState!.validate()) {
+                        if (state.currentLocation == null) {
+                          showErrorMessage(
+                              context,
+                              context.isArabic
+                                  ? 'يرجى تحديد الموقع الحالي'
+                                  : 'Please select your current location');
+                          return;
+                        }
+                        if (state.toLocation == null) {
+                          showErrorMessage(
+                              context,
+                              context.isArabic
+                                  ? 'يرجى تحديد الموقع الهدف'
+                                  : 'Please select your target location');
+                          return;
+                        }
 
-                      cubit.createRoute(
-                          context: context,
-                          params: CreatePricePerSeatParams(
-                              isPremium: true,
-                              phoneNumber:phoneController.text,
-                              fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
-                              toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-                              isComfort: isComfort,
-                              isLadiesPassenger: isLady,
-                              isLadiesDriver: isLadyDriver));
-                    }
-                  },
-                  onRequest: () {
-                    if(formKey.currentState!.validate()) {
-                      if (state.currentLocation == null) {
-                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الحالي' : 'Please select your current location');
-                        return;
+                        cubit.createRoute(
+                            context: context,
+                            params: CreatePricePerSeatParams(
+                                isPremium: true,
+                                phoneNumber: phoneController.text,
+                                fromLocation: [
+                                  state.currentLocation!.lat!,
+                                  state.currentLocation!.lng!
+                                ],
+                                toLocation: [
+                                  state.toLocation!.lat!,
+                                  state.toLocation!.lng!
+                                ],
+                                isComfort: isComfort,
+                                isLadiesPassenger: isLady,
+                                isLadiesDriver: isLadyDriver));
                       }
-                      if (state.toLocation == null) {
-                        showErrorMessage(context, context.isArabic ? 'يرجى تحديد الموقع الهدف' : 'Please select your target location');
-                        return;
-                      }
+                    },
+                    onRequest: () {
+                      if (formKey.currentState!.validate()) {
+                        if (state.currentLocation == null) {
+                          showErrorMessage(
+                              context,
+                              context.isArabic
+                                  ? 'يرجى تحديد الموقع الحالي'
+                                  : 'Please select your current location');
+                          return;
+                        }
+                        if (state.toLocation == null) {
+                          showErrorMessage(
+                              context,
+                              context.isArabic
+                                  ? 'يرجى تحديد الموقع الهدف'
+                                  : 'Please select your target location');
+                          return;
+                        }
 
-                      cubit.createRoute(
-                          context: context,
-                          params: CreatePricePerSeatParams(
-                              isPremium: false,
-                              phoneNumber:phoneController.text,
-                              fromLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!],
-                              toLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-                              isComfort: isComfort,
-                              isLadiesPassenger: isLady,
-                              isLadiesDriver: isLadyDriver));
-                    }
-                  },
-                ),
-                SizedBox(height: 30.h),
-              ],
+                        cubit.createRoute(
+                            context: context,
+                            params: CreatePricePerSeatParams(
+                                isPremium: false,
+                                phoneNumber: phoneController.text,
+                                fromLocation: [
+                                  state.currentLocation!.lat!,
+                                  state.currentLocation!.lng!
+                                ],
+                                toLocation: [
+                                  state.toLocation!.lat!,
+                                  state.toLocation!.lng!
+                                ],
+                                isComfort: isComfort,
+                                isLadiesPassenger: isLady,
+                                isLadiesDriver: isLadyDriver));
+                      }
+                    },
+                  ),
+                  SizedBox(height: 30.h),
+                ],
+              ),
             ))
           ],
         ),
       );
     });
+  }
+
+  String convertDigits(String input, {bool toArabic = false}) {
+    const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const eastern = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    final from = toArabic ? western : eastern;
+    final to = toArabic ? eastern : western;
+
+    for (int i = 0; i < from.length; i++) {
+      input = input.replaceAll(from[i], to[i]);
+    }
+
+    return input;
+  }
+
+  @override
+  initState() {
+    super.initState();
+    context.read<CaptainShareCubit>().fetchUserLocation();
   }
 
   void showPaymentAlert(BuildContext context) {
@@ -463,23 +571,32 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   ),
                   SizedBox(height: 16.h),
                   AlertTextWidget(
-                    text: context.isArabic ? "الدفع مقدمًا وشحن محفظتك." : "Payment in advance, charge your wallet.",
+                    text: context.isArabic
+                        ? "الدفع مقدمًا وشحن محفظتك."
+                        : "Payment in advance, charge your wallet.",
                   ),
-                  AlertTextWidget(text: context.isArabic ? "سيتم الاحتفاظ بالمال حتى انتهاء الرحلة." : "Money will be holding till the ride ends."),
                   AlertTextWidget(
-                    text: context.isArabic ? "لا يوجد أموال للكابتن." : "No cash for the captain.",
+                      text: context.isArabic
+                          ? "سيتم الاحتفاظ بالمال حتى انتهاء الرحلة."
+                          : "Money will be holding till the ride ends."),
+                  AlertTextWidget(
+                    text: context.isArabic
+                        ? "لا يوجد أموال للكابتن."
+                        : "No cash for the captain.",
                   ),
                   const SizedBox(height: 20),
                   Center(
                       child: CustomButton(
                     width: double.infinity,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context.pop();
                     },
                     color: AppColors.getButtonPrimaryColor(context),
                     text: LocaleKeys.cancel.localize,
-                    textStyle: TextStyle(color: context.isDarkMode ? Colors.black : Colors.white),
+                    textStyle: TextStyle(
+                        color:
+                            context.isDarkMode ? Colors.black : Colors.white),
                   )),
                 ],
               ),
@@ -488,66 +605,17 @@ class _NewRouteBodyState extends State<NewRouteBody> {
         });
   }
 
-  Widget _customLocationField({
-    required Color color,
-    required String? text,
-    required bool isTo,
-    required Function()? onPressed,
-    required BuildContext context,
-  }) {
-    if (text == null) {
-      if (isTo == true) {
-        text = 'To';
-      } else {
-        text = 'From';
-      }
-    }
-
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: AppColors.getFillColor(context),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CircleAvatar(
-                backgroundColor: color,
-                radius: 10,
-                child: CircleAvatar(backgroundColor: AppColors.getFillColor(context), radius: 5),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                text == 'From'
-                    ? context.isArabic
-                        ? "من"
-                        : "From"
-                    : text == 'To'
-                        ? context.isArabic
-                            ? "إلى"
-                            : "To"
-                        : text,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: AppColors.getTextColor(context)),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  Widget _buildTopImage(
+      List<List<double>> routePoints, CaptainShareState state) {
+    return _buildTopMap(state, context);
   }
 
   Widget _buildTopMap(CaptainShareState state, BuildContext context) {
     List<gmap.LatLng> routePoints = [];
 
     try {
-      routePoints = _convertPolylineToLatLng(state.pricePerSeat?.polyline ?? []);
+      routePoints =
+          _convertPolylineToLatLng(state.pricePerSeat?.polyline ?? []);
     } catch (e) {
       print('Error processing route points: $e');
       routePoints = [];
@@ -570,8 +638,12 @@ class _NewRouteBodyState extends State<NewRouteBody> {
       child: ClipRect(
         child: CustomGoogleMap(
           // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
-          startLocation: state.currentLocation == null ? null : gmap.LatLng(startLat, startLng),
-          targetLocation: state.toLocation == null ? null : gmap.LatLng(targetLat, targetLng),
+          startLocation: state.currentLocation == null
+              ? null
+              : gmap.LatLng(startLat, startLng),
+          targetLocation: state.toLocation == null
+              ? null
+              : gmap.LatLng(targetLat, targetLng),
           polylinePoints: routePoints,
           clientLocations: clients,
           enableScrolling: true,
@@ -657,7 +729,71 @@ class _NewRouteBodyState extends State<NewRouteBody> {
     return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
 
-  Widget _buildTopImage(List<List<double>> routePoints, CaptainShareState state) {
-    return _buildTopMap(state, context);
+  Widget _customLocationField({
+    required Color color,
+    required String? text,
+    required bool isTo,
+    required Function()? onPressed,
+    required BuildContext context,
+  }) {
+    if (text == null) {
+      if (isTo == true) {
+        text = 'To';
+      } else {
+        text = 'From';
+      }
+    }
+
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: AppColors.getFillColor(context),
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: CircleAvatar(
+                backgroundColor: color,
+                radius: 10,
+                child: CircleAvatar(
+                    backgroundColor: AppColors.getFillColor(context),
+                    radius: 5),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                text == 'From'
+                    ? context.isArabic
+                        ? "من"
+                        : "From"
+                    : text == 'To'
+                        ? context.isArabic
+                            ? "إلى"
+                            : "To"
+                        : text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: AppColors.getTextColor(context)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NewRouteScreenState extends State<NewRouteScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return const SharedScaffold(
+      mainCategoryId: 1,
+      isWithBackArrow: true,
+      body: NewRouteBody(),
+    );
   }
 }

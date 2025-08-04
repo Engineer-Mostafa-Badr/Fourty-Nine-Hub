@@ -1036,30 +1036,35 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                           // final controller = context.read<MainCategoriesTapsCubit>();
 
                           return Expanded(
-                            child: GridView.builder(
-                              padding: EdgeInsets.all(24.w),
-                              itemCount: state.subCategories?.length ?? 0,
-                              controller: controller.scrollController,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: .65,
-                                mainAxisSpacing: 16,
-                                crossAxisSpacing: 16,
+                            child: GlowingOverscrollIndicator(
+                              axisDirection: AxisDirection.down,
+                              color: AppColors.SECONDARY_COLOR,
+                              child: GridView.builder(
+                                padding: EdgeInsets.all(24.w),
+                                itemCount: state.subCategories?.length ?? 0,
+                                controller: controller.scrollController,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: .65,
+                                  mainAxisSpacing: 16,
+                                  crossAxisSpacing: 16,
+                                ),
+                                itemBuilder: (context, index) {
+                                  final subCategory =
+                                      state.subCategories![index];
+                                  return SubCategoryCard(
+                                    mainCategory: controller.selectedCategory,
+                                    item: subCategory,
+                                    onFav: () {
+                                      print("object");
+                                      return controller
+                                          .toggleSubCategoryToFavorites(
+                                              state.subCategories![index].id);
+                                    },
+                                  );
+                                },
                               ),
-                              itemBuilder: (context, index) {
-                                final subCategory = state.subCategories![index];
-                                return SubCategoryCard(
-                                  mainCategory: controller.selectedCategory,
-                                  item: subCategory,
-                                  onFav: () {
-                                    print("object");
-                                    return controller
-                                        .toggleSubCategoryToFavorites(
-                                            state.subCategories![index].id);
-                                  },
-                                );
-                              },
                             ),
                           );
                         } else {

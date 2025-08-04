@@ -561,25 +561,29 @@ class _CustomPageSubCategoriesViewState
                   build: (ScrollController scrollController,
                       List<SubCategoryEntity> data) {
                     print("data.length${data.length}");
-                    return GridView.builder(
-                      padding: EdgeInsets.all(24.w),
-                      itemCount: data.length,
-                      controller: this.scrollController,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: .65,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                      ),
-                      itemBuilder: (context, index) => SubCategoryCard(
-                        mainCategory: widget.params.mainCategory,
-                        item: data[index],
-                        onFav: () async {
-                          var result = await controller
-                              .toggleSubCategoryToFavorites(data[index].id);
-                          return result;
-                        },
+                    return GlowingOverscrollIndicator(
+                      axisDirection: AxisDirection.down,
+                      color: AppColors.SECONDARY_COLOR,
+                      child: GridView.builder(
+                        padding: EdgeInsets.all(24.w),
+                        itemCount: data.length,
+                        controller: this.scrollController,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: .65,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                        ),
+                        itemBuilder: (context, index) => SubCategoryCard(
+                          mainCategory: widget.params.mainCategory,
+                          item: data[index],
+                          onFav: () async {
+                            var result = await controller
+                                .toggleSubCategoryToFavorites(data[index].id);
+                            return result;
+                          },
+                        ),
                       ),
                     );
                   },

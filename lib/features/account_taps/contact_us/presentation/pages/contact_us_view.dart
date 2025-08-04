@@ -10,8 +10,8 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../core/error/failure.dart';
@@ -32,21 +32,6 @@ class ContactUsView extends StatefulWidget {
 class _ContactUsViewState extends State<ContactUsView> {
   final FocusNode phoneFocusNode = FocusNode();
   final FocusNode messageFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      phoneFocusNode.requestFocus();
-    });
-  }
-
-  @override
-  void dispose() {
-    phoneFocusNode.dispose();
-    messageFocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,95 +67,99 @@ class _ContactUsViewState extends State<ContactUsView> {
         },
         builder: (BuildContext context, ContactUsState state) {
           final controller = context.read<ContactUsCubit>();
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height - 140.h,
-              ),
-              child: IntrinsicHeight(
-                child: Form(
-                  key: controller.formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      children: [
-                        const Sizer(
-                          height: 30,
-                        ),
-                        buildContainerPhoneAndEmail(
-                          size,
-                          LocaleKeys.email.localize,
-                          "49hup.app@gmail.com",
-                          Icons.email_outlined,
-                          () {},
-                        ),
-                        const Sizer(
-                          height: 50,
-                        ),
-                        DefaultTextFormField(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 4),
-                          inputFormatter: [
-                            FilteringTextInputFormatter
-                                .digitsOnly, // يسمح بالأرقام فقط
-                          ],
-                          fillColor: Colors.transparent,
-                          borderColor: AppColors.getTextColor(context),
-                          currentController: controller.phoneController,
-                          hint: LocaleKeys.phoneOptional.localize,
-                          keyboardType: TextInputType.phone,
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
+          return GlowingOverscrollIndicator(
+            color: AppColors.SECONDARY_COLOR,
+            axisDirection: AxisDirection.down,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height - 140.h,
+                ),
+                child: IntrinsicHeight(
+                  child: Form(
+                    key: controller.formKey,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                          const Sizer(
+                            height: 30,
+                          ),
+                          buildContainerPhoneAndEmail(
+                            size,
+                            LocaleKeys.email.localize,
+                            "49hup.app@gmail.com",
+                            Icons.email_outlined,
+                            () {},
+                          ),
+                          const Sizer(
+                            height: 50,
+                          ),
+                          DefaultTextFormField(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                            inputFormatter: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // يسمح بالأرقام فقط
+                            ],
+                            fillColor: Colors.transparent,
+                            borderColor: AppColors.getTextColor(context),
+                            currentController: controller.phoneController,
+                            hint: LocaleKeys.phoneOptional.localize,
+                            keyboardType: TextInputType.phone,
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Icon(
+                                  Icons.phone,
                                   color: context.isDarkMode
-                                      ? Colors.white
-                                      : AppColors.PRIMARY_COLOR,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Icon(
-                                Icons.phone,
-                                color: context.isDarkMode
-                                    ? AppColors.PRIMARY_COLOR
-                                    : Colors.white,
-                                // size: 27,
+                                      ? AppColors.PRIMARY_COLOR
+                                      : Colors.white,
+                                  // size: 27,
+                                ),
                               ),
                             ),
+                            currentFocusNode: phoneFocusNode,
                           ),
-                          currentFocusNode: phoneFocusNode,
-                        ),
-                        const Sizer(),
-                        DefaultTextFormField(
-                          contentPadding: const EdgeInsets.all(16),
-                          // contentPadding: EdgeInsets.all(32),
-                          fillColor: Colors.transparent,
-                          borderColor: AppColors.getTextColor(context),
-                          currentController: controller.messageController,
-                          hint: '${LocaleKeys.message.localize}...',
-                          hintColor: context.isDarkMode
-                              ? Colors.white
-                              : Colors.black54,
-                          maxLength: 150,
-                          maxLines: 5,
-                          hintStyle: Styles.headerText(
-                            color: context.isDarkMode
+                          const Sizer(),
+                          DefaultTextFormField(
+                            contentPadding: const EdgeInsets.all(16),
+                            // contentPadding: EdgeInsets.all(32),
+                            fillColor: Colors.transparent,
+                            borderColor: AppColors.getTextColor(context),
+                            currentController: controller.messageController,
+                            hint: '${LocaleKeys.message.localize}...',
+                            hintColor: context.isDarkMode
                                 ? Colors.white
                                 : Colors.black54,
+                            maxLength: 150,
+                            maxLines: 5,
+                            hintStyle: Styles.headerText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black54,
+                            ),
+                            textInputAction: TextInputAction.done,
                           ),
-                          textInputAction: TextInputAction.done,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        const Spacer(),
-                        AppButton(
-                            radius: 25,
-                            color: AppColors.getReversedTextColor(context),
-                            label: LocaleKeys.send.localize,
-                            margin: 10,
-                            backColor: AppColors.getRedColor(context),
-                            onPressed: () =>
-                                controller.createContactUs(context)),
-                      ],
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          const Spacer(),
+                          AppButton(
+                              radius: 25,
+                              color: AppColors.getReversedTextColor(context),
+                              label: LocaleKeys.send.localize,
+                              margin: 10,
+                              backColor: AppColors.getRedColor(context),
+                              onPressed: () =>
+                                  controller.createContactUs(context)),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -186,7 +175,7 @@ class _ContactUsViewState extends State<ContactUsView> {
       Size size, String title, String val, IconData icon, Function()? onTap) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         onTap!();
       },
       child: Container(
@@ -253,5 +242,20 @@ class _ContactUsViewState extends State<ContactUsView> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    phoneFocusNode.dispose();
+    messageFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      phoneFocusNode.requestFocus();
+    });
   }
 }

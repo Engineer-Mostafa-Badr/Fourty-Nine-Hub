@@ -53,219 +53,226 @@ class _HealthViewState extends State<HealthView> {
       mainCategoryId: 1,
       body: BlocBuilder<HealthCubit, HealthState>(
         builder: (context, state) {
-          return ListView(
-            // padding: EdgeInsets.all(16.0.w),
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: HealthBanner(),
-              ),
-              Sizer(),
-              state.isDoctor == false
-                  ? const RegistrationBanner()
-                  : DoctorModeBanner(
-                      isWaitingApproval: isWaitingApproval,
-                    ),
-              if (isWaitingApproval) WaitingAprovalText(),
-              Sizer(),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Icon(
-                      Icons.search,
-                      size: 50.sp,
-                    ),
-                    const Sizer(),
-
-                    /// Favourite Ads
-                    CurrentHistoryBooking(
-                      title: LocaleKeys.mostBooking.localize,
-                      isSelected: _showMost,
-                      onTap: () {
-                        ManageVibration.vibrate();
-                        if (!context.read<UserCubit>().isLoggedIn) {
-                          pleaseLoginDialog(context);
-                        } else {
-                          _toggleView('most');
-                        }
-                      },
-                    ),
-                    const Sizer(),
-
-                    /// History
-                    CurrentHistoryBooking(
-                      title:
-                          context.isArabic ? 'سجل حجوزات' : 'Booking History',
-                      isSelected: _showHistory,
-                      onTap: () {
-                        ManageVibration.vibrate();
-                        if (!context.read<UserCubit>().isLoggedIn) {
-                          return pleaseLoginDialog(context);
-                        } else {
-                          _toggleView('history');
-                        }
-                      },
-                    ),
-                    const Sizer(),
-
-                    /// Current Booking
-                    CurrentHistoryBooking(
-                      title:
-                          context.isArabic ? 'حجوزات حالية' : 'Current Booking',
-                      isSelected: _showCurrent,
-                      onTap: () {
-                        ManageVibration.vibrate();
-                        if (!context.read<UserCubit>().isLoggedIn) {
-                          return pleaseLoginDialog(context);
-                        } else {
-                          _toggleView('current');
-                        }
-                      },
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                  ],
+          return GlowingOverscrollIndicator(
+            axisDirection: AxisDirection.down,
+            color: AppColors.SECONDARY_COLOR,
+            child: ListView(
+              // padding: EdgeInsets.all(16.0.w),
+              shrinkWrap: true,
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: HealthBanner(),
                 ),
-              ),
-              Sizer(height: 20),
-
-              // Default view when none are selected
-              if (!_showMost && !_showHistory && !_showCurrent) ...[
-                Column(
-                  children: [
-                    const HealthBookingTypesWidgt(),
-                    const Sizer(),
-                    const HealthSubCategories(),
-                    const Sizer(),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Icon(
-                            Icons.search,
-                            size: 50.sp,
-                          ),
-                          const Sizer(),
-
-                          /// Favourite Ads
-                          CurrentHistoryBooking(
-                            title: LocaleKeys.favouriteAds.localize,
-                            isSelected: _showFavoriteAds,
-                            onTap: () {
-                              if (!context.read<UserCubit>().isLoggedIn) {
-                                pleaseLoginDialog(context);
-                              } else {
-                                _toggleAdsView('favouriteAds');
-                              }
-                            },
-                          ),
-                          const Sizer(),
-
-                          /// Request Log
-                          CurrentHistoryBooking(
-                            title: LocaleKeys.requestLog.localize,
-                            isSelected: _showRequestLog,
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              if (!context.read<UserCubit>().isLoggedIn) {
-                                return pleaseLoginDialog(context);
-                              } else {
-                                _toggleAdsView('requestLog');
-                              }
-                            },
-                          ),
-                          const Sizer(),
-
-                          /// My Ads
-                          CurrentHistoryBooking(
-                            title: LocaleKeys.myAds.localize,
-                            isSelected: _showMyAds,
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              if (!context.read<UserCubit>().isLoggedIn) {
-                                return pleaseLoginDialog(context);
-                              } else {
-                                _toggleAdsView('myAds');
-                              }
-                            },
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                        ],
+                Sizer(),
+                state.isDoctor == false
+                    ? const RegistrationBanner()
+                    : DoctorModeBanner(
+                        isWaitingApproval: isWaitingApproval,
                       ),
-                    ),
-                    const Sizer(height: 8),
-                    if (!_showFavoriteAds &&
-                        !_showRequestLog &&
-                        !_showMyAds) ...[
-                      const HealthMedicalServices(),
+                if (isWaitingApproval) WaitingAprovalText(),
+                Sizer(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Icon(
+                        Icons.search,
+                        size: 50.sp,
+                      ),
                       const Sizer(),
-                      const HealthBookings(),
+
+                      /// Favourite Ads
+                      CurrentHistoryBooking(
+                        title: LocaleKeys.mostBooking.localize,
+                        isSelected: _showMost,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('most');
+                          }
+                        },
+                      ),
                       const Sizer(),
+
+                      /// History
+                      CurrentHistoryBooking(
+                        title:
+                            context.isArabic ? 'سجل حجوزات' : 'Booking History',
+                        isSelected: _showHistory,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('history');
+                          }
+                        },
+                      ),
+                      const Sizer(),
+
+                      /// Current Booking
+                      CurrentHistoryBooking(
+                        title: context.isArabic
+                            ? 'حجوزات حالية'
+                            : 'Current Booking',
+                        isSelected: _showCurrent,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('current');
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
                     ],
-                    if (_showFavoriteAds)
-                      FavouriteAdsView(
-                        id: '62c8b57c9332225799fe3306',
-                        isFloatingButtonVisible: (p0) {},
-                      ),
-                    if (_showRequestLog)
-                      AdsRequestLogView(
-                        mainCategoryId: '62c8b57c9332225799fe3306',
-                        isFloatingButtonVisible: (p0) {},
-                      ),
-                    if (_showMyAds)
-                      MyAdsView(
-                        id: '62c8b57c9332225799fe3306',
-                        isFloatingButtonVisible: (p0) {},
-                      ),
-                  ],
+                  ),
                 ),
+                Sizer(height: 20),
+
+                // Default view when none are selected
+                if (!_showMost && !_showHistory && !_showCurrent) ...[
+                  Column(
+                    children: [
+                      const HealthBookingTypesWidgt(),
+                      const Sizer(),
+                      const HealthSubCategories(),
+                      const Sizer(),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Icon(
+                              Icons.search,
+                              size: 50.sp,
+                            ),
+                            const Sizer(),
+
+                            /// Favourite Ads
+                            CurrentHistoryBooking(
+                              title: LocaleKeys.favouriteAds.localize,
+                              isSelected: _showFavoriteAds,
+                              onTap: () {
+                                if (!context.read<UserCubit>().isLoggedIn) {
+                                  pleaseLoginDialog(context);
+                                } else {
+                                  _toggleAdsView('favouriteAds');
+                                }
+                              },
+                            ),
+                            const Sizer(),
+
+                            /// Request Log
+                            CurrentHistoryBooking(
+                              title: LocaleKeys.requestLog.localize,
+                              isSelected: _showRequestLog,
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                if (!context.read<UserCubit>().isLoggedIn) {
+                                  return pleaseLoginDialog(context);
+                                } else {
+                                  _toggleAdsView('requestLog');
+                                }
+                              },
+                            ),
+                            const Sizer(),
+
+                            /// My Ads
+                            CurrentHistoryBooking(
+                              title: LocaleKeys.myAds.localize,
+                              isSelected: _showMyAds,
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                if (!context.read<UserCubit>().isLoggedIn) {
+                                  return pleaseLoginDialog(context);
+                                } else {
+                                  _toggleAdsView('myAds');
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Sizer(height: 8),
+                      if (!_showFavoriteAds &&
+                          !_showRequestLog &&
+                          !_showMyAds) ...[
+                        const HealthMedicalServices(),
+                        const Sizer(),
+                        const HealthBookings(),
+                        const Sizer(),
+                      ],
+                      if (_showFavoriteAds)
+                        FavouriteAdsView(
+                          id: '62c8b57c9332225799fe3306',
+                          isFloatingButtonVisible: (p0) {},
+                        ),
+                      if (_showRequestLog)
+                        AdsRequestLogView(
+                          mainCategoryId: '62c8b57c9332225799fe3306',
+                          isFloatingButtonVisible: (p0) {},
+                        ),
+                      if (_showMyAds)
+                        MyAdsView(
+                          id: '62c8b57c9332225799fe3306',
+                          isFloatingButtonVisible: (p0) {},
+                        ),
+                    ],
+                  ),
+                ],
+
+                // Current Booking view
+                if (_showCurrent)
+                  BlocProvider(
+                    create: (context) => serviceLocator<HealthCubit>(
+                        // Pass your dependencies here
+                        )
+                      ..loadInitialBooking('current'),
+                    child: CurrentBookingsScreen(
+                      onClose: () => setState(() => _showCurrent = false),
+                    ),
+                  ),
+
+                // History view
+                if (_showHistory)
+                  BlocProvider(
+                    create: (context) => serviceLocator<HealthCubit>()
+                      ..loadInitialBooking('history'),
+                    child: BookingHistoryScreen(
+                      onClose: () => setState(() => _showHistory = false),
+                    ),
+                  ),
+
+                // Favourite Ads view
+                if (_showMost)
+                  BlocProvider(
+                    key: const ValueKey('MostBookingScreen'),
+                    create: (context) =>
+                        serviceLocator<HealthCubit>()..loadInitialMostBooking(),
+                    child: MostBookingScreen(
+                      onClose: () => setState(() => _showMost = false),
+                    ),
+                  ),
               ],
-
-              // Current Booking view
-              if (_showCurrent)
-                BlocProvider(
-                  create: (context) => serviceLocator<HealthCubit>(
-                      // Pass your dependencies here
-                      )
-                    ..loadInitialBooking('current'),
-                  child: CurrentBookingsScreen(
-                    onClose: () => setState(() => _showCurrent = false),
-                  ),
-                ),
-
-              // History view
-              if (_showHistory)
-                BlocProvider(
-                  create: (context) => serviceLocator<HealthCubit>()
-                    ..loadInitialBooking('history'),
-                  child: BookingHistoryScreen(
-                    onClose: () => setState(() => _showHistory = false),
-                  ),
-                ),
-
-              // Favourite Ads view
-              if (_showMost)
-                BlocProvider(
-                  key: const ValueKey('MostBookingScreen'),
-                  create: (context) =>
-                      serviceLocator<HealthCubit>()..loadInitialMostBooking(),
-                  child: MostBookingScreen(
-                    onClose: () => setState(() => _showMost = false),
-                  ),
-                ),
-            ],
+            ),
           );
         },
       ),

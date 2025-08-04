@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-
-import '../../../../../helpers/manage_vibration.dart';
 import 'available_pickme_screen.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class AllPickMeView extends StatefulWidget {
   const AllPickMeView({super.key});
@@ -29,32 +28,6 @@ class _AllPickMeViewState extends State<AllPickMeView>
   // late Animation<double> _positionAnimation;
   late TabController tabController;
   int selectedIndex = 0; // Changed to 0 to match availableTrips as default
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 3, vsync: this);
-    // tabController.addListener(() {
-    //   setState(() {});
-    // });
-    tabController.addListener(() {
-      setState(() {
-        selectedIndex = tabController.index;
-        // Update category based on selected index
-        switch (tabController.index) {
-          case 0:
-            _displayedCategory = LocaleKeys.availableTrips;
-            break;
-          case 1:
-            _displayedCategory = LocaleKeys.requestLog;
-            break;
-          case 2:
-            _displayedCategory = LocaleKeys.myAds;
-            break;
-        }
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +128,32 @@ class _AllPickMeViewState extends State<AllPickMeView>
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 3, vsync: this);
+    // tabController.addListener(() {
+    //   setState(() {});
+    // });
+    tabController.addListener(() {
+      setState(() {
+        selectedIndex = tabController.index;
+        // Update category based on selected index
+        switch (tabController.index) {
+          case 0:
+            _displayedCategory = LocaleKeys.availableTrips;
+            break;
+          case 1:
+            _displayedCategory = LocaleKeys.requestLog;
+            break;
+          case 2:
+            _displayedCategory = LocaleKeys.myAds;
+            break;
+        }
+      });
+    });
+  }
+
   Widget _buildCardForCategory() {
     switch (_displayedCategory) {
       case LocaleKeys.availableTrips:
@@ -169,38 +168,6 @@ class _AllPickMeViewState extends State<AllPickMeView>
       default:
         return const SizedBox.shrink();
     }
-  }
-
-  _buildStatusCategories() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: _buildCategory(
-            title: LocaleKeys.availableTrips,
-            index: 0,
-          ),
-        ),
-        const Sizer(
-          width: 10,
-        ),
-        Expanded(
-          child: _buildCategory(
-            title: LocaleKeys.requestLog,
-            index: 1,
-          ),
-        ),
-        const Sizer(
-          width: 10,
-        ),
-        Expanded(
-          child: _buildCategory(
-            title: LocaleKeys.myAds,
-            index: 2,
-          ),
-        ),
-      ],
-    );
   }
 
   _buildCategory({
@@ -300,6 +267,38 @@ class _AllPickMeViewState extends State<AllPickMeView>
           ),
         ],
       ),
+    );
+  }
+
+  _buildStatusCategories() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: _buildCategory(
+            title: LocaleKeys.availableTrips,
+            index: 0,
+          ),
+        ),
+        const Sizer(
+          width: 10,
+        ),
+        Expanded(
+          child: _buildCategory(
+            title: LocaleKeys.requestLog,
+            index: 1,
+          ),
+        ),
+        const Sizer(
+          width: 10,
+        ),
+        Expanded(
+          child: _buildCategory(
+            title: LocaleKeys.myAds,
+            index: 2,
+          ),
+        ),
+      ],
     );
   }
 }

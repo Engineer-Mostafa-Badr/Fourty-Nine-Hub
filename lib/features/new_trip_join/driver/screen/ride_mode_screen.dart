@@ -57,85 +57,89 @@ class NewRideModeBody extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           serviceLocator<CaptainShareDashboardCubit>()..getSettings(context),
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(15.w),
-        child:
-            BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
-          builder: (context, state) {
-            var cubit = context.read<CaptainShareDashboardCubit>();
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Row(
-                //   children: [
-                //     IconButton(
-                //       onPressed: () {
-                //         context.pop();
-                //       },
-                //       icon: const Icon(Icons.arrow_back),
-                //     ),
-                //     Text(
-                //       context.isArabic ? 'وضع الركوب' : 'Ride Mode',
-                //       style: TextStyle(
-                //         fontSize: 35.sp,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                RideModeButton(
-                    onTap: () {
-      ManageVibration.vibrate();
-                      context.push(Routes.runningAndPastTripsScreen);
-                    },
-                    onRefreshSettings: () {
-                      cubit.getSettings(context);
-                    },
-                    isCaptain:
-                        state.setting?.data.isCaptainShareEnabled ?? false,
-                    isReady: state.setting?.data.isReady ?? false,
-                    isRegistered: state.setting != null,
-                    isApproved: state.setting?.data.isApproved ?? false),
-                SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TripOptionWidget(
-                      imagePath: Assets.locationTripIcon,
-                      title:
-                          context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
+      child: GlowingOverscrollIndicator(
+        color: AppColors.SECONDARY_COLOR,
+        axisDirection: AxisDirection.down,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(15.w),
+          child:
+              BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
+            builder: (context, state) {
+              var cubit = context.read<CaptainShareDashboardCubit>();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Row(
+                  //   children: [
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         context.pop();
+                  //       },
+                  //       icon: const Icon(Icons.arrow_back),
+                  //     ),
+                  //     Text(
+                  //       context.isArabic ? 'وضع الركوب' : 'Ride Mode',
+                  //       style: TextStyle(
+                  //         fontSize: 35.sp,
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  RideModeButton(
                       onTap: () {
-      ManageVibration.vibrate();
-                        context.push(Routes.captainShareScreen);
+        ManageVibration.vibrate();
+                        context.push(Routes.runningAndPastTripsScreen);
                       },
-                      iconColor: AppColors.getButtonPrimaryColor(context),
-                    ),
-                    TripOptionWidget(
-                      icon: Assets.car,
-                      imagePath: Assets.locationTripIcon,
-                      title: context.isArabic ? "جاي معاك" : "Trip Join",
-                      onTap: () {
-      ManageVibration.vibrate();
-                        context.push(Routes.AVAILABLE_TRIPS);
+                      onRefreshSettings: () {
+                        cubit.getSettings(context);
                       },
-                      iconColor: AppColors.getButtonPrimaryColor(context),
-                    ),
-                    TripOptionWidget(
-                      icon: Assets.pickMeIcon,
-                      imagePath: Assets.locationTripIcon,
-                      title: context.isArabic ? "وصلني معاك" : "Pick me",
-                      onTap: () {
-      ManageVibration.vibrate();
-                        context.push(Routes.All_PickMe_View);
-                      },
-                      iconColor: AppColors.getButtonPrimaryColor(context),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
+                      isCaptain:
+                          state.setting?.data.isCaptainShareEnabled ?? false,
+                      isReady: state.setting?.data.isReady ?? false,
+                      isRegistered: state.setting != null,
+                      isApproved: state.setting?.data.isApproved ?? false),
+                  SizedBox(height: 20.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TripOptionWidget(
+                        imagePath: Assets.locationTripIcon,
+                        title:
+                            context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
+                        onTap: () {
+        ManageVibration.vibrate();
+                          context.push(Routes.captainShareScreen);
+                        },
+                        iconColor: AppColors.getButtonPrimaryColor(context),
+                      ),
+                      TripOptionWidget(
+                        icon: Assets.car,
+                        imagePath: Assets.locationTripIcon,
+                        title: context.isArabic ? "جاي معاك" : "Trip Join",
+                        onTap: () {
+        ManageVibration.vibrate();
+                          context.push(Routes.AVAILABLE_TRIPS);
+                        },
+                        iconColor: AppColors.getButtonPrimaryColor(context),
+                      ),
+                      TripOptionWidget(
+                        icon: Assets.pickMeIcon,
+                        imagePath: Assets.locationTripIcon,
+                        title: context.isArabic ? "وصلني معاك" : "Pick me",
+                        onTap: () {
+        ManageVibration.vibrate();
+                          context.push(Routes.All_PickMe_View);
+                        },
+                        iconColor: AppColors.getButtonPrimaryColor(context),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

@@ -40,31 +40,42 @@ import '../../models/verify_otp_model.dart';
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
 
-  Future<Either<Failure, bool>> updateUserBio({
-    required String bio,
-  });
-
-  Future<Either<Failure, bool>> updateUserName({
-    required String name,
-  });
-
-  Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
+  void attachToken(UserTokensModel? token);
 
   Future<Either<Failure, UserTokensModel>> changePassword(
       ChangePasswordParams params);
 
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params);
+  Future<Either<Failure, ChatEntity>> createAnonymousChat(
+      CreateAnonymousChatParams params);
+
+  Future<Either<Failure, void>> createNewForgetPassword(
+    CreateNewForgetParams params,
+  );
+
+  Future<Either<Failure, ChatEntity>> createNormalChat(
+      CreateNormalChatParams params);
+
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
+      GetProfileViewsParams params);
+
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
+      GetProfileViewsParams params);
+
+  Future<Either<Failure, int>> getUnreadedChatsCounter();
+
+  Future<Either<Failure, double>> getWelcomeGift();
+
+  Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
+
+  Future<Either<Failure, UserTokensEntity>> loginWithPhone(
+      LoginWithPhoneParams params);
+
+  Future<Either<Failure, void>> logout();
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
-  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
-    VerifyOTPParams verifyOTPParams,
-  );
-
-  Future<Either<Failure, String>> verifyQuestions(
-    VerifyQuestionsParams params,
-  );
+  Future<Either<Failure, RegisterByPhoneEntity>> registerByPhone(
+      RegisterByPhoneParams params);
 
   Future<Either<Failure, void>> resendOTP(
     ResendOTPParams params,
@@ -79,45 +90,34 @@ abstract class AuthRemoteDataSource {
     SendForgetPasswordParams params,
   );
 
-  Future<Either<Failure, void>> verifyForgetPasswordOTP(
-    VerifyForgetOTPParams params,
-  );
-
-  Future<Either<Failure, void>> createNewForgetPassword(
-    CreateNewForgetParams params,
-  );
-
-  Future<Either<Failure, double>> getWelcomeGift();
-
-  void attachToken(UserTokensModel? token);
-
-  Future<Either<Failure, void>> logout();
-
-  Future<Either<Failure, ChatEntity>> createNormalChat(
-      CreateNormalChatParams params);
-
-  Future<Either<Failure, ChatEntity>> createAnonymousChat(
-      CreateAnonymousChatParams params);
+  Future<Either<Failure, UserTokensModel>> socialLogin(
+      SocialLoginParams params);
 
   Future<Either<Failure, bool>> updateProfileView(
       UpdateProfileViewParams params);
 
-  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
-      GetProfileViewsParams params);
+  Future<Either<Failure, bool>> updateUserBio({
+    required String bio,
+  });
 
-  Future<Either<Failure, int>> getUnreadedChatsCounter();
+  Future<Either<Failure, bool>> updateUserName({
+    required String name,
+  });
 
-  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
-      GetProfileViewsParams params);
+  Future<Either<Failure, void>> verifyForgetPasswordOTP(
+    VerifyForgetOTPParams params,
+  );
 
-  Future<Either<Failure, RegisterByPhoneEntity>> registerByPhone(
-      RegisterByPhoneParams params);
+  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
+    VerifyOTPParams verifyOTPParams,
+  );
 
   Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
       VerifyPhoneOTPParams params);
 
-  Future<Either<Failure, UserTokensEntity>> loginWithPhone(
-      LoginWithPhoneParams params);
+  Future<Either<Failure, String>> verifyQuestions(
+    VerifyQuestionsParams params,
+  );
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -126,21 +126,24 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   const AuthRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, UserTokensModel>> login(
-    LoginParams loginParams,
-  ) async {
-    final result = await _apiConsumer.post(
-      EndPoints.login,
-      data: await loginParams.toJson(),
+  void attachToken(UserTokensModel? token) {
+    _apiConsumer.attachToken(token);
+  }
+
+  @override
+  Future<Either<Failure, UserTokensModel>> changePassword(
+      ChangePasswordParams params) async {
+    final result = await _apiConsumer.put(
+      EndPoints.changePassword,
+      data: params.toJson(),
     );
+
     return result.fold(
       (failure) => Left(failure),
       (response) async {
         _apiConsumer.attachToken(UserTokensModel.fromJson(
           response['data'],
         ));
-
-        // await registerSocket();
         return Right(
           UserTokensModel.fromJson(
             response['data'],
@@ -151,188 +154,13 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> register(
-    RegisterParams registerParams,
-  ) async {
-    final result = await _apiConsumer.post(
-      EndPoints.register,
-      data: await registerParams.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => const Right(null),
-    );
-  }
+  Future<Either<Failure, ChatEntity>> createAnonymousChat(
+      CreateAnonymousChatParams params) async {
+    final response = await _apiConsumer
+        .post(EndPoints.createAnonymousChat(params.otherUserId));
 
-  @override
-  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
-    VerifyOTPParams verifyOTPParams,
-  ) async {
-    final result = await _apiConsumer.post(
-      EndPoints.verifyOTP,
-      data: verifyOTPParams.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) {
-        return Right(VerifyOtpModel.fromJson(
-          response['data'],
-        ));
-      },
-    );
-  }
-
-  @override
-  void attachToken(UserTokensModel? token) {
-    _apiConsumer.attachToken(token);
-  }
-
-  @override
-  Future<Either<Failure, double>> getWelcomeGift() async {
-    final result = await _apiConsumer.get(
-      EndPoints.getWelcomeGift,
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => Right(
-        double.parse(response['gift'].toString()),
-      ),
-    );
-  }
-
-  Future<Either<Failure, UserCredential>> signInWithGoogle({
-    required String idToken,
-  }) async {
-    try {
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      // Check if the user is null (i.e., the user canceled the sign-in)
-      if (googleUser == null) {
-        return const Left(
-            SocialLoginFailure('Google sign-in was canceled by the user.'));
-      }
-
-      // Obtain the authentication details from the request
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      // Create a new credential
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // Sign in to Firebase using the credential
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      // Return the signed-in user's credentials
-      return Right(userCredential);
-    } catch (e) {
-      return Left(SocialLoginFailure('Failed to sign in with Google: $e'));
-    }
-  }
-
-  Future<String?> _getDeviceId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.id; // Android device ID
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor; // iOS device ID
-    }
-    return 'unknown_device';
-  }
-
-  @override
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params) async {
-    try {
-      // Perform Google sign-in and get the user credentials
-      final signInResult = await signInWithGoogle(idToken: params.idToken);
-
-      // Handle the result
-      return signInResult.fold(
-        (failure) => Left(failure),
-        // If the sign-in failed, return the failure
-        (userCredential) async {
-          // If sign-in succeeded, obtain the tokens (idToken and accessToken)
-          final idToken = await userCredential.user?.getIdToken();
-          final accessToken = await userCredential.user?.getIdTokenResult();
-
-          // Get the device ID
-          final deviceId = await _getDeviceId();
-
-          // Prepare the social login data (including idToken, fcm, and deviceId)
-          final data = {
-            'idToken': idToken,
-            'fcm': accessToken?.token, // Use the FCM token if available
-            'deviceId': deviceId, // Use the actual device ID
-          };
-
-          // Call the API for social login
-          final result = await _apiConsumer.post(
-            EndPoints.socialLogin,
-            data: data,
-          );
-
-          // Handle the API response
-          return result.fold(
-            (failure) => Left(failure),
-            (response) {
-              final userData = response['data'];
-              return Right(UserTokensModel.fromJson(userData));
-            },
-          );
-        },
-      );
-    } catch (e) {
-      return Left(ServerFailure(message: 'Social login failed: $e'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
-    final result = await _apiConsumer.put(
-      params.forVerification
-          ? EndPoints.resendVerificationOTP
-          : EndPoints.resendOTP,
-      data: params.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => const Right(null),
-    );
-  }
-
-  @override
-  Future<Either<Failure, void>> sendForgetPasswordOTP(
-    SendForgetPasswordParams params,
-  ) async {
-    final result = await _apiConsumer.post(
-      EndPoints.sendForgetPasswordOTP,
-      data: params.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => const Right(null),
-    );
-  }
-
-  @override
-  Future<Either<Failure, void>> verifyForgetPasswordOTP(
-    VerifyForgetOTPParams params,
-  ) async {
-    final result = await _apiConsumer.post(
-      EndPoints.verifyForgetPasswordOTP,
-      data: params.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => const Right(null),
-    );
+    return response.fold((failure) => Left(failure),
+        (data) => Right(ChatModel.fromJson(data['data']['chat'])));
   }
 
   @override
@@ -360,44 +188,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> logout() async {
-    var result = await _apiConsumer.post(EndPoints.logout);
-    return result.fold((l) => Left(l), (r) async {
-      await CacheManager.deleteAllTokens();
-      _apiConsumer.removeTokenFromHeader();
-      // await registerSocket();
-
-      return Right(r);
-    });
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateUserBio({required String bio}) async {
-    final result =
-        await _apiConsumer.put(EndPoints.updateUserBio(), data: {'bio': bio});
-    log(result.toString(), name: "updateUserBio");
-    return result.fold((failure) {
-      log(failure.toString(), name: "updateUserBio");
-      return Left(failure);
-    }, (response) {
-      return Right(response['status']);
-    });
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateUserName({required String name}) async {
-    final result = await _apiConsumer.put(EndPoints.updateUserName(),
-        data: {'firstName': name, 'lastName': ' '});
-    log(result.toString(), name: "updateUserName");
-    return result.fold((failure) {
-      log(failure.toString(), name: "updateUserName");
-      return Left(failure);
-    }, (response) {
-      return Right(response['status']);
-    });
-  }
-
-  @override
   Future<Either<Failure, ChatEntity>> createNormalChat(
       CreateNormalChatParams params) async {
     final response = await _apiConsumer.post(EndPoints.createNormalChat(
@@ -406,29 +196,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     ));
     return response.fold((failure) => Left(failure),
         (data) => Right(ChatModel.fromJson(data['data']['chat'])));
-  }
-
-  @override
-  Future<Either<Failure, ChatEntity>> createAnonymousChat(
-      CreateAnonymousChatParams params) async {
-    final response = await _apiConsumer
-        .post(EndPoints.createAnonymousChat(params.otherUserId));
-
-    return response.fold((failure) => Left(failure),
-        (data) => Right(ChatModel.fromJson(data['data']['chat'])));
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateProfileView(
-      UpdateProfileViewParams params) async {
-    final response = await _apiConsumer
-        .post(EndPoints.updateProfileview(params.userId), data: {
-      'viewAction': params.isProfile
-          ? UpdateProfileViewActionType.profile
-          : UpdateProfileViewActionType.avatar
-    });
-    return response.fold(
-        (failure) => Left(failure), (data) => Right(data['status']));
   }
 
   @override
@@ -479,88 +246,39 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, ForgetPasswordQuestionsModel>>
-      sendForgetPasswordQuestions(SendForgetPasswordParams params) async {
-    final result = await _apiConsumer.post(
-      EndPoints.sendForgetPasswordOTP,
-      data: params.toJson(),
+  Future<Either<Failure, double>> getWelcomeGift() async {
+    final result = await _apiConsumer.get(
+      EndPoints.getWelcomeGift,
     );
-
     return result.fold(
       (failure) => Left(failure),
-      (response) {
-        ForgetPasswordQuestionsModel questions =
-            ForgetPasswordQuestionsModel.fromJson(response['data']);
-        return Right(questions);
-      },
+      (response) => Right(
+        double.parse(response['gift'].toString()),
+      ),
     );
   }
 
   @override
-  Future<Either<Failure, String>> verifyQuestions(
-      VerifyQuestionsParams params) async {
+  Future<Either<Failure, UserTokensModel>> login(
+    LoginParams loginParams,
+  ) async {
     final result = await _apiConsumer.post(
-      EndPoints.checkAnswersQuestions,
-      data: params.toJson(),
+      EndPoints.login,
+      data: await loginParams.toJson(),
     );
-
-    return result.fold(
-      (failure) => Left(failure),
-      (response) {
-        return Right(response['data']['userId']);
-      },
-    );
-  }
-
-  @override
-  Future<Either<Failure, UserTokensModel>> changePassword(
-      ChangePasswordParams params) async {
-    final result = await _apiConsumer.put(
-      EndPoints.changePassword,
-      data: params.toJson(),
-    );
-
     return result.fold(
       (failure) => Left(failure),
       (response) async {
         _apiConsumer.attachToken(UserTokensModel.fromJson(
           response['data'],
         ));
+
+        // await registerSocket();
         return Right(
           UserTokensModel.fromJson(
             response['data'],
           ),
         );
-      },
-    );
-  }
-
-  @override
-  Future<Either<Failure, RegisterByPhoneModel>> registerByPhone(
-      RegisterByPhoneParams params) async {
-    final result = await _apiConsumer.post(
-      EndPoints.registerByPhone,
-      data: await params.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => Right(RegisterByPhoneModel.fromJson(response['data'])),
-    );
-  }
-
-  @override
-  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
-      VerifyPhoneOTPParams params) async {
-    final result = await _apiConsumer.post(
-      EndPoints.VerifyPhoneOTP,
-      data: params.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) {
-        return Right(VerifyOtpModel.fromJson(
-          response['data'],
-        ));
       },
     );
   }
@@ -587,5 +305,309 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         );
       },
     );
+  }
+
+  @override
+  Future<Either<Failure, void>> logout() async {
+    var result = await _apiConsumer.post(EndPoints.logout);
+    return result.fold((l) => Left(l), (r) async {
+      await CacheManager.deleteAllTokens();
+      _apiConsumer.removeTokenFromHeader();
+      // await registerSocket();
+
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> register(
+    RegisterParams registerParams,
+  ) async {
+    final result = await _apiConsumer.post(
+      EndPoints.register,
+      data: await registerParams.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<Failure, RegisterByPhoneModel>> registerByPhone(
+      RegisterByPhoneParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.registerByPhone,
+      data: await params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right(RegisterByPhoneModel.fromJson(response['data'])),
+    );
+  }
+
+  // @override
+  // Future<Either<Failure, UserTokensModel>> socialLogin(
+  //     SocialLoginParams params) async {
+  //   try {
+  //     // Perform Google sign-in and get the user credentials
+  //     final signInResult = await signInWithGoogle(idToken: params.idToken);
+
+  //     // Handle the result
+  //     return signInResult.fold(
+  //       (failure) => Left(failure),
+  //       // If the sign-in failed, return the failure
+  //       (userCredential) async {
+  //         // If sign-in succeeded, obtain the tokens (idToken and accessToken)
+  //         final idToken = await userCredential.user?.getIdToken();
+  //         final accessToken = await userCredential.user?.getIdTokenResult();
+
+  //         // Get the device ID
+  //         final deviceId = await _getDeviceId();
+
+  //         // Prepare the social login data (including idToken, fcm, and deviceId)
+  //         final data = {
+  //           'idToken': idToken,
+  //           'fcm': accessToken?.token, // Use the FCM token if available
+  //           'deviceId': deviceId, // Use the actual device ID
+  //         };
+
+  //         // Call the API for social login
+  //         final result = await _apiConsumer.post(
+  //           EndPoints.socialLogin,
+  //           data: data,
+  //         );
+
+  //         // Handle the API response
+  //         return result.fold(
+  //           (failure) => Left(failure),
+  //           (response) {
+  //             final userData = response['data'];
+  //             return Right(UserTokensModel.fromJson(userData));
+  //           },
+  //         );
+  //       },
+  //     );
+  //   } catch (e) {
+  //     return Left(ServerFailure(message: 'Social login failed: $e'));
+  //   }
+  // }
+
+  @override
+  Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
+    final result = await _apiConsumer.put(
+      params.forVerification
+          ? EndPoints.resendVerificationOTP
+          : EndPoints.resendOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> sendForgetPasswordOTP(
+    SendForgetPasswordParams params,
+  ) async {
+    final result = await _apiConsumer.post(
+      EndPoints.sendForgetPasswordOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<Failure, ForgetPasswordQuestionsModel>>
+      sendForgetPasswordQuestions(SendForgetPasswordParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.sendForgetPasswordOTP,
+      data: params.toJson(),
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        ForgetPasswordQuestionsModel questions =
+            ForgetPasswordQuestionsModel.fromJson(response['data']);
+        return Right(questions);
+      },
+    );
+  }
+
+  Future<Either<Failure, UserCredential>> signInWithGoogle({
+    required String idToken,
+  }) async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Check if the user is null (i.e., the user canceled the sign-in)
+      if (googleUser == null) {
+        return const Left(
+            SocialLoginFailure('Google sign-in was canceled by the user.'));
+      }
+
+      // Obtain the authentication details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase using the credential
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Return the signed-in user's credentials
+      return Right(userCredential);
+    } catch (e) {
+      return Left(SocialLoginFailure('Failed to sign in with Google: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserTokensModel>> socialLogin(
+      SocialLoginParams params) async {
+    try {
+      final result = await _apiConsumer.post(
+        EndPoints.socialLogin,
+        data: params.toJson(),
+      );
+
+      return result.fold(
+        (failure) => Left(failure),
+        (response) {
+          final userTokens = UserTokensModel.fromJson(response['data']);
+          _apiConsumer.attachToken(userTokens);
+          return Right(userTokens);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: 'Social login failed: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateProfileView(
+      UpdateProfileViewParams params) async {
+    final response = await _apiConsumer
+        .post(EndPoints.updateProfileview(params.userId), data: {
+      'viewAction': params.isProfile
+          ? UpdateProfileViewActionType.profile
+          : UpdateProfileViewActionType.avatar
+    });
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserBio({required String bio}) async {
+    final result =
+        await _apiConsumer.put(EndPoints.updateUserBio(), data: {'bio': bio});
+    log(result.toString(), name: "updateUserBio");
+    return result.fold((failure) {
+      log(failure.toString(), name: "updateUserBio");
+      return Left(failure);
+    }, (response) {
+      return Right(response['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserName({required String name}) async {
+    final result = await _apiConsumer.put(EndPoints.updateUserName(),
+        data: {'firstName': name, 'lastName': ' '});
+    log(result.toString(), name: "updateUserName");
+    return result.fold((failure) {
+      log(failure.toString(), name: "updateUserName");
+      return Left(failure);
+    }, (response) {
+      return Right(response['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> verifyForgetPasswordOTP(
+    VerifyForgetOTPParams params,
+  ) async {
+    final result = await _apiConsumer.post(
+      EndPoints.verifyForgetPasswordOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
+    VerifyOTPParams verifyOTPParams,
+  ) async {
+    final result = await _apiConsumer.post(
+      EndPoints.verifyOTP,
+      data: verifyOTPParams.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        return Right(VerifyOtpModel.fromJson(
+          response['data'],
+        ));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
+      VerifyPhoneOTPParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.VerifyPhoneOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        return Right(VerifyOtpModel.fromJson(
+          response['data'],
+        ));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> verifyQuestions(
+      VerifyQuestionsParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.checkAnswersQuestions,
+      data: params.toJson(),
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        return Right(response['data']['userId']);
+      },
+    );
+  }
+
+  Future<String?> _getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id; // Android device ID
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor; // iOS device ID
+    }
+    return 'unknown_device';
   }
 }

@@ -370,186 +370,193 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   Widget _buildLoggedInView(RestaurantsListState state) {
     return Padding(
       padding: EdgeInsets.all(10.w),
-      child: ListView(
-        children: [
-          const MealBanner(),
-          _buildRegisterRestaurantPrompt(state),
-          _buildSearchAndExpiredRequests(),
-          const Sizer(),
-          if (_showSearch)
-            BlocProvider(
-              create: (context) => SearchRestaurantsCubit(
-                serviceLocator(),
-                serviceLocator(),
-                serviceLocator(),
-                serviceLocator(),
-              )..loadData(),
-              child: SearchRestaurantView(
-                onClose: () => setState(() => _showSearch = false),
-                focusNode: _focusNode,
+      child: GlowingOverscrollIndicator(
+        color: AppColors.SECONDARY_COLOR,
+        axisDirection: AxisDirection.down,
+        child: ListView(
+          children: [
+            const MealBanner(),
+            _buildRegisterRestaurantPrompt(state),
+            _buildSearchAndExpiredRequests(),
+            const Sizer(),
+            if (_showSearch)
+              BlocProvider(
+                create: (context) => SearchRestaurantsCubit(
+                  serviceLocator(),
+                  serviceLocator(),
+                  serviceLocator(),
+                  serviceLocator(),
+                )..loadData(),
+                child: SearchRestaurantView(
+                  onClose: () => setState(() => _showSearch = false),
+                  focusNode: _focusNode,
+                ),
               ),
-            ),
-          if (_showExpire)
-            BlocProvider(
-              key: ValueKey("expired-${DateTime.now().millisecondsSinceEpoch}"),
-              create: (context) => serviceLocator<RestaurantsCubit>()
-                ..loadInitialExpiredOrders(),
-              child: RestaurantExpiredRequestsScreen(
+            if (_showExpire)
+              BlocProvider(
                 key: ValueKey(
-                    "expired-screen-${DateTime.now().millisecondsSinceEpoch}"),
-                onClose: () => setState(() => _showExpire = false),
+                    "expired-${DateTime.now().millisecondsSinceEpoch}"),
+                create: (context) => serviceLocator<RestaurantsCubit>()
+                  ..loadInitialExpiredOrders(),
+                child: RestaurantExpiredRequestsScreen(
+                  key: ValueKey(
+                      "expired-screen-${DateTime.now().millisecondsSinceEpoch}"),
+                  onClose: () => setState(() => _showExpire = false),
+                ),
               ),
-            ),
-          if (_showLog)
-            BlocProvider(
-              key: ValueKey("log-${DateTime.now().millisecondsSinceEpoch}"),
-              create: (context) =>
-                  serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
-              child: RestaurantRequestLogsScreen(
-                key: ValueKey(
-                    "log-screen-${DateTime.now().millisecondsSinceEpoch}"),
-                onClose: () => setState(() => _showLog = false),
+            if (_showLog)
+              BlocProvider(
+                key: ValueKey("log-${DateTime.now().millisecondsSinceEpoch}"),
+                create: (context) =>
+                    serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
+                child: RestaurantRequestLogsScreen(
+                  key: ValueKey(
+                      "log-screen-${DateTime.now().millisecondsSinceEpoch}"),
+                  onClose: () => setState(() => _showLog = false),
+                ),
               ),
-            ),
-          if (_showFavAds)
-            BlocProvider(
-              create: (context) =>
-                  serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
-              child: RestaurantFavAdsScreen(
-                onClose: () => setState(() {
-                  context.read<RestaurantsCubit>().loadInitialData();
-                  _showFavAds = false;
-                }),
+            if (_showFavAds)
+              BlocProvider(
+                create: (context) =>
+                    serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
+                child: RestaurantFavAdsScreen(
+                  onClose: () => setState(() {
+                    context.read<RestaurantsCubit>().loadInitialData();
+                    _showFavAds = false;
+                  }),
+                ),
               ),
-            ),
-          if (!_showSearch && !_showExpire && !_showLog && !_showFavAds)
-            Padding(
-              padding: EdgeInsets.all(10.w),
-              child: Column(
-                children: [
-                  const Sizer(),
-                  const Sizer(),
-                  const MealCategories(),
-                  const Sizer(),
-                  Label(
-                    text: context.isArabic
-                        ? "${state.selectedCategory?.id != '' ? "مطاعم " : ''}${state.selectedCategory?.nameAr}"
-                        : "${state.selectedCategory?.nameEn}${state.selectedCategory?.id != '' ? " Restaurants" : ''}",
-                    style: Styles.headerText(),
-                  ),
-                  const Sizer(),
-                  (state.isLoadingRestaurantsMore == true &&
-                          context
-                                  .read<RestaurantsCubit>()
-                                  .currentRestaurantsPage ==
-                              1)
-                      ? ListView.builder(
-                          itemCount: 1,
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, i) =>
-                              const PropertyCardShimmer(),
-                        )
-                      : context.read<RestaurantsCubit>().restaurants.isNotEmpty
-                          ? SizedBox(
-                              height: MediaQuery.sizeOf(context).height * .7,
-                              child: OlxPaginationWidget(
-                                itemsPerPage: 2,
-                                loadPage: (page) async {},
-                                banners: bannersList,
-                                items: List.generate(
-                                  context
-                                      .read<RestaurantsCubit>()
-                                      .restaurants
-                                      .length,
-                                  (index) {
-                                    // final request = controller.reqLogs[index];
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: SubCategoriesRestaurantCard(
-                                        item: context
-                                            .read<RestaurantsCubit>()
-                                            .restaurants[index],
-                                        mealId: '',
-                                        favouriteRestaurant: (String id) async {
-                                          var result = await context
+            if (!_showSearch && !_showExpire && !_showLog && !_showFavAds)
+              Padding(
+                padding: EdgeInsets.all(10.w),
+                child: Column(
+                  children: [
+                    const Sizer(),
+                    const Sizer(),
+                    const MealCategories(),
+                    const Sizer(),
+                    Label(
+                      text: context.isArabic
+                          ? "${state.selectedCategory?.id != '' ? "مطاعم " : ''}${state.selectedCategory?.nameAr}"
+                          : "${state.selectedCategory?.nameEn}${state.selectedCategory?.id != '' ? " Restaurants" : ''}",
+                      style: Styles.headerText(),
+                    ),
+                    const Sizer(),
+                    (state.isLoadingRestaurantsMore == true &&
+                            context
+                                    .read<RestaurantsCubit>()
+                                    .currentRestaurantsPage ==
+                                1)
+                        ? ListView.builder(
+                            itemCount: 1,
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, i) =>
+                                const PropertyCardShimmer(),
+                          )
+                        : context
+                                .read<RestaurantsCubit>()
+                                .restaurants
+                                .isNotEmpty
+                            ? SizedBox(
+                                height: MediaQuery.sizeOf(context).height * .7,
+                                child: OlxPaginationWidget(
+                                  itemsPerPage: 2,
+                                  loadPage: (page) async {},
+                                  banners: bannersList,
+                                  items: List.generate(
+                                    context
+                                        .read<RestaurantsCubit>()
+                                        .restaurants
+                                        .length,
+                                    (index) {
+                                      // final request = controller.reqLogs[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: SubCategoriesRestaurantCard(
+                                          item: context
                                               .read<RestaurantsCubit>()
-                                              .toggleFavoriteRestaurant(id);
-                                          if (result == true) {
-                                            context
-                                                    .read<RestaurantsCubit>()
-                                                    .restaurants[index]
-                                                    .isFavorite =
-                                                !context
-                                                    .read<RestaurantsCubit>()
-                                                    .restaurants[index]
-                                                    .isFavorite!;
-                                          }
-                                        },
-                                      ),
+                                              .restaurants[index],
+                                          mealId: '',
+                                          favouriteRestaurant:
+                                              (String id) async {
+                                            var result = await context
+                                                .read<RestaurantsCubit>()
+                                                .toggleFavoriteRestaurant(id);
+                                            if (result == true) {
+                                              context
+                                                      .read<RestaurantsCubit>()
+                                                      .restaurants[index]
+                                                      .isFavorite =
+                                                  !context
+                                                      .read<RestaurantsCubit>()
+                                                      .restaurants[index]
+                                                      .isFavorite!;
+                                            }
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              )
+                            /*ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: context
+                                    .read<RestaurantsCubit>()
+                                    .restaurants
+                                    .length,
+                                separatorBuilder: (context, index) => const Sizer(),
+                                itemBuilder: (context, i) {
+                                  // if (i > nativeAdStart && i % adFrequency == adFrequency - 1) {
+                                  //   return getAdIfNeeded(i, _adsManager);
+                                  // }
+                                  // if (i > context.read<RestaurantsCubit>().restaurants.length && i % adFrequency == adFrequency - 1) {
+                                  //   print("the index ${context.read<RestaurantsCubit>().restaurants.length}");
+                                  //   return getAdIfNeeded(i, _adsManager);
+                                  // }
+                                    return Column(
+                                      children: [
+                                        if (i % adFrequency == adFrequency - 1)
+                                          getAdIfNeeded(
+                                              i, _adsManager), // Only show ad
+                                        SubCategoriesRestaurantCard(
+                                          item: context
+                                              .read<RestaurantsCubit>()
+                                              .restaurants[i],
+                                          mealId: '',
+                                          favouriteRestaurant: (String id) async {
+                                            var result = await context
+                                                .read<RestaurantsCubit>()
+                                                .toggleFavoriteRestaurant(id);
+                                            if (result == true) {
+                                              context.read<RestaurantsCubit>().restaurants[i].isFavorite
+                                              = !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+                                            }
+                                          },
+                                        ),
+                                      ],
                                     );
                                   },
+                                )*/
+                            : Center(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 40.h),
+                                  child: CustomEmptyWidget(
+                                    label: context.isArabic
+                                        ? "لا توجد مطاعم متوفرة."
+                                        : "No Restaurants Found.",
+                                  ),
                                 ),
-                              ),
-                            )
-                          /*ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: context
-                                  .read<RestaurantsCubit>()
-                                  .restaurants
-                                  .length,
-                              separatorBuilder: (context, index) => const Sizer(),
-                              itemBuilder: (context, i) {
-                                // if (i > nativeAdStart && i % adFrequency == adFrequency - 1) {
-                                //   return getAdIfNeeded(i, _adsManager);
-                                // }
-                                // if (i > context.read<RestaurantsCubit>().restaurants.length && i % adFrequency == adFrequency - 1) {
-                                //   print("the index ${context.read<RestaurantsCubit>().restaurants.length}");
-                                //   return getAdIfNeeded(i, _adsManager);
-                                // }
-
-                                  return Column(
-                                    children: [
-                                      if (i % adFrequency == adFrequency - 1)
-                                        getAdIfNeeded(
-                                            i, _adsManager), // Only show ad
-                                      SubCategoriesRestaurantCard(
-                                        item: context
-                                            .read<RestaurantsCubit>()
-                                            .restaurants[i],
-                                        mealId: '',
-                                        favouriteRestaurant: (String id) async {
-                                          var result = await context
-                                              .read<RestaurantsCubit>()
-                                              .toggleFavoriteRestaurant(id);
-                                          if (result == true) {
-                                            context.read<RestaurantsCubit>().restaurants[i].isFavorite
-                                            = !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
-
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              )*/
-                          : Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 40.h),
-                                child: CustomEmptyWidget(
-                                  label: context.isArabic
-                                      ? "لا توجد مطاعم متوفرة."
-                                      : "No Restaurants Found.",
-                                ),
-                              ),
-                            )
-                ],
-              ),
-            )
-        ],
+                              )
+                  ],
+                ),
+              )
+          ],
+        ),
       ),
     );
   }

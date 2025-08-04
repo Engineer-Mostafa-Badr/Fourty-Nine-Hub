@@ -1,156 +1,290 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/clickable_widget.dart';
-import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-
-import 'other_profile_view.dart';
-import 'profile_view.dart';
-import '../widgets/friends_stories.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart' as vibration;
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/widget/custom_circular_progress_indicator.dart';
-import '../../../../../helpers/manage_vibration.dart' as vibration;
+import '../widgets/friends_stories.dart';
+import 'other_profile_view.dart';
+import 'profile_view.dart';
 
-//Todo:Mohamed Magdy: جميع الاكواد اللي معمول لها كومينت هي اكواد فيها لوجيك انا شايلها عشان اشتغل علي ال يو اي او اكواد ملغيه انا عاملها كومنت عشان لو اللي هيربط يستفاد منها او ياخد اجزاء منها
-class SpotlightView extends StatefulWidget {
-  const SpotlightView({super.key});
+class DiscoverSection extends StatefulWidget {
+  final bool isFetchingMore;
+
+  const DiscoverSection({super.key, required this.isFetchingMore});
 
   @override
-  State<SpotlightView> createState() => _SpotlightViewState();
+  DiscoverSectionState createState() => DiscoverSectionState();
 }
 
-class _SpotlightViewState extends State<SpotlightView> {
-  late ScrollController _scrollController;
-  bool _isFetchingMore = false;
-  int itemCount = 20;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
-    _fetchInitialData();
-  }
-
-  void _fetchInitialData() {
-    context.read<StoryCubit>().fetchStories();
-    context.read<StoryCubit>().getMutedStories();
-    context.read<ReelsCubit>().fetchReels();
-    context.read<ReelsCubit>().fetchReelsForFollowers();
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >
-            _scrollController.position.maxScrollExtent + 50 &&
-        !_isFetchingMore) {
-      _fetchMoreReels();
-    }
-  }
-
-  Future<void> _fetchMoreReels() async {
-    setState(() {
-      _isFetchingMore = true;
-    });
-    await context.read<ReelsCubit>().fetchReels();
-    setState(() {
-      _isFetchingMore = false;
-      itemCount += 10; // Simulate more items being added
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
+class DiscoverSectionState extends State<DiscoverSection> {
   @override
   Widget build(BuildContext context) {
-    final userCubit = serviceLocator<UserCubit>();
-    final isLoggedIn = userCubit.isLoggedIn;
-    final userId = userCubit.state.data?.id ?? '';
-
-    return CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: BackAppBar(
-            label: LocaleKeys.spotlight_title.tr(),
-            actions: [
-              CircleAvatar(
-                radius: 35.h, // Responsive radius
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned.fill(
-                      child: ClickableWidget(
-                        onTap: ()=>Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>const SpotLightProfileScreen(),
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: AppColors.PRIMARY_COLOR,
-                          backgroundImage: AssetImage(
-                            Assets.personalImage,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Sizer(),
-            ],
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            LocaleKeys.discover_title.tr(), // Localized text
+            textScaler: TextScaler.noScaling,
+            style: Styles.headerText(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        body:
-            // isLoggedIn
-            //     ?
-            CustomScrollView(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            const SliverToBoxAdapter(
+        Flexible(
+          child: BlocBuilder<ReelsCubit, ReelsState>(
+            builder: (context, state) {
+              // if ((state.globalReels.isEmpty) &&
+              //     !(state.globalReelsIsLoading)) {
+              //   return const Center(child: CupertinoActivityIndicator());
+              // }
+
+              return GridView.builder(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8.h,
+                  crossAxisSpacing: 8.w,
+                  childAspectRatio: 0.6,
+                ),
+                itemCount: 12,
+                // (state.globalReels.length) +
+                //     (widget.isFetchingMore ? 1 : 0),
+                itemBuilder: (context, index) {
+                  // if (index == (state.globalReels.length) &&
+                  //     widget.isFetchingMore) {
+                  //   return const Padding(
+                  //     padding: EdgeInsets.all(8.0),
+                  //     child: CupertinoActivityIndicator(
+                  //       color: Colors.black,
+                  //     ),
+                  //   );
+                  // }
+                  // final reel = state.globalReels[index];
+                  return _buildReelCard(
+                      context,
+                      //reel,
+                      index);
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildReelCard(
+      BuildContext context,
+      //Reel reel,
+      int index) {
+    return GestureDetector(
+      onTap: () {
+        vibration.ManageVibration.vibrate();
+      },
+      //Todo:  خلي اللي معموله كومينت مكان (){}
+      // async {
+      //   await Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => BlocProvider.value(
+      //         value: serviceLocator<ReelsCubit>(),
+      //         child: CustomScaffold(
+      //           extendBodyBehindAppBar: true,
+      //           extendBody: true,
+      //           appBar: AppBar(
+      //             backgroundColor: Colors.transparent,
+      //             elevation: 0,
+      //             leading: IconAppButton(
+      //               icon: Icons.arrow_back,
+      //               size: 50.h,
+      //               color: context.isDarkMode ? Colors.white : Colors.grey,
+      //               onPressed: () => context.pop(),
+      //             ),
+      //             actions: const [
+      //               // const Spacer(),
+      //               // Padding(
+      //               //   padding: const EdgeInsets.all(8.0),
+      //               //   child: IconButton(
+      //               //     onPressed: () async {
+      //               //       // context.pop();
+      //               //       await Navigator.push(
+      //               //           context,
+      //               //           MaterialPageRoute(
+      //               //             builder: (context) =>
+      //               //                 const ReelsRecordingScreen(
+      //               //                     // advertisementType: 'reel',
+      //               //                     // comeFromCompany: 'company',
+      //               //                     // totalPrice: '500',
+      //               //                     ),
+      //               //           ));
+      //               //     },
+      //               //     icon: FaIcon(
+      //               //       Icons.camera_alt_outlined,
+      //               //       color: context.isDarkMode
+      //               //           ? Colors.white
+      //               //           : Colors.grey,
+      //               //       size: 50.h,
+      //               //     ),
+      //               //   ),
+      //               // )
+      //             ],
+      //           ),
+      //           body: UnifiedReelItem(
+      //             reel: reel,
+      //             index: index,
+      //             isVisible: true,
+      //             itemType: ReelItemType.spotlight,
+      //           ),
+      //           // SpotlightReelItem(
+      //           //   key: ValueKey(reel.id),
+      //           //   reel: reel,
+      //           //   isVisible: true,
+      //           // ),,
+      //         ),
+      //       ),
+      //     ),
+      //   );
+      // },
+      child: Card(
+        clipBehavior: Clip.hardEdge,
+        child: Stack(
+          alignment: AlignmentDirectional.bottomStart,
+          children: [
+            // Image.network(
+            //   reel.thumbnailSignedUrl,
+            //   width: double.infinity,
+            //   height: double.infinity,
+            //   fit: BoxFit.cover,
+            //   errorBuilder: (context, error, stackTrace) =>
+            //       const SizedBox.shrink(),
+            // ),
+
+            // Todo: delete this widget and leave the network image above
+            Image.asset(
+              Assets.spotlight_profile,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  const SizedBox.shrink(),
+            ),
+            Padding(
+              padding: EdgeInsets.all(12.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  FriendsList(),
-                  Sizer(),
-                  FollowingSection(),
-                  Sizer(),
+                  ClickableWidget(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const SpotLightOtherProfileScreen(),
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 32.w,
+                      backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+                      backgroundImage: AssetImage(
+                        Assets.personalImage,
+                      ),
+                      // child:ImageFromInternet(
+                      //   image: reel.user.profilePictureSignedUrl ??
+                      //       UIConst.profilePlaceHolder,
+                      //   height: 60.h,
+                      //   width: 60.w,
+                      //   isCircle: true,
+                      // ),
+                    ),
+                  ),
+                  const Sizer(),
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: 'Ali\n',
+                        style: Styles.mediumText(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 32),
+                      ),
+                      TextSpan(
+                        text: context.isArabic ? 'امس' : 'Yesterday',
+                        style:
+                            Styles.smallText(color: Colors.white, fontSize: 24),
+                      ),
+                    ]
+                        // Localized text
+
+                        ),
+                  ),
                 ],
               ),
             ),
-            SliverToBoxAdapter(
-              child: DiscoverSection(isFetchingMore: _isFetchingMore),
-            ),
-            if (_isFetchingMore)
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(
-                    child: CustomCircularProgressIndicator(),
-                  ),
-                ),
-              ),
           ],
-        )
-        // : const Center(
-        //     child: CupertinoActivityIndicator(),
-        //   ),
-        );
+        ),
+      ),
+    );
   }
+//
+// String formatDate(String createdAt) {
+//   final DateTime dateTime = DateTime.parse(createdAt);
+//   final DateTime now = DateTime.now();
+//
+//   final DateTime today = DateTime(now.year, now.month, now.day);
+//   final DateTime yesterday = today.subtract(const Duration(days: 1));
+//
+//   if (dateTime.isAfter(today)) {
+//     return LocaleKeys.today.localize;
+//   } else if (dateTime.isAfter(yesterday)) {
+//     return LocaleKeys.yesterday.localize;
+//   } else {
+//     return context.locale == Locales.english
+//         ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
+//         : DateFormat('yyyy/MM/dd', 'ar')
+//             .format(dateTime); // Format: 12-3-2022
+//   }
+// }
+//
+// String _getFirstTwoWords(String fullName) {
+//   List<String> words = fullName.split(" ");
+//   if (words.length > 1) {
+//     // Capitalize the first letter of each word
+//     words = words.map((word) {
+//       return word[0].toUpperCase() + word.substring(1).toLowerCase();
+//     }).toList();
+//   }
+//   return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
+// }
+}
+
+class FollowingSection extends StatefulWidget {
+  const FollowingSection({super.key});
+
+  @override
+  State<FollowingSection> createState() => _FollowingSectionState();
 }
 
 class FriendsList extends StatelessWidget {
@@ -185,60 +319,18 @@ class FriendsList extends StatelessWidget {
   }
 }
 
-class FollowingSection extends StatefulWidget {
-  const FollowingSection({super.key});
+//Todo:Mohamed Magdy: جميع الاكواد اللي معمول لها كومينت هي اكواد فيها لوجيك انا شايلها عشان اشتغل علي ال يو اي او اكواد ملغيه انا عاملها كومنت عشان لو اللي هيربط يستفاد منها او ياخد اجزاء منها
+class SpotlightView extends StatefulWidget {
+  const SpotlightView({super.key});
 
   @override
-  State<FollowingSection> createState() => _FollowingSectionState();
+  State<SpotlightView> createState() => _SpotlightViewState();
 }
 
 class _FollowingSectionState extends State<FollowingSection> {
   late ScrollController _scrollController;
   bool _isFetchingMore = false;
   double _previousScrollPosition = 0.0; // Track previous scroll position
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    // _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll(ScrollMetrics metrics) {
-    double currentScrollPosition = metrics.pixels;
-
-    bool isScrollingRightToLeft =
-        currentScrollPosition > _previousScrollPosition;
-
-    if (isScrollingRightToLeft &&
-        currentScrollPosition >= metrics.maxScrollExtent + 20 &&
-        !_isFetchingMore) {
-      _fetchMoreReels();
-    }
-
-    _previousScrollPosition = currentScrollPosition;
-  }
-
-  Future<void> _fetchMoreReels() async {
-    setState(() {
-      _isFetchingMore = true;
-    });
-
-    try {
-      await context.read<ReelsCubit>().fetchReelsForFollowers();
-      print('Fetching more reels');
-    } finally {
-      setState(() {
-        _isFetchingMore = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose(); // Dispose the controller when not needed
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -306,14 +398,26 @@ class _FollowingSectionState extends State<FollowingSection> {
     );
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the controller when not needed
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    // _scrollController.addListener(_onScroll);
+  }
+
   Widget _buildReelCard(
       BuildContext context,
       //Reel reel,
       int index) {
     return GestureDetector(
       onTap: () {
-
-      vibration.ManageVibration.vibrate();
+        vibration.ManageVibration.vibrate();
       },
       // async {
       //   await Navigator.push(
@@ -414,9 +518,10 @@ class _FollowingSectionState extends State<FollowingSection> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ClickableWidget(
-                    onTap:()=>Navigator.of(context).push(
+                    onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const SpotLightOtherProfileScreen(),
+                        builder: (context) =>
+                            const SpotLightOtherProfileScreen(),
                       ),
                     ),
                     child: CircleAvatar(
@@ -457,262 +562,161 @@ class _FollowingSectionState extends State<FollowingSection> {
       ),
     );
   }
+
+  Future<void> _fetchMoreReels() async {
+    setState(() {
+      _isFetchingMore = true;
+    });
+
+    try {
+      await context.read<ReelsCubit>().fetchReelsForFollowers();
+      print('Fetching more reels');
+    } finally {
+      setState(() {
+        _isFetchingMore = false;
+      });
+    }
+  }
+
+  void _onScroll(ScrollMetrics metrics) {
+    double currentScrollPosition = metrics.pixels;
+
+    bool isScrollingRightToLeft =
+        currentScrollPosition > _previousScrollPosition;
+
+    if (isScrollingRightToLeft &&
+        currentScrollPosition >= metrics.maxScrollExtent + 20 &&
+        !_isFetchingMore) {
+      _fetchMoreReels();
+    }
+
+    _previousScrollPosition = currentScrollPosition;
+  }
 }
 
-class DiscoverSection extends StatefulWidget {
-  final bool isFetchingMore;
+class _SpotlightViewState extends State<SpotlightView> {
+  late ScrollController _scrollController;
+  bool _isFetchingMore = false;
+  int itemCount = 20;
 
-  const DiscoverSection({super.key, required this.isFetchingMore});
-
-  @override
-  DiscoverSectionState createState() => DiscoverSectionState();
-}
-
-class DiscoverSectionState extends State<DiscoverSection> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            LocaleKeys.discover_title.tr(), // Localized text
-            textScaler: TextScaler.noScaling,
-            style: Styles.headerText(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Flexible(
-          child: BlocBuilder<ReelsCubit, ReelsState>(
-            builder: (context, state) {
-              // if ((state.globalReels.isEmpty) &&
-              //     !(state.globalReelsIsLoading)) {
-              //   return const Center(child: CupertinoActivityIndicator());
-              // }
+    final userCubit = serviceLocator<UserCubit>();
+    final isLoggedIn = userCubit.isLoggedIn;
+    final userId = userCubit.state.data?.id ?? '';
 
-              return GridView.builder(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                ),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8.h,
-                  crossAxisSpacing: 8.w,
-                  childAspectRatio: 0.6,
-                ),
-                itemCount: 12,
-                // (state.globalReels.length) +
-                //     (widget.isFetchingMore ? 1 : 0),
-                itemBuilder: (context, index) {
-                  // if (index == (state.globalReels.length) &&
-                  //     widget.isFetchingMore) {
-                  //   return const Padding(
-                  //     padding: EdgeInsets.all(8.0),
-                  //     child: CupertinoActivityIndicator(
-                  //       color: Colors.black,
-                  //     ),
-                  //   );
-                  // }
-                  // final reel = state.globalReels[index];
-                  return _buildReelCard(
-                      context,
-                      //reel,
-                      index);
-                },
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildReelCard(
-      BuildContext context,
-      //Reel reel,
-      int index) {
-    return GestureDetector(
-      onTap: () {
-
-      vibration.ManageVibration.vibrate();
-      },
-      //Todo:  خلي اللي معموله كومينت مكان (){}
-      // async {
-      //   await Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => BlocProvider.value(
-      //         value: serviceLocator<ReelsCubit>(),
-      //         child: CustomScaffold(
-      //           extendBodyBehindAppBar: true,
-      //           extendBody: true,
-      //           appBar: AppBar(
-      //             backgroundColor: Colors.transparent,
-      //             elevation: 0,
-      //             leading: IconAppButton(
-      //               icon: Icons.arrow_back,
-      //               size: 50.h,
-      //               color: context.isDarkMode ? Colors.white : Colors.grey,
-      //               onPressed: () => context.pop(),
-      //             ),
-      //             actions: const [
-      //               // const Spacer(),
-      //               // Padding(
-      //               //   padding: const EdgeInsets.all(8.0),
-      //               //   child: IconButton(
-      //               //     onPressed: () async {
-      //               //       // context.pop();
-      //               //       await Navigator.push(
-      //               //           context,
-      //               //           MaterialPageRoute(
-      //               //             builder: (context) =>
-      //               //                 const ReelsRecordingScreen(
-      //               //                     // advertisementType: 'reel',
-      //               //                     // comeFromCompany: 'company',
-      //               //                     // totalPrice: '500',
-      //               //                     ),
-      //               //           ));
-      //               //     },
-      //               //     icon: FaIcon(
-      //               //       Icons.camera_alt_outlined,
-      //               //       color: context.isDarkMode
-      //               //           ? Colors.white
-      //               //           : Colors.grey,
-      //               //       size: 50.h,
-      //               //     ),
-      //               //   ),
-      //               // )
-      //             ],
-      //           ),
-      //           body: UnifiedReelItem(
-      //             reel: reel,
-      //             index: index,
-      //             isVisible: true,
-      //             itemType: ReelItemType.spotlight,
-      //           ),
-      //           // SpotlightReelItem(
-      //           //   key: ValueKey(reel.id),
-      //           //   reel: reel,
-      //           //   isVisible: true,
-      //           // ),,
-      //         ),
-      //       ),
-      //     ),
-      //   );
-      // },
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        child: Stack(
-          alignment: AlignmentDirectional.bottomStart,
-          children: [
-            // Image.network(
-            //   reel.thumbnailSignedUrl,
-            //   width: double.infinity,
-            //   height: double.infinity,
-            //   fit: BoxFit.cover,
-            //   errorBuilder: (context, error, stackTrace) =>
-            //       const SizedBox.shrink(),
-            // ),
-
-            // Todo: delete this widget and leave the network image above
-            Image.asset(
-              Assets.spotlight_profile,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  const SizedBox.shrink(),
-            ),
-            Padding(
-              padding: EdgeInsets.all(12.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ClickableWidget(
-                    onTap:()=>Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const SpotLightOtherProfileScreen(),
-                      ),
-                    ),
-                    child:
-                    CircleAvatar(
-                      radius: 32.w,
-                      backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
-                      backgroundImage: AssetImage(
-                        Assets.personalImage,
-                      ),
-                      // child:ImageFromInternet(
-                      //   image: reel.user.profilePictureSignedUrl ??
-                      //       UIConst.profilePlaceHolder,
-                      //   height: 60.h,
-                      //   width: 60.w,
-                      //   isCircle: true,
-                      // ),
-                    ),
-                  ),
-                  const Sizer(),
-                  RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: 'Ali\n',
-                        style: Styles.mediumText(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 32),
-                      ),
-                      TextSpan(
-                        text: context.isArabic ? 'امس' : 'Yesterday',
-                        style:
-                            Styles.smallText(color: Colors.white, fontSize: 24),
-                      ),
-                    ]
-                        // Localized text
-
+    return CustomScaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: BackAppBar(
+            label: LocaleKeys.spotlight_title.tr(),
+            actions: [
+              CircleAvatar(
+                radius: 35.h, // Responsive radius
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fill(
+                      child: ClickableWidget(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const SpotLightProfileScreen(),
+                          ),
                         ),
-                  ),
-                ],
+                        child: CircleAvatar(
+                          backgroundColor: AppColors.PRIMARY_COLOR,
+                          backgroundImage: AssetImage(
+                            Assets.personalImage,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              const Sizer(),
+            ],
+          ),
         ),
-      ),
-    );
+        body:
+            // isLoggedIn
+            //     ?
+            GlowingOverscrollIndicator(
+          color: AppColors.SECONDARY_COLOR,
+          axisDirection: AxisDirection.down,
+          child: CustomScrollView(
+            controller: _scrollController,
+            // physics: const BouncingScrollPhysics(),
+            slivers: [
+              const SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    FriendsList(),
+                    Sizer(),
+                    FollowingSection(),
+                    Sizer(),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: DiscoverSection(isFetchingMore: _isFetchingMore),
+              ),
+              if (_isFetchingMore)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(
+                      child: CustomCircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        )
+        // : const Center(
+        //     child: CupertinoActivityIndicator(),
+        //   ),
+        );
   }
-//
-// String formatDate(String createdAt) {
-//   final DateTime dateTime = DateTime.parse(createdAt);
-//   final DateTime now = DateTime.now();
-//
-//   final DateTime today = DateTime(now.year, now.month, now.day);
-//   final DateTime yesterday = today.subtract(const Duration(days: 1));
-//
-//   if (dateTime.isAfter(today)) {
-//     return LocaleKeys.today.localize;
-//   } else if (dateTime.isAfter(yesterday)) {
-//     return LocaleKeys.yesterday.localize;
-//   } else {
-//     return context.locale == Locales.english
-//         ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
-//         : DateFormat('yyyy/MM/dd', 'ar')
-//             .format(dateTime); // Format: 12-3-2022
-//   }
-// }
-//
-// String _getFirstTwoWords(String fullName) {
-//   List<String> words = fullName.split(" ");
-//   if (words.length > 1) {
-//     // Capitalize the first letter of each word
-//     words = words.map((word) {
-//       return word[0].toUpperCase() + word.substring(1).toLowerCase();
-//     }).toList();
-//   }
-//   return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
-// }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+    _fetchInitialData();
+  }
+
+  void _fetchInitialData() {
+    context.read<StoryCubit>().fetchStories();
+    context.read<StoryCubit>().getMutedStories();
+    context.read<ReelsCubit>().fetchReels();
+    context.read<ReelsCubit>().fetchReelsForFollowers();
+  }
+
+  Future<void> _fetchMoreReels() async {
+    setState(() {
+      _isFetchingMore = true;
+    });
+    await context.read<ReelsCubit>().fetchReels();
+    setState(() {
+      _isFetchingMore = false;
+      itemCount += 10; // Simulate more items being added
+    });
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >
+            _scrollController.position.maxScrollExtent + 50 &&
+        !_isFetchingMore) {
+      _fetchMoreReels();
+    }
+  }
 }
