@@ -43,15 +43,15 @@ class SettingsWidget extends StatefulWidget {
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-  late bool isReady;
+  bool isReady=false;
   bool isComfort=false;
   bool isNonSmoking=false;
-  late bool enableSound;
-  late bool isCaptainShare;
-  late bool isCaptain;
-  late bool isIntercity;
-  late bool isPremium;
-  late num perKm;
+  bool enableSound=false;
+  bool isCaptainShare=false;
+  bool isCaptain=false;
+  bool isIntercity=false;
+  bool isPremium=false;
+  num perKm=0;
 
   var planController = ExpansionTileController();
   var cityController = ExpansionTileController();

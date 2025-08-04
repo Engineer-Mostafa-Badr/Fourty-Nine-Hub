@@ -285,6 +285,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         if (((widget.model?.availableSeats ?? 0) >= 2))
                           ClickableWidget(
                             onTap: () {
+                              if((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)){
+                                return;
+                              }
                               if (widget.onJoin != null) {
                                 showModalBottomSheet(
                                   backgroundColor:
@@ -459,6 +462,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         if (((widget.model?.availableSeats ?? 0) >= 1))
                           ClickableWidget(
                             onTap: () {
+                              if((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)){
+                                return;
+                              }
                               if (widget.onJoin != null) {
                                 showModalBottomSheet(
                                   backgroundColor:
@@ -873,7 +879,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
 
 
-    List<BookingClientEntity> clients = model?.clients ?? [];
+    List<BookingClientEntity> clients = List.from(model?.clients ?? []);
     if (clients.isNotEmpty) {
       clients.removeWhere((e) => e.id == model?.creatorId);
     }
