@@ -88,7 +88,7 @@ class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
                             // cubit.cancelMyBooking(id: cubit.availableBookings[index].id, context: context, from: 'available');
                           }
                         },
-                        onJoin: () {
+                        onJoin: (phone) {
                           if ((!(cubit.availableBookings[index].clients ?? [])
                                   .contains(
                                       (UserCubit.to.state.data?.id ?? ''))) &&
