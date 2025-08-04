@@ -128,44 +128,71 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                                   final shouldProceed = await showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                      title: Text(context.isArabic ? "تحذير" : "Alert!", style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.PRIMARY_COLOR_DARK)),
+                                      title: Center(
+                                        child: Text(
+                                          context.isArabic ? "تحذير" : "Alert!",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.PRIMARY_COLOR_DARK,
+                                          ),
+                                        ),
+                                      ),
                                       content: Text(
                                         context.isArabic
                                             ? "كن حذرا ربما تحصل علي سائق ليس لديه الاحتياجات المختاره"
                                             : "Be careful, you might get a driver who does not meet your selected needs.",
+                                        textAlign: TextAlign.center,
                                       ),
+                                      actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                       actions: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            OutlinedButton(
-                                              onPressed: () => Navigator.of(context).pop(false),
-                                              style: OutlinedButton.styleFrom(
-                                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                                side: BorderSide(color: Colors.red),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                        SizedBox(
+                                          height: 50,
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Expanded(
+                                                child: SizedBox(
+                                                  // width: double.infinity,
+                                                  child: OutlinedButton(
+                                                    onPressed: () => Navigator.of(context).pop(false),
+                                                    style: OutlinedButton.styleFrom(
+                                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                                      side: const BorderSide(color: Colors.red),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      context.isArabic ? "إلغاء" : "Cancel",
+                                                      style: const TextStyle(color: Colors.red),
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                              child: Text(
-                                                context.isArabic ? "إلغاء" : "Cancel",
-                                                style: const TextStyle(color: Colors.red),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: SizedBox(
+                                                  // width: double.infinity,
+                                                  child: FilledButton(
+                                                    onPressed: () => Navigator.of(context).pop(true),
+                                                    style: FilledButton.styleFrom(
+                                                      backgroundColor: AppColors.PRIMARY_COLOR,
+                                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      context.isArabic ? "موافق" : "OK",
+                                                      style: const TextStyle(color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(width: 12),
-                                            FilledButton(
-                                              onPressed: () => Navigator.of(context).pop(true),
-                                              style: FilledButton.styleFrom(
-                                                backgroundColor: AppColors.PRIMARY_COLOR,
-                                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                              ),
-                                              child: Text(
-                                                context.isArabic ? "موافق" : "OK",
-                                                style: const TextStyle(color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   );

@@ -120,6 +120,8 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
           text ?? '',
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         ),
+
+        Spacer(),
         if(index == 1)
           Image.asset(Assets.airConditioner,
             height: 20,
@@ -128,11 +130,11 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
           Image.asset(Assets.noSmokingIcon,
             height: 20,
             width: 40,),
-        if(index == 3)
-          SizedBox(width: 6,),
+
         if(index == 3)
           Icon(Icons.autorenew, size: 20,),
-        Spacer(),
+        if(index == 3)
+          SizedBox(width: 12,),
         Transform.scale(
           scale: 0.75,
           child: Switch(

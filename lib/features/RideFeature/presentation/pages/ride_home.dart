@@ -1642,6 +1642,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                   ),
                                                                   IconButton(
                                                                     icon: const Icon(Icons.close),
+                                                                    padding: const EdgeInsets.all(0),
                                                                     onPressed: () {
                                                                       ManageVibration.vibrate();
                                                                       Navigator.of(context).pop(false);
@@ -1649,18 +1650,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                   ),
                                                                 ],
                                                               ),
-                                                              const SizedBox(height: 20),
+                                                              // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic ?'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة' : "Please enter a direct contact number for the service provider.",
                                                               ),
-                                                              const SizedBox(height: 20),
+                                                              // const SizedBox(height: 20),
                                                               NewPhoneNumberTextFormField(
                                                                 currentController: rideCubit.phoneNumberController,
                                                                 keyboardType: TextInputType.number,
                                                                 isRequired: true,
                                                                 validator: validatorEgyptPhone,
                                                               ),
-                                                              const SizedBox(height: 20),
+                                                              // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic ?"كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه." : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                               ),
@@ -1714,7 +1715,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                 }
                                               }
                                             }
-
                                             /// ✅ Show reservation sheet directly if phone is validated
                                             showModalBottomSheet(
                                               context: context,
@@ -1797,7 +1797,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                           Row(
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             children: [
-                                                              const SizedBox(width: 24),
+                                                              const SizedBox(width: 10),
                                                               Text(
                                                                 LocaleKeys.phoneNumber.localize,
                                                                 style: const TextStyle(
@@ -1807,6 +1807,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               ),
                                                               IconButton(
                                                                 icon: const Icon(Icons.close),
+                                                                padding: const EdgeInsets.all(0),
                                                                 onPressed: () {
                                                                   ManageVibration.vibrate();
                                                                   Navigator.of(context).pop(false);
@@ -1814,18 +1815,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               ),
                                                             ],
                                                           ),
-                                                          const SizedBox(height: 20),
+                                                          // const SizedBox(height: 20),
                                                           Text(
                                                             context.isArabic ?'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة' : "Please enter a direct contact number for the service provider.",
                                                           ),
-                                                          const SizedBox(height: 20),
+                                                          // const SizedBox(height: 20),
                                                           NewPhoneNumberTextFormField(
                                                             currentController: rideCubit.phoneNumberController,
                                                             keyboardType: TextInputType.number,
                                                             isRequired: true,
                                                             validator: validatorEgyptPhone,
                                                           ),
-                                                          const SizedBox(height: 20),
+                                                          // const SizedBox(height: 20),
                                                           Text(
                                                             context.isArabic ?"كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه." : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                           ),
