@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/enums/route_client_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
@@ -24,6 +25,7 @@ class RunningTripClientWidget extends StatefulWidget {
     required this.client,
     this.index,
     required this.onPickClient,
+    required this.onDropOffClient,
     required this.onDriverArrived,
     required this.onClientNotShown,
   });
@@ -31,6 +33,7 @@ class RunningTripClientWidget extends StatefulWidget {
   final BookingClientEntity? client;
   final int? index;
   final Function(String otp) onPickClient;
+  final Function() onDropOffClient;
   final Function() onDriverArrived;
   final Function() onClientNotShown;
 
@@ -39,35 +42,39 @@ class RunningTripClientWidget extends StatefulWidget {
 }
 
 class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
-  final TextEditingController otpController = TextEditingController();
-
-
   Timer? _countdownTimer;
   Duration? remainingTime;
+  String otp = '';
+  bool isLoadingRunningTrip = false;
+  bool isGoingToClient = false;
+  bool showArrived = false;
+  bool showClientNotShown = false;
+  bool showEndTrip = false;
+
 
   void checkAndStartTimer() {
+    setState(() => showEndTrip = false);
     final String? arrivalTimeStr = widget.client?.driverArrivalTime;
     final String? waitingTimeStr = widget.client?.driverWaitingTime;
     final DateTime now = DateTime.now();
 
     if (arrivalTimeStr != null && arrivalTimeStr.isNotEmpty) {
-      setState(() => context.read<CaptainShareDashboardCubit>().isGoingToClient = false);
+      setState(() => isGoingToClient = false);
 
       if (waitingTimeStr != null && waitingTimeStr.isNotEmpty) {
         DateTime waitingTime = DateTime.parse(waitingTimeStr).toLocal();
-        bool isSameDay = waitingTime.year == now.year &&
-            waitingTime.month == now.month &&
-            waitingTime.day == now.day;
+        bool isSameDay = waitingTime.year == now.year && waitingTime.month == now.month && waitingTime.day == now.day;
 
         if (isSameDay && waitingTime.isAfter(now)) {
           final durationUntilWait = waitingTime.difference(now);
-          startCountdownTimer(durationUntilWait);
-          setState(() => context.read<CaptainShareDashboardCubit>().showArrived = false);
-          setState(() => context.read<CaptainShareDashboardCubit>().showClientNotShown = false);
+          startCountdownTimer(durationUntilWait, showClientNotShownWhenFinished: false);
+          setState(() => showArrived = false);
+          setState(() => showClientNotShown = false);
           return;
-        }else{
-          setState(() => context.read<CaptainShareDashboardCubit>().showClientNotShown = false);
-          setState(() => context.read<CaptainShareDashboardCubit>().showEndTrip = true);
+        } else {
+          print("object313");
+          setState(() => showClientNotShown = false);
+          setState(() => showEndTrip = true);
           return;
         }
       }
@@ -77,15 +84,15 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
       DateTime arrivalDeadline = arrivalTime.add(const Duration(minutes: 5));
 
       if (arrivalDeadline.isAfter(now)) {
-        setState(() => context.read<CaptainShareDashboardCubit>().showArrived = false);
-        setState(() => context.read<CaptainShareDashboardCubit>().showClientNotShown = false);
+        setState(() => showArrived = false);
+        setState(() => showClientNotShown = false);
         final Duration countdown = arrivalDeadline.difference(now);
-        startCountdownTimer(countdown);
+        startCountdownTimer(countdown, showClientNotShownWhenFinished: true);
       } else {
-        setState(() => context.read<CaptainShareDashboardCubit>().showClientNotShown = true);
+        setState(() => showClientNotShown = true);
       }
     } else {
-      setState(() => context.read<CaptainShareDashboardCubit>().isGoingToClient = true);
+      setState(() => isGoingToClient = true);
     }
   }
 
@@ -104,13 +111,19 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
     checkAndStartTimer();
   }
 
-
-  void startCountdownTimer(Duration duration) {
+  void startCountdownTimer(Duration duration, {bool showClientNotShownWhenFinished = true}) {
     remainingTime = duration;
 
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
+      print("widget.client?.status ${widget.client?.status}");
+      if (widget.client?.status == 'pickedUp') {
+        remainingTime == null;
+        setState(() {});
+        timer.cancel();
+        return;
+      }
 
       setState(() {
         if (remainingTime!.inSeconds > 1) {
@@ -118,7 +131,15 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
         } else {
           timer.cancel();
           remainingTime = null;
-          context.read<CaptainShareDashboardCubit>().showClientNotShown = true;
+          if (showClientNotShownWhenFinished) {
+            setState(() {
+              showClientNotShown = true;
+            });
+          } else if (!showClientNotShownWhenFinished) {
+            setState(() {
+              showClientNotShown = false;
+            });
+          }
         }
       });
     });
@@ -133,14 +154,12 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
   @override
   void dispose() {
     _countdownTimer?.cancel();
-    otpController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("widget.client?.driverWaitingTime ${widget.client?.driverWaitingTime}");
-    print("widget.client?.driverArrivalTime ${widget.client?.driverArrivalTime}");
+    print("showEndTrip ${showEndTrip}");
     return Column(
       children: [
         Row(
@@ -173,7 +192,6 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
           ],
         ),
         SizedBox(height: 15.h),
-
         if (remainingTime != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
@@ -186,30 +204,32 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
               ),
             ),
           ),
-
         Row(
           children: [
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  if (context.read<CaptainShareDashboardCubit>().isGoingToClient) {
+                  if (widget.client?.status == 'pickedUp') {
+                    widget.onDropOffClient();
+                  }
+                  if (isGoingToClient) {
                     setState(() {
-                      context.read<CaptainShareDashboardCubit>().isGoingToClient = false;
-                      context.read<CaptainShareDashboardCubit>().showArrived = true;
+                      isGoingToClient = false;
+                      showArrived = true;
                     });
                   } else {
-                    if (context.read<CaptainShareDashboardCubit>().showArrived) {
+                    if (showArrived) {
                       widget.onDriverArrived();
                     }
-                    if (context.read<CaptainShareDashboardCubit>().showArrived==false && context.read<CaptainShareDashboardCubit>().isGoingToClient==false) {
-                      if(context.read<CaptainShareDashboardCubit>().showClientNotShown||remainingTime!=null){
-                        if (otpController.text.length == 6) {
-                          widget.onPickClient(otpController.text);
+                    if (showArrived == false && isGoingToClient == false) {
+                      if (showClientNotShown || remainingTime != null) {
+                        if (otp.length == 6) {
+                          widget.onPickClient(otp);
                         }
-                        if(otpController.text.length<6){
-                          showErrorMessage(context,context.isArabic?'يرجى إدخال كود التأكيد':'Please Enter OTP');
+                        if (otp.length < 6) {
+                          showErrorMessage(context, context.isArabic ? 'يرجى إدخال كود التأكيد' : 'Please Enter OTP');
                         }
-                      }else if(context.read<CaptainShareDashboardCubit>().showClientNotShown==false&&remainingTime==null){
+                      } else if (showClientNotShown == false && remainingTime == null) {
                         widget.onPickClient('');
                       }
                     }
@@ -219,20 +239,22 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
                   height: 45,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: context.read<CaptainShareDashboardCubit>().isGoingToClient ? AppColors.PRIMARY_COLOR : AppColors.SECONDARY_COLOR,
+                    color: isGoingToClient ? AppColors.PRIMARY_COLOR : AppColors.SECONDARY_COLOR,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-    context.read<CaptainShareDashboardCubit>().showClientNotShown==false&&remainingTime==null?
-                    (context.isArabic ? "انهاء الرحله" : "End Trip"):
-                    context.read<CaptainShareDashboardCubit>().isGoingToClient
+                    isGoingToClient
                         ? (context.isArabic
-                        ? "الذهاب الي العميل ${widget.index == 0 ? 'الاول' : widget.index == 1 ? 'الثاني' : 'الثالث'}"
-                        : "Go To ${widget.index == 0 ? 'First' : widget.index == 1 ? 'Second' : 'Third'} Client")
-                        : context.read<CaptainShareDashboardCubit>().showArrived
-                        ? (context.isArabic ? "انا وصلت" : "I'm Arrived")
-                        : (context.isArabic ? "بدء" : "Start"),
-                    style: const TextStyle(
+                            ? "الذهاب الي العميل ${widget.index == 0 ? 'الاول' : widget.index == 1 ? 'الثاني' : 'الثالث'}"
+                            : "Go To ${widget.index == 0 ? 'First' : widget.index == 1 ? 'Second' : 'Third'} Client")
+                        : showArrived
+                            ? (context.isArabic ? "انا وصلت" : "I'm Arrived")
+                            : showEndTrip
+                                ? (context.isArabic ? "الغاء الرحله" : "End Trip")
+                                : widget.client?.status == RouteClientStatus.pickedUp.name
+                                    ? (context.isArabic ? "انهاء الرحله" : "Finish Trip")
+                                    : (context.isArabic ? "بدء" : "Start"),
+                    style: TextStyle(
                       fontSize: FontSize.s16,
                       fontWeight: FontWeight.bold,
                       color: AppColors.whiteColor,
@@ -262,36 +284,35 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
             ),
           ],
         ),
-        SizedBox(height: (context.read<CaptainShareDashboardCubit>().isGoingToClient ? 15 : 25).h),
-
-        if (!context.read<CaptainShareDashboardCubit>().isGoingToClient && !context.read<CaptainShareDashboardCubit>().showArrived)
+        SizedBox(height: (isGoingToClient ? 15 : 25).h),
+        if (!isGoingToClient && !showArrived)
           Row(
             children: [
-              Expanded(
-                child: CallMessageButtons(
-                  flex: 1,
-                  chatFlex: 1,
-                  otherUserId: '',
-                  subcategoryId: 'Constants',
-                  phone: 'widget.item.phone',
-                  id: 'widget.item.id',
-                  hasReport: false,
-                ),
-              ),
-              SizedBox(width: 30.w),
+              // Expanded(
+              //   child: CallMessageButtons(
+              //     flex: 1,
+              //     chatFlex: 1,
+              //     otherUserId: '',
+              //     subcategoryId: 'Constants',
+              //     phone: 'widget.item.phone',
+              //     id: 'widget.item.id',
+              //     hasReport: false,
+              //   ),
+              // ),
+              // SizedBox(width: 30.w),
               Expanded(
                 child: ClickableWidget(
                   onTap: !context.read<UserCubit>().isLoggedIn
                       ? () => pleaseLoginDialog(context)
                       : () {
-                    bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: 'widget.id',
-                        categoryId: 'widget.subcategoryId',
-                      ),
-                    );
-                  },
+                          bottomSheet(
+                            context: context,
+                            widget: ReportView(
+                              id: 'widget.id',
+                              categoryId: 'widget.subcategoryId',
+                            ),
+                          );
+                        },
                   child: Container(
                     height: 45,
                     alignment: Alignment.center,
@@ -314,47 +335,51 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
             ],
           ),
         SizedBox(height: 15.h),
+        if (remainingTime != null)
+          Visibility(
+            visible: !isGoingToClient && !showArrived,
+            child: PinCodeTextField(
+              appContext: context,
+              length: 6,
+              // controller: otpController,
 
-        if (!context.read<CaptainShareDashboardCubit>().isGoingToClient && !context.read<CaptainShareDashboardCubit>().showArrived &&!context.read<CaptainShareDashboardCubit>().showEndTrip)
-          PinCodeTextField(
-            appContext: context,
-            length: 6,
-            controller: otpController,
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.box,
-              borderRadius: BorderRadius.circular(8),
-              fieldHeight: 50,
-              fieldWidth: 40,
-              activeColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-              inactiveColor: Colors.grey,
-              selectedColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              pinTheme: PinTheme(
+                shape: PinCodeFieldShape.box,
+                borderRadius: BorderRadius.circular(8),
+                fieldHeight: 50,
+                fieldWidth: 40,
+                activeColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                inactiveColor: Colors.grey,
+                selectedColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(6),
+              ],
+              animationDuration: const Duration(milliseconds: 300),
+              backgroundColor: Colors.transparent,
+              enableActiveFill: false,
+              enablePinAutofill: false,
+              enabled: remainingTime != null,
+              onCompleted: (value) => widget.onPickClient(value),
+              onChanged: (value) {
+                setState(() {
+                  otp = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.length < 6) {
+                  return context.isArabic ? 'يرجى إدخال رمز التحقيق المكون من 6 أرقام' : 'Please enter a 6-digit code';
+                }
+                return null;
+              },
             ),
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(6),
-            ],
-            animationDuration: const Duration(milliseconds: 300),
-            backgroundColor: Colors.transparent,
-            enableActiveFill: false,
-            enablePinAutofill: false,
-            enabled: context.read<CaptainShareDashboardCubit>().showClientNotShown||remainingTime!=null,
-            onCompleted: (value) => widget.onPickClient(value),
-            onChanged: (value) {},
-            validator: (value) {
-              if (value == null || value.length < 6) {
-                return context.isArabic
-                    ? 'يرجى إدخال رمز التحقيق المكون من 6 أرقام'
-                    : 'Please enter a 6-digit code';
-              }
-              return null;
-            },
           ),
-
-        if (context.read<CaptainShareDashboardCubit>().showClientNotShown)
+        if (showClientNotShown && widget.client?.status != 'pickedUp')
           GestureDetector(
-            onTap: (){
+            onTap: () {
               widget.onClientNotShown();
             },
             child: Container(

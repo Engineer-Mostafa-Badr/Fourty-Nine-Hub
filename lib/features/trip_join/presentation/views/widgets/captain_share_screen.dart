@@ -16,7 +16,7 @@ class CaptainShareScreen extends StatelessWidget {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 89,),
-          const Text("Captain Share!",style:
+          Text("Captain Share!",style:
             TextStyle(
               color: AppColors.PRIMARY_COLOR,
               fontWeight: FontWeight.w600,

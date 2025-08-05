@@ -31,7 +31,7 @@ class PickMeScreen extends StatelessWidget {
           BulletPoint(text: "Tired from the expensive price."),
           BulletPoint(text: "Advertise your daily repeat trip."),
           BulletPoint(text: "Wait for car Owners to contact you."),
-          BulletPoint(text: "Share your trip & save money."),
+          BulletPoint(text: "Share your trip & save money."),
           const SizedBox(height: 36,),
           AppButton(
             radius: 22,
