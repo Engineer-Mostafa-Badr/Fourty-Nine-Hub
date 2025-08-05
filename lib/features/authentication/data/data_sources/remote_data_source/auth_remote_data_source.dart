@@ -473,6 +473,28 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     }
   }
 
+  // @override
+  // Future<Either<Failure, UserTokensModel>> socialLogin(
+  //     SocialLoginParams params) async {
+  //   try {
+  //     final result = await _apiConsumer.post(
+  //       EndPoints.socialLogin,
+  //       data: params.toJson(),
+  //     );
+
+  //     return result.fold(
+  //       (failure) => Left(failure),
+  //       (response) {
+  //         final userTokens = UserTokensModel.fromJson(response['data']);
+  //         _apiConsumer.attachToken(userTokens);
+  //         return Right(userTokens);
+  //       },
+  //     );
+  //   } catch (e) {
+  //     return Left(ServerFailure(message: 'Social login failed: $e'));
+  //   }
+  // }
+
   @override
   Future<Either<Failure, UserTokensModel>> socialLogin(
       SocialLoginParams params) async {
@@ -491,6 +513,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         },
       );
     } catch (e) {
+      log('Social login error: $e');
       return Left(ServerFailure(message: 'Social login failed: $e'));
     }
   }
@@ -599,14 +622,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
   }
 
-  Future<String?> _getDeviceId() async {
+  // Helper method to get device ID
+  Future<String> _getDeviceId() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.id; // Android device ID
+      return androidInfo.id;
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor; // iOS device ID
+      return iosInfo.identifierForVendor ?? 'unknown_ios_device';
     }
     return 'unknown_device';
   }

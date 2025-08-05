@@ -4,7 +4,6 @@ import 'dart:io';
 // import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -225,6 +224,9 @@ class _LoginViewState extends State<LoginView> {
               showLoadingDialog(context);
               _isLoadingDialogShown = true;
             }
+          } else if (state is SocialAuthState) {
+            // Handle Social Auth States
+            _handleSocialAuthState(state);
           }
         },
         child: Scaffold(
@@ -391,6 +393,73 @@ class _LoginViewState extends State<LoginView> {
     // wid, required AuthType authTypeget.authType = widget.authType;
     // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
   }
+
+  void _handleSocialAuthState(SocialAuthState state) async {
+    switch (state.status) {
+      case AuthStatus.authenticating:
+        if (!_isLoadingDialogShown) {
+          showLoadingDialog(context);
+          _isLoadingDialogShown = true;
+        }
+        break;
+
+      case AuthStatus.authenticated:
+        if (_isLoadingDialogShown) {
+          Navigator.of(context).pop();
+          _isLoadingDialogShown = false;
+        }
+
+        if (state.userTokensEntity != null) {
+          // Update user cubit and navigate
+          serviceLocator<UserCubit>()
+            ..setLogin(true)
+            ..attachToken()
+            ..getUser().then((value) async {
+              String? accessToken = await CacheManager.getAccessToken();
+              String? refreshToken = await CacheManager.getRefreshToken();
+
+              debugPrint('Social Login Success!');
+              debugPrint('Access Token: $accessToken');
+              debugPrint('Refresh Token: $refreshToken');
+
+              context.pushReplacement(Routes.HOME);
+            });
+
+          showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
+        }
+        break;
+
+      case AuthStatus.authenticateError:
+        if (_isLoadingDialogShown) {
+          Navigator.of(context).pop();
+          _isLoadingDialogShown = false;
+        }
+
+        if (state.error != null) {
+          showErrorMessage(
+            context,
+            getFailureMessage(state.error!, context),
+          );
+        } else {
+          showErrorMessage(
+            context,
+            context.isArabic ? 'فشل في تسجيل الدخول' : 'Social login failed',
+          );
+        }
+        break;
+
+      case AuthStatus.authenticateCanceled:
+        if (_isLoadingDialogShown) {
+          Navigator.of(context).pop();
+          _isLoadingDialogShown = false;
+        }
+        // User canceled - no error message needed
+        break;
+
+      default:
+        break;
+    }
+  }
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
@@ -463,6 +532,76 @@ class _LoginWidgetState extends State<LoginWidget> {
           style: Styles.mediumText(color: Colors.grey),
         ),
         const Sizer(),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.google.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         icon: FontAwesomeIcons.google,
+        //         onPressed: () async {
+        //           ManageVibration.vibrate();
+        //           // await  loginCubit.handleGoogleSignIn();
+        //           print('@@@@@@@@@@@@@@@@@@@@@@@@@');
+        //           log("uid: ${loginCubit.user?.uid ?? ''}");
+        //           log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+        //           log('Google sign in pressed');
+        //           try {
+        //             final user = await loginCubit.signInWithGoogle();
+        //             context.push(Routes.HOME);
+        //             // if (user != null && mounted) {
+        //             // }
+        //           } on FirebaseAuthException catch (error) {
+        //             print(error.message);
+        //             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //                 content: Text(
+        //               error.message ?? "Something went wrong",
+        //             )));
+        //           } catch (error) {
+        //             print(error);
+        //             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //                 content: Text(
+        //               error.toString(),
+        //             )));
+        //           }
+        //         },
+        //       ),
+        //     ),
+        //     const Sizer(),
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.facebook.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         icon: FontAwesomeIcons.facebook,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         onPressed: () async {
+        //           ManageVibration.vibrate();
+        //           log('Facebook sign in pressed');
+        //           await loginCubit.signInWithFacebook();
+        //         },
+        //       ),
+        //     ),
+        //     if (Platform.isIOS) ...[
+        //       const Sizer(),
+        //       Expanded(
+        //         child: AppButton(
+        //           label: 'Apple',
+        //           backColor: AppColors.LIGHT_GRAY_COLOR,
+        //           textColor: Colors.black,
+        //           icon: FontAwesomeIcons.apple,
+        //           onPressed: () {
+        //             log('Apple sign in pressed');
+        //             ManageVibration.vibrate();
+        //             loginCubit.signInWithApple();
+        //           },
+        //         ),
+        //       ),
+        //     ],
+        //   ],
+        // ),
         Row(
           children: [
             Expanded(
@@ -474,28 +613,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                 icon: FontAwesomeIcons.google,
                 onPressed: () async {
                   ManageVibration.vibrate();
-                  // await  loginCubit.handleGoogleSignIn();
-                  print('@@@@@@@@@@@@@@@@@@@@@@@@@');
-                  print(loginCubit.user?.uid ?? '');
-                  log('Google sign in pressed');
-                  try {
-                    final user = await loginCubit.signInWithGoogle();
-                    context.push(Routes.HOME);
-                    // if (user != null && mounted) {
-                    // }
-                  } on FirebaseAuthException catch (error) {
-                    print(error.message);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                      error.message ?? "Something went wrong",
-                    )));
-                  } catch (error) {
-                    print(error);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                      error.toString(),
-                    )));
-                  }
+                  print('Google sign in pressed');
+                  log("uid: ${loginCubit.user?.uid ?? ''}");
+                  log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                  await loginCubit.signInWithGoogle();
+                  context.push(Routes.HOME);
                 },
               ),
             ),
@@ -509,8 +631,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                 color: AppColors.PRIMARY_COLOR,
                 onPressed: () async {
                   ManageVibration.vibrate();
-                  log('Facebook sign in pressed');
+                  print('Facebook sign in pressed');
+                  log("uid: ${loginCubit.user?.uid ?? ''}");
+                  log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
                   await loginCubit.signInWithFacebook();
+                  context.push(Routes.HOME);
                 },
               ),
             ),
@@ -522,10 +647,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                   backColor: AppColors.LIGHT_GRAY_COLOR,
                   textColor: Colors.black,
                   icon: FontAwesomeIcons.apple,
-                  onPressed: () {
-                    log('Apple sign in pressed');
+                  onPressed: () async {
                     ManageVibration.vibrate();
-                    loginCubit.signInWithApple();
+                    print('Apple sign in pressed');
+                    log("uid: ${loginCubit.user?.uid ?? ''}");
+                    log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                    await loginCubit.signInWithApple();
+                    context.push(Routes.HOME);
                   },
                 ),
               ),

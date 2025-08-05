@@ -19,3 +19,55 @@
 //   return digest.toString();
 // }
 // }
+
+
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+
+//! ===== Device ID Helper =====
+class DeviceHelper {
+  static Future<String> getDeviceId() async {
+    final deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id;
+    } else if (Platform.isIOS) {
+      final iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor ?? 'unknown_ios_device';
+    }
+
+    return 'unknown_device';
+  }
+}
+
+//! ===== FCM Helper Class =====
+class FCMHelper {
+  static Future<String?> getFcmToken() async {
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+      print('FCM Token: $token');
+      return token;
+    } catch (e) {
+      print('Error getting FCM token: $e');
+    }
+    return null;
+  }
+}
+
+
+//! Helper method to get device ID
+  Future<String> _getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor ?? 'unknown_ios_device';
+    }
+    return 'unknown_device';
+  }

@@ -86,7 +86,8 @@ abstract class AuthRepository {
 
   Future<Either<Failure, ForgetPasswordQuestionsEntity>>
       sendForgetPasswordQuestions(SendForgetPasswordParams params);
-
+      
+  //! Social Login
   Future<Either<Failure, UserTokensEntity>> signInWithApple();
 
   Future<Either<Failure, UserTokensEntity>> signInWithFacebook();

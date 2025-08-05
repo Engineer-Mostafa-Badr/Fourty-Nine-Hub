@@ -5,8 +5,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
-import '../../../../core/utils/fcm.dart';
-
 // class GoogleSignInUseCase extends UseCase<UserTokensEntity, NoParams> {
 //   final AuthRepository _repository;
 
@@ -33,6 +31,7 @@ import '../../../../core/utils/fcm.dart';
 //   List<Object?> get props => [idToken];
 // }
 
+
 class GoogleSignInUseCase extends UseCase<UserTokensEntity, NoParams> {
   final AuthRepository _repository;
 
@@ -43,7 +42,6 @@ class GoogleSignInUseCase extends UseCase<UserTokensEntity, NoParams> {
     return _repository.signInWithGoogle();
   }
 }
-
 
 class SocialLoginParams extends Equatable {
   final String idToken;

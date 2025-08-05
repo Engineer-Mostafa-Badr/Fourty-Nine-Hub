@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/authentication/data/data_sources/local_da
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
-import 'package:fourtyninehub/features/authentication/domain/repositories/firebase_auth_service_repository.dart';
+import 'package:fourtyninehub/features/authentication/domain/repositories/social_auth_service.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
@@ -28,12 +28,27 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_ot
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_phone_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_questions_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../domain/entities/register_by_phone_entity.dart';
 import '../../domain/entities/verify_otp_entity.dart';
 import '../../domain/use_cases/change_password_use_case.dart';
 import '../models/forget_password_questions_model.dart';
+
+//enum: ['google', 'facebook', 'local', 'apple']
+
+Future<String> _getDeviceId() async {
+  final deviceInfo = DeviceInfoPlugin();
+
+  if (Platform.isAndroid) {
+    final androidInfo = await deviceInfo.androidInfo;
+    return androidInfo.id;
+  } else if (Platform.isIOS) {
+    final iosInfo = await deviceInfo.iosInfo;
+    return iosInfo.identifierForVendor ?? 'unknown_ios_device';
+  }
+
+  return 'unknown_device';
+}
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -370,19 +385,3 @@ class AuthRepositoryImpl extends AuthRepository {
     // مثال: رفع السلة، المفضلة، إلخ
   }
 }
-//enum: ['google', 'facebook', 'local', 'apple']
-
-
-Future<String> _getDeviceId() async {
-    final deviceInfo = DeviceInfoPlugin();
-    
-    if (Platform.isAndroid) {
-      final androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.id;
-    } else if (Platform.isIOS) {
-      final iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor ?? 'unknown_ios_device';
-    }
-    
-    return 'unknown_device';
-  }

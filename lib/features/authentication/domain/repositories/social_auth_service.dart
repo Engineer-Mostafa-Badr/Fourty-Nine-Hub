@@ -11,6 +11,12 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../core/error/failure.dart';
 
+String _sha256ofString(String input) {
+  final bytes = utf8.encode(input);
+  final digest = sha256.convert(bytes);
+  return digest.toString();
+}
+
 abstract class FirebaseAuthServiceRepository {
   Future<Either<Failure, void>> deleteAccount();
   Future<Either<Failure, String?>> getIdToken();
@@ -144,6 +150,15 @@ class SocialAuthService {
       FacebookAuth.instance.logOut(),
     ]);
   }
+
+  // // Helper methods for Apple Sign-In
+  // String _generateNonce([int length = 32]) {
+  //   const charset =
+  //       '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+  //   final random = Random.secure();
+  //   return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+  //       .join();
+  // }
 
   // Helper methods for Apple Sign-In
   String _generateNonce([int length = 32]) {
