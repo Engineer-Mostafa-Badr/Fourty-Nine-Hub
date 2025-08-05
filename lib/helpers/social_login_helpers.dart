@@ -22,6 +22,7 @@
 
 
 import 'dart:io';
+import 'dart:developer';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -45,29 +46,71 @@ class DeviceHelper {
 }
 
 //! ===== FCM Helper Class =====
+// class FCMHelper {
+//   static Future<String?> getFcmToken() async {
+//     try {
+//       final token = await FirebaseMessaging.instance.getToken();
+//       print('FCM Token: $token');
+//       return token;
+//     } catch (e) {
+//       print('Error getting FCM token: $e');
+//     }
+//     return null;
+//   }
+// }
+
+
 class FCMHelper {
   static Future<String?> getFcmToken() async {
     try {
-      final token = await FirebaseMessaging.instance.getToken();
-      print('FCM Token: $token');
-      return token;
+      // Request permission first
+      NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        final token = await FirebaseMessaging.instance.getToken();
+        log('FCM Token: $token');
+        return token;
+      } else {
+        log('User declined or has not accepted permission');
+        return null;
+      }
     } catch (e) {
-      print('Error getting FCM token: $e');
+      log('Error getting FCM token: $e');
+      return null;
     }
-    return null;
+  }
+
+  static Future<void> setupFCM() async {
+    // Handle foreground messages
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log('Got a message whilst in the foreground!');
+      log('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        log('Message also contained a notification: ${message.notification}');
+      }
+    });
   }
 }
 
 
 //! Helper method to get device ID
-  Future<String> _getDeviceId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.id;
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor ?? 'unknown_ios_device';
-    }
-    return 'unknown_device';
-  }
+  // Future<String> _getDeviceId() async {
+  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  //   if (Platform.isAndroid) {
+  //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  //     return androidInfo.id;
+  //   } else if (Platform.isIOS) {
+  //     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  //     return iosInfo.identifierForVendor ?? 'unknown_ios_device';
+  //   }
+  //   return 'unknown_device';
+  // }

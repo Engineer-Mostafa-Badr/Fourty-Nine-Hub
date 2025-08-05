@@ -495,25 +495,62 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   //   }
   // }
 
+  // @override
+  // Future<Either<Failure, UserTokensModel>> socialLogin(
+  //     SocialLoginParams params) async {
+  //   try {
+  //     final result = await _apiConsumer.post(
+  //       EndPoints.socialLogin,
+  //       data: params.toJson(),
+  //     );
+
+  //     return result.fold(
+  //       (failure) => Left(failure),
+  //       (response) {
+  //         final userTokens = UserTokensModel.fromJson(response['data']);
+  //         _apiConsumer.attachToken(userTokens);
+  //         return Right(userTokens);
+  //       },
+  //     );
+  //   } catch (e) {
+  //     log('Social login error: $e');
+  //     return Left(ServerFailure(message: 'Social login failed: $e'));
+  //   }
+  // }
+
   @override
   Future<Either<Failure, UserTokensModel>> socialLogin(
       SocialLoginParams params) async {
     try {
+      log('AuthRemoteDataSource: Starting social login request');
+      log('AuthRemoteDataSource: Params - ${params.toJson()}');
+      
+      // Check if we're using the correct endpoint
+      final endpoint = EndPoints.socialLogin;
+      log('AuthRemoteDataSource: Using endpoint: $endpoint');
+      
       final result = await _apiConsumer.post(
-        EndPoints.socialLogin,
+        endpoint,
         data: params.toJson(),
       );
 
       return result.fold(
-        (failure) => Left(failure),
+        (failure) {
+          log('AuthRemoteDataSource: Social login failed with failure: $failure');
+          return Left(failure);
+        },
         (response) {
+          log('AuthRemoteDataSource: Social login successful');
+          log('AuthRemoteDataSource: Response: $response');
+          
           final userTokens = UserTokensModel.fromJson(response['data']);
           _apiConsumer.attachToken(userTokens);
           return Right(userTokens);
         },
       );
-    } catch (e) {
-      log('Social login error: $e');
+    } catch (e, stackTrace) {
+      log('AuthRemoteDataSource Social login error: $e');
+      log('Stack trace: $stackTrace');
       return Left(ServerFailure(message: 'Social login failed: $e'));
     }
   }

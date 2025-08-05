@@ -4,6 +4,7 @@ import 'dart:io';
 // import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +20,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -394,70 +396,109 @@ class _LoginViewState extends State<LoginView> {
     // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
   }
 
-  void _handleSocialAuthState(SocialAuthState state) async {
+  Future<void> _handleLoginSuccess(LoginSuccess state) async {
+    _showLoadingIfNeeded();
+
+    try {
+      final userCubit = serviceLocator<UserCubit>();
+      await userCubit.setLogin(true);
+      userCubit.attachToken();
+      
+      await userCubit.getUser();
+      
+      String? accessToken = await CacheManager.getAccessToken();
+      String? refreshToken = await CacheManager.getRefreshToken();
+      
+      log('Login successful!');
+      log('Access Token: $accessToken');
+      log('Refresh Token: $refreshToken');
+      log('User data: ${userCubit.state.data}');
+      
+      _hideLoadingIfShown();
+      context.pushReplacement(Routes.HOME);
+      showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
+    } catch (e) {
+      _hideLoadingIfShown();
+      log('Error in login success handler: $e');
+      showErrorMessage(context, 'An error occurred during login');
+    }
+  }
+
+  Future<void> _handleSocialAuthState(SocialAuthState state) async {
     switch (state.status) {
       case AuthStatus.authenticating:
-        if (!_isLoadingDialogShown) {
-          showLoadingDialog(context);
-          _isLoadingDialogShown = true;
-        }
+        _showLoadingIfNeeded();
         break;
 
       case AuthStatus.authenticated:
-        if (_isLoadingDialogShown) {
-          Navigator.of(context).pop();
-          _isLoadingDialogShown = false;
-        }
-
         if (state.userTokensEntity != null) {
-          // Update user cubit and navigate
-          serviceLocator<UserCubit>()
-            ..setLogin(true)
-            ..attachToken()
-            ..getUser().then((value) async {
-              String? accessToken = await CacheManager.getAccessToken();
-              String? refreshToken = await CacheManager.getRefreshToken();
-
-              debugPrint('Social Login Success!');
-              debugPrint('Access Token: $accessToken');
-              debugPrint('Refresh Token: $refreshToken');
-
-              context.pushReplacement(Routes.HOME);
-            });
-
-          showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
+          await _handleSocialLoginSuccess(state.userTokensEntity!);
         }
         break;
 
       case AuthStatus.authenticateError:
-        if (_isLoadingDialogShown) {
-          Navigator.of(context).pop();
-          _isLoadingDialogShown = false;
-        }
-
+        _hideLoadingIfShown();
+        String errorMessage = 'Social login failed';
         if (state.error != null) {
-          showErrorMessage(
-            context,
-            getFailureMessage(state.error!, context),
-          );
-        } else {
-          showErrorMessage(
-            context,
-            context.isArabic ? 'فشل في تسجيل الدخول' : 'Social login failed',
-          );
+          errorMessage = getFailureMessage(state.error!, context);
         }
+        showErrorMessage(context, errorMessage);
         break;
 
       case AuthStatus.authenticateCanceled:
-        if (_isLoadingDialogShown) {
-          Navigator.of(context).pop();
-          _isLoadingDialogShown = false;
-        }
+        _hideLoadingIfShown();
         // User canceled - no error message needed
         break;
 
       default:
+        _hideLoadingIfShown();
         break;
+    }
+  }
+
+
+  Future<void> _handleSocialLoginSuccess(UserTokensEntity userTokens) async {
+    try {
+      final userCubit = serviceLocator<UserCubit>();
+      await userCubit.setLogin(true);
+      userCubit.attachToken();
+      
+      await userCubit.getUser();
+      
+      String? accessToken = await CacheManager.getAccessToken();
+      String? refreshToken = await CacheManager.getRefreshToken();
+      
+      log('Social login successful!');
+      log('Access Token: $accessToken');
+      log('Refresh Token: $refreshToken');
+      
+      _hideLoadingIfShown();
+      context.pushReplacement(Routes.HOME);
+      showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
+    } catch (e) {
+      _hideLoadingIfShown();
+      log('Error in social login success handler: $e');
+      showErrorMessage(context, 'An error occurred during social login');
+    }
+  }
+
+  Future<void> _handleGuestSuccess(LoginGuestSuccess state) async {
+    _hideLoadingIfShown();
+    // Handle guest login success
+    context.pushReplacement(Routes.HOME);
+  }
+
+  void _showLoadingIfNeeded() {
+    if (!_isLoadingDialogShown) {
+      showLoadingDialog(context);
+      _isLoadingDialogShown = true;
+    }
+  }
+
+  void _hideLoadingIfShown() {
+    if (_isLoadingDialogShown) {
+      Navigator.of(context).pop();
+      _isLoadingDialogShown = false;
     }
   }
 }
@@ -612,12 +653,26 @@ class _LoginWidgetState extends State<LoginWidget> {
                 color: AppColors.PRIMARY_COLOR,
                 icon: FontAwesomeIcons.google,
                 onPressed: () async {
-                  ManageVibration.vibrate();
-                  print('Google sign in pressed');
-                  log("uid: ${loginCubit.user?.uid ?? ''}");
-                  log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
-                  await loginCubit.signInWithGoogle();
-                  context.push(Routes.HOME);
+                  try {
+                    ManageVibration.vibrate();
+                    print('Google sign in pressed');
+                    log("uid: ${loginCubit.user?.uid ?? ''}");
+                    log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                    await loginCubit.signInWithGoogle();
+                    context.push(Routes.HOME);
+                  } on FirebaseAuthException catch (error) {
+                    print(error.message);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.message ?? "Something went wrong",
+                    )));
+                  } catch (error) {
+                    print(error);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.toString(),
+                    )));
+                  }
                 },
               ),
             ),
@@ -630,12 +685,26 @@ class _LoginWidgetState extends State<LoginWidget> {
                 icon: FontAwesomeIcons.facebook,
                 color: AppColors.PRIMARY_COLOR,
                 onPressed: () async {
-                  ManageVibration.vibrate();
-                  print('Facebook sign in pressed');
-                  log("uid: ${loginCubit.user?.uid ?? ''}");
-                  log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
-                  await loginCubit.signInWithFacebook();
-                  context.push(Routes.HOME);
+                  try {
+                    ManageVibration.vibrate();
+                    print('Facebook sign in pressed');
+                    log("uid: ${loginCubit.user?.uid ?? ''}");
+                    log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                    await loginCubit.signInWithFacebook();
+                    context.push(Routes.HOME);
+                  } on FirebaseAuthException catch (error) {
+                    print(error.message);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.message ?? "Something went wrong",
+                    )));
+                  } catch (error) {
+                    print(error);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.toString(),
+                    )));
+                  }
                 },
               ),
             ),
@@ -648,12 +717,26 @@ class _LoginWidgetState extends State<LoginWidget> {
                   textColor: Colors.black,
                   icon: FontAwesomeIcons.apple,
                   onPressed: () async {
-                    ManageVibration.vibrate();
-                    print('Apple sign in pressed');
-                    log("uid: ${loginCubit.user?.uid ?? ''}");
-                    log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
-                    await loginCubit.signInWithApple();
-                    context.push(Routes.HOME);
+                    try {
+                      ManageVibration.vibrate();
+                      print('Apple sign in pressed');
+                      log("uid: ${loginCubit.user?.uid ?? ''}");
+                      log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                      await loginCubit.signInWithApple();
+                      context.push(Routes.HOME);
+                    } on FirebaseAuthException catch (error) {
+                      print(error.message);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                        error.message ?? "Something went wrong",
+                      )));
+                    } catch (error) {
+                      print(error);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                        error.toString(),
+                      )));
+                    }
                   },
                 ),
               ),

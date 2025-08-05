@@ -178,26 +178,59 @@ class LoginCubit extends Cubit<LoginState> {
   // }
 
   // Apple Sign In
+  // Future<void> signInWithApple() async {
+  //   if (!Platform.isIOS) {
+  //     emit(const SocialAuthState(status: AuthStatus.authenticateError));
+  //     return;
+  //   }
+
+  //   emit(const SocialAuthState(status: AuthStatus.authenticating));
+
+  //   try {
+  //     // Sign in with Firebase
+  //     final userCredential = await _socialAuthService.signInWithApple();
+
+  //     if (userCredential?.user != null) {
+  //       await _handleSocialLogin(userCredential!);
+  //     } else {
+  //       emit(const SocialAuthState(status: AuthStatus.authenticateCanceled));
+  //     }
+  //   } catch (e) {
+  //     print('Apple Sign-In Error: $e');
+  //     emit(const SocialAuthState(status: AuthStatus.authenticateError));
+  //   }
+  // }
   Future<void> signInWithApple() async {
     if (!Platform.isIOS) {
-      emit(const SocialAuthState(status: AuthStatus.authenticateError));
+      emit(SocialAuthState(
+        status: AuthStatus.authenticateError,
+        error: ServerFailure(message: 'Apple Sign-In is only available on iOS'),
+      ));
       return;
     }
 
     emit(const SocialAuthState(status: AuthStatus.authenticating));
 
     try {
+      log('LoginCubit: Starting Apple sign-in...');
+
       // Sign in with Firebase
       final userCredential = await _socialAuthService.signInWithApple();
 
       if (userCredential?.user != null) {
+        log('LoginCubit: Apple sign-in successful, handling social login...');
         await _handleSocialLogin(userCredential!);
       } else {
+        log('LoginCubit: Apple sign-in was canceled');
         emit(const SocialAuthState(status: AuthStatus.authenticateCanceled));
       }
-    } catch (e) {
-      print('Apple Sign-In Error: $e');
-      emit(const SocialAuthState(status: AuthStatus.authenticateError));
+    } catch (e, stackTrace) {
+      log('LoginCubit Apple Sign-In Error: $e');
+      log('Stack trace: $stackTrace');
+      emit(SocialAuthState(
+        status: AuthStatus.authenticateError,
+        error: ServerFailure(message: 'Apple sign-in failed: $e'),
+      ));
     }
   }
 
@@ -236,21 +269,46 @@ class LoginCubit extends Cubit<LoginState> {
   // }
 
   // Facebook Sign In
+  // Future<void> signInWithFacebook() async {
+  //   emit(const SocialAuthState(status: AuthStatus.authenticating));
+
+  //   try {
+  //     // Sign in with Firebase
+  //     final userCredential = await _socialAuthService.signInWithFacebook();
+
+  //     if (userCredential?.user != null) {
+  //       await _handleSocialLogin(userCredential!);
+  //     } else {
+  //       emit(const SocialAuthState(status: AuthStatus.authenticateCanceled));
+  //     }
+  //   } catch (e) {
+  //     print('Facebook Sign-In Error: $e');
+  //     emit(const SocialAuthState(status: AuthStatus.authenticateError));
+  //   }
+  // }
   Future<void> signInWithFacebook() async {
     emit(const SocialAuthState(status: AuthStatus.authenticating));
 
     try {
+      log('LoginCubit: Starting Facebook sign-in...');
+
       // Sign in with Firebase
       final userCredential = await _socialAuthService.signInWithFacebook();
 
       if (userCredential?.user != null) {
+        log('LoginCubit: Facebook sign-in successful, handling social login...');
         await _handleSocialLogin(userCredential!);
       } else {
+        log('LoginCubit: Facebook sign-in was canceled');
         emit(const SocialAuthState(status: AuthStatus.authenticateCanceled));
       }
-    } catch (e) {
-      print('Facebook Sign-In Error: $e');
-      emit(const SocialAuthState(status: AuthStatus.authenticateError));
+    } catch (e, stackTrace) {
+      log('LoginCubit Facebook Sign-In Error: $e');
+      log('Stack trace: $stackTrace');
+      emit(SocialAuthState(
+        status: AuthStatus.authenticateError,
+        error: ServerFailure(message: 'Facebook sign-in failed: $e'),
+      ));
     }
   }
 
@@ -271,21 +329,46 @@ class LoginCubit extends Cubit<LoginState> {
   // }
 
   // Google Sign In
+  // Future<void> signInWithGoogle() async {
+  //   emit(const SocialAuthState(status: AuthStatus.authenticating));
+
+  //   try {
+  //     // Sign in with Firebase
+  //     final userCredential = await _socialAuthService.signInWithGoogle();
+
+  //     if (userCredential?.user != null) {
+  //       await _handleSocialLogin(userCredential!);
+  //     } else {
+  //       emit(const SocialAuthState(status: AuthStatus.authenticateCanceled));
+  //     }
+  //   } catch (e) {
+  //     print('Google Sign-In Error: $e');
+  //     emit(const SocialAuthState(status: AuthStatus.authenticateError));
+  //   }
+  // }
   Future<void> signInWithGoogle() async {
     emit(const SocialAuthState(status: AuthStatus.authenticating));
 
     try {
+      log('LoginCubit: Starting Google sign-in...');
+
       // Sign in with Firebase
       final userCredential = await _socialAuthService.signInWithGoogle();
 
       if (userCredential?.user != null) {
+        log('LoginCubit: Google sign-in successful, handling social login...');
         await _handleSocialLogin(userCredential!);
       } else {
+        log('LoginCubit: Google sign-in was canceled');
         emit(const SocialAuthState(status: AuthStatus.authenticateCanceled));
       }
-    } catch (e) {
-      print('Google Sign-In Error: $e');
-      emit(const SocialAuthState(status: AuthStatus.authenticateError));
+    } catch (e, stackTrace) {
+      log('LoginCubit Google Sign-In Error: $e');
+      log('Stack trace: $stackTrace');
+      emit(SocialAuthState(
+        status: AuthStatus.authenticateError,
+        error: ServerFailure(message: 'Google sign-in failed: $e'),
+      ));
     }
   }
 
@@ -358,21 +441,89 @@ class LoginCubit extends Cubit<LoginState> {
   //     emit(const SocialAuthState(status: AuthStatus.authenticateError));
   //   }
   // }
+  // Future<void> _handleSocialLogin(UserCredential userCredential) async {
+  //   try {
+  //     // Get ID Token from Firebase
+  //     final idToken = await userCredential.user?.getIdToken();
+
+  //     if (idToken == null) {
+  //       emit(const SocialAuthState(status: AuthStatus.authenticateError));
+  //       return;
+  //     }
+
+  //     // Get FCM Token
+  //     final fcmToken = await FCMHelper.getFcmToken();
+
+  //     // Get Device ID
+  //     final deviceId = await _getDeviceId();
+
+  //     // Create social login params
+  //     final socialLoginParams = SocialLoginParams(
+  //       idToken: idToken,
+  //       fcmToken: fcmToken ?? '',
+  //       deviceId: deviceId,
+  //     );
+
+  //     // Call backend API
+  //     final result = await _authRemoteDataSource.socialLogin(socialLoginParams);
+
+  //     result.fold(
+  //       (failure) {
+  //         var currentContext =
+  //             AppPages.router.configuration.navigatorKey.currentContext!;
+  //         showErrorMessage(
+  //             currentContext, getFailureMessage(failure, currentContext));
+  //         emit(SocialAuthState(
+  //           status: AuthStatus.authenticateError,
+  //           error: failure,
+  //         ));
+  //       },
+  //       (userTokens) async {
+  //         // Save tokens
+  //         await _saveTokens(userTokens);
+  //         _attachToken(userTokens);
+
+  //         // Save tokens to cache manager
+  //         await CacheManager.saveAccessToken(userTokens.accessToken);
+  //         await CacheManager.saveRefreshToken(userTokens.refreshToken);
+
+  //         // Connect socket
+  //         SharedWebSocket.connect(token: userTokens.accessToken);
+
+  //         emit(SocialAuthState(
+  //           status: AuthStatus.authenticated,
+  //           userTokensEntity: userTokens,
+  //         ));
+  //       },
+  //     );
+  //   } catch (e) {
+  //     print('Handle Social Login Error: $e');
+  //     emit(const SocialAuthState(status: AuthStatus.authenticateError));
+  //   }
+  // }
+
   Future<void> _handleSocialLogin(UserCredential userCredential) async {
     try {
+      log('LoginCubit: Handling social login...');
+
       // Get ID Token from Firebase
       final idToken = await userCredential.user?.getIdToken();
 
       if (idToken == null) {
+        log('LoginCubit: Failed to get ID token');
         emit(const SocialAuthState(status: AuthStatus.authenticateError));
         return;
       }
 
+      log('LoginCubit: Got ID token');
+
       // Get FCM Token
       final fcmToken = await FCMHelper.getFcmToken();
+      log('LoginCubit: FCM token: ${fcmToken ?? 'null'}');
 
       // Get Device ID
       final deviceId = await _getDeviceId();
+      log('LoginCubit: Device ID: $deviceId');
 
       // Create social login params
       final socialLoginParams = SocialLoginParams(
@@ -381,21 +532,22 @@ class LoginCubit extends Cubit<LoginState> {
         deviceId: deviceId,
       );
 
+      log('LoginCubit: Calling backend social login...');
+
       // Call backend API
       final result = await _authRemoteDataSource.socialLogin(socialLoginParams);
 
       result.fold(
         (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+          log('LoginCubit: Backend social login failed: $failure');
           emit(SocialAuthState(
             status: AuthStatus.authenticateError,
             error: failure,
           ));
         },
         (userTokens) async {
+          log('LoginCubit: Backend social login successful');
+
           // Save tokens
           await _saveTokens(userTokens);
           _attachToken(userTokens);
@@ -403,6 +555,8 @@ class LoginCubit extends Cubit<LoginState> {
           // Save tokens to cache manager
           await CacheManager.saveAccessToken(userTokens.accessToken);
           await CacheManager.saveRefreshToken(userTokens.refreshToken);
+
+          log('LoginCubit: Tokens saved, connecting socket...');
 
           // Connect socket
           SharedWebSocket.connect(token: userTokens.accessToken);
@@ -413,8 +567,9 @@ class LoginCubit extends Cubit<LoginState> {
           ));
         },
       );
-    } catch (e) {
-      print('Handle Social Login Error: $e');
+    } catch (e, stackTrace) {
+      log('LoginCubit Handle Social Login Error: $e');
+      log('Stack trace: $stackTrace');
       emit(const SocialAuthState(status: AuthStatus.authenticateError));
     }
   }
