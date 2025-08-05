@@ -67,7 +67,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
 
         if (isSameDay && waitingTime.isAfter(now)) {
           final durationUntilWait = waitingTime.difference(now);
-          startCountdownTimer(durationUntilWait, showClientNotShownWhenFinished: false);
+          startCountdownTimer(durationUntilWait, showClientNotShownWhenFinished: false,from: 'waiting');
           setState(() => showArrived = false);
           setState(() => showClientNotShown = false);
           return;
@@ -87,7 +87,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
         setState(() => showArrived = false);
         setState(() => showClientNotShown = false);
         final Duration countdown = arrivalDeadline.difference(now);
-        startCountdownTimer(countdown, showClientNotShownWhenFinished: true);
+        startCountdownTimer(countdown, showClientNotShownWhenFinished: true,from: 'arrival');
       } else {
         setState(() => showClientNotShown = true);
       }
@@ -111,7 +111,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
     checkAndStartTimer();
   }
 
-  void startCountdownTimer(Duration duration, {bool showClientNotShownWhenFinished = true}) {
+  void startCountdownTimer(Duration duration, {bool showClientNotShownWhenFinished = true,required String from}) {
     remainingTime = duration;
 
     _countdownTimer?.cancel();
@@ -131,6 +131,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
         } else {
           timer.cancel();
           remainingTime = null;
+
           if (showClientNotShownWhenFinished) {
             setState(() {
               showClientNotShown = true;
@@ -138,6 +139,11 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
           } else if (!showClientNotShownWhenFinished) {
             setState(() {
               showClientNotShown = false;
+            });
+          }
+          if(from=='waiting'){
+            setState(() {
+              showEndTrip=true;
             });
           }
         }
